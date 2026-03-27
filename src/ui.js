@@ -76,8 +76,25 @@ export function renderSelectors({ ads, campaigns, adaptationGoals }) {
   `).join("");
 }
 
+export function renderAdSetSelector(adSets) {
+  const target = document.getElementById("target-adset");
+  target.innerHTML = adSets.map((adSet) => `
+    <option value="${adSet}">${adSet}</option>
+  `).join("");
+}
+
+export function renderPlacementSummary({ campaign, adSet, format }) {
+  document.getElementById("selected-campaign-summary").textContent = campaign || "No campaign selected yet.";
+  document.getElementById("selected-adset-summary").textContent = adSet || "No ad set selected yet.";
+  document.getElementById("selected-format-summary").textContent = format || "Single image";
+}
+
 export function renderPreview(preview) {
   const stack = document.getElementById("preview-stack");
+  const creativeList = preview.creativeAssets?.length
+    ? preview.creativeAssets.join(", ")
+    : "No uploaded creative files selected yet.";
+
   stack.innerHTML = `
     <article class="preview-card">
       <h4>Source Ad</h4>
@@ -86,7 +103,17 @@ export function renderPreview(preview) {
     <article class="preview-card">
       <h4>Destination</h4>
       <p>${preview.targetCampaign}</p>
+      <p>${preview.targetAdSet || "No ad set selected"}</p>
       <p>${preview.targetLanguage}</p>
+    </article>
+    <article class="preview-card">
+      <h4>Format</h4>
+      <p>${preview.adFormat}</p>
+    </article>
+    <article class="preview-card">
+      <h4>Creative Files</h4>
+      <p>${creativeList}</p>
+      <p>Uploaded files are used as-is.</p>
     </article>
     <article class="preview-card">
       <h4>Primary Text</h4>
@@ -121,6 +148,16 @@ export function renderVariants(variants) {
 
 export function renderPayload(payload) {
   document.getElementById("payload-preview").textContent = JSON.stringify(payload, null, 2);
+}
+
+export function setStudioStatus(message, tone = "neutral") {
+  const target = document.getElementById("studio-status");
+  if (!target) {
+    return;
+  }
+
+  target.textContent = message;
+  target.dataset.tone = tone;
 }
 
 export function renderIntegrations(items) {
@@ -164,4 +201,30 @@ export function toggleSettings(forceOpen) {
   const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !drawer.classList.contains("open");
   drawer.classList.toggle("open", shouldOpen);
   drawer.setAttribute("aria-hidden", shouldOpen ? "false" : "true");
+}
+
+export function setStudioMode(mode) {
+  const duplicateButton = document.getElementById("duplicate-mode-button");
+  const createButton = document.getElementById("create-mode-button");
+  const label = document.getElementById("studio-engine-label");
+  const title = document.getElementById("studio-engine-title");
+
+  duplicateButton.classList.toggle("active", mode === "duplicate");
+  createButton.classList.toggle("active", mode === "create");
+
+  document.querySelectorAll(".mode-duplicate").forEach((element) => {
+    element.classList.toggle("hidden", mode !== "duplicate");
+  });
+
+  document.querySelectorAll(".mode-create").forEach((element) => {
+    element.classList.toggle("hidden", mode !== "create");
+  });
+
+  if (mode === "create") {
+    label.textContent = "New Ad Builder";
+    title.textContent = "Create a fresh ad concept";
+  } else {
+    label.textContent = "Clone & Translate Engine";
+    title.textContent = "Move an ad into another active campaign";
+  }
 }

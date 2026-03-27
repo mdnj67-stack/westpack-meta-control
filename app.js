@@ -16,26 +16,33 @@ import {
   stats
 } from "./src/data.js";
 import {
-  buildPreviewPayload,
+  buildGenerationRequest,
   buildMetaPublishPayload,
+  buildPreviewPayload,
   buildVariantSet,
   createDraftEntry,
+  getAdSetOptions,
   getIntegrationCards,
   getMetaSettingsSummary,
-  getPromptCards
+  getPromptCards,
+  requestAiPreview
 } from "./src/services.js";
 import {
+  renderAdSetSelector,
   renderAuditLog,
   renderCampaignMatches,
   renderCampaignTable,
   renderCardList,
   renderIntegrations,
   renderPayload,
+  renderPlacementSummary,
   renderPreview,
   renderSelectors,
   renderSettings,
   renderStats,
   renderVariants,
+  setStudioMode,
+  setStudioStatus,
   switchTab,
   toggleSettings
 } from "./src/ui.js";
@@ -43,8 +50,64 @@ import {
 const appState = {
   ads,
   campaigns,
-  stats
+  stats,
+  mode: "duplicate",
+  currentPreview: null,
+  currentVariants: [],
+  currentVariantIndex: 0
 };
+
+function setCurrentOutput(preview, variants) {
+  appState.currentPreview = preview;
+  appState.currentVariants = variants;
+  appState.currentVariantIndex = 0;
+
+  renderPreview(preview);
+  renderVariants(variants);
+  renderPayload(buildMetaPublishPayload(preview));
+}
+
+function getInitialPreview(campaignData, adData, liveSnapshot, aiSnapshot) {
+  if (aiSnapshot) {
+    return {
+      source: aiSnapshot.source,
+      sourceId: adData[0]?.id || "",
+      targetCampaign: aiSnapshot.targetCampaign,
+      targetAdSet: getAdSetOptions(aiSnapshot.targetCampaign, campaignData, adData)[0],
+      targetLanguage: aiSnapshot.targetLanguage,
+      adFormat: document.getElementById("ad-format")?.value || "Single image",
+      destinationUrl: document.getElementById("destination-url")?.value || "https://www.westpack.com/",
+      creativeAssets: [],
+      primaryText: aiSnapshot.primaryText,
+      headline: aiSnapshot.headline,
+      description: aiSnapshot.description,
+      rationale: `${aiSnapshot.rationale} AI preview generated: ${aiSnapshot.generatedAt}.`
+    };
+  }
+
+  if (liveSnapshot) {
+    return {
+      ...previewTemplate,
+      source: adData[0]?.name || previewTemplate.source,
+      sourceId: adData[0]?.id || "",
+      targetCampaign: campaignData[0]?.name || previewTemplate.targetCampaign,
+      targetAdSet: getAdSetOptions(campaignData[0]?.name, campaignData, adData)[0],
+      adFormat: document.getElementById("ad-format")?.value || "Single image",
+      destinationUrl: document.getElementById("destination-url")?.value || "https://www.westpack.com/",
+      creativeAssets: [],
+      rationale: `${previewTemplate.rationale} Live Meta snapshot loaded: ${liveSnapshot.generatedAt}.`
+    };
+  }
+
+  return {
+    ...previewTemplate,
+    sourceId: adData[0]?.id || "",
+    targetAdSet: getAdSetOptions(campaignData[0]?.name, campaignData, adData)[0],
+    adFormat: document.getElementById("ad-format")?.value || "Single image",
+    destinationUrl: document.getElementById("destination-url")?.value || "https://www.westpack.com/",
+    creativeAssets: []
+  };
+}
 
 function initializeApp() {
   const liveSnapshot = loadLiveMetaSnapshot();
@@ -70,29 +133,93 @@ function initializeApp() {
     campaigns: campaignData,
     adaptationGoals
   });
-  const initialPreview = aiSnapshot ? {
-    source: aiSnapshot.source,
-    targetCampaign: aiSnapshot.targetCampaign,
-    targetLanguage: aiSnapshot.targetLanguage,
-    primaryText: aiSnapshot.primaryText,
-    headline: aiSnapshot.headline,
-    description: aiSnapshot.description,
-    rationale: `${aiSnapshot.rationale} AI preview generated: ${aiSnapshot.generatedAt}.`
-  } : liveSnapshot ? {
-    ...previewTemplate,
-    source: adData[0]?.name || previewTemplate.source,
-    targetCampaign: campaignData[0]?.name || previewTemplate.targetCampaign,
-    rationale: `${previewTemplate.rationale} Live Meta snapshot loaded: ${liveSnapshot.generatedAt}.`
-  } : previewTemplate;
-  renderPreview(initialPreview);
-  renderVariants(aiSnapshot?.variants?.length ? aiSnapshot.variants : buildVariantSet(initialPreview));
-  renderPayload(buildMetaPublishPayload(initialPreview));
+
+  const initialAdSets = getAdSetOptions(campaignData[0]?.name, campaignData, adData);
+  renderAdSetSelector(initialAdSets);
+  renderPlacementSummary({
+    campaign: campaignData[0]?.name,
+    adSet: initialAdSets[0],
+    format: document.getElementById("ad-format")?.value || "Single image"
+  });
+
+  const initialPreview = getInitialPreview(campaignData, adData, liveSnapshot, aiSnapshot);
+  const initialVariants = aiSnapshot?.variants?.length ? aiSnapshot.variants : buildVariantSet(initialPreview);
+  setCurrentOutput(initialPreview, initialVariants);
+
   renderIntegrations(getIntegrationCards(integrationConfig));
   renderSettings({
     meta: getMetaSettingsSummary(integrationConfig),
     openAi: integrationConfig.openAi,
     promptCards: getPromptCards(promptRecipe)
   });
+  setStudioMode(appState.mode);
+  setStudioStatus("Ready.");
+}
+
+function updatePlacementSummary() {
+  renderPlacementSummary({
+    campaign: document.getElementById("target-campaign").value,
+    adSet: document.getElementById("target-adset").value,
+    format: document.getElementById("ad-format").value
+  });
+}
+
+async function generateAiPreview() {
+  setStudioStatus("Generating AI preview...", "loading");
+
+  try {
+    const requestBody = buildGenerationRequest({
+      ads: appState.ads,
+      mode: appState.mode
+    });
+
+    const result = await requestAiPreview(requestBody);
+    const preview = result.preview;
+    const variants = result.variants?.length ? result.variants : buildVariantSet(preview);
+    setCurrentOutput(preview, variants);
+    setStudioStatus(`AI preview ready. ${result.model || "OpenAI"} responded.`, "success");
+  } catch (error) {
+    const fallbackPreview = buildPreviewPayload({
+      ads: appState.ads,
+      integrationConfig,
+      mode: appState.mode
+    });
+    const fallbackVariants = buildVariantSet(fallbackPreview);
+    setCurrentOutput(fallbackPreview, fallbackVariants);
+    setStudioStatus(`AI fallback preview loaded. ${error.message}`, "warning");
+  }
+}
+
+function saveDraftPreview() {
+  const preview = createDraftEntry(buildPreviewPayload({
+    ads: appState.ads,
+    integrationConfig,
+    mode: appState.mode
+  }));
+  const variants = buildVariantSet(preview);
+  setCurrentOutput(preview, variants);
+  setStudioStatus("Draft saved locally.", "success");
+}
+
+function useNextVariant() {
+  if (!appState.currentPreview || !appState.currentVariants.length) {
+    setStudioStatus("Generate a preview first.", "warning");
+    return;
+  }
+
+  appState.currentVariantIndex = (appState.currentVariantIndex + 1) % appState.currentVariants.length;
+  const nextVariant = appState.currentVariants[appState.currentVariantIndex];
+  const nextPreview = {
+    ...appState.currentPreview,
+    primaryText: nextVariant.body,
+    headline: nextVariant.headline,
+    rationale: nextVariant.angle
+  };
+
+  appState.currentPreview = nextPreview;
+  renderPreview(nextPreview);
+  renderPayload(buildMetaPublishPayload(nextPreview));
+  setStudioStatus(`Using ${nextVariant.title.toLowerCase()}.`, "success");
 }
 
 function attachEvents() {
@@ -108,24 +235,46 @@ function attachEvents() {
     button.addEventListener("click", () => toggleSettings(true));
   });
 
-  document.getElementById("generate-button").addEventListener("click", () => {
-    const preview = buildPreviewPayload({
-      ads: appState.ads,
-      integrationConfig
+  document.querySelectorAll("[data-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      appState.mode = button.dataset.mode;
+      setStudioMode(appState.mode);
+      setStudioStatus("Ready.");
     });
-    renderPreview(preview);
-    renderVariants(buildVariantSet(preview));
-    renderPayload(buildMetaPublishPayload(preview));
+  });
+
+  document.getElementById("target-campaign").addEventListener("change", (event) => {
+    const adSets = getAdSetOptions(event.target.value, appState.campaigns, appState.ads);
+    renderAdSetSelector(adSets);
+    renderPlacementSummary({
+      campaign: event.target.value,
+      adSet: adSets[0],
+      format: document.getElementById("ad-format").value
+    });
+  });
+
+  document.getElementById("target-adset").addEventListener("change", () => {
+    updatePlacementSummary();
+  });
+
+  document.getElementById("ad-format").addEventListener("change", () => {
+    updatePlacementSummary();
+  });
+
+  document.getElementById("generate-button").addEventListener("click", async () => {
+    await generateAiPreview();
   });
 
   document.getElementById("draft-button").addEventListener("click", () => {
-    const preview = createDraftEntry(buildPreviewPayload({
-      ads: appState.ads,
-      integrationConfig
-    }));
-    renderPreview(preview);
-    renderVariants(buildVariantSet(preview));
-    renderPayload(buildMetaPublishPayload(preview));
+    saveDraftPreview();
+  });
+
+  document.getElementById("duplicate-variant-button").addEventListener("click", () => {
+    useNextVariant();
+  });
+
+  document.getElementById("push-meta-button").addEventListener("click", () => {
+    setStudioStatus("Meta push comes next. AI preview is ready.", "warning");
   });
 
   document.getElementById("close-settings").addEventListener("click", () => {

@@ -12,56 +12,35 @@
 <body>
   <div class="shell">
     <aside class="sidebar">
-      <div>
-        <p class="eyebrow">Westpack Internal</p>
-        <h1>Meta Control</h1>
-        <p class="sidebar-copy">
-          A direct-control cockpit for active Meta campaigns, AI-assisted localization, and faster ad duplication.
-        </p>
+      <div class="sidebar-head">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">WP</div>
+          <div>
+            <h1>Meta Control</h1>
+          </div>
+        </div>
+
+        <nav class="tab-list" aria-label="Primary navigation">
+          <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+          <button class="tab-button" data-tab="studio">Create / Manage Ads</button>
+        </nav>
       </div>
 
-      <nav class="tab-list" aria-label="Primary navigation">
-        <button class="tab-button active" data-tab="dashboard">Dashboard</button>
-        <button class="tab-button" data-tab="studio">Create / Manage Ads</button>
-      </nav>
-
-      <section class="sidebar-card compact">
-        <p class="sidebar-label">Operator Mode</p>
-        <h2>Single-user control</h2>
-        <p>
-          Built for one specialist. No team complexity, just fast execution, review, and direct account control.
-        </p>
-      </section>
-
-      <section class="sidebar-card">
-        <p class="sidebar-label">Primary Goal</p>
-        <h2>Execution speed</h2>
-        <p>
-          This version is built around your real workflow: spot what is working, clone strong ads into other active campaigns,
-          adapt the copy with AI, and keep final control before anything goes live.
-        </p>
-      </section>
-
-      <section class="sidebar-card muted">
-        <p class="sidebar-label">Core Capabilities</p>
-        <ul>
-          <li>Only active campaigns in the UI</li>
-          <li>Clone ads between campaigns</li>
-          <li>Translate and adapt copy with AI</li>
-          <li>Prepare direct Meta actions with approval</li>
-        </ul>
-      </section>
+      <div class="sidebar-meta">
+        <section class="sidebar-card compact">
+          <h2>Active only</h2>
+        </section>
+      </div>
     </aside>
 
     <main class="main-content">
       <section class="topbar">
         <div>
-          <p class="eyebrow">Prototype v1</p>
           <h2 id="view-title">Dashboard</h2>
         </div>
         <div class="status-cluster">
-          <div class="status-pill online">OpenAI Strategy Ready</div>
-          <div class="status-pill warning">Meta Auth Not Connected</div>
+          <div class="status-pill online">OpenAI ready</div>
+          <div class="status-pill warning">Meta offline</div>
           <button class="ghost-button small" data-jump="settings">Open Settings</button>
         </div>
       </section>
@@ -69,8 +48,7 @@
       <section class="tab-panel active" id="dashboard-panel">
         <div class="hero">
           <div>
-            <p class="hero-kicker">Today's mission</p>
-            <h3>Protect spend, spot fatigue, and relaunch winning ads across active campaigns in minutes.</h3>
+            <h3>Active campaigns. Clear next moves.</h3>
           </div>
           <button class="ghost-button" data-jump="studio">Open Clone Studio</button>
         </div>
@@ -81,10 +59,9 @@
           <section class="card span-two">
             <div class="card-header">
               <div>
-                <p class="section-label">Active Campaign Monitor</p>
                 <h3>Performance snapshot</h3>
               </div>
-              <button class="ghost-button small">Refresh data</button>
+              <button class="ghost-button small" id="refresh-data-button" type="button">Refresh data</button>
             </div>
             <div class="table-wrap">
               <table>
@@ -106,8 +83,7 @@
           <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">AI Suggestions</p>
-                <h3>High-value next actions</h3>
+                <h3>Next actions</h3>
               </div>
             </div>
             <div class="recommendations" id="recommendations"></div>
@@ -116,8 +92,7 @@
           <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Winning Patterns</p>
-                <h3>What active winners have in common</h3>
+                <h3>Patterns</h3>
               </div>
             </div>
             <div class="pattern-list" id="pattern-list"></div>
@@ -126,8 +101,7 @@
           <section class="card span-two">
             <div class="card-header">
               <div>
-                <p class="section-label">Approval Queue</p>
-                <h3>Prepared actions before publish</h3>
+                <h3>Queue</h3>
               </div>
             </div>
             <div class="queue-list" id="queue-list"></div>
@@ -136,8 +110,7 @@
           <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Audit Log</p>
-                <h3>Latest account decisions</h3>
+                <h3>Audit</h3>
               </div>
             </div>
             <div class="audit-list" id="audit-list"></div>
@@ -146,23 +119,48 @@
       </section>
 
       <section class="tab-panel" id="studio-panel">
-        <div class="studio-grid">
-          <section class="card span-two">
+        <div class="studio-shell">
+          <div class="studio-main">
+            <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Clone & Translate Engine</p>
-                <h3>Move an ad into another active campaign</h3>
+                <h3>Workflow</h3>
+              </div>
+            </div>
+            <div class="mode-grid">
+              <button class="mode-card active" data-mode="duplicate" id="duplicate-mode-button" type="button">
+                <strong>Duplicate / Translate Existing Ad</strong>
+              </button>
+              <button class="mode-card" data-mode="create" id="create-mode-button" type="button">
+                <strong>Create New Ad</strong>
+              </button>
+            </div>
+            </section>
+
+            <section class="card">
+            <div class="card-header">
+              <div>
+                <p class="section-label" id="studio-engine-label"></p>
+                <h3 id="studio-engine-title">Move an ad into another active campaign</h3>
               </div>
             </div>
 
             <form class="control-form" id="clone-form">
-              <div class="field">
+              <div class="field mode-duplicate">
                 <label for="source-ad">Source ad</label>
                 <select id="source-ad"></select>
               </div>
               <div class="field">
                 <label for="target-campaign">Target campaign</label>
                 <select id="target-campaign"></select>
+              </div>
+              <div class="field">
+                <label for="target-adset">Target ad set</label>
+                <select id="target-adset"></select>
+              </div>
+              <div class="field mode-create hidden">
+                <label for="new-ad-name">New ad name</label>
+                <input id="new-ad-name" type="text" placeholder="Example: Spring Packaging Launch - DE">
               </div>
               <div class="field">
                 <label for="target-language">Target language</label>
@@ -178,84 +176,126 @@
                 <label for="adaptation-goal">Adaptation goal</label>
                 <select id="adaptation-goal"></select>
               </div>
+              <div class="field">
+                <label for="ad-format">Ad format</label>
+                <select id="ad-format">
+                  <option>Single image</option>
+                  <option>Carousel</option>
+                  <option>Video</option>
+                </select>
+              </div>
+              <div class="field field-wide">
+                <label for="destination-url">Destination URL</label>
+                <input id="destination-url" type="text" value="https://www.westpack.com/" placeholder="https://www.westpack.com/">
+              </div>
+              <div class="field mode-create hidden">
+                <label for="new-ad-angle">Creative angle</label>
+                <select id="new-ad-angle">
+                  <option>Premium B2B packaging</option>
+                  <option>Retail conversion focus</option>
+                  <option>Lead generation offer</option>
+                  <option>Seasonal campaign push</option>
+                </select>
+              </div>
               <div class="field field-wide">
                 <label for="brief">Operator notes</label>
                 <textarea id="brief" rows="4" placeholder="Example: keep B2B tone, push premium finish, target jewelry stores, keep CTA commercial."></textarea>
               </div>
               <div class="field field-wide upload-field">
-                <label for="creative-upload">Creative references</label>
+                <label for="creative-upload">Creative files</label>
                 <input id="creative-upload" type="file" multiple>
-                <p class="field-hint">This is mocked for now. In the live version, uploaded creatives will be analyzed before the copy is adapted.</p>
               </div>
               <div class="form-actions">
                 <button type="button" class="primary-button" id="generate-button">Generate AI preview</button>
                 <button type="button" class="ghost-button" id="draft-button">Save draft request</button>
               </div>
             </form>
-          </section>
+            </section>
 
-          <section class="card">
+            <section class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Placement</h3>
+                </div>
+              </div>
+              <div class="placement-grid">
+                <article class="placement-card">
+                  <p class="section-label">Campaign</p>
+                  <div id="selected-campaign-summary">No campaign selected yet.</div>
+                </article>
+                <article class="placement-card">
+                  <p class="section-label">Ad Set</p>
+                  <div id="selected-adset-summary">No ad set selected yet.</div>
+                </article>
+                <article class="placement-card">
+                  <p class="section-label">Format</p>
+                  <div id="selected-format-summary">Single image</div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <aside class="studio-side">
+            <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Generated Preview</p>
-                <h3>Review before sending</h3>
+                <h3>Preview</h3>
               </div>
             </div>
             <div class="preview-stack" id="preview-stack"></div>
+            <div class="publish-status" id="studio-status">Ready.</div>
             <div class="action-stack">
-              <button class="primary-button">Push to Meta</button>
-              <button class="ghost-button">Duplicate variant</button>
+              <button class="primary-button" id="push-meta-button" type="button">Push to Meta</button>
+              <button class="ghost-button" id="duplicate-variant-button" type="button">Use next variant</button>
             </div>
-          </section>
+            </section>
 
-          <section class="card">
+            <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Localized Variants</p>
-                <h3>AI draft options</h3>
+                <h3>Variants</h3>
               </div>
             </div>
             <div class="variant-list" id="variant-list"></div>
-          </section>
+            </section>
 
+            <section class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Payload</h3>
+                </div>
+              </div>
+              <pre class="payload-preview" id="payload-preview"></pre>
+            </section>
+          </aside>
+        </div>
+
+        <div class="studio-support-grid">
           <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Quick Controls</p>
-                <h3>Direct account actions</h3>
-              </div>
-            </div>
-            <div class="action-list" id="action-list"></div>
-          </section>
-
-          <section class="card span-two">
-            <div class="card-header">
-              <div>
-                <p class="section-label">Campaign Matching</p>
-                <h3>Where this ad should go next</h3>
+                <h3>Matching</h3>
               </div>
             </div>
             <div class="match-list" id="match-list"></div>
           </section>
 
-          <section class="card span-two">
+          <section class="card">
             <div class="card-header">
               <div>
-                <p class="section-label">Integration Map</p>
-                <h3>Ready for the next build step</h3>
+                <h3>Quick controls</h3>
+              </div>
+            </div>
+            <div class="action-list" id="action-list"></div>
+          </section>
+
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h3>Integration</h3>
               </div>
             </div>
             <div class="integration-grid" id="integration-grid"></div>
-          </section>
-
-          <section class="card span-two">
-            <div class="card-header">
-              <div>
-                <p class="section-label">Publish Payload</p>
-                <h3>What will be sent to Meta</h3>
-              </div>
-            </div>
-            <pre class="payload-preview" id="payload-preview"></pre>
           </section>
         </div>
       </section>
@@ -266,7 +306,6 @@
     <div class="settings-sheet">
       <div class="card-header">
         <div>
-          <p class="section-label">Settings</p>
           <h3>Meta and OpenAI configuration</h3>
         </div>
         <button class="ghost-button small" id="close-settings">Close</button>
@@ -274,23 +313,20 @@
 
       <div class="settings-grid">
         <section class="settings-card">
-          <p class="section-label">Meta Account</p>
-          <h4>Connection status</h4>
+          <h4>Meta</h4>
           <p id="meta-connection-status"></p>
           <ul class="settings-list" id="meta-write-actions"></ul>
         </section>
 
         <section class="settings-card">
-          <p class="section-label">OpenAI</p>
-          <h4>Generation strategy</h4>
+          <h4>OpenAI</h4>
           <p id="openai-status"></p>
           <p id="openai-model"></p>
           <p id="openai-purpose"></p>
         </section>
 
         <section class="settings-card span-two-settings">
-          <p class="section-label">Prompt Recipe</p>
-          <h4>How the live AI flow will think</h4>
+          <h4>Prompt</h4>
           <div class="prompt-stack" id="prompt-stack"></div>
         </section>
       </div>

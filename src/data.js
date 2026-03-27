@@ -3,7 +3,7 @@ import aiPreviewSnapshot from "../data/ai-preview.js";
 
 export const integrationConfig = {
   openAi: {
-    status: "Ready for API wiring",
+    status: "Live preview route ready",
     model: "gpt-4.1",
     purpose: "Translate, adapt, tighten, and variant-generate ad copy"
   },
