@@ -11,7 +11,7 @@ function buildMessages(input) {
       role: "system",
       content: [
         {
-          type: "text",
+          type: "input_text",
           text: [
             "You are a Westpack-specific Meta ad copy engine.",
             "Write in clean B2B language for premium packaging buyers.",
@@ -27,7 +27,7 @@ function buildMessages(input) {
       role: "user",
       content: [
         {
-          type: "text",
+          type: "input_text",
           text: [
             `Mode: ${input.mode}`,
             sourceSummary,
