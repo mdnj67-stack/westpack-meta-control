@@ -62,3 +62,5 @@ The app will automatically prefer `data/ai-preview.js` when it exists.
 3. Fetch active campaigns, ad sets, ads, and insights live.
 4. Connect OpenAI for real translation and copy adaptation.
 5. Add audit logging and draft persistence.
+deploy trigger
+
