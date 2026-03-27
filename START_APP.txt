@@ -1,0 +1,9 @@
+Start the app like this:
+
+1. Open PowerShell
+2. Run:
+   powershell -ExecutionPolicy Bypass -File C:\Projects\westpack-meta-control\serve-local.ps1
+3. Open this address in your browser:
+   http://localhost:4173/
+
+Do not open index.html directly from the folder anymore.
