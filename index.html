@@ -342,6 +342,11 @@
                     <h3>Duplicate batch</h3>
                   </div>
                 </div>
+                <div class="create-stepper" role="tablist" aria-label="Duplicate steps">
+                  <button type="button" class="create-step-button active" data-duplicate-step-nav="1" aria-selected="true">1. Source</button>
+                  <button type="button" class="create-step-button" data-duplicate-step-nav="2" aria-selected="false">2. Targets</button>
+                  <button type="button" class="create-step-button" data-duplicate-step-nav="3" aria-selected="false">3. Push</button>
+                </div>
                 <form class="control-form" id="duplicate-form">
                   <section class="duplicate-flow-summary" id="duplicate-flow-summary"></section>
 
@@ -374,6 +379,9 @@
                         <option>Carousel</option>
                         <option>Video</option>
                       </select>
+                    </div>
+                    <div class="form-actions field-wide">
+                      <button type="button" class="ghost-button" id="duplicate-next-1">Next: choose targets</button>
                     </div>
                   </section>
 
@@ -425,14 +433,10 @@
                       </div>
                       <div class="duplicate-bulk-list" id="dup-bulk-target-list"></div>
                     </section>
-                    <section class="duplicate-bulk-panel field field-wide" aria-labelledby="dup-creative-override-label">
-                      <div class="duplicate-bulk-head">
-                        <div>
-                          <p class="section-label" id="dup-creative-override-label">Media</p>
-                        </div>
-                      </div>
-                      <div id="dup-creative-override-panel"></div>
-                    </section>
+                    <div class="form-actions field-wide">
+                      <button type="button" class="ghost-button" id="duplicate-back-2">Back</button>
+                      <button type="button" class="ghost-button" id="duplicate-next-2">Next: review &amp; push</button>
+                    </div>
                   </section>
 
                   <section class="duplicate-step" data-duplicate-step="3" aria-label="Translate">
@@ -446,6 +450,7 @@
                       <textarea id="dup-brief" rows="3" placeholder="Optional notes"></textarea>
                     </div>
                     <div class="form-actions duplicate-batch-actions">
+                      <button type="button" class="ghost-button" id="duplicate-back-3">Back</button>
                       <button type="button" class="primary-button" id="generate-duplicate-button">Generate AI preview</button>
                       <button type="button" class="ghost-button" id="duplicate-generate-missing-button">Generate missing only</button>
                       <button type="button" class="ghost-button" id="duplicate-open-active-button">Open active preview</button>

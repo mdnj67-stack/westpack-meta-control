@@ -776,9 +776,11 @@ module.exports = async (req, res) => {
       sendJson(res, 200, analysis);
       return;
     }
-    let sourceCreativeSummary = null;
+    let sourceCreativeSummary = input.precomputedSourceCreativeSummary && typeof input.precomputedSourceCreativeSummary === "object"
+      ? input.precomputedSourceCreativeSummary
+      : null;
 
-    if (input.mode === "duplicate" && input?.sourceAd?.id && config.metaAccessToken) {
+    if (!sourceCreativeSummary && input.mode === "duplicate" && input?.sourceAd?.id && config.metaAccessToken) {
       const sourceAd = await getAdDetails(input.sourceAd.id, config.metaAccessToken);
       const sourceCreativeId = sourceAd?.creative?.id;
 
@@ -787,7 +789,14 @@ module.exports = async (req, res) => {
         sourceCreativeSummary = summarizeCreativeForAi(sourceCreative);
       }
     }
-    const strategyBundle = await buildCreativeStrategy(config, input, sourceCreativeSummary);
+
+    // Duplicate mode strategy only identifies the source ad's existing intent (it must not
+    // invent a new one per target), so it is identical for every language in a batch. Reusing
+    // a precomputed strategy here skips a redundant OpenAI call and Meta lookup per target and
+    // keeps every language in the batch aligned to the exact same detected strategy.
+    const strategyBundle = input.precomputedStrategy && typeof input.precomputedStrategy === "object"
+      ? { strategy: input.precomputedStrategy, model: config.openAiModel, knowledgeContext: null }
+      : await buildCreativeStrategy(config, input, sourceCreativeSummary);
     const { parsed, payload } = await requestJsonResponse(config, {
       model: config.openAiModel,
       input: buildMessages(input, sourceCreativeSummary, strategyBundle),
@@ -800,7 +809,10 @@ module.exports = async (req, res) => {
       }
     }, "OpenAI request failed.");
 
-    sendJson(res, 200, normalizeResult(input, parsed, payload.model || config.openAiModel, sourceCreativeSummary, strategyBundle));
+    sendJson(res, 200, {
+      ...normalizeResult(input, parsed, payload.model || config.openAiModel, sourceCreativeSummary, strategyBundle),
+      sourceCreativeSummary
+    });
   } catch (error) {
     sendJson(res, 500, {
       error: error.message || "Unknown OpenAI route failure."

@@ -10664,7 +10664,7 @@ tbody tr:last-child td {
 }
 
 .duplicate-step {
-  display: grid;
+  display: none;
   grid-column: span 2;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
@@ -10673,6 +10673,10 @@ tbody tr:last-child td {
   border: 1px solid rgba(220, 211, 199, 0.92);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 245, 239, 0.94) 100%);
   margin-top: 12px;
+}
+
+.duplicate-step.active {
+  display: grid;
 }
 
 #studio-panel.is-duplicate-focused .duplicate-step {
@@ -10968,6 +10972,32 @@ tbody tr:last-child td {
 .duplicate-bulk-item .button-row .ghost-button.small {
   min-height: 30px;
   padding: 5px 9px;
+}
+
+.duplicate-bulk-mode-row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.duplicate-bulk-mode-row .ghost-button.small {
+  min-height: 28px;
+  padding: 5px 10px;
+  font-size: 0.76rem;
+}
+
+.duplicate-bulk-mode-row .ghost-button.small.is-selected {
+  border-color: rgba(198, 61, 52, 0.35);
+  background: rgba(198, 61, 52, 0.1);
+  color: var(--accent-strong);
+}
+
+.duplicate-bulk-item-media {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(220, 211, 199, 0.9);
 }
 
 .duplicate-bulk-empty {

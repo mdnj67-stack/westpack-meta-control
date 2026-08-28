@@ -71,10 +71,15 @@ export function renderDuplicateBulkTargetsAction({
           </div>
         </div>
         <div class="button-row">
-          <button type="button" class="ghost-button small" data-edit-bulk-target="${key}">Media</button>
           <button type="button" class="ghost-button small" data-open-bulk-target="${key}">Review</button>
           ${isPrimary ? "" : `<button type="button" class="ghost-button small" data-remove-bulk-target="${key}">Remove</button>`}
         </div>
+        <div class="duplicate-bulk-mode-row" role="group" aria-label="Creative for ${escapeHtml(target.languageLabel)}">
+          <button type="button" class="ghost-button small${creativeOverride.mode === "source" ? " is-selected" : ""}" data-row-creative-mode="source">Source</button>
+          <button type="button" class="ghost-button small${creativeOverride.mode === "video" ? " is-selected" : ""}" data-row-creative-mode="video">Video</button>
+          <button type="button" class="ghost-button small${creativeOverride.mode === "carousel" ? " is-selected" : ""}" data-row-creative-mode="carousel">Carousel</button>
+        </div>
+        ${isEditingCreative ? `<div class="duplicate-bulk-item-media" id="dup-creative-override-panel"></div>` : ""}
       </article>
     `;
   }).join("");
@@ -148,19 +153,6 @@ export function renderDuplicateCreativeOverridePanelAction({
   `).join("");
 
   panel.innerHTML = `
-    <div class="duplicate-creative-head">
-      <div>
-        <p class="section-label">Target media</p>
-        <h4>${target.campaignName} · ${target.adSetName}</h4>
-        <p class="field-hint">${target.languageLabel}</p>
-      </div>
-      <span class="duplicate-creative-badge ${override.mode === "video" ? "is-video" : override.mode === "carousel" ? "is-carousel" : "is-source"}">${override.mode === "video" ? "Video override" : override.mode === "carousel" ? "Carousel override" : "Source creative"}</span>
-    </div>
-    <div class="duplicate-creative-toggle">
-      <button type="button" class="ghost-button small${override.mode === "source" ? " is-selected" : ""}" data-duplicate-creative-mode="source">Use source creative</button>
-      <button type="button" class="ghost-button small${override.mode === "video" ? " is-selected" : ""}" data-duplicate-creative-mode="video" ${canUseVideoOverride ? "" : "disabled"}>Use localized video</button>
-      <button type="button" class="ghost-button small${override.mode === "carousel" ? " is-selected" : ""}" data-duplicate-creative-mode="carousel" ${canUseCarouselOverride ? "" : "disabled"}>Use localized carousel images</button>
-    </div>
     ${canUseVideoOverride ? `
       <div class="video-variant-grid duplicate-creative-grid${override.mode === "video" ? "" : " is-disabled"}">
         <label class="field video-upload-field" for="dup-video-square-upload">

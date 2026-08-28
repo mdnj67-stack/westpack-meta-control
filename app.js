@@ -10644,8 +10644,14 @@ function setDuplicateStep(step, options = {}) {
   appState.duplicateStep = next;
 
   document.querySelectorAll(".duplicate-step").forEach((el) => {
-    el.classList.add("active");
-    el.classList.toggle("is-current", el.dataset.duplicateStep === String(next));
+    const isCurrent = el.dataset.duplicateStep === String(next);
+    el.classList.toggle("active", isCurrent);
+    el.classList.toggle("is-current", isCurrent);
+  });
+  document.querySelectorAll("[data-duplicate-step-nav]").forEach((el) => {
+    const isCurrent = el.dataset.duplicateStepNav === String(next);
+    el.classList.toggle("active", isCurrent);
+    el.setAttribute("aria-selected", isCurrent ? "true" : "false");
   });
   renderDuplicateWorkflowSummary();
   if (options.scroll === true) {
@@ -17078,6 +17084,7 @@ function attachEvents() {
   attachDuplicateStudioEventsModule({
     addCurrentDuplicateTarget,
     appState,
+    canAdvanceDuplicateStep,
     clearDuplicateCreativeOverrideCarouselFiles,
     ensureDuplicateTargetPersisted,
     focusDuplicateTargetEditor,
@@ -17094,6 +17101,7 @@ function attachEvents() {
     renderDuplicateCreativeOverridePanel,
     setDuplicateActivePreview,
     setDuplicateReviewOpen,
+    setDuplicateStep,
     setStudioStatus,
     syncActionAvailability,
     syncDuplicateCreativeEditorKey,

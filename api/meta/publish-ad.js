@@ -1015,8 +1015,7 @@ module.exports = async (req, res) => {
         return;
       }
 
-      const sourceAdForIdentity = await getAdDetails(body.source_ad_id, config.metaAccessToken);
-      const identity = await getIdentityFromAnyAd(config.metaAdAccountId, config.metaAccessToken, sourceAdForIdentity);
+      const identity = await getIdentityFromAnyAd(config.metaAdAccountId, config.metaAccessToken);
       const hashes = [];
       for (let index = 0; index < squareItems.length; index += 1) {
         const item = squareItems[index] || {};

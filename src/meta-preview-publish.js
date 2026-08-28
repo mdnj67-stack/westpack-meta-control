@@ -1,3 +1,22 @@
+const DUPLICATE_PREVIEW_CONCURRENCY = 4;
+
+async function runWithConcurrency(items, limit, worker) {
+  const results = new Array(items.length);
+  let cursor = 0;
+
+  async function runNext() {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  const workerCount = Math.max(1, Math.min(limit, items.length));
+  await Promise.all(Array.from({ length: workerCount }, runNext));
+  return results;
+}
+
 export async function generateAiPreviewAction({
   appState,
   buildGenerationRequest,
@@ -63,42 +82,70 @@ export async function generateAiPreviewAction({
         clearDuplicateBatchPreviews();
       }
       const failures = [];
-      let firstKey = "";
+      // Duplicate mode strategy only re-identifies the source ad's existing intent, so it is the
+      // same for every target language in a batch. The first target's response is reused as a
+      // shared strategy/creative-summary basis for the rest, which skips a redundant OpenAI
+      // strategy call and Meta ad/creative lookup per remaining target and keeps every language
+      // aligned to the same detected strategy instead of drifting between independent calls.
+      let sharedStrategy = null;
+      let sharedSourceCreativeSummary = null;
 
-      for (const target of targets) {
-        try {
-          ensureDuplicateTargetPersisted(target);
-          const requestBody = buildGenerationRequest({
-            ads: appState.ads,
-            mode,
-            overrides: {
-              targetCampaign: target.campaignName,
-              targetCampaignId: target.campaignId,
-              targetAdSet: target.adSetName,
-              targetAdSetId: target.adSetId,
-              targetLanguage: target.language
-            }
-          });
-          const result = await requestAiPreview(requestBody);
-          const preview = result.preview;
-          const variants = result.variants?.length ? result.variants : buildVariantSet(preview);
-          const key = getDuplicateTargetKey(target);
-          upsertDuplicateBatchEntry({
-            key,
-            target: cloneDuplicateTarget(target),
-            preview,
-            variants,
-            model: result.model || "OpenAI"
-          });
-          if (!firstKey) {
-            firstKey = key;
+      const runTarget = async (target) => {
+        ensureDuplicateTargetPersisted(target);
+        const requestBody = buildGenerationRequest({
+          ads: appState.ads,
+          mode,
+          overrides: {
+            targetCampaign: target.campaignName,
+            targetCampaignId: target.campaignId,
+            targetAdSet: target.adSetName,
+            targetAdSetId: target.adSetId,
+            targetLanguage: target.language,
+            ...(sharedStrategy ? { precomputedStrategy: sharedStrategy } : {}),
+            ...(sharedSourceCreativeSummary ? { precomputedSourceCreativeSummary: sharedSourceCreativeSummary } : {})
           }
-        } catch (error) {
-          failures.push(`${target.campaignName} / ${target.adSetName} / ${target.languageLabel}: ${error.message || "Preview failed."}`);
+        });
+        const result = await requestAiPreview(requestBody);
+        const preview = result.preview;
+        const variants = result.variants?.length ? result.variants : buildVariantSet(preview);
+        const key = getDuplicateTargetKey(target);
+        upsertDuplicateBatchEntry({
+          key,
+          target: cloneDuplicateTarget(target),
+          preview,
+          variants,
+          model: result.model || "OpenAI"
+        });
+        if (!sharedStrategy && preview?.strategy) {
+          sharedStrategy = preview.strategy;
         }
+        if (!sharedSourceCreativeSummary && result.sourceCreativeSummary) {
+          sharedSourceCreativeSummary = result.sourceCreativeSummary;
+        }
+      };
+
+      const [firstTarget, ...remainingTargets] = targets;
+      try {
+        await runTarget(firstTarget);
+      } catch (error) {
+        failures.push(`${firstTarget.campaignName} / ${firstTarget.adSetName} / ${firstTarget.languageLabel}: ${error.message || "Preview failed."}`);
+      }
+
+      if (remainingTargets.length) {
+        await runWithConcurrency(remainingTargets, DUPLICATE_PREVIEW_CONCURRENCY, async (target) => {
+          try {
+            await runTarget(target);
+          } catch (error) {
+            failures.push(`${target.campaignName} / ${target.adSetName} / ${target.languageLabel}: ${error.message || "Preview failed."}`);
+          }
+        });
       }
 
       appState.lastGeneratedSignature = getCurrentFormSignature();
+      // Resolved in original target order (not completion order) so batches stay deterministic
+      // even though the remaining targets above run concurrently.
+      const firstSuccessfulTarget = targets.find((target) => getDuplicateBatchEntry(getDuplicateTargetKey(target))?.preview);
+      const firstKey = firstSuccessfulTarget ? getDuplicateTargetKey(firstSuccessfulTarget) : "";
       if (!firstKey) {
         throw new Error(failures[0] || "No previews could be generated.");
       }
@@ -234,7 +281,7 @@ export async function pushToMetaAction({
             adId: result.adId,
             status: result.status
           });
-          if (targets.length > 1) {
+          if (targets.length > 1 && index < targets.length - 1) {
             await wait(creativeOverride.mode === "video" ? 10000 : 1200);
           }
         } catch (error) {

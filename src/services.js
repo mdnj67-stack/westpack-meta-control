@@ -227,7 +227,9 @@ export function buildGenerationRequest({ ads, mode, overrides = {} }) {
     newAdName,
     newAdAngle,
     creativeAssets,
-    cardImagePreviews
+    cardImagePreviews,
+    ...(overrides.precomputedStrategy ? { precomputedStrategy: overrides.precomputedStrategy } : {}),
+    ...(overrides.precomputedSourceCreativeSummary ? { precomputedSourceCreativeSummary: overrides.precomputedSourceCreativeSummary } : {})
   };
 }
 

@@ -1,6 +1,7 @@
 export function attachDuplicateStudioEventsModule({
   addCurrentDuplicateTarget,
   appState,
+  canAdvanceDuplicateStep,
   ensureDuplicateTargetPersisted,
   focusDuplicateTargetEditor,
   generateAiPreview,
@@ -16,6 +17,7 @@ export function attachDuplicateStudioEventsModule({
   renderDuplicateCreativeOverridePanel,
   setDuplicateActivePreview,
   setDuplicateReviewOpen,
+  setDuplicateStep,
   setStudioStatus,
   syncActionAvailability,
   syncDuplicateCreativeEditorKey,
@@ -95,9 +97,16 @@ export function attachDuplicateStudioEventsModule({
       return;
     }
 
-    const creativeButton = target.closest("[data-edit-bulk-target]");
-    if (creativeButton instanceof HTMLButtonElement) {
-      const key = creativeButton.dataset.editBulkTarget || "";
+    const modeButton = target.closest("[data-row-creative-mode]");
+    if (modeButton instanceof HTMLButtonElement) {
+      const key = row instanceof HTMLElement ? row.getAttribute("data-duplicate-target-key") || "" : "";
+      const mode = modeButton.dataset.rowCreativeMode || "source";
+      if (!key) return;
+      const duplicateTarget = getDuplicateTargetByKey(key);
+      if (duplicateTarget && (mode === "video" || mode === "carousel")) {
+        ensureDuplicateTargetPersisted(duplicateTarget);
+      }
+      upsertDuplicateCreativeOverride(key, { mode });
       setDuplicateReviewOpen(false);
       appState.duplicateCreativeEditorKey = key;
       if (!setDuplicateActivePreview(key, { syncFields: false })) {
@@ -106,30 +115,13 @@ export function attachDuplicateStudioEventsModule({
         renderCurrentPreviewPayload();
         syncActionAvailability();
       }
-      document.getElementById("dup-creative-override-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  });
-
-  document.getElementById("dup-creative-override-panel")?.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
-    const nextMode = target.closest("[data-duplicate-creative-mode]")?.getAttribute("data-duplicate-creative-mode");
-    if (nextMode) {
-      const editorTarget = getActiveDuplicateCreativeEditorTarget();
-      if (!editorTarget) return;
-      if (nextMode === "video" || nextMode === "carousel") {
-        ensureDuplicateTargetPersisted(editorTarget);
-      }
-      upsertDuplicateCreativeOverride(getDuplicateTargetKey(editorTarget), {
-        mode: nextMode === "video" ? "video" : nextMode === "carousel" ? "carousel" : "source"
-      });
-      renderDuplicateBulkTargets();
-      renderDuplicateCreativeOverridePanel();
-      renderCurrentPreviewPayload();
-      syncActionAvailability();
       return;
     }
 
+    // The override panel now renders inline inside the currently-edited row (see
+    // renderDuplicateBulkTargetsAction), so its DOM node is recreated on every list
+    // re-render. Listening here on the static #dup-bulk-target-list container instead of
+    // on #dup-creative-override-panel itself keeps these handlers working across re-renders.
     const clearVariantKey = target.closest("[data-clear-duplicate-video]")?.getAttribute("data-clear-duplicate-video");
     if (clearVariantKey) {
       const editorTarget = getActiveDuplicateCreativeEditorTarget();
@@ -226,4 +218,33 @@ export function attachDuplicateStudioEventsModule({
     setDuplicateReviewOpen(false);
   });
 
+  document.querySelectorAll("[data-duplicate-step-nav]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (appState.mode !== "duplicate") return;
+      const next = Number(button.dataset.duplicateStepNav);
+      if (next > appState.duplicateStep && !canAdvanceDuplicateStep(appState.duplicateStep)) {
+        setStudioStatus("Complete this step before continuing.", "warning");
+        return;
+      }
+      setDuplicateStep(next);
+    });
+  });
+
+  document.getElementById("duplicate-next-1")?.addEventListener("click", () => {
+    if (!canAdvanceDuplicateStep(1)) {
+      setStudioStatus("Select a source ad before continuing.", "warning");
+      return;
+    }
+    setDuplicateStep(2);
+  });
+
+  document.getElementById("duplicate-back-2")?.addEventListener("click", () => setDuplicateStep(1));
+  document.getElementById("duplicate-next-2")?.addEventListener("click", () => {
+    if (!canAdvanceDuplicateStep(2)) {
+      setStudioStatus("Pick a target campaign and ad set before continuing.", "warning");
+      return;
+    }
+    setDuplicateStep(3);
+  });
+  document.getElementById("duplicate-back-3")?.addEventListener("click", () => setDuplicateStep(2));
 }
