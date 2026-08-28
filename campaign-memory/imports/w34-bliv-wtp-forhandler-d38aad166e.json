@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "w34-bliv-wtp-forhandler-d38aad166e",
+  "source": {
+    "file": "W34 Bliv WTP forhandler.png",
+    "relativePath": "campaign-import/unsorted-email/W34 Bliv WTP forhandler.png",
+    "sha256": "d38aad166ea899d3481e89f1c40bc59b39eef13c45218212d1664f99e06ae936",
+    "bytes": 393530
+  },
+  "analysis": {
+    "campaignTitle": "WTP forhandler campaign",
+    "week": "W34",
+    "language": "Danish",
+    "campaignFamily": "partnership/re-seller recruitment",
+    "campaignType": "lead_generation",
+    "funnelStage": "consideration",
+    "primaryGoal": "Recruit retailers and promote the WTP product line as an add-on or cross-sell for jewelry sellers.",
+    "audience": "Potential retail partners, boutique and jewelry shop owners",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se det store udvalg nu ➞",
+    "secondaryCtas": [
+      "Bliv WTP forhandler nu ➞",
+      "Smykkeskrin ➞",
+      "Ureæske ➞",
+      "Stabelæske ➞",
+      "Rejseæske ➞",
+      "Følg WTP på instagram ➞"
+    ],
+    "products": [
+      "Smykkeskrin",
+      "Ureæske",
+      "Stabelæske",
+      "Rejseæske"
+    ],
+    "themes": [
+      "Cross-selling",
+      "Retailer partnership",
+      "Visual merchandising",
+      "Product education",
+      "Upselling"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#684736",
+        "#bfb29b",
+        "#e3dacd",
+        "#dedede"
+      ],
+      "mood": "Soft, elegant, product-focused with a premium touch",
+      "layoutPatterns": [
+        "Hero image with logo",
+        "Sectioned product groupings",
+        "Alternating image and text blocks",
+        "Call-to-action buttons under each key section"
+      ],
+      "imageStyle": "Professional, minimalist product photography; muted backgrounds"
+    },
+    "copyStyle": {
+      "tone": "Professional but friendly, educational",
+      "structure": [
+        "Introduction and value proposition",
+        "Key selling points and FAQ",
+        "Primary CTA",
+        "Product breakdown",
+        "Social media invitation"
+      ],
+      "urgency": "Low/None; more focused on benefits and education than time-limited offers"
+    },
+    "reusablePatterns": [
+      "Feature a hero product photo with understated branding",
+      "Educate resellers on end-customer needs and how products solve them",
+      "Segmented CTAs for different product categories",
+      "Wholesale pitch as a section after initial product intro",
+      "Social media plug at the end with visually distinct block"
+    ],
+    "risks": [
+      "Email is text-heavy in places—could result in skimming",
+      "No visible incentive (discount, exclusive offer) to drive retailer urgency",
+      "If recipients are not retailers, relevance is low"
+    ],
+    "confidence": {
+      "overall": 0.93,
+      "textReadability": 0.96,
+      "notes": "All primary CTAs, headlines, and section structures are clearly readable. Subject line/preheader not visible. Offer is implicit rather than explicit."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:52.740Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

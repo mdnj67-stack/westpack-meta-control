@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "w45-pre-black-friday-7b6c240b65",
+  "source": {
+    "file": "W45 Pre Black Friday.png",
+    "relativePath": "campaign-import/unsorted-email/W45 Pre Black Friday.png",
+    "sha256": "7b6c240b650a897e214448bf2cbb1a2f56660821b6139ac4eaefcba7cec1149c",
+    "bytes": 411695
+  },
+  "analysis": {
+    "campaignTitle": "World of Treasured Pieces – Pre Black Friday",
+    "week": "W45",
+    "language": "Danish",
+    "campaignFamily": "World of Treasured Pieces",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive sales of WTP (jewelry boxes) through an early pre-Black Friday 20% discount, while distancing from traditional Black Friday events.",
+    "audience": "Customers/subscribers interested in gift packaging, jewelry storage, and premium presentation solutions.",
+    "offer": "20% discount on all WTP jewelry boxes until November 12, 2023.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Spar 20% på WTP ➔",
+    "secondaryCtas": [
+      "Alt World of Treasured Pieces ➔"
+    ],
+    "products": [
+      "WTP-smykkeskrin",
+      "World of Treasured Pieces (jewelry boxes)"
+    ],
+    "themes": [
+      "Anti-Black Friday",
+      "Early access",
+      "Calm/no-panic shopping",
+      "Gift inspiration"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Black",
+        "White",
+        "Gold",
+        "Red",
+        "Yellow"
+      ],
+      "mood": "Elegant, exclusive, slightly playful",
+      "layoutPatterns": [
+        "Hero image with product and large red offer text",
+        "Sectioned storytelling",
+        "Call-to-action boxes",
+        "Alternating product/lifestyle images",
+        "Final bright yellow offer strip"
+      ],
+      "imageStyle": "High-contrast, premium product photography, visually rich black/gold settings"
+    },
+    "copyStyle": {
+      "tone": "Conversational, witty, self-aware, direct",
+      "structure": [
+        "Disarming intro about Black Friday planning",
+        "Humorous explanation of opting out",
+        "Clear unique value proposition and offer details",
+        "Call to action",
+        "PS with extra justification and ‘survival guide’ tease"
+      ],
+      "urgency": "Mild, time-limited offer but intentionally anti-hype"
+    },
+    "reusablePatterns": [
+      "Acknowledging and subverting seasonal hype to build brand trust",
+      "Transparent, conversational explanation for promotion timing",
+      "Value proposition focused on calm/shopping ease instead of panic",
+      "Large visual offer indicator over lifestyle/product image",
+      "Primary bold CTA at the bottom with bright contrasting button",
+      "PS for secondary info and soft teasing of upcoming content"
+    ],
+    "risks": [
+      "Might not appeal to customers seeking traditional Black Friday bargains",
+      "Anti-hype approach could be misinterpreted as less competitive"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.97,
+      "notes": "All major elements, headlines, and CTAs were clearly visible. Some microtext (like preheader/subject lines) were not present, so left blank."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:59:09.725Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w34-bliv-wtp-forhandler-d38aad166e",
+  "source": {
+    "file": "W34 Bliv WTP forhandler.png",
+    "relativePath": "campaign-import/unsorted-email/W34 Bliv WTP forhandler.png",
+    "sha256": "d38aad166ea899d3481e89f1c40bc59b39eef13c45218212d1664f99e06ae936",
+    "bytes": 393530
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Bliv WTP forhandler",
+    "week": "W34",
+    "language": "Danish",
+    "campaignFamily": "B2B Partner Recruitment",
+    "campaignType": "lead_generation",
+    "funnelStage": "consideration",
+    "primaryGoal": "Recruit new retail partners to carry WTP (World of Treasured Pieces) product line.",
+    "audience": "Current or potential business partners/retailers in jewelry sector.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se det store udvalg nu ➜",
+    "secondaryCtas": [
+      "Bliv WTP forhandler nu ➜",
+      "Smykkeskrin ➜",
+      "Uræsker ➜",
+      "Stackables ➜",
+      "Rejseæsker ➜",
+      "Følg WTP på instagram ➜"
+    ],
+    "products": [
+      "Jewelry boxes",
+      "Travel cases",
+      "Watch boxes",
+      "Stackable trays",
+      "Gift-sized boxes"
+    ],
+    "themes": [
+      "Product assortment",
+      "Merchandising advice",
+      "Retailer benefits",
+      "Upselling",
+      "Social media promotion"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Brown",
+        "Pastel pink",
+        "Mint green",
+        "Neutral beige",
+        "Black",
+        "White"
+      ],
+      "mood": "Premium, calm, professional",
+      "layoutPatterns": [
+        "Hero product photo at top",
+        "Product close-ups in grid",
+        "Boxes/cards for button CTAs",
+        "Informational section with icon bullets",
+        "Instagram style with smartphone mockup"
+      ],
+      "imageStyle": "Studio, clean backgrounds, mostly soft neutral settings, product-focused"
+    },
+    "copyStyle": {
+      "tone": "Informative, instructional, supportive",
+      "structure": [
+        "Intro product value statement",
+        "Retailer problem/solution explanation",
+        "How to sell/upsell advice",
+        "Call-to-action for partnership",
+        "Multi-product visual gallery",
+        "Social channel promotion"
+      ],
+      "urgency": "Low to moderate (gentle encouragement, no finite offers or countdowns)"
+    },
+    "reusablePatterns": [
+      "Hero image to introduce flagship line",
+      "Sectioned content: product intro, selling advice, and partnership CTA",
+      "Bullet points to address specific retailer pain points/questions",
+      "End-of-email social media callout with device mockup",
+      "Multiple CTAs segmented by product type"
+    ],
+    "risks": [
+      "Messaging may be too gentle—low urgency",
+      "No visible offer or incentive could reduce response",
+      "Dense section of text may be skimmed over"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.97,
+      "notes": "All visible Danish text is clearly readable; only subject/preheader are missing. Translated and interpreted product/applications based strictly on visuals and text."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:26.294Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

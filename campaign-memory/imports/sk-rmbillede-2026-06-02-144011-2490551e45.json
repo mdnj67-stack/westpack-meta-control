@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-06-02-144011-2490551e45",
+  "source": {
+    "file": "Skærmbillede 2026-06-02 144011.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-06-02 144011.png",
+    "sha256": "2490551e45043e3b2ec40896b32860041ca723ea6cfb56669b6f3c800a2ac251",
+    "bytes": 256625
+  },
+  "analysis": {
+    "campaignTitle": "Westpack fylder 73 år!",
+    "week": "",
+    "language": "da",
+    "campaignFamily": "anniversary",
+    "campaignType": "seasonal",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive urgent sales through a limited-time anniversary offer (Mystery Box giveaway) and highlight product range.",
+    "audience": "Business customers of Westpack, likely buyers of packaging products.",
+    "offer": "Gratis Mystery Box ved køb over 200 kr. (Kun 73 bokse; 20% rabatkode i én boks; tidsbegrænset tilbud).",
+    "subjectLineVisible": "Westpack fylder 73 år! Nu er det sidste chance!",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box",
+    "secondaryCtas": [
+      "Læs mere om fødselsdags kampagnen",
+      "Læg i kurv",
+      "Se alle smykkeskrin",
+      "Se alle bæreposer",
+      "Se alt WTP"
+    ],
+    "products": [
+      "Miluna ECO smykkeske",
+      "Vivara smykkeske",
+      "Rio ECO smykkeske",
+      "Luksus Bærepose, mørkebrun",
+      "Luksus Bærepose, lysegrøn",
+      "WTP Skattekiste smykkeskrin",
+      "WTP Medusa smykkeskrin",
+      "WTP Haiti smykkeskrin"
+    ],
+    "themes": [
+      "anniversary",
+      "giveaway",
+      "urgency",
+      "celebration",
+      "product showcase"
+    ],
+    "visualStyle": {
+      "palette": [
+        "red",
+        "blue",
+        "white",
+        "beige",
+        "pastel accent colors"
+      ],
+      "mood": "festive and friendly",
+      "layoutPatterns": [
+        "hero team/staff photo",
+        "colored banner separators",
+        "two-column product grids",
+        "large CTA buttons"
+      ],
+      "imageStyle": "mix of staged photography (team photo, product shots) and festive digital graphics (banners, box illustration)"
+    },
+    "copyStyle": {
+      "tone": "conversational, informal, urgent, celebratory",
+      "structure": [
+        "Immediate announcement headline",
+        "Short subheader establishing urgency",
+        "Offer description (limited quantity, special benefit, how to participate)",
+        "FAQ-style section ('Hvad er der i?')",
+        "Primary CTA (button)",
+        "Disclaimer",
+        "Supporting CTA",
+        "Product recommendations (with images and 'læg i kurv' CTAs)",
+        "Category section summaries"
+      ],
+      "urgency": "high (limited time and quantity repeatedly stressed)"
+    },
+    "reusablePatterns": [
+      "Team or group staff photo as a personable hero image for anniversary/brand milestone campaigns",
+      "Bold, festive headline followed by smaller subheader creating urgency",
+      "Limited-quantity giveaway incentivizing rapid action",
+      "FAQ-style info box explaining the offer to reduce hesitation",
+      "Large, colored CTA button directly under the offer description",
+      "Tiered secondary CTAs promoting product categories beneath the primary campaign section",
+      "Showcase product grids with add-to-cart below each image and category-wide CTA below each section",
+      "Light, celebratory graphic dividers (bunting or similar) separating content blocks"
+    ],
+    "risks": [
+      "Over-reliance on short-lived urgency may fatigue audience if used too frequently",
+      "Potential disappointment for latecomers if limited offer gone",
+      "Clarity of offer and terms must be maintained"
+    ],
+    "confidence": {
+      "overall": 0.93,
+      "textReadability": 0.98,
+      "notes": "All primary copy, CTAs, and visuals are clearly visible. Subject line and main headings are completely legible. No preheader found. Product images and offer mechanics are easily interpreted."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:56:25.985Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

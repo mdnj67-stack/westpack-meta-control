@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w27-hvad-skal-wp-erne-i-deres-sommerferie-03707fc7ea",
+  "source": {
+    "file": "W27 Hvad skal Wp'erne i deres sommerferie.png",
+    "relativePath": "campaign-import/unsorted-email/W27 Hvad skal Wp'erne i deres sommerferie.png",
+    "sha256": "03707fc7ea1ef5ae6ab4f69be85907d49664d9371834989f3642618d979b767f",
+    "bytes": 205567
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Hvad skal Wp'erne i deres sommerferie?",
+    "week": "W27",
+    "language": "da",
+    "campaignFamily": "summer holiday",
+    "campaignType": "brand",
+    "funnelStage": "awareness",
+    "primaryGoal": "Build brand affinity and highlight team personality connected to summer holidays, while showcasing summer-appropriate packaging products.",
+    "audience": "Westpack customers and email subscribers (likely B2B, gift and packaging focused)",
+    "offer": "",
+    "subjectLineVisible": "Hvad skal du lave i sommerferien?",
+    "preheaderVisible": "",
+    "primaryCta": "Se videoen her ➔",
+    "secondaryCtas": [
+      "Hold forårskampagnen i gang og bestil her ➔",
+      "Fyld op af emballage her ➔"
+    ],
+    "products": [
+      "Soft touch ECO smykkeskrin",
+      "Boston ECO Smykkeskrin",
+      "Boston ECO Smykkeskrin 7,3x7,3cm",
+      "Boston ECO Smykkeskrin 8,5x8,5cm",
+      "Boston ECO Smykkeskrin 5,5x5,5cm",
+      "Boston ECO Smykkeskrin 6,5x6,5cm",
+      "Boston ECO Smykkeskrin 9x9cm",
+      "Tilføj tryk Digital",
+      "Santiago ECO Smykkeskrin"
+    ],
+    "themes": [
+      "team stories",
+      "summer holidays",
+      "personal tone",
+      "product spotlight"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#ea9636",
+        "#ffffff",
+        "#ddc87f",
+        "#26262a"
+      ],
+      "mood": "lighthearted, summery, friendly",
+      "layoutPatterns": [
+        "Top hero area with large team photo",
+        "Video thumbnail with playful icons",
+        "Section with product grid and call-to-action buttons"
+      ],
+      "imageStyle": "Natural team photograph, illustrated playful summer icons, product thumbnails"
+    },
+    "copyStyle": {
+      "tone": "conversational, inviting, cheerful",
+      "structure": [
+        "Opening question/teaser",
+        "Team story and engagement prompt",
+        "Video teaser",
+        "Light product promo blurb",
+        "Product grid with calls to action"
+      ],
+      "urgency": "mild (suggests continuity through summer, gentle push to keep shopping)"
+    },
+    "reusablePatterns": [
+      "Lead with a team or staff story to humanize the brand",
+      "Pose seasonal, relatable questions to drive engagement",
+      "Incorporate a video or interactive element for engagement",
+      "Connect seasonal themes visually (icons, palettes) throughout email",
+      "Align products with seasonal needs or moods",
+      "Use a product grid with clear CTA buttons for each item"
+    ],
+    "risks": [
+      "Personal and playful approach may not appeal to all professional B2B recipients",
+      "Seasonal relevance is time-limited",
+      "Video engagement requires additional resource"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.93,
+      "notes": "All key sections and product names readable. Preheader field not visible. Color palette approximate from visual context."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:58.466Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

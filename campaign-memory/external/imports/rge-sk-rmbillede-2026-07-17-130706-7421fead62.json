@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "id": "rge-sk-rmbillede-2026-07-17-130706-7421fead62",
+  "source": {
+    "file": "Skærmbillede 2026-07-17 130706.png",
+    "relativePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130706.png",
+    "sha256": "7421fead622078c4817fbe017cb6a5ca7114995e198cd82b076004e1290d73d4",
+    "bytes": 628841
+  },
+  "library": {
+    "type": "external_inspiration",
+    "sourceName": "Really Good Emails",
+    "sourceUrl": "",
+    "attributionRequired": true
+  },
+  "analysis": {
+    "campaignTitle": "Wonderbly: $15 Off Books for Everyone",
+    "week": "",
+    "language": "English",
+    "campaignFamily": "sitewide_promotion",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive immediate purchase via a promotional code",
+    "audience": "Parents or gift shoppers for children (various ages including newborns, kids, and adults)",
+    "offer": "$15 off books for everyone with code BOOKSGALORE",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Use code BOOKSGALORE",
+    "secondaryCtas": [
+      "Personalize me",
+      "Bring them closer",
+      "Babies",
+      "Kids",
+      "Adults",
+      "Newborns"
+    ],
+    "products": [
+      "Personalized children’s books",
+      "Multiverse-hopping search-and-find books",
+      "Personalized sibling books",
+      "Personalized adventure books"
+    ],
+    "themes": [
+      "Personalization",
+      "Gift giving",
+      "Family bonding",
+      "Inclusive for all ages"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#123c6b",
+        "#f8eecd",
+        "#fff",
+        "#e4c3f7",
+        "#e0f5ed"
+      ],
+      "mood": "Friendly, playful, inclusive, warm",
+      "layoutPatterns": [
+        "Hero section with bold discount offer",
+        "Product showcase grids",
+        "Human lifestyle imagery",
+        "Category-selection CTAs",
+        "Simple footer with brand support info"
+      ],
+      "imageStyle": "Bright, playful product shots and warm, candid family imagery"
+    },
+    "copyStyle": {
+      "tone": "Friendly, direct, inclusive, informative",
+      "structure": [
+        "Prominent hero discount",
+        "Showcase of featured and popular books",
+        "Short product explanations",
+        "Personalization CTAs",
+        "Segmented product suggestions by age",
+        "Customer support info"
+      ],
+      "urgency": "Soft urgency (time-limited offer mentioned in legal copy only)"
+    },
+    "reusablePatterns": [
+      "Hero section featuring a bold offer code and clear headline",
+      "Segmented product/category blocks with direct personalization CTAs",
+      "Social proof/crowd-sourced sharing prompt (e.g., 'Share your #WonderblyMoments')",
+      "Support and FAQ block addressing hesitations",
+      "Simple visual hierarchy using color block frames and clean spacing",
+      "Product images paired with 1-2 line benefit-driven descriptions"
+    ],
+    "risks": [
+      "Heavily offer-driven design may reduce perceived product value if overused",
+      "Segmented product categories may not cover all audience needs",
+      "Personalization-focused CTAs may not resonate for general audiences"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "All UI text, CTAs, and offer details are clearly visible and legible. No visible information in Danish. Subject line and preheader not shown in screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "external_needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:11:15.846Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

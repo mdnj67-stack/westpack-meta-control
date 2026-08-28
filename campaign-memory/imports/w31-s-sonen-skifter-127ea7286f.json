@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "w31-s-sonen-skifter-127ea7286f",
+  "source": {
+    "file": "W31 Sæsonen skifter.png",
+    "relativePath": "campaign-import/unsorted-email/W31 Sæsonen skifter.png",
+    "sha256": "127ea7286fb9e83b01a3e9052a3c77ec47c2524701465a3ca5db678d69bc51ad",
+    "bytes": 732807
+  },
+  "analysis": {
+    "campaignTitle": "W31 Sæsonen skifter",
+    "week": "W31",
+    "language": "Danish",
+    "campaignFamily": "season_change",
+    "campaignType": "seasonal",
+    "funnelStage": "consideration",
+    "primaryGoal": "Inspire customers to explore new packaging options for the autumn season.",
+    "audience": "Businesses and individuals sourcing packaging for jewelry and gifts.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se de 5 efterårslooks ➔",
+    "secondaryCtas": [
+      "Forsendelse ➔",
+      "Gaveindpakning ➔",
+      "Bæreposer ➔",
+      "Smykkeskrin ➔"
+    ],
+    "products": [
+      "Gift bags",
+      "Jewelry boxes",
+      "Shipping boxes",
+      "Gift wrapping",
+      "Carrier bags"
+    ],
+    "themes": [
+      "Seasonal transition",
+      "Autumn inspiration",
+      "Packaging variety",
+      "Style & branding"
+    ],
+    "visualStyle": {
+      "palette": [
+        "terracotta",
+        "mahogany",
+        "cream",
+        "black",
+        "dark green",
+        "brown",
+        "soft gold"
+      ],
+      "mood": "Warm, inviting, seasonal",
+      "layoutPatterns": [
+        "hero product scene",
+        "sectioned categories",
+        "paired product images",
+        "highlighted CTA block"
+      ],
+      "imageStyle": "Natural light, staged product sets, autumn props (leaves, fabric)"
+    },
+    "copyStyle": {
+      "tone": "Inspiring, conversational, gently persuasive",
+      "structure": [
+        "Seasonal introduction",
+        "Reflective question",
+        "Product/solution overview",
+        "Call to action",
+        "Category highlights"
+      ],
+      "urgency": "Low to medium—invitation to explore or get inspired rather than act immediately"
+    },
+    "reusablePatterns": [
+      "Staged hero image with seasonal props",
+      "Section introduction with evocative seasonal language",
+      "Primary CTA in colored block beneath intro",
+      "Grid or card layout for featured categories",
+      "Product showcase in situ with coordinated palettes",
+      "Secondary CTAs in labeled boxes below category images"
+    ],
+    "risks": [
+      "Low urgency may delay response",
+      "Strong seasonality may reduce relevance out of autumn context",
+      "No clear promotional offer or price trigger"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 1,
+      "notes": "All visible text is readable and product visuals are clearly interpreted. No subject line or preheader are shown in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:45.121Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

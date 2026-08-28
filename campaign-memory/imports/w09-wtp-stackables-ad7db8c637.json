@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "w09-wtp-stackables-ad7db8c637",
+  "source": {
+    "file": "W09 WTP Stackables.png",
+    "relativePath": "campaign-import/unsorted-email/W09 WTP Stackables.png",
+    "sha256": "ad7db8c637e6ae15d98c18cc4627bc7ea224840ad0c973daeb77175625227d09",
+    "bytes": 337221
+  },
+  "analysis": {
+    "campaignTitle": "NYHED: Moduleret smykkeskrins design skabt til mersalg",
+    "week": "W09",
+    "language": "Danish",
+    "campaignFamily": "WTP Stackables",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Introduce and drive sales of the new modular jewelry box system",
+    "audience": "B2B jewelry retailers and resellers",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se sortimentet ➔",
+    "secondaryCtas": [
+      "Læg i kurv ➔",
+      "Se alle de nye skrin ➔",
+      "Læg i kurv",
+      "Shop de nye WTP skrin her ➔"
+    ],
+    "products": [
+      "WTP Stackable smykkeskrin",
+      "WTP Stackable system",
+      "Various configurations/sizes/colors of jewelry trays"
+    ],
+    "themes": [
+      "modularity",
+      "upselling",
+      "premium material quality",
+      "natural presentation",
+      "collection/series"
+    ],
+    "visualStyle": {
+      "palette": [
+        "soft pink",
+        "pastel green",
+        "brown",
+        "neutral beige",
+        "white"
+      ],
+      "mood": "elegant, soft, premium, calm",
+      "layoutPatterns": [
+        "alternating sections with image and text",
+        "centered hero image",
+        "boxed CTAs below content blocks",
+        "product grid with pricing and buttons",
+        "section dividers and ample whitespace"
+      ],
+      "imageStyle": "studio photography, close-ups of product, neutral backgrounds"
+    },
+    "copyStyle": {
+      "tone": "inspirational, informative, product-focused",
+      "structure": [
+        "headline/announcement",
+        "feature explanations",
+        "how-to or steps",
+        "segment intro texts",
+        "product highlights",
+        "repeated direct CTAs"
+      ],
+      "urgency": "none"
+    },
+    "reusablePatterns": [
+      "Large photographic hero introduction of new product family",
+      "Clear headline announcing novelty or benefit",
+      "Paragraph-style explanation of utility and quality",
+      "Scannable subsections tied to product features",
+      "Paired image and text grids for product feature storytelling",
+      "Consolidated CTA buttons after explanatory content",
+      "Product grid listing with price and direct purchase buttons",
+      "Neutral dividers and consistent content padding"
+    ],
+    "risks": [
+      "Highly visual, may not work for products less suitable for strong photography",
+      "Requires custom imagery to achieve similar effect",
+      "No strong urgency or offer to stimulate fast decision"
+    ],
+    "confidence": {
+      "overall": 0.96,
+      "textReadability": 0.94,
+      "notes": "All key text, buttons, and section structures readable; no subject line or preheader visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:56:42.885Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

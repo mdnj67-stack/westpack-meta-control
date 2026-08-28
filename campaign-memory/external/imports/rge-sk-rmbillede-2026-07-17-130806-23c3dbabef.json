@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "rge-sk-rmbillede-2026-07-17-130806-23c3dbabef",
+  "source": {
+    "file": "Skærmbillede 2026-07-17 130806.png",
+    "relativePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130806.png",
+    "sha256": "23c3dbabef3883bb123007cbff7f40bd95bb6e2dd61b93554d74d1acda4a0654",
+    "bytes": 516986
+  },
+  "library": {
+    "type": "external_inspiration",
+    "sourceName": "Really Good Emails",
+    "sourceUrl": "",
+    "attributionRequired": true
+  },
+  "analysis": {
+    "campaignTitle": "Your annual physical tests ~15 biomarkers. Here's what gets left out.",
+    "week": "",
+    "language": "English",
+    "campaignFamily": "health education",
+    "campaignType": "educational",
+    "funnelStage": "consideration",
+    "primaryGoal": "Educate readers on limitations of standard bloodwork and promote Lifeforce's expanded biomarker testing.",
+    "audience": "Health-conscious adults considering advanced biomarker testing; likely aged 30+.",
+    "offer": "Education about the benefits and value of testing 50+ biomarkers with an at-home test reviewed by a clinician.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "SEE WHAT YOUR NUMBERS LOOK LIKE",
+    "secondaryCtas": [],
+    "products": [
+      "Lifeforce biomarker testing panel",
+      "Clinician-reviewed health plan"
+    ],
+    "themes": [
+      "Proactive health monitoring",
+      "Personalized data",
+      "Limitations of standard care",
+      "Actionability based on information"
+    ],
+    "visualStyle": {
+      "palette": [
+        "neutral beige",
+        "earthy green",
+        "warm brown",
+        "off-white"
+      ],
+      "mood": "calm, trustworthy, reassuring",
+      "layoutPatterns": [
+        "hero statement with secondary subtitle",
+        "educational blocks with headings",
+        "side-by-side or full-width imagery",
+        "information hierarchy using typographic contrast",
+        "visually separated sections with shaded backgrounds"
+      ],
+      "imageStyle": "Lifestyle and in-situ product photography; human-centric, warm lighting."
+    },
+    "copyStyle": {
+      "tone": "educational, supportive, credible",
+      "structure": [
+        "Provocative opening statement",
+        "Educational content with section headings",
+        "Grouped bullet-point features/benefits",
+        "Reason-to-believe explanation",
+        "Actionable closing with CTA"
+      ],
+      "urgency": "Low-to-moderate; focuses on the importance of not missing gradual health changes rather than immediate action."
+    },
+    "reusablePatterns": [
+      "Contrast standard offering with what is missing to increase perceived value",
+      "Breakdown of features into clear, scannable lists with supporting explanation",
+      "Lead with educational content before transitioning to a product invite",
+      "Support claims with specific but accessible medical information",
+      "Use background color blocks to visually segment educational points"
+    ],
+    "risks": [
+      "Educational message may be perceived as undermining traditional healthcare providers",
+      "Long sections and small font could challenge quick readability on mobile",
+      "Health benefit claims may appear generic without strong evidence to back up"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 1,
+      "notes": "All key sections were clearly visible and fully readable. Product name, structure, and calls-to-action are unambiguous from the screenshot. Subject/preheader line is not visible in screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "external_needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:11:22.792Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

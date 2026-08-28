@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "w35-kick-off-1-intro-83c0f7a8bc",
+  "source": {
+    "file": "W35 Kick off 1 - intro.png",
+    "relativePath": "campaign-import/unsorted-email/W35 Kick off 1 - intro.png",
+    "sha256": "83c0f7a8bcd13a1b387f613caa14d379c399d2b0b1b39810aa0bf57a6a19ce62",
+    "bytes": 438179
+  },
+  "analysis": {
+    "campaignTitle": "SEASON KICK-OFF INTRODUKTION",
+    "week": "W35",
+    "language": "Danish",
+    "campaignFamily": "season kick-off",
+    "campaignType": "educational",
+    "funnelStage": "consideration",
+    "primaryGoal": "Prepare B2B customers for the upcoming peak sales season and introduce resources to maximize results.",
+    "audience": "Existing and potential Westpack B2B customers (likely retailers/brands using packaging solutions)",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Gør mig klar til højsæsonen",
+    "secondaryCtas": [
+      "Læs guiden",
+      "Læs guiden",
+      "Læs guiden",
+      "Læs guiden",
+      "Pause fra nyhedsbrevet i 30 dage"
+    ],
+    "products": [
+      "The Dirty Jewellery Report (satirical sales guide)",
+      "Styrk dit brand i 2026 (branding guide)",
+      "Sådan tager du bedre produktbilleder (product photo guide)",
+      "Sådan tager du bedre SoMe billeder (social media photo guide)"
+    ],
+    "themes": [
+      "seasonal preparation",
+      "education/resources",
+      "business growth",
+      "self-service",
+      "communication cadence transparency"
+    ],
+    "visualStyle": {
+      "palette": [
+        "dark green",
+        "white",
+        "soft beige",
+        "light grey",
+        "pastel pink",
+        "yellow accent"
+      ],
+      "mood": "supportive, energizing, practical",
+      "layoutPatterns": [
+        "video hero intro",
+        "headline and subhead",
+        "feature links in a grid",
+        "clear buttons",
+        "separated grey info bar"
+      ],
+      "imageStyle": "Product/people photos with soft lighting and minimal props; playful illustrated accents around some images."
+    },
+    "copyStyle": {
+      "tone": "upbeat, direct, slightly informal, encouraging",
+      "structure": [
+        "video introduction",
+        "season announcement and actionable invitation",
+        "resource grid with short, catchy subheads",
+        "transparent note about campaign cadence and pause option"
+      ],
+      "urgency": "Moderate—emphasizes preparing for a time-sensitive peak season, uses deadlines and readiness language."
+    },
+    "reusablePatterns": [
+      "Video intro from key team member for campaign context",
+      "Seasonal messaging structured around readiness and resources",
+      "Grid of resource links with simple calls to action",
+      "Transparently explain increased message cadence, with self-service pause link",
+      "Use of bold color blocks for CTAs"
+    ],
+    "risks": [
+      "Message increases frequency without performance opt-out could annoy recipients",
+      "Assumes audience has urgent need for seasonal prep resources"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "Full email copy is visible and mostly clear; minor uncertainty on palette specifics due to monitor color variance."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:00.975Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

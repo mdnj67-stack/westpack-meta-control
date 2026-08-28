@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w11-monaco-eco-94b789d245",
+  "source": {
+    "file": "W11 Monaco Eco.png",
+    "relativePath": "campaign-import/unsorted-email/W11 Monaco Eco.png",
+    "sha256": "94b789d245f7bd2506c439f78bc46768820522f4127116f14790257524dfd667",
+    "bytes": 241723
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Monaco ECO Gaveæsker: Tre nye farver",
+    "week": "W11",
+    "language": "Danish",
+    "campaignFamily": "Monaco ECO",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote new color options for Monaco ECO gift boxes and drive shop interest.",
+    "audience": "B2B customers and brand retailers seeking sustainable gift packaging.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Tid til Monaco Eco →",
+    "secondaryCtas": [
+      "Shop now",
+      "Køb nu"
+    ],
+    "products": [
+      "Monaco ECO gift boxes",
+      "Monaco ECO Mørkegrøn",
+      "Monaco ECO Lysebrun",
+      "Monaco ECO Sand",
+      "Monaco ECO Hvid",
+      "Monaco ECO Sort"
+    ],
+    "themes": [
+      "Sustainability",
+      "New product colors",
+      "Gift packaging",
+      "Brand matching"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Earthy green",
+        "Beige",
+        "Black",
+        "White",
+        "Pastels",
+        "Accent gold"
+      ],
+      "mood": "Premium, eco-friendly, celebratory",
+      "layoutPatterns": [
+        "Hero image of product in use",
+        "Grid of product options",
+        "Checklist benefits",
+        "Reasons-to-choose section",
+        "Repeated clearly-labeled CTAs",
+        "Product close-up photos",
+        "Lifestyle/product-in-use photography"
+      ],
+      "imageStyle": "Polished studio photography with soft, neutral backgrounds and lifestyle context"
+    },
+    "copyStyle": {
+      "tone": "Informative, upbeat, convenience-focused",
+      "structure": [
+        "Introduction of new features/colors",
+        "Bulleted/checked benefit list",
+        "Three-point 'reasons to choose'",
+        "Product assortment grid",
+        "Action-oriented CTAs"
+      ],
+      "urgency": "Mild; focused on product novelty, not limited-time"
+    },
+    "reusablePatterns": [
+      "Announce new product options with a hero image and focused headline",
+      "Use checkpoints or checkmark lists to convey key product strengths",
+      "Dedicated section for reasons-to-choose-this-product",
+      "Grid-style display of product variants with clear CTAs under each",
+      "Visual storytelling with lifestyle + studio shots",
+      "Prominent, color-blocked CTAs recurring through the email",
+      "Highlight ease or simplicity (e.g. low MOQ, free branding) via icon/accent section"
+    ],
+    "risks": [
+      "Heavy reliance on product images—could underperform in text-only or dark mode views",
+      "Limited urgency could reduce immediate response",
+      "Absence of explicit pricing/offer may limit conversions"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "All visible text, buttons, and product names read with high clarity; no subject line or preheader visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:34.966Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

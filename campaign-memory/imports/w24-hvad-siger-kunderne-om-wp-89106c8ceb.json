@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "w24-hvad-siger-kunderne-om-wp-89106c8ceb",
+  "source": {
+    "file": "W24 Hvad siger kunderne om WP.png",
+    "relativePath": "campaign-import/unsorted-email/W24 Hvad siger kunderne om WP.png",
+    "sha256": "89106c8cebe419aa42dd282b8d960ee4f26c0656e938bb33230a1504c3f74da8",
+    "bytes": 346797
+  },
+  "analysis": {
+    "campaignTitle": "Hvad siger kunderne om WP",
+    "week": "W24",
+    "language": "Danish",
+    "campaignFamily": "Customer Testimonials",
+    "campaignType": "customer_story",
+    "funnelStage": "consideration",
+    "primaryGoal": "Build trust through customer testimonials and drive traffic to site/product categories.",
+    "audience": "Potential and existing B2B customers evaluating packaging suppliers.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Læs flere anmeldelser ➔",
+    "secondaryCtas": [
+      "Westpack.com ➔",
+      "Forsendelse ➔",
+      "Gaveindpakning ➔",
+      "Bæreposer ➔",
+      "Smykkeskrin ➔"
+    ],
+    "products": [
+      "Forsendelse",
+      "Gaveindpakning",
+      "Bæreposer",
+      "Smykkeskrin"
+    ],
+    "themes": [
+      "Trust and credibility",
+      "Customer experience",
+      "5-star service",
+      "Product quality"
+    ],
+    "visualStyle": {
+      "palette": [
+        "White",
+        "Light blue",
+        "Red",
+        "Green",
+        "Yellow",
+        "Neutral tones"
+      ],
+      "mood": "Professional, approachable, trustworthy",
+      "layoutPatterns": [
+        "Hero testimonial with photo",
+        "Statistics block",
+        "Multiple testimonial highlights",
+        "Grid of product categories with photos"
+      ],
+      "imageStyle": "Real customer faces, product category packshots, clean backgrounds"
+    },
+    "copyStyle": {
+      "tone": "Enthusiastic, authentic, credible",
+      "structure": [
+        "Hero customer review with rating and photo",
+        "Proof/statistics block",
+        "Additional short testimonials",
+        "Clear CTAs",
+        "Product grid"
+      ],
+      "urgency": "None"
+    },
+    "reusablePatterns": [
+      "Headline with social proof/statistics",
+      "Hero testimonial with direct quote and photo",
+      "Block of short testimonials from various regions",
+      "Dual primary CTAs side-by-side in colored buttons",
+      "Product category grid with approachable visuals"
+    ],
+    "risks": [
+      "Testimonials could appear fabricated if not clearly genuine",
+      "Heavy reliance on Trustpilot/social proof may not appeal to all segments"
+    ],
+    "confidence": {
+      "overall": 0.93,
+      "textReadability": 0.95,
+      "notes": "All visible copy clearly legible, layout fully parsed; subject line and preheader not visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:07.212Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

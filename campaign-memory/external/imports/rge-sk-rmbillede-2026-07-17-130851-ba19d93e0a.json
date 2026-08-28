@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "rge-sk-rmbillede-2026-07-17-130851-ba19d93e0a",
+  "source": {
+    "file": "Skærmbillede 2026-07-17 130851.png",
+    "relativePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130851.png",
+    "sha256": "ba19d93e0ad0b0ed1a39c35d826c3b568cc88a320e2ec572805bcb00959d7e98",
+    "bytes": 615624
+  },
+  "library": {
+    "type": "external_inspiration",
+    "sourceName": "Really Good Emails",
+    "sourceUrl": "",
+    "attributionRequired": true
+  },
+  "analysis": {
+    "campaignTitle": "The path to “future you”",
+    "week": "",
+    "language": "English",
+    "campaignFamily": "Mindbloom Behavior Change Journey",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Drive action to start the Mindbloom program",
+    "audience": "Potential customers seeking mental health treatment solutions",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Start Mindbloom",
+    "secondaryCtas": [
+      "Book a call"
+    ],
+    "products": [
+      "Mindbloom program"
+    ],
+    "themes": [
+      "transformation",
+      "guided journey",
+      "mental health improvement",
+      "progression over time",
+      "credibility/results"
+    ],
+    "visualStyle": {
+      "palette": [
+        "yellow",
+        "black",
+        "white",
+        "warm golden tones",
+        "gray accents"
+      ],
+      "mood": "optimistic and supportive",
+      "layoutPatterns": [
+        "hero image with strong value proposition",
+        "step-by-step timeline with accompanying visuals",
+        "testimonial/statistics overlay",
+        "modular content blocks",
+        "strong call-to-action buttons"
+      ],
+      "imageStyle": "Warm, lifestyle photography with natural outdoor and home settings, human-focused, motivating"
+    },
+    "copyStyle": {
+      "tone": "encouraging and reassuring",
+      "structure": [
+        "Headline/hero statement",
+        "Credibility statistic",
+        "CTA button",
+        "Sequential journey (steps/weeks)",
+        "Value proposition block",
+        "Reinforcing secondary CTA",
+        "Footer navigation"
+      ],
+      "urgency": "Low to moderate: Emphasizes transformation and positive outcomes rather than immediate scarcity"
+    },
+    "reusablePatterns": [
+      "Visual timeline communicating stages or benefits over time",
+      "Hero section with short, bold headline and emotional imagery",
+      "Supporting credibility/statistics overlay",
+      "Modular, scroll-friendly block layouts",
+      "Two CTAs (primary action, secondary reassurance/question route)",
+      "Simple, conversational explanations of each customer journey stage",
+      "Footer navigation with direct resource links"
+    ],
+    "risks": [
+      "Outcome promises could be seen as medical claims if copied directly",
+      "Stepwise transformation visuals may oversimplify nuanced journeys when reused in other contexts",
+      "Heavy use of warm photography could be hard to replicate for other brands"
+    ],
+    "confidence": {
+      "overall": 0.97,
+      "textReadability": 0.99,
+      "notes": "Almost all visible text is clearly readable throughout the email. Cautious on copy for legal/branding reasons."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "external_needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:11:28.215Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

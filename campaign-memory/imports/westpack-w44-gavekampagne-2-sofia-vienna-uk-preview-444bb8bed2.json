@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-2-sofia-vienna-uk-preview-444bb8bed2",
+  "source": {
+    "file": "W44 Gavekampagne 2_ Sofia & Vienna UK Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 2_ Sofia & Vienna UK Preview.png",
+    "sha256": "444bb8bed29e0be19c3e03afd3da41a8558a8c6dab8306e40015f8d66fe16fc0",
+    "bytes": 4472105
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Free Mystery Box",
+    "week": "W44",
+    "language": "English",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote new jewellery box styles (Vienna & Sofia) and incentivize trial or purchase with a free mystery box offer",
+    "audience": "B2B customers and jewellers considering new packaging products",
+    "offer": "Free Mystery Box with qualifying purchase",
+    "subjectLineVisible": "Free Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "READ ABOUT THE MYSTERY BOX OFFER →",
+    "secondaryCtas": [
+      "MEET VIENNA →",
+      "MEET SOFIA →"
+    ],
+    "products": [
+      "Vienna (jewellery box collection)",
+      "Sofia (jewellery box collection)"
+    ],
+    "themes": [
+      "New product introduction",
+      "Gift/seasonal",
+      "Mystery/reward"
+    ],
+    "visualStyle": {
+      "palette": [
+        "red",
+        "cream",
+        "black",
+        "natural beige"
+      ],
+      "mood": "Festive yet elegant",
+      "layoutPatterns": [
+        "Sectioned product highlights",
+        "Side-by-side or stacked product photography",
+        "Full-width hero image",
+        "Red accent wave/shape dividers"
+      ],
+      "imageStyle": "Studio product photography with shadow and texture focus"
+    },
+    "copyStyle": {
+      "tone": "Professional and inviting; slightly playful for mystery element",
+      "structure": [
+        "Headline offer",
+        "Introductory context",
+        "Detailed product sections (Vienna & Sofia)",
+        "How to qualify steps",
+        "Visual purchase incentive (DIY kits)",
+        "Legal/disclaimer"
+      ],
+      "urgency": "Moderate – time-limited or limited-supply offer implied"
+    },
+    "reusablePatterns": [
+      "Lead with a strong value proposition headline (offer/gift)",
+      "Feature new product launches with narrative & visuals",
+      "Breakdown steps to qualify for an incentive offer",
+      "Segment product details by style/option with clear CTA",
+      "Visual journey path leading to CTA (red line connecting offer boxes)",
+      "Emphasize discovery with mystery/gift elements"
+    ],
+    "risks": [
+      "If the mystery box offer is unavailable, interest may decrease",
+      "Complex qualification steps could deter some recipients",
+      "Heavy product focus; may not appeal to those seeking inspiration or lifestyle content"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.92,
+      "notes": "Nearly all headings, CTAs, and primary copy clear; some small print in legal/disclaimer section is less legible but campaign structure and offers are fully evident."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:00.933Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w24-hvad-siger-kunderne-om-wp-89106c8ceb",
+  "source": {
+    "file": "W24 Hvad siger kunderne om WP.png",
+    "relativePath": "campaign-import/unsorted-email/W24 Hvad siger kunderne om WP.png",
+    "sha256": "89106c8cebe419aa42dd282b8d960ee4f26c0656e938bb33230a1504c3f74da8",
+    "bytes": 346797
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Hvad siger kunderne om WP",
+    "week": "W24",
+    "language": "da",
+    "campaignFamily": "customer testimonials",
+    "campaignType": "customer_story",
+    "funnelStage": "consideration",
+    "primaryGoal": "Build trust using customer testimonials and drive traffic to shop or review pages.",
+    "audience": "Potential and existing customers considering a purchase and interested in customer feedback.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Læs flere anmeldelser",
+    "secondaryCtas": [
+      "Westpack.com ➔",
+      "Forsendelse ➔",
+      "Gaveindpakning ➔",
+      "Bæreposer ➔",
+      "Smykkesker ➔"
+    ],
+    "products": [
+      "Forsendelse",
+      "Gaveindpakning",
+      "Bæreposer",
+      "Smykkesker"
+    ],
+    "themes": [
+      "Trustpilot reviews",
+      "customer satisfaction",
+      "product quality",
+      "customer service"
+    ],
+    "visualStyle": {
+      "palette": [
+        "white",
+        "light blue",
+        "mint green",
+        "bright red",
+        "navy blue",
+        "yellow stars",
+        "beige",
+        "olive green",
+        "brown"
+      ],
+      "mood": "friendly and reassuring",
+      "layoutPatterns": [
+        "Top-aligned logo and navigation",
+        "Prominent customer review in graphic",
+        "Sectioned background colors",
+        "Product grid with pictorial links",
+        "Button CTAs under testimonials",
+        "Review stars used graphically"
+      ],
+      "imageStyle": "Clean product photography, testimonial photo simulating a phone screen"
+    },
+    "copyStyle": {
+      "tone": "enthusiastic, trustworthy, service-focused",
+      "structure": [
+        "Headline summary",
+        "Hero testimonial",
+        "Quantitative claim",
+        "International review quotes",
+        "Product replenishment prompt",
+        "Grid-call to specific product categories"
+      ],
+      "urgency": "subtle, encouraging action but not aggressive"
+    },
+    "reusablePatterns": [
+      "Feature authentic customer testimonials across geographies as proof points",
+      "Open with a hero testimonial rated 5 stars and human visual",
+      "Use review counts/statistics as social proof between testimonial sections",
+      "Include multiple written testimonials with reviewer names and locations",
+      "Insert bold colored action buttons for key CTAs under trust-building content",
+      "Present products visually in a grid with clear category navigation to stimulate repurchase",
+      "Highlight customer service quality with supporting quotes"
+    ],
+    "risks": [
+      "Heavy reliance on customer reviews; if not genuine, could erode trust.",
+      "Testimonial fatigue if used too often or without variation.",
+      "May not appeal to first-time visitors who seek factual product info over testimonials."
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.98,
+      "notes": "All key content and CTA texts are clearly legible; subject and preheader are not visible in screenshot. Color palette and structural layout are directly observed."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:51.753Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

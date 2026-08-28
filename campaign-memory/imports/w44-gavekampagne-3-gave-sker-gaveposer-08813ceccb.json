@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-3-gave-sker-gaveposer-08813ceccb",
+  "source": {
+    "file": "W44 Gavekampagne 3_ Gaveæsker & Gaveposer.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 3_ Gaveæsker & Gaveposer.png",
+    "sha256": "08813ceccb7633193498f3ddc7f8251205cf280057e83986f99d3acdafad96a6",
+    "bytes": 3045122
+  },
+  "analysis": {
+    "campaignTitle": "Gratis Mystery Box",
+    "week": "W44",
+    "language": "da",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote gift boxes, gift bags, and generate interest with a free mystery box offer",
+    "audience": "Business customers or resellers seeking branded packaging and holiday gifting solutions",
+    "offer": "Gratis Mystery Box",
+    "subjectLineVisible": "Gratis Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box her ➔",
+    "secondaryCtas": [
+      "Læs gaver her ➔",
+      "Se alle gaveæsker ➔",
+      "Køb poser nu ➔"
+    ],
+    "products": [
+      "Gift boxes",
+      "Gift bags",
+      "Mystery Box",
+      "DIY Kits"
+    ],
+    "themes": [
+      "Holiday gifting",
+      "Branded packaging",
+      "Mystery offer"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#A72322",
+        "#F8F6F2",
+        "#000000",
+        "#FFFFFF",
+        "#EADFCF"
+      ],
+      "mood": "Premium, festive, inviting",
+      "layoutPatterns": [
+        "Banner with strong headline",
+        "Sectioned product highlights",
+        "Hero product photo",
+        "Callout box for CTAs",
+        "Circular focal images",
+        "Curved section dividers"
+      ],
+      "imageStyle": "Glossy product photos with soft shadows, festive props/backgrounds, branded visuals"
+    },
+    "copyStyle": {
+      "tone": "Inviting, encouraging, premium",
+      "structure": [
+        "Headline offer",
+        "Seasonal greeting/message",
+        "Product highlights",
+        "Explainer/callouts",
+        "Multiple CTAs",
+        "DIY kit tiered pricing"
+      ],
+      "urgency": "Moderate – time-limited holiday/gifting angle, free offer framing"
+    },
+    "reusablePatterns": [
+      "Lead with strong value-driven headline offer",
+      "Section benefits and product categories for scan-friendly reading",
+      "Use hero product imagery that combines multiple product types",
+      "Multiple call-to-action buttons after each section",
+      "Feature 'mystery box' and tiered/bonus gift mechanics",
+      "Show product variants together to encourage up-sell/cross-sell"
+    ],
+    "risks": [
+      "Offer clarity – possibility of misunderstanding what is included in the mystery box",
+      "Visual overload from many boxed product photos",
+      "Limited urgency triggers"
+    ],
+    "confidence": {
+      "overall": 0.9,
+      "textReadability": 0.92,
+      "notes": "All main copy, CTAs, and headlines are clear; small text is slightly blurred but contextually inferred from product displays and titles."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:31.264Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

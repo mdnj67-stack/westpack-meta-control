@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w23-display-butikspr-sentation-til-sommer-faa81b0ad2",
+  "source": {
+    "file": "W23 Display & Butikspræsentation til sommer.png",
+    "relativePath": "campaign-import/unsorted-email/W23 Display & Butikspræsentation til sommer.png",
+    "sha256": "faa81b0ad22759a245ab03385da81b2ea9b721351c5a232f94546aa848cb66e5",
+    "bytes": 293071
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Display & Butikspræsentation til sommer",
+    "week": "W23",
+    "language": "Danish",
+    "campaignFamily": "Display & In-store Presentation",
+    "campaignType": "educational",
+    "funnelStage": "consideration",
+    "primaryGoal": "Inspire customers to improve in-store display and presentation for the summer season to boost product appeal and drive purchases.",
+    "audience": "Retailers and shop owners, likely existing B2B customers.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "SE ALT DISPLAY-AV",
+    "secondaryCtas": [
+      "SE KOM-PÅ-MARKED HER",
+      "SE KUN-LOKALT",
+      "Papræsker",
+      "Gaveindpakning",
+      "Bæreposer",
+      "Smykkeæsker"
+    ],
+    "products": [
+      "Display solutions",
+      "Gift packaging",
+      "Jewelry packaging",
+      "Paper bags",
+      "Boxes"
+    ],
+    "themes": [
+      "Summer vibes",
+      "In-store inspiration",
+      "Natural materials",
+      "Gift-ready packaging",
+      "Practical presentation tips"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Soft pastel pinks",
+        "Neutral beige",
+        "Sandy taupe",
+        "Muted green",
+        "White"
+      ],
+      "mood": "Relaxed, summery, inviting",
+      "layoutPatterns": [
+        "Hero lifestyle image",
+        "Sectioned blocks with product photos",
+        "Side-by-side comparison photos",
+        "Large colored CTA buttons"
+      ],
+      "imageStyle": "Natural light, soft focus, product arrangements on neutral/summer-themed backgrounds"
+    },
+    "copyStyle": {
+      "tone": "Inspiring, warm, encouraging, practical",
+      "structure": [
+        "Headline with thematic hook",
+        "Short intro paragraph",
+        "Sub-sections for product ideas",
+        "Bulleted or bold points for key takeaways",
+        "Descriptive support sentences",
+        "Multiple action CTAs"
+      ],
+      "urgency": "Mild, seasonal (linked to summer opportunities)"
+    },
+    "reusablePatterns": [
+      "Lifestyle hero image reflecting campaign theme",
+      "Sectioning by product use-case or benefit (inspirational angle)",
+      "Side-by-side product photography",
+      "Concise advice boxes broken down by 'What works well' vs 'What to avoid'",
+      "Large, colored buttons for clear CTAs",
+      "Repeated structure: visual inspiration, tip, CTA",
+      "End-of-email cross-sell grid"
+    ],
+    "risks": [
+      "Seasonal relevance limits year-round reuse",
+      "Niche context may not suit all customer segments",
+      "Visual style assumes high-quality photography"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.97,
+      "notes": "All CTA and product names are legible. Most copy is clear, though nuance in smaller text may be missed. Visual design patterns are directly observable."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:45.349Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

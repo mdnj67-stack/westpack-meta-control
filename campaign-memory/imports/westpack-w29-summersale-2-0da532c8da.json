@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w29-summersale-2-0da532c8da",
+  "source": {
+    "file": "w29 summersale 2.png",
+    "relativePath": "campaign-import/unsorted-email/w29 summersale 2.png",
+    "sha256": "0da532c8da16a41453de86247838ff7b8ddb335a8e277aabc33357dc35d4b0db",
+    "bytes": 523118
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "SUMMER Sale",
+    "week": "w29",
+    "language": "Danish",
+    "campaignFamily": "seasonal_sale",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive immediate sales of summer-themed jewellery packaging at up to 50% off",
+    "audience": "Existing and potential B2B customers interested in jewellery packaging and displays",
+    "offer": "Up to 50% off selected items, while supplies last",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "GÅ TIL UDSALGET NU ➜",
+    "secondaryCtas": [],
+    "products": [
+      "Jewellery boxes",
+      "Jewellery pouches",
+      "Display trays"
+    ],
+    "themes": [
+      "summer",
+      "limited stock",
+      "urgency",
+      "savings"
+    ],
+    "visualStyle": {
+      "palette": [
+        "coral pink",
+        "yellow",
+        "turquoise",
+        "sand beige",
+        "white"
+      ],
+      "mood": "playful and vibrant, summer holiday vibe",
+      "layoutPatterns": [
+        "hero image with props",
+        "discount bursts on product images",
+        "offer-centric headline"
+      ],
+      "imageStyle": "3D product characters with sunglasses and beach accessories set in tropical scenes; product closeups with graphic discount tags"
+    },
+    "copyStyle": {
+      "tone": "friendly, urgent, commercial",
+      "structure": [
+        "hero headline",
+        "sub-headline with bold percentage",
+        "explanation/body",
+        "small print on exclusions",
+        "visual callout boxes"
+      ],
+      "urgency": "high (stock warnings, \"Når det er væk, er det væk.\")"
+    },
+    "reusablePatterns": [
+      "Seasonal characters and themed props (e.g., summer items) for emotional appeal",
+      "Bold headline with prominent discount percentage",
+      "Short, direct copy emphasizing limited stock and urgency",
+      "Product images overlaid with large, graphic discount markers",
+      "Primary action button in a contrasting color"
+    ],
+    "risks": [
+      "High urgency and stock warnings may frustrate if products sell out quickly",
+      "Heavy theme may feel less relevant outside the summer period",
+      "Limited appeal if customer is not in market for discounted items"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.97,
+      "notes": "Primary text and CTAs are clearly readable; no visible subject line or preheader in screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:10.744Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

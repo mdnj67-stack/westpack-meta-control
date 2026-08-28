@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "libraryType": "external_inspiration",
+  "generatedAt": "2026-07-17T11:11:28.221Z",
+  "count": 3,
+  "campaigns": [
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130706-7421fead62",
+      "sourceFile": "Skærmbillede 2026-07-17 130706.png",
+      "campaignTitle": "Wonderbly: $15 Off Books for Everyone",
+      "week": "",
+      "familyKey": "sitewide-promotion",
+      "campaignFamily": "sitewide_promotion",
+      "campaignType": "sale",
+      "language": "en-GB",
+      "themes": [
+        "Personalization",
+        "Gift giving",
+        "Family bonding",
+        "Inclusive for all ages"
+      ],
+      "confidence": 0.95,
+      "reviewStatus": "external_needs_review",
+      "approvedAsReference": false,
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "sourceUrl": "",
+      "recordPath": "campaign-memory/external/imports/rge-sk-rmbillede-2026-07-17-130706-7421fead62.json"
+    },
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130806-23c3dbabef",
+      "sourceFile": "Skærmbillede 2026-07-17 130806.png",
+      "campaignTitle": "Your annual physical tests ~15 biomarkers. Here's what gets left out.",
+      "week": "",
+      "familyKey": "health-education",
+      "campaignFamily": "health education",
+      "campaignType": "educational",
+      "language": "en-GB",
+      "themes": [
+        "Proactive health monitoring",
+        "Personalized data",
+        "Limitations of standard care",
+        "Actionability based on information"
+      ],
+      "confidence": 0.98,
+      "reviewStatus": "external_needs_review",
+      "approvedAsReference": false,
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "sourceUrl": "",
+      "recordPath": "campaign-memory/external/imports/rge-sk-rmbillede-2026-07-17-130806-23c3dbabef.json"
+    },
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130851-ba19d93e0a",
+      "sourceFile": "Skærmbillede 2026-07-17 130851.png",
+      "campaignTitle": "The path to “future you”",
+      "week": "",
+      "familyKey": "mindbloom-behavior-change-journey",
+      "campaignFamily": "Mindbloom Behavior Change Journey",
+      "campaignType": "product",
+      "language": "en-GB",
+      "themes": [
+        "transformation",
+        "guided journey",
+        "mental health improvement",
+        "progression over time",
+        "credibility/results"
+      ],
+      "confidence": 0.97,
+      "reviewStatus": "external_needs_review",
+      "approvedAsReference": false,
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "sourceUrl": "",
+      "recordPath": "campaign-memory/external/imports/rge-sk-rmbillede-2026-07-17-130851-ba19d93e0a.json"
+    }
+  ]
+}

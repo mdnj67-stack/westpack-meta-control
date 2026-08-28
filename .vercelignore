@@ -1,0 +1,9 @@
+secrets
+*.ps1
+*.docx
+meta-config.template.json
+klaviyo-config.json
+META_SETUP.md
+START_APP.txt
+README.md
+campaign-memory

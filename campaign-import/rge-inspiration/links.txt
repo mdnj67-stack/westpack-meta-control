@@ -1,0 +1,1 @@
+# Add one manually selected Really Good Emails URL per line.

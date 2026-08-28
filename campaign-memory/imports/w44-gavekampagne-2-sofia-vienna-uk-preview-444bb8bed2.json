@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-2-sofia-vienna-uk-preview-444bb8bed2",
+  "source": {
+    "file": "W44 Gavekampagne 2_ Sofia & Vienna UK Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 2_ Sofia & Vienna UK Preview.png",
+    "sha256": "444bb8bed29e0be19c3e03afd3da41a8558a8c6dab8306e40015f8d66fe16fc0",
+    "bytes": 4472105
+  },
+  "analysis": {
+    "campaignTitle": "Free Mystery Box",
+    "week": "W44",
+    "language": "English (with visible offer wording in English and Danish in CTAs)",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive orders/select target product ranges to unlock a free mystery box",
+    "audience": "B2B customers interested in jewelry packaging/new product lines",
+    "offer": "Free Mystery Box upon qualifying purchase (DIY kits: £400, £800, £1200)",
+    "subjectLineVisible": "Free Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "READ ALL ABOUT THE MYSTERY BOX OFFER ➔",
+    "secondaryCtas": [
+      "MEET VIENNA ➔",
+      "MEET SOFIA ➔",
+      "SE OUR MYSTERY BOXES ➔"
+    ],
+    "products": [
+      "Vienna jewelry box series",
+      "Sofia jewelry box series",
+      "Mystery Box",
+      "DIY Kits (£400, £800, £1200)"
+    ],
+    "themes": [
+      "new arrivals",
+      "gift promotion",
+      "limited-time offer",
+      "product feature"
+    ],
+    "visualStyle": {
+      "palette": [
+        "deep red",
+        "beige",
+        "black",
+        "soft pink",
+        "white background"
+      ],
+      "mood": "inviting, slightly festive, premium",
+      "layoutPatterns": [
+        "image and text blocks alternating",
+        "call-to-action buttons after product descriptions",
+        "highlighted product group photos",
+        "wavy graphic dividers in red"
+      ],
+      "imageStyle": "studio product photography with soft shadows, consistent white background"
+    },
+    "copyStyle": {
+      "tone": "warm, encouraging, slightly exclusive",
+      "structure": [
+        "headline with offer",
+        "intro paragraph",
+        "segmented product highlights (Vienna, Sofia)",
+        "how-to/unlock mechanics for offer",
+        "multiple CTAs",
+        "legal/disclaimer block"
+      ],
+      "urgency": "moderate (limited time, 'new arrivals', 'make room for the autumn')"
+    },
+    "reusablePatterns": [
+      "Lead with a bold, value-focused headline paired with a strong visual of the offer",
+      "Divide features by product lines for clarity and easy comparison",
+      "Insert product photos between text for visual breaks",
+      "Use explanatory subheads for each product/series",
+      "Outline clear offer unlock conditions (step-by-step)",
+      "Stack CTA buttons after each major product block and at the end",
+      "Wavy horizontal section dividers in campaign color",
+      "List pricing tiers vertically with connecting graphics",
+      "Reinforce offer in both headline and the email footer"
+    ],
+    "risks": [
+      "Offer complexity (tiered spend requirements could be misunderstood)",
+      "Multiple CTAs potentially distract from main objective",
+      "Heavy product focus could feel sales-heavy to some recipients"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.97,
+      "notes": "All major campaign, offer, product, and design details visible. Some small print in footer is blurred but overall structure, CTAs, and visual style are clear."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:20.834Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

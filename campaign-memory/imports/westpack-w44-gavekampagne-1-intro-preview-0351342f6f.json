@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-1-intro-preview-0351342f6f",
+  "source": {
+    "file": "W44 Gavekampagne 1_ Intro Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 1_ Intro Preview.png",
+    "sha256": "0351342f6f446c57c21e617824c70363ef1ef9f7a84ff55dff888f7c3f4318be",
+    "bytes": 2551800
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "W44 Gavekampagne 1: Intro",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne (Gift campaign)",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive purchases to qualify for a free Mystery Box gift",
+    "audience": "Existing B2B customers (businesses likely purchasing packaging or gifting products)",
+    "offer": "Free Mystery Box with purchase (gift value increases with higher order values: 1,500 DKK / 3,000 DKK / 6,000 DKK tiers)",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "JEG KAN IKKE VENTE ➔",
+    "secondaryCtas": [
+      "JEG VIL VIDE MERE ➔",
+      "LÆG DIN ORDRE NU ➔"
+    ],
+    "products": [
+      "Mystery Box",
+      "Gift packaging solutions (referenced, not the core offer)"
+    ],
+    "themes": [
+      "Gift",
+      "Mystery",
+      "Tiered rewards",
+      "Holiday season"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Dark red",
+        "White",
+        "Beige/Sand",
+        "Black (text/icons)"
+      ],
+      "mood": "Festive, inviting, slightly luxurious",
+      "layoutPatterns": [
+        "Prominent hero visual of product/concept",
+        "Sectioned layout with colored background panels",
+        "Infographic/stepwise visual with line connector",
+        "Clear call-to-action buttons"
+      ],
+      "imageStyle": "Product-focused, cutouts/montages, use of zoom crops for step highlights"
+    },
+    "copyStyle": {
+      "tone": "Friendly, tempting, festive",
+      "structure": [
+        "Headline offer introduction",
+        "Brief explanation/benefits",
+        "Stepwise breakdown of the promotion",
+        "FAQ-style motivation ('Why it's worth it?', 'What is in the box?')",
+        "Multiple CTAs"
+      ],
+      "urgency": "Moderate (limited campaign window, excitement about surprise)"
+    },
+    "reusablePatterns": [
+      "Mystery gift/bonus for order threshold",
+      "Tiered incentive structure (bigger spend = bigger reward)",
+      "Visual timeline or steps to explain how the offer works",
+      "Main and secondary CTAs, each mapped to different customer intent ('order now', 'learn more')",
+      "FAQ-style section to preempt doubts",
+      "Legal/disclaimer block in fine print"
+    ],
+    "risks": [
+      "Potential confusion about content/value of Mystery Box",
+      "Disappointment if reward perceived as underwhelming",
+      "Multi-step explanation may be skipped by skimmers (white space mitigates, but risk remains)"
+    ],
+    "confidence": {
+      "overall": 0.9,
+      "textReadability": 0.95,
+      "notes": "All main text and CTA wording is clearly readable except for the very small legal/disclaimer, which may have minor unreadable nuances."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:52.610Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

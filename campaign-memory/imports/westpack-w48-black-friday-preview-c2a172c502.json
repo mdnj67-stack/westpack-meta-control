@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w48-black-friday-preview-c2a172c502",
+  "source": {
+    "file": "W48 Black Friday Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W48 Black Friday Preview.png",
+    "sha256": "c2a172c5028557e27057f11379775daa5160cda8a72799a8b3919d5d35786eeb",
+    "bytes": 3554744
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Black Friday Survival Guide",
+    "week": "W48",
+    "language": "Danish",
+    "campaignFamily": "Black Friday",
+    "campaignType": "educational",
+    "funnelStage": "awareness",
+    "primaryGoal": "Educate audience and humanize brand around Black Friday preparations",
+    "audience": "B2B customers, likely buyers or subscribers to Westpack's packaging products",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Læs Survival guiden her →",
+    "secondaryCtas": [
+      "Shop emballage"
+    ],
+    "products": [
+      "emballage"
+    ],
+    "themes": [
+      "Behind the scenes",
+      "Employee stories",
+      "Preparation for sales events",
+      "Human approach",
+      "Black Friday"
+    ],
+    "visualStyle": {
+      "palette": [
+        "neon yellow",
+        "bright pink",
+        "white",
+        "black"
+      ],
+      "mood": "friendly, energetic, playful",
+      "layoutPatterns": [
+        "collage-style hero image",
+        "employee portrait circles",
+        "highlight colors behind text or images",
+        "section breaks with diagonal neon lines"
+      ],
+      "imageStyle": "Casual, candid office/team photography; illustrated product and object accents"
+    },
+    "copyStyle": {
+      "tone": "Conversational, personal, humorous",
+      "structure": [
+        "Hero image with title",
+        "Introductory contextual text",
+        "Employee story sections",
+        "Call-to-action and summary"
+      ],
+      "urgency": "Low urgency, focus on storytelling over hard sell"
+    },
+    "reusablePatterns": [
+      "Candid team/employee features to humanize brand",
+      "Event-proximate educational content (e.g., Survival Guide) sent before major sales periods",
+      "Contrasting, high-visibility CTAs in brand palette at bottom of email",
+      "Alternating sections with team portraits and quotes",
+      "Visual breaks with motif lines/shapes matching palette"
+    ],
+    "risks": [
+      "Low direct sales focus may reduce short-term conversions",
+      "Customer confusion if expecting traditional Black Friday sale",
+      "Very casual style may not align with all B2B buyer expectations"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.97,
+      "notes": "Main content and CTAs are highly readable, but no subject or preheader visible in the screenshot. Basing week from filename and visual cues."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:16:11.973Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

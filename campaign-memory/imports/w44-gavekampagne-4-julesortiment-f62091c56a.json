@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-4-julesortiment-f62091c56a",
+  "source": {
+    "file": "W44 Gavekampagne 4_ Julesortiment.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 4_ Julesortiment.png",
+    "sha256": "f62091c56ac2914f3eff0c31ec386f76a863bf58f62fea4d27ee0faa89eca4ed",
+    "bytes": 2519112
+  },
+  "analysis": {
+    "campaignTitle": "Gratis Mystery Box",
+    "week": "W44",
+    "language": "da",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive seasonal sales through gifting and promote Christmas assortment with a mystery box incentive.",
+    "audience": "Danish B2B customers interested in Christmas gifting supplies or seasonal packaging.",
+    "offer": "Free 'Mystery Box' with purchase, promoting the Christmas assortment.",
+    "subjectLineVisible": "Gratis Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "Shop X-mas emballage →",
+    "secondaryCtas": [
+      "Få æskendet indenfor 24-timer →",
+      "Shop Julesortiment – Klar til afsendelse →",
+      "LÆS ALT OM MYSTERY BOXEN HER →"
+    ],
+    "products": [
+      "Juleemballage",
+      "Eksklusiv gaveæske",
+      "Pose",
+      "Bånd/tilbehør",
+      "Kurv/pose",
+      "Gaveindpakning"
+    ],
+    "themes": [
+      "Christmas",
+      "Gifting",
+      "Surprise incentive",
+      "Assortment navigation"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#650000",
+        "#F4EDE7",
+        "#000000",
+        "#FFFFFF"
+      ],
+      "mood": "Festive, Surprising, Scandinavian clean",
+      "layoutPatterns": [
+        "Hero offer section",
+        "Product/category navigation in circular icons",
+        "Feature/benefit blocks",
+        "Sectioned with wave-shaped dividers",
+        "Comparison table for product kits"
+      ],
+      "imageStyle": "Cut-outs and in-situ product photography, roundels/circles, festive illustration"
+    },
+    "copyStyle": {
+      "tone": "Friendly, direct, festive, sales-oriented",
+      "structure": [
+        "Headline offer",
+        "Short intro & offer explanation",
+        "Visual navigation of key categories",
+        "Benefits/reasons to buy",
+        "Shipping/service call-out",
+        "Deep dive on Mystery Box offer"
+      ],
+      "urgency": "Moderate (emphasis on shipping speed and seasonality)"
+    },
+    "reusablePatterns": [
+      "Hero with big, simple headline offer",
+      "Primary product/service shown up front with contextual lifestyle imagery",
+      "Use of thematic color bands/dividers to separate content blocks",
+      "Grid or icon-based navigation for subcategories",
+      "Benefit bar with icons/checkmarks",
+      "Mini comparison/pricing table for upselling",
+      "Multiple distinct call-to-action sections"
+    ],
+    "risks": [
+      "Mystery box may require clear T&Cs disclosure",
+      "Generosity/novelty tone might not fit outside gifting/holiday context",
+      "Heavy use of red/holiday visuals may feel out-of-place during other seasons"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.88,
+      "notes": "Primary offer, headlines, CTAs, and most body copy are clearly legible. Very small text (e.g., fine print or small labels on images) is somewhat blurry but does not prevent accurate overall analysis."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:38.457Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

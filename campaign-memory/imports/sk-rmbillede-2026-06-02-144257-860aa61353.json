@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-06-02-144257-860aa61353",
+  "source": {
+    "file": "Skærmbillede 2026-06-02 144257.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-06-02 144257.png",
+    "sha256": "860aa613535a7f08372415d5b4f27827e5dc4b52addd5ed9560b89306affbee0",
+    "bytes": 579983
+  },
+  "analysis": {
+    "campaignTitle": "Westpack 73-års fødselsdag — Mystery Box",
+    "week": "2026-06-02",
+    "language": "da",
+    "campaignFamily": "anniversary_promotion",
+    "campaignType": "seasonal",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive orders over 200 kr. to clear limited stock of Mystery Boxes as part of 73rd anniversary event.",
+    "audience": "Existing and potential Westpack webshop customers, Danish-speaking (B2B or B2C).",
+    "offer": "Free Mystery Box with orders over 200 kr.; select boxes contain a 20% discount code.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box ➔",
+    "secondaryCtas": [],
+    "products": [
+      "Mystery Box",
+      "Gift Packaging (implied)",
+      "Discount code (potential)"
+    ],
+    "themes": [
+      "anniversary",
+      "urgency",
+      "scarcity",
+      "surprise",
+      "celebration"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Red",
+        "Orange",
+        "Yellow",
+        "Blue",
+        "White",
+        "Black"
+      ],
+      "mood": "Festive, cheerful, inviting",
+      "layoutPatterns": [
+        "Hero group photo",
+        "Bold hero graphic overlay",
+        "Section with festive bunting",
+        "Central heading",
+        "Neutral callout box",
+        "Large centered CTA button",
+        "Grey legal footer"
+      ],
+      "imageStyle": "Photo of staff in front of HQ, playful graphic overlay (boxes, question marks, starburst)"
+    },
+    "copyStyle": {
+      "tone": "Direct, excited, urgent, friendly",
+      "structure": [
+        "Header/Intro banner",
+        "Hero image with promo graphic",
+        "Main heading/subheading",
+        "Urgency and scarcity explanation",
+        "Product/offer details in callout box",
+        "Primary CTA",
+        "Legal disclaimer/footer"
+      ],
+      "urgency": "High (language: 'nu eller aldrig', very limited availability, event nearly over)"
+    },
+    "reusablePatterns": [
+      "Anniversary or milestone as campaign anchor",
+      "Mystery gift mechanic to drive excitement",
+      "Scarcity language ('last chance', 'few left') to create urgency",
+      "Photo of staff/team to humanize and build trust",
+      "Stylized festive bunting as a visual divider",
+      "Hero graphic overlay for campaign emphasis",
+      "Clear, single large CTA positioned after offer explanation",
+      "Surprise element with possible added value (random bonus/discount in some boxes)",
+      "Legal disclaimer box for campaign details and terms"
+    ],
+    "risks": [
+      "Scarcity/urgency could disappoint if perceived as disingenuous",
+      "Surprise content (mystery) may not appeal to all segments",
+      "Strict legal disclosure needed for selective rewards (discount codes in some boxes only)",
+      "Limited campaign localization—Danish only"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "All core copy, offer details, and CTA visible and readable. Small print and legal text included. Subject line and preheader not visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:56:35.904Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

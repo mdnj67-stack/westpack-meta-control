@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-5-sidste-chance-9f11b4e278",
+  "source": {
+    "file": "W44 Gavekampagne 5_ Sidste chance.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 5_ Sidste chance.png",
+    "sha256": "9f11b4e278e4a5f0b946cb2340552d0fcc0b1f2df85f1325e9ce65d65b8876d2",
+    "bytes": 1794392
+  },
+  "analysis": {
+    "campaignTitle": "Gavekampagne 5 - Sidste chance",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Mystery Box/Gift Campaign",
+    "campaignType": "seasonal",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive final orders before the campaign ends by leveraging urgency and mystery bonus offers.",
+    "audience": "Westpack business customers (likely B2B, as orders are in thousands of kroner and terms mention business use only).",
+    "offer": "Mystery Box gift added to orders exceeding 1500, 3000, or 6000 DKK, with greater value at higher tiers. Countdown timer triggers end of offer.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Sidste chance – klik nu! ➔",
+    "secondaryCtas": [
+      "JEG VIL VIDE MERE ➔",
+      "LÆG DIN ORDRE NU ➔"
+    ],
+    "products": [
+      "Mystery Box",
+      "Gift packaging products (implied by imagery and company line 'when packaging matters')"
+    ],
+    "themes": [
+      "Mystery/surprise",
+      "Urgency (countdown timer, last chance)",
+      "Seasonal/holiday (nisse/Christmas elf references)",
+      "Reward/bonus"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#FFF8ED",
+        "#7D2A22",
+        "#AE7B4F",
+        "#B82814"
+      ],
+      "mood": "Festive, urgent, playful with a business tone",
+      "layoutPatterns": [
+        "Countdown timer at top",
+        "Prominent mystery/hero image with question mark overlay",
+        "Sectioned narrative with supporting illustrations",
+        "Visual step-by-step rewards path",
+        "Final legal/disclaimer section"
+      ],
+      "imageStyle": "Product photos in a gift-box setting, overlaid with graphic question marks and festive patterns"
+    },
+    "copyStyle": {
+      "tone": "Conversational, playful, and urgent (references to elves in crisis and direct calls to act)",
+      "structure": [
+        "Headline and timer",
+        "Situation explanation/narrative",
+        "Primary urgent CTA",
+        "Details of offer and rewards tiers",
+        "Secondary CTAs",
+        "Legal/disclaimer"
+      ],
+      "urgency": "High—countdown timer, repeated 'last chance', final warning language"
+    },
+    "reusablePatterns": [
+      "Limited-time countdown timer for urgency",
+      "Mystery gift with tiered reward system based on purchase value",
+      "Storytelling (thematic narrative tied to seasonal or campaign premise)",
+      "Prominent call-to-action button immediately after key offer",
+      "Step-by-step visual reward explanation",
+      "FAQs or explanatory section about the mystery offer",
+      "Legally required notice/disclaimer at footer for business terms"
+    ],
+    "risks": [
+      "Mystery offers can generate disappointment if actual gifts underwhelm",
+      "Urgent messaging can lead to list fatigue if overused",
+      "Terms must be strictly followed to prevent customer frustration or legal issues"
+    ],
+    "confidence": {
+      "overall": 0.96,
+      "textReadability": 0.97,
+      "notes": "Small text is generally legible except for some fine print below product images. Headings, CTAs, and main narrative are clearly readable."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:47.112Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

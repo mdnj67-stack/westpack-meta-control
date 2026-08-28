@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w29-summersale-1-649ea722d4",
+  "source": {
+    "file": "W29 summersale 1.png",
+    "relativePath": "campaign-import/unsorted-email/W29 summersale 1.png",
+    "sha256": "649ea722d40f525b49e1c852828fd45500d5f1c5a446bec0b80234b72c0a3cc9",
+    "bytes": 478048
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "SUMMER Sale",
+    "week": "W29",
+    "language": "da",
+    "campaignFamily": "summersale",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive purchases of discounted products during summer sale",
+    "audience": "Retailers and business customers of Westpack looking for jewelry boxes, displays, or accessories",
+    "offer": "Up to 50% discount on selected jewelry boxes, displays, and accessories",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "GÅ TIL UDSALGET NU →",
+    "secondaryCtas": [],
+    "products": [
+      "Jewelry boxes",
+      "Jewelry display cases",
+      "Jewelry accessories"
+    ],
+    "themes": [
+      "Summer",
+      "Fun",
+      "Savings",
+      "Urgency"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#F6557A",
+        "#FBB040",
+        "#FFF7E1",
+        "#008E7D",
+        "#48B8C4"
+      ],
+      "mood": "Playful, bright, and summery",
+      "layoutPatterns": [
+        "Top-down scroll, from hero to offer to product grid",
+        "Sectioned color backgrounds with clear separation",
+        "Eye-catching headline and CTA bar"
+      ],
+      "imageStyle": "3D illustrated product mascots with sunglasses in a summer/beach scene. Product shots integrated in a faux-beach setting with playful graphics."
+    },
+    "copyStyle": {
+      "tone": "Friendly, enthusiastic, slightly urgent",
+      "structure": [
+        "Large headline offer",
+        "Subheadline detailing discount",
+        "Short explanatory body copy",
+        "Highlighted urgency warning",
+        "Legal disclaimer",
+        "Product examples with discount badges",
+        "Bold, colored CTA button"
+      ],
+      "urgency": "High"
+    },
+    "reusablePatterns": [
+      "Mascot-style product illustrations for seasonal storytelling",
+      "Large, bold discount text or badges on images",
+      "Single clear primary CTA in colored box",
+      "Prominent benefit-oriented headline",
+      "Adding urgency with phrases like 'first come, first served'",
+      "Display of multiple product categories in a single campaign"
+    ],
+    "risks": [
+      "Heavily promotional tone may not suit all brand messaging",
+      "Some visuals may require localization for non-summer or international audiences",
+      "Lack of visible subject/preheader may impact email open if not well configured elsewhere"
+    ],
+    "confidence": {
+      "overall": 0.97,
+      "textReadability": 0.99,
+      "notes": "Not all CTAs or headline elements are repeated in every language version. Some fine legal print faint but readable."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:05.808Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

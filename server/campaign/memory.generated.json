@@ -1,0 +1,975 @@
+{
+  "version": 2,
+  "generatedAt": "2026-07-21T05:44:56.866Z",
+  "policy": "Only explicitly curated references are available. Owned campaigns inform brand patterns; external references inform abstract design principles only.",
+  "counts": {
+    "owned": 15,
+    "external": 3
+  },
+  "references": [
+    {
+      "id": "w44-gavekampagne-2-sofia-vienna-uk-preview-444bb8bed2",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W44 Gavekampagne 2_ Sofia & Vienna UK Preview.png",
+      "title": "Free Mystery Box",
+      "family": "Gavekampagne",
+      "campaignType": "sale",
+      "funnelStage": "conversion",
+      "language": "English (with visible offer wording in English and Danish in CTAs)",
+      "primaryGoal": "Drive orders/select target product ranges to unlock a free mystery box",
+      "audience": "B2B customers interested in jewelry packaging/new product lines",
+      "offer": "Free Mystery Box upon qualifying purchase (DIY kits: £400, £800, £1200)",
+      "themes": [
+        "new arrivals",
+        "gift promotion",
+        "limited-time offer",
+        "product feature"
+      ],
+      "products": [
+        "Vienna jewelry box series",
+        "Sofia jewelry box series",
+        "Mystery Box",
+        "DIY Kits (£400, £800, £1200)"
+      ],
+      "visualPatterns": [
+        "inviting, slightly festive, premium",
+        "studio product photography with soft shadows, consistent white background",
+        "image and text blocks alternating",
+        "call-to-action buttons after product descriptions",
+        "highlighted product group photos",
+        "wavy graphic dividers in red"
+      ],
+      "copyPatterns": [
+        "warm, encouraging, slightly exclusive",
+        "headline with offer",
+        "intro paragraph",
+        "segmented product highlights (Vienna, Sofia)",
+        "how-to/unlock mechanics for offer",
+        "multiple CTAs",
+        "legal/disclaimer block",
+        "moderate (limited time, 'new arrivals', 'make room for the autumn')"
+      ],
+      "reusablePatterns": [
+        "Lead with a bold, value-focused headline paired with a strong visual of the offer",
+        "Divide features by product lines for clarity and easy comparison",
+        "Insert product photos between text for visual breaks",
+        "Use explanatory subheads for each product/series",
+        "Outline clear offer unlock conditions (step-by-step)",
+        "Stack CTA buttons after each major product block and at the end",
+        "Wavy horizontal section dividers in campaign color",
+        "List pricing tiers vertically with connecting graphics"
+      ],
+      "confidence": 0.98,
+      "owned": true
+    },
+    {
+      "id": "w27-hvad-skal-wp-erne-i-deres-sommerferie-03707fc7ea",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W27 Hvad skal Wp'erne i deres sommerferie.png",
+      "title": "W27 Hvad skal Wp'erne i deres sommerferie",
+      "family": "summer holiday / brand culture",
+      "campaignType": "brand",
+      "funnelStage": "mixed",
+      "language": "Danish",
+      "primaryGoal": "Promote Westpack's company culture while encouraging summer season product ordering.",
+      "audience": "Westpack's Danish-speaking B2B customers",
+      "offer": "",
+      "themes": [
+        "Summer holiday",
+        "Westpack employee life",
+        "Seasonal ordering",
+        "Product focus"
+      ],
+      "products": [
+        "Santiago ECO Smykkeskrin af bambus 65 x 65 mm",
+        "Boston ECO Smykkeskrin af karton 53 x 53 mm",
+        "Boston ECO Smykkeskrin af karton 86 x 86 mm",
+        "Boston ECO Smykkeskrin af karton 92 x 118 mm",
+        "Boston ECO Smykkeskrin af karton 75 x 75 mm",
+        "Boston ECO Smykkeskrin af karton 41 x 47 mm"
+      ],
+      "visualPatterns": [
+        "Friendly and cheerful",
+        "Mix of professional photography and playful illustrated elements",
+        "Hero image with staff",
+        "Playful illustrated divider/background",
+        "Embedded video link",
+        "Product grid with CTA buttons"
+      ],
+      "copyPatterns": [
+        "Conversational, personal, inviting",
+        "Headline with quote-style question",
+        "Short introduction about company staff and summer plans",
+        "Call-to-action for video",
+        "Transitional message tying summer to ordering",
+        "Product listing with subheadline",
+        "Lightly encouraged (summer ordering, keep stock up)"
+      ],
+      "reusablePatterns": [
+        "Start with a relatable staff or community angle",
+        "Blend of cultural content (staff story) and product promotion",
+        "Seasonal motifs to reinforce time relevance",
+        "Video or media embed as engagement hook",
+        "Grid-style product feature section with direct CTAs",
+        "Multiple CTA buttons for segmented actions"
+      ],
+      "confidence": 0.98,
+      "owned": true
+    },
+    {
+      "id": "w45-pre-black-friday-7b6c240b65",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W45 Pre Black Friday.png",
+      "title": "World of Treasured Pieces – Pre Black Friday",
+      "family": "World of Treasured Pieces",
+      "campaignType": "sale",
+      "funnelStage": "conversion",
+      "language": "Danish",
+      "primaryGoal": "Drive sales of WTP (jewelry boxes) through an early pre-Black Friday 20% discount, while distancing from traditional Black Friday events.",
+      "audience": "Customers/subscribers interested in gift packaging, jewelry storage, and premium presentation solutions.",
+      "offer": "20% discount on all WTP jewelry boxes until November 12, 2023.",
+      "themes": [
+        "Anti-Black Friday",
+        "Early access",
+        "Calm/no-panic shopping",
+        "Gift inspiration"
+      ],
+      "products": [
+        "WTP-smykkeskrin",
+        "World of Treasured Pieces (jewelry boxes)"
+      ],
+      "visualPatterns": [
+        "Elegant, exclusive, slightly playful",
+        "High-contrast, premium product photography, visually rich black/gold settings",
+        "Hero image with product and large red offer text",
+        "Sectioned storytelling",
+        "Call-to-action boxes",
+        "Alternating product/lifestyle images",
+        "Final bright yellow offer strip"
+      ],
+      "copyPatterns": [
+        "Conversational, witty, self-aware, direct",
+        "Disarming intro about Black Friday planning",
+        "Humorous explanation of opting out",
+        "Clear unique value proposition and offer details",
+        "Call to action",
+        "PS with extra justification and ‘survival guide’ tease",
+        "Mild, time-limited offer but intentionally anti-hype"
+      ],
+      "reusablePatterns": [
+        "Acknowledging and subverting seasonal hype to build brand trust",
+        "Transparent, conversational explanation for promotion timing",
+        "Value proposition focused on calm/shopping ease instead of panic",
+        "Large visual offer indicator over lifestyle/product image",
+        "Primary bold CTA at the bottom with bright contrasting button",
+        "PS for secondary info and soft teasing of upcoming content"
+      ],
+      "confidence": 0.98,
+      "owned": true
+    },
+    {
+      "id": "w44-gavekampagne-1-intro-preview-0351342f6f",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W44 Gavekampagne 1_ Intro Preview.png",
+      "title": "W44 Gavekampagne 1_ Intro",
+      "family": "Gavekampagne",
+      "campaignType": "sale",
+      "funnelStage": "conversion",
+      "language": "Danish",
+      "primaryGoal": "Drive sales by incentivizing customers with a free Mystery Box gift on minimum order values.",
+      "audience": "Existing customers and prospects interested in Westpack packaging or related products.",
+      "offer": "Få en gratis Mystery Box ved køb over bestemte beløbsgrænser.",
+      "themes": [
+        "Gift with purchase",
+        "Mystery/Surprise",
+        "Holiday season",
+        "Tiered rewards"
+      ],
+      "products": [
+        "Mystery Box",
+        "Gaveæsker",
+        "Emballage"
+      ],
+      "visualPatterns": [
+        "festive and inviting",
+        "soft-edged product photos, festive overlays, rounded highlighting",
+        "hero image with product lineup",
+        "information blocks with colored background",
+        "vertical journey with tiered steps visualized"
+      ],
+      "copyPatterns": [
+        "enthusiastic, friendly, teasing",
+        "headline offer",
+        "detailed explanation",
+        "stepwise breakdown of offer tiers",
+        "FAQs",
+        "multiple strong CTAs",
+        "implied urgency—promotion period, enthusiastic CTAs, surprise factor"
+      ],
+      "reusablePatterns": [
+        "Gift-with-purchase mechanic communicated simply up top",
+        "Visual progression with stepwise illustration for tiered rewards",
+        "Multiple CTA buttons at key decision points (learn more, purchase, claim offer)",
+        "Thematic color blocking for primary message",
+        "FAQ section reinforcing the offer’s value"
+      ],
+      "confidence": 0.97,
+      "owned": true
+    },
+    {
+      "id": "w09-wtp-stackables-ad7db8c637",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W09 WTP Stackables.png",
+      "title": "NYHED: Moduleret smykkeskrins design skabt til mersalg",
+      "family": "WTP Stackables",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Introduce and drive sales of the new modular jewelry box system",
+      "audience": "B2B jewelry retailers and resellers",
+      "offer": "",
+      "themes": [
+        "modularity",
+        "upselling",
+        "premium material quality",
+        "natural presentation",
+        "collection/series"
+      ],
+      "products": [
+        "WTP Stackable smykkeskrin",
+        "WTP Stackable system",
+        "Various configurations/sizes/colors of jewelry trays"
+      ],
+      "visualPatterns": [
+        "elegant, soft, premium, calm",
+        "studio photography, close-ups of product, neutral backgrounds",
+        "alternating sections with image and text",
+        "centered hero image",
+        "boxed CTAs below content blocks",
+        "product grid with pricing and buttons",
+        "section dividers and ample whitespace"
+      ],
+      "copyPatterns": [
+        "inspirational, informative, product-focused",
+        "headline/announcement",
+        "feature explanations",
+        "how-to or steps",
+        "segment intro texts",
+        "product highlights",
+        "repeated direct CTAs",
+        "none"
+      ],
+      "reusablePatterns": [
+        "Large photographic hero introduction of new product family",
+        "Clear headline announcing novelty or benefit",
+        "Paragraph-style explanation of utility and quality",
+        "Scannable subsections tied to product features",
+        "Paired image and text grids for product feature storytelling",
+        "Consolidated CTA buttons after explanatory content",
+        "Product grid listing with price and direct purchase buttons",
+        "Neutral dividers and consistent content padding"
+      ],
+      "confidence": 0.96,
+      "owned": true
+    },
+    {
+      "id": "w11-monaco-eco-94b789d245",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W11 Monaco Eco.png",
+      "title": "Monaco ECO Gaveæsker - TRE NYE FARVER",
+      "family": "Monaco ECO Gift Boxes",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Drive product interest and conversions for Monaco ECO gift boxes in three new colors.",
+      "audience": "Existing and potential retail/business customers looking for eco-friendly gift packaging solutions.",
+      "offer": "",
+      "themes": [
+        "eco-friendly",
+        "new product colors",
+        "gift packaging",
+        "brand alignment",
+        "customization"
+      ],
+      "products": [
+        "Monaco ECO gaveæske grøn",
+        "Monaco ECO gaveæske brun",
+        "Monaco ECO gaveæske sand",
+        "Monaco ECO gaveæske m. silkebånd sort",
+        "Monaco ECO gaveæske m. silkebånd guld"
+      ],
+      "visualPatterns": [
+        "premium, understated, eco-conscious, refined",
+        "Studio photography with soft daylight, focus on texture/material, elegant compositions",
+        "hero product photography",
+        "benefit/bullet section",
+        "alternating photo and text blocks",
+        "icon-supported feature highlights",
+        "product grid"
+      ],
+      "copyPatterns": [
+        "professional, inviting, benefit-driven",
+        "headline with product news",
+        "subheadline for context",
+        "short intro text",
+        "bullet/checkmark feature list",
+        "benefits with icons",
+        "product grid with direct CTAs",
+        "low, product news and informative rather than urgent"
+      ],
+      "reusablePatterns": [
+        "Announce new product variants or colors with visual focus",
+        "Use icon-accompanied benefit lists to reinforce key selling points",
+        "Grid of clickable product images with visible ‘Shop now’ buttons",
+        "Feature comparison or reasons-to-buy section",
+        "Alternating product shots with use-case or lifestyle imagery",
+        "Checkmark style benefit lists for skimmable product features"
+      ],
+      "confidence": 0.95,
+      "owned": true
+    },
+    {
+      "id": "w35-kick-off-1-intro-83c0f7a8bc",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W35 Kick off 1 - intro.png",
+      "title": "SEASON KICK-OFF INTRODUKTION",
+      "family": "season kick-off",
+      "campaignType": "educational",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Prepare B2B customers for the upcoming peak sales season and introduce resources to maximize results.",
+      "audience": "Existing and potential Westpack B2B customers (likely retailers/brands using packaging solutions)",
+      "offer": "",
+      "themes": [
+        "seasonal preparation",
+        "education/resources",
+        "business growth",
+        "self-service",
+        "communication cadence transparency"
+      ],
+      "products": [
+        "The Dirty Jewellery Report (satirical sales guide)",
+        "Styrk dit brand i 2026 (branding guide)",
+        "Sådan tager du bedre produktbilleder (product photo guide)",
+        "Sådan tager du bedre SoMe billeder (social media photo guide)"
+      ],
+      "visualPatterns": [
+        "supportive, energizing, practical",
+        "Product/people photos with soft lighting and minimal props; playful illustrated accents around some images.",
+        "video hero intro",
+        "headline and subhead",
+        "feature links in a grid",
+        "clear buttons",
+        "separated grey info bar"
+      ],
+      "copyPatterns": [
+        "upbeat, direct, slightly informal, encouraging",
+        "video introduction",
+        "season announcement and actionable invitation",
+        "resource grid with short, catchy subheads",
+        "transparent note about campaign cadence and pause option",
+        "Moderate—emphasizes preparing for a time-sensitive peak season, uses deadlines and readiness language."
+      ],
+      "reusablePatterns": [
+        "Video intro from key team member for campaign context",
+        "Seasonal messaging structured around readiness and resources",
+        "Grid of resource links with simple calls to action",
+        "Transparently explain increased message cadence, with self-service pause link",
+        "Use of bold color blocks for CTAs"
+      ],
+      "confidence": 0.95,
+      "owned": true
+    },
+    {
+      "id": "w29-summersale-1-649ea722d4",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W29 summersale 1.png",
+      "title": "Summer Sale",
+      "family": "seasonal_sale",
+      "campaignType": "sale",
+      "funnelStage": "conversion",
+      "language": "Danish",
+      "primaryGoal": "Drive immediate purchases by promoting a summer sale with up to 50% discounts on select products.",
+      "audience": "Existing and potential customers interested in jewelry boxes, retail displays, and accessories.",
+      "offer": "Up to 50% off selected items.",
+      "themes": [
+        "Summer",
+        "Sale",
+        "Urgency",
+        "Fun/Playful"
+      ],
+      "products": [
+        "Smykkeskrin (jewelry boxes)",
+        "Butikskasse displays (shop displays)"
+      ],
+      "visualPatterns": [
+        "Playful, sunny, inviting",
+        "3D-style product mascots with summer accessories, realistic product photographs with discount overlays",
+        "Top hero image with product characters and summer props",
+        "Large central headline",
+        "Benefit-explaining body copy",
+        "Feature-product grid with discount badges",
+        "Full-width color block CTA"
+      ],
+      "copyPatterns": [
+        "Energetic, friendly, urgent, slightly informal",
+        "Hero headline",
+        "Short explanatory paragraph",
+        "Urgency message",
+        "Legal/fairness note",
+        "Product grid with discount highlights",
+        "Direct CTA",
+        "High—shortage and time pressure stressed"
+      ],
+      "reusablePatterns": [
+        "Seasonal cartoon product mascots illustrating the campaign theme",
+        "Discount percentages displayed on product images in oversized badges",
+        "Single bold color-call-to-action button at the email end",
+        "Informal, lively tone to match campaign energy",
+        "Visual metaphors linking products to the season (beach, summer props)"
+      ],
+      "confidence": 0.95,
+      "owned": true
+    },
+    {
+      "id": "w31-s-sonen-skifter-127ea7286f",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W31 Sæsonen skifter.png",
+      "title": "W31 Sæsonen skifter",
+      "family": "season_change",
+      "campaignType": "seasonal",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Inspire customers to explore new packaging options for the autumn season.",
+      "audience": "Businesses and individuals sourcing packaging for jewelry and gifts.",
+      "offer": "",
+      "themes": [
+        "Seasonal transition",
+        "Autumn inspiration",
+        "Packaging variety",
+        "Style & branding"
+      ],
+      "products": [
+        "Gift bags",
+        "Jewelry boxes",
+        "Shipping boxes",
+        "Gift wrapping",
+        "Carrier bags"
+      ],
+      "visualPatterns": [
+        "Warm, inviting, seasonal",
+        "Natural light, staged product sets, autumn props (leaves, fabric)",
+        "hero product scene",
+        "sectioned categories",
+        "paired product images",
+        "highlighted CTA block"
+      ],
+      "copyPatterns": [
+        "Inspiring, conversational, gently persuasive",
+        "Seasonal introduction",
+        "Reflective question",
+        "Product/solution overview",
+        "Call to action",
+        "Category highlights",
+        "Low to medium—invitation to explore or get inspired rather than act immediately"
+      ],
+      "reusablePatterns": [
+        "Staged hero image with seasonal props",
+        "Section introduction with evocative seasonal language",
+        "Primary CTA in colored block beneath intro",
+        "Grid or card layout for featured categories",
+        "Product showcase in situ with coordinated palettes",
+        "Secondary CTAs in labeled boxes below category images"
+      ],
+      "confidence": 0.95,
+      "owned": true
+    },
+    {
+      "id": "w45-post-sker-preview-59fba46cfd",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W45 Postæsker Preview.png",
+      "title": "W45 Postæsker Preview",
+      "family": "custom packaging",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Promote custom printed shipping boxes and encourage businesses to design their own branded packaging.",
+      "audience": "E-commerce business owners and retailers interested in custom packaging solutions.",
+      "offer": "Custom printed shipping boxes starting at 200 pcs with your own design.",
+      "themes": [
+        "Branding",
+        "Personalization",
+        "Emotional connection",
+        "Ease of use",
+        "Small order quantities"
+      ],
+      "products": [
+        "Custom printed shipping boxes",
+        "Postæsker"
+      ],
+      "visualPatterns": [
+        "Clean, modern, friendly, upbeat",
+        "Simple product photos with hands, neutral backgrounds, focus on packaging",
+        "Hero image of product in use",
+        "Sectioned content with large images",
+        "Text blocks with supportive icons",
+        "Contrasting CTA buttons"
+      ],
+      "copyPatterns": [
+        "Conversational, enthusiastic, empowering, clear",
+        "Hero statement",
+        "Supportive benefit explanation",
+        "Bulleted feature list",
+        "Emotional scenario narrative",
+        "Step simplification",
+        "Multiple clear CTAs",
+        "Low-moderate (emphasizes simplicity and emotional impact over limited-time offers)"
+      ],
+      "reusablePatterns": [
+        "Hero product image with a hand holding the item to humanize and contextualize product use",
+        "Opening with a direct benefit statement for the customer's business",
+        "Emphasizing emotional impact and brand experience alongside practical product features",
+        "Bulleted list with icons to summarize key benefits",
+        "Narrative invitation to imagine the customer experience",
+        "Prominent multi-stage CTA placement with action-oriented text",
+        "Feature on low minimum order quantity as a key differentiator"
+      ],
+      "confidence": 0.95,
+      "owned": true
+    },
+    {
+      "id": "w24-hvad-siger-kunderne-om-wp-89106c8ceb",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W24 Hvad siger kunderne om WP.png",
+      "title": "Hvad siger kunderne om WP",
+      "family": "Customer Testimonials",
+      "campaignType": "customer_story",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Build trust through customer testimonials and drive traffic to site/product categories.",
+      "audience": "Potential and existing B2B customers evaluating packaging suppliers.",
+      "offer": "",
+      "themes": [
+        "Trust and credibility",
+        "Customer experience",
+        "5-star service",
+        "Product quality"
+      ],
+      "products": [
+        "Forsendelse",
+        "Gaveindpakning",
+        "Bæreposer",
+        "Smykkeskrin"
+      ],
+      "visualPatterns": [
+        "Professional, approachable, trustworthy",
+        "Real customer faces, product category packshots, clean backgrounds",
+        "Hero testimonial with photo",
+        "Statistics block",
+        "Multiple testimonial highlights",
+        "Grid of product categories with photos"
+      ],
+      "copyPatterns": [
+        "Enthusiastic, authentic, credible",
+        "Hero customer review with rating and photo",
+        "Proof/statistics block",
+        "Additional short testimonials",
+        "Clear CTAs",
+        "Product grid",
+        "None"
+      ],
+      "reusablePatterns": [
+        "Headline with social proof/statistics",
+        "Hero testimonial with direct quote and photo",
+        "Block of short testimonials from various regions",
+        "Dual primary CTAs side-by-side in colored buttons",
+        "Product category grid with approachable visuals"
+      ],
+      "confidence": 0.93,
+      "owned": true
+    },
+    {
+      "id": "w34-bliv-wtp-forhandler-d38aad166e",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W34 Bliv WTP forhandler.png",
+      "title": "WTP forhandler campaign",
+      "family": "partnership/re-seller recruitment",
+      "campaignType": "lead_generation",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Recruit retailers and promote the WTP product line as an add-on or cross-sell for jewelry sellers.",
+      "audience": "Potential retail partners, boutique and jewelry shop owners",
+      "offer": "",
+      "themes": [
+        "Cross-selling",
+        "Retailer partnership",
+        "Visual merchandising",
+        "Product education",
+        "Upselling"
+      ],
+      "products": [
+        "Smykkeskrin",
+        "Ureæske",
+        "Stabelæske",
+        "Rejseæske"
+      ],
+      "visualPatterns": [
+        "Soft, elegant, product-focused with a premium touch",
+        "Professional, minimalist product photography; muted backgrounds",
+        "Hero image with logo",
+        "Sectioned product groupings",
+        "Alternating image and text blocks",
+        "Call-to-action buttons under each key section"
+      ],
+      "copyPatterns": [
+        "Professional but friendly, educational",
+        "Introduction and value proposition",
+        "Key selling points and FAQ",
+        "Primary CTA",
+        "Product breakdown",
+        "Social media invitation",
+        "Low/None; more focused on benefits and education than time-limited offers"
+      ],
+      "reusablePatterns": [
+        "Feature a hero product photo with understated branding",
+        "Educate resellers on end-customer needs and how products solve them",
+        "Segmented CTAs for different product categories",
+        "Wholesale pitch as a section after initial product intro",
+        "Social media plug at the end with visually distinct block"
+      ],
+      "confidence": 0.93,
+      "owned": true
+    },
+    {
+      "id": "w23-display-butikspr-sentation-til-sommer-faa81b0ad2",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W23 Display & Butikspræsentation til sommer.png",
+      "title": "Sprede sommer-vibes i din butik",
+      "family": "Display & Butikspræsentation til sommer",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Inspire shops to create summer-themed product displays using Westpack packaging solutions",
+      "audience": "Retailers and shops interested in seasonal display and packaging inspiration",
+      "offer": "",
+      "themes": [
+        "Summer vibes",
+        "Display inspiration",
+        "Packaging solutions",
+        "In-store experience"
+      ],
+      "products": [
+        "Gift boxes",
+        "Jewelry displays",
+        "Packaging sets",
+        "Paper bags",
+        "Display kits"
+      ],
+      "visualPatterns": [
+        "Warm, inviting, seasonal",
+        "Professional, light-drenched photography with summer motifs",
+        "Hero lifestyle image",
+        "Thematic sections with product shots",
+        "Alternating image and text blocks",
+        "Visible large CTA blocks"
+      ],
+      "copyPatterns": [
+        "Inspirational, conversational, supportive",
+        "Seasonal greeting/introduction",
+        "Segmented sections by display theme",
+        "Explanation of the look and what it achieves",
+        "Practical tips",
+        "Direct CTAs after each section",
+        "Mild; primary focus is on inspiration and preparation"
+      ],
+      "reusablePatterns": [
+        "Segmenting product inspiration by thematic story (e.g. 'Den støvede sommeraften', 'Et iskoldt dyp')",
+        "Mix of lifestyle context photographs with isolated product images",
+        "Short, actionable suggestions within each themed section ('Prøv det også her:')",
+        "Large, consistent CTAs at the end of each section",
+        "Soft, pastel backgrounds to unify visual theme"
+      ],
+      "confidence": 0.92,
+      "owned": true
+    },
+    {
+      "id": "w48-black-friday-preview-c2a172c502",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W48 Black Friday Preview.png",
+      "title": "Black Friday Survival Guide",
+      "family": "Black Friday / Peak Season",
+      "campaignType": "educational",
+      "funnelStage": "consideration",
+      "language": "Danish",
+      "primaryGoal": "Educate and support customers on how to handle busy periods without a Black Friday campaign at Westpack",
+      "audience": "Westpack customers and subscribers preparing for the Black Friday period",
+      "offer": "",
+      "themes": [
+        "support",
+        "community",
+        "peak season",
+        "customer perspective",
+        "stress management"
+      ],
+      "products": [
+        "emballage"
+      ],
+      "visualPatterns": [
+        "fun, supportive, energetic",
+        "candid staff photos, casual workplace scenes",
+        "collage-style staff photos",
+        "bright highlight blocks",
+        "circular portrait frames",
+        "hand-drawn lines/arrows"
+      ],
+      "copyPatterns": [
+        "colloquial, humorous, personal",
+        "intro",
+        "personal stories/tips from staff",
+        "sectional dividers",
+        "closing summary",
+        "clear CTA buttons",
+        "mild; more supportive than urgent"
+      ],
+      "reusablePatterns": [
+        "Company values spotlight (no Black Friday but support during peak)",
+        "Personal stories from staff or customers",
+        "Step-by-step tips/guide linked as main CTA",
+        "Bright, playful palette with hand-drawn or informal lines",
+        "Multiple CTAs: guide link and related shop action",
+        "Highlighting team or community wisdom"
+      ],
+      "confidence": 0.9,
+      "owned": true
+    },
+    {
+      "id": "w44-gavekampagne-3-gave-sker-gaveposer-08813ceccb",
+      "libraryType": "owned_campaign",
+      "sourceName": "Westpack",
+      "imagePath": "campaign-import/unsorted-email/W44 Gavekampagne 3_ Gaveæsker & Gaveposer.png",
+      "title": "Gratis Mystery Box",
+      "family": "Gavekampagne",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "da",
+      "primaryGoal": "Promote gift boxes, gift bags, and generate interest with a free mystery box offer",
+      "audience": "Business customers or resellers seeking branded packaging and holiday gifting solutions",
+      "offer": "Gratis Mystery Box",
+      "themes": [
+        "Holiday gifting",
+        "Branded packaging",
+        "Mystery offer"
+      ],
+      "products": [
+        "Gift boxes",
+        "Gift bags",
+        "Mystery Box",
+        "DIY Kits"
+      ],
+      "visualPatterns": [
+        "Premium, festive, inviting",
+        "Glossy product photos with soft shadows, festive props/backgrounds, branded visuals",
+        "Banner with strong headline",
+        "Sectioned product highlights",
+        "Hero product photo",
+        "Callout box for CTAs",
+        "Circular focal images",
+        "Curved section dividers"
+      ],
+      "copyPatterns": [
+        "Inviting, encouraging, premium",
+        "Headline offer",
+        "Seasonal greeting/message",
+        "Product highlights",
+        "Explainer/callouts",
+        "Multiple CTAs",
+        "DIY kit tiered pricing",
+        "Moderate – time-limited holiday/gifting angle, free offer framing"
+      ],
+      "reusablePatterns": [
+        "Lead with strong value-driven headline offer",
+        "Section benefits and product categories for scan-friendly reading",
+        "Use hero product imagery that combines multiple product types",
+        "Multiple call-to-action buttons after each section",
+        "Feature 'mystery box' and tiered/bonus gift mechanics",
+        "Show product variants together to encourage up-sell/cross-sell"
+      ],
+      "confidence": 0.9,
+      "owned": true
+    },
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130806-23c3dbabef",
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "imagePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130806.png",
+      "title": "Your annual physical tests ~15 biomarkers. Here's what gets left out.",
+      "family": "health education",
+      "campaignType": "educational",
+      "funnelStage": "consideration",
+      "language": "English",
+      "primaryGoal": "Educate readers on limitations of standard bloodwork and promote Lifeforce's expanded biomarker testing.",
+      "audience": "Health-conscious adults considering advanced biomarker testing; likely aged 30+.",
+      "offer": "Education about the benefits and value of testing 50+ biomarkers with an at-home test reviewed by a clinician.",
+      "themes": [
+        "Proactive health monitoring",
+        "Personalized data",
+        "Limitations of standard care",
+        "Actionability based on information"
+      ],
+      "products": [
+        "Lifeforce biomarker testing panel",
+        "Clinician-reviewed health plan"
+      ],
+      "visualPatterns": [
+        "calm, trustworthy, reassuring",
+        "Lifestyle and in-situ product photography; human-centric, warm lighting.",
+        "hero statement with secondary subtitle",
+        "educational blocks with headings",
+        "side-by-side or full-width imagery",
+        "information hierarchy using typographic contrast",
+        "visually separated sections with shaded backgrounds"
+      ],
+      "copyPatterns": [
+        "educational, supportive, credible",
+        "Provocative opening statement",
+        "Educational content with section headings",
+        "Grouped bullet-point features/benefits",
+        "Reason-to-believe explanation",
+        "Actionable closing with CTA",
+        "Low-to-moderate; focuses on the importance of not missing gradual health changes rather than immediate action."
+      ],
+      "reusablePatterns": [
+        "Contrast standard offering with what is missing to increase perceived value",
+        "Breakdown of features into clear, scannable lists with supporting explanation",
+        "Lead with educational content before transitioning to a product invite",
+        "Support claims with specific but accessible medical information",
+        "Use background color blocks to visually segment educational points"
+      ],
+      "confidence": 0.98,
+      "owned": false
+    },
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130851-ba19d93e0a",
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "imagePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130851.png",
+      "title": "The path to “future you”",
+      "family": "Mindbloom Behavior Change Journey",
+      "campaignType": "product",
+      "funnelStage": "consideration",
+      "language": "English",
+      "primaryGoal": "Drive action to start the Mindbloom program",
+      "audience": "Potential customers seeking mental health treatment solutions",
+      "offer": "",
+      "themes": [
+        "transformation",
+        "guided journey",
+        "mental health improvement",
+        "progression over time",
+        "credibility/results"
+      ],
+      "products": [
+        "Mindbloom program"
+      ],
+      "visualPatterns": [
+        "optimistic and supportive",
+        "Warm, lifestyle photography with natural outdoor and home settings, human-focused, motivating",
+        "hero image with strong value proposition",
+        "step-by-step timeline with accompanying visuals",
+        "testimonial/statistics overlay",
+        "modular content blocks",
+        "strong call-to-action buttons"
+      ],
+      "copyPatterns": [
+        "encouraging and reassuring",
+        "Headline/hero statement",
+        "Credibility statistic",
+        "CTA button",
+        "Sequential journey (steps/weeks)",
+        "Value proposition block",
+        "Reinforcing secondary CTA",
+        "Low to moderate: Emphasizes transformation and positive outcomes rather than immediate scarcity"
+      ],
+      "reusablePatterns": [
+        "Visual timeline communicating stages or benefits over time",
+        "Hero section with short, bold headline and emotional imagery",
+        "Supporting credibility/statistics overlay",
+        "Modular, scroll-friendly block layouts",
+        "Two CTAs (primary action, secondary reassurance/question route)",
+        "Simple, conversational explanations of each customer journey stage",
+        "Footer navigation with direct resource links"
+      ],
+      "confidence": 0.97,
+      "owned": false
+    },
+    {
+      "id": "rge-sk-rmbillede-2026-07-17-130706-7421fead62",
+      "libraryType": "external_inspiration",
+      "sourceName": "Really Good Emails",
+      "imagePath": "campaign-import/rge-inspiration/Skærmbillede 2026-07-17 130706.png",
+      "title": "Wonderbly: $15 Off Books for Everyone",
+      "family": "sitewide_promotion",
+      "campaignType": "sale",
+      "funnelStage": "conversion",
+      "language": "English",
+      "primaryGoal": "Drive immediate purchase via a promotional code",
+      "audience": "Parents or gift shoppers for children (various ages including newborns, kids, and adults)",
+      "offer": "$15 off books for everyone with code BOOKSGALORE",
+      "themes": [
+        "Personalization",
+        "Gift giving",
+        "Family bonding",
+        "Inclusive for all ages"
+      ],
+      "products": [
+        "Personalized children’s books",
+        "Multiverse-hopping search-and-find books",
+        "Personalized sibling books",
+        "Personalized adventure books"
+      ],
+      "visualPatterns": [
+        "Friendly, playful, inclusive, warm",
+        "Bright, playful product shots and warm, candid family imagery",
+        "Hero section with bold discount offer",
+        "Product showcase grids",
+        "Human lifestyle imagery",
+        "Category-selection CTAs",
+        "Simple footer with brand support info"
+      ],
+      "copyPatterns": [
+        "Friendly, direct, inclusive, informative",
+        "Prominent hero discount",
+        "Showcase of featured and popular books",
+        "Short product explanations",
+        "Personalization CTAs",
+        "Segmented product suggestions by age",
+        "Customer support info",
+        "Soft urgency (time-limited offer mentioned in legal copy only)"
+      ],
+      "reusablePatterns": [
+        "Hero section featuring a bold offer code and clear headline",
+        "Segmented product/category blocks with direct personalization CTAs",
+        "Social proof/crowd-sourced sharing prompt (e.g., 'Share your #WonderblyMoments')",
+        "Support and FAQ block addressing hesitations",
+        "Simple visual hierarchy using color block frames and clean spacing",
+        "Product images paired with 1-2 line benefit-driven descriptions"
+      ],
+      "confidence": 0.95,
+      "owned": false
+    }
+  ]
+}

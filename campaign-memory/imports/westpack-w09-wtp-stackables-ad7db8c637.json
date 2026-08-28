@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w09-wtp-stackables-ad7db8c637",
+  "source": {
+    "file": "W09 WTP Stackables.png",
+    "relativePath": "campaign-import/unsorted-email/W09 WTP Stackables.png",
+    "sha256": "ad7db8c637e6ae15d98c18cc4627bc7ea224840ad0c973daeb77175625227d09",
+    "bytes": 337221
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "WTP Stackables Launch",
+    "week": "W09",
+    "language": "Danish",
+    "campaignFamily": "WTP Stackables",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Introduce and drive sales of the new modular jewellery box system for wholesale customers",
+    "audience": "Jewellery retailers and business buyers interested in display and storage solutions",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se sortimentet ➔",
+    "secondaryCtas": [
+      "Læg i kurv ➔",
+      "Se alle de nye skrin ➔",
+      "Læg i kurv",
+      "Shop de nye WTP skrin her ➔"
+    ],
+    "products": [
+      "WTP Stabelbare smykkeskrin"
+    ],
+    "themes": [
+      "modularity",
+      "quality",
+      "upselling",
+      "natural materials",
+      "flexible display"
+    ],
+    "visualStyle": {
+      "palette": [
+        "soft pastel green",
+        "warm brown",
+        "light blush pink",
+        "neutral beige",
+        "white background"
+      ],
+      "mood": "elegant, calm, minimalistic, premium",
+      "layoutPatterns": [
+        "stacked hero imagery",
+        "split image/text sections",
+        "product grid",
+        "visual dividers with whitespace"
+      ],
+      "imageStyle": "high-resolution product photography, clean backgrounds, focus on product texture and arrangement"
+    },
+    "copyStyle": {
+      "tone": "informative, promotional, assured",
+      "structure": [
+        "hero announcement",
+        "introductory overview",
+        "benefit-focused text blocks",
+        "product features",
+        "section-based CTAs",
+        "visual step/guidance element",
+        "detailed product list"
+      ],
+      "urgency": "gentle/evergreen, not urgent"
+    },
+    "reusablePatterns": [
+      "Modular product announcement with stacked hero visual",
+      "Side-by-side image and benefit explanation",
+      "Section-specific CTAs driving to details or shop",
+      "Product grid with direct add-to-cart functionality",
+      "Guidance section with text link and visual cue (arrow) to nurture learning"
+    ],
+    "risks": [
+      "Dense block text may challenge quick scanning",
+      "Multiple CTAs could split user focus",
+      "Heavy reliance on visuals (may underperform if products are less visually appealing in other contexts)"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.95,
+      "notes": "All text and visuals are clearly readable except for a few minor product details. No subject or preheader visible. Derived week/campaign family from filename."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:28.546Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "w48-black-friday-preview-c2a172c502",
+  "source": {
+    "file": "W48 Black Friday Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W48 Black Friday Preview.png",
+    "sha256": "c2a172c5028557e27057f11379775daa5160cda8a72799a8b3919d5d35786eeb",
+    "bytes": 3554744
+  },
+  "analysis": {
+    "campaignTitle": "Black Friday Survival Guide",
+    "week": "W48",
+    "language": "Danish",
+    "campaignFamily": "Black Friday / Peak Season",
+    "campaignType": "educational",
+    "funnelStage": "consideration",
+    "primaryGoal": "Educate and support customers on how to handle busy periods without a Black Friday campaign at Westpack",
+    "audience": "Westpack customers and subscribers preparing for the Black Friday period",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Læs Survival guiden her →",
+    "secondaryCtas": [
+      "Shop emballage"
+    ],
+    "products": [
+      "emballage"
+    ],
+    "themes": [
+      "support",
+      "community",
+      "peak season",
+      "customer perspective",
+      "stress management"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#FFD600",
+        "#FF00A8",
+        "#FFFFFF",
+        "#000000"
+      ],
+      "mood": "fun, supportive, energetic",
+      "layoutPatterns": [
+        "collage-style staff photos",
+        "bright highlight blocks",
+        "circular portrait frames",
+        "hand-drawn lines/arrows"
+      ],
+      "imageStyle": "candid staff photos, casual workplace scenes"
+    },
+    "copyStyle": {
+      "tone": "colloquial, humorous, personal",
+      "structure": [
+        "intro",
+        "personal stories/tips from staff",
+        "sectional dividers",
+        "closing summary",
+        "clear CTA buttons"
+      ],
+      "urgency": "mild; more supportive than urgent"
+    },
+    "reusablePatterns": [
+      "Company values spotlight (no Black Friday but support during peak)",
+      "Personal stories from staff or customers",
+      "Step-by-step tips/guide linked as main CTA",
+      "Bright, playful palette with hand-drawn or informal lines",
+      "Multiple CTAs: guide link and related shop action",
+      "Highlighting team or community wisdom"
+    ],
+    "risks": [
+      "Humorous/self-deprecating tone may not resonate with every B2B audience",
+      "Casual visual style may reduce perceived professionalism for some recipients",
+      "No direct product offer which may reduce immediate conversions"
+    ],
+    "confidence": {
+      "overall": 0.9,
+      "textReadability": 0.95,
+      "notes": "Main body and buttons are clearly readable; subject and preheader are not visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:59:18.617Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

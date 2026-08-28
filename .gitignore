@@ -1,0 +1,38 @@
+# Secrets / credentials
+.env
+.env.*
+!.env.*.template
+.vercel.live.env
+klaviyo-config.json
+secrets/
+
+# Vercel local cache/link
+.vercel/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+local-debug.*
+local-serve.*
+local-email-audit.*
+serve-local-wrapper.*
+vercel-dev*.log
+vercel-dev-session.log
+
+# Temp / scratch / debug artifacts
+tmp/
+tmp-*/
+tmp-*.png
+tmp-*.mp4
+_tiny_test.mp4
+_write_ok.txt
+_login_headers.txt
+_live_snapshot_*.json
+*.tmp
+westpack-fr-check.png
+k.includes( ' npm ' )))
+
+# Test output
+test-results/

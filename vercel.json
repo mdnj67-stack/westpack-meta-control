@@ -1,0 +1,40 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/campaign/brain.js": {
+      "maxDuration": 300,
+      "includeFiles": "campaign-import/**"
+    },
+    "api/meta/account-snapshot.js": {
+      "maxDuration": 300
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/meta/account-snapshot",
+      "schedule": "45 5 * * *"
+    },
+    {
+      "path": "/api/meta/account-snapshot?historical=sync",
+      "schedule": "20 3 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

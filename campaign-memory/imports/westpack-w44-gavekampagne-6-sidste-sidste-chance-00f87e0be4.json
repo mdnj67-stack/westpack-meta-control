@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-6-sidste-sidste-chance-00f87e0be4",
+  "source": {
+    "file": "W44 Gavekampagne 6_ Sidste sidste chance.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 6_ Sidste sidste chance.png",
+    "sha256": "00f87e0be47c191d53c5299946ae7bb937616d42d3bb5709c4e5a67d3eed3784",
+    "bytes": 1317751
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Gavekampagne 6: Sidste sidste chance",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive urgency to purchase remaining Mystery Boxes before offer ends",
+    "audience": "Existing customers and newsletter subscribers interested in packaging and DIY gifts",
+    "offer": "Limited-stock Mystery Box, available until a specific countdown expiry. Each box contains unique DIY-themed surprises.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Åbn din Mystery Box",
+    "secondaryCtas": [
+      "Sidste chance – klik nu!",
+      "Jeg vil vide mere"
+    ],
+    "products": [
+      "Mystery Box",
+      "DIY surprise kits (e.g., Modelling, Crepe paper, Candle making, Macrame, Embroidery)"
+    ],
+    "themes": [
+      "last chance urgency",
+      "surprise",
+      "limited-time/countdown",
+      "playful seasonal references (e.g., nisser/elves)",
+      "DIY/creative"
+    ],
+    "visualStyle": {
+      "palette": [
+        "deep red",
+        "cream/off-white",
+        "brown",
+        "neutral accents"
+      ],
+      "mood": "Urgent, playful, seasonal, slightly whimsical",
+      "layoutPatterns": [
+        "hero panel with countdown timer",
+        "large bold CTAs",
+        "central question mark over product image",
+        "clear stepwise sections (urgency > details > secondary info)"
+      ],
+      "imageStyle": "Product/photo collage obscured by graphic (mystery effect), festive patterned background"
+    },
+    "copyStyle": {
+      "tone": "Conversational, urgent, playful, lightly humorous",
+      "structure": [
+        "Top countdown timer",
+        "Short punchy headline",
+        "Supporting urgency statement",
+        "Primary CTA",
+        "Visual teaser (mystery box imagery)",
+        "Expanded urgency copy with seasonal storytelling",
+        "Secondary call to action",
+        "Short FAQ/teaser about the offer",
+        "Legal/notes section",
+        "Contact/social footer"
+      ],
+      "urgency": "High (repeat 'last chance', explicit countdown, references to 'game over', scarcity)"
+    },
+    "reusablePatterns": [
+      "Countdown timer above the fold to emphasize urgency",
+      "Obscured product reveal to add mystery/suspense",
+      "Irreverent, gamified urgency copy (references to 'no respawn', 'game over', 'elves turning off the lights')",
+      "Contrasting strong color CTAs that repeat through email",
+      "Explanatory/subtle FAQ section answering unspoken questions about product",
+      "Lighthearted, seasonal metaphors to connect with audience"
+    ],
+    "risks": [
+      "Mystery box concept may frustrate customers seeking exact contents",
+      "Heavy urgency repetition may induce fatigue or be perceived as spammy",
+      "Danish language/niche Christmas references may not translate globally"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "Almost all content clearly readable in the screenshot; branding, disclaimers, and CTAs are unambiguous. Subject line/preheader not visible in screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:38.911Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

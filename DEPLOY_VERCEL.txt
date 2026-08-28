@@ -1,0 +1,15 @@
+Deploy from Vercel UI:
+
+1. Open your Vercel project.
+2. Create a deployment from the folder:
+   C:\Projects\westpack-meta-control
+3. The project is already linked through .vercel/project.json
+4. Secrets are ignored through .vercelignore
+
+If Vercel CLI becomes available later, run from project root:
+  vercel
+  vercel --prod
+
+Important:
+- Do not upload the secrets folder.
+- Rotate the exposed Meta and OpenAI keys before any serious production use.

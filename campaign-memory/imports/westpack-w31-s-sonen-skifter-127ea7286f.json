@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w31-s-sonen-skifter-127ea7286f",
+  "source": {
+    "file": "W31 Sæsonen skifter.png",
+    "relativePath": "campaign-import/unsorted-email/W31 Sæsonen skifter.png",
+    "sha256": "127ea7286fb9e83b01a3e9052a3c77ec47c2524701465a3ca5db678d69bc51ad",
+    "bytes": 732807
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Vi spoler tiden frem... (W31 Sæsonen skifter)",
+    "week": "W31",
+    "language": "Danish",
+    "campaignFamily": "Sæsonen skifter",
+    "campaignType": "seasonal",
+    "funnelStage": "consideration",
+    "primaryGoal": "Inspire customers to refresh or update their packaging with autumn-themed styles",
+    "audience": "Existing customers, primarily B2B/jewellery or boutique retailers seeking packaging options",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se de 5 efterårslooks ➔",
+    "secondaryCtas": [
+      "Forsendelse ➔",
+      "Gaveindpakning ➔",
+      "Bæreposer ➔",
+      "Smykkeskrin ➔"
+    ],
+    "products": [
+      "Jewellery boxes",
+      "Gift packaging",
+      "Carrier bags",
+      "Shipping boxes"
+    ],
+    "themes": [
+      "Seasonal change",
+      "Inspiration",
+      "New styles",
+      "Autumn colors"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Warm beige",
+        "Terracotta",
+        "Mahogany",
+        "Cream",
+        "Soft black",
+        "Dark green"
+      ],
+      "mood": "Warm, inviting, autumnal, cozy",
+      "layoutPatterns": [
+        "Hero image with product vignette",
+        "Sectioned product highlights",
+        "Button grid for navigation"
+      ],
+      "imageStyle": "Light, soft, lifestyle imagery with natural props (fall leaves, fabric) and clean product groupings"
+    },
+    "copyStyle": {
+      "tone": "Conversational, inspirational, slightly poetic",
+      "structure": [
+        "Intro lead",
+        "Reflective/aspirational questions",
+        "Short product descriptions",
+        "Action-oriented CTAs"
+      ],
+      "urgency": "Gentle, implied by seasonal change but not overtly urgent"
+    },
+    "reusablePatterns": [
+      "Theme-driven introduction referencing time or seasonality",
+      "Showcasing product variants in a styled hero image",
+      "Framing products as 'looks' or inspiration rather than just items",
+      "Grid of secondary CTAs for easy navigation by product type",
+      "Palette and photography aligned with seasonal color mood"
+    ],
+    "risks": [
+      "Copy may feel non-specific if not seasonally relevant",
+      "Not all customers may relate to the inspiration-driven approach"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.99,
+      "notes": "All main Danish text is clearly visible. No performance data or explicit subject/preheader provided."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:17.475Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-3-gave-sker-gaveposer-08813ceccb",
+  "source": {
+    "file": "W44 Gavekampagne 3_ Gaveæsker & Gaveposer.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 3_ Gaveæsker & Gaveposer.png",
+    "sha256": "08813ceccb7633193498f3ddc7f8251205cf280057e83986f99d3acdafad96a6",
+    "bytes": 3045122
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Gratis Mystery Box",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "consideration",
+    "primaryGoal": "Drive interest and orders of gift boxes, gift bags, and a Mystery Box promotion.",
+    "audience": "B2B customers interested in packaging, gifting solutions, and branded merchandise.",
+    "offer": "Gratis Mystery Box with purchase, promotional highlighting of gift packaging and branded bags.",
+    "subjectLineVisible": "Gratis Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box her ➔",
+    "secondaryCtas": [
+      "Længi luksus boks ➔",
+      "Se alle gaveæsker ➔",
+      "Køb poser nu ➔"
+    ],
+    "products": [
+      "Luxury gift boxes",
+      "Gift bags",
+      "DIY Kits (1.500 kr, 3.000 kr, 6.000 kr)",
+      "Custom branded bags"
+    ],
+    "themes": [
+      "Gifting",
+      "Mystery/Surprise",
+      "Holiday/Christmas",
+      "Brand personalization"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#900c0c",
+        "#f7f6f4",
+        "#d4cfc5",
+        "#101010"
+      ],
+      "mood": "Festive, premium, elegant",
+      "layoutPatterns": [
+        "Hero offer bar",
+        "Alternating image with explanatory text",
+        "Product lineups",
+        "Circular product-detail highlights",
+        "Section color-blocking"
+      ],
+      "imageStyle": "Well-lit professional product photography, mix of group and close-up images, clean compositional backgrounds"
+    },
+    "copyStyle": {
+      "tone": "Conversational with a touch of festivity and exclusivity",
+      "structure": [
+        "Headline offer",
+        "Emotional introduction",
+        "Product showcase and benefits",
+        "Feature spotlights",
+        "Sequential value proposition with pricing",
+        "Multiple, clearly-labeled CTAs"
+      ],
+      "urgency": "Moderate (invites action but not high pressure; supported by limited kit availability/pricing)."
+    },
+    "reusablePatterns": [
+      "Prominent headline bar offer",
+      "Intro section framing the value emotionally",
+      "Alternating blocks: visual focus, explanatory caption",
+      "Clusters of product images for range visualization",
+      "Sectional color changes for segmentation",
+      "Tiered product/kit upsell path with clear pricing",
+      "Multiple bold CTAs aligned with each section's focus"
+    ],
+    "risks": [
+      "Possible confusion if the Mystery Box mechanics/rules are unclear.",
+      "Potential lack of clarity if users are unfamiliar with DIY Kit value.",
+      "Danish-only copy may not engage audiences outside DK."
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.97,
+      "notes": "Text, structure, and wording are almost fully clear except for minor details in small print/blurred kit images. Copy and design patterns are confidently identified."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:13.739Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

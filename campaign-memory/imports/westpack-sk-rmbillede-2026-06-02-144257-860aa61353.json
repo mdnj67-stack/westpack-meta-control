@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-sk-rmbillede-2026-06-02-144257-860aa61353",
+  "source": {
+    "file": "Skærmbillede 2026-06-02 144257.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-06-02 144257.png",
+    "sha256": "860aa613535a7f08372415d5b4f27827e5dc4b52addd5ed9560b89306affbee0",
+    "bytes": 579983
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Westpack Mystery Box 73rd Birthday",
+    "week": "2026-06-15 to 2026-06-22",
+    "language": "Danish",
+    "campaignFamily": "Birthday/Celebration",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive urgent sales by encouraging customers to place orders and receive a limited Mystery Box gift.",
+    "audience": "Westpack customers/prospects, likely existing small business clients that regularly purchase packaging.",
+    "offer": "Free Mystery Box with orders over 200 kr (limited quantities, possible 20% discount code inside)",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box ➔",
+    "secondaryCtas": [],
+    "products": [
+      "Mystery Box",
+      "Gift with purchase",
+      "Westpack packaging products (implied)"
+    ],
+    "themes": [
+      "Anniversary",
+      "Scarcity",
+      "Surprise",
+      "Urgency",
+      "Celebration"
+    ],
+    "visualStyle": {
+      "palette": [
+        "red",
+        "orange",
+        "blue",
+        "white",
+        "yellow",
+        "black"
+      ],
+      "mood": "Festive, friendly, urgent",
+      "layoutPatterns": [
+        "photographic group header",
+        "large celebratory headline",
+        "banner graphics",
+        "boxed explanation",
+        "single bold CTA button",
+        "fine print/disclaimer"
+      ],
+      "imageStyle": "Natural team photo with digitally overlaid playful graphics and event branding"
+    },
+    "copyStyle": {
+      "tone": "Conversational, urgent, celebratory, transparent",
+      "structure": [
+        "Header/logo + navigation",
+        "Hero image with offer overlay",
+        "Celebration headline and subhead",
+        "Urgency-focused explanation",
+        "Boxed FAQ-style clarification",
+        "Primary CTA button",
+        "Legal disclaimer/fine print"
+      ],
+      "urgency": "High (limited time, limited quantities, explicit countdown language)"
+    },
+    "reusablePatterns": [
+      "Team photograph to humanize the brand",
+      "Large, graphical overlay for the main offer",
+      "Use of bunting or festive elements for celebration",
+      "Headline focusing on an unmissable opportunity",
+      "Scarcity-based urgency (\"få håndfulde\" / 'a few left')",
+      "FAQ-style content box to pre-answer common questions",
+      "Bold, solitary CTA button just above the fold",
+      "Comprehensive disclaimer detailing campaign mechanics"
+    ],
+    "risks": [
+      "Overselling scarcity if not genuine",
+      "Potential disappointment if contents of Mystery Box do not meet expectations",
+      "Ambiguity in who receives a discount code",
+      "Limited to orders over 200 kr. may exclude lower-spending customers"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.98,
+      "notes": "All major sections and CTA are fully legible; fine print and legal details read clearly. Preheader or subject line are not visible in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:13:17.346Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

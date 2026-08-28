@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "w27-hvad-skal-wp-erne-i-deres-sommerferie-03707fc7ea",
+  "source": {
+    "file": "W27 Hvad skal Wp'erne i deres sommerferie.png",
+    "relativePath": "campaign-import/unsorted-email/W27 Hvad skal Wp'erne i deres sommerferie.png",
+    "sha256": "03707fc7ea1ef5ae6ab4f69be85907d49664d9371834989f3642618d979b767f",
+    "bytes": 205567
+  },
+  "analysis": {
+    "campaignTitle": "W27 Hvad skal Wp'erne i deres sommerferie",
+    "week": "27",
+    "language": "Danish",
+    "campaignFamily": "summer holiday / brand culture",
+    "campaignType": "brand",
+    "funnelStage": "mixed",
+    "primaryGoal": "Promote Westpack's company culture while encouraging summer season product ordering.",
+    "audience": "Westpack's Danish-speaking B2B customers",
+    "offer": "",
+    "subjectLineVisible": "\"Hvad skal du lave i sommerferien?\"",
+    "preheaderVisible": "",
+    "primaryCta": "Se videoen her →",
+    "secondaryCtas": [
+      "Hold forådsbestillingen i gang og bestil her →",
+      "Fyld op på emballage her →"
+    ],
+    "products": [
+      "Santiago ECO Smykkeskrin af bambus 65 x 65 mm",
+      "Boston ECO Smykkeskrin af karton 53 x 53 mm",
+      "Boston ECO Smykkeskrin af karton 86 x 86 mm",
+      "Boston ECO Smykkeskrin af karton 92 x 118 mm",
+      "Boston ECO Smykkeskrin af karton 75 x 75 mm",
+      "Boston ECO Smykkeskrin af karton 41 x 47 mm",
+      "Boston ECO Smykkeskrin af karton 62 x 62 mm",
+      "Tilsæt tryk Digital",
+      "Santiago ECO Smykkeskrin af bambus 85 x 85 mm"
+    ],
+    "themes": [
+      "Summer holiday",
+      "Westpack employee life",
+      "Seasonal ordering",
+      "Product focus"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Orange",
+        "Blue",
+        "Brown",
+        "Green",
+        "White"
+      ],
+      "mood": "Friendly and cheerful",
+      "layoutPatterns": [
+        "Hero image with staff",
+        "Playful illustrated divider/background",
+        "Embedded video link",
+        "Product grid with CTA buttons"
+      ],
+      "imageStyle": "Mix of professional photography and playful illustrated elements"
+    },
+    "copyStyle": {
+      "tone": "Conversational, personal, inviting",
+      "structure": [
+        "Headline with quote-style question",
+        "Short introduction about company staff and summer plans",
+        "Call-to-action for video",
+        "Transitional message tying summer to ordering",
+        "Product listing with subheadline"
+      ],
+      "urgency": "Lightly encouraged (summer ordering, keep stock up)"
+    },
+    "reusablePatterns": [
+      "Start with a relatable staff or community angle",
+      "Blend of cultural content (staff story) and product promotion",
+      "Seasonal motifs to reinforce time relevance",
+      "Video or media embed as engagement hook",
+      "Grid-style product feature section with direct CTAs",
+      "Multiple CTA buttons for segmented actions"
+    ],
+    "risks": [
+      "Cultural references may not resonate for non-local recipients",
+      "Playful visuals could reduce perceived business formality"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.98,
+      "notes": "All main content is clear and legible; minor product text very small but context inferable."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:16.817Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

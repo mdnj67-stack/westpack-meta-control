@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w45-post-sker-preview-59fba46cfd",
+  "source": {
+    "file": "W45 Postæsker Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W45 Postæsker Preview.png",
+    "sha256": "59fba46cfde24d23bf78c003db6dcfd999d8e993c5f8cfba70aeb5b2f8430171",
+    "bytes": 1105332
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "W45 Postæsker Preview",
+    "week": "W45",
+    "language": "Danish",
+    "campaignFamily": "custom packaging solutions",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Drive interest and orders for custom branded postal boxes",
+    "audience": "E-commerce/store owners interested in branded packaging",
+    "offer": "Custom printed postal boxes; minimum order 200 pcs",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Gør emballagen til dit stærkeste kort ➔",
+    "secondaryCtas": [
+      "Køb forsendelsesæsker nu ➔",
+      "Send noget, der bliver husket ➔",
+      "Start nu ➔",
+      "Forskél dit brand ➔"
+    ],
+    "products": [
+      "Custom printed postal boxes"
+    ],
+    "themes": [
+      "Brand identity",
+      "E-commerce packaging",
+      "Personalization",
+      "Customer experience"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#f5f5f5",
+        "#ebe7df",
+        "#ffe5c8",
+        "#eee3cb",
+        "#ffffff",
+        "#c3d729",
+        "#382f2d"
+      ],
+      "mood": "clean, professional, inviting, creative",
+      "layoutPatterns": [
+        "Hero product photograph",
+        "Informative text blocks",
+        "Feature checklist",
+        "Secondary product images",
+        "Clear call to action buttons"
+      ],
+      "imageStyle": "Minimalist, product-focused, soft colored backgrounds, hand-holding box for scale"
+    },
+    "copyStyle": {
+      "tone": "inspirational, confident, supportive, sales-oriented",
+      "structure": [
+        "Attention-grabbing headline",
+        "Emotive value proposition",
+        "Explanation of product benefits",
+        "Feature checklist",
+        "Practical instructions",
+        "Emotional branding story",
+        "Encouragement CTA"
+      ],
+      "urgency": "mild (encouraging immediate action but not aggressively urgent)"
+    },
+    "reusablePatterns": [
+      "Emotive headline linking packaging to brand impact",
+      "Feature benefit list with icons or emojis",
+      "Hero image of product in real context (hand-held)",
+      "Alternating image-and-copy split sections",
+      "Step-by-step or practical breakdowns to reduce perceived barrier",
+      "Soft colored backgrounds for product contrast"
+    ],
+    "risks": [
+      "May not appeal to brands with radically different visual identities",
+      "Copy heavy for quick readers",
+      "Potentially too product-focused for top-funnel audiences"
+    ],
+    "confidence": {
+      "overall": 0.97,
+      "textReadability": 0.98,
+      "notes": "All visible text is clear, all CTA text and most product features are explicit. No subject/preheader visible, so left blank."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:48.158Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

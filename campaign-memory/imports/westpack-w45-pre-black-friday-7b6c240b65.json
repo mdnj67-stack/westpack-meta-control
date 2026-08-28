@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w45-pre-black-friday-7b6c240b65",
+  "source": {
+    "file": "W45 Pre Black Friday.png",
+    "relativePath": "campaign-import/unsorted-email/W45 Pre Black Friday.png",
+    "sha256": "7b6c240b650a897e214448bf2cbb1a2f56660821b6139ac4eaefcba7cec1149c",
+    "bytes": 411695
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "W45 Pre Black Friday",
+    "week": "W45",
+    "language": "Danish",
+    "campaignFamily": "Black Friday Alternative",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Promote early sale on jewelry boxes, bypassing Black Friday rush",
+    "audience": "Westpack customers interested in jewelry packaging or storage, Danish speaking",
+    "offer": "20% off all WTP jewelry boxes",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Spar 20% på WTP ➔",
+    "secondaryCtas": [
+      "Alt World of Treasured Pieces ➔"
+    ],
+    "products": [
+      "WTP jewelry boxes",
+      "World of Treasured Pieces product line"
+    ],
+    "themes": [
+      "Black Friday alternative",
+      "anti-hype",
+      "calm shopping",
+      "early access",
+      "exclusive offer"
+    ],
+    "visualStyle": {
+      "palette": [
+        "black",
+        "white",
+        "gold",
+        "red",
+        "yellow"
+      ],
+      "mood": "premium, relaxed, non-hysterical",
+      "layoutPatterns": [
+        "hero image with headline",
+        "large discount graphic",
+        "sectioned copy blocks",
+        "bold CTA button at end"
+      ],
+      "imageStyle": "high-end product photography, soft backdrops, close-ups"
+    },
+    "copyStyle": {
+      "tone": "playful, honest, slightly irreverent, reassuring",
+      "structure": [
+        "Unexpected headline/subhead (We tried to plan Black Friday...)",
+        "Story format explaining decision",
+        "Bolded conclusion",
+        "Clear offer details",
+        "Reassuring statements",
+        "P.S. for product/guide cross-sell",
+        "Final urgent CTA"
+      ],
+      "urgency": "Low urgency, explicitly avoids panic but still highlights time restriction"
+    },
+    "reusablePatterns": [
+      "Anti-trend or counter-narrative messaging around peak sales events",
+      "Early-access or alternative-timing sales messaging",
+      "Storytelling format that humanizes business decision-making",
+      "Large typographic discount overlay on product image",
+      "Calming, less-hype rhetoric to differentiate from norm",
+      "P.S. section for secondary CTA (e.g., guide or information resource)",
+      "Yellow block CTA for clear visibility"
+    ],
+    "risks": [
+      "Potential mismatch with audience expecting traditional Black Friday deals",
+      "Humor or irreverent tone may not appeal to all segments"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 1,
+      "notes": "All main copy, CTAs, and offer details are fully legible. Subject line/preheader not visible in screenshot, everything else highly clear."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:16:03.447Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

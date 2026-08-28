@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-05-11-142038-e9309641d5",
+  "source": {
+    "file": "Skærmbillede 2026-05-11 142038.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-05-11 142038.png",
+    "sha256": "e9309641d5fbedff4809a3d22fd8fa6831d5541b2a4f02f1ff8625657950faff",
+    "bytes": 232896
+  },
+  "analysis": {
+    "campaignTitle": "",
+    "week": "",
+    "language": "Danish",
+    "campaignFamily": "Product highlight",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote new product colors and increase add-to-cart actions",
+    "audience": "Current customers or prospects interested in jewelry packaging and accessories",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Læg i kurv",
+    "secondaryCtas": [
+      "SE ALLE FRANKFURT ECO →",
+      "SE ALLE SMYKKEPOSER →",
+      "Shop now"
+    ],
+    "products": [
+      "Frankfurt ECO smykkeske til ring/øreringe",
+      "Frankfurt ECO smykkeske til halskæde",
+      "Smykkepose i satin, mini",
+      "Smykkepose i satin, medium",
+      "Smykkepose i økologisk bomuld, lille",
+      "Smykkepose i økologisk bomuld, stor",
+      "Smykkepose i imiteret ruskind, Lille",
+      "Smykkepose i imiteret ruskind, Stor",
+      "Luksus Bærepose, vævet hank, stor",
+      "Luksus Bærepose, vævet hank, XXL"
+    ],
+    "themes": [
+      "New colors",
+      "Product upgrade",
+      "Luxury packaging"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Soft pink",
+        "Gold/beige",
+        "Olive green",
+        "White"
+      ],
+      "mood": "Elegant, clean, modern",
+      "layoutPatterns": [
+        "Grid of product images with prices and CTA buttons",
+        "Section separators with colored background",
+        "Product category headers"
+      ],
+      "imageStyle": "Minimalist product photography on light backgrounds"
+    },
+    "copyStyle": {
+      "tone": "Descriptive, inviting, informative",
+      "structure": [
+        "Section header",
+        "Short intro or benefit statement",
+        "Product grid with add-to-cart CTAs",
+        "Category navigation links"
+      ],
+      "urgency": "Low"
+    },
+    "reusablePatterns": [
+      "Vertical stacking of product sections by category",
+      "Use of soft color backgrounds to separate sections",
+      "List of products in grid with price and call-to-action button under each",
+      "Section introductions highlighting a product's new feature or color"
+    ],
+    "risks": [
+      "No overt value proposition for new users",
+      "CTAs may be heavily commerce-focused, less engaging for browsers"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 1,
+      "notes": "All visible copy is highly readable, with strong evidence from the uninterrupted screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:55:40.633Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

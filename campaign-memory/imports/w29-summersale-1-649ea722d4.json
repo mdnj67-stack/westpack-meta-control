@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "w29-summersale-1-649ea722d4",
+  "source": {
+    "file": "W29 summersale 1.png",
+    "relativePath": "campaign-import/unsorted-email/W29 summersale 1.png",
+    "sha256": "649ea722d40f525b49e1c852828fd45500d5f1c5a446bec0b80234b72c0a3cc9",
+    "bytes": 478048
+  },
+  "analysis": {
+    "campaignTitle": "Summer Sale",
+    "week": "W29",
+    "language": "Danish",
+    "campaignFamily": "seasonal_sale",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive immediate purchases by promoting a summer sale with up to 50% discounts on select products.",
+    "audience": "Existing and potential customers interested in jewelry boxes, retail displays, and accessories.",
+    "offer": "Up to 50% off selected items.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "GÅ TIL UDSALGET NU ➔",
+    "secondaryCtas": [],
+    "products": [
+      "Smykkeskrin (jewelry boxes)",
+      "Butikskasse displays (shop displays)"
+    ],
+    "themes": [
+      "Summer",
+      "Sale",
+      "Urgency",
+      "Fun/Playful"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Bright yellow",
+        "Red",
+        "Aqua blue",
+        "Pastel pink",
+        "Sandy beige"
+      ],
+      "mood": "Playful, sunny, inviting",
+      "layoutPatterns": [
+        "Top hero image with product characters and summer props",
+        "Large central headline",
+        "Benefit-explaining body copy",
+        "Feature-product grid with discount badges",
+        "Full-width color block CTA"
+      ],
+      "imageStyle": "3D-style product mascots with summer accessories, realistic product photographs with discount overlays"
+    },
+    "copyStyle": {
+      "tone": "Energetic, friendly, urgent, slightly informal",
+      "structure": [
+        "Hero headline",
+        "Short explanatory paragraph",
+        "Urgency message",
+        "Legal/fairness note",
+        "Product grid with discount highlights",
+        "Direct CTA"
+      ],
+      "urgency": "High—shortage and time pressure stressed"
+    },
+    "reusablePatterns": [
+      "Seasonal cartoon product mascots illustrating the campaign theme",
+      "Discount percentages displayed on product images in oversized badges",
+      "Single bold color-call-to-action button at the email end",
+      "Informal, lively tone to match campaign energy",
+      "Visual metaphors linking products to the season (beach, summer props)"
+    ],
+    "risks": [
+      "Heavy visual theme may not translate for other seasons",
+      "Urgency could be less effective for non-sale campaigns",
+      "Depending on seasonal relevance, visuals may appear out of context"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "All major elements are clearly readable, subject/preheader lines are not visible in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:23.897Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

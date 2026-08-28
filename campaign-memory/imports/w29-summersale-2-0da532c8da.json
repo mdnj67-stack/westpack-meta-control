@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "w29-summersale-2-0da532c8da",
+  "source": {
+    "file": "w29 summersale 2.png",
+    "relativePath": "campaign-import/unsorted-email/w29 summersale 2.png",
+    "sha256": "0da532c8da16a41453de86247838ff7b8ddb335a8e277aabc33357dc35d4b0db",
+    "bytes": 523118
+  },
+  "analysis": {
+    "campaignTitle": "Summer Sale",
+    "week": "w29",
+    "language": "Danish",
+    "campaignFamily": "seasonal sale",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive immediate purchases during the summer sale event.",
+    "audience": "Existing and potential customers interested in jewelry packaging and accessories.",
+    "offer": "Spar op til 50%",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "GÅ TIL UDSALGET NU ➜",
+    "secondaryCtas": [],
+    "products": [
+      "Smykkeskrin (jewelry boxes)",
+      "Plug-and-play smykkeskin (jewelry inserts)",
+      "Tilbehør/Accessories"
+    ],
+    "themes": [
+      "Summer",
+      "Discount",
+      "Limited-time offer",
+      "Urgency (while stock lasts)",
+      "Fun / Light-hearted"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Pastel pink",
+        "Beige",
+        "Yellow",
+        "Aqua blue",
+        "White",
+        "Green"
+      ],
+      "mood": "Playful, summer-inspired, vibrant",
+      "layoutPatterns": [
+        "Hero image with anthropomorphized product characters",
+        "Large heading for promotion",
+        "Discount callouts over product images",
+        "Sectioned layout: promo, details, product highlights"
+      ],
+      "imageStyle": "Bright, cartoon-like, 3D rendered props and backdrops, playful beach scene."
+    },
+    "copyStyle": {
+      "tone": "Friendly, energetic, urgency-driven",
+      "structure": [
+        "Headline promotion",
+        "Introductory paragraph with urgency",
+        "Product and offer highlights",
+        "Legal disclaimer",
+        "Clear CTA button"
+      ],
+      "urgency": "Strong (emphasizes limited stock and first come, first served)"
+    },
+    "reusablePatterns": [
+      "Seasonal campaign with themed backgrounds",
+      "Discounts expressed as bold large numbers over product images",
+      "Anthropomorphized products to create emotional engagement",
+      "Urgency reinforced with copy on limited stock",
+      "Barrier-free, prominent CTA button in contrasting color at the end",
+      "Legal disclaimer placed discretely below main content"
+    ],
+    "risks": [
+      "Potential for disappointment if items sell out too quickly",
+      "Playful style may not appeal to every audience segment",
+      "Product focus may exclude customers interested in other categories"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "Nearly all text is clearly visible and legible, minor details like subject/preheader are not visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:30.978Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

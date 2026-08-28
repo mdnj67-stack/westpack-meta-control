@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w35-kick-off-1-intro-83c0f7a8bc",
+  "source": {
+    "file": "W35 Kick off 1 - intro.png",
+    "relativePath": "campaign-import/unsorted-email/W35 Kick off 1 - intro.png",
+    "sha256": "83c0f7a8bcd13a1b387f613caa14d379c399d2b0b1b39810aa0bf57a6a19ce62",
+    "bytes": 438179
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "W35 Kick off 1 - intro",
+    "week": "35",
+    "language": "Danish",
+    "campaignFamily": "Season Kick-off",
+    "campaignType": "seasonal",
+    "funnelStage": "awareness",
+    "primaryGoal": "Introduce and prepare recipients for upcoming peak season; encourage engagement with prep resources.",
+    "audience": "Westpack B2B customers preparing for seasonal sales/peak periods.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Gør mig klar til højsæsonen",
+    "secondaryCtas": [
+      "Læs guiden",
+      "Pause fra nyhedsbrevet i 30 dage"
+    ],
+    "products": [
+      "The Dirty Jewellery Report",
+      "Styrk dit brand i 2026",
+      "Guide: Sådan tager du bedre produktbilleder",
+      "Guide: Sådan tager du bedre SoMe billeder"
+    ],
+    "themes": [
+      "seasonal preparation",
+      "education",
+      "engagement",
+      "customer empowerment"
+    ],
+    "visualStyle": {
+      "palette": [
+        "dark green",
+        "white",
+        "pastel pink",
+        "yellow",
+        "light grey"
+      ],
+      "mood": "inspirational and resourceful",
+      "layoutPatterns": [
+        "video header",
+        "modular sections",
+        "featured content grid",
+        "contrasting CTA buttons"
+      ],
+      "imageStyle": "authentic photography (warehouse/staff), guide visuals, product close-ups"
+    },
+    "copyStyle": {
+      "tone": "conversational, supportive, motivational",
+      "structure": [
+        "Video introduction",
+        "Short intro copy",
+        "Primary call to action",
+        "Preview/teaser for those ahead",
+        "Grid of featured guides/resources",
+        "Notice about increased frequency and opt-out option"
+      ],
+      "urgency": "gentle reminder; time-bound ('kampagnen starter d. 1 september')"
+    },
+    "reusablePatterns": [
+      "Video-based introduction for campaign kickoff",
+      "Primary CTA in a contrasting, full-width button",
+      "Secondary educational CTAs arranged in a content grid",
+      "Section specifically addressing early/advanced customers",
+      "Option to pause email frequency during campaign",
+      "Reassuring transparency about increased communication pace"
+    ],
+    "risks": [
+      "Increased send frequency may lead to unsubscribes or fatigue if not properly managed",
+      "Over-reliance on educational content may not drive direct conversions",
+      "Communicating in Danish only may not reach non-Danish speakers in the customer base"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 1,
+      "notes": "All sections and CTAs are legible and content is clearly organized. No subject line/preheader visible in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:14:37.228Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

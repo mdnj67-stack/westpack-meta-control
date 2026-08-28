@@ -1,0 +1,12 @@
+Start the app like this:
+
+1. Open PowerShell
+2. Run:
+   powershell -ExecutionPolicy Bypass -File C:\Projects\westpack-meta-control\serve-local.ps1
+3. Open this address in your browser:
+   http://localhost:4173/
+
+This local server now serves both the frontend and the local api/* handlers.
+Restart the local server after backend/api code changes so local runtime caches reload cleanly.
+Local config can come from `.env.local`, `.env.production`, or `.vercel.live.env` before the legacy `secrets` file fallback.
+Do not open index.html directly from the folder anymore.

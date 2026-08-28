@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-06-02-143541-4fbafbca98",
+  "source": {
+    "file": "Skærmbillede 2026-06-02 143541.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-06-02 143541.png",
+    "sha256": "4fbafbca9894e57e39557817a97dedb1c252e5564dd1171192c560f3ae6f9b4f",
+    "bytes": 317910
+  },
+  "analysis": {
+    "campaignTitle": "Westpack fylder 73 år!",
+    "week": "",
+    "language": "Danish",
+    "campaignFamily": "Anniversary / Birthday",
+    "campaignType": "seasonal",
+    "funnelStage": "retention",
+    "primaryGoal": "Celebrate anniversary and encourage purchases with a giveaway",
+    "audience": "Existing customers and subscribers (B2B focus suggested by CVR mention)",
+    "offer": "Free Mystery Box on orders over DKK 200 during campaign period",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Få din mystery box",
+    "secondaryCtas": [
+      "Læs mere om fødselsdags kampagnen",
+      "Se sortimentet"
+    ],
+    "products": [
+      "Bæreposer",
+      "Smykkesker",
+      "Forsendelse",
+      "Gaveindpakning"
+    ],
+    "themes": [
+      "Anniversary",
+      "Surprise/Delight",
+      "Gift",
+      "Special offer",
+      "Company history"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Red",
+        "Blue",
+        "White"
+      ],
+      "mood": "Festive, Friendly, Inclusive",
+      "layoutPatterns": [
+        "Banner headline",
+        "Hero group photo",
+        "Offer section with illustration",
+        "Repetitive product grid",
+        "Disclosure footer"
+      ],
+      "imageStyle": "Realistic photography with festive vector graphics"
+    },
+    "copyStyle": {
+      "tone": "Playful, celebratory, direct",
+      "structure": [
+        "Headline with number",
+        "Short intro",
+        "Mystery box offer with scarcity",
+        "FAQ/curiosity section",
+        "Direct CTAs",
+        "Product highlights",
+        "Footer/legal"
+      ],
+      "urgency": "Limited time and quantity (scarcity: 'kun 1.000 kasser')"
+    },
+    "reusablePatterns": [
+      "Anniversary/birthday theme with visual festivity indicators (banners, badges)",
+      "Mystery offer to incentivize action and create curiosity",
+      "Threshold-based gift giveaway (purchase above X DKK)",
+      "Using a FAQ section to drive intrigue (\"Hvad er der i?\")",
+      "Grid presentation of product/service categories",
+      "Single main CTA complemented by discovery/secondary CTAs"
+    ],
+    "risks": [
+      "Mystery box contents may not match all customer expectations",
+      "Scarcity/urgency claims (limited boxes) can create disappointment if not managed",
+      "Legal/disclaimer block must be prominent due to value transfer"
+    ],
+    "confidence": {
+      "overall": 0.97,
+      "textReadability": 0.98,
+      "notes": "Main content and CTAs are highly readable. Tiny legal text mostly readable, but fine details could be missed in low-res. No subject line or preheader visible in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:55:46.050Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,468 @@
+[
+  {
+    "date": "2026-04-16",
+    "totalFamilies": 46,
+    "flows": [
+      {
+        "campaignName": "Abandoned Cart - When someone started checkout",
+        "sentTotal": 606,
+        "revenueTotal": 54739.44,
+        "openRateWeighted": 57.07,
+        "clickRateWeighted": 3.31,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Abandoned Cart Reminder - Added to Cart",
+        "sentTotal": 425,
+        "revenueTotal": 26880.42,
+        "openRateWeighted": 56.95,
+        "clickRateWeighted": 3.55,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 17,
+        "missingMarkets": 1
+      },
+      {
+        "campaignName": "Abandoned Cart Reminder - Added to CartNO",
+        "sentTotal": 1,
+        "revenueTotal": 0,
+        "openRateWeighted": 100,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "AW25 Quiz - Leads",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "AW25: Meta Quiz Leads",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "AW25: Quiz",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "AW25: Quiz - Lead",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 2,
+        "missingMarkets": 16
+      },
+      {
+        "campaignName": "AW25: Quiz - lead",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "AW25: Quiz lead ad",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "Browse Abandonment",
+        "sentTotal": 1059,
+        "revenueTotal": 13025.25,
+        "openRateWeighted": 57.49,
+        "clickRateWeighted": 5.48,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Campaign - Viewed Product",
+        "sentTotal": 5858,
+        "revenueTotal": 22687.81,
+        "openRateWeighted": 52.76,
+        "clickRateWeighted": 3.13,
+        "unsubRateWeighted": 0.13,
+        "activeMarkets": 16,
+        "missingMarkets": 2
+      },
+      {
+        "campaignName": "Customer tags (Bought jewellery boxes by material)",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Customer tags (Viewed product in category)",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 17,
+        "missingMarkets": 1
+      },
+      {
+        "campaignName": "Customer tags (Viewed products in categories)",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "Customer Winback - A/B Test Time Delay",
+        "sentTotal": 1517,
+        "revenueTotal": 2154.68,
+        "openRateWeighted": 43.48,
+        "clickRateWeighted": 0.92,
+        "unsubRateWeighted": 0.2,
+        "activeMarkets": 17,
+        "missingMarkets": 1
+      },
+      {
+        "campaignName": "EDNO",
+        "sentTotal": 160,
+        "revenueTotal": 0,
+        "openRateWeighted": 56.26,
+        "clickRateWeighted": 1.25,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "Opfyldning",
+        "sentTotal": 969,
+        "revenueTotal": 13169.47,
+        "openRateWeighted": 49.32,
+        "clickRateWeighted": 1.45,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 14,
+        "missingMarkets": 4
+      },
+      {
+        "campaignName": "Permission = Aktiv = Removal",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 15,
+        "missingMarkets": 3
+      },
+      {
+        "campaignName": "Post purchase (Generelt)",
+        "sentTotal": 3615,
+        "revenueTotal": 8798.57,
+        "openRateWeighted": 48.48,
+        "clickRateWeighted": 1.31,
+        "unsubRateWeighted": 0.11,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Review Flow",
+        "sentTotal": 1981,
+        "revenueTotal": 8283.91,
+        "openRateWeighted": 52.41,
+        "clickRateWeighted": 1.32,
+        "unsubRateWeighted": 0.25,
+        "activeMarkets": 17,
+        "missingMarkets": 1
+      },
+      {
+        "campaignName": "Sample Follow-up",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Smykkeæske Quiz",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 16,
+        "missingMarkets": 2
+      },
+      {
+        "campaignName": "Sunset Flow",
+        "sentTotal": 78,
+        "revenueTotal": 0,
+        "openRateWeighted": 5.69,
+        "clickRateWeighted": 1.44,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Transactional 2 - Er dine informationer korrekte?",
+        "sentTotal": 1795,
+        "revenueTotal": 849.35,
+        "openRateWeighted": 60.16,
+        "clickRateWeighted": 10.26,
+        "unsubRateWeighted": 0.41,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Transactional 3 - Tilfredshedsundersøgelse",
+        "sentTotal": 1690,
+        "revenueTotal": 6900.46,
+        "openRateWeighted": 57.28,
+        "clickRateWeighted": 6.16,
+        "unsubRateWeighted": 0.48,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Transactional 5 - Generel Tilfredshedsundersøgelse",
+        "sentTotal": 1373,
+        "revenueTotal": 6943.54,
+        "openRateWeighted": 52.95,
+        "clickRateWeighted": 3.67,
+        "unsubRateWeighted": 0.44,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Transactional 6 - Opbevaring af data",
+        "sentTotal": 1628,
+        "revenueTotal": 399.55,
+        "openRateWeighted": 57.72,
+        "clickRateWeighted": 6.69,
+        "unsubRateWeighted": 0.98,
+        "activeMarkets": 17,
+        "missingMarkets": 1
+      },
+      {
+        "campaignName": "Upsell/Cross",
+        "sentTotal": 1410,
+        "revenueTotal": 3768.07,
+        "openRateWeighted": 50.81,
+        "clickRateWeighted": 1.35,
+        "unsubRateWeighted": 0.28,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "Welcome Series (New)",
+        "sentTotal": 12206,
+        "revenueTotal": 37082.02,
+        "openRateWeighted": 47.23,
+        "clickRateWeighted": 2.52,
+        "unsubRateWeighted": 0.41,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xAutomation - Profile property updates - source_DK - Pop up - Unboxing oplevelse - Null = Nej",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xAutomation - Profile property updates - source_Standard Signup (Flyout) - Null = Nej",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 2,
+        "missingMarkets": 16
+      },
+      {
+        "campaignName": "xExpired permission -> Auto-suppress",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - All suppressed -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - Hard bounce -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - Inactive profiles -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - Incorrect email -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - Soft bounce -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xGDPR - Unsubscribed from list -> Auto-delete",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xList cleaning - Dead subscribers -> Auto-suppress",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 18,
+        "missingMarkets": 0
+      },
+      {
+        "campaignName": "xQuality flow - source_DK - Frontpage",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xQuality flow - source_DK - Frontpage Embedded",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xQuality flow - source_DK - Pop up - Unboxing oplevelse",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xQuality flow - source_Standard Signup (Flyout)",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 2,
+        "missingMarkets": 16
+      },
+      {
+        "campaignName": "xQuality flow - source_UK - Frontpage",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xQuality flow - source_UK - Signup Form Full",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      },
+      {
+        "campaignName": "xQuality flow - source_UK - Tilmeld Westpack Exclusive",
+        "sentTotal": 0,
+        "revenueTotal": 0,
+        "openRateWeighted": 0,
+        "clickRateWeighted": 0,
+        "unsubRateWeighted": 0,
+        "activeMarkets": 1,
+        "missingMarkets": 17
+      }
+    ]
+  }
+]

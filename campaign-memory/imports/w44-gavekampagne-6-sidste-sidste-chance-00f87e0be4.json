@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-6-sidste-sidste-chance-00f87e0be4",
+  "source": {
+    "file": "W44 Gavekampagne 6_ Sidste sidste chance.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 6_ Sidste sidste chance.png",
+    "sha256": "00f87e0be47c191d53c5299946ae7bb937616d42d3bb5709c4e5a67d3eed3784",
+    "bytes": 1317751
+  },
+  "analysis": {
+    "campaignTitle": "Sidste sidste chance Mystery Box",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive urgency to complete Mystery Box purchases before time runs out",
+    "audience": "Existing customers and email subscribers",
+    "offer": "Limited-time Mystery Box offer with surprise DIY gift content; only one per business; limited stock",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Åbn din Mystery Box →",
+    "secondaryCtas": [
+      "Sidste chance – klik nu! →",
+      "Jeg vil vide mere →"
+    ],
+    "products": [
+      "Mystery Box",
+      "DIY kits (Candle, Macramé, Embroidery, etc.)"
+    ],
+    "themes": [
+      "urgency",
+      "exclusivity",
+      "countdown",
+      "mystery",
+      "seasonal/holiday playfulness"
+    ],
+    "visualStyle": {
+      "palette": [
+        "deep red",
+        "burgundy",
+        "cream/off-white"
+      ],
+      "mood": "playful urgency with festive undertones",
+      "layoutPatterns": [
+        "central countdown timer",
+        "hero image with superimposed question mark",
+        "boxed copy sections with colored backgrounds",
+        "clear CTA buttons"
+      ],
+      "imageStyle": "product lineup with overlay, subtle festive icons as background texture"
+    },
+    "copyStyle": {
+      "tone": "Playful, urgent, informal, lightly humorous",
+      "structure": [
+        "headline urgency",
+        "countdown timer",
+        "direct message/benefit",
+        "visual product tease",
+        "repeated last chance messaging",
+        "product mystery reveal",
+        "disclaimer"
+      ],
+      "urgency": "Very strong (multiple cues: countdown, final/last chance repetition, implied FOMO)"
+    },
+    "reusablePatterns": [
+      "Prominent countdown timer to deadline",
+      "Multiple CTAs reiterating urgency",
+      "Central mysterious product reveal with question mark",
+      "Playful copy referencing gaming/holiday cultural cues",
+      "Reassurance of product uniqueness/surprise",
+      "Crisp color block CTAs for visibility",
+      "Benefit-driven body copy above the fold"
+    ],
+    "risks": [
+      "Extreme urgency can fatigue audience if overused",
+      "Mystery offers require clear disclaimer/expectation management",
+      "Excessive playful tone may not fit all segments"
+    ],
+    "confidence": {
+      "overall": 0.98,
+      "textReadability": 0.99,
+      "notes": "Nearly all major copy elements are visible and readable; minor legal/disclaimer text is inferred contextually."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:54.059Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

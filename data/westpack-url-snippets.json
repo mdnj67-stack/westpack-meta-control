@@ -1,0 +1,20 @@
+{
+  "CZ": "eur_eu_cze",
+  "DE": "eur_eu_ger",
+  "DK": "dkk_dk_den",
+  "ES": "eur_eu_spa",
+  "EU": "eur_eu_eng",
+  "FI": "eur_eu_fin",
+  "FR": "eur_eu_fra",
+  "HU": "eur_eu_hun",
+  "IT": "eur_eu_ita",
+  "NL": "eur_eu_ned",
+  "NO": "nor_no_den",
+  "PL": "pln_pl_pol",
+  "PT": "eur_eu_por",
+  "RO": "eur_eu_rou",
+  "SE": "sek_se_swe",
+  "SK": "eur_eu_svk",
+  "UK": "gbp_uk_eng",
+  "US": "usd_us_eng"
+}

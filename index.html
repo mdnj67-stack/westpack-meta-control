@@ -1,0 +1,1416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mads' bibel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20260723-email-editor1">
+</head>
+<body>
+  <div class="auth-wall" id="auth-wall" aria-hidden="true">
+    <div class="auth-wall-card">
+      <p class="section-label">Protected workspace</p>
+      <h2>Log ind for at fortsætte</h2>
+      <p class="auth-wall-copy">Denne version af Westpack marketing OS er låst bag et fælles kodeord, så dashboards og API-handlinger ikke er åbne for alle med linket.</p>
+
+      <form class="auth-wall-form" id="auth-form">
+        <label class="auth-wall-label" for="auth-password">Kodeord</label>
+        <input id="auth-password" name="password" type="password" autocomplete="current-password" placeholder="Indtast adgangskode">
+        <button class="primary-button auth-submit" id="auth-submit" type="submit">Log ind</button>
+      </form>
+
+      <p class="auth-wall-status" id="auth-status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">WP</div>
+          <div>
+            <p class="sidebar-label">Westpack marketing OS</p>
+            <h1>Mads' bibel</h1>
+          </div>
+        </div>
+
+        <nav class="tab-list meta-nav-list" id="meta-nav-list" aria-label="Meta navigation">
+          <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+          <button class="tab-button" data-tab="studio">Create / Manage Ads</button>
+        </nav>
+
+        <nav class="subnav-list" id="klaviyo-nav-list" aria-label="Klaviyo navigation" hidden>
+          <button class="subnav-button active" data-klaviyo-view="dashboard" type="button">Dashboard</button>
+          <button class="subnav-button" data-klaviyo-view="duplicate_translate" type="button">Duplicate / Translate</button>
+          <button class="subnav-button" data-klaviyo-view="campaign_brain" type="button">Campaign Studio</button>
+        </nav>
+      </div>
+
+      <div class="sidebar-meta">
+        <section class="sidebar-card compact workspace-switch-card">
+          <p class="sidebar-label">Workspace</p>
+          <div class="workspace-switch" aria-label="Workspace switch">
+            <button class="workspace-tab active" data-workspace="meta" type="button">Meta</button>
+            <button class="workspace-tab" data-workspace="klaviyo" type="button">Klaviyo</button>
+          </div>
+          <button class="ghost-button small auth-logout-button" id="auth-logout-button" type="button" hidden>Log out</button>
+        </section>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section class="product-panel active" id="meta-product-panel">
+      <section class="topbar">
+        <div class="topbar-copy">
+          <p class="section-label">Mads' bibel / Meta</p>
+          <h2 id="view-title">Dashboard</h2>
+          <p class="topbar-sub">Decision-ready Meta operations with one sharp view per lens.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="dashboard-controls">
+            <select id="dashboard-date-preset" class="dashboard-control-select" aria-label="Date scope">
+              <option value="last_7d">Last 7 days</option>
+              <option value="last_14d">Last 14 days</option>
+              <option value="last_30d">Last 30 days</option>
+              <option value="this_month">This month</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="custom">Custom range</option>
+            </select>
+            <div class="dashboard-date-custom" id="dashboard-date-custom" hidden>
+              <input id="dashboard-date-from" type="date" aria-label="From date">
+              <input id="dashboard-date-to" type="date" aria-label="To date">
+              <button class="ghost-button small" id="dashboard-date-apply" type="button">Apply</button>
+            </div>
+            <select id="dashboard-auto-refresh" class="dashboard-control-select" aria-label="Auto refresh">
+              <option value="off">Auto refresh: Off</option>
+              <option value="15m">Auto refresh: 15 min</option>
+              <option value="1h">Auto refresh: 1 hour</option>
+              <option value="daily">Browser daily: 07:45 + 13:00</option>
+            </select>
+            <select id="meta-data-mode" class="dashboard-control-select" aria-label="Meta data mode">
+              <option value="snapshot">Data mode: Snapshot</option>
+              <option value="live">Data mode: Live</option>
+            </select>
+          </div>
+          <button class="ghost-button" id="refresh-data-button" type="button">Refresh data</button>
+          <button class="ghost-button" id="update-snapshot-button" type="button">Update snapshot</button>
+          <div class="sync-status" id="sync-status" aria-live="polite"></div>
+        </div>
+        <div class="status-cluster">
+          <div class="status-pill online" id="openai-status-pill">OpenAI ready</div>
+          <div class="status-pill warning" id="meta-status-pill">Meta offline</div>
+          <button class="ghost-button small" data-jump="settings">Open Settings</button>
+        </div>
+      </section>
+
+      <section class="tab-panel active" id="dashboard-panel">
+        <section class="dashboard-subtabs" aria-label="Dashboard views">
+          <button type="button" class="dashboard-subtab active" data-dashboard-lens="general" aria-selected="true">
+            General
+          </button>
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="awareness" aria-selected="false">
+            Brand awareness
+          </button>
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="leads" aria-selected="false">
+            Leads
+          </button>
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion_standard" aria-selected="false">
+            Conversion (standard)
+          </button>
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion_incremental" aria-selected="false">
+            Conversion (incremental)
+          </button>
+
+          <div class="dashboard-subtab-tools" id="incremental-controls" hidden></div>
+        </section>
+
+        <div class="hero">
+          <div class="hero-copy">
+            <p class="hero-kicker" id="dashboard-hero-kicker">Operator cockpit</p>
+            <h3 id="dashboard-hero-title">Active campaigns. Clear next moves.</h3>
+            <p class="hero-sub" id="dashboard-hero-subtitle">One clean view per decision type. No Meta UI mud.</p>
+          </div>
+          <div class="hero-actions">
+            <div class="hero-panel" id="hero-panel"></div>
+            <button class="primary-button hero-cta" data-jump="studio">Open Clone Studio</button>
+          </div>
+        </div>
+
+        <section class="overview-grid" id="overview-grid" hidden>
+          <article class="card overview-card overview-card-wide">
+            <div class="card-header">
+              <div>
+                <h3 id="overview-spend-title">Objective spend split</h3>
+                <p class="field-hint" id="overview-spend-sub">Real spend split by campaign objective in the selected range.</p>
+              </div>
+            </div>
+            <div id="overview-spend-split"></div>
+          </article>
+
+          <article class="card overview-card tone-awareness">
+            <div class="card-header">
+              <div>
+                <h3>Brand awareness</h3>
+                <p class="field-hint" id="overview-awareness-meta"></p>
+              </div>
+            </div>
+            <div class="overview-metric" id="overview-awareness-metric"></div>
+            <div class="overview-list" id="overview-awareness-list"></div>
+          </article>
+
+          <article class="card overview-card tone-leads">
+            <div class="card-header">
+              <div>
+                <h3>Leads</h3>
+                <p class="field-hint" id="overview-leads-meta"></p>
+              </div>
+            </div>
+            <div class="overview-metric" id="overview-leads-metric"></div>
+            <div class="overview-list" id="overview-leads-list"></div>
+          </article>
+
+          <article class="card overview-card tone-conversion">
+            <div class="card-header">
+              <div>
+                <h3>Conversion (standard)</h3>
+                <p class="field-hint" id="overview-convstd-meta"></p>
+              </div>
+            </div>
+            <div class="overview-metric" id="overview-convstd-metric"></div>
+            <div class="overview-list" id="overview-convstd-list"></div>
+          </article>
+
+          <article class="card overview-card tone-incremental">
+            <div class="card-header">
+              <div>
+                <h3>Conversion (incremental)</h3>
+                <p class="field-hint" id="overview-convinc-meta"></p>
+              </div>
+            </div>
+            <div class="overview-metric" id="overview-convinc-metric"></div>
+            <div class="overview-list" id="overview-convinc-list"></div>
+          </article>
+        </section>
+
+        <section class="playbook" id="playbook">
+          <section class="playbook-section" id="playbook-status">
+            <div class="dashboard-section-head">
+              <div>
+                <p class="section-label">Status</p>
+                <h3 id="playbook-status-title">Current position</h3>
+              </div>
+              <p id="playbook-status-sub">Where the lens stands right now.</p>
+            </div>
+            <div class="playbook-stack" id="playbook-status-stack">
+              <div class="stats-grid" id="stats-grid"></div>
+              <section class="trend-deck" id="trend-deck"></section>
+            </div>
+          </section>
+
+          <section class="playbook-section" id="playbook-risk">
+            <div class="dashboard-section-head" id="action-board-head">
+              <div>
+                <p class="section-label">Risk</p>
+                <h3 id="playbook-risk-title">What needs attention</h3>
+              </div>
+              <p id="playbook-risk-sub">Scale, protect, fix or trim without noise.</p>
+            </div>
+            <div class="playbook-stack" id="playbook-risk-stack">
+              <section class="dashboard-executive" id="dashboard-executive-section">
+                <article class="card executive-card">
+                  <div class="card-header">
+                    <div>
+                      <h3>Executive brief</h3>
+                      <p class="field-hint" id="dashboard-brief-kicker">One sentence you can act on right now.</p>
+                    </div>
+                  </div>
+                  <div class="executive-brief" id="dashboard-executive-brief"></div>
+                </article>
+
+                <article class="card pressure-card">
+                  <div class="card-header">
+                    <div>
+                      <h3>Decision buckets</h3>
+                      <p class="field-hint">Scale, protect, fix and test without digging through Meta noise.</p>
+                    </div>
+                  </div>
+                  <div class="pressure-grid" id="dashboard-pressure-grid"></div>
+                </article>
+              </section>
+              <section class="decision-board" id="decision-board" aria-label="Decision board"></section>
+            </div>
+          </section>
+
+          <section class="playbook-section" id="playbook-next">
+            <div class="dashboard-section-head" id="operator-feed-head">
+              <div>
+                <p class="section-label">Next decision</p>
+                <h3 id="playbook-next-title">Priority queue</h3>
+              </div>
+              <p id="playbook-next-sub">Fast reads for the next budget, creative and hygiene moves.</p>
+            </div>
+            <div class="playbook-stack" id="playbook-next-stack">
+              <div class="decision-rail" id="decision-rail">
+                <section class="card span-two">
+                  <div class="card-header">
+                    <div>
+                      <h3 id="dashboard-pulse-title">Campaign pulse</h3>
+                      <p class="field-hint">Ranked by the active decision lens. Higher score means higher priority.</p>
+                    </div>
+                  </div>
+                  <div class="campaign-pulse-list" id="campaign-pulse-list"></div>
+                </section>
+
+                <section class="card">
+                  <div class="card-header">
+                    <div>
+                      <h3>Recommended moves</h3>
+                    </div>
+                    <button class="ghost-button small" id="dashboard-agent-button" type="button">Get moves</button>
+                  </div>
+                  <p class="field-hint" id="dashboard-agent-hint">Concrete budget and creative moves from the active lens.</p>
+                  <div class="agent-status" id="dashboard-agent-status" aria-live="polite"></div>
+                  <div class="agent-list" id="dashboard-agent-list"></div>
+                </section>
+              </div>
+
+              <div class="dashboard-grid" id="dashboard-grid">
+                <section class="card span-two">
+                  <div class="card-header">
+                    <div>
+                      <h3 id="dashboard-table-title">Performance snapshot</h3>
+                    </div>
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead id="campaign-table-head"></thead>
+                      <tbody id="campaign-table"></tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <details class="card accordion" id="dashboard-signals">
+                  <summary>
+                    <span>Signals</span>
+                    <span class="accordion-meta">What matters now</span>
+                  </summary>
+                  <div class="pattern-list" id="pattern-list"></div>
+                </details>
+              </div>
+
+              <section class="card" id="dashboard-quality-section">
+                <div class="card-header">
+                  <div>
+                    <h3>Data quality</h3>
+                    <p class="field-hint">How trustworthy the current Meta snapshot is.</p>
+                  </div>
+                </div>
+                <div class="pressure-grid" id="dashboard-quality-grid"></div>
+              </section>
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="studio-panel">
+        <div class="studio-shell">
+          <div class="studio-main">
+            <section class="card" id="studio-mode-card">
+              <div class="card-header">
+                <div>
+                  <h3>Mode</h3>
+                </div>
+              </div>
+              <div class="studio-tab-list" role="tablist" aria-label="Ad workflows">
+                <button class="studio-tab-button active" data-mode="duplicate" id="duplicate-mode-button" type="button" role="tab" aria-selected="true">
+                  Duplicate / Translate
+                </button>
+                <button class="studio-tab-button" data-mode="create" id="create-mode-button" type="button" role="tab" aria-selected="false">
+                  Create Ad
+                </button>
+              </div>
+            </section>
+
+            <section class="studio-workspace active" id="duplicate-workspace" aria-labelledby="duplicate-mode-button">
+              <section class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Duplicate batch</h3>
+                  </div>
+                </div>
+                <form class="control-form" id="duplicate-form">
+                  <section class="duplicate-flow-summary" id="duplicate-flow-summary"></section>
+
+                  <section class="duplicate-step active" data-duplicate-step="1" aria-label="Source">
+                    <div class="duplicate-section-head field-wide">
+                      <div>
+                        <h4>Source</h4>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label for="dup-source-campaign">Source campaign</label>
+                      <select id="dup-source-campaign"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-source-adset">Source ad set</label>
+                      <select id="dup-source-adset"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-source-ad">Source ad</label>
+                      <select id="dup-source-ad"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-adaptation-goal">Adaptation goal</label>
+                      <select id="dup-adaptation-goal"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-ad-format">Ad format</label>
+                      <select id="dup-ad-format">
+                        <option>Single image</option>
+                        <option>Carousel</option>
+                        <option>Video</option>
+                      </select>
+                    </div>
+                  </section>
+
+                  <section class="duplicate-step" data-duplicate-step="2" aria-label="Destination">
+                    <div class="duplicate-section-head field-wide">
+                      <div>
+                        <h4>Targets</h4>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label for="dup-target-campaign">Target campaign</label>
+                      <select id="dup-target-campaign"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-target-adset">Target ad set</label>
+                      <select id="dup-target-adset"></select>
+                    </div>
+                    <div class="field">
+                      <label for="dup-bulk-target-language">Target language</label>
+                      <select id="dup-bulk-target-language">
+                        <option>Dansk (DK)</option>
+                        <option>Engelsk (UK)</option>
+                        <option>Engelsk (EU)</option>
+                        <option>Engelsk (US)</option>
+                        <option>Tysk (DE)</option>
+                        <option>Fransk (FR)</option>
+                        <option>Italiensk (IT)</option>
+                        <option>Hollandsk (NL)</option>
+                        <option>Svensk (SE)</option>
+                        <option>Norsk (NO)</option>
+                        <option>Polsk (PL)</option>
+                        <option>Spansk (ES)</option>
+                        <option>Finsk (FI)</option>
+                        <option>Portugisisk (PT)</option>
+                        <option>Rumænsk (RO)</option>
+                      </select>
+                    </div>
+                    <div class="field field-wide">
+                      <label for="dup-destination-url">Destination URL</label>
+                      <input id="dup-destination-url" type="text" value="https://www.westpack.com/" placeholder="https://www.westpack.com/">
+                    </div>
+                    <section class="duplicate-bulk-panel field field-wide" aria-labelledby="dup-bulk-target-label">
+                      <div class="duplicate-bulk-head">
+                        <div>
+                          <p class="section-label" id="dup-bulk-target-label">Batch</p>
+                          <p class="field-hint" id="dup-bulk-target-meta">Add a target.</p>
+                        </div>
+                        <button type="button" class="ghost-button small" id="dup-add-target-button">Add target</button>
+                      </div>
+                      <div class="duplicate-bulk-list" id="dup-bulk-target-list"></div>
+                    </section>
+                    <section class="duplicate-bulk-panel field field-wide" aria-labelledby="dup-creative-override-label">
+                      <div class="duplicate-bulk-head">
+                        <div>
+                          <p class="section-label" id="dup-creative-override-label">Media</p>
+                        </div>
+                      </div>
+                      <div id="dup-creative-override-panel"></div>
+                    </section>
+                  </section>
+
+                  <section class="duplicate-step" data-duplicate-step="3" aria-label="Translate">
+                    <div class="duplicate-section-head field-wide">
+                      <div>
+                        <h4>Push</h4>
+                      </div>
+                    </div>
+                    <div class="field field-wide">
+                      <label for="dup-brief">Notes</label>
+                      <textarea id="dup-brief" rows="3" placeholder="Optional notes"></textarea>
+                    </div>
+                    <div class="form-actions duplicate-batch-actions">
+                      <button type="button" class="primary-button" id="generate-duplicate-button">Generate AI preview</button>
+                      <button type="button" class="ghost-button" id="duplicate-generate-missing-button">Generate missing only</button>
+                      <button type="button" class="ghost-button" id="duplicate-open-active-button">Open active preview</button>
+                      <button type="button" class="ghost-button" id="push-duplicate-button" onclick="window.__westpackForcePushDuplicate && window.__westpackForcePushDuplicate()">Push to Meta</button>
+                    </div>
+                    <div class="studio-inline-status" id="duplicate-inline-status" data-studio-status-mirror="duplicate" aria-live="polite">Ready.</div>
+                  </section>
+                </form>
+              </section>
+            </section>
+
+            <section class="studio-workspace" id="create-workspace" aria-labelledby="create-mode-button">
+              <section class="card workspace-intro workspace-intro-create">
+                <div class="workspace-intro-copy">
+                  <p class="section-label">Create Flow</p>
+                  <h3>Build a new ad from your final files and generate clean Westpack copy around it</h3>
+                </div>
+                <div class="workspace-intro-tags">
+                  <span>Upload files</span>
+                  <span>Pick angle</span>
+                  <span>Generate copy</span>
+                </div>
+              </section>
+
+              <section class="card">
+                <div class="card-header">
+                  <div>
+                    <p class="section-label">New Ad Builder</p>
+                    <h3>Create a fresh ad from your own files</h3>
+                  </div>
+                </div>
+                <div class="create-stepper" role="tablist" aria-label="Create steps">
+                  <button type="button" class="create-step-button active" data-create-step="1" aria-selected="true">1. Files</button>
+                  <button type="button" class="create-step-button" data-create-step="2" aria-selected="false">2. Placement</button>
+                  <button type="button" class="create-step-button" data-create-step="3" aria-selected="false">3. Copy</button>
+                </div>
+
+                <form class="control-form create-form" id="create-form">
+                  <section class="create-step active" data-create-step="1" aria-label="Files">
+                    <div class="field field-wide upload-field" id="create-generic-upload-wrap">
+                      <label for="creative-upload">Creative files</label>
+                      <input id="creative-upload" type="file" multiple>
+                      <p class="field-hint">Files are used as-is. AI only generates copy.</p>
+                    </div>
+                    <div class="field field-wide mode-create-only" id="create-image-variant-wrap">
+                      <div class="video-variant-grid image-variant-grid">
+                        <label class="field video-upload-field" for="create-image-square-upload">
+                          <span>Feed image (1:1)</span>
+                          <input id="create-image-square-upload" type="file" accept="image/*" hidden>
+                          <span class="video-upload-button">Upload 1:1 image</span>
+                          <span class="video-upload-filename" id="create-image-square-filename">No file selected</span>
+                          <p class="field-hint">Used for Facebook feed-style placements, Marketplace, Explore and other square surfaces.</p>
+                        </label>
+                        <label class="field video-upload-field" for="create-image-portrait-upload">
+                          <span>Instagram feed image (4:5)</span>
+                          <input id="create-image-portrait-upload" type="file" accept="image/*" hidden>
+                          <span class="video-upload-button">Upload 4:5 image</span>
+                          <span class="video-upload-filename" id="create-image-portrait-filename">No file selected</span>
+                          <p class="field-hint">Used for Instagram feed placement where 4:5 gives the taller layout.</p>
+                        </label>
+                        <label class="field video-upload-field" for="create-image-vertical-upload">
+                          <span>Stories / Reels image (9:16)</span>
+                          <input id="create-image-vertical-upload" type="file" accept="image/*" hidden>
+                          <span class="video-upload-button">Upload 9:16 image</span>
+                          <span class="video-upload-filename" id="create-image-vertical-filename">No file selected</span>
+                          <p class="field-hint">Used for Facebook and Instagram Stories plus Reels placements.</p>
+                        </label>
+                      </div>
+                      <p class="field-hint">For single-image ads, upload all three formats once and the creator will map them to the right placements automatically.</p>
+                    </div>
+                    <div class="field field-wide mode-create-only" id="create-carousel-variant-wrap">
+                      <div class="video-variant-grid">
+                        <label class="field video-upload-field" for="create-carousel-square-upload">
+                          <span>Carousel cards (1:1)</span>
+                          <input id="create-carousel-square-upload" type="file" accept="image/*" multiple hidden>
+                          <span class="video-upload-button">Upload 1:1 card set</span>
+                          <span class="video-upload-filename" id="create-carousel-square-filename">No files selected</span>
+                          <p class="field-hint">Upload the full carousel card set in square format. This is the only carousel format we publish to Meta.</p>
+                        </label>
+                      </div>
+                      <p class="field-hint">For carousel ads, upload one 1:1 card set. The same card order, copy and URL are then used across the carousel creative.</p>
+                    </div>
+                    <div class="field field-wide mode-create-only" id="create-video-url-wrap">
+                      <div class="video-variant-grid">
+                        <label class="field video-upload-field" for="create-video-square-upload">
+                          <span>Feed video (1:1)</span>
+                          <input id="create-video-square-upload" type="file" accept="video/*" hidden>
+                          <span class="video-upload-button">Upload 1x1 video</span>
+                          <span class="video-upload-filename" id="create-video-square-filename">No file selected</span>
+                          <p class="field-hint">Upload the square version used for feed-style placements.</p>
+                        </label>
+                        <label class="field video-upload-field" for="create-video-vertical-upload">
+                          <span>Stories / Reels video (9:16)</span>
+                          <input id="create-video-vertical-upload" type="file" accept="video/*" hidden>
+                          <span class="video-upload-button">Upload 9x16 video</span>
+                          <span class="video-upload-filename" id="create-video-vertical-filename">No file selected</span>
+                          <p class="field-hint">Upload the vertical version used for Stories and Reels.</p>
+                        </label>
+                      </div>
+                      <p class="field-hint">For video ads, upload both formats so the same ad can render correctly across feed and vertical placements.</p>
+                      <div class="video-analysis-panel" id="create-video-analysis-panel">
+                        <div class="video-analysis-head">
+                          <strong>Video analysis</strong>
+                          <button type="button" class="ghost-button small" id="analyze-create-video-button">Analyze video</button>
+                        </div>
+                        <p class="field-hint" id="create-video-analysis-status">Analyze both videos to give AI better hook, pacing and product-context input.</p>
+                        <div class="video-analysis-list" id="create-video-analysis-list"></div>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label for="create-ad-format">Ad format</label>
+                      <select id="create-ad-format">
+                        <option>Single image</option>
+                        <option>Carousel</option>
+                        <option>Video</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="new-ad-name">Ad name</label>
+                      <input id="new-ad-name" type="text" placeholder="Example: Spring Packaging Launch - DE">
+                    </div>
+                    <div class="field field-wide">
+                      <div class="upload-preview" id="create-upload-preview"></div>
+                    </div>
+                    <div class="form-actions">
+                      <button type="button" class="ghost-button" id="create-next-1">Next</button>
+                    </div>
+                  </section>
+
+                  <section class="create-step" data-create-step="2" aria-label="Placement">
+                    <div class="field">
+                      <label for="create-target-campaign">Target campaign</label>
+                      <select id="create-target-campaign"></select>
+                    </div>
+                    <div class="field">
+                      <label for="create-target-adset">Target ad set</label>
+                      <select id="create-target-adset"></select>
+                    </div>
+                    <div class="field">
+                      <label for="create-target-language">Target language</label>
+                      <select id="create-target-language">
+                        <option>Dansk (DK)</option>
+                        <option>Engelsk (UK)</option>
+                        <option>Engelsk (EU)</option>
+                        <option>Engelsk (US)</option>
+                        <option>Fransk (FR)</option>
+                        <option>Tysk (DE)</option>
+                        <option>Polsk (PL)</option>
+                        <option>Svensk (SE)</option>
+                        <option>Norsk (NO)</option>
+                        <option>Hollandsk (NL)</option>
+                        <option>Italiensk (IT)</option>
+                        <option>Spansk (ES)</option>
+                        <option>Finsk (FI)</option>
+                        <option>Portugisisk (PT)</option>
+                        <option>Rumænsk (RO)</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="create-destination-url">Destination URL</label>
+                      <input id="create-destination-url" type="text" value="https://www.westpack.com/" placeholder="https://www.westpack.com/">
+                    </div>
+                    <div class="form-actions">
+                      <button type="button" class="ghost-button" id="create-back-2">Back</button>
+                      <button type="button" class="ghost-button" id="create-next-2">Next</button>
+                    </div>
+                  </section>
+
+                  <section class="create-step" data-create-step="3" aria-label="Copy">
+                    <div class="field">
+                      <label for="create-ad-intent">Ad intent</label>
+                      <select id="create-ad-intent">
+                        <option>Promote one product family clearly</option>
+                        <option>Show logo branding and customization</option>
+                        <option>Drive premium retail presentation</option>
+                        <option>Push seasonal packaging or gifting</option>
+                        <option>Highlight ecommerce or shipping practicality</option>
+                        <option>Win new B2B customers with a simple first offer</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="new-ad-angle">Creative angle</label>
+                      <select id="new-ad-angle">
+                        <option>Premium B2B packaging</option>
+                        <option>Retail conversion focus</option>
+                        <option>Lead generation offer</option>
+                        <option>Seasonal campaign push</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="create-brief">Operator notes</label>
+                      <textarea id="create-brief" rows="4" placeholder="Example: highlight MOQ, logo print, and premium retail presentation."></textarea>
+                    </div>
+                    <div class="form-actions">
+                      <button type="button" class="ghost-button" id="create-back-3">Back</button>
+                      <button type="button" class="primary-button" id="generate-create-button">Generate AI preview</button>
+                      <button type="button" class="ghost-button" id="push-create-button" onclick="window.__westpackForcePushCreate && window.__westpackForcePushCreate()">Push to Meta</button>
+                    </div>
+                    <div class="studio-inline-status" id="create-inline-status" data-studio-status-mirror="create" aria-live="polite">Ready to generate preview.</div>
+                  </section>
+                </form>
+              </section>
+            </section>
+
+            <section class="card" id="preview-editor-card">
+              <div class="card-header">
+                <div>
+                  <h3>Copy</h3>
+                  <p class="field-hint" id="preview-editor-meta">Active target context will appear here when working in duplicate mode.</p>
+                </div>
+              </div>
+              <div class="preview-editor-stack" id="preview-editor-stack"></div>
+            </section>
+
+          </div>
+
+          <aside class="studio-side">
+            <section class="card" id="preview-card">
+              <div class="card-header">
+                <div>
+                  <h3 id="preview-title">Preview</h3>
+                </div>
+                <button class="ghost-button small mode-duplicate-only" id="duplicate-close-review-button" type="button">Close</button>
+              </div>
+              <div class="preview-loader" id="preview-loader" hidden>
+                <div class="preview-loader-spinner" aria-hidden="true"></div>
+                <span id="preview-loader-text">Generating preview...</span>
+              </div>
+              <div class="preview-stack" id="preview-stack"></div>
+              <div class="publish-status" id="studio-status">Ready.</div>
+              <div class="action-stack" id="preview-actions">
+                <button class="ghost-button" id="duplicate-variant-button" type="button">Use next variant</button>
+              </div>
+            </section>
+
+            <details class="card accordion mode-duplicate-only" id="variants-card">
+              <summary>
+                <span>Variants</span>
+                <span class="accordion-meta">3 options</span>
+              </summary>
+              <div class="variant-list" id="variant-list"></div>
+            </details>
+
+            <details class="card accordion mode-duplicate-only" id="payload-card">
+              <summary>
+                <span>Payload</span>
+                <span class="accordion-meta">Advanced</span>
+              </summary>
+              <pre class="payload-preview" id="payload-preview"></pre>
+            </details>
+          </aside>
+        </div>
+
+        <div class="studio-support-grid">
+          <details class="card accordion mode-duplicate-only" id="matching-card">
+            <summary>
+              <span>Matching</span>
+              <span class="accordion-meta">Suggestions</span>
+            </summary>
+            <div class="match-list" id="match-list"></div>
+          </details>
+
+          <section class="card mode-duplicate-only" id="duplicate-note-card">
+            <div class="card-header">
+              <div>
+                <h3 id="quick-controls-title">Translation notes</h3>
+              </div>
+            </div>
+            <div class="action-list" id="action-list"></div>
+          </section>
+
+          <section class="card mode-create-only" id="create-note-card">
+            <div class="card-header">
+              <div>
+                <h3>Create checklist</h3>
+              </div>
+            </div>
+            <div class="action-list" id="create-checklist"></div>
+          </section>
+
+          <details class="card accordion mode-duplicate-only" id="integration-card">
+            <summary>
+              <span>Integration</span>
+              <span class="accordion-meta">Status</span>
+            </summary>
+            <div class="integration-grid" id="integration-grid"></div>
+          </details>
+        </div>
+      </section>
+      </section>
+
+      <section class="product-panel" id="klaviyo-product-panel">
+        <section class="klaviyo-view-panel active" id="klaviyo-dashboard-panel">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Mads' bibel / Klaviyo</p>
+              <h2 id="klaviyo-dashboard-title">Klaviyo Overview</h2>
+              <p class="topbar-sub" id="klaviyo-topbar-sub"></p>
+            </div>
+            <div class="topbar-actions">
+              <div class="dashboard-controls klaviyo-controls">
+                <select id="klaviyo-range" class="dashboard-control-select" aria-label="Klaviyo range">
+                  <option value="7">Last 7 days</option>
+                  <option value="30" selected>Last 30 days</option>
+                  <option value="90">Last 90 days</option>
+                </select>
+              </div>
+              <button class="ghost-button" id="klaviyo-refresh-button" type="button">Refresh data</button>
+              <div class="status-pill" id="klaviyo-refresh-status">Snapshot loaded</div>
+            </div>
+          </section>
+
+          <section class="dashboard-subtabs klaviyo-dashboard-subtabs" aria-label="Klaviyo dashboard views">
+            <button type="button" class="klaviyo-dashboard-subtab active" data-klaviyo-dashboard-tab="general" aria-selected="true">
+              General
+            </button>
+            <button type="button" class="klaviyo-dashboard-subtab" data-klaviyo-dashboard-tab="campaigns" aria-selected="false">
+              Campaigns
+            </button>
+            <button type="button" class="klaviyo-dashboard-subtab" data-klaviyo-dashboard-tab="flows" aria-selected="false">
+              Flows
+            </button>
+            <button type="button" class="klaviyo-dashboard-subtab" data-klaviyo-dashboard-tab="subscribers" aria-selected="false">
+              Subscribers
+            </button>
+          </section>
+
+          <section class="klaviyo-diagnostics-panel" id="klaviyo-diagnostics-panel"></section>
+
+          <section class="klaviyo-command-center" id="klaviyo-command-center-section">
+            <article class="klaviyo-command-hero" id="klaviyo-command-hero"></article>
+          </section>
+
+          <section class="playbook klaviyo-playbook">
+            <section class="playbook-section klaviyo-section klaviyo-section-performance" id="klaviyo-performance-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Overview</p>
+                  <h3>Performance</h3>
+                </div>
+                <p id="klaviyo-results-meta"></p>
+              </div>
+              <div class="klaviyo-mini-grid" id="klaviyo-mini-grid"></div>
+            </section>
+
+            <section class="playbook-section klaviyo-section klaviyo-section-signals" id="klaviyo-signals-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Signals</p>
+                  <h3>Signals</h3>
+                </div>
+                <p></p>
+              </div>
+              <div class="klaviyo-overview-highlights" id="klaviyo-overview-highlights"></div>
+            </section>
+
+            <section class="playbook-section klaviyo-section klaviyo-section-audience" id="klaviyo-audience-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Audience</p>
+                  <h3>Audience</h3>
+                </div>
+                <p id="klaviyo-subscriber-meta"></p>
+              </div>
+              <div class="klaviyo-subscriber-total" id="klaviyo-subscriber-total"></div>
+              <div class="klaviyo-subscriber-toolbar">
+                <label class="field field-inline">
+                  <span>Market</span>
+                  <select id="klaviyo-subscriber-market" class="dashboard-control-select">
+                    <option value="total">Total</option>
+                  </select>
+                </label>
+                <label class="field field-inline">
+                  <span>Mode</span>
+                  <select id="klaviyo-subscriber-mode" class="dashboard-control-select">
+                    <option value="net">Net growth</option>
+                    <option value="daily">New subscribers</option>
+                    <option value="cumulative">Cumulative</option>
+                    <option value="snapshot">Snapshot</option>
+                  </select>
+                </label>
+                <label class="field field-inline">
+                  <span>Range</span>
+                  <select id="klaviyo-subscriber-range" class="dashboard-control-select">
+                    <option value="30">30d</option>
+                    <option value="90">90d</option>
+                    <option value="180">180d</option>
+                  </select>
+                </label>
+              </div>
+              <div class="klaviyo-subscriber-chart" id="klaviyo-subscriber-chart"></div>
+            </section>
+
+            <section class="playbook-section klaviyo-section klaviyo-section-campaigns" id="klaviyo-campaigns-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Campaigns</p>
+                  <h3>Campaigns</h3>
+                </div>
+                <p id="klaviyo-campaigns-meta"></p>
+              </div>
+              <div class="klaviyo-campaign-toolbar">
+                <input id="klaviyo-search" class="dashboard-control-select klaviyo-search" type="search" placeholder="Search campaign name" aria-label="Search campaign name">
+                <select id="klaviyo-sort" class="dashboard-control-select" aria-label="Sort campaigns">
+                  <option value="last_sent">Sort: Latest send</option>
+                  <option value="revenue">Sort: Revenue</option>
+                  <option value="open_rate">Sort: Open rate</option>
+                  <option value="click_rate">Sort: Click rate</option>
+                </select>
+                <label class="toggle-chip" for="klaviyo-full-markets">
+                  <input id="klaviyo-full-markets" type="checkbox">
+                  <span>Only full-market campaigns</span>
+                </label>
+              </div>
+              <div class="klaviyo-campaign-list" id="klaviyo-campaign-list"></div>
+            </section>
+
+            <section class="playbook-section klaviyo-section klaviyo-section-flows" id="klaviyo-flows-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Automation</p>
+                  <h3>Flows</h3>
+                </div>
+                <p id="klaviyo-flows-meta"></p>
+              </div>
+              <div id="klaviyo-flow-focus"></div>
+              <div class="klaviyo-flow-journey-map" id="klaviyo-flow-journey-map"></div>
+              <div class="agent-list" id="klaviyo-flow-attention"></div>
+              <details class="klaviyo-flow-backup">
+                <summary>
+                  <span>Flow list</span>
+                  <span class="accordion-meta">Open only if you need detail</span>
+                </summary>
+                <div class="klaviyo-flow-backup-body">
+                  <div class="klaviyo-campaign-toolbar">
+                    <input id="klaviyo-flow-search" class="dashboard-control-select klaviyo-search" type="search" placeholder="Search flow name" aria-label="Search flow name">
+                    <select id="klaviyo-flow-category" class="dashboard-control-select" aria-label="Filter flow category">
+                      <option value="operator">Category: Operator flows</option>
+                      <option value="all">Category: All flows</option>
+                      <option value="revenue">Category: Revenue</option>
+                      <option value="lifecycle">Category: Lifecycle</option>
+                      <option value="transactional">Category: Transactional</option>
+                      <option value="leadgen">Category: Lead gen</option>
+                      <option value="utility">Category: Utility</option>
+                    </select>
+                    <select id="klaviyo-flow-sort" class="dashboard-control-select" aria-label="Sort flows">
+                      <option value="last_sent">Sort: Latest activity</option>
+                      <option value="health">Sort: Health risk</option>
+                      <option value="revenue">Sort: Revenue</option>
+                      <option value="open_rate">Sort: Open rate</option>
+                      <option value="click_rate">Sort: Click rate</option>
+                    </select>
+                    <label class="toggle-chip" for="klaviyo-flow-full-markets">
+                      <input id="klaviyo-flow-full-markets" type="checkbox">
+                      <span>Only full-market flows</span>
+                    </label>
+                  </div>
+                  <div class="klaviyo-campaign-list" id="klaviyo-flow-list"></div>
+                </div>
+              </details>
+            </section>
+
+            <section class="playbook-section klaviyo-section klaviyo-section-markets" id="klaviyo-markets-section">
+              <div class="dashboard-section-head">
+                <div>
+                  <p class="section-label">Markets</p>
+                  <h3>Markets</h3>
+                </div>
+                <p></p>
+              </div>
+              <div class="klaviyo-market-detail-grid" id="klaviyo-market-detail-grid"></div>
+            </section>
+          </section>
+        </section>
+
+        <section class="klaviyo-view-panel" id="klaviyo-duplicate-translate-panel">
+          <section class="topbar klaviyo-topbar">
+              <div class="topbar-copy">
+                <p class="section-label">Mads' bibel / Klaviyo</p>
+                <h2>Duplicate / Translate</h2>
+              <p class="topbar-sub">Choose source country, choose template, choose target countries.</p>
+              </div>
+            <div class="topbar-actions">
+              <button class="ghost-button" id="klaviyo-refresh-templates-button" type="button">Refresh templates</button>
+              <div class="status-pill" id="klaviyo-template-status">Ready to choose source and targets</div>
+            </div>
+          </section>
+
+          <div class="studio-shell klaviyo-studio-shell">
+            <div class="studio-main">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Source</p>
+                    <h3>Choose source</h3>
+                  </div>
+                  <p>Pick the source country and source template.</p>
+                </div>
+                <div class="control-form klaviyo-template-form">
+                  <label class="field">
+                    <span>Source account</span>
+                    <select id="klaviyo-template-source-account" class="dashboard-control-select"></select>
+                  </label>
+                  <label class="field">
+                    <span>Source template</span>
+                    <select id="klaviyo-template-source-template" class="dashboard-control-select"></select>
+                  </label>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Targets</p>
+                    <h3>Choose target countries</h3>
+                  </div>
+                  <p>Select the countries that should receive a draft.</p>
+                </div>
+                <div class="klaviyo-target-grid" id="klaviyo-target-grid"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Preview</p>
+                    <h3>Preview</h3>
+                  </div>
+                  <p>Preview the drafts before pushing to Klaviyo.</p>
+                </div>
+                <div class="klaviyo-variant-list" id="klaviyo-template-variant-list"></div>
+              </section>
+            </div>
+
+            <aside class="studio-side klaviyo-studio-side">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Summary</p>
+                    <h3>Selection summary</h3>
+                  </div>
+                </div>
+                <div class="klaviyo-rollout-summary" id="klaviyo-rollout-summary"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Safety</p>
+                    <h3>Rules</h3>
+                  </div>
+                </div>
+                <div class="agent-list" id="klaviyo-translation-guardrails"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Push</p>
+                    <h3>Draft action</h3>
+                  </div>
+                </div>
+                <div class="action-stack">
+                  <button class="primary-button" id="klaviyo-generate-rollout-button" type="button">Generate drafts</button>
+                  <button class="ghost-button" id="klaviyo-push-rollout-button" type="button" disabled>Push drafts to Klaviyo</button>
+                </div>
+                <div class="inline-feedback" id="klaviyo-rollout-action-feedback" aria-live="polite"></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="klaviyo-view-panel" id="klaviyo-campaign-ai-panel">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Mads' bibel / Klaviyo</p>
+              <h2>Template AI</h2>
+              <p class="topbar-sub">Take one existing template, let AI rewrite the full mail, and create a new template draft from it.</p>
+            </div>
+            <div class="topbar-actions">
+              <button class="ghost-button" id="klaviyo-refresh-campaigns-button" type="button">Refresh templates</button>
+              <div class="status-pill" id="klaviyo-campaign-status">Ready to choose a source template</div>
+            </div>
+          </section>
+
+          <div class="studio-shell klaviyo-studio-shell">
+            <div class="studio-main">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Source</p>
+                    <h3>Choose template</h3>
+                  </div>
+                  <p>Pick the market account and the source template you want AI to build from.</p>
+                </div>
+                <div class="control-form klaviyo-template-form">
+                  <label class="field">
+                    <span>Source account</span>
+                    <select id="klaviyo-campaign-source-account" class="dashboard-control-select"></select>
+                  </label>
+                  <label class="field">
+                    <span>Source template</span>
+                    <select id="klaviyo-campaign-source-select" class="dashboard-control-select"></select>
+                  </label>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">AI brief</p>
+                    <h3>Describe the variant</h3>
+                  </div>
+                  <p>Tell AI what kind of follow-up or alternative version you want.</p>
+                </div>
+                <div class="control-form klaviyo-template-form">
+                  <label class="field field-wide">
+                    <span>Operator brief</span>
+                    <textarea id="klaviyo-campaign-brief" rows="5" placeholder="Example: Make this a version we can send 3 days later with more urgency, stronger scarcity, and a more direct CTA, but keep the same products and overall structure."></textarea>
+                  </label>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Preview</p>
+                    <h3>Source vs AI template</h3>
+                  </div>
+                  <p>Check the original template against the AI version before creating the new Klaviyo template.</p>
+                </div>
+                <div class="klaviyo-variant-list" id="klaviyo-campaign-preview-list"></div>
+              </section>
+            </div>
+
+            <aside class="studio-side klaviyo-studio-side">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Summary</p>
+                    <h3>Draft summary</h3>
+                  </div>
+                </div>
+                <div class="klaviyo-rollout-summary" id="klaviyo-campaign-summary"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Safety</p>
+                    <h3>Rules</h3>
+                  </div>
+                </div>
+                <div class="agent-list" id="klaviyo-campaign-guardrails"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Push</p>
+                    <h3>Template action</h3>
+                  </div>
+                </div>
+                <div class="action-stack">
+                  <button class="primary-button" id="klaviyo-generate-campaign-variant-button" type="button">Generate AI version</button>
+                  <button class="ghost-button" id="klaviyo-duplicate-campaign-button" type="button" disabled>Create template in Klaviyo</button>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="klaviyo-view-panel" id="klaviyo-campaign-brain-panel">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Mads' bibel / Klaviyo</p>
+              <h2>Campaign Studio</h2>
+              <p class="topbar-sub">From connected Asana sources to quality-gated campaign systems, ready for human direction.</p>
+            </div>
+            <div class="topbar-actions">
+              <button class="ghost-button" id="campaign-brain-assemble-button" type="button">Assemble campaign object</button>
+              <button class="primary-button" id="campaign-brain-generate-button" type="button">Generate campaign plan</button>
+              <button class="ghost-button" id="campaign-brain-artifacts-button" type="button">Generate artifact pack</button>
+              <button class="ghost-button" id="campaign-brain-push-klaviyo-button" type="button">Create Klaviyo draft</button>
+              <div class="status-pill" id="campaign-brain-status">Ready to analyze a brief</div>
+            </div>
+          </section>
+
+          <section class="content-agent-console" id="content-agent-console" aria-live="polite">
+            <div class="content-agent-console-loading">Connecting Content Agent...</div>
+          </section>
+
+          <div class="studio-shell klaviyo-studio-shell">
+            <div class="studio-main">
+              <section class="card klaviyo-operator-card" id="campaign-brain-linking-section">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Assembly</p>
+                    <h3>Campaign source</h3>
+                  </div>
+                  <p>Select the campaign. Campaign Brain connects the matching content and prepares one production-ready campaign object.</p>
+                </div>
+                <div class="campaign-brain-mode-switch" id="campaign-brain-mode-switch" aria-label="Campaign intake mode">
+                  <button class="campaign-brain-mode-button" data-campaign-mode="meta_master" type="button">Meta from Master</button>
+                  <button class="campaign-brain-mode-button active" data-campaign-mode="asana_combo" type="button">Asana Combo</button>
+                  <button class="campaign-brain-mode-button" data-campaign-mode="html_master" type="button">HTML Master</button>
+                  <button class="campaign-brain-mode-button" data-campaign-mode="manual_brief" type="button">Manual Brief</button>
+                  <button class="campaign-brain-mode-button" data-campaign-mode="mixed" type="button">Mixed Inputs</button>
+                </div>
+                <section class="campaign-meta-master" id="campaign-meta-master-source" data-campaign-mode-group="meta_master">
+                  <div class="campaign-meta-master-loading">Preparing master sources...</div>
+                </section>
+                <section class="campaign-asana-source" id="campaign-asana-source" data-campaign-mode-group="asana_combo mixed">
+                  <div class="campaign-asana-source-head">
+                    <div>
+                      <p class="section-label">Live source</p>
+                      <h4>Asana campaign connection</h4>
+                    </div>
+                    <button class="ghost-button small" id="campaign-asana-refresh-button" type="button">Refresh</button>
+                  </div>
+                  <div id="campaign-asana-source-content">
+                    <div class="campaign-asana-loading">Connecting to Asana...</div>
+                  </div>
+                </section>
+                <details class="campaign-manual-fallback" data-campaign-mode-group="asana_combo mixed">
+                  <summary>
+                    <span>Manual source fallback</span>
+                    <small>Paste task data only when the live connection is unavailable</small>
+                  </summary>
+                  <div class="control-form klaviyo-template-form">
+                    <label class="field field-wide">
+                      <span>Campaign task</span>
+                      <textarea id="campaign-brain-campaign-task" rows="8" placeholder='Paste Asana campaign task JSON or text here'></textarea>
+                    </label>
+                    <label class="field field-wide">
+                      <span>Content task</span>
+                      <textarea id="campaign-brain-content-task" rows="8" placeholder='Paste Asana content task JSON or text here'></textarea>
+                    </label>
+                  </div>
+                </details>
+                <div class="control-form klaviyo-template-form campaign-optional-source-fields">
+                  <label class="field field-wide" data-campaign-mode-group="html_master mixed">
+                    <span>Blog HTML / source HTML</span>
+                    <textarea id="campaign-brain-source-html" rows="6" placeholder="Optional: paste blog HTML, email HTML or other source markup here"></textarea>
+                  </label>
+                </div>
+                <details class="campaign-extra-direction" data-campaign-mode-group="asana_combo html_master manual_brief mixed">
+                  <summary>
+                    <span>Add direction</span>
+                    <small>Optional</small>
+                  </summary>
+                  <label class="field field-wide">
+                    <span>Extra prompt</span>
+                    <textarea id="campaign-brain-extra-prompt" rows="4" placeholder="Add a strategic angle, mandatory message or creative direction"></textarea>
+                  </label>
+                </details>
+              </section>
+
+              <section class="card klaviyo-operator-card" id="campaign-brain-setup-section" data-campaign-mode-group="asana_combo html_master manual_brief mixed">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Campaign brief</p>
+                    <h3>Core input</h3>
+                  </div>
+                  <p>Describe the commercial objective clearly before we fan it out across channels.</p>
+                </div>
+                <div class="control-form klaviyo-template-form">
+                  <label class="field">
+                    <span>Campaign title</span>
+                    <input id="campaign-brain-title" class="dashboard-control-select" type="text" value="W34: Bliv WTP forhandler">
+                  </label>
+                  <label class="field">
+                    <span>Objective</span>
+                    <input id="campaign-brain-objective" class="dashboard-control-select" type="text" value="Få eksisterende Westpack-kunder til at blive WTP-forhandlere og skabe mersalg i højsæsonen.">
+                  </label>
+                  <label class="field">
+                    <span>Audience</span>
+                    <input id="campaign-brain-audience" class="dashboard-control-select" type="text" value="Eksisterende Westpack-kunder der sælger smykker eller gaver til slutkunder.">
+                  </label>
+                  <label class="field">
+                    <span>Offer</span>
+                    <input id="campaign-brain-offer" class="dashboard-control-select" type="text" value="Bliv WTP-forhandler og tjen mere pr. ordre i Q4.">
+                  </label>
+                  <label class="field">
+                    <span>Channels</span>
+                    <input id="campaign-brain-channels" class="dashboard-control-select" type="text" value="klaviyo, meta, blog">
+                  </label>
+                  <label class="field">
+                    <span>Markets</span>
+                    <input id="campaign-brain-markets" class="dashboard-control-select" type="text" value="DK">
+                  </label>
+                  <label class="field">
+                    <span>Klaviyo account</span>
+                    <select id="campaign-brain-klaviyo-account" class="dashboard-control-select"></select>
+                  </label>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card" id="campaign-brain-source-section" data-campaign-mode-group="asana_combo html_master manual_brief mixed">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Source material</p>
+                    <h3>What do we already have?</h3>
+                  </div>
+                  <p>This is the input the machine should chew on before it proposes channel outputs.</p>
+                </div>
+                <div class="control-form klaviyo-template-form">
+                  <label class="field">
+                    <span>Source type</span>
+                    <select id="campaign-brain-source-type" class="dashboard-control-select">
+                      <option value="brief" selected>Brief</option>
+                      <option value="blog">Blog</option>
+                      <option value="email">Email</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span>Source subject</span>
+                    <input id="campaign-brain-source-subject" class="dashboard-control-select" type="text" value="Bliv WTP-forhandler: Sådan tjen du penge på indpakning til højsæsonen">
+                  </label>
+                  <label class="field field-wide">
+                    <span>Source body</span>
+                    <textarea id="campaign-brain-source-body" rows="9">Mailen skal være konkret og økonomisk overbevisende: hvad koster det at blive forhandler, hvad tjener du pr. ordre, og hvad er potentialet i Q4. Ingen bløde formuleringer. Struktur: 1) Hvad er WTP-forhandler? 2) Hvad får du adgang til? 3) Hvad tjener du? 4) Hvordan kommer du i gang? CTA: Bliv WTP-forhandler nu eller Kontakt os og hør mere.</textarea>
+                  </label>
+                  <label class="field">
+                    <span>Assets</span>
+                    <textarea id="campaign-brain-assets" rows="4">kampagnebrief
+eksisterende email-brief</textarea>
+                  </label>
+                  <label class="field">
+                    <span>Constraints</span>
+                    <textarea id="campaign-brain-constraints" rows="4">Ingen rabatvinkel
+Vis tal og forretningscase</textarea>
+                  </label>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card" id="campaign-brain-plan-section" data-campaign-mode-group="asana_combo html_master manual_brief mixed">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Plan</p>
+                    <h3>Campaign summary</h3>
+                  </div>
+                  <p id="campaign-brain-generated-at">No plan generated yet.</p>
+                </div>
+                <div class="klaviyo-rollout-summary" id="campaign-brain-summary"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card" id="campaign-brain-assembly-section" data-campaign-mode-group="asana_combo html_master manual_brief mixed">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Campaign object</p>
+                    <h3>Assembly output</h3>
+                  </div>
+                  <p id="campaign-brain-assembly-generated-at">No campaign object assembled yet.</p>
+                </div>
+                <div class="campaign-brain-assembly-glance" id="campaign-brain-assembly-glance"></div>
+                <div class="klaviyo-rollout-summary" id="campaign-brain-assembly-summary"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card" id="campaign-brain-artifact-section">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Artifacts</p>
+                    <h3 id="campaign-brain-artifact-title">Email + Meta + Blog</h3>
+                  </div>
+                  <p id="campaign-brain-artifacts-generated-at">No artifact pack generated yet.</p>
+                </div>
+                <div class="campaign-studio-action-row campaign-studio-toolbar">
+                  <button class="ghost-button small" id="campaign-brain-save-draft-button" type="button">Save studio draft</button>
+                  <button class="ghost-button small" id="campaign-brain-reset-draft-button" type="button">Reset edits</button>
+                  <div class="campaign-studio-draft-status" id="campaign-studio-draft-status" aria-live="polite"></div>
+                </div>
+                <div class="klaviyo-variant-list" id="campaign-brain-artifacts"></div>
+                <div class="inline-feedback" id="campaign-brain-klaviyo-feedback" aria-live="polite"></div>
+              </section>
+            </div>
+
+            <aside class="studio-side klaviyo-studio-side" id="campaign-brain-side-rail">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Assets</p>
+                    <h3>Asset mapping</h3>
+                  </div>
+                </div>
+                <div class="campaign-studio-asset-map" id="campaign-studio-asset-map"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Intake</p>
+                    <h3>Brief intelligence</h3>
+                  </div>
+                </div>
+                <div class="campaign-studio-intake-grid" id="campaign-brain-intake-profile"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Channels</p>
+                    <h3>Channel plan</h3>
+                  </div>
+                </div>
+                <div class="agent-list" id="campaign-brain-channel-plans"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Assets</p>
+                    <h3>Asset gaps</h3>
+                  </div>
+                </div>
+                <div class="agent-list" id="campaign-brain-asset-plan"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Workflow</p>
+                    <h3>Execution order</h3>
+                  </div>
+                </div>
+                <div class="agent-list" id="campaign-brain-workflow"></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="settings-drawer" id="settings-drawer" aria-hidden="true">
+    <div class="settings-sheet">
+      <div class="card-header">
+        <div>
+          <h3>Meta and OpenAI configuration</h3>
+        </div>
+        <button class="ghost-button small" id="close-settings">Close</button>
+      </div>
+
+      <div class="settings-grid">
+        <section class="settings-card">
+          <h4>Meta</h4>
+          <p id="meta-connection-status"></p>
+          <ul class="settings-list" id="meta-write-actions"></ul>
+        </section>
+
+        <section class="settings-card">
+          <h4>OpenAI</h4>
+          <p id="openai-status"></p>
+          <p id="openai-model"></p>
+          <p id="openai-purpose"></p>
+        </section>
+
+        <section class="settings-card span-two-settings">
+          <h4>Prompt</h4>
+          <div class="prompt-stack" id="prompt-stack"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+    <script type="module" src="app.js?v=20260723-email-editor1"></script>
+</body>
+</html>
+

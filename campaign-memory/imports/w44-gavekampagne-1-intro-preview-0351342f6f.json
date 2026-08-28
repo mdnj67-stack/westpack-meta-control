@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "id": "w44-gavekampagne-1-intro-preview-0351342f6f",
+  "source": {
+    "file": "W44 Gavekampagne 1_ Intro Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 1_ Intro Preview.png",
+    "sha256": "0351342f6f446c57c21e617824c70363ef1ef9f7a84ff55dff888f7c3f4318be",
+    "bytes": 2551800
+  },
+  "analysis": {
+    "campaignTitle": "W44 Gavekampagne 1_ Intro",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive sales by incentivizing customers with a free Mystery Box gift on minimum order values.",
+    "audience": "Existing customers and prospects interested in Westpack packaging or related products.",
+    "offer": "Få en gratis Mystery Box ved køb over bestemte beløbsgrænser.",
+    "subjectLineVisible": "[PREVIEW] W44 Gavekampagne 1_ Intro Preview",
+    "preheaderVisible": "",
+    "primaryCta": "JEG KAN IKKE VENTE ➔",
+    "secondaryCtas": [
+      "JEG VIL VIDE MERE ➔",
+      "LÆG DIN ORDRE NU ➔"
+    ],
+    "products": [
+      "Mystery Box",
+      "Gaveæsker",
+      "Emballage"
+    ],
+    "themes": [
+      "Gift with purchase",
+      "Mystery/Surprise",
+      "Holiday season",
+      "Tiered rewards"
+    ],
+    "visualStyle": {
+      "palette": [
+        "dark red",
+        "cream",
+        "white"
+      ],
+      "mood": "festive and inviting",
+      "layoutPatterns": [
+        "hero image with product lineup",
+        "information blocks with colored background",
+        "vertical journey with tiered steps visualized"
+      ],
+      "imageStyle": "soft-edged product photos, festive overlays, rounded highlighting"
+    },
+    "copyStyle": {
+      "tone": "enthusiastic, friendly, teasing",
+      "structure": [
+        "headline offer",
+        "detailed explanation",
+        "stepwise breakdown of offer tiers",
+        "FAQs",
+        "multiple strong CTAs"
+      ],
+      "urgency": "implied urgency—promotion period, enthusiastic CTAs, surprise factor"
+    },
+    "reusablePatterns": [
+      "Gift-with-purchase mechanic communicated simply up top",
+      "Visual progression with stepwise illustration for tiered rewards",
+      "Multiple CTA buttons at key decision points (learn more, purchase, claim offer)",
+      "Thematic color blocking for primary message",
+      "FAQ section reinforcing the offer’s value"
+    ],
+    "risks": [
+      "Mystery Box content may not appeal to all customers",
+      "Messaging is not fully explicit about product range unless reader clicks through",
+      "Some detailed terms in fine print only"
+    ],
+    "confidence": {
+      "overall": 0.97,
+      "textReadability": 0.95,
+      "notes": "All main email copy, headers, CTAs, and visual design elements are clearly readable except for minor fine print. Offer details, structure, and format are unambiguous."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:58:08.287Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

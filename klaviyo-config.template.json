@@ -1,0 +1,16 @@
+{
+  "revision": "2024-10-15",
+  "timeframeDays": 30,
+  "markets": [
+    {
+      "country": "DK",
+      "listId": "PASTE_LIST_ID",
+      "privateKey": "PASTE_PRIVATE_KEY"
+    },
+    {
+      "country": "SE",
+      "listId": "PASTE_LIST_ID",
+      "privateKey": "PASTE_PRIVATE_KEY"
+    }
+  ]
+}

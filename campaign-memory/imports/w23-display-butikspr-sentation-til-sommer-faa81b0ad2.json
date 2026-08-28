@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "w23-display-butikspr-sentation-til-sommer-faa81b0ad2",
+  "source": {
+    "file": "W23 Display & Butikspræsentation til sommer.png",
+    "relativePath": "campaign-import/unsorted-email/W23 Display & Butikspræsentation til sommer.png",
+    "sha256": "faa81b0ad22759a245ab03385da81b2ea9b721351c5a232f94546aa848cb66e5",
+    "bytes": 293071
+  },
+  "analysis": {
+    "campaignTitle": "Sprede sommer-vibes i din butik",
+    "week": "",
+    "language": "Danish",
+    "campaignFamily": "Display & Butikspræsentation til sommer",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Inspire shops to create summer-themed product displays using Westpack packaging solutions",
+    "audience": "Retailers and shops interested in seasonal display and packaging inspiration",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "SE ALT DISPLAY ➜",
+    "secondaryCtas": [
+      "SE DISPLAY-PAKKER HER ➜",
+      "SE BUNT-SÆTENE HER ➜",
+      "KØB LOCKET ➜",
+      "Punchedækselet",
+      "Gaveindpakning ➜",
+      "Bæretaske ➜",
+      "Smykkeæske ➜"
+    ],
+    "products": [
+      "Gift boxes",
+      "Jewelry displays",
+      "Packaging sets",
+      "Paper bags",
+      "Display kits"
+    ],
+    "themes": [
+      "Summer vibes",
+      "Display inspiration",
+      "Packaging solutions",
+      "In-store experience"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Sandy beige",
+        "Light pink",
+        "Soft earthy greens",
+        "Brown"
+      ],
+      "mood": "Warm, inviting, seasonal",
+      "layoutPatterns": [
+        "Hero lifestyle image",
+        "Thematic sections with product shots",
+        "Alternating image and text blocks",
+        "Visible large CTA blocks"
+      ],
+      "imageStyle": "Professional, light-drenched photography with summer motifs"
+    },
+    "copyStyle": {
+      "tone": "Inspirational, conversational, supportive",
+      "structure": [
+        "Seasonal greeting/introduction",
+        "Segmented sections by display theme",
+        "Explanation of the look and what it achieves",
+        "Practical tips",
+        "Direct CTAs after each section"
+      ],
+      "urgency": "Mild; primary focus is on inspiration and preparation"
+    },
+    "reusablePatterns": [
+      "Segmenting product inspiration by thematic story (e.g. 'Den støvede sommeraften', 'Et iskoldt dyp')",
+      "Mix of lifestyle context photographs with isolated product images",
+      "Short, actionable suggestions within each themed section ('Prøv det også her:')",
+      "Large, consistent CTAs at the end of each section",
+      "Soft, pastel backgrounds to unify visual theme"
+    ],
+    "risks": [
+      "Heavily seasonal theme limits reuse outside of summer",
+      "Visual and text-heavy approach may not suit action-driven campaigns",
+      "No explicit promotions may reduce perceived value for deal-oriented segments"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.95,
+      "notes": "All sections and most CTAs are visible and readable, some minor body text detail obscured in smallest fonts."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:57:02.685Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

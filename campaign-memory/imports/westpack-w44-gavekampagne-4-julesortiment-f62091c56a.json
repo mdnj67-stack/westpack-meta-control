@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-4-julesortiment-f62091c56a",
+  "source": {
+    "file": "W44 Gavekampagne 4_ Julesortiment.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 4_ Julesortiment.png",
+    "sha256": "f62091c56ac2914f3eff0c31ec386f76a863bf58f62fea4d27ee0faa89eca4ed",
+    "bytes": 2519112
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Gratis Mystery Box",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Julesortiment",
+    "campaignType": "seasonal",
+    "funnelStage": "mixed",
+    "primaryGoal": "Drive awareness and sales of Christmas assortment with a free gift incentive.",
+    "audience": "Existing B2B customers interested in holiday packaging and seasonal business supplies.",
+    "offer": "Gratis Mystery Box ved køb (Free Mystery Box with purchase)",
+    "subjectLineVisible": "Gratis Mystery Box",
+    "preheaderVisible": "",
+    "primaryCta": "Shop X-mas emballage →",
+    "secondaryCtas": [
+      "Få sendt indenfor 24-timer →",
+      "Shop Julesortiment – Klar til afsendelse →",
+      "LÆS ALT OM MYSTERY BOXEN HER →"
+    ],
+    "products": [
+      "Juleæsker",
+      "Poser og punge",
+      "Bånd og tilbehør",
+      "Julepapir",
+      "Gaveæsker",
+      "Gaveindpakning"
+    ],
+    "themes": [
+      "Holiday/Christmas",
+      "Surprise/incentive",
+      "Category browsing",
+      "Urgency (fast shipping)"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#690000",
+        "#e9e7e2",
+        "#c3b091",
+        "#ffffff"
+      ],
+      "mood": "Festive, warm, professional",
+      "layoutPatterns": [
+        "Header with logo/navigation",
+        "Bold featured offer banner",
+        "Product grouping in circles",
+        "Stepwise incentive explanation",
+        "Buttons in solid color blocks",
+        "Visual section breaks with wave dividers",
+        "Rounded-corner product photos"
+      ],
+      "imageStyle": "Studio product photography, holiday costumes, decorative gold/silver highlights"
+    },
+    "copyStyle": {
+      "tone": "Friendly, promotional, seasonal, slightly urgent",
+      "structure": [
+        "Headline offer",
+        "Brief explanation",
+        "Visual category chooser",
+        "How it works/steps",
+        "Trust/benefit highlights",
+        "Multiple, clearly visible CTAs",
+        "FAQ/promo details"
+      ],
+      "urgency": "Mild-moderate (fast shipping, while stocks last)"
+    },
+    "reusablePatterns": [
+      "Major seasonal incentive lead (headline offer above the fold)",
+      "Visual product category chooser using circular icons/photos",
+      "Step-by-step breakdown of promotion mechanics",
+      "Reassurance with fulfillment/shipping info and checkmarks",
+      "Strong, color-blocked CTAs repeated through email",
+      "Use of festive motifs to reinforce seasonal atmosphere",
+      "Clear price points for gift tiers",
+      "Wave-style visual dividers to segment content sections"
+    ],
+    "risks": [
+      "Offer might require explanation—could confuse if not well translated",
+      "Heavy seasonal motifs may limit reuse outside holiday context",
+      "Some category images or CTA copy may be unclear to non-Danish readers"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.94,
+      "notes": "All major sections and Danish CTAs/wording visible. Small legal text at the bottom was not fully legible but main content is clear."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:23.078Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

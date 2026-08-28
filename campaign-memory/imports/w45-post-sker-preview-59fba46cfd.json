@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "w45-post-sker-preview-59fba46cfd",
+  "source": {
+    "file": "W45 Postæsker Preview.png",
+    "relativePath": "campaign-import/unsorted-email/W45 Postæsker Preview.png",
+    "sha256": "59fba46cfde24d23bf78c003db6dcfd999d8e993c5f8cfba70aeb5b2f8430171",
+    "bytes": 1105332
+  },
+  "analysis": {
+    "campaignTitle": "W45 Postæsker Preview",
+    "week": "W45",
+    "language": "Danish",
+    "campaignFamily": "custom packaging",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote custom printed shipping boxes and encourage businesses to design their own branded packaging.",
+    "audience": "E-commerce business owners and retailers interested in custom packaging solutions.",
+    "offer": "Custom printed shipping boxes starting at 200 pcs with your own design.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Gør emballagen til dit stærkeste kort ➔",
+    "secondaryCtas": [
+      "Køb forsendelsesæsker nu ➔",
+      "Send noget, der bliver husket ➔",
+      "Start nu ➔",
+      "Forskæl dit brand ➔"
+    ],
+    "products": [
+      "Custom printed shipping boxes",
+      "Postæsker"
+    ],
+    "themes": [
+      "Branding",
+      "Personalization",
+      "Emotional connection",
+      "Ease of use",
+      "Small order quantities"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Muted beige",
+        "Pale yellow",
+        "Light peach",
+        "White",
+        "Dark gray text"
+      ],
+      "mood": "Clean, modern, friendly, upbeat",
+      "layoutPatterns": [
+        "Hero image of product in use",
+        "Sectioned content with large images",
+        "Text blocks with supportive icons",
+        "Contrasting CTA buttons"
+      ],
+      "imageStyle": "Simple product photos with hands, neutral backgrounds, focus on packaging"
+    },
+    "copyStyle": {
+      "tone": "Conversational, enthusiastic, empowering, clear",
+      "structure": [
+        "Hero statement",
+        "Supportive benefit explanation",
+        "Bulleted feature list",
+        "Emotional scenario narrative",
+        "Step simplification",
+        "Multiple clear CTAs"
+      ],
+      "urgency": "Low-moderate (emphasizes simplicity and emotional impact over limited-time offers)"
+    },
+    "reusablePatterns": [
+      "Hero product image with a hand holding the item to humanize and contextualize product use",
+      "Opening with a direct benefit statement for the customer's business",
+      "Emphasizing emotional impact and brand experience alongside practical product features",
+      "Bulleted list with icons to summarize key benefits",
+      "Narrative invitation to imagine the customer experience",
+      "Prominent multi-stage CTA placement with action-oriented text",
+      "Feature on low minimum order quantity as a key differentiator"
+    ],
+    "risks": [
+      "Absent direct performance data limits optimization learnings",
+      "Visually-driven layout may underperform for accessibility or low-vision users",
+      "Text-heavy sections could reduce mobile readability"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "All major text, CTAs, and design elements are legible. No subject/preheader visible in the screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:59:00.873Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

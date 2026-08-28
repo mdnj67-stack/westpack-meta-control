@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-06-02-143745-a2c0fae8d1",
+  "source": {
+    "file": "Skærmbillede 2026-06-02 143745.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-06-02 143745.png",
+    "sha256": "a2c0fae8d1a845a8b9775f1b425660fe65222771da382081e73c2af9065f2ac6",
+    "bytes": 392179
+  },
+  "analysis": {
+    "campaignTitle": "Westpack fejrer 73 år – Mystery Box tilbud",
+    "week": "",
+    "language": "Danish",
+    "campaignFamily": "anniversary_promotion",
+    "campaignType": "seasonal",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive sales and increase order frequency with a limited-time 'Mystery Box' promotion for the company anniversary.",
+    "audience": "Existing customers, B2B jewelry and packaging buyers",
+    "offer": "Free Mystery Box on orders over 200 DKK, valid for a limited time and while supplies last.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Få din Mystery Box før de sidste er væk ➜",
+    "secondaryCtas": [
+      "Læs mere om fødselsdagskampagnen ➜",
+      "Læg i kurv ➜",
+      "Prøv Seoul Eco ➜",
+      "Se sortimentet ➜"
+    ],
+    "products": [
+      "London Eco",
+      "Seoul Eco",
+      "Smykkeposer"
+    ],
+    "themes": [
+      "Anniversary",
+      "Urgency",
+      "Celebration",
+      "Gift promotion",
+      "Product discovery"
+    ],
+    "visualStyle": {
+      "palette": [
+        "white",
+        "pastel green",
+        "black",
+        "red",
+        "muted colors",
+        "gold accents"
+      ],
+      "mood": "festive, cheerful, professional",
+      "layoutPatterns": [
+        "Top hero section with brand team photo",
+        "Banner with icons/illustration",
+        "Section divider garlands",
+        "Product grid",
+        "Feature blocks with CTAs"
+      ],
+      "imageStyle": "Mix of real employee photo, illustrated icons, and clean product photography with soft lighting and natural textures."
+    },
+    "copyStyle": {
+      "tone": "Friendly, celebratory, urgent",
+      "structure": [
+        "Announcement headline",
+        "Brief offer explanation",
+        "Stock urgency statement",
+        "Short, actionable CTAs",
+        "Product showcase grid",
+        "Simple, direct product copy"
+      ],
+      "urgency": "High—repeated references to limited quantities, disappearing gifts, countdown to campaign end."
+    },
+    "reusablePatterns": [
+      "Team or staff group photo to humanize brand",
+      "Prominent hero illustration supporting offer",
+      "Limited-time free gift on order threshold",
+      "Multiple CTAs targeting both offer and product exploration",
+      "Product showcase grid organized by range/type",
+      "Visual emphasis on scarcity/urgency",
+      "Colored section dividers for a festive tone"
+    ],
+    "risks": [
+      "Heavy urgency and scarcity language may disappoint if supply runs out quickly.",
+      "Free gift threshold may not appeal to smaller buyers.",
+      "Information-dense; long scroll could reduce click-through to products."
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.97,
+      "notes": "Nearly all text and design elements are fully readable with only possible minor uncertainty in fine print due to resolution."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:56:17.407Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

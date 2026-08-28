@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "w11-monaco-eco-94b789d245",
+  "source": {
+    "file": "W11 Monaco Eco.png",
+    "relativePath": "campaign-import/unsorted-email/W11 Monaco Eco.png",
+    "sha256": "94b789d245f7bd2506c439f78bc46768820522f4127116f14790257524dfd667",
+    "bytes": 241723
+  },
+  "analysis": {
+    "campaignTitle": "Monaco ECO Gaveæsker - TRE NYE FARVER",
+    "week": "W11",
+    "language": "Danish",
+    "campaignFamily": "Monaco ECO Gift Boxes",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Drive product interest and conversions for Monaco ECO gift boxes in three new colors.",
+    "audience": "Existing and potential retail/business customers looking for eco-friendly gift packaging solutions.",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Se de Monaco Eco-s",
+    "secondaryCtas": [
+      "Shop nu",
+      "Shop now"
+    ],
+    "products": [
+      "Monaco ECO gaveæske grøn",
+      "Monaco ECO gaveæske brun",
+      "Monaco ECO gaveæske sand",
+      "Monaco ECO gaveæske m. silkebånd sort",
+      "Monaco ECO gaveæske m. silkebånd guld"
+    ],
+    "themes": [
+      "eco-friendly",
+      "new product colors",
+      "gift packaging",
+      "brand alignment",
+      "customization"
+    ],
+    "visualStyle": {
+      "palette": [
+        "earth green",
+        "kraft brown",
+        "creamy beige",
+        "white",
+        "soft yellow"
+      ],
+      "mood": "premium, understated, eco-conscious, refined",
+      "layoutPatterns": [
+        "hero product photography",
+        "benefit/bullet section",
+        "alternating photo and text blocks",
+        "icon-supported feature highlights",
+        "product grid"
+      ],
+      "imageStyle": "Studio photography with soft daylight, focus on texture/material, elegant compositions"
+    },
+    "copyStyle": {
+      "tone": "professional, inviting, benefit-driven",
+      "structure": [
+        "headline with product news",
+        "subheadline for context",
+        "short intro text",
+        "bullet/checkmark feature list",
+        "benefits with icons",
+        "product grid with direct CTAs"
+      ],
+      "urgency": "low, product news and informative rather than urgent"
+    },
+    "reusablePatterns": [
+      "Announce new product variants or colors with visual focus",
+      "Use icon-accompanied benefit lists to reinforce key selling points",
+      "Grid of clickable product images with visible ‘Shop now’ buttons",
+      "Feature comparison or reasons-to-buy section",
+      "Alternating product shots with use-case or lifestyle imagery",
+      "Checkmark style benefit lists for skimmable product features"
+    ],
+    "risks": [
+      "Text-heavy or feature-bullet layouts may blend with competitors",
+      "Predominantly soft natural tones may underwhelm in crowded inboxes",
+      "No visible offer or explicit discount reduces transactional urgency"
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "Majority of body copy and CTA buttons are clear and fully readable. Subject and preheader not visible."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:56:51.571Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "sk-rmbillede-2026-05-06-113714-b7fa1f41ad",
+  "source": {
+    "file": "Skærmbillede 2026-05-06 113714.png",
+    "relativePath": "campaign-import/unsorted-email/Skærmbillede 2026-05-06 113714.png",
+    "sha256": "b7fa1f41ade9de0a6363fcf2021895cf83fde57762a2676e3fd6f19c9b5ec1e5",
+    "bytes": 288656
+  },
+  "analysis": {
+    "campaignTitle": "Friske forsyninger på shoppen",
+    "week": "",
+    "language": "Danish",
+    "campaignFamily": "Restock/new arrivals announcement",
+    "campaignType": "product",
+    "funnelStage": "consideration",
+    "primaryGoal": "Promote new stock and product variants on the webshop",
+    "audience": "Existing customers, likely B2B (jewelry retailers or gift shops)",
+    "offer": "",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "SE ALLE FRANKFURT ECO ➔",
+    "secondaryCtas": [
+      "SE ALLE SMYKKEPOSER ➔",
+      "KØB BÆREPOSER NU ➔",
+      "Shop now",
+      "Læg i kurv"
+    ],
+    "products": [
+      "Frankfurt Eco jewelry boxes (ring/earring/various sizes)",
+      "Jewelry pouches (satin, cotton, different sizes/colors)",
+      "Carrier bags (new colors/sizes)"
+    ],
+    "themes": [
+      "New arrivals",
+      "Eco-friendly packaging",
+      "Expanded color options"
+    ],
+    "visualStyle": {
+      "palette": [
+        "Soft pink",
+        "Beige",
+        "Brown",
+        "Olive green",
+        "Muted gold"
+      ],
+      "mood": "Light, soft and contemporary with eco vibe",
+      "layoutPatterns": [
+        "Intro image with hero products",
+        "Text blocks with product features",
+        "Product grid with images/prices/CTAs",
+        "Section dividers",
+        "Collage-style product group photos"
+      ],
+      "imageStyle": "High-key, clean product photography on pastel backdrops"
+    },
+    "copyStyle": {
+      "tone": "Practical, friendly, B2B conversational",
+      "structure": [
+        "Short intro emphasizing restock urgency",
+        "Breakdown by product type",
+        "Short product descriptions",
+        "Bulleted/segmented layout by category",
+        "Multiple CTAs interspersed"
+      ],
+      "urgency": "Mild, product availability and fresh variants as gently motivating"
+    },
+    "reusablePatterns": [
+      "Lead with a central theme relating to stock or newness",
+      "Visual segmentation by product category",
+      "Hero product image followed by supporting detail blocks",
+      "Product grid layout with thumbnail, price, and direct add-to-cart CTA",
+      "Section-specific CTA bars for deeper category navigation",
+      "Use of real product photography against neutral backgrounds"
+    ],
+    "risks": [
+      "Limited emotional storytelling—heavy product focus",
+      "Some CTA buttons in Danish may be unclear to non-Danish readers",
+      "No explicit introductory subject line or preheader visible"
+    ],
+    "confidence": {
+      "overall": 0.92,
+      "textReadability": 0.95,
+      "notes": "All visible text and structure is clear, no major sections obscured. No subject line or preheader visible in image start."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T10:55:34.773Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "westpack-w44-gavekampagne-5-sidste-chance-9f11b4e278",
+  "source": {
+    "file": "W44 Gavekampagne 5_ Sidste chance.png",
+    "relativePath": "campaign-import/unsorted-email/W44 Gavekampagne 5_ Sidste chance.png",
+    "sha256": "9f11b4e278e4a5f0b946cb2340552d0fcc0b1f2df85f1325e9ce65d65b8876d2",
+    "bytes": 1794392
+  },
+  "library": {
+    "type": "owned_campaign",
+    "sourceName": "Westpack",
+    "sourceUrl": "",
+    "attributionRequired": false
+  },
+  "analysis": {
+    "campaignTitle": "Gavekampagne 5 – Sidste chance (Mystery Box offer)",
+    "week": "W44",
+    "language": "Danish",
+    "campaignFamily": "Gavekampagne",
+    "campaignType": "sale",
+    "funnelStage": "conversion",
+    "primaryGoal": "Drive immediate sales by creating urgency around the last chance to receive a Mystery Box gift.",
+    "audience": "Existing customers interested in gift/holiday promotions, familiar with Westpack packaging products.",
+    "offer": "Free Mystery Box with qualifying order (tiered offer: larger orders get larger boxes). Countdown timer signifies last chance.",
+    "subjectLineVisible": "",
+    "preheaderVisible": "",
+    "primaryCta": "Sidste chance – klik nu! ➔",
+    "secondaryCtas": [
+      "JEG VIL VIDE MERE ➔",
+      "LÆG DIN ORDRE NU ➔"
+    ],
+    "products": [
+      "Mystery Box",
+      "Gift packaging"
+    ],
+    "themes": [
+      "Holiday urgency",
+      "Gift giving",
+      "Surprise/reward",
+      "Countdown timer",
+      "Mystery"
+    ],
+    "visualStyle": {
+      "palette": [
+        "#f8f6ee",
+        "#7a3228",
+        "#bfa177",
+        "#ffffff"
+      ],
+      "mood": "Playful and urgent, with festive holiday elements.",
+      "layoutPatterns": [
+        "Hero section with urgent timer",
+        "Prominent visual of product/gift with question mark",
+        "Tiered visual incentives along a path/flow",
+        "Pinned CTA buttons"
+      ],
+      "imageStyle": "Photographic product images partially obscured or blurred for mystery; overlays with graphics and bold question mark."
+    },
+    "copyStyle": {
+      "tone": "Conversational, playful (references to elves and holiday chaos), urgent.",
+      "structure": [
+        "Urgency intro with countdown",
+        "Storytelling around 'crisis'",
+        "Explainer (what is the mystery box?)",
+        "Tiered offer breakdown",
+        "Multiple CTAs"
+      ],
+      "urgency": "High"
+    },
+    "reusablePatterns": [
+      "Countdown timer at the top to build urgency",
+      "Tiered reward structure visually connected (order size = better reward)",
+      "Mystery or surprise element (not revealing the exact content of gift)",
+      "Playful, thematic storytelling tied to the offer",
+      "Multiple, spaced CTAs using different wording",
+      "Visual focus on product with mystery overlay (question mark or blurring)"
+    ],
+    "risks": [
+      "Vague details may reduce trust/motivation if audience dislikes surprises.",
+      "Heavy thematic/seasonal language may require significant adaptation for other contexts.",
+      "Countdown timer can backfire if deadline is flexible/extended."
+    ],
+    "confidence": {
+      "overall": 0.95,
+      "textReadability": 0.98,
+      "notes": "Clear, legible Danish copy and visual structure. Subject line/preheader not visible in screenshot."
+    }
+  },
+  "performance": null,
+  "review": {
+    "status": "needs_review",
+    "approvedAsReference": false,
+    "notes": ""
+  },
+  "provenance": {
+    "analyzedAt": "2026-07-17T11:15:32.925Z",
+    "model": "gpt-4.1-2025-04-14",
+    "method": "openai_vision"
+  }
+}
