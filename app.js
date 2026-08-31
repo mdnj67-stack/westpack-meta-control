@@ -17149,29 +17149,43 @@ function attachEvents() {
   });
 
   document.getElementById("refresh-data-button")?.addEventListener("click", async () => {
-    const studioVisible = isStudioVisible();
-    if (appState.metaDataMode === "snapshot") {
-      if (studioVisible) {
-        await refreshMetaWorkspaceData({ silent: false });
-      } else {
-        await refreshMetaData({ silent: false });
+    const idleLabel = document.getElementById("refresh-data-button")?.textContent || "Refresh data";
+    setButtonBusy("refresh-data-button", true, idleLabel, "Refreshing...");
+    try {
+      const studioVisible = isStudioVisible();
+      if (appState.metaDataMode === "snapshot") {
+        if (studioVisible) {
+          await refreshMetaWorkspaceData({ silent: false });
+        } else {
+          await refreshMetaData({ silent: false });
+        }
+        return;
       }
-      return;
+      if (studioVisible) {
+        await refreshMetaWorkspaceData({ force: true, silent: false });
+        return;
+      }
+      await refreshMetaData();
+    } finally {
+      setButtonBusy("refresh-data-button", false, idleLabel, "Refreshing...");
+      syncDashboardControls();
     }
-    if (studioVisible) {
-      await refreshMetaWorkspaceData({ force: true, silent: false });
-      return;
-    }
-    await refreshMetaData();
   });
 
   document.getElementById("update-snapshot-button")?.addEventListener("click", async () => {
-    const studioVisible = isStudioVisible();
-    if (studioVisible) {
-      await refreshMetaWorkspaceData({ force: true, forceLive: true, silent: false });
-      return;
+    const idleLabel = document.getElementById("update-snapshot-button")?.textContent || "Update snapshot";
+    setButtonBusy("update-snapshot-button", true, idleLabel, "Refreshing...");
+    try {
+      const studioVisible = isStudioVisible();
+      if (studioVisible) {
+        await refreshMetaWorkspaceData({ force: true, forceLive: true, silent: false });
+        return;
+      }
+      await refreshMetaData({ forceLive: true, reason: "Updating snapshot" });
+    } finally {
+      setButtonBusy("update-snapshot-button", false, idleLabel, "Refreshing...");
+      syncDashboardControls();
     }
-    await refreshMetaData({ forceLive: true, reason: "Updating snapshot" });
   });
 
   document.getElementById("dashboard-date-preset")?.addEventListener("change", async (event) => {
