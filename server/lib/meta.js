@@ -190,13 +190,24 @@ function sanitizeStoryIdentitySpec(storySpec = {}) {
   return sanitized;
 }
 
+// Meta includes a derived `picture` URL alongside `image_hash` when reading a creative back,
+// but rejects (OAuth code 100 / subcode 1443051, "ObjectStorySpecRedundant") a create request
+// that resubmits both on the same link_data or child_attachment. image_hash is the more precise
+// reference, so it wins whenever both are present after a straight read-back clone.
+function dropRedundantPictureField(spec) {
+  if (spec && typeof spec === "object" && spec.picture && spec.image_hash) {
+    delete spec.picture;
+  }
+  return spec;
+}
+
 function sanitizeLinkData(linkData) {
   const cloned = { ...linkData };
   delete cloned.page_welcome_message;
   delete cloned.retailer_item_ids;
   delete cloned.product_data;
   delete cloned.template_data;
-  return cloned;
+  return dropRedundantPictureField(cloned);
 }
 
 function cloneAssetFeedSpec(creative, preview) {
@@ -448,6 +459,7 @@ function cloneStorySpec(creative, preview, options = {}) {
           delete nextAttachment.page_welcome_message;
           delete nextAttachment.product_data;
           delete nextAttachment.retailer_item_ids;
+          dropRedundantPictureField(nextAttachment);
 
           if (translated.name) {
             nextAttachment.name = translated.name;

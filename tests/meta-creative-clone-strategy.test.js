@@ -93,3 +93,71 @@ test("creative creation posts AD11-style carousel story instead of metadata-only
     global.fetch = originalFetch;
   }
 });
+
+test("cloning a mixed image/video carousel drops Meta's redundant picture field", async () => {
+  const originalFetch = global.fetch;
+  let postedBody = null;
+  global.fetch = async (_url, options = {}) => {
+    postedBody = new URLSearchParams(String(options.body || ""));
+    return {
+      ok: true,
+      async json() {
+        return { id: "new-creative-id" };
+      }
+    };
+  };
+
+  try {
+    // Reading a creative back from Meta includes a derived `picture` URL alongside
+    // image_hash / video_id + its own thumbnail hash. Reposting both as-is is what
+    // Meta rejects with "ObjectStorySpecRedundant" (only one of picture and image_hash
+    // may be set) - this is exactly what happens when a carousel mixes an image card
+    // with a video card and the source is duplicated without cleaning the read-back.
+    const creativeId = await createAdCreative(
+      "act_123",
+      "token",
+      {
+        object_story_spec: {
+          page_id: "page-1",
+          link_data: {
+            link: "https://www.westpack.com/",
+            message: "Original",
+            child_attachments: [
+              { image_hash: "hash-1", picture: "https://scontent.example/card-1.jpg", link: "https://www.westpack.com/", name: "Card 1" },
+              { video_id: "video-1", image_hash: "hash-thumb-2", picture: "https://scontent.example/card-2-thumb.jpg", link: "https://www.westpack.com/", name: "Card 2" }
+            ]
+          }
+        },
+        url_tags: ""
+      },
+      {
+        source: "Mixed carousel",
+        targetLanguage: "English",
+        targetAdSet: "UK - Broad",
+        destinationUrl: "https://www.westpack.com/uk/",
+        primaryText: "Translated body",
+        headline: "Translated headline",
+        description: "Translated description"
+      },
+      {
+        translatedAttachments: [
+          { name: "Card 1 EN", description: "First" },
+          { name: "Card 2 EN", description: "Second" }
+        ]
+      }
+    );
+
+    assert.equal(creativeId, "new-creative-id");
+    const story = JSON.parse(postedBody.get("object_story_spec"));
+    const [imageCard, videoCard] = story.link_data.child_attachments;
+
+    assert.equal(imageCard.image_hash, "hash-1");
+    assert.equal(imageCard.picture, undefined, "image card must not keep a redundant picture field alongside image_hash");
+
+    assert.equal(videoCard.video_id, "video-1");
+    assert.equal(videoCard.image_hash, "hash-thumb-2");
+    assert.equal(videoCard.picture, undefined, "video card must not keep a redundant picture field alongside image_hash");
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
