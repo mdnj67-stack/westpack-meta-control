@@ -57,7 +57,9 @@ export function renderDuplicateBulkTargetsAction({
     const isPrimary = primary ? key === getDuplicateTargetKey(primary) : false;
     const isActive = key === appState.duplicateActivePreviewKey;
     const isEditingCreative = key === syncDuplicateCreativeEditorKey();
-    const previewReady = Boolean(getDuplicateBatchEntry(key)?.preview);
+    const batchEntry = getDuplicateBatchEntry(key);
+    const previewReady = Boolean(batchEntry?.preview);
+    const pushedAdId = batchEntry?.pushedAdId || "";
     const creativeOverride = getDuplicateOverrideStatus(target);
     return `
       <article class="duplicate-bulk-item${isActive ? " is-active" : ""}${isEditingCreative ? " is-editing-creative" : ""}" data-duplicate-target-key="${key}">
@@ -66,7 +68,9 @@ export function renderDuplicateBulkTargetsAction({
           <span class="duplicate-bulk-campaign" title="${escapeHtml(target.campaignName)}">${target.campaignName}</span>
           <span class="duplicate-bulk-adset">${target.adSetName}</span>
           <div class="duplicate-bulk-badges">
-            <span class="duplicate-bulk-badge ${previewReady ? "is-success" : "is-warning"}">${previewReady ? "Preview ready" : "Preview pending"}</span>
+            ${pushedAdId
+              ? `<span class="duplicate-bulk-badge is-success" title="Ad ID ${escapeHtml(pushedAdId)}">Pushed to Meta</span>`
+              : `<span class="duplicate-bulk-badge ${previewReady ? "is-success" : "is-warning"}">${previewReady ? "Preview ready" : "Preview pending"}</span>`}
             <span class="duplicate-bulk-badge ${creativeOverride.tone === "danger" ? "is-danger" : creativeOverride.tone === "success" ? "is-success" : ""}">${creativeOverride.label}</span>
           </div>
         </div>

@@ -211,6 +211,7 @@ export async function pushToMetaAction({
   setSyncStatus,
   syncActionAvailability,
   updateMetaStatusPill,
+  upsertDuplicateBatchEntry,
   uploadCreateCarouselVariantsToMeta,
   uploadCreateImageVariantsToMeta,
   uploadCreateVideoVariantsToMeta,
@@ -252,7 +253,18 @@ export async function pushToMetaAction({
 
   try {
     if (mode === "duplicate") {
-      const targets = getDuplicatePublishTargets();
+      const allTargets = getDuplicatePublishTargets();
+      // A batch entry keeps its pushedAdId once Meta confirms creation, so a target that
+      // already succeeded is never re-submitted on a later "Push to Meta" click (for example
+      // after a partial rate-limit failure) - re-running the whole batch would otherwise
+      // create a second, duplicate ad in Meta for every target that already went through.
+      const targets = allTargets.filter((target) => !getDuplicateBatchEntry(getDuplicateTargetKey(target))?.pushedAdId);
+
+      if (!targets.length) {
+        setStudioStatus("All targets in this batch are already pushed to Meta.", "success");
+        return;
+      }
+
       const successes = [];
       const failures = [];
       let stoppedForRateLimit = false;
@@ -276,6 +288,11 @@ export async function pushToMetaAction({
             ? await uploadDuplicateVideoVariantsToMeta(key, target)
             : [];
           const result = await requestMetaPublish(payload);
+          upsertDuplicateBatchEntry({
+            key,
+            pushedAdId: result.adId,
+            pushedStatus: result.status
+          });
           successes.push({
             ...target,
             adId: result.adId,

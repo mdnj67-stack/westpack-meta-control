@@ -49,6 +49,7 @@ test("pushing a duplicate batch does not wait after the final target", async () 
     setSyncStatus: () => {},
     syncActionAvailability: () => {},
     updateMetaStatusPill: () => {},
+    upsertDuplicateBatchEntry: () => {},
     uploadCreateCarouselVariantsToMeta: async () => [],
     uploadCreateImageVariantsToMeta: async () => [],
     uploadCreateVideoVariantsToMeta: async () => [],

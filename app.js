@@ -15395,6 +15395,7 @@ async function pushToMeta(mode = appState.mode) {
     setSyncStatus,
     syncActionAvailability,
     updateMetaStatusPill,
+    upsertDuplicateBatchEntry,
     uploadCreateCarouselVariantsToMeta,
     uploadCreateImageVariantsToMeta,
     uploadCreateVideoVariantsToMeta,
