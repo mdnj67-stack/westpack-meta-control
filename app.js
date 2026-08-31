@@ -368,7 +368,7 @@ const appState = {
   dashboardDateShortLabel: "Last 7 days",
   dashboardDateDays: 7,
   dashboardAutoRefresh: "off",
-  metaDataMode: "snapshot",
+  metaDataMode: "live",
   klaviyoDataSource: "mock",
   klaviyoGeneratedAt: "",
   klaviyoRangeDays: 30,
@@ -11780,7 +11780,7 @@ function loadDashboardPreferences() {
     const from = localStorage.getItem("westpack.dashboardDateFrom");
     const to = localStorage.getItem("westpack.dashboardDateTo");
     const autoRefresh = localStorage.getItem("westpack.dashboardAutoRefresh");
-    const metaDataMode = localStorage.getItem("westpack.metaDataMode");
+    const metaDataMode = localStorage.getItem("westpack.metaDataMode.v2");
     if (preset) appState.dashboardDatePreset = preset;
     if (from) appState.dashboardDateFrom = from;
     if (to) appState.dashboardDateTo = to;
@@ -11797,7 +11797,10 @@ function persistDashboardPreferences() {
     localStorage.setItem("westpack.dashboardDateFrom", appState.dashboardDateFrom);
     localStorage.setItem("westpack.dashboardDateTo", appState.dashboardDateTo);
     localStorage.setItem("westpack.dashboardAutoRefresh", appState.dashboardAutoRefresh);
-    localStorage.setItem("westpack.metaDataMode", appState.metaDataMode);
+    // Renamed key: the default flipped from "snapshot" to "live", and a browser that
+    // already persisted the old "snapshot" default under the old key would otherwise
+    // keep overriding the new default forever.
+    localStorage.setItem("westpack.metaDataMode.v2", appState.metaDataMode);
   } catch {}
 }
 
@@ -15012,7 +15015,7 @@ function initializeApp() {
   syncStudioChrome();
   setStudioStatus("Ready.");
 
-  if (!liveSnapshot && appState.metaDataMode === "live") {
+  if (appState.metaDataMode === "live") {
     refreshMetaData({ silent: true, reason: "Syncing Meta data" });
   }
 
@@ -15269,6 +15272,13 @@ async function loadMetaStudioCatalog(options = {}) {
       }
       return catalog;
     } catch (error) {
+      if (isMetaRateLimitMessage(error.message) && storedStudioSnapshot) {
+        applyMetaStudioCatalog(storedStudioSnapshot);
+        if (!silent) {
+          setStudioStatus("Meta rate limited. Using last saved catalog.", "warning");
+        }
+        return storedStudioSnapshot;
+      }
       if (!silent) {
         setStudioStatus(error.message || "Meta studio catalog refresh failed.", "warning");
       }
@@ -17131,22 +17141,11 @@ function attachEvents() {
     persistDashboardPreferences();
     syncDashboardControls();
 
-    const studioVisible = isStudioVisible();
-    if (nextMode === "snapshot") {
-      if (studioVisible) {
-        await refreshMetaWorkspaceData({ silent: false });
-      } else {
-        await refreshMetaData({ silent: false });
-      }
-      return;
+    if (isStudioVisible()) {
+      await refreshMetaWorkspaceData({ silent: false });
+    } else {
+      await refreshMetaData({ silent: false });
     }
-
-    setSyncStatus(
-      studioVisible
-        ? "Live mode active. Studio refresh only pulls the active ad catalog."
-        : "Live mode active. Meta is only queried when you refresh or update snapshot.",
-      "success"
-    );
   });
 
   document.getElementById("refresh-data-button")?.addEventListener("click", async () => {
