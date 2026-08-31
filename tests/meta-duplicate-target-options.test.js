@@ -2,7 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { isStudioSelectableStatus } = require("../server/meta/_catalog-selection");
+const { isStudioSelectableStatus, isDuplicatableAdStatus } = require("../server/meta/_catalog-selection");
 
 async function loadTargetOptionsModule() {
   const source = fs.readFileSync(path.join(__dirname, "..", "src", "meta-target-options.js"), "utf8");
@@ -36,5 +36,14 @@ test("studio catalog only admits active Meta destinations", () => {
   assert.equal(isStudioSelectableStatus("ACTIVE"), true);
   ["PAUSED", "CAMPAIGN_PAUSED", "ADSET_PAUSED", "ARCHIVED", "DELETED", "PENDING_REVIEW", "DISAPPROVED", ""].forEach((status) => {
     assert.equal(isStudioSelectableStatus(status), false, status);
+  });
+});
+
+test("duplicate source ads stay pickable while Meta is still reviewing them", () => {
+  ["ACTIVE", "PAUSED", "CAMPAIGN_PAUSED", "ADSET_PAUSED", "PENDING_REVIEW", "IN_PROCESS", "WITH_ISSUES", "DISAPPROVED", "PREAPPROVED"].forEach((status) => {
+    assert.equal(isDuplicatableAdStatus(status), true, status);
+  });
+  ["DELETED", "ARCHIVED", ""].forEach((status) => {
+    assert.equal(isDuplicatableAdStatus(status), false, status);
   });
 });

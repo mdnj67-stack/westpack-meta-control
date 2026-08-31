@@ -5,7 +5,7 @@ const { createMetaSnapshotRuntime } = require("../../server/meta/_snapshot-runti
 const { createMetaSnapshotFetchers } = require("../../server/meta/_snapshot-fetchers");
 const { createMetaSnapshotTransformers } = require("../../server/meta/_snapshot-transformers");
 const { createMetaSnapshotDashboardBuilder } = require("../../server/meta/_snapshot-dashboard");
-const { isStudioSelectableStatus } = require("../../server/meta/_catalog-selection");
+const { isStudioSelectableStatus, isDuplicatableAdStatus } = require("../../server/meta/_catalog-selection");
 const { syncHistoricalIntelligence } = require("../../server/meta/historical-intelligence");
 const {
   getHistoricalStoreProfile,
@@ -1921,7 +1921,9 @@ module.exports = async (req, res) => {
 
       const activeAds = (adsResponse.data || []).filter((ad) => {
         const campaignId = String(ad?.campaign?.id || "");
-        return ad?.status === "ACTIVE" && campaignId && selectableCampaignIds.has(campaignId);
+        return campaignId
+          && selectableCampaignIds.has(campaignId)
+          && isDuplicatableAdStatus(ad?.effective_status || ad?.status);
       });
 
       const responsePayload = {

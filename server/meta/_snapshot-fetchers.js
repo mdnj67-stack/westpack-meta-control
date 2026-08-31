@@ -22,7 +22,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("ads", [accountId, "catalog"]),
         maxAgeMs: adsCacheMaxAgeMs,
         fetcher: () => metaGetAll(`/${accountId}/ads`, accessToken, {
-          fields: "id,name,status,campaign{id,name,status,effective_status},adset{id,name},creative{id,name}",
+          fields: "id,name,status,effective_status,campaign{id,name,status,effective_status},adset{id,name},creative{id,name}",
           limit: "200"
         })
       }),
