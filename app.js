@@ -10653,6 +10653,11 @@ function setDuplicateStep(step, options = {}) {
     el.classList.toggle("active", isCurrent);
     el.setAttribute("aria-selected", isCurrent ? "true" : "false");
   });
+  // Step 3 ("Push") is where the generated copy review (preview/variants/payload cards
+  // plus the copy editor) belongs. This class lets CSS reveal that normally-hidden
+  // sidebar content as part of step 3 specifically, instead of it living in a
+  // disconnected panel that shows/hides independently of the wizard step.
+  document.getElementById("studio-panel")?.classList.toggle("is-duplicate-step-3", next === 3);
   renderDuplicateWorkflowSummary();
   if (options.scroll === true) {
     scrollDuplicateStepIntoView(next);
@@ -11984,6 +11989,7 @@ function syncStudioChrome() {
   const isDuplicate = appState.mode === "duplicate";
   document.getElementById("studio-panel")?.classList.toggle("is-duplicate-focused", isDuplicate);
   document.getElementById("studio-panel")?.classList.toggle("is-duplicate-review-open", isDuplicate && Boolean(appState.duplicateReviewOpen));
+  document.getElementById("studio-panel")?.classList.toggle("is-duplicate-step-3", isDuplicate && appState.duplicateStep === 3);
   document.querySelectorAll(".mode-duplicate-only").forEach((element) => {
     element.classList.toggle("hidden-by-mode", !isDuplicate);
   });
@@ -15008,7 +15014,12 @@ function initializeApp() {
   });
   refreshMetaConnectionStatus({ silent: true });
   renderKlaviyoWorkspace();
-  loadKlaviyoLiveData();
+  // Paint instantly from the bundled snapshot first, then silently pull the real
+  // subscriber/campaign numbers from Klaviyo. Without this second call the dashboard only
+  // ever shows whatever data.klaviyo-live.json was last committed with, since nothing else
+  // triggers a live fetch until someone changes the date range or clicks refresh by hand -
+  // that snapshot has no automatic refresh schedule (Klaviyo has no cron, unlike Meta's).
+  loadKlaviyoLiveData().then(() => loadKlaviyoLiveData({ force: true }));
   setKlaviyoView(appState.klaviyoView);
   setWorkspace(appState.workspace);
   setStudioMode(appState.mode);
