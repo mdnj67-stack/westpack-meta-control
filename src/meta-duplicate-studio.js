@@ -107,6 +107,16 @@ export function attachDuplicateStudioEventsModule({
         ensureDuplicateTargetPersisted(duplicateTarget);
       }
       upsertDuplicateCreativeOverride(key, { mode });
+      // Keep the shared "Ad format" selector (step 1) in step with whatever override the
+      // operator just picked for this row - it drives both the video/carousel upload UI
+      // and what ad_format gets published, so letting it silently disagree with a chip the
+      // operator explicitly clicked is what breaks the video/carousel override end to end.
+      if (mode === "video" || mode === "carousel") {
+        const adFormatSelect = document.getElementById("dup-ad-format");
+        if (adFormatSelect instanceof HTMLSelectElement) {
+          adFormatSelect.value = mode === "video" ? "Video" : "Carousel";
+        }
+      }
       setDuplicateReviewOpen(false);
       appState.duplicateCreativeEditorKey = key;
       if (!setDuplicateActivePreview(key, { syncFields: false })) {

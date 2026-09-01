@@ -8226,6 +8226,13 @@ function renderCampaignBrainPanel() {
       const reviewFloor = Number(appState.campaignStudioMode === "meta_master"
         ? metaQualityReview?.dimensionFloor || 0
         : reviewJob?.output?.qualityAudit?.gate?.dimensionFloor || 0);
+      const reviewQualityAudit = appState.campaignStudioMode === "meta_master" ? null : reviewJob?.output?.qualityAudit || null;
+      const reviewAdmissionTier = reviewQualityAudit?.admissionTier || "";
+      const reviewVerdict = reviewQualityAudit?.verdict || "";
+      const reviewIsFullPass = appState.campaignStudioMode === "meta_master"
+        ? metaQualityReview?.passed === true
+        : reviewAdmissionTier === "excellent" || reviewVerdict === "ready";
+      const reviewIsReviewableTier = reviewAdmissionTier === "reviewable" || reviewVerdict === "ready_with_notes";
       const visibleLibraryItems = appState.campaignBrainAssetLibrary?.scope === "all"
         ? getCampaignAssetLibraryAllItems()
         : libraryItems;
@@ -8290,7 +8297,7 @@ function renderCampaignBrainPanel() {
           <aside class="campaign-studio-review-score" aria-label="Quality review summary">
             <span>Quality Director</span>
             <strong>${reviewScore || "—"}<small>${reviewScore ? "/100" : ""}</small></strong>
-            <p>${reviewJob?.state === "quality_blocked" ? `Editable Studio draft · not quality approved` : reviewScore >= 90 ? "Passed for human review" : reviewJob ? "Human decision required" : "Studio draft"}${reviewFloor ? ` · floor ${reviewFloor}` : ""}</p>
+            <p>${reviewJob?.state === "quality_blocked" ? `Editable Studio draft · not quality approved` : reviewIsFullPass ? "Passed for human review" : reviewIsReviewableTier ? "Reviewable draft · not a full pass" : reviewJob ? "Human decision required" : "Studio draft"}${reviewFloor ? ` · floor ${reviewFloor}` : ""}</p>
           </aside>
           <div class="campaign-studio-master-meta">
             <span class="campaign-brain-pill">${escapeHtml(taskPair.join(" + ") || "Standalone studio run")}</span>
@@ -12311,7 +12318,6 @@ function renderDuplicateCreativeOverridePanel() {
     getCachedCreateUploadPreviewUrl,
     getDuplicateCreativeOverride,
     getDuplicateTargetKey,
-    getInputValue,
     getOrderedDuplicateCarouselFiles,
     renderDuplicateWorkflowSummary,
     sanitizeDuplicateBulkTargets

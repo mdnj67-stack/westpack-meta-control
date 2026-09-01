@@ -106,7 +106,6 @@ export function renderDuplicateCreativeOverridePanelAction({
   getCachedCreateUploadPreviewUrl,
   getDuplicateCreativeOverride,
   getDuplicateTargetKey,
-  getInputValue,
   getOrderedDuplicateCarouselFiles,
   renderDuplicateWorkflowSummary,
   sanitizeDuplicateBulkTargets
@@ -116,7 +115,6 @@ export function renderDuplicateCreativeOverridePanelAction({
 
   sanitizeDuplicateBulkTargets();
   const target = getActiveDuplicateCreativeEditorTarget();
-  const adFormat = getInputValue("dup-ad-format");
 
   if (!target) {
     panel.innerHTML = `
@@ -132,8 +130,12 @@ export function renderDuplicateCreativeOverridePanelAction({
   const override = getDuplicateCreativeOverride(key);
   const squareFile = override.videoFiles.square;
   const verticalFile = override.videoFiles.vertical;
-  const canUseVideoOverride = adFormat === "Video";
-  const canUseCarouselOverride = adFormat === "Carousel";
+  // Gated on the override the operator actually picked for this row, not the shared
+  // "Ad format" selector from step 1 - that selector defaults to "Single image" and has
+  // no way to know a given source ad is really a video/carousel ad, so gating on it here
+  // hid the upload fields behind a value the operator had no reason to also go change.
+  const canUseVideoOverride = override.mode === "video";
+  const canUseCarouselOverride = override.mode === "carousel";
   const orderedCarouselFiles = getOrderedDuplicateCarouselFiles(override.carouselFiles || []);
   const previewTiles = [
     squareFile ? `
