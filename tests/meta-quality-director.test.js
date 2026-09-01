@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const {
   META_CREATIVE_DIMENSIONS,
+  META_CREATIVE_PASS_SCORE,
   buildMetaCreativeReviewPrompt,
   buildMetaCreativeReviewSchema,
   normalizeMetaCreativeReview
@@ -33,4 +34,18 @@ test("Meta quality gate requires 90 overall and every dimension at least 80", ()
   assert.equal(failed.passed, false);
   assert.equal(failed.verdict, "REVISE");
   assert.equal(failed.dimensionFloor, 79);
+});
+
+test("reported Meta creative scores are calibrated against the dimension average", () => {
+  const inflated = {
+    verdict: "PASS",
+    overallScore: 95,
+    criticalFailures: [],
+    dimensions: META_CREATIVE_DIMENSIONS.map((key, index) => ({ key, score: index % 2 ? 80 : 81, assessment: "Evidence", evidence: ["Card"], improvement: "" }))
+  };
+  const result = normalizeMetaCreativeReview(inflated);
+  assert.equal(result.passed, false);
+  assert.ok(result.overallScore < META_CREATIVE_PASS_SCORE);
+  assert.equal(result.overallScore, 81);
+  assert.equal(result.reportedScore, 95);
 });

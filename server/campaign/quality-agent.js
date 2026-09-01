@@ -397,6 +397,10 @@ function decideQualityNextStep({ review, deterministicAudit, revisionCount = 0, 
     if (gate.reviewable) return { action: "admit_to_review", gate, reason: "reviewable_draft_ready", admissionTier: "reviewable" };
     return { action: "quality_blocked", gate, reason: "maximum_revisions_exhausted" };
   }
+  if (hasQualityStagnated(scoreHistory)) {
+    if (gate.reviewable) return { action: "admit_to_review", gate, reason: "quality_stagnated", admissionTier: "reviewable" };
+    return { action: "quality_blocked", gate, reason: "quality_stagnated" };
+  }
   if (deadlineReached) return { action: "continue_later", gate, reason: "quality_window_checkpoint" };
   return { action: "revise", gate, reason: "revision_required" };
 }

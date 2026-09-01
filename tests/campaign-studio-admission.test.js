@@ -16,3 +16,10 @@ test("Campaign Studio admits terminal artifact drafts from score 70 without appr
 test("Campaign Studio refuses arbitrary or unfinished agent outputs", () => {
   assert.match(app, /if \(!isContentAgentJobStudioEligible\(job\) \|\| !output\?\.artifactPack\?\.artifacts\) return false;/);
 });
+
+test("Campaign Studio review badge derives pass status from admissionTier/verdict, not a hardcoded score", () => {
+  assert.doesNotMatch(app, /reviewScore >= 90/);
+  assert.match(app, /reviewAdmissionTier === "excellent" \|\| reviewVerdict === "ready"/);
+  assert.match(app, /reviewAdmissionTier === "reviewable" \|\| reviewVerdict === "ready_with_notes"/);
+  assert.match(app, /Reviewable draft · not a full pass/);
+});

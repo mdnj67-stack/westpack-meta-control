@@ -288,6 +288,18 @@ async function requestStructuredOutput(config, { prompt, schemaName, schema, mod
     response = result.response;
     payload = result.payload;
   } catch (error) {
+    if (error?.name === "AbortError" && retryOnTimeout) {
+      return requestStructuredOutput(config, {
+        prompt,
+        schemaName,
+        schema,
+        model,
+        reasoningEffort,
+        requestTimeoutMs,
+        retryOnTimeout: false,
+        retryOnModelAvailability
+      });
+    }
     throw error;
   } finally {
     clearTimeout(timer);
@@ -325,7 +337,8 @@ async function generateArtifactPack(config, { input, plan, prompt, schemaName, m
     schemaName,
     schema: buildCampaignArtifactSchema(),
     model: config.contentAgentModel || config.openAiModel,
-    reasoningEffort: "medium"
+    reasoningEffort: "medium",
+    retryOnTimeout: false
   });
   return normalizeCampaignArtifactResult(
     input,
@@ -348,7 +361,8 @@ async function generateChannelDraft(config, { channel, prompt, schemaName, resol
     schemaName,
     schema: buildChannelArtifactSchema(channel),
     model: config.contentAgentModel || config.openAiModel,
-    reasoningEffort
+    reasoningEffort,
+    retryOnTimeout: false
   });
   return { channel: response.parsed?.[channel] || null, productionNotes: response.parsed?.productionNotes || [], model: response.model };
 }
@@ -682,7 +696,8 @@ async function processAgentJob(config, stateValue, job) {
           schema: buildCampaignBrainSchema(),
           model: config.contentAgentModel || config.openAiModel,
           reasoningEffort: "low",
-          requestTimeoutMs: 150_000
+          requestTimeoutMs: 150_000,
+          retryOnTimeout: false
         });
         plan = normalizeCampaignBrainResult(input, planResponse.parsed, planResponse.model, planRequest.memoryReferences);
         return checkpointAndContinue(
@@ -706,7 +721,8 @@ async function processAgentJob(config, stateValue, job) {
           schemaName: "westpack_creative_directions_v1",
           schema: buildCreativeDirectionSchema(),
           model: config.contentAgentModel || config.openAiModel,
-          reasoningEffort: "high"
+          reasoningEffort: "high",
+          retryOnTimeout: false
         });
         creativeDirections = normalizeCreativeDirections(response.parsed);
         let directionQualityGate = evaluateCreativeDirectionDiversity(creativeDirections);
@@ -927,7 +943,7 @@ async function processAgentJob(config, stateValue, job) {
       }
       if (job.resumeStage === "revision" && previousReview) {
         revisionCount += 1;
-        const revisionChannel = selectRevisionChannel(previousReview);
+        const revisionChannel = selectRevisionChannel(previousReview, revisionScopes);
         revisionScopes.push(revisionChannel);
         ({ state } = await persistTransition(state, job.id, "producing", {
           progress: Math.min(92, 72 + revisionCount * 7),
@@ -1490,6 +1506,7 @@ module.exports = {
   queueAgentContinuation,
   remapAssetUrls,
   rejectAndRestartContentAgentJob,
+  requestStructuredOutput,
   retryContentAgentJob,
   runContentAgentCycle,
   scanAsanaForAgentJobs,

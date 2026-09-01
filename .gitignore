@@ -32,7 +32,6 @@ _login_headers.txt
 _live_snapshot_*.json
 *.tmp
 westpack-fr-check.png
-k.includes( ' npm ' )))
 
 # Test output
 test-results/

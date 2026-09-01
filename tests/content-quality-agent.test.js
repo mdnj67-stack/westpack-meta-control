@@ -220,7 +220,15 @@ test("quality orchestration revises, admits or blocks without an infinite loop",
   assert.equal(decideQualityNextStep({ review: buildReview({ verdict: "REVISE" }), deterministicAudit, deadlineReached: true }).action, "continue_later");
   assert.equal(hasQualityStagnated([68, 69, 70]), false);
   assert.equal(hasQualityStagnated([68, 68, 69]), true);
-  assert.equal(decideQualityNextStep({ review: buildReview({ verdict: "REVISE", overallScore: 69 }), deterministicAudit, revisionCount: 1, scoreHistory: [68, 68, 69] }).action, "revise");
+  const stagnatedBlocked = decideQualityNextStep({ review: buildReview({ verdict: "REVISE", overallScore: 69 }), deterministicAudit, revisionCount: 1, scoreHistory: [68, 68, 69] });
+  assert.equal(stagnatedBlocked.action, "quality_blocked");
+  assert.equal(stagnatedBlocked.reason, "quality_stagnated");
+  const stagnatedReviewable = decideQualityNextStep({ review: reviewable, deterministicAudit, revisionCount: 1, scoreHistory: [82, 83, 83] });
+  assert.equal(stagnatedReviewable.action, "admit_to_review");
+  assert.equal(stagnatedReviewable.admissionTier, "reviewable");
+  assert.equal(stagnatedReviewable.reason, "quality_stagnated");
+  const improvingDecision = decideQualityNextStep({ review: buildReview({ verdict: "REVISE", overallScore: 84 }), deterministicAudit, revisionCount: 1, scoreHistory: [60, 68, 76] });
+  assert.equal(improvingDecision.action, "revise");
 });
 
 test("quality review receives structural evidence from the compiled deliverables", () => {

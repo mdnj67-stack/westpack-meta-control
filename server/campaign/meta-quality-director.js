@@ -116,14 +116,17 @@ function normalizeMetaCreativeReview(value = {}, model = "") {
     improvement: String(byKey.get(key)?.improvement || "")
   }));
   const dimensionFloor = Math.min(...dimensions.map((item) => item.score));
-  const overallScore = Math.max(0, Math.min(100, Number(value.overallScore || 0)));
+  const reportedScore = Math.max(0, Math.min(100, Number(value.overallScore || 0)));
+  const averageDimensionScore = Math.round(dimensions.reduce((sum, item) => sum + item.score, 0) / dimensions.length);
+  const calibratedScore = Math.min(reportedScore, averageDimensionScore);
   const criticalFailures = Array.isArray(value.criticalFailures) ? value.criticalFailures : [];
-  const passed = value.verdict === "PASS" && overallScore >= META_CREATIVE_PASS_SCORE && dimensionFloor >= META_CREATIVE_DIMENSION_FLOOR && !criticalFailures.length;
+  const passed = value.verdict === "PASS" && calibratedScore >= META_CREATIVE_PASS_SCORE && dimensionFloor >= META_CREATIVE_DIMENSION_FLOOR && !criticalFailures.length;
   return {
     rubricVersion: META_CREATIVE_RUBRIC_VERSION,
     verdict: passed ? "PASS" : value.verdict === "BLOCKED" ? "BLOCKED" : "REVISE",
     passed,
-    overallScore,
+    overallScore: calibratedScore,
+    reportedScore,
     dimensionFloor,
     requiredScore: META_CREATIVE_PASS_SCORE,
     requiredDimensionFloor: META_CREATIVE_DIMENSION_FLOOR,
