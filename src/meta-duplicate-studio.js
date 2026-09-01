@@ -72,7 +72,12 @@ export function attachDuplicateStudioEventsModule({
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     const row = target.closest(".duplicate-bulk-item");
-    if (row instanceof HTMLElement && !target.closest("button")) {
+    // The inline media panel (video/carousel upload labels, clear buttons) lives inside this
+    // same row now, so a click there also matches ".duplicate-bulk-item" - without this
+    // exclusion, clicking a file-upload label re-renders the row (via focusDuplicateTargetEditor)
+    // in the middle of the browser's native label-click-opens-file-picker action, which silently
+    // kills the file dialog before it ever opens.
+    if (row instanceof HTMLElement && !target.closest("button") && !target.closest(".duplicate-bulk-item-media")) {
       const rowKey = row.getAttribute("data-duplicate-target-key") || "";
       const duplicateTarget = getDuplicateTargetByKey(rowKey);
       if (duplicateTarget) {
