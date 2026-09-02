@@ -331,7 +331,8 @@ export async function requestMetaPublish(requestBody) {
       || text.includes("too many calls")
       || text.includes("rate limit")
       || text.includes("application request limit reached")
-      || text.includes("user request limit reached");
+      || text.includes("user request limit reached")
+      || /\bcode (4|17|32|613)\b/.test(text);
   };
   const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
   const maxAttempts = 4;

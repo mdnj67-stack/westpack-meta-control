@@ -8,11 +8,17 @@ function sleep(ms) {
 
 function isRateLimitMessage(message = "") {
   const text = String(message || "").toLowerCase();
+  // graphRequest below always folds Meta's numeric error code into the message as "code N",
+  // so matching the known throttling codes (4 = app limit, 17 = user limit, 32 = page limit,
+  // 613 = custom rate limit) catches every throttling response regardless of the exact wording
+  // Meta happens to use for it - notably including the lower-ceiling errors an app running on
+  // Development Access (rather than Standard/Advanced) hits well before real usage limits.
   return text.includes("request limit reached")
     || text.includes("too many calls")
     || text.includes("rate limit")
     || text.includes("application request limit reached")
-    || text.includes("user request limit reached");
+    || text.includes("user request limit reached")
+    || /\bcode (4|17|32|613)\b/.test(text);
 }
 
 function readCacheEntry(key = "", maxAgeMs = META_LOOKUP_CACHE_MAX_AGE_MS) {
@@ -976,6 +982,7 @@ module.exports = {
   ensureAccountId,
   graphRequest,
   buildVideoAssetCustomizationRules,
+  isRateLimitMessage,
   createAd,
   createAdCreative,
   createAdCreativeFromSpec,

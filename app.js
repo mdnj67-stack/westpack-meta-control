@@ -777,10 +777,15 @@ let metaStudioCatalogPromise = null;
 
 function isMetaRateLimitMessage(message = "") {
   const text = String(message || "").toLowerCase();
+  // Kept in sync with server/lib/meta.js's isRateLimitMessage - the numeric-code match matters
+  // most for an app running on Meta's Development Access tier, whose much lower rate ceiling
+  // gets hit well before any wording containing "rate limit" literally shows up.
   return text.includes("request limit reached")
     || text.includes("too many calls")
     || text.includes("rate limit")
-    || text.includes("application request limit reached");
+    || text.includes("application request limit reached")
+    || text.includes("user request limit reached")
+    || /\bcode (4|17|32|613)\b/.test(text);
 }
 
 function setMetaSnapshotMeta(meta = null) {
@@ -15043,7 +15048,12 @@ function initializeApp() {
     refreshMetaData({ silent: true, reason: "Syncing Meta data" });
   }
 
-  loadMetaStudioCatalog({ silent: true });
+  // Not fetched eagerly here: both real entry points into the Studio tab (the tab button and
+  // the "jump to studio" shortcuts) already call refreshMetaWorkspaceData() themselves. Firing
+  // it again unconditionally at startup doubled the live Meta calls for every session that
+  // visits Studio, and cost one full call for sessions that never do - meaningful pressure
+  // against Meta's low development-tier rate limit, which is why the catalog intermittently
+  // fell back to the stale bundled snapshot under normal use.
 }
 
 function refreshModeAdSets(mode) {
