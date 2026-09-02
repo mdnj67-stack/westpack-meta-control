@@ -11077,10 +11077,17 @@ async function uploadVideoVariantToMeta(variant) {
   let startOffset = Number(startSession.startOffset || 0);
   let endOffset = Number(startSession.endOffset || 0);
   const fallbackChunkBytes = 1_000_000;
+  // Meta's own suggested window (end_offset - start_offset) can be the entire remaining
+  // file for anything under its own chunk-size threshold, which is often tens of MB - far
+  // more than a single request can carry through a serverless function. Vercel's functions
+  // reject a request body over ~4.5MB, and base64 inflates raw bytes by ~33%, so the actual
+  // transfer size per call is capped here regardless of what Meta offers; Meta's resumable
+  // upload protocol allows sending less than the offered window per call.
+  const maxChunkBytes = 2_800_000;
 
   while (startOffset < endOffset) {
     const requestedChunkBytes = endOffset > startOffset
-      ? (endOffset - startOffset)
+      ? Math.min(endOffset - startOffset, maxChunkBytes)
       : fallbackChunkBytes;
     const chunkEnd = Math.min(file.size, startOffset + requestedChunkBytes);
     const chunk = file.slice(startOffset, chunkEnd, file.type || "video/mp4");
