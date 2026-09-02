@@ -512,10 +512,24 @@ function summarizeCreativeForAi(creative) {
       }))
     : [];
 
+  // A creative built through Meta's asset-feed / dynamic-creative tooling carries its media
+  // in asset_feed_spec.images/videos instead of object_story_spec, which the checks above
+  // never look at. Missing this made every such ad register as "Single image" no matter its
+  // real format, which then routed a duplicate through the plain clone-creative path instead
+  // of the video/carousel override path - the source's original video always went out
+  // untouched because the app never realized there was a video to override in the first place.
+  const assetFeedSpec = creative?.asset_feed_spec || {};
+  const assetFeedImageCount = Array.isArray(assetFeedSpec.images)
+    ? assetFeedSpec.images.filter((item) => String(item?.hash || "").trim()).length
+    : 0;
+  const hasAssetFeedVideo = Array.isArray(assetFeedSpec.videos)
+    ? assetFeedSpec.videos.some((item) => String(item?.video_id || "").trim())
+    : false;
+
   return {
-    format: attachments.length
+    format: attachments.length || assetFeedImageCount >= 2
       ? "Carousel"
-      : videoData.video_id
+      : videoData.video_id || hasAssetFeedVideo
         ? "Video"
         : "Single image",
     primaryText: linkData.message || videoData.message || photoData.caption || "",
