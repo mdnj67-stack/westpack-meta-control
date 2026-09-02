@@ -86,7 +86,11 @@ test("preserves placements the generic default doesn't include, like Facebook se
   assert.deepEqual(verticalRule.customization_spec.instagram_positions.sort(), ["explore", "story"]);
 });
 
-test("a source with only feed-like placements produces just a square rule, no phantom vertical one", () => {
+test("a source with only feed-like placements falls back to null instead of an invalid single rule", () => {
+  // Meta rejects placement-customized asset feeds with fewer than 2 target rules (error code
+  // 100 / subcode 2446428, "Insufficient number of target rules"). A source ad that never ran
+  // on story/reels placements would otherwise produce just one rule here; returning null lets
+  // the caller fall back to its generic two-rule default instead of forwarding an invalid spec.
   const rules = buildVideoAssetCustomizationRules(
     {
       asset_customization_rules: [
@@ -100,6 +104,5 @@ test("a source with only feed-like placements produces just a square rule, no ph
     "video_vertical"
   );
 
-  assert.equal(rules.length, 1);
-  assert.equal(rules[0].video_label.name, "video_square");
+  assert.equal(rules, null);
 });

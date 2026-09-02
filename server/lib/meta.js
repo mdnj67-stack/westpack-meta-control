@@ -462,7 +462,11 @@ function buildVideoAssetCustomizationRules(sourceAssetFeedSpec, squareLabelName,
   if (grouped.vertical) {
     rules.push({ customization_spec: grouped.vertical, video_label: { name: verticalLabelName } });
   }
-  return rules.length ? rules : null;
+  // Meta rejects placement-customized asset feeds with fewer than 2 target rules (error code
+  // 100 / subcode 2446428). If the source ad's rules all collapsed onto one side (e.g. it only
+  // ever ran on feed placements, never story/reels), return null so the caller's generic
+  // two-rule default is used instead of forwarding an invalid single-rule spec to Meta.
+  return rules.length >= 2 ? rules : null;
 }
 
 async function ensureStorySpecVideoThumbnail(storySpec, accessToken) {
