@@ -405,6 +405,60 @@ function buildStorySpecFromAssetFeed(creative, preview, options = {}) {
   return null;
 }
 
+const STORY_LIKE_PLACEMENT_TOKENS = new Set(["story", "stories", "reels", "facebook_reels"]);
+
+function isStoryLikeCustomizationSpec(customizationSpec = {}) {
+  const facebookPositions = Array.isArray(customizationSpec.facebook_positions) ? customizationSpec.facebook_positions : [];
+  const instagramPositions = Array.isArray(customizationSpec.instagram_positions) ? customizationSpec.instagram_positions : [];
+  return [...facebookPositions, ...instagramPositions].some((position) => STORY_LIKE_PLACEMENT_TOKENS.has(String(position || "").toLowerCase()));
+}
+
+function mergePlacementList(existing, incoming) {
+  if (!Array.isArray(incoming) || !incoming.length) {
+    return existing;
+  }
+  return [...new Set([...(existing || []), ...incoming])];
+}
+
+// A duplicated video ad should keep exactly the placements the source ad actually ran on
+// (e.g. Facebook Search results, Instagram Explore) instead of a generic hardcoded set. The
+// source's own asset_customization_rules already describe that, split across (usually two)
+// rules that each point at one of its videos; the only thing that changes here is which video
+// each rule's label points to, so rules are re-grouped onto exactly two labels - one for the
+// square/feed video, one for the vertical/story video - by whether their placement list looks
+// story-like, merging placement lists together if the source had more than one rule per side.
+function buildVideoAssetCustomizationRules(sourceAssetFeedSpec, squareLabelName, verticalLabelName) {
+  const sourceRules = Array.isArray(sourceAssetFeedSpec?.asset_customization_rules)
+    ? sourceAssetFeedSpec.asset_customization_rules
+    : [];
+  if (!sourceRules.length) {
+    return null;
+  }
+
+  const grouped = { square: null, vertical: null };
+  for (const rule of sourceRules) {
+    const spec = rule?.customization_spec || {};
+    const side = isStoryLikeCustomizationSpec(spec) ? "vertical" : "square";
+    const current = grouped[side] || {};
+    grouped[side] = {
+      publisher_platforms: mergePlacementList(current.publisher_platforms, spec.publisher_platforms),
+      facebook_positions: mergePlacementList(current.facebook_positions, spec.facebook_positions),
+      instagram_positions: mergePlacementList(current.instagram_positions, spec.instagram_positions),
+      audience_network_positions: mergePlacementList(current.audience_network_positions, spec.audience_network_positions),
+      messenger_positions: mergePlacementList(current.messenger_positions, spec.messenger_positions)
+    };
+  }
+
+  const rules = [];
+  if (grouped.square) {
+    rules.push({ customization_spec: grouped.square, video_label: { name: squareLabelName } });
+  }
+  if (grouped.vertical) {
+    rules.push({ customization_spec: grouped.vertical, video_label: { name: verticalLabelName } });
+  }
+  return rules.length ? rules : null;
+}
+
 async function ensureStorySpecVideoThumbnail(storySpec, accessToken) {
   const videoData = storySpec?.video_data;
   if (!videoData || typeof videoData !== "object") {
@@ -921,6 +975,7 @@ async function createAdCreativeWithAssetFeed(accountId, accessToken, options = {
 module.exports = {
   ensureAccountId,
   graphRequest,
+  buildVideoAssetCustomizationRules,
   createAd,
   createAdCreative,
   createAdCreativeFromSpec,

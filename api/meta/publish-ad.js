@@ -3,6 +3,7 @@ const { requireAuth } = require("../../server/lib/auth");
 const { readJsonBody, sendJson } = require("../../server/lib/http");
 const { assertCampaignStudioCarouselContract } = require("../../server/campaign/meta-carousel-contract");
 const {
+  buildVideoAssetCustomizationRules,
   createAd,
   createAdCreative,
   createAdCreativeFromSpec,
@@ -243,7 +244,8 @@ async function publishVideoAdFromVariants({
   headline,
   description,
   uploadedVideoVariants = [],
-  videoVariants = []
+  videoVariants = [],
+  sourceAssetFeedSpec = null
 }) {
   const squareUploadedVideo = uploadedVideoVariants.find((variant) => variant?.key === "square") || null;
   const verticalUploadedVideo = uploadedVideoVariants.find((variant) => variant?.key === "vertical") || null;
@@ -323,15 +325,42 @@ async function publishVideoAdFromVariants({
     }
 
     videoStage = "create_creative";
+    // Prefer the source ad's own placement rules (Facebook Search results, Instagram
+    // Explore, etc. only show up here when the source actually used them) over the generic
+    // hardcoded pair - duplicating an ad should keep its real placement footprint, not reset
+    // it to a fixed default every time.
+    const assetCustomizationRules = buildVideoAssetCustomizationRules(sourceAssetFeedSpec, "video_square", "video_vertical")
+      || [
+        {
+          customization_spec: {
+            publisher_platforms: ["facebook", "instagram"],
+            facebook_positions: ["feed", "marketplace", "video_feeds"],
+            instagram_positions: ["stream", "explore", "profile_feed"]
+          },
+          video_label: { name: "video_square" }
+        },
+        {
+          customization_spec: {
+            publisher_platforms: ["facebook", "instagram"],
+            facebook_positions: ["story", "facebook_reels"],
+            instagram_positions: ["story", "reels"]
+          },
+          video_label: { name: "video_vertical" }
+        }
+      ];
+
     const creativeId = await createAdCreativeWithAssetFeed(
       config.metaAdAccountId,
       config.metaAccessToken,
       {
         name: creativeName,
         objectStorySpec,
+        degreesOfFreedomSpec: sourceAssetFeedSpec?.degrees_of_freedom_spec || "",
         assetFeedSpec: {
-          ad_formats: ["AUTOMATIC_FORMAT"],
-          optimization_type: "PLACEMENT",
+          ad_formats: Array.isArray(sourceAssetFeedSpec?.ad_formats) && sourceAssetFeedSpec.ad_formats.length
+            ? sourceAssetFeedSpec.ad_formats
+            : ["AUTOMATIC_FORMAT"],
+          optimization_type: sourceAssetFeedSpec?.optimization_type || "PLACEMENT",
           videos: [
             {
               video_id: squareVideoId,
@@ -349,24 +378,7 @@ async function publishVideoAdFromVariants({
           descriptions: [{ text: description }],
           link_urls: [{ website_url: destinationUrl }],
           call_to_action_types: ["LEARN_MORE"],
-          asset_customization_rules: [
-            {
-              customization_spec: {
-                publisher_platforms: ["facebook", "instagram"],
-                facebook_positions: ["feed", "marketplace", "video_feeds"],
-                instagram_positions: ["stream", "explore", "profile_feed"]
-              },
-              video_label: { name: "video_square" }
-            },
-            {
-              customization_spec: {
-                publisher_platforms: ["facebook", "instagram"],
-                facebook_positions: ["story", "facebook_reels"],
-                instagram_positions: ["story", "reels"]
-              },
-              video_label: { name: "video_vertical" }
-            }
-          ]
+          asset_customization_rules: assetCustomizationRules
         }
       }
     );
@@ -984,6 +996,14 @@ module.exports = async (req, res) => {
     if (body.ad_format === "Video" && creativeOverrideMode === "video") {
       try {
         const creativeName = buildMetaEntityName(body.source_ad_name, body.target_language, body.target_adset_name);
+        // Carry over the source ad's own placement footprint and creative settings (which
+        // placements it actually ran on, whether Advantage+ "flexible media" was on) instead
+        // of always publishing the same generic hardcoded default for every video override.
+        const sourceAdForVideoOverride = await getAdDetails(body.source_ad_id, config.metaAccessToken);
+        const sourceCreativeIdForVideoOverride = String(sourceAdForVideoOverride?.creative?.id || "").trim();
+        const sourceCreativeForVideoOverride = sourceCreativeIdForVideoOverride
+          ? await getCreativeDetails(sourceCreativeIdForVideoOverride, config.metaAccessToken)
+          : null;
         const result = await publishVideoAdFromVariants({
           config,
           targetAdSet,
@@ -994,7 +1014,8 @@ module.exports = async (req, res) => {
           headline: body.creative_strategy?.headline || body.source_ad_name || "Westpack",
           description: body.creative_strategy?.description || "",
           uploadedVideoVariants: duplicateUploadedVideoVariants,
-          videoVariants: duplicateVideoVariants
+          videoVariants: duplicateVideoVariants,
+          sourceAssetFeedSpec: sourceCreativeForVideoOverride?.asset_feed_spec || null
         });
         sendJson(res, 200, result);
         return;
@@ -1157,7 +1178,7 @@ module.exports = async (req, res) => {
       status: "PAUSED"
     });
   } catch (error) {
-    sendJson(res, 500, {
+    sendJson(res, Number(error?.statusCode) || 500, {
       error: error.message || "Meta publish failed."
     });
   }
