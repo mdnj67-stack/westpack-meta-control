@@ -14406,7 +14406,56 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
   };
 }
 
+// One panel failing must not blank the rest of the dashboard.
+//
+// Both outages on 2026-09-04 were a single ReferenceError - one in an objective label,
+// one in a trend badge - and each aborted renderDashboard before spend, revenue, ROAS and
+// every remaining panel had rendered. Neither figure was on a critical path; both took
+// the whole page down and left it reading zeros.
+//
+// Failures are collected rather than thrown, reported once at the end of the render, and
+// logged with their stack so the cause is still findable.
+const dashboardPanelFailures = [];
+
+function renderPanelSafely(label, render) {
+  try {
+    render();
+    return true;
+  } catch (error) {
+    dashboardPanelFailures.push({ label, message: error?.message || String(error) });
+    console.error(`[dashboard] ${label} failed to render`, error);
+    return false;
+  }
+}
+
+// Shape the renderers expect when the analysis phase itself fails, so they draw an empty
+// panel instead of throwing on a missing property.
+function emptyDashboardAnalysis() {
+  return {
+    executiveBrief: null,
+    pressureGroups: [],
+    cards: [],
+    pulseRows: [],
+    signals: [],
+    tableCampaigns: [],
+    quickInsight: null
+  };
+}
+
+function reportDashboardPanelFailures() {
+  if (!dashboardPanelFailures.length) {
+    // Nothing failed, so the status line is left exactly as the data layer set it.
+    return;
+  }
+  const names = dashboardPanelFailures.map((failure) => failure.label);
+  setSyncStatus(
+    `${dashboardPanelFailures.length} panel${dashboardPanelFailures.length === 1 ? "" : "s"} failed to render (${names.join(", ")}). The rest of the dashboard is unaffected. See the browser console for details.`,
+    "warning"
+  );
+}
+
 function renderDashboard() {
+  dashboardPanelFailures.length = 0;
   const lens = appState.dashboardLens;
   const allCampaigns = appState.campaigns || [];
   const factor = appState.dashboardIncrementalityFactor;
@@ -14414,14 +14463,31 @@ function renderDashboard() {
   const lensHasCampaigns = Array.isArray(lensCampaigns) && lensCampaigns.length > 0;
   const backendTrendCards = getBackendTrendCards(lens);
   const backendOverviewCards = getBackendOverviewCards();
-  const analysis = lens === "general"
-    ? buildGeneralDashboardAnalysis(allCampaigns, factor)
-    : buildDashboardAnalysis(lensCampaigns, lens, factor);
+  // The analysis phase is where the objectiveLabels ReferenceError lived, so it gets the
+  // same treatment as a panel: on failure the dashboard draws empty panels rather than
+  // nothing at all.
+  let analysis = emptyDashboardAnalysis();
+  renderPanelSafely("Analysis", () => {
+    analysis = lens === "general"
+      ? buildGeneralDashboardAnalysis(allCampaigns, factor)
+      : buildDashboardAnalysis(lensCampaigns, lens, factor);
+  });
   appState.dashboardAnalysis = analysis;
 
   const lensCopy = (() => {
     if (lens === "general") {
-      return getGeneralHeroCopy(analysis, allCampaigns);
+      // Reads the analysis, so it can fail for the same reasons the analysis can. A
+      // generic heading is a better outcome than an unrendered page.
+      let copy = {
+        kicker: "Daily operator view",
+        title: "General",
+        subtitle: "",
+        tableTitle: "Campaign snapshot"
+      };
+      renderPanelSafely("Hero copy", () => {
+        copy = getGeneralHeroCopy(analysis, allCampaigns);
+      });
+      return copy;
     }
     if (lens === "conversion_incremental") {
       return {
@@ -14489,50 +14555,80 @@ function renderDashboard() {
   }
 
   setDashboardHero(lensCopy);
-  renderHeroPanel(buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
-  renderStats(isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor));
-  renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
-  renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
-  renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
-  renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));
+  renderPanelSafely("Hero Panel", () => {
+    renderHeroPanel(buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
+  });
+  renderPanelSafely("Stats", () => {
+    renderStats(isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor));
+  });
+  renderPanelSafely("Overview Grid", () => {
+    renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
+  });
+  renderPanelSafely("Overview Spend Split", () => {
+    renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
+  });
+  renderPanelSafely("Overview Customer Acquisition", () => {
+    renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
+  });
+  renderPanelSafely("Trend Deck", () => {
+    renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));
+  });
   if (isEmptyLensState) {
     const emptyState = getLensEmptyStateCopy(lens);
-    renderExecutiveBrief({
-      kicker: getDashboardDateLabel(),
-      headline: emptyState.headline,
-      body: emptyState.body,
-      points: [
-        {
-          label: "Current scope",
-          value: "0 campaigns",
-          meta: "Nothing is available to rank in this lens."
-        },
-        {
-          label: "Date range",
-          value: getDashboardDateLabel(),
-          meta: "The current filter returned no campaigns in this track."
-        },
-        {
-          label: "Next step",
-          value: "Review scope",
-          meta: emptyState.nextStep
-        }
-      ]
+    renderPanelSafely("Executive Brief", () => {
+      renderExecutiveBrief({
+        kicker: getDashboardDateLabel(),
+        headline: emptyState.headline,
+        body: emptyState.body,
+        points: [
+          {
+            label: "Current scope",
+            value: "0 campaigns",
+            meta: "Nothing is available to rank in this lens."
+          },
+          {
+            label: "Date range",
+            value: getDashboardDateLabel(),
+            meta: "The current filter returned no campaigns in this track."
+          },
+          {
+            label: "Next step",
+            value: "Review scope",
+            meta: emptyState.nextStep
+          }
+        ]
+      });
     });
-    renderPressureGrid([]);
+    renderPanelSafely("Pressure Grid", () => {
+      renderPressureGrid([]);
+    });
   } else {
-    renderExecutiveBrief(analysis.executiveBrief);
-    renderPressureGrid(analysis.pressureGroups);
+    renderPanelSafely("Executive Brief", () => {
+      renderExecutiveBrief(analysis.executiveBrief);
+    });
+    renderPanelSafely("Pressure Grid", () => {
+      renderPressureGrid(analysis.pressureGroups);
+    });
   }
-  renderMetaQualityPanel(buildMetaQualityCards());
+  renderPanelSafely("Meta Quality Panel", () => {
+    renderMetaQualityPanel(buildMetaQualityCards());
+  });
   const actionCardLimit = lens === "awareness" || lens === "leads" ? 3 : 4;
-  renderDecisionBoard(isEmptyLensState ? [] : (analysis.cards || []).slice(0, actionCardLimit));
+  renderPanelSafely("Decision Board", () => {
+    renderDecisionBoard(isEmptyLensState ? [] : (analysis.cards || []).slice(0, actionCardLimit));
+  });
   const pulseLimit = lens === "awareness" || lens === "leads" ? 2 : 3;
-  renderCampaignPulse(isEmptyLensState ? [] : (analysis.pulseRows || []).slice(0, pulseLimit));
-  renderCardList("pattern-list", isEmptyLensState ? [] : analysis.signals, "pattern-item");
-  renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
-    incrementalityFactor: factor,
-    currency: appState.metaCurrency || "EUR"
+  renderPanelSafely("Campaign Pulse", () => {
+    renderCampaignPulse(isEmptyLensState ? [] : (analysis.pulseRows || []).slice(0, pulseLimit));
+  });
+  renderPanelSafely("Card List", () => {
+    renderCardList("pattern-list", isEmptyLensState ? [] : analysis.signals, "pattern-item");
+  });
+  renderPanelSafely("Campaign Table", () => {
+    renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
+      incrementalityFactor: factor,
+      currency: appState.metaCurrency || "EUR"
+    });
   });
 
   if (playbookNode) {
@@ -14704,9 +14800,15 @@ function renderDashboard() {
   if (appState.dashboardAgentLastLens !== agentLensKey) {
     appState.dashboardAgentItems = [];
     appState.dashboardAgentLastLens = agentLensKey;
-    renderDashboardAgentList([]);
+    renderPanelSafely("Dashboard Agent List", () => {
+      renderDashboardAgentList([]);
+    });
     setDashboardAgentStatus("");
   }
+
+  // Reported once, after every panel has had its turn, so a single failure is visible
+  // without hiding the panels that rendered fine.
+  reportDashboardPanelFailures();
 }
 
 function buildAgentPayload(lens, analysis) {
