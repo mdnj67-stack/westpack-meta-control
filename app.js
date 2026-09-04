@@ -29,6 +29,12 @@ import {
   splitAggregateSeries
 } from "./src/meta-dashboard-metrics.js?v=20260507-meta-dashboardmetrics1";
 import {
+  OBJECTIVE_GROUP_DISPLAY_ORDER,
+  classifyCampaign,
+  resolveObjectiveGroupLabel,
+  splitByCategory
+} from "./src/meta-objectives.js?v=20260904-metaobjectives1";
+import {
   duplicateKlaviyoCampaignWithAiVariantAction,
   generateKlaviyoCampaignVariantPreviewAction,
   renderKlaviyoCampaignAiPanel
@@ -214,7 +220,6 @@ import {
   renderCampaignPulse,
   renderExecutiveBrief,
   renderPressureGrid,
-  renderMetaBudgetVisualization,
   renderMetaQualityPanel,
   renderOverviewGrid,
   renderOverviewSpendSplit,
@@ -12514,76 +12519,6 @@ function applyCampaignAttribution(campaigns, adSets) {
   });
 }
 
-function normalizeObjective(value) {
-  return String(value || "").trim().toUpperCase();
-}
-
-function classifyCampaign(campaign) {
-  const explicitCategory = String(campaign?.category || campaign?.lens || "").trim().toLowerCase();
-  if (explicitCategory === "awareness" || explicitCategory === "leads" || explicitCategory === "conversion") {
-    return explicitCategory;
-  }
-
-  const objective = normalizeObjective(campaign?.objective);
-  const name = String(campaign?.name || "").toLowerCase();
-
-  const purchases = toFiniteNumber(campaign?.purchases_value);
-  const leads = toFiniteNumber(campaign?.leads_value);
-
-  const awarenessObjectives = new Set([
-    "AWARENESS",
-    "BRAND_AWARENESS",
-    "REACH",
-    "VIDEO_VIEWS",
-    "THRUPLAY",
-    "ENGAGEMENT",
-    "POST_ENGAGEMENT",
-    "PAGE_LIKES",
-    "EVENT_RESPONSES",
-    "OUTCOME_AWARENESS",
-    "OUTCOME_ENGAGEMENT",
-    "TRAFFIC",
-    "OUTCOME_TRAFFIC"
-  ]);
-
-  const leadObjectives = new Set([
-    "LEAD_GENERATION",
-    "OUTCOME_LEADS",
-    "MESSAGES"
-  ]);
-
-  const conversionObjectives = new Set([
-    "CONVERSIONS",
-    "OUTCOME_SALES",
-    "CATALOG_SALES",
-    "PRODUCT_CATALOG_SALES",
-    "APP_INSTALLS",
-    "OUTCOME_APP_PROMOTION"
-  ]);
-
-  if (leadObjectives.has(objective)) return "leads";
-  if (awarenessObjectives.has(objective)) return "awareness";
-  if (conversionObjectives.has(objective)) return "conversion";
-
-  if (/^ba[\s-_]?\d/i.test(name) || /\bawareness\b|\breach\b/.test(name)) return "awareness";
-
-  if (purchases > 0) return "conversion";
-  if (leads > 0) return "leads";
-
-  if (/\blead\b|\bform\b|\binquir|\bkontakt\b/.test(name)) return "leads";
-  if (/\bremarket|\bprospecting|\bconv\b|\bconversion\b|\bsales\b/.test(name)) return "conversion";
-  return "awareness";
-}
-
-function splitByCategory(campaigns) {
-  const buckets = { awareness: [], leads: [], conversion: [] };
-  (campaigns || []).forEach((campaign) => {
-    const category = classifyCampaign(campaign);
-    (buckets[category] || buckets.awareness).push(campaign);
-  });
-  return buckets;
-}
-
 function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributionSpecs = []) {
   if (!campaign) {
     return { mode: "standard", source: "baseline default", explicit: false };
@@ -12761,94 +12696,23 @@ function getDashboardPeriodDays() {
   return 30;
 }
 
-function estimateMonthlyBudgetFrontend(campaigns = [], adSets = [], periodDays = 30) {
-  const campaignMap = new Map();
-
-  (campaigns || []).forEach((campaign) => {
-    const id = String(campaign?.id || "").trim();
-    if (!id) return;
-    campaignMap.set(id, {
-      category: classifyCampaign(campaign),
-      attributionMode: classifyConversionAttribution(campaign),
-      campaignDailyBudget: toFiniteNumber(campaign?.daily_budget),
-      adSetDailyBudget: 0
-    });
-  });
-
-  (adSets || []).forEach((adSet) => {
-    const campaignId = String(adSet?.campaignId || "").trim();
-    if (!campaignId || !campaignMap.has(campaignId)) return;
-    campaignMap.get(campaignId).adSetDailyBudget += toFiniteNumber(adSet?.daily_budget);
-  });
-
-  const normalizedPeriodDays = Math.max(1, Number(periodDays) || 30);
-  let totalDailyBudget = 0;
-  let awarenessDailyBudget = 0;
-  let leadsDailyBudget = 0;
-  let conversionDailyBudget = 0;
-  let conversionStandardDailyBudget = 0;
-  let conversionIncrementalDailyBudget = 0;
-
-  campaignMap.forEach((entry) => {
-    const dailyBudget = entry.adSetDailyBudget > 0 ? entry.adSetDailyBudget : entry.campaignDailyBudget;
-    if (!(dailyBudget > 0)) return;
-    totalDailyBudget += dailyBudget;
-
-    if (entry.category === "awareness") {
-      awarenessDailyBudget += dailyBudget;
-      return;
-    }
-    if (entry.category === "leads") {
-      leadsDailyBudget += dailyBudget;
-      return;
-    }
-    conversionDailyBudget += dailyBudget;
-    if (entry.attributionMode === "incremental") {
-      conversionIncrementalDailyBudget += dailyBudget;
-      return;
-    }
-    conversionStandardDailyBudget += dailyBudget;
-  });
-
-  return {
-    totalMonthlyBudget: totalDailyBudget * 30,
-    totalPeriodBudget: totalDailyBudget * normalizedPeriodDays,
-    totalDailyBudget,
-    periodDays: normalizedPeriodDays,
-    awarenessDailyBudget,
-    leadsDailyBudget,
-    conversionDailyBudget,
-    conversionStandardDailyBudget,
-    conversionIncrementalDailyBudget,
-    awarenessMonthlyBudget: awarenessDailyBudget * 30,
-    awarenessPeriodBudget: awarenessDailyBudget * normalizedPeriodDays,
-    leadsMonthlyBudget: leadsDailyBudget * 30,
-    leadsPeriodBudget: leadsDailyBudget * normalizedPeriodDays,
-    conversionMonthlyBudget: conversionDailyBudget * 30,
-    conversionPeriodBudget: conversionDailyBudget * normalizedPeriodDays,
-    conversionStandardMonthlyBudget: conversionStandardDailyBudget * 30,
-    conversionStandardPeriodBudget: conversionStandardDailyBudget * normalizedPeriodDays,
-    conversionIncrementalMonthlyBudget: conversionIncrementalDailyBudget * 30,
-    conversionIncrementalPeriodBudget: conversionIncrementalDailyBudget * normalizedPeriodDays
-  };
-}
-
+// Budget amounts are never derived in the browser. Meta reports budgets in minor
+// currency units and the server normalises them exactly once, so the client either
+// renders the server's `quality.budgetAllocation` or renders no budget at all.
+//
+// Budget is always stated per 30-day month, because that is the unit the marketing team
+// budgets in. Actual spend stays the real amount spent in the selected range, and the two
+// are compared through a 30-day spend pace rather than by rescaling the budget.
 function buildGeneralSpendDistribution(campaigns = [], currency = appState.metaCurrency || "DKK") {
   const normalizedCurrency = String(currency || "DKK").trim().toUpperCase() || "DKK";
   const buckets = splitByCategory(campaigns);
   const totalAmount = sumMetric(campaigns, "spend_value");
-  const backendBudgetAllocation = appState.metaDashboard?.quality?.budgetAllocation || null;
+  const budgetAllocation = appState.metaDashboard?.quality?.budgetAllocation || null;
   const periodDays = getDashboardPeriodDays();
-  const periodShortLabel = appState.dashboardDateShortLabel || `${periodDays}d`;
-  const fallbackBudgetAllocation = estimateMonthlyBudgetFrontend(campaigns, appState.adSets || [], periodDays);
-  const budgetAllocation = backendBudgetAllocation || fallbackBudgetAllocation;
-  const totalBudgetAmount = toFiniteNumber(budgetAllocation?.totalPeriodBudget);
-  const totalMonthlyBudgetAmount = toFiniteNumber(budgetAllocation?.totalMonthlyBudget);
-  const budgetByKey = {
-    awareness: toFiniteNumber(budgetAllocation?.awarenessPeriodBudget ?? (toFiniteNumber(budgetAllocation?.awarenessDailyBudget) * periodDays)),
-    conversion: toFiniteNumber(budgetAllocation?.conversionPeriodBudget ?? (toFiniteNumber(budgetAllocation?.conversionDailyBudget) * periodDays)),
-    leads: toFiniteNumber(budgetAllocation?.leadsPeriodBudget ?? (toFiniteNumber(budgetAllocation?.leadsDailyBudget) * periodDays))
-  };
+  const monthlyBudgetByGroup = budgetAllocation?.monthlyBudgetByGroup || {};
+  const totalBudgetAmount = toFiniteNumber(budgetAllocation?.totalMonthlyBudget);
+  const spendToMonthlyPace = 30 / Math.max(1, periodDays);
+  const totalMonthlySpendPace = totalAmount * spendToMonthlyPace;
 
   const formatValue = (value) => new Intl.NumberFormat("en-GB", {
     style: "currency",
@@ -12856,104 +12720,72 @@ function buildGeneralSpendDistribution(campaigns = [], currency = appState.metaC
     maximumFractionDigits: 2
   }).format(value);
 
+  const items = OBJECTIVE_GROUP_DISPLAY_ORDER
+    .map((group) => ({
+      key: group,
+      label: resolveObjectiveGroupLabel(group),
+      campaignCount: (buckets[group] || []).length,
+      amount: sumMetric(buckets[group] || [], "spend_value"),
+      budgetAmount: toFiniteNumber(monthlyBudgetByGroup[group])
+    }))
+    .filter((item) => item.campaignCount > 0 || item.amount > 0 || item.budgetAmount > 0)
+    .map((item) => {
+      const monthlySpendPace = item.amount * spendToMonthlyPace;
+      return {
+        ...item,
+        percentage: totalAmount > 0 ? Number(((item.amount / totalAmount) * 100).toFixed(1)) : 0,
+        formattedAmount: formatValue(item.amount),
+        formattedBudgetAmount: item.budgetAmount > 0 ? formatValue(item.budgetAmount) : "--",
+        budgetPercentage: totalBudgetAmount > 0 ? Number(((item.budgetAmount / totalBudgetAmount) * 100).toFixed(1)) : 0,
+        monthlySpendPace,
+        formattedMonthlySpendPace: formatValue(monthlySpendPace),
+        pacePercentage: item.budgetAmount > 0 ? Number(((monthlySpendPace / item.budgetAmount) * 100).toFixed(1)) : 0
+      };
+    });
+
   return {
     currency: normalizedCurrency,
     totalAmount,
     formattedTotalAmount: formatValue(totalAmount),
     totalLabel: getDashboardSpendLabel(),
+    periodDays,
+    totalMonthlySpendPace,
+    formattedTotalMonthlySpendPace: formatValue(totalMonthlySpendPace),
+    totalPacePercentage: totalBudgetAmount > 0
+      ? Number(((totalMonthlySpendPace / totalBudgetAmount) * 100).toFixed(1))
+      : 0,
     totalBudgetAmount,
     formattedTotalBudgetAmount: totalBudgetAmount > 0 ? formatValue(totalBudgetAmount) : "--",
-    kpiBudgetAmount: totalMonthlyBudgetAmount,
-    formattedKpiBudgetAmount: totalMonthlyBudgetAmount > 0 ? formatValue(totalMonthlyBudgetAmount) : "--",
-    kpiBudgetLabel: "Planned 30-day budget",
-    kpiBudgetMeta: "Projected 30-day pace based on active Meta campaign and ad set budgets.",
-    totalBudgetLabel: `Planned budget (${periodShortLabel})`,
-    budgetMixLabel: `Planned budget mix (${periodShortLabel})`,
+    kpiBudgetAmount: totalBudgetAmount,
+    formattedKpiBudgetAmount: totalBudgetAmount > 0 ? formatValue(totalBudgetAmount) : "--",
+    kpiBudgetLabel: "Planned budget (30 days)",
+    kpiBudgetMeta: budgetAllocation
+      ? "Monthly budget from the active Meta campaign and ad set budgets, including lifetime budgets spread across their flight."
+      : "Planned budget needs a live Meta sync. Spend figures are real; budget figures stay blank rather than estimated.",
+    budgetAvailable: Boolean(budgetAllocation),
+    totalBudgetLabel: "Planned budget (30 days)",
+    budgetMixLabel: "Planned budget mix (30 days)",
+    spendMixLabel: `Actual spend mix (${appState.dashboardDateShortLabel || `${periodDays}d`})`,
+    paceLabel: periodDays === 30 ? "Spend vs monthly budget" : "30-day spend pace vs monthly budget",
     rangeLabel: getDashboardDateLabel(),
-    summaryMeta: "Real spend in the selected range, plus planned budget by objective for the same period. Topline planned budget stays fixed at 30 days.",
+    summaryMeta: budgetAllocation
+      ? `Actual spend covers ${getDashboardDateLabel()}. Planned budget is always stated per 30-day month, and pacing compares a 30-day spend pace against it.`
+      : `Actual spend covers ${getDashboardDateLabel()}, grouped by the objective Meta reports on each campaign. Planned budget is unavailable without a live Meta sync.`,
     title: "Spend and planned budget",
-    subtitle: `Real spend for ${getDashboardDateLabel()} plus planned budget for the same period based on the active campaign/ad set budgets in Meta. Conversion combines standard and incremental campaigns here.`,
-    items: [
-      { key: "awareness", label: "Brand Awareness", amount: sumMetric(buckets.awareness, "spend_value") },
-      { key: "conversion", label: "Conversion", amount: sumMetric(buckets.conversion, "spend_value") },
-      { key: "leads", label: "Leads", amount: sumMetric(buckets.leads, "spend_value") }
-    ].map((item) => ({
-      ...item,
-      percentage: totalAmount > 0 ? Number(((item.amount / totalAmount) * 100).toFixed(1)) : 0,
-      formattedAmount: formatValue(item.amount),
-      budgetAmount: budgetByKey[item.key] || 0,
-      formattedBudgetAmount: (budgetByKey[item.key] || 0) > 0 ? formatValue(budgetByKey[item.key] || 0) : "--",
-      budgetPercentage: totalBudgetAmount > 0 ? Number((((budgetByKey[item.key] || 0) / totalBudgetAmount) * 100).toFixed(1)) : 0
-    }))
+    subtitle: `Actual spend for ${getDashboardDateLabel()} against the 30-day planned budget, grouped by the objective Meta reports on each campaign. Conversion combines standard and incremental campaigns here.`,
+    items
   };
 }
 
 function getGeneralSpendDistributionModel(campaigns = []) {
+  // The server builds this payload from the same objective grouping and from budgets it
+  // has already normalised, so when it is present it is used as-is.
   const backendSplit = appState.metaDashboard?.quality?.generalSpendDistribution;
-  const backendBudgetAllocation = appState.metaDashboard?.quality?.budgetAllocation || null;
-  const periodDays = getDashboardPeriodDays();
-  const periodShortLabel = appState.dashboardDateShortLabel || `${periodDays}d`;
-  const fallbackBudgetAllocation = estimateMonthlyBudgetFrontend(campaigns, appState.adSets || [], periodDays);
-  const budgetAllocation = backendBudgetAllocation || fallbackBudgetAllocation;
   if (backendSplit && Array.isArray(backendSplit.items) && backendSplit.items.length) {
-    const normalizedCurrency = String(backendSplit.currency || appState.metaCurrency || "DKK").trim().toUpperCase() || "DKK";
-    const totalAmount = Number(backendSplit.totalAmount) || 0;
-    const totalBudgetAmount = toFiniteNumber(backendSplit.totalBudgetAmount) || toFiniteNumber(budgetAllocation?.totalPeriodBudget);
-    const totalMonthlyBudgetAmount = toFiniteNumber(backendSplit.kpiBudgetAmount) || toFiniteNumber(budgetAllocation?.totalMonthlyBudget);
-    const budgetByKey = {
-      awareness: toFiniteNumber(budgetAllocation?.awarenessPeriodBudget ?? (toFiniteNumber(budgetAllocation?.awarenessDailyBudget) * periodDays)),
-      conversion: toFiniteNumber(budgetAllocation?.conversionPeriodBudget ?? (toFiniteNumber(budgetAllocation?.conversionDailyBudget) * periodDays)),
-      leads: toFiniteNumber(budgetAllocation?.leadsPeriodBudget ?? (toFiniteNumber(budgetAllocation?.leadsDailyBudget) * periodDays))
-    };
-    return {
-      ...backendSplit,
-      items: backendSplit.items.map((item) => ({
-        ...item,
-        budgetAmount: toFiniteNumber(item?.budgetAmount) || budgetByKey[item.key] || 0,
-        formattedBudgetAmount: item?.formattedBudgetAmount || ((budgetByKey[item.key] || 0) > 0 ? new Intl.NumberFormat("en-GB", {
-          style: "currency",
-          currency: normalizedCurrency,
-          maximumFractionDigits: 2
-        }).format(budgetByKey[item.key] || 0) : "--"),
-        budgetPercentage: Number.isFinite(Number(item?.budgetPercentage))
-          ? Number(item.budgetPercentage)
-          : totalBudgetAmount > 0
-            ? Number((((budgetByKey[item.key] || 0) / totalBudgetAmount) * 100).toFixed(1))
-            : 0
-      })),
-      formattedTotalAmount: backendSplit.formattedTotalAmount || new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: normalizedCurrency,
-        maximumFractionDigits: 2
-      }).format(totalAmount),
-      totalBudgetAmount,
-      formattedTotalBudgetAmount: backendSplit.formattedTotalBudgetAmount || (totalBudgetAmount > 0 ? new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: normalizedCurrency,
-        maximumFractionDigits: 2
-      }).format(totalBudgetAmount) : "--"),
-      kpiBudgetAmount: totalMonthlyBudgetAmount,
-      formattedKpiBudgetAmount: backendSplit.formattedKpiBudgetAmount || (totalMonthlyBudgetAmount > 0 ? new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: normalizedCurrency,
-        maximumFractionDigits: 2
-      }).format(totalMonthlyBudgetAmount) : "--"),
-      kpiBudgetLabel: backendSplit.kpiBudgetLabel || "Planned 30-day budget",
-      kpiBudgetMeta: backendSplit.kpiBudgetMeta || "Projected 30-day pace based on active Meta campaign and ad set budgets.",
-      totalBudgetLabel: backendSplit.totalBudgetLabel || `Planned budget (${periodShortLabel})`,
-      budgetMixLabel: backendSplit.budgetMixLabel || `Planned budget mix (${periodShortLabel})`,
-      rangeLabel: backendSplit.rangeLabel || getDashboardDateLabel(),
-      summaryMeta: backendSplit.summaryMeta || "Real spend in the selected range, plus planned budget by objective for the same period. Topline planned budget stays fixed at 30 days.",
-      title: backendSplit.title || "Spend and planned budget",
-      subtitle: backendSplit.subtitle || `Real spend for ${getDashboardDateLabel()} plus planned budget for the same period based on the active campaign/ad set budgets in Meta. Conversion combines standard and incremental campaigns here.`
-    };
+    return { ...backendSplit, budgetAvailable: toFiniteNumber(backendSplit.totalBudgetAmount) > 0 };
   }
 
-  return {
-    ...buildGeneralSpendDistribution(campaigns, appState.metaCurrency || "DKK"),
-    title: "Spend and planned budget",
-    subtitle: `Real spend for ${getDashboardDateLabel()} plus planned budget for the same period based on the active campaign/ad set budgets in Meta. Conversion combines standard and incremental campaigns here.`
-  };
+  return buildGeneralSpendDistribution(campaigns, appState.metaCurrency || "DKK");
 }
 
 function buildGeneralStats(campaigns) {
@@ -13118,50 +12950,55 @@ function buildGeneralKpiStrip(campaigns = []) {
 
 function buildGeneralObjectivePerformanceRows(campaigns = []) {
   const buckets = splitByCategory(campaigns);
-  const objectiveGroups = [
-    {
-      key: "awareness",
-      label: "Brand Awareness",
-      campaigns: buckets.awareness,
-      tone: "awareness",
-      metricLabel: "CPM",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.awareness);
-        const cpm = computeAggregateMetric(series, "cpm");
-        return cpm > 0 ? formatDashboardCurrency(cpm) : "--";
-      })()
-    },
-    {
-      key: "conversion",
-      label: "Conversion",
-      campaigns: buckets.conversion,
-      tone: "conversion",
+  // Each objective family gets the headline metric that actually means something for it,
+  // and anything else falls back to CPM. Groups with no campaigns are dropped, so the
+  // rows mirror what the account really runs.
+  const metricByGroup = {
+    conversion: {
       metricLabel: "ROAS",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.conversion);
+      resolve: (series) => {
         const roas = computeAggregateMetric(series, "roas");
         return roas > 0 ? formatDashboardNumber(roas, 2) : "--";
-      })()
+      }
     },
-    {
-      key: "leads",
-      label: "Leads",
-      campaigns: buckets.leads,
-      tone: "leads",
+    leads: {
       metricLabel: "CPL",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.leads);
+      resolve: (series) => {
         const cpl = computeAggregateMetric(series, "cpl");
         return cpl > 0 ? formatDashboardCurrency(cpl) : "--";
-      })()
+      }
     }
-  ];
+  };
+  const defaultMetric = {
+    metricLabel: "CPM",
+    resolve: (series) => {
+      const cpm = computeAggregateMetric(series, "cpm");
+      return cpm > 0 ? formatDashboardCurrency(cpm) : "--";
+    }
+  };
+
+  const objectiveGroups = OBJECTIVE_GROUP_DISPLAY_ORDER
+    .filter((group) => (buckets[group] || []).length > 0)
+    .map((group) => {
+      const groupCampaigns = buckets[group] || [];
+      const metric = metricByGroup[group] || defaultMetric;
+      return {
+        key: group,
+        label: resolveObjectiveGroupLabel(group),
+        campaigns: groupCampaigns,
+        tone: group,
+        metricLabel: metric.metricLabel,
+        metricValue: metric.resolve(buildAggregateSeries(groupCampaigns))
+      };
+    });
 
   const maxSpend = Math.max(
     ...objectiveGroups.map((group) => sumMetric(group.campaigns, "spend_value")),
     1
   );
-  const totalSpend = objectiveGroups.reduce((sum, group) => sum + sumMetric(group.campaigns, "spend_value"), 0);
+  // Denominator is every campaign in scope, not just the groups rendered above, so the
+  // shares cannot silently add up to 100% while excluding spend.
+  const totalSpend = sumMetric(campaigns, "spend_value");
 
   return objectiveGroups.map((group) => {
     const spend = sumMetric(group.campaigns, "spend_value");
@@ -13226,11 +13063,6 @@ function buildGeneralPerformerGroups(campaigns = []) {
 function buildGeneralQuickInsight(campaigns = []) {
   const series = buildAggregateSeries(campaigns);
   const objectiveBuckets = splitByCategory(campaigns);
-  const objectiveLabels = {
-    awareness: "Brand Awareness",
-    conversion: "Conversion",
-    leads: "Leads"
-  };
   const changeCandidates = [
     { label: "Spend", metric: "spend", positiveDirection: "up" },
     { label: "Revenue", metric: "revenue", positiveDirection: "up" },
@@ -13260,7 +13092,7 @@ function buildGeneralQuickInsight(campaigns = []) {
       ? "flat"
       : "up";
   const body = biggestChange
-    ? `${biggestChange.label} ${directionWord} ${Math.abs(biggestChange.summary.percentChange).toFixed(1)}% vs previous period${objectiveDriver ? `, driven most by ${objectiveLabels[objectiveDriver.key] || objectiveDriver.key}.` : "."}`
+    ? `${biggestChange.label} ${directionWord} ${Math.abs(biggestChange.summary.percentChange).toFixed(1)}% vs previous period${objectiveDriver ? `, driven most by ${resolveObjectiveGroupLabel(objectiveDriver.key)}.` : "."}`
     : `${getDashboardDateLabel()}: not enough prior-period data to highlight a meaningful change yet.`;
 
   const bestObjective = [...buildGeneralObjectivePerformanceRows(campaigns)]
@@ -14658,7 +14490,6 @@ function renderDashboard() {
   setDashboardHero(lensCopy);
   renderHeroPanel(buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
   renderStats(isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor));
-  renderMetaBudgetVisualization(getGeneralSpendDistributionModel(allCampaigns), false);
   renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
   renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
   renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));

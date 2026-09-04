@@ -9,6 +9,7 @@ const {
   QUALITY_REVIEW_SCORE,
   QUALITY_VETO_FLOORS,
   buildContentCraftEvidence,
+  buildQualityReviewPrompt,
   buildQualityReviewSchema,
   buildRenderedArtifactEvidence,
   decideQualityNextStep,
@@ -26,6 +27,7 @@ const {
 } = require("../server/campaign/content-agent-worker");
 const { renderPremiumCampaignEmail } = require("../server/campaign/email-design");
 const { EMAIL_MODULE_SYSTEM_VERSION, WESTPACK_EMAIL_MASTER } = require("../server/campaign/email-module-library");
+const { META_CAROUSEL_MAX_CARDS, META_CAROUSEL_MIN_CARDS } = require("../server/campaign/meta-carousel-contract");
 
 function buildReview(overrides = {}) {
   return normalizeQualityReview({
@@ -118,6 +120,18 @@ test("quality gate passes only a high-scoring complete independent review", () =
   assert.ok(buildCampaignArtifactSchema().properties.email.properties.sections.items.required.includes("moduleId"));
   assert.equal(buildCampaignArtifactSchema().properties.email.properties.sections.items.properties.moduleId.enum.length, 10);
   assert.ok(buildCampaignArtifactSchema().properties.email.properties.sections.items.required.includes("imageUrl"));
+});
+
+test("quality review prompt describes the real reviewable-tier triggers instead of a stale revision count", () => {
+  const promptText = buildQualityReviewPrompt({
+    input: {},
+    plan: {},
+    artifactPack: { email: {}, meta: { carouselConcepts: [] } },
+    deterministicAudit: { verdict: "ready" }
+  })[0].content[0].text;
+  assert.ok(!/two targeted revisions/i.test(promptText));
+  assert.ok(promptText.includes(`after ${QUALITY_MAX_REVISIONS} revision attempts`));
+  assert.ok(/stagnat/i.test(promptText));
 });
 
 test("quality gate rejects low dimensions, critical failures and deterministic failures", () => {
@@ -367,6 +381,114 @@ test("deterministic QA rejects campaign email HTML without locked universal cont
   assert.equal(audit.checks.find((check) => check.key === "universal_header_2023").passed, false);
   assert.equal(audit.checks.find((check) => check.key === "universal_footer_2023").passed, false);
   assert.notEqual(audit.verdict, "ready");
+});
+
+test("deterministic QA's carousel card-count gate stays in sync with the shared meta-carousel-contract bounds", () => {
+  const makeConcepts = (cardCount) => [
+    { cards: Array.from({ length: cardCount }, () => ({})) },
+    { cards: Array.from({ length: cardCount }, () => ({})) }
+  ];
+  const auditWithCardCount = (cardCount) => buildQualityAudit(
+    { campaignObject: { linkedTasks: { campaignTask: { id: "campaign" }, contentTask: { id: "content" } } } },
+    { campaign: {}, sourceAudit: {} },
+    {
+      input: { assets: [] },
+      artifacts: {
+        email: { bodyHtml: '<h1>Campaign</h1><span data-primary-cta="true">Read more</span>', primaryCtaUrl: "" },
+        meta: { headline: "Campaign", primaryText: "Safe copy", carouselConcepts: makeConcepts(cardCount) },
+        blog: { bodyHtml: "<p>Complete article.</p>" }
+      }
+    },
+    []
+  );
+  const carouselCheck = (audit) => audit.checks.find((check) => check.key === "meta_carousel").passed;
+  assert.equal(carouselCheck(auditWithCardCount(META_CAROUSEL_MIN_CARDS)), true);
+  assert.equal(carouselCheck(auditWithCardCount(META_CAROUSEL_MIN_CARDS - 1)), false);
+  assert.equal(carouselCheck(auditWithCardCount(META_CAROUSEL_MAX_CARDS)), true);
+  assert.equal(carouselCheck(auditWithCardCount(META_CAROUSEL_MAX_CARDS + 1)), false);
+});
+
+test("deterministic QA catches an image-required module that compiled with no image", () => {
+  const assignedUrl = "https://cdn.example.com/mismatched-transcription.jpg";
+  const resolvedUrls = ["https://cdn.example.com/actually-probed.jpg"];
+  const compiledEmail = renderPremiumCampaignEmail({
+    subject: "Campaign",
+    primaryCta: "Read more",
+    primaryCtaUrl: "",
+    heroLayout: "typographic",
+    heroImageMode: "none",
+    sections: [{
+      label: "Detail",
+      headline: "Product detail",
+      body: "A precise product detail earns attention.",
+      bullets: [],
+      moduleId: "image_full",
+      layout: "image_full",
+      imageUrl: assignedUrl,
+      imageMode: "assigned",
+      imageAlt: "Product detail"
+    }],
+    closingHeadline: "Next step",
+    closingBody: "Continue the conversation."
+  }, { title: "Campaign", markets: ["DK"], resolvedEmailImageUrls: resolvedUrls });
+  const moduleBlock = compiledEmail.split("<!-- Email module: image_full -->")[1].split("<!-- Locked Klaviyo universal content:")[0];
+  assert.match(compiledEmail, /data-email-module="image_full"/);
+  assert.doesNotMatch(moduleBlock, /<img\b[^>]*\bsrc=/i);
+  const audit = buildQualityAudit(
+    { campaignObject: { linkedTasks: { campaignTask: { id: "campaign" }, contentTask: { id: "content" } } } },
+    { campaign: {}, sourceAudit: {} },
+    {
+      input: { assets: resolvedUrls },
+      artifacts: {
+        email: { bodyHtml: compiledEmail, primaryCtaUrl: "" },
+        meta: { headline: "Campaign", primaryText: "Safe copy", carouselConcepts: [{ cards: [{}, {}, {}, {}, {}] }, { cards: [{}, {}, {}, {}, {}] }] },
+        blog: { bodyHtml: "<p>Complete article.</p>" }
+      }
+    },
+    resolvedUrls
+  );
+  assert.equal(audit.checks.find((check) => check.key === "email_image_modules_rendered").passed, false);
+  assert.notEqual(audit.verdict, "ready");
+});
+
+test("deterministic QA passes the image-required-module check when the module's image compiled correctly", () => {
+  const assignedUrl = "https://cdn.example.com/actually-probed.jpg";
+  const compiledEmail = renderPremiumCampaignEmail({
+    subject: "Campaign",
+    primaryCta: "Read more",
+    primaryCtaUrl: "",
+    heroLayout: "typographic",
+    heroImageMode: "none",
+    sections: [{
+      label: "Detail",
+      headline: "Product detail",
+      body: "A precise product detail earns attention.",
+      bullets: [],
+      moduleId: "image_full",
+      layout: "image_full",
+      imageUrl: assignedUrl,
+      imageMode: "assigned",
+      imageAlt: "Product detail"
+    }],
+    closingHeadline: "Next step",
+    closingBody: "Continue the conversation."
+  }, { title: "Campaign", markets: ["DK"], resolvedEmailImageUrls: [assignedUrl] });
+  const moduleBlock = compiledEmail.split("<!-- Email module: image_full -->")[1].split("<!-- Locked Klaviyo universal content:")[0];
+  assert.match(moduleBlock, /<img\b[^>]*\bsrc=/i);
+  const audit = buildQualityAudit(
+    { campaignObject: { linkedTasks: { campaignTask: { id: "campaign" }, contentTask: { id: "content" } } } },
+    { campaign: {}, sourceAudit: {} },
+    {
+      input: { assets: [assignedUrl] },
+      artifacts: {
+        email: { bodyHtml: compiledEmail, primaryCtaUrl: "" },
+        meta: { headline: "Campaign", primaryText: "Safe copy", carouselConcepts: [{ cards: [{}, {}, {}, {}, {}] }, { cards: [{}, {}, {}, {}, {}] }] },
+        blog: { bodyHtml: "<p>Complete article.</p>" }
+      }
+    },
+    [assignedUrl]
+  );
+  assert.equal(audit.checks.find((check) => check.key === "email_image_modules_rendered").passed, true);
 });
 
 test("deterministic craft gate remains achievable for a substantive designed campaign", () => {

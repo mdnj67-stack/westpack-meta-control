@@ -70,6 +70,7 @@ const {
 const { isStaticImageUrl } = require("./email-design");
 const { WESTPACK_UNIVERSAL_CONTENT, getUniversalContentStatus } = require("./email-universal-content");
 const { EMAIL_MODULES, EMAIL_MODULE_SYSTEM_VERSION, WESTPACK_EMAIL_MASTER } = require("./email-module-library");
+const { META_CAROUSEL_MAX_CARDS, META_CAROUSEL_MIN_CARDS } = require("./meta-carousel-contract");
 const { getCampaignLearningStatus, recordArtifactLearning } = require("./campaign-learning-service");
 const { readCampaignLearningEvents } = require("./campaign-learning-store");
 const { buildCampaignLearningPromptBlock } = require("./campaign-learning");
@@ -457,9 +458,19 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
     && moduleSystem.locked === true
     && moduleSystem.version === EMAIL_MODULE_SYSTEM_VERSION
     && moduleSystem.master?.id === WESTPACK_EMAIL_MASTER.id;
+  const imageRequiredModuleIds = new Set(EMAIL_MODULES.filter((module) => module.image === "required").map((module) => module.id));
+  // Boundaries include the locked-footer marker (not just module markers) so the last
+  // module's block doesn't swallow the footer's own <img> social icons and false-pass.
+  const emailBlockBoundaries = [...compiledEmailHtml.matchAll(/<!-- Email module: ([^>]*?) -->|<!-- Locked Klaviyo universal content:/g)];
+  const emailImageModulesRenderedPassed = emailBlockBoundaries.every((marker, markerIndex) => {
+    if (marker[1] === undefined || !imageRequiredModuleIds.has(marker[1])) return true;
+    const blockStart = marker.index + marker[0].length;
+    const blockEnd = markerIndex + 1 < emailBlockBoundaries.length ? emailBlockBoundaries[markerIndex + 1].index : compiledEmailHtml.length;
+    return /<img\b[^>]*\bsrc=["']/i.test(compiledEmailHtml.slice(blockStart, blockEnd));
+  });
   const carouselConcepts = Array.isArray(artifacts?.meta?.carouselConcepts) ? artifacts.meta.carouselConcepts : [];
   const carouselIntegrityPassed = carouselConcepts.length >= 2
-    && carouselConcepts.every((concept) => Array.isArray(concept.cards) && concept.cards.length >= 3 && concept.cards.length <= 6);
+    && carouselConcepts.every((concept) => Array.isArray(concept.cards) && concept.cards.length >= META_CAROUSEL_MIN_CARDS && concept.cards.length <= META_CAROUSEL_MAX_CARDS);
   const usedValidatedEmailImages = new Set(compiledCampaignImages.filter((url) => validatedImages.has(url)));
   const requiredEmailImages = Math.min(2, validatedImages.size);
   const emailImageChoreographyPassed = requiredEmailImages === 0 || usedValidatedEmailImages.size >= requiredEmailImages;
@@ -477,6 +488,7 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
     { key: "universal_header_2023", passed: universalContent.header && universalContent.webView },
     { key: "universal_footer_2023", passed: universalContent.footer && universalContent.unsubscribe },
     { key: "email_module_contract", passed: emailModuleContractPassed },
+    { key: "email_image_modules_rendered", passed: emailImageModulesRenderedPassed },
     { key: "email_media_integrity", passed: emailMediaIntegrityPassed },
     { key: "email_image_choreography", passed: emailImageChoreographyPassed },
     { key: "customer_copy_clean", passed: customerCopyClean },
@@ -558,6 +570,10 @@ async function queueAgentContinuation(config, { delaySeconds = 10, action = "age
 async function processAgentJob(config, stateValue, job) {
   let state = stateValue;
   const processingStartedAt = Date.now();
+  // Declared here (not with `let` inside the try block below) so the catch block's
+  // AbortError-checkpoint-resume check can actually see it instead of throwing its own
+  // ReferenceError and masking the timeout as an ungraceful failure.
+  let recoveryCheckpoint = null;
   try {
     const checkpoint = job.checkpoint && typeof job.checkpoint === "object" ? job.checkpoint : null;
     ({ state } = await persistTransition(state, job.id, "analysing", {
@@ -585,7 +601,7 @@ async function processAgentJob(config, stateValue, job) {
     let channelDrafts;
     let productionNotes;
     let revisionScopes;
-    let recoveryCheckpoint = checkpoint;
+    recoveryCheckpoint = checkpoint;
     const [historicalIntelligence, learningEvents] = await Promise.all([
       readHistoricalIntelligence(),
       readCampaignLearningEvents(160)
@@ -621,6 +637,7 @@ async function processAgentJob(config, stateValue, job) {
         qualityIterations,
         checkpoint: recoveryCheckpoint,
         resumeStage,
+        timeoutRetryCount: 0,
         publishCapability: false
       });
       const pendingControls = await drainAgentControlCommands();
@@ -763,7 +780,8 @@ async function processAgentJob(config, stateValue, job) {
           schemaName: "westpack_creative_directions_challenge_v1",
           schema: buildCreativeDirectionSchema(),
           model: config.contentQualityModel || config.openAiModel,
-          reasoningEffort: "high"
+          reasoningEffort: "high",
+          retryOnTimeout: false
         });
         creativeDirections = normalizeCreativeDirections(challenged.parsed);
         creativeDirections.preproductionGate = evaluateCreativeDirectionDiversity(creativeDirections);
@@ -788,7 +806,8 @@ async function processAgentJob(config, stateValue, job) {
           schemaName: "westpack_concept_selection_v1",
           schema: buildConceptSelectionSchema(),
           model: config.contentQualityModel || config.openAiModel,
-          reasoningEffort: "medium"
+          reasoningEffort: "medium",
+          retryOnTimeout: false
         });
         conceptSelection = normalizeConceptSelection(response.parsed, creativeDirections);
         let conceptQualityGate = evaluateConceptSelectionQuality(conceptSelection);
@@ -835,7 +854,8 @@ async function processAgentJob(config, stateValue, job) {
           schemaName: "westpack_concept_selection_challenge_v1",
           schema: buildConceptSelectionSchema(),
           model: config.contentQualityModel || config.openAiModel,
-          reasoningEffort: "medium"
+          reasoningEffort: "medium",
+          retryOnTimeout: false
         });
         conceptSelection = normalizeConceptSelection(challenged.parsed, creativeDirections);
         const conceptQualityGate = evaluateConceptSelectionQuality(conceptSelection);
@@ -1054,7 +1074,8 @@ async function processAgentJob(config, stateValue, job) {
         schemaName: "westpack_quality_director_review_v1",
         schema: buildQualityReviewSchema(),
         model: config.contentQualityModel || config.openAiModel,
-        reasoningEffort: "medium"
+        reasoningEffort: "medium",
+        retryOnTimeout: false
       });
       const qualityReview = normalizeQualityReview(reviewResponse.parsed, reviewResponse.model);
       const processingDeadlineReached = Date.now() - processingStartedAt > 235_000;
@@ -1118,6 +1139,7 @@ async function processAgentJob(config, stateValue, job) {
           qualityIterations,
           checkpoint: createCheckpoint(),
           resumeStage: "revision",
+          timeoutRetryCount: 0,
           publishCapability: false
         });
         const continuation = await queueAgentContinuation(config);

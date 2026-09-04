@@ -7,6 +7,10 @@ const CONTROL_KEY = `${STORE_KEY}:operator-controls`;
 const LOCAL_STORE_PATH = path.join(process.cwd(), "data", "content-agent-state.json");
 const LOCAL_LOCK_PATH = path.join(process.cwd(), "data", "content-agent-state.lock.json");
 const LOCAL_CONTROLS_PATH = path.join(process.cwd(), "data", "content-agent-controls.json");
+// Dedicated lock file, distinct from LOCAL_LOCK_PATH above, so the operator control-command queue
+// never contends with the main agent-state lock for unrelated work.
+const LOCAL_CONTROLS_LOCK_PATH = path.join(process.cwd(), "data", "content-agent-controls.lock.json");
+const LOCAL_CONTROLS_LOCK_TTL_SECONDS = 30;
 let volatileState = createInitialAgentState();
 let volatileControls = [];
 
@@ -52,27 +56,27 @@ function writeLocalState(state) {
   fs.renameSync(tempPath, LOCAL_STORE_PATH);
 }
 
-function readLocalLock() {
+function readLocalLock(lockPath = LOCAL_LOCK_PATH) {
   try {
-    return JSON.parse(fs.readFileSync(LOCAL_LOCK_PATH, "utf8"));
+    return JSON.parse(fs.readFileSync(lockPath, "utf8"));
   } catch (error) {
     return null;
   }
 }
 
-function acquireLocalLock(lockId, ttlSeconds) {
+function acquireLocalLock(lockId, ttlSeconds, lockPath = LOCAL_LOCK_PATH) {
   const now = Date.now();
   const expiresAt = now + Math.max(1, Number(ttlSeconds) || 0) * 1000;
   const payload = JSON.stringify({ lockId: String(lockId), expiresAt });
-  fs.mkdirSync(path.dirname(LOCAL_LOCK_PATH), { recursive: true });
+  fs.mkdirSync(path.dirname(lockPath), { recursive: true });
   try {
     // Exclusive create is atomic at the OS level, so a fresh lock can't race another acquirer.
-    fs.writeFileSync(LOCAL_LOCK_PATH, payload, { encoding: "utf8", flag: "wx" });
+    fs.writeFileSync(lockPath, payload, { encoding: "utf8", flag: "wx" });
     return true;
   } catch (error) {
     if (error.code !== "EEXIST") throw error;
   }
-  const current = readLocalLock();
+  const current = readLocalLock(lockPath);
   if (current && String(current.lockId) !== String(lockId) && Number(current.expiresAt) > now) {
     return false;
   }
@@ -85,9 +89,9 @@ function acquireLocalLock(lockId, ttlSeconds) {
   // just read: another caller could have raced in and written a fresh, non-expired lock into the
   // gap between our read above and our rename below. If so, we put back exactly what we took and
   // report failure, instead of destroying someone else's valid lock.
-  const stolenPath = `${LOCAL_LOCK_PATH}.${process.pid}.${now}.stolen`;
+  const stolenPath = `${lockPath}.${process.pid}.${now}.stolen`;
   try {
-    fs.renameSync(LOCAL_LOCK_PATH, stolenPath);
+    fs.renameSync(lockPath, stolenPath);
   } catch (error) {
     if (error.code === "ENOENT") return false; // another caller already took it
     throw error;
@@ -101,7 +105,7 @@ function acquireLocalLock(lockId, ttlSeconds) {
   const stillStale = !heldLock || String(heldLock.lockId) === String(lockId) || Number(heldLock.expiresAt) <= now;
   if (!stillStale) {
     try {
-      fs.renameSync(stolenPath, LOCAL_LOCK_PATH);
+      fs.renameSync(stolenPath, lockPath);
     } catch (error) {
       // Could not restore it (e.g. its owner already renewed/released independently) — either
       // way we did not win the steal.
@@ -111,7 +115,7 @@ function acquireLocalLock(lockId, ttlSeconds) {
   try {
     // Exclusive create: guards against a fresh (non-expired) lock being written by a different
     // caller in the brief window between validating heldLock above and this write.
-    fs.writeFileSync(LOCAL_LOCK_PATH, payload, { encoding: "utf8", flag: "wx" });
+    fs.writeFileSync(lockPath, payload, { encoding: "utf8", flag: "wx" });
   } catch (error) {
     if (error.code !== "EEXIST") throw error;
     return false;
@@ -124,13 +128,37 @@ function acquireLocalLock(lockId, ttlSeconds) {
   return true;
 }
 
-function releaseLocalLock(lockId) {
-  const current = readLocalLock();
+function releaseLocalLock(lockId, lockPath = LOCAL_LOCK_PATH) {
+  const current = readLocalLock(lockPath);
   if (!current || String(current.lockId) !== String(lockId)) return;
   try {
-    fs.unlinkSync(LOCAL_LOCK_PATH);
+    fs.unlinkSync(lockPath);
   } catch (error) {
     // Already released.
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// local_file mode otherwise has zero cross-invocation mutual exclusion for
+// data/content-agent-controls.json (the same gap already fixed for content-agent-state.json above):
+// two overlapping queue/drain calls can each read the same base array and have the second write
+// silently clobber the first, permanently dropping an operator's pause/resume/takeover command.
+// This holds a real file lock across the whole read -> mutate -> write cycle, retrying (rather
+// than failing fast) so a contended caller waits its turn instead of dropping its command.
+async function withLocalControlsLock(fn) {
+  const lockId = `controls_${process.pid}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const deadline = Date.now() + 10000;
+  while (!acquireLocalLock(lockId, LOCAL_CONTROLS_LOCK_TTL_SECONDS, LOCAL_CONTROLS_LOCK_PATH)) {
+    if (Date.now() > deadline) throw new Error("Timed out waiting for the content agent controls lock.");
+    await sleep(10 + Math.floor(Math.random() * 15));
+  }
+  try {
+    return await fn();
+  } finally {
+    releaseLocalLock(lockId, LOCAL_CONTROLS_LOCK_PATH);
   }
 }
 
@@ -161,7 +189,11 @@ async function readAgentState() {
   const profile = getAgentStoreProfile();
   if (profile.mode === "redis") {
     const raw = await redisCommand(["GET", STORE_KEY]);
-    return normalizeAgentState(raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : null);
+    try {
+      return normalizeAgentState(raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : null);
+    } catch (error) {
+      return normalizeAgentState(createInitialAgentState());
+    }
   }
   if (profile.mode === "local_file") return readLocalState();
   return normalizeAgentState(volatileState);
@@ -213,9 +245,11 @@ async function queueAgentControlCommand(command = {}) {
     await redisCommand(["RPUSH", CONTROL_KEY, JSON.stringify(entry)]);
     await redisCommand(["EXPIRE", CONTROL_KEY, "86400"]);
   } else if (profile.mode === "local_file") {
-    const entries = readLocalControls();
-    entries.push(entry);
-    writeLocalControls(entries.slice(-50));
+    await withLocalControlsLock(() => {
+      const entries = readLocalControls();
+      entries.push(entry);
+      writeLocalControls(entries.slice(-50));
+    });
   } else {
     volatileControls.push(entry);
     volatileControls = volatileControls.slice(-50);
@@ -227,10 +261,12 @@ async function drainAgentControlCommands(limit = 20) {
   const profile = getAgentStoreProfile();
   if (profile.mode === "local_file") {
     const count = Math.max(1, Number(limit || 20));
-    const entries = readLocalControls();
-    const drained = entries.slice(0, count);
-    writeLocalControls(entries.slice(count));
-    return drained;
+    return withLocalControlsLock(() => {
+      const entries = readLocalControls();
+      const drained = entries.slice(0, count);
+      writeLocalControls(entries.slice(count));
+      return drained;
+    });
   }
   if (profile.mode !== "redis") {
     const entries = volatileControls.splice(0, Math.max(1, Number(limit || 20)));
@@ -256,6 +292,7 @@ module.exports = {
   getAgentStoreProfile,
   readAgentState,
   releaseAgentLock,
+  releaseLocalLock,
   queueAgentControlCommand,
   writeAgentState
 };

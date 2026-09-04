@@ -57,7 +57,7 @@ function createMetaSnapshotFetchers({
         timingStore: timings,
         timingLabel: "campaigns_metadata",
         fetcher: () => metaGetAll(`/${accountId}/campaigns`, accessToken, {
-          fields: "id,name,status,effective_status,objective,daily_budget,lifetime_budget",
+          fields: "id,name,status,effective_status,objective,daily_budget,lifetime_budget,start_time,stop_time",
           limit: "100"
         })
       }),
@@ -77,7 +77,7 @@ function createMetaSnapshotFetchers({
         timingStore: timings,
         timingLabel: "adsets_metadata",
         fetcher: () => metaGetAll(`/${accountId}/adsets`, accessToken, {
-          fields: "id,name,status,effective_status,daily_budget,lifetime_budget,attribution_spec,attribution_setting,campaign{id,name,status}",
+          fields: "id,name,status,effective_status,daily_budget,lifetime_budget,start_time,end_time,attribution_spec,attribution_setting,campaign{id,name,status}",
           limit: "500"
         })
       })

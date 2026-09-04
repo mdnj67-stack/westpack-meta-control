@@ -59,14 +59,35 @@ function assertSafeCampaignAssetUrl(value = "") {
   return url.toString();
 }
 
+const CAMPAIGN_ASSET_MAX_REDIRECTS = 5;
+
+// Node's fetch dereferences a "follow" redirect chain itself with no per-hop hook, so an
+// attacker-controlled host could 3xx to a private/loopback/metadata address before any of our
+// checks run again. Walk the chain ourselves with redirect: "manual" so every hop's target is
+// validated by assertSafeCampaignAssetUrl before it is ever requested.
+async function fetchCampaignAssetSafely(sourceUrl, { timeoutMs }) {
+  let currentUrl = assertSafeCampaignAssetUrl(sourceUrl);
+  const signal = AbortSignal.timeout(timeoutMs);
+  for (let hop = 0; ; hop += 1) {
+    const response = await fetch(currentUrl, { redirect: "manual", signal });
+    if (response.status >= 300 && response.status < 400) {
+      if (hop >= CAMPAIGN_ASSET_MAX_REDIRECTS) {
+        throw new Error("Campaign asset redirected too many times.");
+      }
+      const location = response.headers.get("location");
+      if (!location) throw new Error("Campaign asset redirect is missing a Location header.");
+      currentUrl = assertSafeCampaignAssetUrl(new URL(location, currentUrl).toString());
+      continue;
+    }
+    return { response, finalUrl: currentUrl };
+  }
+}
+
 async function proxyCampaignAsset(req, res) {
   const sourceUrl = assertSafeCampaignAssetUrl(req.query?.url || "");
-  const response = await fetch(sourceUrl, {
-    redirect: "follow",
-    signal: AbortSignal.timeout(25_000)
-  });
+  const { response, finalUrl } = await fetchCampaignAssetSafely(sourceUrl, { timeoutMs: 25_000 });
   if (!response.ok) throw new Error(`Campaign asset download failed (${response.status}).`);
-  assertSafeCampaignAssetUrl(response.url || sourceUrl);
+  assertSafeCampaignAssetUrl(response.url || finalUrl);
   const contentType = String(response.headers.get("content-type") || "").toLowerCase();
   if (!contentType.startsWith("image/")) throw new Error("Campaign asset did not return an image.");
   const declaredSize = Number(response.headers.get("content-length") || 0);
@@ -91,12 +112,9 @@ async function proxyCampaignAsset(req, res) {
 
 async function downloadCampaignAssetFile(sourceUrl) {
   const safeSourceUrl = assertSafeCampaignAssetUrl(sourceUrl);
-  const response = await fetch(safeSourceUrl, {
-    redirect: "follow",
-    signal: AbortSignal.timeout(20_000)
-  });
+  const { response, finalUrl } = await fetchCampaignAssetSafely(safeSourceUrl, { timeoutMs: 20_000 });
   if (!response.ok) throw new Error(`Campaign asset download failed (${response.status}).`);
-  assertSafeCampaignAssetUrl(response.url || safeSourceUrl);
+  assertSafeCampaignAssetUrl(response.url || finalUrl);
   const contentType = String(response.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
   if (!contentType.startsWith("image/")) throw new Error("Campaign asset did not return an image.");
   const declaredSize = Number(response.headers.get("content-length") || 0);
@@ -408,6 +426,7 @@ module.exports = async (req, res) => {
       const response = await fetch("https://api.openai.com/v1/responses", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.openAiApiKey}` },
+        signal: AbortSignal.timeout(120_000),
         body: JSON.stringify({
           model: config.openAiModel,
           input: reviewRequest,
@@ -589,6 +608,7 @@ module.exports = async (req, res) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${config.openAiApiKey}`
         },
+        signal: AbortSignal.timeout(60_000),
         body: JSON.stringify({
           model: config.openAiModel,
           input: [
@@ -654,6 +674,7 @@ module.exports = async (req, res) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${config.openAiApiKey}`
             },
+            signal: AbortSignal.timeout(150_000),
             body: JSON.stringify({
               model: visualModel,
               images: sourceUrls.slice(0, 6).map((imageUrl) => ({ image_url: imageUrl })),
@@ -756,6 +777,7 @@ module.exports = async (req, res) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${config.openAiApiKey}`
               },
+              signal: AbortSignal.timeout(150_000),
               body: JSON.stringify({
                 model: environmentModel,
                 images: [
@@ -908,6 +930,7 @@ module.exports = async (req, res) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${config.openAiApiKey}`
       },
+      signal: AbortSignal.timeout(180_000),
       body: JSON.stringify({
         model: config.openAiModel,
         input: requestPayload.prompt,
@@ -969,10 +992,14 @@ module.exports = async (req, res) => {
 
     sendJson(res, 200, normalizeCampaignBrainResult(input, parsed, payload.model || config.openAiModel, requestPayload.memoryReferences));
   } catch (error) {
-    sendJson(res, 500, {
+    sendJson(res, Number(error?.statusCode) || 500, {
       error: error.message || "Campaign brain failed."
     });
   }
 };
 
 module.exports.decodeCampaignImageDataUri = decodeCampaignImageDataUri;
+module.exports.assertSafeCampaignAssetUrl = assertSafeCampaignAssetUrl;
+module.exports.fetchCampaignAssetSafely = fetchCampaignAssetSafely;
+module.exports.proxyCampaignAsset = proxyCampaignAsset;
+module.exports.downloadCampaignAssetFile = downloadCampaignAssetFile;

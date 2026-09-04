@@ -248,7 +248,7 @@ function buildMetaFromMasterPrompt(input, imageUrls = [], metaIntelligenceBlock 
               "",
               `Visually inspect ${masterVisualImages.length} reachable image${masterVisualImages.length === 1 ? "" : "s"} extracted from the approved master before choosing a route.`,
               "",
-              "Create one coherent Meta campaign. The first card must stop the scroll, cards 2-4 must each add new persuasive information, and card 5 must close with one clear CTA.",
+              "Create one coherent Meta campaign. The first card must stop the scroll, the middle cards must each add new persuasive information, and the final card must close with one clear CTA.",
               "Primary text must complement the carousel instead of repeating every card.",
               "Set destinationUrl to an exact supplied URL when one exists; otherwise use https://www.westpack.com/.",
               "Unsupported or incomplete claims must be called out instead of being guessed.",

@@ -8,7 +8,7 @@ function createMetaSnapshotTransformers({
   resolveConversionAttribution,
   normalizeBudgetValue,
   formatCurrency,
-  inferBudgetDivisor,
+  resolveBudgetNormalization,
   isActiveDeliveryStatus,
   purchaseActionTypes,
   addToCartActionTypes,
@@ -67,7 +67,8 @@ function createMetaSnapshotTransformers({
     budgetCampaignsRaw = [],
     adSetRows = [],
     insightMap = {},
-    dateScope
+    dateScope,
+    accountCurrency
   }) {
     const activeCampaignIds = new Set(activeCampaigns.map((campaign) => campaign.id));
     const campaignIdsWithPeriodData = new Set(Object.keys(insightMap));
@@ -80,15 +81,9 @@ function createMetaSnapshotTransformers({
       return sum + readNumber(insightMap[campaign.id]?.spend || "0", 0);
     }, 0);
 
-    const budgetNormalization = inferBudgetDivisor({
-      campaignBudgets: budgetCampaignsRaw.map((campaign) => campaign.daily_budget),
-      adSetBudgets: (adSetRows || [])
-        .filter((adSet) => adSet.campaign && isActiveDeliveryStatus(adSet?.effective_status || adSet?.status))
-        .map((adSet) => adSet.daily_budget),
-      totalSpend,
-      activeCampaignCount: Math.max(activeCampaigns.length, budgetCampaignsRaw.length),
-      rangeDays: dateScope.days
-    });
+    // Meta always returns budgets in the account currency's minor unit, so the divisor
+    // is a lookup, not an inference from the observed budget magnitudes.
+    const budgetNormalization = resolveBudgetNormalization(accountCurrency);
 
     return {
       activeCampaignIds,
@@ -144,6 +139,10 @@ function createMetaSnapshotTransformers({
         status: adSet.status || adSet.effective_status || "",
         daily_budget: normalizeBudgetValue(adSet.daily_budget, budgetNormalization.divisor),
         lifetime_budget: normalizeBudgetValue(adSet.lifetime_budget, budgetNormalization.divisor),
+        // Carried so a lifetime budget can be spread across its real flight rather than
+        // across the reporting window.
+        start_time: adSet.start_time || "",
+        end_time: adSet.end_time || "",
         attribution_spec: Array.isArray(adSet.attribution_spec) ? adSet.attribution_spec : [],
         attribution_setting: adSet.attribution_setting || "",
         campaignId: adSet?.campaign?.id || "",

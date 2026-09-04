@@ -6,6 +6,16 @@ const { createMetaSnapshotFetchers } = require("../../server/meta/_snapshot-fetc
 const { createMetaSnapshotTransformers } = require("../../server/meta/_snapshot-transformers");
 const { createMetaSnapshotDashboardBuilder } = require("../../server/meta/_snapshot-dashboard");
 const { isStudioSelectableStatus, isDuplicatableAdStatus } = require("../../server/meta/_catalog-selection");
+const {
+  OBJECTIVE_GROUP_DISPLAY_ORDER,
+  buildBudgetSanityWarnings,
+  calculateBudgetAllocation,
+  classifyCampaign,
+  normalizeBudgetValue,
+  resolveBudgetNormalization,
+  resolveObjectiveGroupLabel,
+  splitByCategory
+} = require("../../server/meta/budget-allocation");
 const { syncHistoricalIntelligence } = require("../../server/meta/historical-intelligence");
 const {
   getHistoricalStoreProfile,
@@ -122,7 +132,7 @@ const {
   resolveConversionAttribution,
   normalizeBudgetValue,
   formatCurrency,
-  inferBudgetDivisor,
+  resolveBudgetNormalization,
   isActiveDeliveryStatus,
   purchaseActionTypes: PURCHASE_ACTION_TYPES,
   addToCartActionTypes: ADD_TO_CART_ACTION_TYPES,
@@ -139,6 +149,7 @@ const {
   hasIncrementalNameTag,
   buildQualityWarnings,
   resolveConversionAttribution,
+  classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildGeneralSpendDistribution,
@@ -339,55 +350,6 @@ function resolveAttributionNameTag(campaign) {
   return null;
 }
 
-function classifyCampaign(campaign) {
-  const objective = normalizeObjective(campaign?.objective);
-  const name = String(campaign?.name || "").toLowerCase();
-  const purchases = readNumber(campaign?.purchases_value, 0);
-  const leads = readNumber(campaign?.leads_value, 0);
-
-  const awarenessObjectives = new Set([
-    "AWARENESS",
-    "BRAND_AWARENESS",
-    "REACH",
-    "VIDEO_VIEWS",
-    "THRUPLAY",
-    "ENGAGEMENT",
-    "POST_ENGAGEMENT",
-    "PAGE_LIKES",
-    "EVENT_RESPONSES",
-    "OUTCOME_AWARENESS",
-    "OUTCOME_ENGAGEMENT",
-    "TRAFFIC",
-    "OUTCOME_TRAFFIC"
-  ]);
-
-  const leadObjectives = new Set([
-    "LEAD_GENERATION",
-    "OUTCOME_LEADS",
-    "MESSAGES"
-  ]);
-
-  const conversionObjectives = new Set([
-    "CONVERSIONS",
-    "OUTCOME_SALES",
-    "CATALOG_SALES",
-    "PRODUCT_CATALOG_SALES",
-    "APP_INSTALLS",
-    "OUTCOME_APP_PROMOTION"
-  ]);
-
-  if (leadObjectives.has(objective)) return "leads";
-  if (awarenessObjectives.has(objective)) return "awareness";
-  if (conversionObjectives.has(objective)) return "conversion";
-
-  if (/^ba[\s-_]?\d/i.test(name) || /\bawareness\b|\breach\b/.test(name)) return "awareness";
-  if (purchases > 0) return "conversion";
-  if (leads > 0) return "leads";
-  if (/\blead\b|\bform\b|\binquir|\bkontakt\b/.test(name)) return "leads";
-  if (/\bremarket|\bprospecting|\bconv\b|\bconversion\b|\bsales\b/.test(name)) return "conversion";
-  return "awareness";
-}
-
 function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributionSpecs = []) {
   const override = resolveAttributionOverride(campaign);
   if (override) {
@@ -411,15 +373,6 @@ function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributio
 
 function classifyConversionAttribution(campaign) {
   return resolveConversionAttribution(campaign, campaign?.adset_names || [], campaign?.adset_attribution_specs || []).mode;
-}
-
-function splitByCategory(campaigns) {
-  const buckets = { awareness: [], leads: [], conversion: [] };
-  for (const campaign of campaigns || []) {
-    const category = classifyCampaign(campaign);
-    (buckets[category] || buckets.awareness).push(campaign);
-  }
-  return buckets;
 }
 
 function splitConversionByAttribution(campaigns) {
@@ -481,152 +434,6 @@ function isActiveDeliveryStatus(value) {
   return status === "ACTIVE";
 }
 
-function inferBudgetDivisor({ campaignBudgets = [], adSetBudgets = [], totalSpend = 0, activeCampaignCount = 0, rangeDays = 7 }) {
-  const rawBudgets = [...campaignBudgets, ...adSetBudgets]
-    .map((value) => readNumber(value, 0))
-    .filter((value) => value > 0);
-
-  if (!rawBudgets.length) {
-    return { divisor: 1, confidence: "none", reason: "No active budgets available." };
-  }
-
-  const normalizedByOne = rawBudgets.reduce((sum, value) => sum + value, 0) * 30;
-  const normalizedByHundred = rawBudgets.reduce((sum, value) => sum + value / 100, 0) * 30;
-  const safeRangeDays = Math.max(1, Number(rangeDays) || 7);
-  const spendPace = totalSpend > 0 ? (totalSpend / safeRangeDays) * 30 : 0;
-  const averageRawBudget = rawBudgets.reduce((sum, value) => sum + value, 0) / rawBudgets.length;
-  const activeCount = Math.max(activeCampaignCount, rawBudgets.length, 1);
-  const monthlyBudgetPerActive = normalizedByOne / activeCount;
-  const budgetToSpendRatio = spendPace > 0 ? normalizedByOne / spendPace : 0;
-  const likelyMinorUnits = averageRawBudget >= 1000
-    || monthlyBudgetPerActive >= 10000
-    || budgetToSpendRatio >= 20;
-
-  if (likelyMinorUnits) {
-    return {
-      divisor: 100,
-      confidence: spendPace > 0 ? "high" : "medium",
-      reason: "Raw Meta budgets looked like minor currency units, so they were normalized by 100."
-    };
-  }
-
-  return {
-    divisor: 1,
-    confidence: rawBudgets.every((value) => value < 1000) ? "high" : "medium",
-    reason: "Raw Meta budgets already looked like major currency units."
-  };
-}
-
-function normalizeBudgetValue(value, divisor = 1) {
-  const numeric = readNumber(value, 0);
-  if (!numeric || numeric <= 0) {
-    return null;
-  }
-  return numeric / Math.max(divisor, 1);
-}
-
-function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30) {
-  const campaignMap = new Map();
-
-  for (const campaign of campaigns || []) {
-    const campaignId = String(campaign?.id || "").trim();
-    if (!campaignId) {
-      continue;
-    }
-
-    campaignMap.set(campaignId, {
-      id: campaignId,
-      category: classifyCampaign(campaign),
-      attributionMode: classifyConversionAttribution(campaign),
-      campaignDailyBudget: readNumber(campaign?.daily_budget, 0),
-      adSetDailyBudget: 0
-    });
-  }
-
-  for (const adSet of adSets || []) {
-    const campaignId = String(adSet?.campaignId || "").trim();
-    if (!campaignId || !campaignMap.has(campaignId)) {
-      continue;
-    }
-
-    campaignMap.get(campaignId).adSetDailyBudget += readNumber(adSet?.daily_budget, 0);
-  }
-
-  const normalizedPeriodDays = Math.max(1, readNumber(periodDays, 30) || 30);
-  const allocation = {
-    totalDailyBudget: 0,
-    totalMonthlyBudget: 0,
-    totalPeriodBudget: 0,
-    awarenessDailyBudget: 0,
-    awarenessMonthlyBudget: 0,
-    awarenessPeriodBudget: 0,
-    leadsDailyBudget: 0,
-    leadsMonthlyBudget: 0,
-    leadsPeriodBudget: 0,
-    conversionDailyBudget: 0,
-    conversionMonthlyBudget: 0,
-    conversionPeriodBudget: 0,
-    conversionStandardDailyBudget: 0,
-    conversionStandardMonthlyBudget: 0,
-    conversionStandardPeriodBudget: 0,
-    conversionIncrementalDailyBudget: 0,
-    conversionIncrementalMonthlyBudget: 0,
-    conversionIncrementalPeriodBudget: 0,
-    periodDays: normalizedPeriodDays
-  };
-
-  for (const item of campaignMap.values()) {
-    const dailyBudget = item.adSetDailyBudget > 0 ? item.adSetDailyBudget : item.campaignDailyBudget;
-    if (!(dailyBudget > 0)) {
-      continue;
-    }
-
-    allocation.totalDailyBudget += dailyBudget;
-
-    if (item.category === "awareness") {
-      allocation.awarenessDailyBudget += dailyBudget;
-      continue;
-    }
-
-    if (item.category === "leads") {
-      allocation.leadsDailyBudget += dailyBudget;
-      continue;
-    }
-
-    allocation.conversionDailyBudget += dailyBudget;
-    if (item.attributionMode === "incremental") {
-      allocation.conversionIncrementalDailyBudget += dailyBudget;
-      continue;
-    }
-    allocation.conversionStandardDailyBudget += dailyBudget;
-  }
-
-  allocation.totalMonthlyBudget = allocation.totalDailyBudget * 30;
-  allocation.totalPeriodBudget = allocation.totalDailyBudget * normalizedPeriodDays;
-  allocation.awarenessMonthlyBudget = allocation.awarenessDailyBudget * 30;
-  allocation.awarenessPeriodBudget = allocation.awarenessDailyBudget * normalizedPeriodDays;
-  allocation.leadsMonthlyBudget = allocation.leadsDailyBudget * 30;
-  allocation.leadsPeriodBudget = allocation.leadsDailyBudget * normalizedPeriodDays;
-  allocation.conversionMonthlyBudget = allocation.conversionDailyBudget * 30;
-  allocation.conversionPeriodBudget = allocation.conversionDailyBudget * normalizedPeriodDays;
-  allocation.conversionStandardMonthlyBudget = allocation.conversionStandardDailyBudget * 30;
-  allocation.conversionStandardPeriodBudget = allocation.conversionStandardDailyBudget * normalizedPeriodDays;
-  allocation.conversionIncrementalMonthlyBudget = allocation.conversionIncrementalDailyBudget * 30;
-  allocation.conversionIncrementalPeriodBudget = allocation.conversionIncrementalDailyBudget * normalizedPeriodDays;
-  return allocation;
-}
-
-function estimateMonthlyBudget(campaigns = [], adSets = []) {
-  return calculateBudgetAllocation(campaigns, adSets).totalMonthlyBudget;
-}
-
-function buildBudgetShare(value, total) {
-  if (!(total > 0) || !(value >= 0)) {
-    return "--";
-  }
-  return `${((value / total) * 100).toFixed(1)}%`;
-}
-
 function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currency = "DKK", budgetAllocation = null) {
   const normalizedCurrency = normalizeCurrencyCode(currency, "DKK");
   const buckets = splitByCategory(campaigns);
@@ -634,44 +441,70 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
   const spendLabel = `Spend (${dateScope?.shortLabel || "Scope"})`;
   const safeBudgetAllocation = budgetAllocation || {};
   const periodDays = Math.max(1, readNumber(dateScope?.days, readNumber(safeBudgetAllocation.periodDays, 30)) || 30);
-  const totalBudgetAmount = readNumber(safeBudgetAllocation.totalPeriodBudget, 0);
-  const totalMonthlyBudgetAmount = readNumber(safeBudgetAllocation.totalMonthlyBudget, 0);
-  const periodShortLabel = dateScope?.shortLabel || `${periodDays}d`;
-  const budgetByKey = {
-    awareness: readNumber(safeBudgetAllocation.awarenessPeriodBudget, 0),
-    conversion: readNumber(safeBudgetAllocation.conversionPeriodBudget, 0),
-    leads: readNumber(safeBudgetAllocation.leadsPeriodBudget, 0)
-  };
+
+  // Budget is always stated per 30-day month, whatever range is selected, because that is
+  // the unit the marketing team budgets and talks in ("the budget is 200k" means per
+  // month). Actual spend stays the real amount spent in the selected range, so the two
+  // sides cover different windows on purpose and are compared via a 30-day pace below.
+  const monthlyBudgetByGroup = safeBudgetAllocation.monthlyBudgetByGroup || {};
+  const totalBudgetAmount = readNumber(safeBudgetAllocation.totalMonthlyBudget, 0);
+  const spendToMonthlyPace = 30 / periodDays;
+  const totalMonthlySpendPace = totalSpend * spendToMonthlyPace;
+
+  const items = OBJECTIVE_GROUP_DISPLAY_ORDER
+    .map((group) => ({
+      key: group,
+      label: resolveObjectiveGroupLabel(group),
+      campaignCount: (buckets[group] || []).length,
+      amount: sumMetric(buckets[group] || [], "spend_value"),
+      budgetAmount: readNumber(monthlyBudgetByGroup[group], 0)
+    }))
+    .filter((item) => item.campaignCount > 0 || item.amount > 0 || item.budgetAmount > 0)
+    .map((item) => {
+      const monthlySpendPace = item.amount * spendToMonthlyPace;
+      return {
+        ...item,
+        percentage: totalSpend > 0 ? Number(((item.amount / totalSpend) * 100).toFixed(1)) : 0,
+        formattedAmount: formatCurrency(item.amount, normalizedCurrency),
+        formattedBudgetAmount: item.budgetAmount > 0 ? formatCurrency(item.budgetAmount, normalizedCurrency) : "--",
+        budgetPercentage: totalBudgetAmount > 0 ? Number(((item.budgetAmount / totalBudgetAmount) * 100).toFixed(1)) : 0,
+        monthlySpendPace,
+        formattedMonthlySpendPace: formatCurrency(monthlySpendPace, normalizedCurrency),
+        // Pacing compares like with like: a 30-day spend pace against the 30-day budget.
+        pacePercentage: item.budgetAmount > 0 ? Number(((monthlySpendPace / item.budgetAmount) * 100).toFixed(1)) : 0
+      };
+    });
+
+  const unclassifiedItem = items.find((item) => item.key === "unclassified") || null;
 
   return {
     currency: normalizedCurrency,
     totalAmount: totalSpend,
     formattedTotalAmount: formatCurrency(totalSpend, normalizedCurrency),
     totalLabel: spendLabel,
+    periodDays,
+    totalMonthlySpendPace,
+    formattedTotalMonthlySpendPace: formatCurrency(totalMonthlySpendPace, normalizedCurrency),
+    totalPacePercentage: totalBudgetAmount > 0
+      ? Number(((totalMonthlySpendPace / totalBudgetAmount) * 100).toFixed(1))
+      : 0,
     totalBudgetAmount,
     formattedTotalBudgetAmount: totalBudgetAmount > 0 ? formatCurrency(totalBudgetAmount, normalizedCurrency) : "--",
-    kpiBudgetAmount: totalMonthlyBudgetAmount,
-    formattedKpiBudgetAmount: totalMonthlyBudgetAmount > 0 ? formatCurrency(totalMonthlyBudgetAmount, normalizedCurrency) : "--",
-    kpiBudgetLabel: "Planned 30-day budget",
-    kpiBudgetMeta: "Projected 30-day pace based on active Meta campaign and ad set budgets.",
-    totalBudgetLabel: `Planned budget (${periodShortLabel})`,
-    budgetMixLabel: `Planned budget mix (${periodShortLabel})`,
+    kpiBudgetAmount: totalBudgetAmount,
+    formattedKpiBudgetAmount: totalBudgetAmount > 0 ? formatCurrency(totalBudgetAmount, normalizedCurrency) : "--",
+    kpiBudgetLabel: "Planned budget (30 days)",
+    kpiBudgetMeta: "Monthly budget from the active Meta campaign and ad set budgets, including lifetime budgets spread across their flight.",
+    totalBudgetLabel: "Planned budget (30 days)",
+    budgetMixLabel: "Planned budget mix (30 days)",
+    spendMixLabel: `Actual spend mix (${dateScope?.shortLabel || "selected range"})`,
+    paceLabel: periodDays === 30 ? "Spend vs monthly budget" : "30-day spend pace vs monthly budget",
     rangeLabel: dateScope?.label || "Selected range",
-    summaryMeta: "Real spend in the selected range, plus planned budget by objective for the same period. Topline planned budget stays fixed at 30 days.",
+    summaryMeta: `Actual spend covers ${dateScope?.label || "the selected range"}. Planned budget is always stated per 30-day month, and pacing compares a 30-day spend pace against it.`,
     title: "Spend and planned budget",
-    subtitle: `Real spend for ${dateScope?.label || "the selected range"} plus planned budget for the same period based on the active campaign/ad set budgets in Meta. Conversion combines standard and incremental campaigns here.`,
-    items: [
-      { key: "awareness", label: "Brand Awareness", amount: sumMetric(buckets.awareness, "spend_value") },
-      { key: "conversion", label: "Conversion", amount: sumMetric(buckets.conversion, "spend_value") },
-      { key: "leads", label: "Leads", amount: sumMetric(buckets.leads, "spend_value") }
-    ].map((item) => ({
-      ...item,
-      percentage: totalSpend > 0 ? Number(((item.amount / totalSpend) * 100).toFixed(1)) : 0,
-      formattedAmount: formatCurrency(item.amount, normalizedCurrency),
-      budgetAmount: budgetByKey[item.key] || 0,
-      formattedBudgetAmount: (budgetByKey[item.key] || 0) > 0 ? formatCurrency(budgetByKey[item.key], normalizedCurrency) : "--",
-      budgetPercentage: totalBudgetAmount > 0 ? Number((((budgetByKey[item.key] || 0) / totalBudgetAmount) * 100).toFixed(1)) : 0
-    }))
+    subtitle: `Actual spend for ${dateScope?.label || "the selected range"} against the 30-day planned budget, grouped by the objective Meta reports on each campaign. Conversion combines standard and incremental campaigns here.`,
+    unclassifiedAmount: readNumber(unclassifiedItem?.amount, 0),
+    unclassifiedCampaignCount: readNumber(unclassifiedItem?.campaignCount, 0),
+    items
   };
 }
 
@@ -695,14 +528,55 @@ function buildQualityWarnings({
   nonNamedIncrementalMetricsCount = 0,
   campaignSpendTotal = 0,
   awarenessCampaignSpendTotal = 0,
-  awarenessAdSetSpendTotal = 0
+  awarenessAdSetSpendTotal = 0,
+  budgetAllocation = null,
+  unclassifiedCampaignCount = 0,
+  unclassifiedSpendTotal = 0,
+  unclassifiedCampaigns = [],
+  accountCurrency = "DKK",
+  periodDays = 30
 }) {
   const warnings = [];
 
-  if (!budgetNormalization || budgetNormalization.confidence === "none") {
-    warnings.push("No budget normalization confidence available.");
-  } else if (budgetNormalization.confidence !== "high") {
-    warnings.push(`Budget normalization confidence is ${budgetNormalization.confidence}.`);
+  if (!budgetNormalization) {
+    warnings.push("No budget normalization metadata available.");
+  } else if (budgetNormalization.confidence === "assumed") {
+    warnings.push("Meta returned no account currency, so budgets were normalized with the two-decimal default.");
+  }
+
+  warnings.push(...buildBudgetSanityWarnings({
+    totalMonthlyBudget: readNumber(budgetAllocation?.totalMonthlyBudget, 0),
+    totalSpend: campaignSpendTotal,
+    periodDays,
+    currency: accountCurrency
+  }));
+
+  // Unmapped objectives are reported rather than absorbed into a real category, because
+  // the objective split is used to read budget shares off the dashboard.
+  if (unclassifiedCampaignCount > 0) {
+    // Name the campaigns and the objectives Meta actually reported, so the warning can be
+    // acted on: either the objective belongs in the mapping table, or the campaign needs
+    // fixing in Ads Manager. A count alone leaves nowhere to start.
+    const named = unclassifiedCampaigns
+      .slice(0, 5)
+      .map((campaign) => {
+        const name = String(campaign?.name || campaign?.id || "unnamed").trim() || "unnamed";
+        const objective = String(campaign?.objective || "").trim();
+        return objective ? `${name} (${objective})` : `${name} (no objective reported)`;
+      });
+    const overflow = unclassifiedCampaignCount - named.length;
+    const detail = named.length
+      ? ` ${named.join("; ")}${overflow > 0 ? `; and ${overflow} more` : ""}.`
+      : "";
+    warnings.push(`${unclassifiedCampaignCount} campaign(s) carry an objective this dashboard does not map, holding ${formatCurrency(unclassifiedSpendTotal, accountCurrency)} of spend in the Unclassified group.${detail}`);
+  }
+
+  if (readNumber(budgetAllocation?.unscheduledLifetimeBudgetCampaignCount, 0) > 0) {
+    warnings.push(`${budgetAllocation.unscheduledLifetimeBudgetCampaignCount} campaign(s) use a lifetime budget with no end date, so their budget was spread across the reporting period instead of a real flight.`);
+  }
+
+  if (readNumber(budgetAllocation?.campaignsWithoutBudgetCount, 0) > 0) {
+    warnings.push(`${budgetAllocation.campaignsWithoutBudgetCount} active campaign(s) reported no daily or lifetime budget and contribute nothing to the planned budget split.`);
   }
 
   if (includedCampaignCount > campaignsWithPeriodDataCount) {
@@ -1566,7 +1440,9 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
   const splitItems = Array.isArray(split.items) ? split.items : [];
   const splitSpendSum = splitItems.reduce((sum, item) => sum + readNumber(item?.amount, 0), 0);
   const splitBudgetSum = splitItems.reduce((sum, item) => sum + readNumber(item?.budgetAmount, 0), 0);
-  const expectedBudgetTotal = readNumber(split.totalBudgetAmount, readNumber(budgetAllocation?.totalPeriodBudget, 0));
+  // The split states budget per 30-day month, so the reconciliation target is the monthly
+  // total, not the period-scaled one.
+  const expectedBudgetTotal = readNumber(split.totalBudgetAmount, readNumber(budgetAllocation?.totalMonthlyBudget, 0));
   const expectedSpendTotal = readNumber(split.totalAmount, 0);
   const requiredLenses = [
     "general",
@@ -2050,7 +1926,8 @@ module.exports = async (req, res) => {
       budgetCampaignsRaw,
       adSetRows: adSetsResponse.data || [],
       insightMap,
-      dateScope
+      dateScope,
+      accountCurrency
     });
 
     const {
@@ -2205,4 +2082,14 @@ module.exports = async (req, res) => {
       error: error.message || "Meta snapshot refresh failed."
     });
   }
+};
+
+// Test-only surface. The Vercel handler is the default export above; these internals are
+// attached so the objective split and its reconciliation checks can be unit tested
+// without standing up an HTTP request or calling the Meta Graph API.
+module.exports.__internals = {
+  buildDashboardValidation,
+  buildGeneralSpendDistribution,
+  buildLensStats,
+  buildQualityWarnings
 };

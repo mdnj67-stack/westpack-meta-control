@@ -7,3 +7,38 @@ META_SETUP.md
 START_APP.txt
 README.md
 campaign-memory
+
+# Environment files. These live in the project root (.env.local, .env.production) and hold
+# the Meta and OpenAI credentials. Vercel injects real environment variables from the
+# project settings, so these must never be part of an upload.
+.env
+.env.*
+
+# Local debug and capture artifacts. All of these are gitignored but were not excluded from
+# deploys, so a folder deploy would have published them as static files on the production
+# domain, reachable by anyone who guessed the path.
+_login_headers.txt
+_live_catalog.json
+_live_snapshot_*.json
+_write_ok.txt
+_tiny_test.mp4
+westpack-fr-check.png
+*.tmp
+*.log
+local-debug.*
+local-serve.*
+local-email-audit.*
+serve-local-wrapper.*
+vercel-dev*.log
+tmp/
+tmp-*/
+tmp-*.png
+tmp-*.mp4
+test-results/
+
+# Not needed at runtime.
+tests/
+.claude/
+DEPLOY_VERCEL.txt
+META_DASHBOARD_REFACTOR.md
+CLAUDE.md

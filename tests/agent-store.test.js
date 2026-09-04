@@ -4,8 +4,10 @@ const fs = require("fs");
 const path = require("path");
 
 const AGENT_STORE_PATH = require.resolve("../server/campaign/agent-store");
+const { createInitialAgentState, normalizeAgentState } = require("../server/campaign/content-agent");
 const LOCAL_LOCK_PATH = path.join(process.cwd(), "data", "content-agent-state.lock.json");
 const LOCAL_CONTROLS_PATH = path.join(process.cwd(), "data", "content-agent-controls.json");
+const LOCAL_CONTROLS_LOCK_PATH = path.join(process.cwd(), "data", "content-agent-controls.lock.json");
 
 const REDIS_ENV_KEYS = [
   "VERCEL",
@@ -30,7 +32,7 @@ function forceLocalFileMode() {
 }
 
 function cleanupLocalFiles() {
-  for (const filePath of [LOCAL_LOCK_PATH, LOCAL_CONTROLS_PATH]) {
+  for (const filePath of [LOCAL_LOCK_PATH, LOCAL_CONTROLS_PATH, LOCAL_CONTROLS_LOCK_PATH]) {
     try {
       fs.unlinkSync(filePath);
     } catch (error) {
@@ -42,6 +44,10 @@ function cleanupLocalFiles() {
 function freshAgentStore() {
   delete require.cache[AGENT_STORE_PATH];
   return require(AGENT_STORE_PATH);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 test("local_file mode: acquireAgentLock provides real mutual exclusion", async () => {
@@ -189,6 +195,174 @@ test("volatile mode: control commands stay in-memory only and are not written to
 
     const drained = await agentStore.drainAgentControlCommands(20);
     assert.equal(drained.some((entry) => entry.jobId === "job-456"), true);
+  } finally {
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("local_file mode: queueAgentControlCommand waits out a lock held by another writer instead of writing over it", async () => {
+  const restoreEnv = forceLocalFileMode();
+  try {
+    const agentStore = freshAgentStore();
+    assert.equal(agentStore.getAgentStoreProfile().mode, "local_file");
+
+    // Simulate another process (e.g. a second browser tab's pause/resume/takeover click) already
+    // mid-write: it holds the controls queue's own lock file directly.
+    const otherWriterLockId = "other-writer-controls-a";
+    assert.equal(agentStore.acquireLocalLock(otherWriterLockId, 5, LOCAL_CONTROLS_LOCK_PATH), true);
+
+    const queuePromise = agentStore.queueAgentControlCommand({ type: "pause", jobId: "job-wait" });
+
+    // While the other writer still holds the lock, this call must be retrying, not writing.
+    await sleep(60);
+    const midway = fs.existsSync(LOCAL_CONTROLS_PATH) ? JSON.parse(fs.readFileSync(LOCAL_CONTROLS_PATH, "utf8")) : [];
+    assert.equal(
+      midway.some((entry) => entry.jobId === "job-wait"),
+      false,
+      "queueAgentControlCommand must not write while another holder still has the lock"
+    );
+
+    agentStore.releaseLocalLock(otherWriterLockId, LOCAL_CONTROLS_LOCK_PATH);
+
+    const queued = await queuePromise;
+    assert.ok(queued.id);
+
+    const after = JSON.parse(fs.readFileSync(LOCAL_CONTROLS_PATH, "utf8"));
+    assert.equal(after.some((entry) => entry.jobId === "job-wait"), true, "the write must land once the lock frees up");
+  } finally {
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("local_file mode: two overlapping queueAgentControlCommand calls both survive — neither operator command is lost", async () => {
+  const restoreEnv = forceLocalFileMode();
+  try {
+    const agentStore = freshAgentStore();
+
+    // Hold the lock out from under the module to force both calls to genuinely contend and
+    // retry, the same way two overlapping operator actions (e.g. two browser tabs) would.
+    const otherWriterLockId = "other-writer-controls-b";
+    assert.equal(agentStore.acquireLocalLock(otherWriterLockId, 5, LOCAL_CONTROLS_LOCK_PATH), true);
+
+    const queuePause = agentStore.queueAgentControlCommand({ type: "pause", jobId: "job-a" });
+    const queueResume = agentStore.queueAgentControlCommand({ type: "resume", jobId: "job-b" });
+
+    await sleep(60);
+    agentStore.releaseLocalLock(otherWriterLockId, LOCAL_CONTROLS_LOCK_PATH);
+
+    const [pauseEntry, resumeEntry] = await Promise.all([queuePause, queueResume]);
+    assert.ok(pauseEntry.id);
+    assert.ok(resumeEntry.id);
+
+    const drained = await agentStore.drainAgentControlCommands(20);
+    assert.equal(drained.some((entry) => entry.jobId === "job-a"), true, "the first overlapping command must not be dropped");
+    assert.equal(drained.some((entry) => entry.jobId === "job-b"), true, "the second overlapping command must not be dropped");
+  } finally {
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("local_file mode: drainAgentControlCommands does not clobber a command queued while it is contending for the lock", async () => {
+  const restoreEnv = forceLocalFileMode();
+  try {
+    const agentStore = freshAgentStore();
+    await agentStore.queueAgentControlCommand({ type: "pause", jobId: "job-pre-existing" });
+
+    const otherWriterLockId = "other-writer-controls-c";
+    assert.equal(agentStore.acquireLocalLock(otherWriterLockId, 5, LOCAL_CONTROLS_LOCK_PATH), true);
+
+    const drainPromise = agentStore.drainAgentControlCommands(20);
+    const queuePromise = agentStore.queueAgentControlCommand({ type: "takeover", jobId: "job-concurrent" });
+
+    await sleep(60);
+    agentStore.releaseLocalLock(otherWriterLockId, LOCAL_CONTROLS_LOCK_PATH);
+
+    const [drained] = await Promise.all([drainPromise, queuePromise]);
+    assert.equal(drained.some((entry) => entry.jobId === "job-pre-existing"), true, "the pre-existing command must be drained");
+
+    // Whether queueAgentControlCommand's write lands before or after drainAgentControlCommands'
+    // read+splice+write is a genuine race (both are simply retrying for the same lock), so
+    // job-concurrent may surface in this first drain result or in a later one — either is a
+    // correct outcome under the lock. What must never happen is it appearing in neither (lost)
+    // or in both (duplicated).
+    const remaining = await agentStore.drainAgentControlCommands(20);
+    const concurrentSightings = [drained, remaining].filter((batch) => batch.some((entry) => entry.jobId === "job-concurrent")).length;
+    assert.equal(concurrentSightings, 1, "the command queued during the drain must land exactly once, not be lost or duplicated");
+  } finally {
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("redis mode: readAgentState falls back to a safe initial state instead of throwing on a corrupted blob", async () => {
+  const restoreEnv = forceLocalFileMode();
+  const originalFetch = global.fetch;
+  try {
+    process.env.KV_REST_API_URL = "https://example-redis.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    const agentStore = freshAgentStore();
+    assert.equal(agentStore.getAgentStoreProfile().mode, "redis");
+
+    global.fetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ result: "{not valid json" })
+    });
+
+    const state = await agentStore.readAgentState();
+    assert.deepEqual(state, normalizeAgentState(createInitialAgentState()));
+  } finally {
+    global.fetch = originalFetch;
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("redis mode: readAgentState still parses and returns a well-formed blob unchanged", async () => {
+  const restoreEnv = forceLocalFileMode();
+  const originalFetch = global.fetch;
+  try {
+    process.env.KV_REST_API_URL = "https://example-redis.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    const agentStore = freshAgentStore();
+    assert.equal(agentStore.getAgentStoreProfile().mode, "redis");
+
+    const wellFormed = normalizeAgentState(createInitialAgentState());
+    global.fetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ result: JSON.stringify(wellFormed) })
+    });
+
+    const state = await agentStore.readAgentState();
+    assert.deepEqual(state, wellFormed, "a well-formed blob must still round-trip unchanged");
+  } finally {
+    global.fetch = originalFetch;
+    cleanupLocalFiles();
+    restoreEnv();
+  }
+});
+
+test("local_file mode: the control-command lock is a dedicated file that does not contend with the main agent-state lock", async () => {
+  const restoreEnv = forceLocalFileMode();
+  try {
+    const agentStore = freshAgentStore();
+
+    // Hold the main content-agent-state lock ...
+    assert.equal(await agentStore.acquireAgentLock("agent-holder-controls-isolation", 5), true);
+
+    // ... queueAgentControlCommand must still be able to write immediately: it is not contending
+    // on the same lock file.
+    const queued = await agentStore.queueAgentControlCommand({ type: "pause", jobId: "job-isolated" });
+    assert.ok(queued.id);
+
+    assert.equal(fs.existsSync(LOCAL_LOCK_PATH), true, "the main agent-state lock file must still exist — the write above must not have released it");
+    assert.equal(fs.existsSync(LOCAL_CONTROLS_LOCK_PATH), false, "queueAgentControlCommand must release its own lock file after writing");
+
+    await agentStore.releaseAgentLock("agent-holder-controls-isolation");
   } finally {
     cleanupLocalFiles();
     restoreEnv();

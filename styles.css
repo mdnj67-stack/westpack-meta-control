@@ -9805,54 +9805,92 @@ h1 {
   white-space: nowrap;
 }
 
-.meta-budget-mode-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+/* Actual spend and planned budget deliberately cover different windows: spend is the real
+   amount for the selected range, budget is always stated per 30-day month because that is
+   the unit the team budgets in. This strip states both windows up front so the two halves
+   of the panel are never read as the same period. */
+.meta-budget-window-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 12px;
 }
 
-.meta-budget-mode-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 38px;
-  padding: 0 14px;
-  border-radius: 999px;
+.meta-budget-window {
+  display: grid;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(231, 236, 255, 0.84);
+  background: rgba(255, 255, 255, 0.04);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.meta-budget-mode-pill strong {
-  color: #ffffff;
-  font-size: 0.78rem;
+.meta-budget-window-tag {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.62rem;
   font-weight: 700;
 }
 
-.meta-budget-mode-pill span:last-child {
+.meta-budget-window strong {
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.meta-budget-window-note {
   font-size: 0.75rem;
-  color: rgba(203, 212, 255, 0.74);
+  color: rgba(203, 212, 255, 0.7);
+  line-height: 1.4;
 }
 
-.meta-budget-mode-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  flex: 0 0 auto;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+.meta-budget-window.is-actual {
+  border-left: 3px solid #d7ab59;
 }
 
-.meta-budget-mode-pill.is-spend .meta-budget-mode-dot {
-  background: #d7ab59;
+.meta-budget-window.is-actual .meta-budget-window-tag {
+  color: #e8cc99;
 }
 
-.meta-budget-mode-pill.is-budget .meta-budget-mode-dot {
-  background: #62d7b4;
+.meta-budget-window.is-planned {
+  border-left: 3px solid #62d7b4;
 }
 
-.meta-budget-mode-pill.is-breakdown .meta-budget-mode-dot {
-  background: #9eaef0;
+.meta-budget-window.is-planned .meta-budget-window-tag {
+  color: #99c1b2;
+}
+
+.meta-budget-window-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(196, 204, 255, 0.6);
+}
+
+/* The same colour coding carries into the two mix cards, so a reader can tell at a glance
+   which card is the selected range and which is the monthly budget. */
+.meta-budget-stack-card.is-actual-card {
+  border-top: 2px solid rgba(215, 171, 89, 0.55);
+}
+
+.meta-budget-stack-card.is-planned-card {
+  border-top: 2px solid rgba(98, 215, 180, 0.55);
+}
+
+@media (max-width: 720px) {
+  .meta-budget-window-strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .meta-budget-window-divider {
+    justify-content: flex-start;
+    padding: 0;
+  }
 }
 
 .meta-budget-kpi-grid,
@@ -9901,6 +9939,23 @@ h1 {
 
 .meta-budget-kpi-card.is-budget {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(79, 227, 196, 0.07) 100%);
+}
+
+/* Pacing card: a 30-day spend pace measured against the 30-day budget, so both sides of
+   the comparison cover the same length of time. */
+.meta-budget-kpi-card.is-pace {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(158, 174, 240, 0.07) 100%);
+}
+
+/* Three cards when pacing is available, two when the budget has not been synced. */
+.meta-budget-kpi-grid:has(.meta-budget-kpi-card.is-pace) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .meta-budget-kpi-grid:has(.meta-budget-kpi-card.is-pace) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .meta-budget-stack-head {
@@ -9968,6 +10023,32 @@ h1 {
 
 .meta-budget-segment.tone-leads {
   background: linear-gradient(135deg, rgba(111, 125, 163, 0.9) 0%, rgba(176, 187, 214, 0.96) 100%);
+}
+
+/* Objective families beyond awareness/conversion/leads. They only render for accounts
+   that actually run them, but they need a tone so they never fall back to an unstyled
+   transparent segment. */
+.meta-budget-segment.tone-traffic {
+  background: linear-gradient(135deg, rgba(126, 158, 176, 0.9) 0%, rgba(184, 210, 222, 0.96) 100%);
+}
+
+.meta-budget-segment.tone-engagement {
+  background: linear-gradient(135deg, rgba(163, 132, 168, 0.9) 0%, rgba(214, 190, 218, 0.96) 100%);
+}
+
+.meta-budget-segment.tone-app-promotion {
+  background: linear-gradient(135deg, rgba(140, 152, 128, 0.9) 0%, rgba(197, 206, 184, 0.96) 100%);
+}
+
+.meta-budget-segment.tone-unclassified,
+.meta-budget-segment.tone-neutral {
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(168, 168, 176, 0.85) 0px,
+    rgba(168, 168, 176, 0.85) 8px,
+    rgba(198, 198, 206, 0.9) 8px,
+    rgba(198, 198, 206, 0.9) 16px
+  );
 }
 
 .meta-budget-rows {
@@ -10070,6 +10151,42 @@ h1 {
 
 .meta-budget-row.tone-leads .meta-budget-row-fill {
   background: linear-gradient(90deg, #6f7da3 0%, #aebade 100%);
+}
+
+.meta-budget-row.tone-traffic .meta-budget-row-fill {
+  background: linear-gradient(90deg, #7e9eb0 0%, #b8d2de 100%);
+}
+
+.meta-budget-row.tone-engagement .meta-budget-row-fill {
+  background: linear-gradient(90deg, #a384a8 0%, #d6beda 100%);
+}
+
+.meta-budget-row.tone-app-promotion .meta-budget-row-fill {
+  background: linear-gradient(90deg, #8c9880 0%, #c5ceb8 100%);
+}
+
+.meta-budget-row.tone-unclassified .meta-budget-row-fill,
+.meta-budget-row.tone-neutral .meta-budget-row-fill {
+  background: linear-gradient(90deg, #a8a8b0 0%, #c6c6ce 100%);
+}
+
+/* Shown instead of the planned-budget bar when the snapshot carries no server-normalised
+   budget. Budget figures are never estimated in the browser, so the panel says so. */
+.meta-budget-empty {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.meta-budget-variance-pill.is-unknown {
+  background: rgba(168, 168, 176, 0.12);
+  border-color: rgba(168, 168, 176, 0.22);
+  color: var(--muted);
 }
 
 .meta-budget-row-footer {
@@ -10214,8 +10331,17 @@ h1 {
   position: static;
 }
 
-#studio-panel.is-duplicate-focused:not(.is-duplicate-review-open) #preview-editor-card,
-#studio-panel.is-duplicate-focused:not(.is-duplicate-review-open) .studio-side {
+#studio-panel.is-duplicate-focused:not(.is-duplicate-review-open):not(.is-duplicate-step-3) #preview-editor-card,
+#studio-panel.is-duplicate-focused:not(.is-duplicate-review-open):not(.is-duplicate-step-3) .studio-side {
+  display: none;
+}
+
+/* Step 3 ("Push") is the review step: the copy editor and the preview/variants/payload
+   cards read as this step's own content, stacked full-width directly beneath it (the
+   .studio-shell grid stays single-column here, see above), rather than a separately
+   toggled sidebar. Reviewing a target from step 2's batch list still opens the
+   side-by-side layout via .is-duplicate-review-open, unchanged. */
+#studio-panel.is-duplicate-focused.is-duplicate-step-3 #duplicate-close-review-button {
   display: none;
 }
 

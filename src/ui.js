@@ -1,4 +1,6 @@
-﻿export function renderStats(stats) {
+﻿import { OBJECTIVE_GROUP_LABELS, resolveObjectiveGroupLabel } from "./meta-objectives.js?v=20260904-metaobjectives1";
+
+export function renderStats(stats) {
   const grid = document.getElementById("stats-grid");
   if (!grid) return;
 
@@ -480,6 +482,45 @@ export function renderOverviewGrid(cards = [], visible = false) {
   });
 }
 
+const OBJECTIVE_TONES = {
+  awareness: "awareness",
+  traffic: "traffic",
+  engagement: "engagement",
+  leads: "leads",
+  conversion: "conversion",
+  app_promotion: "app-promotion",
+  unclassified: "unclassified"
+};
+
+function resolveObjectiveTone(key) {
+  return OBJECTIVE_TONES[String(key || "")] || "neutral";
+}
+
+// Segment widths have to add up to 100% or the rendered bar contradicts the percentages
+// printed next to it. A flat `Math.max(5, pct)` floor per segment overflowed the track
+// whenever one objective was small, so the floor is applied and then the whole set is
+// rescaled, with the rounding remainder absorbed by the largest segment.
+function buildStackSegments(items = [], valueKey = "amount", minimumPercent = 4) {
+  const values = items.map((item) => Math.max(0, Number(item?.[valueKey]) || 0));
+  const total = values.reduce((sum, value) => sum + value, 0);
+  if (!(total > 0)) {
+    return items.map((item) => ({ item, width: 0 }));
+  }
+
+  const visible = values.map((value) => (value > 0 ? Math.max(minimumPercent, (value / total) * 100) : 0));
+  const visibleTotal = visible.reduce((sum, value) => sum + value, 0);
+  const scaled = visible.map((value) => (visibleTotal > 0 ? (value / visibleTotal) * 100 : 0));
+
+  const largestIndex = scaled.reduce((best, value, index) => (value > scaled[best] ? index : best), 0);
+  const rounded = scaled.map((value) => Number(value.toFixed(2)));
+  const drift = Number((100 - rounded.reduce((sum, value) => sum + value, 0)).toFixed(2));
+  if (rounded[largestIndex] > 0) {
+    rounded[largestIndex] = Number((rounded[largestIndex] + drift).toFixed(2));
+  }
+
+  return items.map((item, index) => ({ item, width: rounded[index] }));
+}
+
 export function renderOverviewSpendSplit(model = null, visible = false) {
   const node = document.getElementById("overview-spend-split");
   const titleNode = document.getElementById("overview-spend-title");
@@ -499,11 +540,9 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
 
   const maxAmount = Math.max(...items.map((item) => Number(item?.amount) || 0), 1);
   const maxBudgetAmount = Math.max(...items.map((item) => Number(item?.budgetAmount) || 0), 1);
-  const toneMap = {
-    awareness: "awareness",
-    conversion: "conversion",
-    leads: "leads"
-  };
+  const budgetAvailable = model?.budgetAvailable !== false && totalBudgetAmount > 0;
+  const spendSegments = buildStackSegments(items, "amount");
+  const budgetSegments = buildStackSegments(items, "budgetAmount");
 
   node.innerHTML = `
     <section class="meta-budget-premium">
@@ -515,21 +554,17 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
         <div class="meta-budget-range-chip">${escapeHtml(model?.rangeLabel || "")}</div>
       </div>
 
-      <div class="meta-budget-mode-strip" aria-label="Budget comparison modes">
-        <div class="meta-budget-mode-pill is-spend">
-          <span class="meta-budget-mode-dot"></span>
-          <strong>Actual</strong>
-          <span>${escapeHtml(model?.rangeLabel || "Selected range")}</span>
+      <div class="meta-budget-window-strip" aria-label="Reporting windows in this panel">
+        <div class="meta-budget-window is-actual">
+          <span class="meta-budget-window-tag">Actual</span>
+          <strong>${escapeHtml(model?.rangeLabel || "Selected range")}</strong>
+          <span class="meta-budget-window-note">Money that actually left the account</span>
         </div>
-        <div class="meta-budget-mode-pill is-budget">
-          <span class="meta-budget-mode-dot"></span>
-          <strong>Planned topline</strong>
-          <span>${escapeHtml(model?.kpiBudgetLabel || "30 days")}</span>
-        </div>
-        <div class="meta-budget-mode-pill is-breakdown">
-          <span class="meta-budget-mode-dot"></span>
-          <strong>Planned mix</strong>
-          <span>${escapeHtml(model?.budgetMixLabel || "Selected range")}</span>
+        <div class="meta-budget-window-divider" aria-hidden="true">vs</div>
+        <div class="meta-budget-window is-planned">
+          <span class="meta-budget-window-tag">Planned</span>
+          <strong>30 days</strong>
+          <span class="meta-budget-window-note">Monthly budget, the unit the team budgets in</span>
         </div>
       </div>
 
@@ -537,42 +572,57 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
         <article class="meta-budget-kpi-card is-spend">
           <span>${escapeHtml(model?.totalLabel || "Total spend")}</span>
           <strong>${escapeHtml(model?.formattedTotalAmount || "--")}</strong>
-          <p>Actual amount spent in the selected reporting window.</p>
+          <p>Actual amount spent in ${escapeHtml(model?.rangeLabel || "the selected range")}.</p>
         </article>
         <article class="meta-budget-kpi-card is-budget">
-          <span>${escapeHtml(model?.kpiBudgetLabel || model?.totalBudgetLabel || "Planned budget")}</span>
+          <span>${escapeHtml(model?.kpiBudgetLabel || model?.totalBudgetLabel || "Planned budget (30 days)")}</span>
           <strong>${escapeHtml(model?.formattedKpiBudgetAmount || model?.formattedTotalBudgetAmount || "--")}</strong>
-          <p>${escapeHtml(model?.kpiBudgetMeta || "Projected 30-day pace based on active Meta campaign and ad set budgets.")}</p>
+          <p>${escapeHtml(model?.kpiBudgetMeta || "Monthly budget from the active Meta campaign and ad set budgets.")}</p>
         </article>
+        ${budgetAvailable ? `
+        <article class="meta-budget-kpi-card is-pace">
+          <span>${escapeHtml(model?.paceLabel || "30-day spend pace vs monthly budget")}</span>
+          <strong>${escapeHtml(`${Number(model?.totalPacePercentage || 0).toFixed(0)}%`)}</strong>
+          <p>${escapeHtml(
+            Number(model?.periodDays) === 30
+              ? "Spend in this range measured against the monthly budget."
+              : `Spend scaled to a 30-day pace (${model?.formattedTotalMonthlySpendPace || "--"}) so it is comparable with the monthly budget.`
+          )}</p>
+        </article>
+        ` : ""}
       </div>
 
       <div class="meta-budget-dual-stack">
-        <article class="meta-budget-stack-card">
+        <article class="meta-budget-stack-card is-actual-card">
           <div class="meta-budget-stack-head">
-            <strong>Actual spend mix</strong>
+            <strong>${escapeHtml(model?.spendMixLabel || "Actual spend mix")}</strong>
             <span>${escapeHtml(model?.formattedTotalAmount || "--")}</span>
           </div>
           <div class="meta-budget-stack" role="img" aria-label="${escapeHtml(model?.title || "Objective spend split")}">
-            ${items.map((item) => `
-              <div class="meta-budget-segment tone-${escapeHtml(toneMap[item.key] || "neutral")}" style="width:${Math.max(5, Number(item?.percentage) || 0)}%">
-                <span>${escapeHtml(item.label || "")}</span>
+            ${spendSegments.filter((segment) => segment.width > 0).map((segment) => `
+              <div class="meta-budget-segment tone-${escapeHtml(resolveObjectiveTone(segment.item.key))}" style="width:${segment.width}%" title="${escapeHtml(`${segment.item.label || ""}: ${segment.item.formattedAmount || "--"} (${Number(segment.item?.percentage || 0).toFixed(1)}%)`)}">
+                <span>${escapeHtml(segment.item.label || "")}</span>
               </div>
             `).join("")}
           </div>
         </article>
 
-        <article class="meta-budget-stack-card">
+        <article class="meta-budget-stack-card is-planned-card">
           <div class="meta-budget-stack-head">
-            <strong>${escapeHtml(model?.budgetMixLabel || "Planned budget mix")}</strong>
+            <strong>${escapeHtml(model?.budgetMixLabel || "Planned budget mix (30 days)")}</strong>
             <span>${escapeHtml(model?.formattedTotalBudgetAmount || "--")}</span>
           </div>
+          ${budgetAvailable ? `
           <div class="meta-budget-stack is-budget-view" role="img" aria-label="${escapeHtml(model?.budgetMixLabel || "Planned budget mix by objective")}">
-            ${items.map((item) => `
-              <div class="meta-budget-segment tone-${escapeHtml(toneMap[item.key] || "neutral")}" style="width:${Math.max(5, Number(item?.budgetPercentage) || 0)}%">
-                <span>${escapeHtml(item.label || "")}</span>
+            ${budgetSegments.filter((segment) => segment.width > 0).map((segment) => `
+              <div class="meta-budget-segment tone-${escapeHtml(resolveObjectiveTone(segment.item.key))}" style="width:${segment.width}%" title="${escapeHtml(`${segment.item.label || ""}: ${segment.item.formattedBudgetAmount || "--"} (${Number(segment.item?.budgetPercentage || 0).toFixed(1)}%)`)}">
+                <span>${escapeHtml(segment.item.label || "")}</span>
               </div>
             `).join("")}
           </div>
+          ` : `
+          <p class="meta-budget-empty">${escapeHtml(model?.kpiBudgetMeta || "Planned budget is unavailable for this snapshot.")}</p>
+          `}
         </article>
       </div>
 
@@ -582,19 +632,33 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
           const budgetAmount = Number(item?.budgetAmount) || 0;
           const spendWidth = Math.max(5, (spendAmount / maxAmount) * 100);
           const budgetWidth = budgetAmount > 0 ? Math.max(5, (budgetAmount / maxBudgetAmount) * 100) : 0;
-          const variance = budgetAmount > 0 ? ((spendAmount / budgetAmount) * 100) : 0;
-          const varianceLabel = budgetAmount > 0 ? `${variance.toFixed(0)}% of planned budget` : "No active budget";
-          const pacingTone = variance > 105 ? "is-over" : variance > 0 && variance < 85 ? "is-under" : "is-even";
+          // Pacing compares a 30-day spend pace against the 30-day budget, so the two
+          // sides cover the same length of time even when a shorter range is selected.
+          const variance = Number(item?.pacePercentage) || 0;
+          // A missing budget figure and a genuinely unbudgeted objective are different
+          // facts, so they get different labels instead of a shared "No active budget".
+          const varianceLabel = budgetAmount > 0
+            ? `${variance.toFixed(0)}% of monthly budget`
+            : budgetAvailable
+              ? "No active budget"
+              : "Budget not synced";
+          const pacingTone = !(budgetAmount > 0)
+            ? "is-unknown"
+            : variance > 105
+              ? "is-over"
+              : variance < 85
+                ? "is-under"
+                : "is-even";
           return `
-            <article class="meta-budget-row tone-${escapeHtml(toneMap[item.key] || "neutral")}">
+            <article class="meta-budget-row tone-${escapeHtml(resolveObjectiveTone(item.key))}">
               <div class="meta-budget-row-topline">
                 <div class="meta-budget-row-head">
                   <strong>${escapeHtml(item.label || "")}</strong>
                   <span>${escapeHtml(String(Number(item?.percentage || 0).toFixed(1)))}% spend share</span>
                 </div>
                 <div class="meta-budget-row-value">
-                  <strong>${escapeHtml(item.formattedAmount || "--")}</strong>
-                  <span>${escapeHtml(item.formattedBudgetAmount || "--")}</span>
+                  <strong title="${escapeHtml(`Actual spend, ${model?.rangeLabel || "selected range"}`)}">${escapeHtml(item.formattedAmount || "--")}</strong>
+                  <span title="Planned budget per 30-day month">${escapeHtml(item.formattedBudgetAmount || "--")}</span>
                 </div>
               </div>
               <div class="meta-budget-row-rail">
@@ -606,9 +670,13 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
                 </div>
               </div>
               <div class="meta-budget-row-footer">
-                <span class="meta-budget-row-caption">Actual spend</span>
-                <span class="meta-budget-variance-pill ${escapeHtml(pacingTone)}">${escapeHtml(varianceLabel)}</span>
-                <span class="meta-budget-row-caption">${escapeHtml(model?.totalBudgetLabel || "Planned budget")}</span>
+                <span class="meta-budget-row-caption">Actual · ${escapeHtml(model?.rangeLabel || "selected range")}</span>
+                <span class="meta-budget-variance-pill ${escapeHtml(pacingTone)}" title="${escapeHtml(
+                  budgetAmount > 0 && Number(model?.periodDays) !== 30
+                    ? `30-day spend pace ${item.formattedMonthlySpendPace || "--"} against a monthly budget of ${item.formattedBudgetAmount || "--"}`
+                    : `Spend against a monthly budget of ${item.formattedBudgetAmount || "--"}`
+                )}">${escapeHtml(varianceLabel)}</span>
+                <span class="meta-budget-row-caption">Planned · 30 days</span>
               </div>
             </article>
           `;
@@ -748,67 +816,18 @@ export function renderHeroPanel(items = []) {
   `).join("");
 }
 
-export function renderMetaBudgetVisualization(model = null, visible = false) {
-  const section = document.getElementById("meta-budget-visualization-section");
-  const node = document.getElementById("meta-budget-visualization");
-  const titleNode = document.getElementById("meta-budget-title");
-  const subNode = document.getElementById("meta-budget-sub");
-  if (!section || !node) return;
-
-  const items = Array.isArray(model?.items) ? model.items : [];
-  const totalMonthlyAmount = Number(model?.totalMonthlyAmount) || 0;
-  if (!visible || !items.length || !(totalMonthlyAmount > 0)) {
-    section.hidden = true;
-    node.innerHTML = "";
-    return;
-  }
-
-  section.hidden = false;
-  if (titleNode) titleNode.textContent = model?.title || "Spend distribution";
-  if (subNode) subNode.textContent = model?.subtitle || "Brand awareness, conversion and leads split from real spend.";
-
-  const maxAmount = Math.max(...items.map((item) => Number(item?.amount) || 0), 1);
-  const toneMap = {
-    awareness: "awareness",
-    conversion: "conversion",
-    leads: "leads"
-  };
-
-  node.innerHTML = `
-    <div class="meta-budget-stack" role="img" aria-label="${escapeHtml(model?.title || "Budget distribution")}">
-      ${items.map((item) => `
-        <div class="meta-budget-segment tone-${escapeHtml(toneMap[item.key] || "neutral")}" style="width:${Math.max(5, Number(item?.percentage) || 0)}%">
-          <span>${escapeHtml(item.label || "")}</span>
-        </div>
-      `).join("")}
-    </div>
-    <div class="meta-budget-rows">
-      ${items.map((item) => `
-        <article class="meta-budget-row tone-${escapeHtml(toneMap[item.key] || "neutral")}">
-          <div class="meta-budget-row-head">
-            <strong>${escapeHtml(item.label || "")}</strong>
-            <span>${escapeHtml(String(Number(item?.percentage || 0).toFixed(1)))}%</span>
-          </div>
-          <div class="meta-budget-row-track">
-            <span class="meta-budget-row-fill" style="width:${Math.max(5, ((Number(item?.amount) || 0) / maxAmount) * 100)}%"></span>
-          </div>
-          <div class="meta-budget-row-value">${escapeHtml(item.formattedAmount || "--")}</div>
-        </article>
-      `).join("")}
-    </div>
-  `;
-}
-
 function itemsHaveLength(items) {
   return Array.isArray(items) && items.length > 0;
 }
 
 function formatLensLabel(value = "") {
-  if (value === "awareness") return "Awareness";
-  if (value === "leads") return "Leads";
-  if (value === "conversion") return "Conversion";
+  // The two attribution splits are lenses, not Meta objective families, so they keep
+  // their own labels. Everything else reads from the shared objective table, which means
+  // a campaign on a newly supported objective shows a real name instead of a raw key.
   if (value === "conversion_standard") return "Conversion (standard)";
   if (value === "conversion_incremental") return "Conversion (incremental)";
+  if (value === "awareness") return "Awareness";
+  if (OBJECTIVE_GROUP_LABELS[value]) return resolveObjectiveGroupLabel(value);
   return value || "General";
 }
 

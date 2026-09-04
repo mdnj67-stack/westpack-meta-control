@@ -7,6 +7,7 @@ function createMetaSnapshotDashboardBuilder({
   hasIncrementalNameTag,
   buildQualityWarnings,
   resolveConversionAttribution,
+  classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildGeneralSpendDistribution,
@@ -44,6 +45,10 @@ function createMetaSnapshotDashboardBuilder({
         status: campaign.status || campaign.effective_status || "",
         daily_budget: normalizeBudgetValue(campaign.daily_budget, budgetNormalization.divisor),
         lifetime_budget: normalizeBudgetValue(campaign.lifetime_budget, budgetNormalization.divisor),
+        // Carried so a lifetime budget can be spread across its real flight rather than
+        // across the reporting window.
+        start_time: campaign.start_time || "",
+        stop_time: campaign.stop_time || "",
         category: enrichedCampaign?.category || classifyCampaign(campaign),
         attribution_mode: attribution.mode,
         attribution_source: attribution.source,
@@ -111,6 +116,22 @@ function createMetaSnapshotDashboardBuilder({
     const nonNamedIncrementalMetricsCount = conversionBuckets.standard.filter((campaign) => {
       return campaign?.incremental_metrics_available;
     }).length;
+    const budgetCampaigns = buildBudgetCampaigns({
+      budgetCampaignsRaw,
+      enrichedCampaignById,
+      adSetsByCampaignId,
+      budgetNormalization
+    });
+    const budgetAllocation = calculateBudgetAllocation(budgetCampaigns, budgetAdSets, dateScope.days, {
+      // budgetCampaigns already carry the resolved attribution mode; fall back to a fresh
+      // resolve only if a row somehow arrives without one.
+      classifyConversionAttribution: (campaign) => String(campaign?.attribution_mode || "")
+        || classifyConversionAttribution(campaign)
+    });
+    const generalSpendDistribution = buildGeneralSpendDistribution(enrichedCampaigns, dateScope, accountCurrency, budgetAllocation);
+
+    // Built after the allocation so the warnings can report on budget coverage: unmapped
+    // objectives, lifetime budgets without a flight, and active campaigns with no budget.
     const qualityWarnings = buildQualityWarnings({
       budgetNormalization,
       includedCampaignCount: includedCampaigns.length,
@@ -124,25 +145,19 @@ function createMetaSnapshotDashboardBuilder({
       nonNamedIncrementalMetricsCount,
       campaignSpendTotal: totalSpend,
       awarenessCampaignSpendTotal,
-      awarenessAdSetSpendTotal
+      awarenessAdSetSpendTotal,
+      budgetAllocation,
+      unclassifiedCampaignCount: buckets.unclassified.length,
+      unclassifiedSpendTotal: readNumber(generalSpendDistribution?.unclassifiedAmount, 0),
+      unclassifiedCampaigns: buckets.unclassified,
+      accountCurrency,
+      periodDays: dateScope.days
     });
-
-    const budgetCampaigns = buildBudgetCampaigns({
-      budgetCampaignsRaw,
-      enrichedCampaignById,
-      adSetsByCampaignId,
-      budgetNormalization
-    });
-    const budgetAllocation = calculateBudgetAllocation(budgetCampaigns, budgetAdSets, dateScope.days);
-    const generalSpendDistribution = buildGeneralSpendDistribution(enrichedCampaigns, dateScope, accountCurrency, budgetAllocation);
 
     const dashboard = {
       statsByLens: {
         general: buildLensStats(enrichedCampaigns, "general", dateScope, {
-          adSets,
           currency: accountCurrency,
-          budgetCampaigns,
-          budgetAdSets,
           generalSpendDistribution
         }),
         awareness: buildLensStats(buckets.awareness, "awareness", dateScope, { currency: accountCurrency }),
