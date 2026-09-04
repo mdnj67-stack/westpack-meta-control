@@ -128,6 +128,56 @@ test("every name the handler destructures from customer-acquisition is exported 
   assert.deepEqual(missing, [], `the handler imports ${missing.join(", ")} which customer-acquisition.js does not export`);
 });
 
+test("every customer-acquisition helper the handler calls is actually imported", () => {
+  // The reverse of the test above, and the direction that slipped through: a name used in
+  // the handler but missing from the require block is `undefined`, and because the call
+  // sites are inside the request handler rather than at module level, both `node --check`
+  // and `require()` stay happy. It only fails when someone loads the dashboard.
+  const moduleSource = readFileSync(join(root, "server", "meta", "customer-acquisition.js"), "utf8");
+  const exported = (moduleSource.match(/module\.exports = \{([\s\S]*?)\};/) || [, ""])[1]
+    .split(",")
+    .map((entry) => entry.split(":")[0].trim())
+    .filter((name) => /^[A-Za-z_$][\w$]*$/.test(name));
+
+  const imported = ((handlerSource.match(
+    /const \{([^}]*)\} = require\("\.\.\/\.\.\/server\/meta\/customer-acquisition"\);/
+  ) || [, ""])[1])
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  // Strip strings and comments so a helper named only in prose is not counted as a call.
+  const code = handlerSource
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/(^|[^:/])\/\/[^\n]*/g, "$1")
+    .replace(/'(?:\\.|[^'\\])*'/g, '""')
+    .replace(/"(?:\\.|[^"\\])*"/g, '""');
+
+  const used = exported.filter((name) => new RegExp(`(?<![\\w.$])${name}\\s*\\(`).test(code));
+  const missing = used.filter((name) => !imported.includes(name));
+
+  assert.deepEqual(
+    missing,
+    [],
+    `api/meta/account-snapshot.js calls ${missing.join(", ")} from customer-acquisition.js without importing ${missing.length === 1 ? "it" : "them"}, so ${missing.length === 1 ? "it" : "each"} is undefined at request time`
+  );
+});
+
+test("the handler does not import customer-acquisition helpers it never uses", () => {
+  const moduleSource = readFileSync(join(root, "server", "meta", "customer-acquisition.js"), "utf8");
+  const imported = ((handlerSource.match(
+    /const \{([^}]*)\} = require\("\.\.\/\.\.\/server\/meta\/customer-acquisition"\);/
+  ) || [, ""])[1])
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  const body = handlerSource.slice(handlerSource.indexOf("customer-acquisition\");"));
+  const unused = imported.filter((name) => !new RegExp(`(?<![\\w.$])${name}\\b`).test(body));
+  assert.deepEqual(unused, [], `the handler imports ${unused.join(", ")} but never references ${unused.length === 1 ? "it" : "them"}`);
+  assert.ok(moduleSource.length > 0);
+});
+
 test("the dependency readers discriminate rather than returning empty", () => {
   const sample = "function createMetaSnapshotThing({\n  alpha,\n  beta = 3,\n  gamma\n}) {\n  return 1;\n}";
   assert.deepEqual(factoryDependencies(sample, "createMetaSnapshotThing"), ["alpha", "beta", "gamma"]);

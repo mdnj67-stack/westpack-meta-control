@@ -692,6 +692,80 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
 // budgets against: it never treats a missing conversion as "zero new customers", it never
 // folds untagged purchases into either customer type, and it never presents a single cost
 // per new customer without saying what spend it was divided by.
+// The panel's own period selector. It is deliberately local: changing it must not touch
+// the dashboard's global date filter, and the default stays month to date so the view
+// nobody asked to change stays the same.
+//
+// Every preset is computed server side from one daily series, so switching costs no Meta
+// request and no reload - the handler below just re-renders from data already in memory.
+let acquisitionPresetKey = "";
+
+function resolveAcquisitionPreset(model) {
+  const presets = model?.trend?.windows?.presets;
+  if (!Array.isArray(presets) || !presets.length) return null;
+  const wanted = acquisitionPresetKey || model?.trend?.windows?.defaultPreset || presets[0].key;
+  return presets.find((preset) => preset.key === wanted) || presets[0];
+}
+
+// The trend renderer predates the presets, so give it the shape it expects. Keeping one
+// renderer means a change to how direction or the badge reads applies to every period.
+function adaptPresetToTrend(model, preset) {
+  const windows = model?.trend?.windows;
+  if (!preset || !windows) return model?.trend || null;
+  return {
+    available: Boolean(windows.available),
+    comparable: preset.comparable,
+    notComparableReason: preset.note || "Nothing to compare for this period.",
+    current: preset.current,
+    previous: preset.previous,
+    today: windows.today,
+    delta: preset.delta,
+    percentChange: preset.percentChange,
+    direction: preset.direction,
+    // A window-length mismatch is surfaced the same way a clamped month is.
+    clamped: Boolean(preset.note),
+    clampedNote: preset.note || ""
+  };
+}
+
+function renderAcquisitionPresetPicker(model) {
+  const windows = model?.trend?.windows;
+  const presets = Array.isArray(windows?.presets) ? windows.presets : [];
+  if (presets.length < 2) return "";
+
+  const active = resolveAcquisitionPreset(model);
+  return `
+    <div class="meta-acq-periods" role="group" aria-label="Period for the new customer comparison">
+      ${presets.map((preset) => `
+        <button type="button"
+          class="meta-acq-period${preset.key === active?.key ? " is-active" : ""}"
+          data-acq-preset="${escapeHtml(preset.key)}"
+          aria-pressed="${preset.key === active?.key ? "true" : "false"}"
+          title="${escapeHtml(`${preset.current.since} to ${preset.current.until} against ${preset.previous.since} to ${preset.previous.until}`)}">
+          ${escapeHtml(preset.label)}
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+// Bound once; the click handler re-renders the panel from the model already held.
+let acquisitionPresetModel = null;
+
+function bindAcquisitionPresetPicker() {
+  const node = document.getElementById("overview-acquisition");
+  if (!node || node.dataset.acqPresetsBound === "true") return;
+  node.dataset.acqPresetsBound = "true";
+  node.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-acq-preset]");
+    if (!button) return;
+    acquisitionPresetKey = String(button.dataset.acqPreset || "");
+    if (acquisitionPresetModel) {
+      renderOverviewCustomerAcquisition(acquisitionPresetModel, true);
+    }
+  });
+}
+
 export function renderOverviewCustomerAcquisition(model = null, visible = false) {
   const node = document.getElementById("overview-acquisition");
   const titleNode = document.getElementById("overview-acquisition-title");
@@ -722,11 +796,22 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
     subNode.textContent = `${escapeHtml(model.rangeLabel || "Selected range")} · counted from the New_customer and Existing_customer conversions on the ad account.`;
   }
 
+  // Held so the period buttons can re-render from data already in memory - switching
+  // period must not cost a request, and must not touch the dashboard's global date filter.
+  acquisitionPresetModel = model;
+
   const rows = Array.isArray(model.campaigns) ? model.campaigns : [];
-  const newCount = Number(model.newCustomers) || 0;
   const existingCount = Number(model.existingCustomers) || 0;
   const untagged = Number(model.untaggedPurchases) || 0;
   const maxNew = Math.max(...rows.map((r) => Number(r.newCustomers) || 0), 1);
+
+  // The headline new-customer figure follows the panel's own period selector. Everything
+  // below it that only exists per campaign stays on the dashboard's range and says so.
+  const active = resolveAcquisitionPreset(model);
+  const usingPreset = Boolean(active) && active.key !== (model.trend?.windows?.defaultPreset || "month_to_date");
+  const newCount = active
+    ? Number(active.current.newCustomers) || 0
+    : Number(model.newCustomers) || 0;
 
   // The three-way split of purchases: new, existing, and the remainder that matched
   // neither. Widths are normalised so the bar cannot contradict the printed counts.
@@ -741,33 +826,39 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
 
   node.innerHTML = `
     <section class="meta-acq">
+      ${renderAcquisitionPresetPicker(model)}
+
       <div class="meta-acq-kpis">
         <article class="meta-acq-kpi is-new">
-          <span>New customers</span>
+          <span>New customers${active ? ` · ${escapeHtml(active.label)}` : ""}</span>
           <strong>${escapeHtml(String(newCount))}</strong>
-          ${renderAcquisitionTrend(model.trend)}
-          <p>${escapeHtml(model.formattedNewCustomerRevenue || "--")} in revenue · ${escapeHtml(String(Number(model.newCustomerShare || 0).toFixed(1)))}% of identified buyers</p>
+          ${renderAcquisitionTrend(adaptPresetToTrend(model, active))}
+          <p>${escapeHtml(
+            active
+              ? `${active.current.formattedNewCustomerRevenue || "--"} in revenue`
+              : `${model.formattedNewCustomerRevenue || "--"} in revenue · ${Number(model.newCustomerShare || 0).toFixed(1)}% of identified buyers`
+          )}</p>
         </article>
         <article class="meta-acq-kpi is-cac">
-          <span>Cost per new customer</span>
-          <strong>${escapeHtml(model.formattedCostPerNewCustomer || "--")}</strong>
-          <p>${escapeHtml(model.costPerNewCustomerBasis || "")}${
-            Number(model.conversionCampaignCount) > 0
-              ? ` Conversion campaigns only: ${escapeHtml(model.formattedConversionCostPerNewCustomer || "--")}.`
-              : ""
-          }</p>
+          <span>Cost per new customer${active ? ` · ${escapeHtml(active.label)}` : ""}</span>
+          <strong>${escapeHtml(active ? (active.current.formattedCostPerNewCustomer || "--") : (model.formattedCostPerNewCustomer || "--"))}</strong>
+          <p>${escapeHtml(
+            active
+              ? `${active.current.formattedSpend || "--"} spent over ${active.current.days} days. Was ${active.previous.formattedCostPerNewCustomer || "--"} in ${active.previous.label}.`
+              : `${model.costPerNewCustomerBasis || ""}${Number(model.conversionCampaignCount) > 0 ? ` Conversion campaigns only: ${model.formattedConversionCostPerNewCustomer || "--"}.` : ""}`
+          )}</p>
         </article>
         <article class="meta-acq-kpi is-existing">
-          <span>Existing customers</span>
-          <strong>${escapeHtml(String(existingCount))}</strong>
-          <p>${escapeHtml(model.formattedExistingCustomerRevenue || "--")} in revenue</p>
+          <span>Existing customers${active ? ` · ${escapeHtml(active.label)}` : ""}</span>
+          <strong>${escapeHtml(String(active ? (Number(active.current.existingCustomers) || 0) : existingCount))}</strong>
+          <p>${escapeHtml(active ? `${active.previous.existingCustomers} in ${active.previous.label}` : (model.formattedExistingCustomerRevenue || "--") + " in revenue")}</p>
         </article>
       </div>
 
       <div class="meta-acq-mix-card">
         <div class="meta-budget-stack-head">
           <strong>Purchases by customer type</strong>
-          <span>${escapeHtml(String(Number(model.totalPurchases) || 0))} purchases</span>
+          <span>${escapeHtml(`${Number(model.totalPurchases) || 0} purchases · ${model.rangeLabel || "selected range"}`)}</span>
         </div>
         <div class="meta-budget-stack" role="img" aria-label="Purchases split by customer type">
           ${mixSegments.filter((s) => s.width > 0).map((s) => `
@@ -794,6 +885,12 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
 
       ${rows.length ? `
       <div class="meta-acq-rows">
+        ${usingPreset ? `
+        <p class="meta-acq-scope-note">
+          The per-campaign breakdown below still covers ${escapeHtml(model.rangeLabel || "the dashboard's range")},
+          not ${escapeHtml(active.label)} - Meta only returns the customer split per campaign for the dashboard's own date range.
+        </p>
+        ` : ""}
         <div class="meta-acq-row is-head">
           <span>Campaign</span><span>New</span><span>Existing</span><span>Cost / new</span>
         </div>
@@ -812,6 +909,10 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
       ` : ""}
     </section>
   `;
+
+  // Delegated on the container, which survives innerHTML replacement, so this is safe to
+  // call after every render and only ever attaches once.
+  bindAcquisitionPresetPicker();
 }
 
 // Month-to-date new customers against the same elapsed point in the previous month.

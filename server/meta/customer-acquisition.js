@@ -288,13 +288,13 @@ function resolveMonthToDateWindows(now = new Date(), timeZone = "") {
       since: `${year}-${pad(month)}-01`,
       until: `${year}-${pad(month)}-${pad(Math.max(comparedDay, 1))}`,
       days: comparable ? comparedDay : 0,
-      label: `${year}-${pad(month)} through day ${Math.max(comparedDay, 1)}`
+      label: comparable ? `the first ${comparedDay} days of this month` : "this month so far"
     },
     previous: {
       since: `${previousYear}-${pad(previousMonth)}-01`,
       until: `${previousYear}-${pad(previousMonth)}-${pad(previousDay)}`,
       days: comparable ? previousDay : 0,
-      label: `${previousYear}-${pad(previousMonth)} through day ${previousDay}`
+      label: comparable ? `the same ${previousDay} days last month` : "the same days last month"
     },
     // The day in progress, reported on its own rather than folded into the comparison.
     today: {
@@ -313,6 +313,136 @@ function resolveMonthToDateWindows(now = new Date(), timeZone = "") {
   };
 }
 
+// --- Panel-local window presets ------------------------------------------------------
+//
+// The acquisition panel gets its own period selector, independent of the dashboard's
+// global date filter, so "how did August look in total" can be answered without
+// disturbing every other lens. The default stays month-to-date.
+//
+// Every preset compares against an immediately preceding window of the SAME length. That
+// invariant is the whole reason the comparison means anything: a complete month against a
+// partial one, or 30 days against 31, reads as a change that is really just arithmetic.
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+function isoDate(year, month, day) {
+  return `${year}-${pad(month)}-${pad(day)}`;
+}
+
+function shiftIsoDays(iso, days) {
+  const [year, month, day] = String(iso).split("-").map(Number);
+  const shifted = new Date(Date.UTC(year, month - 1, day + days));
+  return shifted.toISOString().slice(0, 10);
+}
+
+function isoDaysBetween(since, until) {
+  const start = Date.parse(`${since}T00:00:00Z`);
+  const end = Date.parse(`${until}T00:00:00Z`);
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return 0;
+  return Math.round((end - start) / 86400000) + 1;
+}
+
+// A rolling window of `days` ending yesterday, against the equally long window before it.
+function rollingPreset(key, label, days, yesterday) {
+  const currentSince = shiftIsoDays(yesterday, -(days - 1));
+  const previousUntil = shiftIsoDays(currentSince, -1);
+  const previousSince = shiftIsoDays(previousUntil, -(days - 1));
+  return {
+    key,
+    label,
+    comparable: true,
+    note: "",
+    current: { since: currentSince, until: yesterday, days, label: `the last ${days} days` },
+    previous: { since: previousSince, until: previousUntil, days, label: `the ${days} days before that` }
+  };
+}
+
+// A complete calendar month against the complete month before it.
+//
+// Calendar months are the one preset where the two windows can differ in length: 31
+// against 30, or February against anything. That is what month-over-month reporting
+// normally means, so it is offered - but the size of the mismatch is stated, because a
+// 31-versus-28-day comparison carries an 11% arithmetic bias before any real change.
+function calendarMonthPreset(key, year, month) {
+  const previousMonth = month === 1 ? 12 : month - 1;
+  const previousYear = month === 1 ? year - 1 : year;
+  const label = `${MONTH_NAMES[month - 1]} ${year}`;
+  const currentDays = daysInMonth(year, month);
+  const previousDays = daysInMonth(previousYear, previousMonth);
+  const dayGap = Math.abs(currentDays - previousDays);
+  const lengthNote = currentDays === previousDays
+    ? ""
+    : `${MONTH_NAMES[month - 1]} has ${currentDays} days against ${MONTH_NAMES[previousMonth - 1]}'s ${previousDays}, so about ${Math.round((dayGap / previousDays) * 100)}% of any difference is just the ${dayGap === 1 ? "extra day" : `${dayGap} days`}.`;
+
+  return {
+    key,
+    label,
+    comparable: true,
+    note: lengthNote,
+    current: {
+      since: isoDate(year, month, 1),
+      until: isoDate(year, month, daysInMonth(year, month)),
+      days: daysInMonth(year, month),
+      label
+    },
+    previous: {
+      since: isoDate(previousYear, previousMonth, 1),
+      until: isoDate(previousYear, previousMonth, daysInMonth(previousYear, previousMonth)),
+      days: daysInMonth(previousYear, previousMonth),
+      label: `${MONTH_NAMES[previousMonth - 1]} ${previousYear}`
+    }
+  };
+}
+
+function resolveAcquisitionWindowPresets(now = new Date(), timeZone = "") {
+  const monthToDate = resolveMonthToDateWindows(now, timeZone);
+  const { year, month, day } = accountDateParts(now, timeZone);
+  // Everything is anchored on yesterday, because today is still running.
+  const yesterday = shiftIsoDays(isoDate(year, month, day), -1);
+
+  // The last two complete calendar months, named, so picking "August 2026" is one click.
+  const lastFullMonth = month === 1 ? 12 : month - 1;
+  const lastFullYear = month === 1 ? year - 1 : year;
+  const priorMonth = lastFullMonth === 1 ? 12 : lastFullMonth - 1;
+  const priorYear = lastFullMonth === 1 ? lastFullYear - 1 : lastFullYear;
+
+  const presets = [
+    {
+      key: "month_to_date",
+      label: "This month so far",
+      comparable: monthToDate.comparable,
+      note: monthToDate.comparable ? monthToDate.clampedNote : monthToDate.notComparableReason,
+      current: monthToDate.current,
+      previous: monthToDate.previous
+    },
+    calendarMonthPreset("last_full_month", lastFullYear, lastFullMonth),
+    calendarMonthPreset("prior_full_month", priorYear, priorMonth),
+    rollingPreset("last_7_days", "Last 7 days", 7, yesterday),
+    rollingPreset("last_30_days", "Last 30 days", 30, yesterday),
+    rollingPreset("last_90_days", "Last 90 days", 90, yesterday)
+  ];
+
+  // One fetch has to reach the earliest day any preset needs, plus today so the
+  // in-progress figure can still be reported.
+  const earliest = presets
+    .map((preset) => preset.previous.since)
+    .filter(Boolean)
+    .sort()[0];
+
+  return {
+    timeZone: timeZone || "UTC",
+    defaultPreset: "month_to_date",
+    today: monthToDate.today,
+    presets,
+    fetch: {
+      since: earliest,
+      until: isoDate(year, month, day)
+    }
+  };
+}
+
 function withinWindow(date, window) {
   const value = String(date || "");
   return Boolean(value) && value >= window.since && value <= window.until;
@@ -322,18 +452,134 @@ function sumWindow(dailyRows = [], window, actionTypes = {}) {
   let newCustomers = 0;
   let existingCustomers = 0;
   let newCustomerRevenue = 0;
+  let spend = 0;
   let days = 0;
 
   for (const row of dailyRows || []) {
     if (!withinWindow(row?.date_start, window)) continue;
     days += 1;
+    spend += readNumber(row?.spend, 0);
     const extracted = extractCustomerAcquisition(row, actionTypes);
     newCustomers += extracted.new_customers_value;
     existingCustomers += extracted.existing_customers_value;
     newCustomerRevenue += extracted.new_customer_revenue_value;
   }
 
-  return { newCustomers, existingCustomers, newCustomerRevenue, daysWithData: days };
+  return { newCustomers, existingCustomers, newCustomerRevenue, spend, daysWithData: days };
+}
+
+// Shared comparison for one preset. Every preset uses the same maths, so a change to how
+// direction or the summary reads can never apply to some periods and not others.
+function compareAcquisitionWindow({
+  dailyRows = [],
+  preset,
+  actionTypes = {},
+  available = false,
+  todayTotals = null,
+  currency = "DKK",
+  formatCurrency = (value) => String(value)
+}) {
+  const current = sumWindow(dailyRows, preset.current, actionTypes);
+  const previous = sumWindow(dailyRows, preset.previous, actionTypes);
+
+  const delta = current.newCustomers - previous.newCustomers;
+  const percentChange = previous.newCustomers > 0
+    ? Number((((current.newCustomers - previous.newCustomers) / previous.newCustomers) * 100).toFixed(1))
+    : null;
+
+  const comparable = available && preset.comparable !== false;
+  const direction = !comparable
+    ? "unknown"
+    : previous.newCustomers === 0 && current.newCustomers === 0
+      ? "flat"
+      : previous.newCustomers === 0
+        ? "new"
+        : delta > 0
+          ? "up"
+          : delta < 0
+            ? "down"
+            : "flat";
+
+  // The summary names both periods rather than describing them, so it reads correctly
+  // whether the preset is a calendar month, a rolling window, or month to date.
+  const currentPhrase = preset.current.label || "this period";
+  const previousPhrase = preset.previous.label || "the period before";
+
+  return {
+    key: preset.key,
+    label: preset.label,
+    comparable,
+    note: preset.note || "",
+    // A preset whose windows differ in length is reported rather than quietly compared.
+    equalLengthWindows: preset.current.days === preset.previous.days,
+
+    current: {
+      ...preset.current,
+      newCustomers: current.newCustomers,
+      existingCustomers: current.existingCustomers,
+      newCustomerRevenue: current.newCustomerRevenue,
+      formattedNewCustomerRevenue: formatCurrency(current.newCustomerRevenue, currency),
+      spend: current.spend,
+      formattedSpend: formatCurrency(current.spend, currency),
+      costPerNewCustomer: current.newCustomers > 0 ? current.spend / current.newCustomers : 0,
+      formattedCostPerNewCustomer: current.newCustomers > 0 ? formatCurrency(current.spend / current.newCustomers, currency) : "--",
+      daysWithData: current.daysWithData
+    },
+    previous: {
+      ...preset.previous,
+      newCustomers: previous.newCustomers,
+      existingCustomers: previous.existingCustomers,
+      newCustomerRevenue: previous.newCustomerRevenue,
+      formattedNewCustomerRevenue: formatCurrency(previous.newCustomerRevenue, currency),
+      spend: previous.spend,
+      formattedSpend: formatCurrency(previous.spend, currency),
+      costPerNewCustomer: previous.newCustomers > 0 ? previous.spend / previous.newCustomers : 0,
+      formattedCostPerNewCustomer: previous.newCustomers > 0 ? formatCurrency(previous.spend / previous.newCustomers, currency) : "--",
+      daysWithData: previous.daysWithData
+    },
+
+    delta,
+    percentChange,
+    direction,
+    summary: !available
+      ? "New customers cannot be counted for this ad account."
+      : preset.comparable === false
+        ? `${preset.note || "Nothing to compare yet."} ${todayTotals ? `${todayTotals.newCustomers} new customers so far today.` : ""}`.trim()
+        : previous.newCustomers === 0 && current.newCustomers === 0
+          ? `No new customers in ${currentPhrase} or ${previousPhrase}.`
+          : previous.newCustomers === 0
+            ? `${current.newCustomers} new customers in ${currentPhrase}, against none in ${previousPhrase}.`
+            : `${current.newCustomers} new customers in ${currentPhrase}, against ${previous.newCustomers} in ${previousPhrase} (${delta >= 0 ? "+" : ""}${delta}, ${percentChange >= 0 ? "+" : ""}${percentChange}%).`
+  };
+}
+
+// All panel presets, computed server side from one daily series so switching period in the
+// UI costs no extra Meta request.
+function buildCustomerAcquisitionWindows({
+  dailyRows = [],
+  actionTypes = {},
+  now = new Date(),
+  timeZone = "",
+  currency = "DKK",
+  formatCurrency = (value) => String(value)
+} = {}) {
+  const resolved = resolveAcquisitionWindowPresets(now, timeZone);
+  const available = Boolean(actionTypes.available);
+  const todayTotals = sumWindow(
+    dailyRows,
+    { since: resolved.today.date, until: resolved.today.date },
+    actionTypes
+  );
+
+  return {
+    available,
+    defaultPreset: resolved.defaultPreset,
+    timeZone: resolved.timeZone,
+    today: { ...resolved.today, newCustomers: todayTotals.newCustomers, existingCustomers: todayTotals.existingCustomers },
+    presets: resolved.presets.map((preset) => compareAcquisitionWindow({
+      dailyRows, preset, actionTypes, available, todayTotals, currency, formatCurrency
+    }))
+  };
 }
 
 function buildCustomerAcquisitionTrend({
@@ -384,6 +630,10 @@ function buildCustomerAcquisitionTrend({
       existingCustomers: current.existingCustomers,
       newCustomerRevenue: current.newCustomerRevenue,
       formattedNewCustomerRevenue: formatCurrency(current.newCustomerRevenue, currency),
+      spend: current.spend,
+      formattedSpend: formatCurrency(current.spend, currency),
+      costPerNewCustomer: current.newCustomers > 0 ? current.spend / current.newCustomers : 0,
+      formattedCostPerNewCustomer: current.newCustomers > 0 ? formatCurrency(current.spend / current.newCustomers, currency) : "--",
       daysWithData: current.daysWithData
     },
     previous: {
@@ -392,6 +642,10 @@ function buildCustomerAcquisitionTrend({
       existingCustomers: previous.existingCustomers,
       newCustomerRevenue: previous.newCustomerRevenue,
       formattedNewCustomerRevenue: formatCurrency(previous.newCustomerRevenue, currency),
+      spend: previous.spend,
+      formattedSpend: formatCurrency(previous.spend, currency),
+      costPerNewCustomer: previous.newCustomers > 0 ? previous.spend / previous.newCustomers : 0,
+      formattedCostPerNewCustomer: previous.newCustomers > 0 ? formatCurrency(previous.spend / previous.newCustomers, currency) : "--",
       daysWithData: previous.daysWithData
     },
 
@@ -416,6 +670,10 @@ function buildCustomerAcquisitionTrend({
           : previous.newCustomers === 0
             ? `${current.newCustomers} new customers in the first ${windows.current.days} days of this month, against none in the same days last month.`
             : `${current.newCustomers} new customers in the first ${windows.current.days} days of this month, against ${previous.newCustomers} in the same days last month (${delta >= 0 ? "+" : ""}${delta}, ${percentChange >= 0 ? "+" : ""}${percentChange}%).`,
+
+    // Every panel preset, computed from the same daily series, so switching period in
+    // the UI needs no extra Meta request.
+    windows: buildCustomerAcquisitionWindows({ dailyRows, actionTypes, now, timeZone, currency, formatCurrency }),
 
     // Daily counts for both windows, so a sparkline can be added without another fetch.
     dailySeries: (dailyRows || [])
@@ -458,6 +716,9 @@ module.exports = {
   NEW_CUSTOMER_NAMES,
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
+  buildCustomerAcquisitionWindows,
+  compareAcquisitionWindow,
+  resolveAcquisitionWindowPresets,
   resolveMonthToDateWindows,
   buildCustomerAcquisitionWarnings,
   extractCustomerAcquisition,

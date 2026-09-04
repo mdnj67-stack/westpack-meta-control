@@ -10,8 +10,8 @@ const {
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
-  resolveMonthToDateWindows,
   extractCustomerAcquisition,
+  resolveAcquisitionWindowPresets,
   resolveCustomerConversionActionTypes
 } = require("../../server/meta/customer-acquisition");
 const {
@@ -48,6 +48,10 @@ const META_CATALOG_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const META_METADATA_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const META_ADS_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const META_INSIGHTS_CACHE_MAX_AGE_MS = 2 * 60 * 1000;
+// The acquisition panel serves every period preset from one daily series. Those days are
+// finished, so the series barely changes; a long TTL keeps the widest query off the
+// per-refresh path, which matters while the app is on the development access tier.
+const META_ACQUISITION_TREND_CACHE_MAX_AGE_MS = 3 * 60 * 60 * 1000;
 const META_SERVER_CRON_SCHEDULES = ["45 5 * * *"];
 const META_REQUEST_TIMEOUT_MS = 15000;
 const META_TARGET_REFRESH_SLOTS = [
@@ -1904,12 +1908,13 @@ module.exports = async (req, res) => {
     // beside the level: month to date against the same elapsed point last month.
     // Boundaries are resolved in the ad account timezone, which is what Meta uses for a
     // time_range, and is not the user timezone on this account.
-    const acquisitionTrendWindows = resolveMonthToDateWindows(new Date(), account.timezone_name || "");
+    // Wide enough for every panel preset, not just month to date.
+    const acquisitionTrendWindows = resolveAcquisitionWindowPresets(new Date(), account.timezone_name || "");
     const acquisitionTrendResponse = await fetchCustomerAcquisitionTrend({
       accountId,
       accessToken: config.metaAccessToken,
       trendWindow: acquisitionTrendWindows.fetch,
-      insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+      insightsCacheMaxAgeMs: META_ACQUISITION_TREND_CACHE_MAX_AGE_MS,
       timings
     }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
 
