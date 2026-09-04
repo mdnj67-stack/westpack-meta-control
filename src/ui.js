@@ -706,9 +706,15 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
   if (titleNode) titleNode.textContent = "New customers from Meta";
 
   // A missing conversion is a setup gap, not a result. Say so instead of showing zeros.
+  // Wrapped in .meta-acq so it sits on the panel's own dark surface; .meta-budget-empty
+  // is styled for light-on-dark and would be unreadable straight on the light card.
   if (!model.available) {
     if (subNode) subNode.textContent = "Not available for this ad account.";
-    node.innerHTML = `<p class="meta-budget-empty">${escapeHtml(model.unavailableReason || "New customers cannot be counted for this account.")}</p>`;
+    node.innerHTML = `
+      <section class="meta-acq">
+        <p class="meta-budget-empty">${escapeHtml(model.unavailableReason || "New customers cannot be counted for this account.")}</p>
+      </section>
+    `;
     return;
   }
 
