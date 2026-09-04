@@ -50,7 +50,7 @@ function createMetaSnapshotFetchers({
     adsCacheMaxAgeMs,
     timings
   }) {
-    const [campaignResponse, adsResponse, adSetsResponse] = await Promise.all([
+    const [campaignResponse, adsResponse, adSetsResponse, customConversionsResponse] = await Promise.all([
       getCachedMetaCollection({
         cacheKey: buildMetaResourceCacheKey("campaigns", [accountId, "dashboard"]),
         maxAgeMs: metadataCacheMaxAgeMs,
@@ -80,13 +80,27 @@ function createMetaSnapshotFetchers({
           fields: "id,name,status,effective_status,daily_budget,lifetime_budget,start_time,end_time,attribution_spec,attribution_setting,campaign{id,name,status}",
           limit: "500"
         })
+      }),
+      // Custom conversions carry the New_customer / Existing_customer definitions. They
+      // are resolved by name at runtime rather than by hardcoded id, so this list has to
+      // come along with the metadata.
+      getCachedMetaCollection({
+        cacheKey: buildMetaResourceCacheKey("customconversions", [accountId, "dashboard"]),
+        maxAgeMs: metadataCacheMaxAgeMs,
+        timingStore: timings,
+        timingLabel: "custom_conversions_metadata",
+        fetcher: () => metaGetAll(`/${accountId}/customconversions`, accessToken, {
+          fields: "id,name,custom_event_type,is_archived",
+          limit: "100"
+        })
       })
     ]);
 
     return {
       campaignResponse,
       adsResponse,
-      adSetsResponse
+      adSetsResponse,
+      customConversionsResponse
     };
   }
 

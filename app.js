@@ -222,6 +222,7 @@ import {
   renderPressureGrid,
   renderMetaQualityPanel,
   renderOverviewGrid,
+  renderOverviewCustomerAcquisition,
   renderOverviewSpendSplit,
   renderTrendDeck,
   renderHeroPanel,
@@ -14492,6 +14493,7 @@ function renderDashboard() {
   renderStats(isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor));
   renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
   renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
+  renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
   renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));
   if (isEmptyLensState) {
     const emptyState = getLensEmptyStateCopy(lens);

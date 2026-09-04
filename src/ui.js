@@ -686,6 +686,138 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
   `;
 }
 
+// New vs existing customers, counted from the ad account's own custom conversions.
+//
+// Three things this panel refuses to do, because they would misstate a number the team
+// budgets against: it never treats a missing conversion as "zero new customers", it never
+// folds untagged purchases into either customer type, and it never presents a single cost
+// per new customer without saying what spend it was divided by.
+export function renderOverviewCustomerAcquisition(model = null, visible = false) {
+  const node = document.getElementById("overview-acquisition");
+  const titleNode = document.getElementById("overview-acquisition-title");
+  const subNode = document.getElementById("overview-acquisition-sub");
+  if (!node) return;
+
+  if (!visible || !model) {
+    node.innerHTML = "";
+    return;
+  }
+
+  if (titleNode) titleNode.textContent = "New customers from Meta";
+
+  // A missing conversion is a setup gap, not a result. Say so instead of showing zeros.
+  if (!model.available) {
+    if (subNode) subNode.textContent = "Not available for this ad account.";
+    node.innerHTML = `<p class="meta-budget-empty">${escapeHtml(model.unavailableReason || "New customers cannot be counted for this account.")}</p>`;
+    return;
+  }
+
+  if (subNode) {
+    subNode.textContent = `${escapeHtml(model.rangeLabel || "Selected range")} · counted from the New_customer and Existing_customer conversions on the ad account.`;
+  }
+
+  const rows = Array.isArray(model.campaigns) ? model.campaigns : [];
+  const newCount = Number(model.newCustomers) || 0;
+  const existingCount = Number(model.existingCustomers) || 0;
+  const untagged = Number(model.untaggedPurchases) || 0;
+  const maxNew = Math.max(...rows.map((r) => Number(r.newCustomers) || 0), 1);
+
+  // The three-way split of purchases: new, existing, and the remainder that matched
+  // neither. Widths are normalised so the bar cannot contradict the printed counts.
+  const mixSegments = buildStackSegments(
+    [
+      { key: "new", label: "New", amount: newCount },
+      { key: "existing", label: "Existing", amount: existingCount },
+      { key: "untagged", label: "Unknown type", amount: untagged }
+    ],
+    "amount"
+  );
+
+  node.innerHTML = `
+    <section class="meta-acq">
+      <div class="meta-acq-kpis">
+        <article class="meta-acq-kpi is-new">
+          <span>New customers</span>
+          <strong>${escapeHtml(String(newCount))}</strong>
+          <p>${escapeHtml(model.formattedNewCustomerRevenue || "--")} in revenue · ${escapeHtml(String(Number(model.newCustomerShare || 0).toFixed(1)))}% of identified buyers</p>
+        </article>
+        <article class="meta-acq-kpi is-cac">
+          <span>Cost per new customer</span>
+          <strong>${escapeHtml(model.formattedCostPerNewCustomer || "--")}</strong>
+          <p>${escapeHtml(model.costPerNewCustomerBasis || "")}${
+            Number(model.conversionCampaignCount) > 0
+              ? ` Conversion campaigns only: ${escapeHtml(model.formattedConversionCostPerNewCustomer || "--")}.`
+              : ""
+          }</p>
+        </article>
+        <article class="meta-acq-kpi is-existing">
+          <span>Existing customers</span>
+          <strong>${escapeHtml(String(existingCount))}</strong>
+          <p>${escapeHtml(model.formattedExistingCustomerRevenue || "--")} in revenue</p>
+        </article>
+      </div>
+
+      <div class="meta-acq-mix-card">
+        <div class="meta-budget-stack-head">
+          <strong>Purchases by customer type</strong>
+          <span>${escapeHtml(String(Number(model.totalPurchases) || 0))} purchases</span>
+        </div>
+        <div class="meta-budget-stack" role="img" aria-label="Purchases split by customer type">
+          ${mixSegments.filter((s) => s.width > 0).map((s) => `
+            <div class="meta-budget-segment tone-acq-${escapeHtml(s.item.key)}" style="width:${s.width}%" title="${escapeHtml(`${s.item.label}: ${s.item.amount} purchases`)}">
+              <span>${escapeHtml(s.item.label)}</span>
+            </div>
+          `).join("")}
+        </div>
+        ${untagged > 0 ? `
+        <p class="meta-acq-gap">
+          ${escapeHtml(String(untagged))} purchases (${escapeHtml(String(Number(model.untaggedShare || 0).toFixed(1)))}%) matched neither conversion,
+          so the new-customer count is a floor rather than a total.
+        </p>
+        ` : ""}
+      </div>
+
+      <div class="meta-acq-aov">
+        <span>Average order value</span>
+        <div>
+          <strong>New</strong> ${escapeHtml(formatAcqNumber(model.averageNewCustomerOrderValue, model.currency))}
+          <strong>Existing</strong> ${escapeHtml(formatAcqNumber(model.averageExistingCustomerOrderValue, model.currency))}
+        </div>
+      </div>
+
+      ${rows.length ? `
+      <div class="meta-acq-rows">
+        <div class="meta-acq-row is-head">
+          <span>Campaign</span><span>New</span><span>Existing</span><span>Cost / new</span>
+        </div>
+        ${rows.slice(0, 12).map((row) => `
+          <div class="meta-acq-row">
+            <span class="meta-acq-name" title="${escapeHtml(row.name || "")}">${escapeHtml(row.name || "")}</span>
+            <span class="meta-acq-new">
+              <em style="width:${Math.max(3, ((Number(row.newCustomers) || 0) / maxNew) * 100)}%"></em>
+              ${escapeHtml(String(Number(row.newCustomers) || 0))}
+            </span>
+            <span>${escapeHtml(String(Number(row.existingCustomers) || 0))}</span>
+            <span>${escapeHtml(row.formattedCostPerNewCustomer || "--")}</span>
+          </div>
+        `).join("")}
+      </div>
+      ` : ""}
+    </section>
+  `;
+}
+
+function formatAcqNumber(value, currency = "DKK") {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) return "--";
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: String(currency || "DKK").toUpperCase(),
+    maximumFractionDigits: 0
+  }).format(number);
+}
+
+
 export function renderTrendDeck(cards = []) {
   const node = document.getElementById("trend-deck");
   if (!node) return;

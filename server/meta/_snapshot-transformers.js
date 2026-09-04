@@ -9,6 +9,7 @@ function createMetaSnapshotTransformers({
   normalizeBudgetValue,
   formatCurrency,
   resolveBudgetNormalization,
+  extractCustomerAcquisition,
   isActiveDeliveryStatus,
   purchaseActionTypes,
   addToCartActionTypes,
@@ -223,7 +224,8 @@ function createMetaSnapshotTransformers({
     incrementalInsightsAvailable = false,
     dateScope,
     accountCurrency,
-    budgetNormalization
+    budgetNormalization,
+    customerConversionActionTypes = {}
   }) {
     let awarenessUsingAdSetInsights = 0;
 
@@ -341,6 +343,10 @@ function createMetaSnapshotTransformers({
         cpa_value: cpa,
         leads_value: leads,
         cpl_value: cpl,
+        // New vs existing customer counts, read from the account's own custom
+        // conversions. Zero here means the event did not fire, not that the shop has no
+        // new customers - the untagged remainder is reported separately.
+        ...extractCustomerAcquisition(insight, customerConversionActionTypes),
         series: comparisonWindow.current,
         comparison_window: comparisonWindow,
         incremental_purchases_value: incrementalPurchases,

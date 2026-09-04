@@ -85,6 +85,43 @@ test("the retired mode-strip styles are gone with their markup", () => {
   assert.equal(cssSource.includes("meta-budget-mode-strip"), false);
 });
 
+test("the customer-acquisition panel is styled", () => {
+  // Same drift protection as the objective tones: a class the renderer emits with no rule
+  // in the stylesheet renders as an unstyled gap, which on a stacked bar reads as missing
+  // data rather than as a segment.
+  const classes = [
+    "meta-acq",
+    "meta-acq-kpis",
+    "meta-acq-kpi.is-new",
+    "meta-acq-kpi.is-cac",
+    "meta-acq-kpi.is-existing",
+    "meta-acq-mix-card",
+    "meta-acq-gap",
+    "meta-acq-aov",
+    "meta-acq-rows",
+    "meta-acq-row.is-head",
+    "meta-acq-name",
+    "meta-acq-new",
+    "meta-budget-segment.tone-acq-new",
+    "meta-budget-segment.tone-acq-existing",
+    "meta-budget-segment.tone-acq-untagged"
+  ];
+
+  for (const className of classes) {
+    const bare = className.split(".")[0];
+    assert.ok(uiSource.includes(bare), `renderer never emits ${bare}`);
+    assert.ok(cssSource.includes(`.${className}`), `styles.css has no .${className} rule`);
+  }
+});
+
+test("the untagged customer segment is visually distinct from the real types", () => {
+  // It must not look like a third customer type. The objective split uses a hatched
+  // pattern for Unclassified; this reuses it so the two read the same way.
+  const block = cssSource.match(/\.meta-budget-segment\.tone-acq-untagged\s*\{([\s\S]*?)\}/);
+  assert.ok(block, "no rule for the untagged segment");
+  assert.match(block[1], /repeating-linear-gradient/);
+});
+
 test("the budget-unavailable state and unknown pacing pill are styled", () => {
   // The planned-budget bar is replaced by this note when no server-normalised budget is
   // present, so it must not render as unstyled text.

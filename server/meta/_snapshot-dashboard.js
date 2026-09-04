@@ -10,6 +10,9 @@ function createMetaSnapshotDashboardBuilder({
   classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
+  buildCustomerAcquisition,
+  buildCustomerAcquisitionWarnings,
+  formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
   buildLensSummary,
@@ -78,6 +81,7 @@ function createMetaSnapshotDashboardBuilder({
     budgetAdSets = [],
     adSetsByCampaignId,
     budgetNormalization,
+    customerConversionActionTypes = {},
     awarenessUsingAdSetInsights = 0,
     totalSpend = 0,
     dateScope,
@@ -129,6 +133,16 @@ function createMetaSnapshotDashboardBuilder({
         || classifyConversionAttribution(campaign)
     });
     const generalSpendDistribution = buildGeneralSpendDistribution(enrichedCampaigns, dateScope, accountCurrency, budgetAllocation);
+
+    // New vs existing customers, from the account's own custom conversions. Purchases
+    // matching neither keep their own visible bucket rather than being folded in.
+    const customerAcquisition = buildCustomerAcquisition({
+      campaigns: enrichedCampaigns,
+      actionTypes: customerConversionActionTypes,
+      currency: accountCurrency,
+      formatCurrency,
+      dateScope
+    });
 
     // Built after the allocation so the warnings can report on budget coverage: unmapped
     // objectives, lifetime budgets without a flight, and active campaigns with no budget.
@@ -196,6 +210,7 @@ function createMetaSnapshotDashboardBuilder({
         budgetAllocation,
         schedule: buildScheduleDiagnostics(),
         generalSpendDistribution,
+        customerAcquisition,
         explicitIncrementalCount,
         incrementalNamedCount,
         incrementalInsightsAvailable,
@@ -228,7 +243,7 @@ function createMetaSnapshotDashboardBuilder({
           adsPages: adsResponse.pageCount
         },
         timings,
-        warnings: qualityWarnings
+        warnings: [...qualityWarnings, ...buildCustomerAcquisitionWarnings(customerAcquisition)]
       }
     };
 

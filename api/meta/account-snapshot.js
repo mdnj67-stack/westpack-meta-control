@@ -7,6 +7,12 @@ const { createMetaSnapshotTransformers } = require("../../server/meta/_snapshot-
 const { createMetaSnapshotDashboardBuilder } = require("../../server/meta/_snapshot-dashboard");
 const { isStudioSelectableStatus, isDuplicatableAdStatus } = require("../../server/meta/_catalog-selection");
 const {
+  buildCustomerAcquisition,
+  buildCustomerAcquisitionWarnings,
+  extractCustomerAcquisition,
+  resolveCustomerConversionActionTypes
+} = require("../../server/meta/customer-acquisition");
+const {
   OBJECTIVE_GROUP_DISPLAY_ORDER,
   buildBudgetSanityWarnings,
   calculateBudgetAllocation,
@@ -133,6 +139,7 @@ const {
   normalizeBudgetValue,
   formatCurrency,
   resolveBudgetNormalization,
+  extractCustomerAcquisition,
   isActiveDeliveryStatus,
   purchaseActionTypes: PURCHASE_ACTION_TYPES,
   addToCartActionTypes: ADD_TO_CART_ACTION_TYPES,
@@ -152,6 +159,9 @@ const {
   classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
+  buildCustomerAcquisition,
+  buildCustomerAcquisitionWarnings,
+  formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
   buildLensSummary,
@@ -1853,13 +1863,18 @@ module.exports = async (req, res) => {
     const timings = {};
     const snapshotStartedAt = nowMs();
 
-    const { campaignResponse, adsResponse, adSetsResponse } = await fetchDashboardMetadataCollections({
+    const { campaignResponse, adsResponse, adSetsResponse, customConversionsResponse } = await fetchDashboardMetadataCollections({
       accountId,
       accessToken: config.metaAccessToken,
       metadataCacheMaxAgeMs: META_METADATA_CACHE_MAX_AGE_MS,
       adsCacheMaxAgeMs: META_ADS_CACHE_MAX_AGE_MS,
       timings
     });
+
+    // New_customer / Existing_customer are resolved by name from the account's own
+    // custom conversions, so recreating them in Events Manager cannot silently break the
+    // count the way a hardcoded id would.
+    const customerConversionActionTypes = resolveCustomerConversionActionTypes(customConversionsResponse?.data || []);
 
     const activeCampaigns = (campaignResponse.data || []).filter((campaign) => campaign.status === "ACTIVE");
     const budgetCampaignsRaw = (campaignResponse.data || []).filter((campaign) => {
@@ -1964,7 +1979,8 @@ module.exports = async (req, res) => {
       incrementalInsightsAvailable,
       dateScope,
       accountCurrency,
-      budgetNormalization
+      budgetNormalization,
+      customerConversionActionTypes
     });
 
     const enrichedCampaigns = enrichCampaignsWithAttribution({
@@ -1985,6 +2001,7 @@ module.exports = async (req, res) => {
       budgetAdSets,
       adSetsByCampaignId,
       budgetNormalization,
+      customerConversionActionTypes,
       awarenessUsingAdSetInsights,
       totalSpend,
       dateScope,
