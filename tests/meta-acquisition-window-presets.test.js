@@ -365,3 +365,94 @@ test("today's partial count is only shown on the default preset", () => {
   assert.equal(trendBody.includes("in the same days last month"), false);
   assert.equal(trendBody.includes("both months"), false);
 });
+
+test("the presets roll over correctly on every day of two years", () => {
+  // Answers "does this keep working at a month change" by exhaustion rather than by
+  // reasoning: every day across 2026-2028, including both January year-boundaries, the
+  // leap February of 2028, and both DST switches in the ad account's timezone.
+  const MONTHS = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+  const lengthOf = (year, month) => new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+  const failures = [];
+  let checked = 0;
+
+  for (let year = 2026; year <= 2028; year += 1) {
+    for (let month = 1; month <= 12; month += 1) {
+      for (let dayOfMonth = 1; dayOfMonth <= lengthOf(year, month); dayOfMonth += 1) {
+        const resolved = resolveAcquisitionWindowPresets(
+          new Date(Date.UTC(year, month - 1, dayOfMonth, 20, 0, 0)),
+          TZ
+        );
+        checked += 1;
+        const where = `${year}-${String(month).padStart(2, "0")}-${String(dayOfMonth).padStart(2, "0")}`;
+        const fail = (message) => failures.push(`${where}: ${message}`);
+
+        for (const preset of resolved.presets) {
+          if (!(preset.previous.until < preset.current.since)) fail(`${preset.key} windows overlap`);
+          if (preset.previous.since < resolved.fetch.since) fail(`${preset.key} starts before the fetch window`);
+          if (preset.current.until > resolved.fetch.until) fail(`${preset.key} ends after the fetch window`);
+        }
+
+        for (const key of ["last_7_days", "last_30_days", "last_90_days"]) {
+          const preset = resolved.presets.find((entry) => entry.key === key);
+          if (preset.current.days !== preset.previous.days) fail(`${key} unequal lengths`);
+          if (preset.current.until >= resolved.today.date) fail(`${key} includes the day in progress`);
+        }
+
+        // The named months must be the two most recent COMPLETE ones, rolling into the
+        // previous year in January, and must never touch the month in progress.
+        const expectedMonth = month === 1 ? 12 : month - 1;
+        const expectedYear = month === 1 ? year - 1 : year;
+        const lastFull = resolved.presets.find((entry) => entry.key === "last_full_month");
+        const prior = resolved.presets.find((entry) => entry.key === "prior_full_month");
+        if (lastFull.label !== `${MONTHS[expectedMonth - 1]} ${expectedYear}`) {
+          fail(`last_full_month is "${lastFull.label}"`);
+        }
+        if (lastFull.current.days !== lengthOf(expectedYear, expectedMonth)) {
+          fail(`last_full_month does not cover the whole of ${lastFull.label}`);
+        }
+        if (lastFull.current.until >= `${year}-${String(month).padStart(2, "0")}-01`) {
+          fail("last_full_month reaches into the month in progress");
+        }
+        if (!(prior.current.until < lastFull.current.since)) fail("prior_full_month is not before last_full_month");
+
+        // A length mismatch must always be disclosed, and never invented.
+        for (const preset of [lastFull, prior]) {
+          const unequal = preset.current.days !== preset.previous.days;
+          if (unequal && !preset.note) fail(`${preset.key} (${preset.label}) hides a length mismatch`);
+          if (!unequal && preset.note) fail(`${preset.key} (${preset.label}) invents a caveat`);
+        }
+
+        // Month to date is only comparable once a day has completed.
+        const mtd = resolved.presets.find((entry) => entry.key === "month_to_date");
+        const accountDay = Number(resolved.today.date.slice(8, 10));
+        if (accountDay === 1 && mtd.comparable) fail("month_to_date is comparable on the 1st");
+        if (accountDay > 1 && !mtd.comparable) fail("month_to_date is not comparable mid-month");
+        if (mtd.comparable && mtd.previous.days !== Math.min(accountDay - 1, lengthOf(expectedYear, expectedMonth))) {
+          fail(`month_to_date previous window is ${mtd.previous.days} days`);
+        }
+      }
+    }
+  }
+
+  assert.equal(checked, 1096, "the walk did not cover the expected number of days");
+  assert.deepEqual(failures.slice(0, 10), [], `${failures.length} rollover failures`);
+});
+
+test("a month rollover cannot serve a stale cached window", () => {
+  // The daily series is cached for 3 hours. If the cache key did not move with the
+  // window, the first refresh of a new month would answer from a series that stops before
+  // the new month begins - every preset would silently read low.
+  const fetchers = readFileSync(join(__dirname, "..", "server", "meta", "_snapshot-fetchers.js"), "utf8");
+  const line = fetchers.split(/\r?\n/).find((entry) => entry.includes("insights_acquisition_trend"));
+  assert.ok(line, "the trend fetch cache key is gone");
+  assert.match(line, /trendWindow\.since/, "the cache key does not include the window start");
+  assert.match(line, /trendWindow\.until/, "the cache key does not include the window end");
+
+  // And the window itself moves every day, so the key does too.
+  const before = resolveAcquisitionWindowPresets(new Date("2026-09-30T20:00:00Z"), TZ).fetch;
+  const after = resolveAcquisitionWindowPresets(new Date("2026-10-01T20:00:00Z"), TZ).fetch;
+  assert.notEqual(`${before.since}|${before.until}`, `${after.since}|${after.until}`);
+  assert.equal(after.until, "2026-10-01");
+});
