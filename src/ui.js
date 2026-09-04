@@ -707,6 +707,33 @@ function resolveAcquisitionPreset(model) {
   return presets.find((preset) => preset.key === wanted) || presets[0];
 }
 
+// Cost per new customer needs its own direction, and it runs the opposite way to the
+// count: cheaper is better. Without this, a period can show more new customers in green
+// while quietly costing far more each - which is exactly what the last 90 days did, at
+// +11% customers and +30% cost per customer.
+function renderAcquisitionCostTrend(preset) {
+  if (!preset) return "";
+  const now = Number(preset.current?.costPerNewCustomer) || 0;
+  const before = Number(preset.previous?.costPerNewCustomer) || 0;
+  if (!(now > 0) || !(before > 0)) return "";
+
+  const change = ((now - before) / before) * 100;
+  if (Math.abs(change) < 1) {
+    return `<div class="meta-acq-trend is-flat"><span class="meta-acq-trend-badge"><em aria-hidden="true">→</em>no change</span></div>`;
+  }
+
+  // Cheaper is the good outcome, so the tone is inverted relative to the count badge.
+  const cheaper = change < 0;
+  return `
+    <div class="meta-acq-trend ${cheaper ? "is-up" : "is-down"}">
+      <span class="meta-acq-trend-badge">
+        <em aria-hidden="true">${cheaper ? "↓" : "↑"}</em>${escapeHtml(`${change > 0 ? "+" : ""}${change.toFixed(0)}%`)}
+      </span>
+      <span class="meta-acq-trend-detail">${escapeHtml(cheaper ? "cheaper than the period before" : "more expensive than the period before")}</span>
+    </div>
+  `;
+}
+
 // The trend renderer predates the presets, so give it the shape it expects. Keeping one
 // renderer means a change to how direction or the badge reads applies to every period.
 function adaptPresetToTrend(model, preset) {
@@ -719,6 +746,8 @@ function adaptPresetToTrend(model, preset) {
     current: preset.current,
     previous: preset.previous,
     today: windows.today,
+    // Today's in-progress count is only relevant to the month-to-date view.
+    showToday: preset.key === (windows.defaultPreset || "month_to_date"),
     delta: preset.delta,
     percentChange: preset.percentChange,
     direction: preset.direction,
@@ -792,8 +821,11 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
     return;
   }
 
+  // The subtitle names the period the panel is actually showing, which is the panel's own
+  // selection rather than the dashboard's range once a preset is picked.
   if (subNode) {
-    subNode.textContent = `${escapeHtml(model.rangeLabel || "Selected range")} · counted from the New_customer and Existing_customer conversions on the ad account.`;
+    const shown = resolveAcquisitionPreset(model)?.label || model.rangeLabel || "Selected range";
+    subNode.textContent = `${shown} · counted from the New_customer and Existing_customer conversions on the ad account.`;
   }
 
   // Held so the period buttons can re-render from data already in memory - switching
@@ -801,17 +833,46 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
   acquisitionPresetModel = model;
 
   const rows = Array.isArray(model.campaigns) ? model.campaigns : [];
-  const existingCount = Number(model.existingCustomers) || 0;
-  const untagged = Number(model.untaggedPurchases) || 0;
   const maxNew = Math.max(...rows.map((r) => Number(r.newCustomers) || 0), 1);
 
-  // The headline new-customer figure follows the panel's own period selector. Everything
-  // below it that only exists per campaign stays on the dashboard's range and says so.
+  // Everything that can be computed for an arbitrary window follows the panel's own
+  // period selector. Only the per-campaign table cannot, because Meta returns the
+  // customer split per campaign for one date range at a time.
+  //
+  // The first version moved only the new-customer count onto the preset and left the
+  // purchase-split bar, its caption and the order values on the dashboard range. The bar
+  // then drew a 90-day new-customer count against a one-month existing count, so it grew
+  // as the period widened while its caption still read "this month". Mixing periods
+  // inside one figure is worse than showing the wrong period, because nothing on screen
+  // reveals it.
   const active = resolveAcquisitionPreset(model);
   const usingPreset = Boolean(active) && active.key !== (model.trend?.windows?.defaultPreset || "month_to_date");
-  const newCount = active
-    ? Number(active.current.newCustomers) || 0
-    : Number(model.newCustomers) || 0;
+
+  const scope = active
+    ? {
+        label: active.label,
+        newCount: Number(active.current.newCustomers) || 0,
+        existingCount: Number(active.current.existingCustomers) || 0,
+        untagged: Number(active.current.untaggedPurchases) || 0,
+        purchases: Number(active.current.purchases) || 0,
+        untaggedShare: Number(active.current.untaggedShare) || 0,
+        averageNew: Number(active.current.averageNewCustomerOrderValue) || 0,
+        averageExisting: Number(active.current.averageExistingCustomerOrderValue) || 0
+      }
+    : {
+        label: model.rangeLabel || "selected range",
+        newCount: Number(model.newCustomers) || 0,
+        existingCount: Number(model.existingCustomers) || 0,
+        untagged: Number(model.untaggedPurchases) || 0,
+        purchases: Number(model.totalPurchases) || 0,
+        untaggedShare: Number(model.untaggedShare) || 0,
+        averageNew: Number(model.averageNewCustomerOrderValue) || 0,
+        averageExisting: Number(model.averageExistingCustomerOrderValue) || 0
+      };
+
+  const newCount = scope.newCount;
+  const existingCount = scope.existingCount;
+  const untagged = scope.untagged;
 
   // The three-way split of purchases: new, existing, and the remainder that matched
   // neither. Widths are normalised so the bar cannot contradict the printed counts.
@@ -842,6 +903,7 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
         <article class="meta-acq-kpi is-cac">
           <span>Cost per new customer${active ? ` · ${escapeHtml(active.label)}` : ""}</span>
           <strong>${escapeHtml(active ? (active.current.formattedCostPerNewCustomer || "--") : (model.formattedCostPerNewCustomer || "--"))}</strong>
+          ${renderAcquisitionCostTrend(active)}
           <p>${escapeHtml(
             active
               ? `${active.current.formattedSpend || "--"} spent over ${active.current.days} days. Was ${active.previous.formattedCostPerNewCustomer || "--"} in ${active.previous.label}.`
@@ -858,7 +920,7 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
       <div class="meta-acq-mix-card">
         <div class="meta-budget-stack-head">
           <strong>Purchases by customer type</strong>
-          <span>${escapeHtml(`${Number(model.totalPurchases) || 0} purchases · ${model.rangeLabel || "selected range"}`)}</span>
+          <span>${escapeHtml(`${scope.purchases} purchases · ${scope.label}`)}</span>
         </div>
         <div class="meta-budget-stack" role="img" aria-label="Purchases split by customer type">
           ${mixSegments.filter((s) => s.width > 0).map((s) => `
@@ -869,17 +931,17 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
         </div>
         ${untagged > 0 ? `
         <p class="meta-acq-gap">
-          ${escapeHtml(String(untagged))} purchases (${escapeHtml(String(Number(model.untaggedShare || 0).toFixed(1)))}%) matched neither conversion,
+          ${escapeHtml(String(untagged))} purchases (${escapeHtml(scope.untaggedShare.toFixed(1))}%) matched neither conversion,
           so the new-customer count is a floor rather than a total.
         </p>
         ` : ""}
       </div>
 
       <div class="meta-acq-aov">
-        <span>Average order value</span>
+        <span>Average order value · ${escapeHtml(scope.label)}</span>
         <div>
-          <strong>New</strong> ${escapeHtml(formatAcqNumber(model.averageNewCustomerOrderValue, model.currency))}
-          <strong>Existing</strong> ${escapeHtml(formatAcqNumber(model.averageExistingCustomerOrderValue, model.currency))}
+          <strong>New</strong> ${escapeHtml(formatAcqNumber(scope.averageNew, model.currency))}
+          <strong>Existing</strong> ${escapeHtml(formatAcqNumber(scope.averageExisting, model.currency))}
         </div>
       </div>
 
@@ -951,13 +1013,24 @@ function renderAcquisitionTrend(trend = null) {
       ? "↓"
       : "→";
 
+  // Both period names come from the preset. Hardcoding "last month" here described only
+  // the month-to-date case, so picking Last 7 days read as "38 in the same days last
+  // month" - which was neither the window compared nor a month.
+  const previousName = trend.previous?.label || "the period before";
+  const currentDays = Number(trend.current?.days) || 0;
+  const previousDays = Number(trend.previous?.days) || 0;
+
   const headline = percent === null || percent === undefined
-    ? (previous === 0 && current > 0 ? "first this month" : "no change")
+    ? (previous === 0 && current > 0 ? "no prior data" : "no change")
     : `${percent > 0 ? "+" : ""}${Number(percent).toFixed(0)}%`;
 
   const deltaLabel = previous === 0 && current > 0
-    ? `${current} vs none by this point last month`
-    : `${delta > 0 ? "+" : ""}${delta} vs ${previous} in the same days last month`;
+    ? `${current} against none in ${previousName}`
+    : `${delta > 0 ? "+" : ""}${delta} vs ${previous} in ${previousName}`;
+
+  const windowLabel = currentDays === previousDays
+    ? `${currentDays} days each side`
+    : `${currentDays} days vs ${previousDays}`;
 
   return `
     <div class="meta-acq-trend ${tone}">
@@ -967,8 +1040,14 @@ function renderAcquisitionTrend(trend = null) {
       <span class="meta-acq-trend-detail">${escapeHtml(deltaLabel)}</span>
     </div>
     <div class="meta-acq-trend-windows">
-      <span title="${escapeHtml(`${trend.current?.since || ""} to ${trend.current?.until || ""}`)}">First ${escapeHtml(String(trend.current?.days || 0))} days, both months</span>
-      <span title="${escapeHtml(`Today so far, ${trend.today?.date || ""} in the ad account timezone. Excluded from the comparison because it is still running.`)}">+${escapeHtml(String(Number(trend.today?.newCustomers) || 0))} so far today</span>
+      <span title="${escapeHtml(`${trend.current?.since || ""} to ${trend.current?.until || ""}, against ${trend.previous?.since || ""} to ${trend.previous?.until || ""}`)}">${escapeHtml(windowLabel)}</span>
+      ${
+        // Today's partial figure only belongs on the month-to-date view. On a completed
+        // calendar month or a rolling window it is unrelated to what is being compared.
+        trend.showToday
+          ? `<span title="${escapeHtml(`Today so far, ${trend.today?.date || ""} in the ad account timezone. Excluded from the comparison because it is still running.`)}">+${escapeHtml(String(Number(trend.today?.newCustomers) || 0))} so far today</span>`
+          : ""
+      }
     </div>
     ${trend.clamped ? `<p class="meta-acq-trend-note">${escapeHtml(trend.clampedNote || "")}</p>` : ""}
   `;

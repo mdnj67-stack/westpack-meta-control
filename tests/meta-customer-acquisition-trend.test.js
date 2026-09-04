@@ -163,7 +163,7 @@ test("delta, percentage and direction describe the same movement", () => {
   assert.equal(up.delta, 5);
   assert.equal(up.percentChange, 50);
   assert.equal(up.direction, "up");
-  assert.match(up.summary, /15 new customers in the first 2 days of this month, against 10 in the same days last month \(\+5, \+50%\)/);
+  assert.match(up.summary, /15 new customers in the first 2 days of this month, against 10 in the same 2 days last month \(\+5, \+50%\)/);
 
   const down = on([day("2026-08-01", 10), day("2026-08-02", 10), day("2026-09-01", 8), day("2026-09-02", 7)]);
   assert.equal(down.delta, -5);
@@ -187,7 +187,7 @@ test("a zero baseline reports no percentage instead of infinity", () => {
   assert.equal(fromZero.previous.newCustomers, 0);
   assert.equal(fromZero.percentChange, null);
   assert.equal(fromZero.direction, "new");
-  assert.match(fromZero.summary, /against none in the same days last month/);
+  assert.match(fromZero.summary, /against none in the same 2 days last month/);
 
   const bothZero = buildCustomerAcquisitionTrend({
     dailyRows: [],
@@ -198,7 +198,7 @@ test("a zero baseline reports no percentage instead of infinity", () => {
   });
   assert.equal(bothZero.percentChange, null);
   assert.equal(bothZero.direction, "flat");
-  assert.match(bothZero.summary, /No new customers in the first 2 days of either month/);
+  assert.match(bothZero.summary, /No new customers in the first 2 days of this month or the same 2 days last month/);
 });
 
 test("the first of the month reports unknown rather than a decline", () => {
@@ -214,7 +214,7 @@ test("the first of the month reports unknown rather than a decline", () => {
   assert.equal(trend.comparable, false);
   assert.equal(trend.direction, "unknown");
   assert.equal(trend.today.newCustomers, 2);
-  assert.match(trend.summary, /nothing to compare/i);
+  assert.match(trend.summary, /no completed days to compare yet/i);
   assert.match(trend.summary, /2 new customers so far today/);
 });
 
@@ -251,8 +251,9 @@ test("the daily series labels which window each day belongs to", () => {
   assert.equal(byDate["2026-09-02"], "current");
   // Inside the fetch window but past the comparison point.
   assert.equal(byDate["2026-08-20"], "outside");
-  // Before the fetch window, dropped entirely.
-  assert.equal(byDate["2026-07-20"], undefined);
+  // Also outside both compared windows. Days are labelled rather than dropped, so a
+  // sparkline can draw context either side of the comparison.
+  assert.equal(byDate["2026-07-20"], "outside");
   // Sorted ascending so a sparkline can render it directly.
   const dates = trend.dailySeries.map((p) => p.date);
   assert.deepEqual(dates, [...dates].sort());

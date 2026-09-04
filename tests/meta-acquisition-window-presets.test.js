@@ -248,3 +248,120 @@ test("the period selector and its scope note are styled", () => {
     assert.ok(css.includes(`.${className}`), `styles.css has no .${className} rule`);
   }
 });
+
+test("every window reports its own three-way purchase split, reconciled", () => {
+  // The bug this pins: the panel drew one bar from a preset's new-customer count against
+  // the dashboard range's existing and untagged counts. The bar grew as the period
+  // widened while its caption still said "this month", and nothing on screen revealed
+  // that the segments came from different periods.
+  const day = (date, newC, existing, purchases) => ({
+    date_start: date,
+    spend: "1000",
+    actions: [
+      { action_type: NEW_TYPE, value: String(newC) },
+      { action_type: EXISTING_TYPE, value: String(existing) },
+      { action_type: "omni_purchase", value: String(purchases) }
+    ],
+    action_values: [
+      { action_type: NEW_TYPE, value: "1000" },
+      { action_type: EXISTING_TYPE, value: "3000" }
+    ]
+  });
+
+  const rows = [];
+  for (let d = 1; d <= 30; d += 1) rows.push(day(`2026-06-${String(d).padStart(2, "0")}`, 3, 6, 12));
+  for (let d = 1; d <= 31; d += 1) rows.push(day(`2026-07-${String(d).padStart(2, "0")}`, 4, 8, 15));
+  for (let d = 1; d <= 31; d += 1) rows.push(day(`2026-08-${String(d).padStart(2, "0")}`, 5, 10, 19));
+  rows.push(day("2026-09-01", 11, 8, 25), day("2026-09-02", 7, 7, 18), day("2026-09-03", 6, 10, 21));
+
+  const windows = buildCustomerAcquisitionWindows({
+    dailyRows: rows, actionTypes, now: NOW, timeZone: TZ, currency: "DKK", formatCurrency
+  });
+
+  for (const preset of windows.presets) {
+    for (const side of ["current", "previous"]) {
+      const w = preset[side];
+      assert.equal(
+        w.newCustomers + w.existingCustomers + w.untaggedPurchases,
+        w.purchases,
+        `${preset.key}.${side} split does not reconcile to its own purchase count`
+      );
+      assert.ok(w.untaggedPurchases >= 0, `${preset.key}.${side} has a negative remainder`);
+      assert.ok(w.untaggedShare >= 0 && w.untaggedShare <= 100, `${preset.key}.${side} share out of range`);
+    }
+  }
+
+  // The whole point: a wider period has a genuinely larger purchase count, so the split
+  // scales together instead of one segment outgrowing the others.
+  const by = Object.fromEntries(windows.presets.map((preset) => [preset.key, preset.current]));
+  assert.ok(by.last_90_days.purchases > by.last_30_days.purchases);
+  assert.ok(by.last_30_days.purchases > by.last_7_days.purchases);
+  assert.ok(by.last_90_days.existingCustomers > by.month_to_date.existingCustomers);
+});
+
+test("average order value is computed per window, not carried from the dashboard range", () => {
+  const day = (date, newC, existing, newRev, existingRev) => ({
+    date_start: date,
+    spend: "1000",
+    actions: [
+      { action_type: NEW_TYPE, value: String(newC) },
+      { action_type: EXISTING_TYPE, value: String(existing) },
+      { action_type: "omni_purchase", value: String(newC + existing) }
+    ],
+    action_values: [
+      { action_type: NEW_TYPE, value: String(newRev) },
+      { action_type: EXISTING_TYPE, value: String(existingRev) }
+    ]
+  });
+
+  const rows = [];
+  // July orders are small, August orders are large, so the two months must not report the
+  // same average.
+  for (let d = 1; d <= 31; d += 1) rows.push(day(`2026-07-${String(d).padStart(2, "0")}`, 2, 2, 2000, 4000));
+  for (let d = 1; d <= 31; d += 1) rows.push(day(`2026-08-${String(d).padStart(2, "0")}`, 2, 2, 6000, 10000));
+
+  const windows = buildCustomerAcquisitionWindows({
+    dailyRows: rows, actionTypes, now: NOW, timeZone: TZ, currency: "DKK", formatCurrency
+  });
+  const august = windows.presets.find((preset) => preset.key === "last_full_month");
+  const july = windows.presets.find((preset) => preset.key === "prior_full_month");
+
+  assert.equal(august.current.averageNewCustomerOrderValue, 3000);
+  assert.equal(august.current.averageExistingCustomerOrderValue, 5000);
+  assert.equal(july.current.averageNewCustomerOrderValue, 1000);
+  assert.equal(july.current.averageExistingCustomerOrderValue, 2000);
+  assert.notEqual(august.current.averageNewCustomerOrderValue, july.current.averageNewCustomerOrderValue);
+});
+
+test("the panel reads every scoped figure from one source, never a mix", () => {
+  const ui = readFileSync(join(__dirname, "..", "src", "ui.js"), "utf8");
+  const start = ui.indexOf("export function renderOverviewCustomerAcquisition(");
+  const body = ui.slice(start, ui.indexOf("\n}", ui.indexOf("bindAcquisitionPresetPicker();", start)));
+
+  // The three bar segments must all come from the same scope object.
+  const segments = body.match(/buildStackSegments\(\s*\[([\s\S]*?)\]/);
+  assert.ok(segments, "the purchase-split bar is gone");
+  assert.match(segments[1], /amount: newCount/);
+  assert.match(segments[1], /amount: existingCount/);
+  assert.match(segments[1], /amount: untagged/);
+
+  // And those three must be assigned from scope, not from the model directly.
+  assert.match(body, /const newCount = scope\.newCount;/);
+  assert.match(body, /const existingCount = scope\.existingCount;/);
+  assert.match(body, /const untagged = scope\.untagged;/);
+});
+
+test("today's partial count is only shown on the default preset", () => {
+  const ui = readFileSync(join(__dirname, "..", "src", "ui.js"), "utf8");
+  const start = ui.indexOf("function adaptPresetToTrend(");
+  const body = ui.slice(start, ui.indexOf("\n}", start));
+  // A completed calendar month or a rolling window has nothing to do with today.
+  assert.match(body, /showToday: preset\.key === \(windows\.defaultPreset/);
+
+  const trendStart = ui.indexOf("function renderAcquisitionTrend(");
+  const trendBody = ui.slice(trendStart, ui.indexOf("\n}", ui.indexOf("clampedNote", trendStart)));
+  assert.match(trendBody, /trend\.showToday/, "the trend renderer ignores showToday");
+  // The old hardcoded phrasing described only the month-to-date case.
+  assert.equal(trendBody.includes("in the same days last month"), false);
+  assert.equal(trendBody.includes("both months"), false);
+});

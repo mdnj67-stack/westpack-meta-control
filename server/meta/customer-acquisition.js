@@ -22,6 +22,15 @@ const EXISTING_CUSTOMER_NAMES = new Set([
   "returningcustomer", "returningcustomers", "eksisterendekunde", "eksisterendekunder"
 ]);
 
+// omni_purchase and its aliases, needed so each window can compute its own untagged
+// remainder rather than borrowing the dashboard range's.
+const PURCHASE_ACTION_TYPES = [
+  "omni_purchase",
+  "purchase",
+  "offsite_conversion.purchase",
+  "offsite_conversion.fb_pixel_purchase"
+];
+
 function readNumber(value, fallback = 0) {
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : fallback;
@@ -64,6 +73,15 @@ function resolveCustomerConversionActionTypes(customConversions = []) {
     resolved,
     available: newTypes.length > 0
   };
+}
+
+function firstActionValue(entries = [], actionTypes = []) {
+  const list = Array.isArray(entries) ? entries : [];
+  for (const type of actionTypes) {
+    const match = list.find((entry) => entry.action_type === type);
+    if (match && match.value != null) return readNumber(match.value, 0);
+  }
+  return 0;
 }
 
 function sumActionTypes(entries = [], actionTypes = []) {
@@ -452,6 +470,8 @@ function sumWindow(dailyRows = [], window, actionTypes = {}) {
   let newCustomers = 0;
   let existingCustomers = 0;
   let newCustomerRevenue = 0;
+  let existingCustomerRevenue = 0;
+  let purchases = 0;
   let spend = 0;
   let days = 0;
 
@@ -463,9 +483,19 @@ function sumWindow(dailyRows = [], window, actionTypes = {}) {
     newCustomers += extracted.new_customers_value;
     existingCustomers += extracted.existing_customers_value;
     newCustomerRevenue += extracted.new_customer_revenue_value;
+    existingCustomerRevenue += extracted.existing_customer_revenue_value;
+    purchases += firstActionValue(row?.actions, PURCHASE_ACTION_TYPES);
   }
 
-  return { newCustomers, existingCustomers, newCustomerRevenue, spend, daysWithData: days };
+  return {
+    newCustomers,
+    existingCustomers,
+    newCustomerRevenue,
+    existingCustomerRevenue,
+    purchases,
+    spend,
+    daysWithData: days
+  };
 }
 
 // Shared comparison for one preset. Every preset uses the same maths, so a change to how
@@ -505,6 +535,26 @@ function compareAcquisitionWindow({
   const currentPhrase = preset.current.label || "this period";
   const previousPhrase = preset.previous.label || "the period before";
 
+  // Each window carries its own three-way purchase split. The first version let the panel
+  // draw one bar from a preset's new-customer count against the dashboard range's
+  // existing and untagged counts, which produced a bar that grew as the period widened
+  // while its caption stayed on "this month" - the segments were from different periods.
+  const windowSplit = (totals) => {
+    const tagged = totals.newCustomers + totals.existingCustomers;
+    const untagged = Math.max(0, totals.purchases - tagged);
+    return {
+      purchases: totals.purchases,
+      taggedPurchases: tagged,
+      untaggedPurchases: untagged,
+      untaggedShare: totals.purchases > 0 ? Number(((untagged / totals.purchases) * 100).toFixed(1)) : 0,
+      newCustomerShare: tagged > 0 ? Number(((totals.newCustomers / tagged) * 100).toFixed(1)) : 0,
+      averageNewCustomerOrderValue: totals.newCustomers > 0 ? totals.newCustomerRevenue / totals.newCustomers : 0,
+      averageExistingCustomerOrderValue: totals.existingCustomers > 0
+        ? totals.existingCustomerRevenue / totals.existingCustomers
+        : 0
+    };
+  };
+
   return {
     key: preset.key,
     label: preset.label,
@@ -519,6 +569,9 @@ function compareAcquisitionWindow({
       existingCustomers: current.existingCustomers,
       newCustomerRevenue: current.newCustomerRevenue,
       formattedNewCustomerRevenue: formatCurrency(current.newCustomerRevenue, currency),
+      existingCustomerRevenue: current.existingCustomerRevenue,
+      formattedExistingCustomerRevenue: formatCurrency(current.existingCustomerRevenue, currency),
+      ...windowSplit(current),
       spend: current.spend,
       formattedSpend: formatCurrency(current.spend, currency),
       costPerNewCustomer: current.newCustomers > 0 ? current.spend / current.newCustomers : 0,
@@ -531,6 +584,9 @@ function compareAcquisitionWindow({
       existingCustomers: previous.existingCustomers,
       newCustomerRevenue: previous.newCustomerRevenue,
       formattedNewCustomerRevenue: formatCurrency(previous.newCustomerRevenue, currency),
+      existingCustomerRevenue: previous.existingCustomerRevenue,
+      formattedExistingCustomerRevenue: formatCurrency(previous.existingCustomerRevenue, currency),
+      ...windowSplit(previous),
       spend: previous.spend,
       formattedSpend: formatCurrency(previous.spend, currency),
       costPerNewCustomer: previous.newCustomers > 0 ? previous.spend / previous.newCustomers : 0,
@@ -581,7 +637,13 @@ function buildCustomerAcquisitionWindows({
     }))
   };
 }
-
+// Month-to-date is just one of the panel presets, so this delegates to it rather than
+// recomputing the same comparison. The previous version duplicated 114 lines of the same
+// maths, which meant the panel headline and the trend badge could drift apart - and a
+// blind edit to one copy left `windowSplit` undefined in the other.
+//
+// The top-level fields are kept because the dashboard payload and its consumers were
+// built against them.
 function buildCustomerAcquisitionTrend({
   dailyRows = [],
   actionTypes = {},
@@ -590,103 +652,46 @@ function buildCustomerAcquisitionTrend({
   currency = "DKK",
   formatCurrency = (value) => String(value)
 } = {}) {
-  const windows = resolveMonthToDateWindows(now, timeZone);
-  const available = Boolean(actionTypes.available);
-
-  const current = sumWindow(dailyRows, windows.current, actionTypes);
-  const previous = sumWindow(dailyRows, windows.previous, actionTypes);
-  const today = sumWindow(dailyRows, { since: windows.today.date, until: windows.today.date }, actionTypes);
-
-  const delta = current.newCustomers - previous.newCustomers;
-  // A percentage against zero is not a number anyone can act on, so it stays null and the
-  // renderer says "no comparable customers last month" instead of showing an infinity.
-  const percentChange = previous.newCustomers > 0
-    ? Number((((current.newCustomers - previous.newCustomers) / previous.newCustomers) * 100).toFixed(1))
-    : null;
-
-  const direction = !available || !windows.comparable
-    ? "unknown"
-    : previous.newCustomers === 0 && current.newCustomers === 0
-      ? "flat"
-      : previous.newCustomers === 0
-        ? "new"
-        : delta > 0
-          ? "up"
-          : delta < 0
-            ? "down"
-            : "flat";
+  const windows = buildCustomerAcquisitionWindows({
+    dailyRows, actionTypes, now, timeZone, currency, formatCurrency
+  });
+  const monthToDate = windows.presets.find((preset) => preset.key === windows.defaultPreset)
+    || windows.presets[0];
 
   return {
-    available,
+    available: windows.available,
     timeZone: windows.timeZone,
-    comparable: windows.comparable,
-    notComparableReason: windows.notComparableReason,
-    clamped: windows.clamped,
-    clampedNote: windows.clampedNote,
+    comparable: monthToDate.comparable,
+    notComparableReason: monthToDate.comparable ? "" : monthToDate.note,
+    clamped: Boolean(monthToDate.note),
+    clampedNote: monthToDate.note || "",
 
-    current: {
-      ...windows.current,
-      newCustomers: current.newCustomers,
-      existingCustomers: current.existingCustomers,
-      newCustomerRevenue: current.newCustomerRevenue,
-      formattedNewCustomerRevenue: formatCurrency(current.newCustomerRevenue, currency),
-      spend: current.spend,
-      formattedSpend: formatCurrency(current.spend, currency),
-      costPerNewCustomer: current.newCustomers > 0 ? current.spend / current.newCustomers : 0,
-      formattedCostPerNewCustomer: current.newCustomers > 0 ? formatCurrency(current.spend / current.newCustomers, currency) : "--",
-      daysWithData: current.daysWithData
-    },
-    previous: {
-      ...windows.previous,
-      newCustomers: previous.newCustomers,
-      existingCustomers: previous.existingCustomers,
-      newCustomerRevenue: previous.newCustomerRevenue,
-      formattedNewCustomerRevenue: formatCurrency(previous.newCustomerRevenue, currency),
-      spend: previous.spend,
-      formattedSpend: formatCurrency(previous.spend, currency),
-      costPerNewCustomer: previous.newCustomers > 0 ? previous.spend / previous.newCustomers : 0,
-      formattedCostPerNewCustomer: previous.newCustomers > 0 ? formatCurrency(previous.spend / previous.newCustomers, currency) : "--",
-      daysWithData: previous.daysWithData
-    },
+    current: monthToDate.current,
+    previous: monthToDate.previous,
+    today: windows.today,
 
-    today: {
-      ...windows.today,
-      newCustomers: today.newCustomers,
-      existingCustomers: today.existingCustomers
-    },
+    delta: monthToDate.delta,
+    percentChange: monthToDate.percentChange,
+    direction: monthToDate.direction,
+    summary: monthToDate.summary,
 
-    delta,
-    percentChange,
-    direction,
-    // Plain-language summary, because this is the line people read out in a meeting. It
-    // always names the window, since the figure only means anything given that both
-    // months cover the same number of completed days.
-    summary: !available
-      ? "New customers cannot be counted for this ad account."
-      : !windows.comparable
-        ? `No completed days this month yet, so there is nothing to compare. ${today.newCustomers} new customers so far today.`
-        : previous.newCustomers === 0 && current.newCustomers === 0
-          ? `No new customers in the first ${windows.current.days} days of either month.`
-          : previous.newCustomers === 0
-            ? `${current.newCustomers} new customers in the first ${windows.current.days} days of this month, against none in the same days last month.`
-            : `${current.newCustomers} new customers in the first ${windows.current.days} days of this month, against ${previous.newCustomers} in the same days last month (${delta >= 0 ? "+" : ""}${delta}, ${percentChange >= 0 ? "+" : ""}${percentChange}%).`,
+    // Every panel preset, computed from the same daily series, so switching period in the
+    // UI needs no extra Meta request.
+    windows,
 
-    // Every panel preset, computed from the same daily series, so switching period in
-    // the UI needs no extra Meta request.
-    windows: buildCustomerAcquisitionWindows({ dailyRows, actionTypes, now, timeZone, currency, formatCurrency }),
-
-    // Daily counts for both windows, so a sparkline can be added without another fetch.
+    // Daily counts across the whole fetched span, labelled by which window each day falls
+    // in, so a sparkline can be added without another fetch.
     dailySeries: (dailyRows || [])
-      .filter((row) => withinWindow(row?.date_start, windows.fetch))
       .map((row) => ({
-        date: String(row.date_start || ""),
+        date: String(row?.date_start || ""),
         newCustomers: extractCustomerAcquisition(row, actionTypes).new_customers_value,
-        month: withinWindow(row?.date_start, windows.current)
+        month: withinWindow(row?.date_start, monthToDate.current)
           ? "current"
-          : withinWindow(row?.date_start, windows.previous)
+          : withinWindow(row?.date_start, monthToDate.previous)
             ? "previous"
             : "outside"
       }))
+      .filter((point) => point.date)
       .sort((left, right) => left.date.localeCompare(right.date))
   };
 }
