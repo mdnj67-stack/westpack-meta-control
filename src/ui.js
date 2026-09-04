@@ -745,6 +745,7 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
         <article class="meta-acq-kpi is-new">
           <span>New customers</span>
           <strong>${escapeHtml(String(newCount))}</strong>
+          ${renderAcquisitionTrend(model.trend)}
           <p>${escapeHtml(model.formattedNewCustomerRevenue || "--")} in revenue · ${escapeHtml(String(Number(model.newCustomerShare || 0).toFixed(1)))}% of identified buyers</p>
         </article>
         <article class="meta-acq-kpi is-cac">
@@ -810,6 +811,65 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
       </div>
       ` : ""}
     </section>
+  `;
+}
+
+// Month-to-date new customers against the same elapsed point in the previous month.
+// This is the pace comparison the marketing team is measured on, so the two windows are
+// always named: a partial month against a whole one would read as a collapse every time.
+function renderAcquisitionTrend(trend = null) {
+  if (!trend || !trend.available) return "";
+
+  // Before any day of the month has completed there is nothing to compare, and a badge
+  // reading "no change" would imply we checked and found them equal.
+  if (trend.comparable === false) {
+    return `
+      <div class="meta-acq-trend is-flat">
+        <span class="meta-acq-trend-detail">${escapeHtml(trend.notComparableReason || "No completed days this month yet.")}</span>
+      </div>
+      <div class="meta-acq-trend-windows">
+        <span>+${escapeHtml(String(Number(trend.today?.newCustomers) || 0))} so far today</span>
+      </div>
+    `;
+  }
+
+  const current = Number(trend.current?.newCustomers) || 0;
+  const previous = Number(trend.previous?.newCustomers) || 0;
+  const delta = Number(trend.delta) || 0;
+  const percent = trend.percentChange;
+
+  // Direction is about acquisition, so more is better and the tone follows that.
+  const tone = trend.direction === "up" || trend.direction === "new"
+    ? "is-up"
+    : trend.direction === "down"
+      ? "is-down"
+      : "is-flat";
+  const arrow = trend.direction === "up" || trend.direction === "new"
+    ? "↑"
+    : trend.direction === "down"
+      ? "↓"
+      : "→";
+
+  const headline = percent === null || percent === undefined
+    ? (previous === 0 && current > 0 ? "first this month" : "no change")
+    : `${percent > 0 ? "+" : ""}${Number(percent).toFixed(0)}%`;
+
+  const deltaLabel = previous === 0 && current > 0
+    ? `${current} vs none by this point last month`
+    : `${delta > 0 ? "+" : ""}${delta} vs ${previous} in the same days last month`;
+
+  return `
+    <div class="meta-acq-trend ${tone}">
+      <span class="meta-acq-trend-badge">
+        <em aria-hidden="true">${arrow}</em>${escapeHtml(headline)}
+      </span>
+      <span class="meta-acq-trend-detail">${escapeHtml(deltaLabel)}</span>
+    </div>
+    <div class="meta-acq-trend-windows">
+      <span title="${escapeHtml(`${trend.current?.since || ""} to ${trend.current?.until || ""}`)}">First ${escapeHtml(String(trend.current?.days || 0))} days, both months</span>
+      <span title="${escapeHtml(`Today so far, ${trend.today?.date || ""} in the ad account timezone. Excluded from the comparison because it is still running.`)}">+${escapeHtml(String(Number(trend.today?.newCustomers) || 0))} so far today</span>
+    </div>
+    ${trend.clamped ? `<p class="meta-acq-trend-note">${escapeHtml(trend.clampedNote || "")}</p>` : ""}
   `;
 }
 

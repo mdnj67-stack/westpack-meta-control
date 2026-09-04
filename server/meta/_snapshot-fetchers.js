@@ -287,9 +287,39 @@ function createMetaSnapshotFetchers({
     };
   }
 
+  // Account-level daily rows spanning the first of the previous month to today, so the
+  // month-to-date new-customer comparison can be computed without a second round trip per
+  // window. One request, ~62 rows, and it also yields a daily series for a sparkline.
+  async function fetchCustomerAcquisitionTrend({
+    accountId,
+    accessToken,
+    trendWindow,
+    insightsCacheMaxAgeMs,
+    timings
+  }) {
+    if (!trendWindow?.since || !trendWindow?.until) {
+      return { data: [], pageCount: 0 };
+    }
+
+    return getCachedMetaCollection({
+      cacheKey: buildMetaResourceCacheKey("insights_acquisition_trend", [accountId, trendWindow.since, trendWindow.until]),
+      maxAgeMs: insightsCacheMaxAgeMs,
+      timingStore: timings,
+      timingLabel: "acquisition_trend_insights",
+      fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
+        level: "account",
+        time_range: JSON.stringify({ since: trendWindow.since, until: trendWindow.until }),
+        time_increment: "1",
+        limit: "200",
+        fields: "date_start,spend,actions,action_values"
+      })
+    });
+  }
+
   return {
     fetchAwarenessAdSetInsightsCollections,
     fetchCampaignInsightsCollections,
+    fetchCustomerAcquisitionTrend,
     fetchCatalogCollections,
     fetchDashboardMetadataCollections
   };

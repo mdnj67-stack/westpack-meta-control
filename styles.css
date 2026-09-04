@@ -17614,3 +17614,74 @@ body.campaign-studio-review-mode .main-content {
     font-size: 0.78rem;
   }
 }
+
+/* Month-to-date new customers against the same elapsed point last month. Sits inside the
+   dark .meta-acq panel, so the text tones are light-on-dark like the rest of it. Up is
+   green because more new customers is better; this is acquisition, not cost. */
+.meta-acq-trend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: -2px;
+}
+
+.meta-acq-trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.meta-acq-trend-badge em {
+  font-style: normal;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.meta-acq-trend.is-up .meta-acq-trend-badge {
+  background: rgba(106, 215, 180, 0.16);
+  border-color: rgba(106, 215, 180, 0.3);
+  color: #b6ecd9;
+}
+
+.meta-acq-trend.is-down .meta-acq-trend-badge {
+  background: rgba(230, 138, 138, 0.16);
+  border-color: rgba(230, 138, 138, 0.3);
+  color: #f2c2c2;
+}
+
+.meta-acq-trend.is-flat .meta-acq-trend-badge {
+  color: rgba(228, 233, 255, 0.8);
+}
+
+.meta-acq-trend-detail {
+  font-size: 0.78rem;
+  color: rgba(228, 233, 255, 0.74);
+}
+
+/* Both windows are always named. The comparison is only meaningful because the two cover
+   the same number of elapsed days, and stating it stops anyone reading a partial month as
+   a drop. */
+.meta-acq-trend-windows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(196, 204, 255, 0.62);
+}
+
+.meta-acq-trend-note {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: rgba(228, 233, 255, 0.66);
+}

@@ -11,6 +11,7 @@ function createMetaSnapshotDashboardBuilder({
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildCustomerAcquisition,
+  buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
   formatCurrency,
   buildGeneralSpendDistribution,
@@ -82,6 +83,8 @@ function createMetaSnapshotDashboardBuilder({
     adSetsByCampaignId,
     budgetNormalization,
     customerConversionActionTypes = {},
+    acquisitionTrendRows = [],
+    accountTimezone = "",
     awarenessUsingAdSetInsights = 0,
     totalSpend = 0,
     dateScope,
@@ -142,6 +145,17 @@ function createMetaSnapshotDashboardBuilder({
       currency: accountCurrency,
       formatCurrency,
       dateScope
+    });
+
+    // Month to date against the same elapsed point last month, from the wider daily
+    // window fetched for exactly this purpose.
+    customerAcquisition.trend = buildCustomerAcquisitionTrend({
+      dailyRows: acquisitionTrendRows,
+      actionTypes: customerConversionActionTypes,
+      now: new Date(),
+      timeZone: accountTimezone,
+      currency: accountCurrency,
+      formatCurrency
     });
 
     // Built after the allocation so the warnings can report on budget coverage: unmapped

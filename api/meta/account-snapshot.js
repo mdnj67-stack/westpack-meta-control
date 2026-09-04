@@ -8,7 +8,9 @@ const { createMetaSnapshotDashboardBuilder } = require("../../server/meta/_snaps
 const { isStudioSelectableStatus, isDuplicatableAdStatus } = require("../../server/meta/_catalog-selection");
 const {
   buildCustomerAcquisition,
+  buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
+  resolveMonthToDateWindows,
   extractCustomerAcquisition,
   resolveCustomerConversionActionTypes
 } = require("../../server/meta/customer-acquisition");
@@ -112,6 +114,7 @@ const {
 const {
   fetchAwarenessAdSetInsightsCollections,
   fetchCampaignInsightsCollections,
+  fetchCustomerAcquisitionTrend,
   fetchCatalogCollections,
   fetchDashboardMetadataCollections
 } = createMetaSnapshotFetchers({
@@ -1744,7 +1747,7 @@ module.exports = async (req, res) => {
       `/${accountId}`,
       config.metaAccessToken,
       {
-        fields: "id,name,account_status,currency"
+        fields: "id,name,account_status,currency,timezone_name"
       },
       {
         maxRetries: healthOnly ? 1 : 4
@@ -1896,6 +1899,19 @@ module.exports = async (req, res) => {
     });
     const incrementalInsightsAvailable = !aggregatedIncrementalInsightsResponse?.unavailable && !dailyIncrementalInsightsResponse?.unavailable;
 
+    // New customers is the KPI the marketing team is measured on, so it needs a trend
+    // beside the level: month to date against the same elapsed point last month.
+    // Boundaries are resolved in the ad account timezone, which is what Meta uses for a
+    // time_range, and is not the user timezone on this account.
+    const acquisitionTrendWindows = resolveMonthToDateWindows(new Date(), account.timezone_name || "");
+    const acquisitionTrendResponse = await fetchCustomerAcquisitionTrend({
+      accountId,
+      accessToken: config.metaAccessToken,
+      trendWindow: acquisitionTrendWindows.fetch,
+      insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+      timings
+    }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
+
     const awarenessCampaignIds = new Set(
       activeCampaigns
         .filter((campaign) => classifyCampaign(campaign) === "awareness")
@@ -2002,6 +2018,8 @@ module.exports = async (req, res) => {
       adSetsByCampaignId,
       budgetNormalization,
       customerConversionActionTypes,
+      acquisitionTrendRows: acquisitionTrendResponse?.data || [],
+      accountTimezone: account.timezone_name || "",
       awarenessUsingAdSetInsights,
       totalSpend,
       dateScope,
