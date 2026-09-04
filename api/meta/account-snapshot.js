@@ -43,11 +43,21 @@ const {
 const GRAPH_BASE = "https://graph.facebook.com/v25.0";
 const META_SNAPSHOT_SCHEMA_VERSION = 1;
 const COPENHAGEN_TIMEZONE = "Europe/Copenhagen";
-const META_SNAPSHOT_CACHE_MAX_AGE_MS = 2 * 60 * 1000;
+// A full dashboard snapshot costs about 15 percentage points of Meta's hourly CPU-time
+// budget on this account, measured 2026-09-04: the ceiling was 89% before one snapshot and
+// 104% after. That is roughly six full refreshes an hour on the development access tier,
+// and the throttle is on CPU time, not call count (call_count sat at 4%).
+//
+// These TTLs were 2 minutes while auto-refresh runs hourly, so the cache had always
+// expired by the time it mattered and every click through the dashboard paid for another
+// full snapshot. 15 minutes makes routine viewing free without touching the hourly
+// refresh, and an explicit "Update snapshot" bypasses every layer, so nobody is stuck
+// with figures they cannot refresh.
+const META_SNAPSHOT_CACHE_MAX_AGE_MS = 15 * 60 * 1000;
 const META_CATALOG_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const META_METADATA_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const META_ADS_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
-const META_INSIGHTS_CACHE_MAX_AGE_MS = 2 * 60 * 1000;
+const META_INSIGHTS_CACHE_MAX_AGE_MS = 15 * 60 * 1000;
 // The acquisition panel serves every period preset from one daily series. Those days are
 // finished, so the series barely changes; a long TTL keeps the widest query off the
 // per-refresh path, which matters while the app is on the development access tier.
@@ -1876,7 +1886,8 @@ module.exports = async (req, res) => {
       accessToken: config.metaAccessToken,
       metadataCacheMaxAgeMs: META_METADATA_CACHE_MAX_AGE_MS,
       adsCacheMaxAgeMs: META_ADS_CACHE_MAX_AGE_MS,
-      timings
+      timings,
+      bypassCache: forceRefresh
     });
 
     // New_customer / Existing_customer are resolved by name from the account's own
@@ -1900,7 +1911,8 @@ module.exports = async (req, res) => {
       dateScope,
       comparisonDateScope,
       insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
-      timings
+      timings,
+      bypassCache: forceRefresh
     });
     const incrementalInsightsAvailable = !aggregatedIncrementalInsightsResponse?.unavailable && !dailyIncrementalInsightsResponse?.unavailable;
 
@@ -1915,7 +1927,8 @@ module.exports = async (req, res) => {
       accessToken: config.metaAccessToken,
       trendWindow: acquisitionTrendWindows.fetch,
       insightsCacheMaxAgeMs: META_ACQUISITION_TREND_CACHE_MAX_AGE_MS,
-      timings
+      timings,
+      bypassCache: forceRefresh
     }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
 
     const awarenessCampaignIds = new Set(

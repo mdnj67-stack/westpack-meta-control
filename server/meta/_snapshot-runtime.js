@@ -55,14 +55,20 @@ function createMetaSnapshotRuntime({
     }
   }
 
+  // bypassCache lets an explicit "Update snapshot" reach Meta even when a resource is
+  // still inside its TTL. Without it, raising the insights TTL would leave no way to get
+  // fresh numbers on demand: force=1 only skips the whole-response cache, not these
+  // per-resource ones, so the user would press refresh and be handed the same figures.
+  // The result is still written to the cache, so the next routine view is cheap again.
   async function getCachedMetaCollection({
     cacheKey,
     maxAgeMs,
     timingStore,
     timingLabel,
-    fetcher
+    fetcher,
+    bypassCache = false
   }) {
-    const cached = getCachedMapEntry(resourceCache, cacheKey, maxAgeMs);
+    const cached = bypassCache ? null : getCachedMapEntry(resourceCache, cacheKey, maxAgeMs);
     if (cached) {
       if (timingStore && timingLabel) {
         timingStore[`${timingLabel}_cache`] = "hit";
