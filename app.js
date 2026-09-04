@@ -13122,7 +13122,7 @@ function buildGeneralQuickInsight(campaigns = []) {
       },
       {
         label: "Largest objective move",
-        value: objectiveDriver ? objectiveLabels[objectiveDriver.key] || objectiveDriver.key : "--",
+        value: objectiveDriver ? resolveObjectiveGroupLabel(objectiveDriver.key) : "--",
         meta: objectiveDriver?.summary?.value || "No comparable period"
       },
       {
