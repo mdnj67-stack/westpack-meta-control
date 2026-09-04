@@ -163,6 +163,7 @@ const {
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildCustomerAcquisition,
+  buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
   formatCurrency,
   buildGeneralSpendDistribution,

@@ -194,6 +194,50 @@ async function run() {
   results.push(`PASS  GET /api/meta/account-snapshot?health=1 -> ${metaHealth.status} (${metaHealth.durationMs}ms) :: ${metaMessage}`);
 
   if (systemHealth.json?.integrations?.meta?.configured) {
+    // The full dashboard snapshot, with no query flags. Neither ?health=1 nor ?catalog=1
+    // reaches the dashboard assembly - they return earlier - so this is the only request
+    // that exercises the objective split, the budget allocation and the customer
+    // acquisition payload. That gap let two "X is not a function" failures reach
+    // production with every unit test green, because module load only proves the files
+    // parse, not that the hand-wired dependency graph is complete.
+    const metaSnapshot = await request("/api/meta/account-snapshot", {
+      timeoutMs: 90000
+    });
+    assert(
+      metaSnapshot.status === 200,
+      `GET /api/meta/account-snapshot returned ${metaSnapshot.status} :: ${String(metaSnapshot.json?.error || metaSnapshot.text || "").slice(0, 300)}`
+    );
+
+    const quality = metaSnapshot.json?.dashboard?.quality;
+    assert(quality, "Full snapshot returned no dashboard.quality block");
+    assert(quality.generalSpendDistribution, "Snapshot is missing quality.generalSpendDistribution");
+    assert(quality.budgetAllocation, "Snapshot is missing quality.budgetAllocation");
+
+    const acquisition = quality.customerAcquisition;
+    assert(acquisition, "Snapshot is missing quality.customerAcquisition");
+    assert(acquisition.trend, "Snapshot is missing quality.customerAcquisition.trend");
+    assert(
+      typeof acquisition.trend.summary === "string" && acquisition.trend.summary.length > 0,
+      "The customer acquisition trend has no summary line"
+    );
+    // Reconciliation the panel depends on: the three buckets must account for every
+    // purchase, or the split is misstating the number the team is measured on.
+    const bucketSum = Number(acquisition.newCustomers || 0)
+      + Number(acquisition.existingCustomers || 0)
+      + Number(acquisition.untaggedPurchases || 0);
+    assert(
+      bucketSum === Number(acquisition.totalPurchases || 0),
+      `Customer buckets sum to ${bucketSum} but total purchases is ${acquisition.totalPurchases}`
+    );
+
+    const trend = acquisition.trend;
+    assert(
+      trend.comparable === false || trend.current.days === trend.previous.days,
+      `Trend windows cover different day counts: ${trend.current.days} vs ${trend.previous.days}`
+    );
+
+    results.push(`PASS  GET /api/meta/account-snapshot -> ${metaSnapshot.status} (${metaSnapshot.durationMs}ms) :: newCustomers=${acquisition.newCustomers}, trend=${trend.direction} ${trend.delta >= 0 ? "+" : ""}${trend.delta}, untagged=${acquisition.untaggedShare}%, warnings=${(quality.warnings || []).length}`);
+
     const metaCatalog = await request("/api/meta/account-snapshot?catalog=1", {
       timeoutMs: 30000
     });
