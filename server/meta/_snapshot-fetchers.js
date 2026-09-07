@@ -56,7 +56,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("campaigns", [accountId, "dashboard"]),
         maxAgeMs: metadataCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "campaigns_metadata",
         fetcher: () => metaGetAll(`/${accountId}/campaigns`, accessToken, {
           fields: "id,name,status,effective_status,objective,daily_budget,lifetime_budget,start_time,stop_time",
@@ -67,7 +67,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("ads", [accountId, "dashboard"]),
         maxAgeMs: adsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "ads_metadata",
         fetcher: () => metaGetAll(`/${accountId}/ads`, accessToken, {
           fields: "id,name,status,campaign{id,name},adset{id,name},creative{id,name}",
@@ -78,7 +78,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("adsets", [accountId, "dashboard"]),
         maxAgeMs: metadataCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "adsets_metadata",
         fetcher: () => metaGetAll(`/${accountId}/adsets`, accessToken, {
           fields: "id,name,status,effective_status,daily_budget,lifetime_budget,start_time,end_time,attribution_spec,attribution_setting,campaign{id,name,status}",
@@ -92,7 +92,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("customconversions", [accountId, "dashboard"]),
         maxAgeMs: metadataCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "custom_conversions_metadata",
         fetcher: () => metaGetAll(`/${accountId}/customconversions`, accessToken, {
           fields: "id,name,custom_event_type,is_archived",
@@ -123,7 +123,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("insights_campaign_agg", [accountId, dateScope.since, dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "campaign_insights_aggregated",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
@@ -151,7 +151,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("insights_campaign_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "campaign_insights_daily",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
@@ -168,12 +168,17 @@ function createMetaSnapshotFetchers({
             "action_values"
           ].join(",")
         })
-      }),
+        // Optional: this is the day-by-day series behind the sparklines and the
+        // previous-period overlays. Losing it costs those, not the dashboard's numbers.
+        // It is also one of the most CPU-expensive queries Meta bills us for, so on a
+        // throttled account it is the first thing to fail - and it used to take every
+        // panel down with it.
+      }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
       getCachedMetaCollection({
         cacheKey: buildMetaResourceCacheKey("insights_incremental_agg", [accountId, dateScope.since, dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "incremental_insights_aggregated",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
@@ -202,7 +207,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("insights_incremental_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "incremental_insights_daily",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
@@ -245,7 +250,7 @@ function createMetaSnapshotFetchers({
         cacheKey: buildMetaResourceCacheKey("insights_adset_agg", [accountId, dateScope.since, dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "adset_insights_aggregated",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "adset",
@@ -268,12 +273,15 @@ function createMetaSnapshotFetchers({
             "website_purchase_roas"
           ].join(",")
         })
-      }),
+        // Optional: awareness campaigns prefer ad-set level insights where available.
+        // Without it they fall back to campaign-level figures, which the pipeline already
+        // handles and reports through awarenessUsingAdSetInsights.
+      }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
       getCachedMetaCollection({
         cacheKey: buildMetaResourceCacheKey("insights_adset_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
-      bypassCache,
+        bypassCache,
         timingLabel: "adset_insights_daily",
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "adset",
@@ -291,7 +299,8 @@ function createMetaSnapshotFetchers({
             "action_values"
           ].join(",")
         })
-      })
+        // Optional for the same reason as the aggregated ad-set query above.
+      }).catch(() => ({ data: [], pageCount: 0, unavailable: true }))
     ]);
 
     return {
