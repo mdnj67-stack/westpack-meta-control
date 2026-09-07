@@ -18,6 +18,7 @@
 import {
   buildStudioCatalogSnapshot,
   readMetaSnapshotCache,
+  readMostRecentMetaSnapshotCache,
   readMetaStudioSnapshot,
   writeMetaSnapshotCache,
   writeMetaStudioSnapshot
@@ -15137,15 +15138,27 @@ async function refreshMetaData(options = {}) {
       return snapshot;
     } catch (error) {
       refreshMetaConnectionStatus({ silent: true });
-      if (cachedEntry?.snapshot && isMetaRateLimitMessage(error.message)) {
-        const snapshot = cachedEntry.snapshot;
+      // The cache key ends with today's date, so a Monday morning finds nothing under it
+      // even though Friday's snapshot is still in the browser. When Meta is throttled,
+      // fall back to the most recent snapshot under any key rather than showing a blank
+      // dashboard - clearly labelled with the range it actually covers, because stale
+      // data must never read as current.
+      const rateLimited = isMetaRateLimitMessage(error.message);
+      const staleEntry = !cachedEntry?.snapshot && rateLimited
+        ? readMostRecentMetaSnapshotCache()
+        : null;
+      const fallbackEntry = cachedEntry?.snapshot ? cachedEntry : staleEntry;
+
+      if (fallbackEntry?.snapshot && rateLimited) {
+        const snapshot = fallbackEntry.snapshot;
+        const isStaleRange = fallbackEntry === staleEntry;
         setMetaSnapshotMeta({
           mode: appState.metaDataMode === "snapshot" && !forceLive ? "snapshot" : "live",
           modeLabel: appState.metaDataMode === "snapshot" && !forceLive ? "Snapshot mode" : "Live mode",
           source: "fallback-cache",
-          sourceLabel: "Fallback cache",
+          sourceLabel: isStaleRange ? "Older cached range" : "Fallback cache",
           generatedAt: snapshot.generatedAt || "",
-          cachedAt: cachedEntry.cachedAt || ""
+          cachedAt: fallbackEntry.cachedAt || ""
         });
         applySnapshotScope(snapshot.scope || {});
         renderCoreData(
@@ -15156,10 +15169,26 @@ async function refreshMetaData(options = {}) {
           snapshot.dashboard || null,
           snapshot.account || null
         );
+        // Naming the range the data actually covers is the whole safeguard here. The
+        // figures are real, they are just from an earlier window than the one selected.
+        const staleRangeLabel = String(snapshot.scope?.label || snapshot.scope?.shortLabel || "an earlier range");
+        const cachedAge = fallbackEntry.cachedAt
+          ? formatRelativeAgeFromNow(fallbackEntry.cachedAt)
+          : "";
         if (!silent) {
-          setStudioStatus("Meta rate limited. Using last verified snapshot.", "warning");
+          setStudioStatus(
+            isStaleRange
+              ? `Meta is rate limited. Showing ${staleRangeLabel}${cachedAge ? ` from ${cachedAge}` : ""} instead of the selected range.`
+              : "Meta rate limited. Using last verified snapshot.",
+            "warning"
+          );
         }
-        setSyncStatus(`${buildMetaQualityLabel()} · ${appState.dashboardDateLabel}`, getMetaTrustStatusTone());
+        setSyncStatus(
+          isStaleRange
+            ? `Meta rate limited · showing ${staleRangeLabel}${cachedAge ? ` cached ${cachedAge}` : ""}, not the selected range · ${buildMetaQualityLabel()}`
+            : `${buildMetaQualityLabel()} · ${appState.dashboardDateLabel}`,
+          "warning"
+        );
         return snapshot;
       }
       if (!silent) {

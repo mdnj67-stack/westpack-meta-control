@@ -92,3 +92,28 @@ export function buildStudioCatalogSnapshot(payload = {}) {
     dashboard: null
   };
 }
+
+// The cache key is preset|from|to, and `to` is today, so it changes every day. That is
+// correct for reads - you should not be shown yesterday's range as though it were today's
+// - but it means a Monday morning with Meta throttled finds nothing under today's key and
+// the dashboard has no data at all, even though Friday's snapshot is still in the browser.
+//
+// This returns the most recently cached snapshot under ANY key, for the rate-limited
+// fallback only. The caller must label what range it actually covers; stale data that says
+// so is better than a blank dashboard, but it must never be mistaken for current.
+export function readMostRecentMetaSnapshotCache() {
+  try {
+    const store = readMetaSnapshotCacheStore();
+    const entries = Object.entries(store)
+      .map(([cacheKey, entry]) => ({ cacheKey, ...entry }))
+      .filter((entry) => isUsableMetaDashboardSnapshot(entry.snapshot))
+      .sort((left, right) => {
+        const leftAt = new Date(left.cachedAt || 0).getTime() || 0;
+        const rightAt = new Date(right.cachedAt || 0).getTime() || 0;
+        return rightAt - leftAt;
+      });
+    return entries[0] || null;
+  } catch {
+    return null;
+  }
+}
