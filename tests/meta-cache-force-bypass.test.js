@@ -78,10 +78,11 @@ test("an explicit force reaches every cached layer, not just the response cache"
   assert.match(handler, /if \(!forceRefresh && isCacheFresh\(cachedSnapshot, META_SNAPSHOT_CACHE_MAX_AGE_MS\)\)/);
 
   const passes = handler.match(/bypassCache: forceRefresh/g) || [];
-  assert.equal(passes.length, 3, `expected the flag on all three fetchers, found ${passes.length}`);
+  assert.equal(passes.length, 4, `expected the flag on all four dashboard fetchers, found ${passes.length}`);
 
-  // Each of the three dashboard fetchers must accept it.
-  for (const signature of ["fetchDashboardMetadataCollections", "fetchCampaignInsightsCollections", "fetchCustomerAcquisitionTrend"]) {
+  // Each dashboard fetcher must accept it. The awareness ad-set fetcher was missed on the
+  // first pass and shipped a ReferenceError, so it is named explicitly here.
+  for (const signature of ["fetchDashboardMetadataCollections", "fetchCampaignInsightsCollections", "fetchAwarenessAdSetInsightsCollections", "fetchCustomerAcquisitionTrend"]) {
     const start = fetchers.indexOf(`async function ${signature}(`);
     assert.notEqual(start, -1, `${signature} is gone`);
     const params = fetchers.slice(start, fetchers.indexOf(") {", start));
@@ -125,4 +126,59 @@ test("no duplicated bypassCache keys were left behind", () => {
   const duplicates = lines.filter((line, index) =>
     line.trim() === "bypassCache," && lines[index - 1]?.trim() === "bypassCache,");
   assert.deepEqual(duplicates, []);
+});
+
+test("every bypassCache usage sits inside a function that declares it", () => {
+  // This is the check that was missing, and its absence put a ReferenceError in
+  // production. The previous test confirmed each cached call forwards the flag, but not
+  // that the enclosing fetcher actually has it in scope. Threading it with a text
+  // replacement added it to fetchAwarenessAdSetInsightsCollections' calls without adding
+  // it to that function's parameters, so the shorthand `bypassCache,` referenced a
+  // variable that did not exist - and that fetcher runs on every snapshot with awareness
+  // campaigns. `node --check` cannot see it; nothing fails until the request runs.
+  const lines = fetchers.split(/\r?\n/);
+
+  const functions = [];
+  lines.forEach((line, index) => {
+    const match = line.match(/^ {2}(?:async )?function (\w+)\(/);
+    if (match) functions.push({ name: match[1], line: index });
+  });
+  assert.ok(functions.length >= 4, `expected the fetcher functions, found ${functions.length}`);
+
+  const declares = new Set(
+    functions
+      .filter(({ line }) => lines.slice(line, line + 16).join("\n").includes("bypassCache = false"))
+      .map(({ name }) => name)
+  );
+
+  const orphans = [];
+  lines.forEach((line, index) => {
+    if (line.trim() !== "bypassCache," && !/bypassCache:/.test(line)) return;
+    if (/bypassCache = false/.test(line)) return;
+    const owner = [...functions].reverse().find((entry) => entry.line < index);
+    if (owner && !declares.has(owner.name)) {
+      orphans.push(`${owner.name} (line ${index + 1})`);
+    }
+  });
+
+  assert.deepEqual(
+    orphans,
+    [],
+    `these functions use bypassCache without declaring it, which throws at request time: ${orphans.join(", ")}`
+  );
+});
+
+test("every fetcher the handler forces is one that accepts the flag", () => {
+  // The other direction: passing bypassCache to a fetcher that ignores it would silently
+  // keep serving cached data through a forced refresh.
+  const forced = [...handler.matchAll(/(fetch\w+)\(\{[\s\S]{0,600}?bypassCache: forceRefresh/g)]
+    .map((match) => match[1]);
+  assert.ok(forced.length >= 4, `expected several forced fetchers, found ${forced.length}`);
+
+  for (const name of new Set(forced)) {
+    const start = fetchers.indexOf(`function ${name}(`);
+    assert.notEqual(start, -1, `${name} is not defined in the fetchers`);
+    const params = fetchers.slice(start, fetchers.indexOf(") {", start));
+    assert.match(params, /bypassCache = false/, `the handler forces ${name}, which does not accept bypassCache`);
+  }
 });

@@ -1950,7 +1950,8 @@ module.exports = async (req, res) => {
         dateScope,
         comparisonDateScope,
         insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
-        timings
+        timings,
+        bypassCache: forceRefresh
       }));
     } else {
       timings.adset_insights_aggregated_ms = 0;

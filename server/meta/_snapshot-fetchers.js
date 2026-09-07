@@ -237,7 +237,8 @@ function createMetaSnapshotFetchers({
     dateScope,
     comparisonDateScope,
     insightsCacheMaxAgeMs,
-    timings
+    timings,
+    bypassCache = false
   }) {
     const [aggregatedAdSetInsightsResponse, dailyAdSetInsightsResponse] = await Promise.all([
       getCachedMetaCollection({
