@@ -216,9 +216,22 @@ Verification here means checking against the live account, not against fixtures.
 server with `serve-local.ps1`, log in the way `smoke-local.js` does, and read
 `/api/meta/account-snapshot?force=1&preset=last_30d`. **Restart the server after any
 server-side change** - it holds the modules in Node's require cache. The account throttles
-easily: a forced refresh makes about thirteen paginated Graph calls and repeated forcing
-will earn "There have been too many calls to this ad-account" for the best part of an hour.
-Poll `?health=1`, which costs one call, rather than retrying the snapshot.
+easily: a forced refresh makes about thirteen paginated Graph calls, and a handful of them
+in one session will earn "There have been too many calls to this ad-account" for the rest
+of it - which locks out the marketing team's own dashboard too, not just the test.
+
+So budget those refreshes. Get one snapshot, save the JSON, and analyse the file rather
+than refetching; poll `?health=1`, which costs a single call, rather than retrying the
+snapshot; and never leave a retry loop running against the account unattended. A session
+on 2026-09-09 spent the account's whole window this way and could not verify its own work
+against live data as a result.
+
+Rate limits are deliberately **not** retried inside a request (`isRetryableMetaError` in
+`_snapshot-runtime.js`). They used to count as transient, so each throttled call was
+retried four more times against a limit Meta measures in minutes to an hour: five calls'
+worth of quota spent per failure, for nothing. Failing fast is also what lets the
+stale-cache fallback serve the last good snapshot. Do not fold rate limits back into
+`isTransientMetaError`'s retry path.
 
 ## Agent workflow for this subsystem
 
