@@ -183,3 +183,84 @@ test("the new-customer panel comes before the budget panel on General", () => {
   assert.notEqual(budgetAt, -1, "the budget panel is gone");
   assert.ok(acquisitionAt < budgetAt, "the budget panel is being shown first again");
 });
+
+const { buildAcquisitionChange } = require(join(root, "api", "meta", "account-snapshot.js")).__internals;
+
+function acquisition(current, previous) {
+  return {
+    available: true,
+    trend: {
+      available: true,
+      comparable: true,
+      current: { ...current, label: "the first 7 days of this month" },
+      previous: { ...previous, label: "the first 7 days of last month" }
+    }
+  };
+}
+
+test("the new-customer count carries the month-to-date change beside it", () => {
+  // A count on its own says where acquisition stands and nothing about where it is going,
+  // which is the question the department is actually held to.
+  const up = buildAcquisitionChange(acquisition({ newCustomers: 58 }, { newCustomers: 47 }), "newCustomers", "up");
+  assert.equal(up.value, "+23.4%");
+  assert.equal(up.tone, "positive", "more new customers is good news");
+  assert.equal(up.direction, "up");
+
+  const down = buildAcquisitionChange(acquisition({ newCustomers: 47 }, { newCustomers: 58 }), "newCustomers", "up");
+  assert.equal(down.tone, "negative");
+});
+
+test("cost per new customer runs the other way, because cheaper is better", () => {
+  // Without this, a period can show more new customers in green while quietly costing far
+  // more for each one.
+  const dearer = buildAcquisitionChange(
+    acquisition({ costPerNewCustomer: 1509 }, { costPerNewCustomer: 1200 }),
+    "costPerNewCustomer",
+    "down"
+  );
+  assert.equal(dearer.direction, "up", "the figure did rise");
+  assert.equal(dearer.tone, "negative", "and a rising cost per customer is bad news");
+
+  const cheaper = buildAcquisitionChange(
+    acquisition({ costPerNewCustomer: 1200 }, { costPerNewCustomer: 1509 }),
+    "costPerNewCustomer",
+    "down"
+  );
+  assert.equal(cheaper.direction, "down");
+  assert.equal(cheaper.tone, "positive");
+});
+
+test("the badge names its own window, because its neighbours use a different one", () => {
+  // Spend and ROAS in the same strip compare against the selected dashboard range. This
+  // one compares calendar month to date. Two windows in one row is only honest if each
+  // says which it is.
+  const change = buildAcquisitionChange(acquisition({ newCustomers: 58 }, { newCustomers: 47 }), "newCustomers", "up");
+  assert.match(change.label, /vs the first 7 days of last month/);
+
+  // And the tile has to render that label, or the distinction never reaches the reader.
+  const ui = readFileSync(join(root, "src", "ui.js"), "utf8");
+  const hero = ui.slice(ui.indexOf("export function renderHeroPanel"));
+  assert.match(hero.slice(0, 900), /item.change?.label/);
+});
+
+test("no badge at all when there is nothing honest to compare", () => {
+  // A fabricated "0.0% flat" is worse than a missing badge: it asserts that nothing
+  // changed. On the first of the month there is no elapsed period to compare against.
+  assert.equal(
+    buildAcquisitionChange({ available: true, trend: { available: true, comparable: false } }, "newCustomers", "up"),
+    null,
+    "an incomparable window must produce no badge"
+  );
+  assert.equal(buildAcquisitionChange({ available: false }, "newCustomers", "up"), null);
+  assert.equal(buildAcquisitionChange(null, "newCustomers", "up"), null);
+
+  // Both windows genuinely empty is a real, reportable flat.
+  const flat = buildAcquisitionChange(acquisition({ newCustomers: 0 }, { newCustomers: 0 }), "newCustomers", "up");
+  assert.equal(flat.direction, "flat");
+  assert.equal(flat.tone, "neutral");
+
+  // A first-ever customer is "New", not an infinite percentage.
+  const fresh = buildAcquisitionChange(acquisition({ newCustomers: 12 }, { newCustomers: 0 }), "newCustomers", "up");
+  assert.equal(fresh.value, "New");
+  assert.equal(fresh.tone, "positive");
+});

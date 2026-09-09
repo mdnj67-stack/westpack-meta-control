@@ -1277,6 +1277,54 @@ function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {
   ];
 }
 
+// Month to date against the same elapsed days of last month, taken from the acquisition
+// panel's own comparison rather than recomputed, so the badge in the KPI strip and the
+// badge inside the panel can never disagree.
+//
+// The window is deliberately not the dashboard's selected range: the department reports on
+// calendar months, and comparing a part-month against a whole one would make every month
+// look worse than the last. Because the neighbouring badges do use the selected range, the
+// label names this one explicitly.
+function buildAcquisitionChange(acquisition = null, field = "newCustomers", positiveDirection = "up") {
+  const trend = acquisition?.trend || null;
+  if (!acquisition?.available || !trend?.available || !trend.comparable) {
+    return null;
+  }
+
+  const currentValue = readNumber(trend.current?.[field], 0);
+  const previousValue = readNumber(trend.previous?.[field], 0);
+  const label = trend.previous?.label ? `vs ${trend.previous.label}` : "vs the same days last month";
+
+  if (previousValue <= 0 && currentValue <= 0) {
+    return { value: "0.0%", percentChange: 0, tone: "neutral", direction: "flat", label, currentValue, previousValue };
+  }
+  if (previousValue <= 0) {
+    return {
+      value: "New",
+      percentChange: null,
+      tone: positiveDirection === "down" ? "negative" : "positive",
+      direction: "new",
+      label,
+      currentValue,
+      previousValue
+    };
+  }
+
+  const change = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
+  const isNeutral = Math.abs(change) < 0.1;
+  const isPositive = positiveDirection === "down" ? change < 0 : change > 0;
+
+  return {
+    value: `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
+    percentChange: change,
+    tone: isNeutral ? "neutral" : (isPositive ? "positive" : "negative"),
+    direction: isNeutral ? "flat" : (change > 0 ? "up" : "down"),
+    label,
+    currentValue,
+    previousValue
+  };
+}
+
 function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK", dateScope = null, options = {}) {
   const deduplicatedHeroReach = readNumber(options.deduplicatedReach?.reach, 0);
   const series = buildAggregateSeries(campaigns);
@@ -1297,6 +1345,8 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
     const newCustomers = readNumber(acquisition?.newCustomers, 0);
     const costPerNewCustomer = readNumber(acquisition?.costPerNewCustomer, 0);
     const acquisitionAvailable = Boolean(acquisition?.available);
+    const newCustomerChange = buildAcquisitionChange(acquisition, "newCustomers", "up");
+    const costPerNewCustomerChange = buildAcquisitionChange(acquisition, "costPerNewCustomer", "down");
 
     return [
       {
@@ -1305,12 +1355,14 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
         meta: acquisitionAvailable
           ? "From the New_customer conversion"
           : "No New_customer conversion on this account",
+        change: newCustomerChange,
         tone: "success"
       },
       {
         label: "Cost per new customer",
         value: acquisitionAvailable && costPerNewCustomer > 0 ? formatCurrency(costPerNewCustomer, currency) : "--",
         meta: acquisitionAvailable ? String(acquisition?.costPerNewCustomerBasis || "Spend / new customers") : "Not available",
+        change: costPerNewCustomerChange,
         tone: "warning"
       },
       {
@@ -2160,6 +2212,7 @@ module.exports.__internals = {
   buildGeneralSpendDistribution,
   buildLensStats,
   buildQualityWarnings,
+  buildAcquisitionChange,
   buildPresetRange,
   buildSnapshotDashboardAssembly,
   buildTrendCards,
