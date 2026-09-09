@@ -75,9 +75,13 @@ email-editor-usability change is fully finished.
 
 As of 2026-09-01, running the full campaign-related unit suite
 (`node --test tests/campaign-*.test.js tests/content-agent-domain.test.js tests/content-quality-agent.test.js tests/creative-production.test.js tests/master-design-dna.test.js tests/meta-carousel-contract.test.js tests/meta-quality-director.test.js tests/agent-store.test.js tests/content-agent-worker-retry.test.js tests/content-agent-worker-revision-resume.test.js tests/meta-from-master.test.js`)
-passes 138/138. As of 2026-09-04, `node --test "tests/*.test.js"` (the whole suite, quoted so
-the shell does not expand the glob — `node --test tests/` does not work) passes 255/255, which
-includes the six new Meta budget/objective test files listed above.
+passes 138/138. As of 2026-09-09, `node --test "tests/*.test.js"` (the whole suite, quoted so
+the shell does not expand the glob — `node --test tests/` does not work) passes 370/370. That
+includes `tests/meta-dashboard-truthfulness.test.js`, which pins the nine figures corrected in
+the 2026-09-09 pass. One Campaign Studio test,
+"redis mode: readAgentState falls back to a safe initial state instead of throwing on a corrupted
+blob" in `tests/agent-store.test.js`, failed once in a full-suite run and passed both in
+isolation and on the next full run, so treat it as flaky rather than as a regression signal.
 (The `tests/campaign-*.test.js` glob already picks up `tests/campaign-learning-store.test.js`
 and `tests/campaign-learning-store-local-file-lock.test.js`; the four files listed explicitly above are the
 ones added since the prior 100/100 count that the glob doesn't already cover.) The e2e Playwright spec was
@@ -153,6 +157,68 @@ The marketing department budgets monthly and treats a month as 30 days — "the 
 - Adding an objective group means: the table in both modules, a tone in `OBJECTIVE_TONES`
   (`src/ui.js`) and matching `.meta-budget-segment.tone-*` / `.meta-budget-row.tone-*` rules
   in `styles.css`. `tests/meta-objective-tone-coverage.test.js` enforces all four.
+- Objective colours are `--tone-<group>-rgb` / `--tone-<group>-soft-rgb` tokens on `:root`,
+  stored as space-separated channel triples so one value serves both the solid row fill
+  and the semi-transparent mix-bar segment. Both rules must read the tokens and neither
+  may hard-code a colour; the tone-coverage test enforces that too.
+
+## What the dashboard is allowed to claim
+
+Reworked 2026-09-09. The standing rule for this dashboard, from the user: it must be
+"100% korrekt", aimed at growth in the Meta setup, "super clean og ikke fyldt med alt
+muligt fyld som ikke har interesse". Correctness outranks features, and removing a panel
+is a legitimate deliverable. A missing number is acceptable where a wrong one is not.
+
+Nine figures were wrong before this pass. Do not reintroduce any of them:
+
+- **Reach can never be summed.** Meta deduplicates reach only inside the entity queried,
+  so adding campaign reach counts anyone who saw two campaigns twice - on this account
+  that inflated the awareness figure from roughly 6M to 12.2M. `fetchDeduplicatedReach`
+  (`server/meta/_snapshot-fetchers.js`) asks at `level: "account"`, once for the whole
+  account and once filtered to the awareness campaign ids, which is what Ads Manager shows
+  for that selection. Frequency uses the same denominator. Where the deduplicated figure
+  is missing the summed one is shown but explicitly labelled as a sum.
+- **A rate over several campaigns is summed numerator over summed denominator.**
+  `buildComparisonSeriesTotals` adds its accessor's output across campaigns, so feeding it
+  a ratio plots the sum of the ratios. Use `buildDerivedSeriesTotals` for ROAS, CPM, CPL,
+  CTR and frequency.
+- **Percent change divides by the real baseline.** The zero and negative cases return
+  before the division, so flooring the divisor at 1 guards nothing and silently flattens
+  every metric whose baseline is below 1.
+- **The client uses `comparison_window`, never a half-split.** `splitAggregateSeries` cuts
+  one range in half and calls the first half "previous"; `getComparisonWindowChange`
+  (`src/meta-dashboard-metrics.js`) takes the two real windows instead.
+- **Date ranges resolve in the ad account timezone** (`America/Los_Angeles`), via
+  `resolveTodayInTimeZone`. The account is fetched before `buildDateScope` for this reason;
+  do not move that call back.
+- **Campaign status is Meta's `effective_status`**, mapped through
+  `describeDeliveryStatus`. It was the literal string "Healthy" on every row.
+- **Currency falls back to DKK everywhere**, matching the account and
+  `budget-allocation.js`. A EUR fallback in the display path once meant kroner could print
+  with a euro sign.
+- **The incremental lens is a campaign grouping, not a measurement.** Conv 01 to 03 carry
+  `Inkrementel` in the campaign name and the marketing team maintains that register
+  deliberately, so the name tag stays and is the correct source here. But Meta returns the
+  incrementality attribution window for every campaign on this account and gives back the
+  standard figures, verified field by field. `incremental_matches_standard` detects that
+  and `buildQualityWarnings` discloses it. Never present the lens as a measured uplift.
+- **The data quality panel is visible on every lens**, including General. It used to sit
+  inside the section the render hides there, so the first view people open was the one
+  that never showed whether its own numbers could be trusted.
+
+Panels deleted in this pass, with the user's agreement: Executive brief, Decision buckets,
+Decision board and Signals (all four were computed every render and then hidden by the
+render itself, and all four were generated advice prose over invented priority scores),
+and the Recommended moves panel with its `api/openai/dashboard-agent.js` route. General
+also lost its stat row, which restated the budget panel's totals and shares.
+
+Verification here means checking against the live account, not against fixtures. Start the
+server with `serve-local.ps1`, log in the way `smoke-local.js` does, and read
+`/api/meta/account-snapshot?force=1&preset=last_30d`. **Restart the server after any
+server-side change** - it holds the modules in Node's require cache. The account throttles
+easily: a forced refresh makes about thirteen paginated Graph calls and repeated forcing
+will earn "There have been too many calls to this ad-account" for the best part of an hour.
+Poll `?health=1`, which costs one call, rather than retrying the snapshot.
 
 ## Agent workflow for this subsystem
 
