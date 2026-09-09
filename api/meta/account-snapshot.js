@@ -956,7 +956,7 @@ function buildWindowChange(series = [], metric, options = {}) {
   const isNeutral = Math.abs(change) < 0.1;
 
   return {
-    value: `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
+    value: isNeutral ? "0.0%" : `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
     percentChange: change,
     tone: isNeutral ? "neutral" : (isPositive ? "positive" : "negative"),
     label: buildChangeLabel(isNeutral ? "flat" : (change > 0 ? "up" : "down"), windowLabel),
@@ -1315,7 +1315,7 @@ function buildAcquisitionChange(acquisition = null, field = "newCustomers", posi
   const isPositive = positiveDirection === "down" ? change < 0 : change > 0;
 
   return {
-    value: `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
+    value: isNeutral ? "0.0%" : `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
     percentChange: change,
     tone: isNeutral ? "neutral" : (isPositive ? "positive" : "negative"),
     direction: isNeutral ? "flat" : (change > 0 ? "up" : "down"),

@@ -296,6 +296,7 @@ function createMetaSnapshotFetchers({
             "date_start",
             "spend",
             "impressions",
+            "reach",
             "inline_link_clicks",
             "actions",
             "action_values"

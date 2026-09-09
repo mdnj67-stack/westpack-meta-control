@@ -309,6 +309,7 @@ function createMetaSnapshotTransformers({
               const current = seriesTotals.get(key) || {
                 spend: 0,
                 impressions: 0,
+                reach: 0,
                 clicks: 0,
                 add_to_cart: 0,
                 purchases: 0,
@@ -319,6 +320,11 @@ function createMetaSnapshotTransformers({
               seriesTotals.set(key, {
                 spend: current.spend + readNumber(point.spend, 0),
                 impressions: current.impressions + readNumber(point.impressions, 0),
+                // Summed across the ad sets of one campaign, so it double counts anyone in
+                // two of them. It is only ever read as a day-over-day change here, where
+                // both windows carry the same bias; the reach figure the panel prints comes
+                // from an account-level query instead.
+                reach: current.reach + readNumber(point.reach, 0),
                 clicks: current.clicks + readNumber(point.clicks, 0),
                 add_to_cart: current.add_to_cart + readNumber(point.add_to_cart, 0),
                 purchases: current.purchases + readNumber(point.purchases, 0),
@@ -328,10 +334,13 @@ function createMetaSnapshotTransformers({
             }
           }
 
-          series = sortSeries(Array.from(seriesTotals.entries()).map(([date, value]) => ({
+          const rebuiltSeries = sortSeries(Array.from(seriesTotals.entries()).map(([date, value]) => ({
             date,
             ...value
           })));
+          if (rebuiltSeries.length) {
+            series = rebuiltSeries;
+          }
         }
       }
 

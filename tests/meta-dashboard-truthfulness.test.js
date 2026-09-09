@@ -249,3 +249,66 @@ test("no summing helper is handed an accessor that divides", () => {
     );
   }
 });
+
+test("a change inside the neutral band prints as flat, not as a rounded minus", () => {
+  // Cost per new customer moved by -0.0036% on the live account. That rounded to "-0.0%",
+  // which reads as a fall while the badge beside it was coloured neutral and labelled
+  // flat: three signals disagreeing about one number.
+  const window = {
+    previous: [{ date: "2026-08-01", spend: 1000, revenue: 2000, impressions: 10000, clicks: 100, purchases: 10, leads: 0, reach: 0, add_to_cart: 0 }],
+    current: [{ date: "2026-09-01", spend: 1000, revenue: 2000.01, impressions: 10000, clicks: 100, purchases: 10, leads: 0, reach: 0, add_to_cart: 0 }]
+  };
+
+  const change = buildWindowChange(window, "roas", { positiveDirection: "up" });
+  assert.equal(change.direction, "flat");
+  assert.equal(change.tone, "neutral");
+  assert.equal(change.value, "0.0%", "a flat badge must not carry a sign");
+
+  // A real move still keeps its sign in both directions.
+  const realWindow = {
+    previous: [{ date: "2026-08-01", spend: 1000, revenue: 1000, impressions: 0, clicks: 0, purchases: 0, leads: 0, reach: 0, add_to_cart: 0 }],
+    current: [{ date: "2026-09-01", spend: 1000, revenue: 1500, impressions: 0, clicks: 0, purchases: 0, leads: 0, reach: 0, add_to_cart: 0 }]
+  };
+  assert.equal(buildWindowChange(realWindow, "roas", { positiveDirection: "up" }).value, "+50.0%");
+});
+
+test("the awareness series carries reach through its ad-set rebuild", () => {
+  // Awareness campaigns have their daily series rebuilt from their ad sets, and that
+  // rebuild dropped reach. So the one lens where reach is the headline was the one lens
+  // whose reach change badge could never read anything but "0.0% flat" - verified against
+  // the live account after the campaign-level query had already been fixed.
+  const fetchers = readFileSync(join(root, "server", "meta", "_snapshot-fetchers.js"), "utf8");
+  const adsetDaily = fetchers.slice(fetchers.indexOf("insights_adset_daily_cmp"));
+  assert.match(adsetDaily.slice(0, 900), /"reach"/, "the ad-set daily query must ask for reach");
+
+  const transformers = readFileSync(join(root, "server", "meta", "_snapshot-transformers.js"), "utf8");
+  const rebuild = transformers.slice(
+    transformers.indexOf("const seriesTotals"),
+    transformers.indexOf("series = sortSeries(Array.from(seriesTotals")
+  );
+  assert.ok(rebuild.length > 0, "the ad-set series rebuild is gone");
+  assert.match(rebuild, /reach: current\.reach \+ readNumber\(point\.reach, 0\)/, "the rebuild drops reach again");
+  assert.match(rebuild, /reach: 0,/, "the accumulator has no reach slot");
+});
+
+test("a degraded ad-set daily query does not wipe the awareness trend", () => {
+  // The ad-set daily query is optional and returns an empty list when the account is
+  // throttled. Its aggregated sibling can still succeed, and when it did, the awareness
+  // override replaced each campaign's daily series with a rebuild of nothing - so the
+  // awareness lens lost its trend entirely even though the campaign-level daily series
+  // had come back fine. Seen on the live account: eight of eleven campaigns had a series
+  // and the three missing ones were exactly the awareness set.
+  const transformers = readFileSync(join(root, "server", "meta", "_snapshot-transformers.js"), "utf8");
+  const override = transformers.slice(
+    transformers.indexOf("const seriesTotals"),
+    transformers.indexOf("const roas = spend > 0")
+  );
+  assert.ok(override.length > 0, "the awareness override is gone");
+
+  assert.match(override, /const rebuiltSeries = sortSeries/, "the rebuild is being assigned unconditionally again");
+  assert.match(override, /if \(rebuiltSeries\.length\) \{\s*series = rebuiltSeries;/);
+  assert.ok(
+    !/^\s+series = sortSeries\(Array\.from\(seriesTotals/m.test(override),
+    "an empty rebuild can still overwrite the campaign series"
+  );
+});
