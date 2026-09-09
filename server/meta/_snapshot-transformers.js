@@ -209,12 +209,13 @@ function createMetaSnapshotTransformers({
     const totalSpend = includedCampaigns.reduce((sum, campaign) => {
       return sum + readNumber(insightMap[campaign.id]?.spend || "0", 0);
     }, 0);
-    const ctrValues = includedCampaigns
-      .map((campaign) => readNumber(insightMap[campaign.id]?.inline_link_click_ctr || "0", 0))
-      .filter((value) => value > 0);
-    const averageCtr = ctrValues.length
-      ? ctrValues.reduce((sum, value) => sum + value, 0) / ctrValues.length
-      : 0;
+    const totalClicks = includedCampaigns.reduce((sum, campaign) => {
+      return sum + readNumber(insightMap[campaign.id]?.inline_link_clicks || "0", 0);
+    }, 0);
+    const totalImpressions = includedCampaigns.reduce((sum, campaign) => {
+      return sum + readNumber(insightMap[campaign.id]?.impressions || "0", 0);
+    }, 0);
+    const averageCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
 
     return [
       {
@@ -233,9 +234,9 @@ function createMetaSnapshotTransformers({
         meta: "Live insights"
       },
       {
-        label: "Average CTR",
+        label: "CTR",
         value: `${averageCtr.toFixed(2)}%`,
-        meta: "Included campaigns"
+        meta: "Clicks / impressions across included campaigns"
       }
     ];
   }
