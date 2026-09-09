@@ -211,7 +211,9 @@ function createMetaSnapshotDashboardBuilder({
       },
       visuals: {
         heroPanelByLens: {
-          general: buildHeroPanelItems(enrichedCampaigns, "general", accountCurrency, dateScope),
+          general: buildHeroPanelItems(enrichedCampaigns, "general", accountCurrency, dateScope, {
+            customerAcquisition
+          }),
           awareness: buildHeroPanelItems(buckets.awareness, "awareness", accountCurrency, dateScope, {
             deduplicatedReach: deduplicatedReach?.awareness || null
           }),

@@ -221,7 +221,11 @@ test("an empty account produces an empty split without dividing by zero", () => 
   assert.equal(split.formattedTotalBudgetAmount, "--");
 });
 
-test("general lens stat cards follow the same dynamic objective rows", () => {
+test("general has no stat row, because the budget panel already carries those figures", () => {
+  // It used to return total spend plus one card per objective with its share of spend.
+  // The budget panel directly below shows the same total, the same objective rows and the
+  // same shares, alongside the planned budget and the pacing that gives them meaning, so
+  // the stat row was a second rendering of one fact.
   const campaigns = buildWestpackCampaigns();
   const allocation = calculateBudgetAllocation(buildWestpackBudgetCampaigns(), [], 30);
   const generalSpendDistribution = buildGeneralSpendDistribution(campaigns, DATE_SCOPE, "DKK", allocation);
@@ -230,13 +234,11 @@ test("general lens stat cards follow the same dynamic objective rows", () => {
     generalSpendDistribution
   });
 
-  // A total card plus one card per objective group present.
-  assert.equal(stats.length, generalSpendDistribution.items.length + 1);
-  assert.match(stats[0].label, /Spend/);
-  assert.deepEqual(
-    stats.slice(1).map((stat) => stat.label),
-    generalSpendDistribution.items.map((item) => item.label)
-  );
+  assert.deepEqual(stats, []);
+
+  // The figures themselves must still be there, in the panel that owns them.
+  assert.ok(generalSpendDistribution.items.length > 0);
+  assert.ok(generalSpendDistribution.totalAmount > 0);
 });
 
 test("quality warnings report unmapped objectives and budget coverage gaps", () => {

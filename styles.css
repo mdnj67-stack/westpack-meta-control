@@ -8895,6 +8895,13 @@ h1 {
   gap: 24px;
 }
 
+/* The data quality panel used to live inside the section the render hides on General,
+   so the view people open first never showed whether its own figures could be trusted.
+   It now sits below the playbook on every lens. */
+.dashboard-quality {
+  margin-top: 24px;
+}
+
 .playbook-section {
   display: grid;
   gap: 16px;

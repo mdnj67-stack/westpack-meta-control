@@ -654,21 +654,11 @@ function buildLensStats(campaigns, lens, dateScope, options = {}) {
   const roas = spend > 0 ? revenue / spend : 0;
   const spendLabel = `Spend (${dateScope?.shortLabel || "Scope"})`;
 
+  // General has no status row of its own. Total spend and the per-objective shares live
+  // in the budget panel, next to the planned budget and the pacing they are read against,
+  // so repeating them here was a second copy of one fact.
   if (lens === "general") {
-    const generalSpendDistribution = options.generalSpendDistribution
-      || buildGeneralSpendDistribution(campaigns, dateScope, currency);
-    return [
-      {
-        label: generalSpendDistribution.totalLabel,
-        value: generalSpendDistribution.totalAmount > 0 ? formatCurrency(generalSpendDistribution.totalAmount, currency) : "--",
-        meta: "Real category spend base"
-      },
-      ...generalSpendDistribution.items.map((item) => ({
-        label: item.label,
-        value: item.formattedAmount,
-        meta: `${item.percentage.toFixed(1)}% of total spend`
-      }))
-    ];
+    return [];
   }
 
   if (lens === "awareness") {
@@ -1346,13 +1336,32 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
   const cpm = computeAggregateMetric(series, "cpm");
 
   if (lens === "general") {
+    const acquisition = options.customerAcquisition || null;
+    const newCustomers = readNumber(acquisition?.newCustomers, 0);
+    const costPerNewCustomer = readNumber(acquisition?.costPerNewCustomer, 0);
+    const acquisitionAvailable = Boolean(acquisition?.available);
+
     return [
       {
-        label: "Revenue",
-        value: formatCurrency(revenue, currency),
-        meta: "Attributed revenue",
-        change: buildWindowChange(comparisonWindow, "revenue", { positiveDirection: "up", windowLabel: changeWindowLabel }),
+        label: "New customers",
+        value: acquisitionAvailable ? formatDashboardNumber(newCustomers, 0) : "--",
+        meta: acquisitionAvailable
+          ? "From the New_customer conversion"
+          : "No New_customer conversion on this account",
         tone: "success"
+      },
+      {
+        label: "Cost per new customer",
+        value: acquisitionAvailable && costPerNewCustomer > 0 ? formatCurrency(costPerNewCustomer, currency) : "--",
+        meta: acquisitionAvailable ? String(acquisition?.costPerNewCustomerBasis || "Spend / new customers") : "Not available",
+        tone: "warning"
+      },
+      {
+        label: "Spend",
+        value: formatCurrency(spend, currency),
+        meta: dateScope?.label || "Selected range",
+        change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }),
+        tone: "neutral"
       },
       {
         label: "ROAS",
@@ -1360,20 +1369,6 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
         meta: "Revenue / spend",
         change: buildWindowChange(comparisonWindow, "roas", { positiveDirection: "up", windowLabel: changeWindowLabel }),
         tone: "success"
-      },
-      {
-        label: "Purchases",
-        value: formatDashboardNumber(purchases, 0),
-        meta: "Attributed conversions",
-        change: buildWindowChange(comparisonWindow, "purchases", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-        tone: "neutral"
-      },
-      {
-        label: "CPA",
-        value: purchases > 0 ? formatCurrency(cpa, currency) : "--",
-        meta: "Spend / purchases",
-        change: buildWindowChange(comparisonWindow, "cpa", { positiveDirection: "down", windowLabel: changeWindowLabel }),
-        tone: "warning"
       }
     ];
   }
@@ -2204,5 +2199,9 @@ module.exports.__internals = {
   buildDashboardValidation,
   buildGeneralSpendDistribution,
   buildLensStats,
-  buildQualityWarnings
+  buildQualityWarnings,
+  buildPresetRange,
+  buildTrendCards,
+  buildWindowChange,
+  resolveTodayInTimeZone
 };

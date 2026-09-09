@@ -12575,45 +12575,6 @@ function buildIncrementalLensCampaigns(campaigns = []) {
     }));
 }
 
-function buildDashboardStats(campaigns, lens, incrementalityFactor = 0.6) {
-  const spend = sumMetric(campaigns, "spend_value");
-  const reach = sumMetric(campaigns, "reach_value");
-  const impressions = sumMetric(campaigns, "impressions_value");
-  const cpm = impressions > 0 ? (spend / impressions) * 1000 : 0;
-  const frequency = reach > 0 ? impressions / reach : 0;
-  const purchases = sumMetric(campaigns, "purchases_value");
-  const revenue = sumMetric(campaigns, "revenue_value");
-  const roas = spend > 0 ? revenue / spend : 0;
-  const cpa = purchases > 0 ? spend / purchases : 0;
-
-  if (lens === "conversion_standard") {
-    return [
-      { label: "Spend (7d)", value: formatDashboardCurrency(spend), meta: "Active campaigns" },
-      { label: "Purchases", value: String(Math.round(purchases)), meta: "From actions" },
-      { label: "CPA", value: purchases > 0 ? formatDashboardCurrency(cpa) : "--", meta: "Spend / purchases" },
-      { label: "ROAS", value: roas ? roas.toFixed(2) : "â€”", meta: "Revenue / spend" }
-    ];
-  }
-
-  if (lens === "conversion_incremental") {
-    const incRevenue = revenue * incrementalityFactor;
-    const iroas = spend > 0 ? incRevenue / spend : 0;
-    return [
-      { label: "Spend (7d)", value: formatDashboardCurrency(spend), meta: "Incremental campaigns" },
-      { label: "Revenue", value: formatDashboardCurrency(revenue), meta: "Separated campaign set" },
-      { label: "ROAS", value: roas ? roas.toFixed(2) : "--", meta: "Revenue / spend" },
-      { label: "Purchases", value: String(Math.round(purchases)), meta: "Separated campaign set" }
-    ];
-  }
-
-  return [
-    { label: "Spend (7d)", value: formatDashboardCurrency(spend), meta: "Active campaigns" },
-    { label: "Reach", value: reach ? String(Math.round(reach)) : "â€”", meta: "Last 7 days" },
-    { label: "Frequency", value: frequency ? frequency.toFixed(2) : "â€”", meta: "Impressions / reach" },
-    { label: "CPM", value: cpm ? formatDashboardCurrency(cpm) : "--", meta: "Spend / 1,000 impressions" }
-  ];
-}
-
 function buildDashboardStatsV2(campaigns, lens, incrementalityFactor = 0.6) {
   const spend = sumMetric(campaigns, "spend_value");
   const reach = sumMetric(campaigns, "reach_value");
@@ -12779,52 +12740,6 @@ function getGeneralSpendDistributionModel(campaigns = []) {
   }
 
   return buildGeneralSpendDistribution(campaigns, appState.metaCurrency || "DKK");
-}
-
-function buildGeneralStats(campaigns) {
-  const series = buildAggregateSeries(campaigns);
-  const window = buildAggregateComparisonWindow(campaigns);
-  const change = (metric, positiveDirection) => getComparisonWindowChange(window.previous, window.current, metric, {
-    positiveDirection,
-    windowDays: appState.dashboardDateDays
-  });
-  const totalSpend = computeAggregateMetric(series, "spend");
-  const totalCpa = computeAggregateMetric(series, "cpa");
-  const totalConversionRate = computeAggregateMetric(series, "conversion_rate");
-  const totalCostPerAddToCart = computeAggregateMetric(series, "cost_per_add_to_cart");
-  const addToCart = computeAggregateMetric(series, "add_to_cart");
-  const clicks = computeAggregateMetric(series, "clicks");
-
-  return [
-    {
-      label: "Current spend",
-      value: formatDashboardCurrency(totalSpend),
-      meta: getDashboardDateLabel(),
-      change: change("spend", "up"),
-      compact: true
-    },
-    {
-      label: "CPA",
-      value: Number.isFinite(totalCpa) && totalCpa > 0 ? formatDashboardCurrency(totalCpa) : "--",
-      meta: "Cost per purchase",
-      change: change("cpa", "down"),
-      compact: true
-    },
-    {
-      label: "Conversion rate",
-      value: clicks > 0 ? formatDashboardPercent(totalConversionRate, 2) : "--",
-      meta: "Purchases / clicks",
-      change: change("conversion_rate", "up"),
-      compact: true
-    },
-    {
-      label: "Cost per add to cart",
-      value: addToCart > 0 ? formatDashboardCurrency(totalCostPerAddToCart) : "--",
-      meta: addToCart > 0 ? "Spend / add-to-cart" : "No add-to-cart events tracked",
-      change: change("cost_per_add_to_cart", "down"),
-      compact: true
-    }
-  ];
 }
 
 function buildSeriesTotals(campaigns, metricAccessor) {
@@ -13516,9 +13431,15 @@ function getDashboardStatsForLens(lens, campaigns, factor = 0.6) {
   if (Array.isArray(backendStats) && backendStats.length) {
     return backendStats;
   }
-  return lens === "general"
-    ? buildGeneralStats(campaigns)
-    : buildDashboardStatsV2(campaigns, lens, factor);
+  // General deliberately has no stat row: total spend and the per-objective shares are
+  // the budget panel's job, and rendering them twice was one fact in two places. The old
+  // client fallback here showed a different panel from the server's - CPA, conversion
+  // rate, cost per add to cart - so which numbers appeared depended on whether the
+  // dashboard payload had arrived.
+  if (lens === "general") {
+    return [];
+  }
+  return buildDashboardStatsV2(campaigns, lens, factor);
 }
 
 function toFiniteNumber(value, fallback = 0) {
