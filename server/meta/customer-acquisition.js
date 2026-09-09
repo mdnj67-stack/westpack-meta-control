@@ -713,6 +713,16 @@ function buildCustomerAcquisitionWarnings(acquisition = null) {
     warnings.push("Purchases were recorded but no New_customer conversions fired, which usually means the shop stopped sending the new_customer event.");
   }
 
+  for (const [side, label] of [["new", "new-customer"], ["existing", "existing-customer"]]) {
+    const matches = acquisition.resolvedConversions?.[side] || [];
+    if (matches.length > 1) {
+      const names = matches.map((entry) => `"${entry.name}"`).join(", ");
+      warnings.push(
+        `${matches.length} active custom conversions match the ${label} name (${names}) and their counts are added together. If one of them is a duplicate or a replacement for another, the ${label} figure is counting the same purchases twice - archive the one you do not use.`
+      );
+    }
+  }
+
   return warnings;
 }
 

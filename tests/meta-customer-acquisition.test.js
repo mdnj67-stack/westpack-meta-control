@@ -338,3 +338,35 @@ test("the real 90-day account figures reproduce the numbers read off Meta", () =
   assert.equal(Math.round(acquisition.averageNewCustomerOrderValue), 1397);
   assert.equal(Math.round(acquisition.averageExistingCustomerOrderValue), 2966);
 });
+
+test("two conversions matching the same customer side are flagged, not silently added", () => {
+  // New customers is the figure the department is measured on, and it is the sum of every
+  // non-archived custom conversion whose name matches. Events Manager holding both an old
+  // New_customer and a recreated New_customers would double the KPI with nothing on screen
+  // to say so, and that is exactly the case the by-name lookup was built to tolerate.
+  const base = {
+    available: true,
+    untaggedShare: 0,
+    untaggedPurchases: 0,
+    newCustomers: 10,
+    totalPurchases: 20
+  };
+
+  const single = buildCustomerAcquisitionWarnings({
+    ...base,
+    resolvedConversions: { new: [{ id: "1", name: "New_customer" }], existing: [] }
+  });
+  assert.deepEqual(single, [], "one conversion per side is the normal case and must stay quiet");
+
+  const duplicated = buildCustomerAcquisitionWarnings({
+    ...base,
+    resolvedConversions: {
+      new: [{ id: "1", name: "New_customer" }, { id: "2", name: "New_customers" }],
+      existing: []
+    }
+  });
+  assert.equal(duplicated.length, 1);
+  assert.match(duplicated[0], /counting the same purchases twice/);
+  assert.match(duplicated[0], /New_customer/);
+  assert.match(duplicated[0], /New_customers/);
+});
