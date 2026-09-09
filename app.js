@@ -12433,8 +12433,10 @@ function hasIncrementalNameTag(value) {
     return false;
   }
 
-  return /\binkrementel\b/.test(name)
-    || /\bincremental\b/.test(name)
+  // Kept in step with the server copy in api/meta/account-snapshot.js. The stem covers
+  // inkrementel, inkremental, inkrementelle, incremental and incrementality; the account
+  // rebuild on 2026-09-09 used a spelling the old fixed list did not match.
+  return /\bin[kc]rement\w*\b/.test(name)
     || /\[inc\]|\(inc\)/.test(name);
 }
 

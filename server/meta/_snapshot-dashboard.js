@@ -126,6 +126,12 @@ function createMetaSnapshotDashboardBuilder({
     const incrementalMatchingStandardCount = incrementalLensCampaigns.filter((campaign) => {
       return campaign?.incremental_matches_standard;
     }).length;
+    // Conversion campaigns whose name carried no tag the classifier recognised. They are
+    // counted as standard, which is a guess, so the dashboard names them rather than
+    // letting the guess pass as a reading.
+    const untaggedConversionCampaigns = buckets.conversion.filter((campaign) => {
+      return campaign?.attribution_explicit === false;
+    });
     const budgetCampaigns = buildBudgetCampaigns({
       budgetCampaignsRaw,
       enrichedCampaignById,
@@ -174,6 +180,7 @@ function createMetaSnapshotDashboardBuilder({
       incrementalNamedCount,
       attributionOverlapCount: attributionOverlapIds.length,
       nonNamedIncrementalMetricsCount,
+      untaggedConversionCampaigns,
       incrementalMatchingStandardCount,
       incrementalLensCampaignCount: incrementalLensCampaigns.length,
       campaignSpendTotal: totalSpend,
@@ -258,7 +265,9 @@ function createMetaSnapshotDashboardBuilder({
           overlapCount: attributionOverlapIds.length,
           overlapCampaignIds: attributionOverlapIds,
           nonNamedIncrementalMetricsCount,
-          incrementalMatchingStandardCount
+          incrementalMatchingStandardCount,
+          untaggedConversionCount: untaggedConversionCampaigns.length,
+          untaggedConversionNames: untaggedConversionCampaigns.map((campaign) => String(campaign?.name || ""))
         },
         pagination: {
           campaignsPages: campaignResponse.pageCount,

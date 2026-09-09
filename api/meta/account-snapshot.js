@@ -318,8 +318,17 @@ function hasIncrementalNameTag(value) {
     return false;
   }
 
-  return /\binkrementel\b/.test(name)
-    || /\bincremental\b/.test(name)
+  // The team tags its incremental campaigns in the campaign name and maintains that
+  // register deliberately, so the name is the right source. It is also typed by hand: the
+  // account rebuild on 2026-09-09 spelled the three new ones "Inkremental" where the
+  // previous set said "Inkrementel", and that one vowel put all three in the standard
+  // lens along with 216,000 DKK of monthly budget.
+  //
+  // Matching the stem covers inkrementel, inkremental, inkrementelle, incremental and
+  // incrementality without needing another edit the next time someone types it
+  // differently. "in[kc]rement" is specific enough that no ordinary campaign name hits it
+  // by accident.
+  return /\bin[kc]rement\w*\b/.test(name)
     || /\[inc\]|\(inc\)/.test(name);
 }
 
@@ -525,6 +534,7 @@ function buildQualityWarnings({
   incrementalNamedCount = 0,
   attributionOverlapCount = 0,
   nonNamedIncrementalMetricsCount = 0,
+  untaggedConversionCampaigns = [],
   incrementalMatchingStandardCount = 0,
   incrementalLensCampaignCount = 0,
   campaignSpendTotal = 0,
@@ -601,7 +611,7 @@ function buildQualityWarnings({
   }
 
   if (conversionCampaignCount > 0 && incrementalNamedCount === 0) {
-    warnings.push("No conversion campaigns were named 'inkrementel' in this snapshot.");
+    warnings.push("No conversion campaign carries an incremental tag in its name, so the incremental lens is empty.");
   }
 
   if (attributionOverlapCount > 0) {
@@ -609,7 +619,22 @@ function buildQualityWarnings({
   }
 
   if (nonNamedIncrementalMetricsCount > 0) {
-    warnings.push(`Incremental insight rows existed for ${nonNamedIncrementalMetricsCount} non-'inkrementel' conversion campaigns and were kept out of the incremental lens.`);
+    warnings.push(`Incremental insight rows existed for ${nonNamedIncrementalMetricsCount} conversion campaigns with no incremental tag, and were kept out of the incremental lens.`);
+  }
+
+  // Named, because knowing which campaign lost its tag is the difference between a
+  // warning you can act on and one you scroll past.
+  if (untaggedConversionCampaigns.length > 0) {
+    const names = untaggedConversionCampaigns
+      .slice(0, 4)
+      .map((campaign) => `"${String(campaign?.name || "unnamed")}"`)
+      .join(", ");
+    const remainder = untaggedConversionCampaigns.length > 4
+      ? ` and ${untaggedConversionCampaigns.length - 4} more`
+      : "";
+    warnings.push(
+      `${untaggedConversionCampaigns.length} conversion campaign${untaggedConversionCampaigns.length === 1 ? "" : "s"} carry neither an incremental nor a standard tag in the name (${names}${remainder}), so ${untaggedConversionCampaigns.length === 1 ? "it is" : "they are"} being counted as standard. Add the tag in Ads Manager if that is wrong.`
+    );
   }
 
   // The incremental lens is the three campaigns the marketing team tags 'Inkrementel'.
