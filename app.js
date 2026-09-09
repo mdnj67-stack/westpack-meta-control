@@ -13013,11 +13013,11 @@ function buildTrendCards(campaigns, lens) {
           return totalSpend > 0 ? formatDashboardNumber(totalRevenue / totalSpend, 2) : "--";
         })(),
         tone: "conversion",
-        series: buildSeriesTotals(campaigns, (point) => {
-          const spend = toFiniteNumber(point.spend);
-          const revenue = toFiniteNumber(point.revenue);
-          return spend > 0 ? revenue / spend : 0;
-        })
+        series: buildDerivedSeriesTotals(
+          campaigns,
+          (point) => toFiniteNumber(point.revenue),
+          (point) => toFiniteNumber(point.spend)
+        )
       },
       {
         title: "Objective performance",
@@ -13042,7 +13042,7 @@ function buildTrendCards(campaigns, lens) {
         title: "Reach delivery",
         meta,
         value: formatDashboardNumber(sumMetric(campaigns, "reach_value"), 0),
-        series: buildSeriesTotals(campaigns, (point) => point.impressions || 0),
+        series: buildSeriesTotals(campaigns, (point) => point.reach || 0),
         tone: "awareness",
         hero: true
       },
@@ -13054,21 +13054,26 @@ function buildTrendCards(campaigns, lens) {
           const spend = sumMetric(campaigns, "spend_value");
           return impressions > 0 ? formatDashboardCurrency((spend / impressions) * 1000) : "--";
         })(),
-        series: buildSeriesTotals(campaigns, (point) => {
-          const impressions = toFiniteNumber(point.impressions);
-          const spend = toFiniteNumber(point.spend);
-          return impressions > 0 ? (spend / impressions) * 1000 : 0;
-        }),
+        series: buildDerivedSeriesTotals(
+          campaigns,
+          (point) => toFiniteNumber(point.spend) * 1000,
+          (point) => toFiniteNumber(point.impressions)
+        ),
         tone: "awareness"
       },
       {
         title: "Frequency trend",
         meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "frequency_value") / Math.max(1, campaigns.length), 2),
-        series: buildSeriesTotals(campaigns, (point, campaign) => {
-          const reach = toFiniteNumber(point.reach || campaign.reach_value);
-          return reach > 0 ? (point.impressions || 0) / reach : 0;
-        }),
+        value: (() => {
+          const totalImpressions = sumMetric(campaigns, "impressions_value");
+          const totalReach = sumMetric(campaigns, "reach_value");
+          return totalReach > 0 ? formatDashboardNumber(totalImpressions / totalReach, 2) : "--";
+        })(),
+        series: buildDerivedSeriesTotals(
+          campaigns,
+          (point) => toFiniteNumber(point.impressions),
+          (point) => toFiniteNumber(point.reach)
+        ),
         tone: "awareness"
       }
     ];
@@ -13099,11 +13104,11 @@ function buildTrendCards(campaigns, lens) {
           const spend = sumMetric(campaigns, "spend_value");
           return leads > 0 ? formatDashboardCurrency(spend / leads) : "--";
         })(),
-        series: buildSeriesTotals(campaigns, (point) => {
-          const leads = toFiniteNumber(point.leads);
-          const spend = toFiniteNumber(point.spend);
-          return leads > 0 ? spend / leads : 0;
-        }),
+        series: buildDerivedSeriesTotals(
+          campaigns,
+          (point) => toFiniteNumber(point.spend),
+          (point) => toFiniteNumber(point.leads)
+        ),
         tone: "leads"
       },
       {
@@ -13114,11 +13119,11 @@ function buildTrendCards(campaigns, lens) {
           const clicks = sumMetric(campaigns, "clicks_value");
           return impressions > 0 ? `${((clicks / impressions) * 100).toFixed(2)}%` : "--";
         })(),
-        series: buildSeriesTotals(campaigns, (point) => {
-          const impressions = toFiniteNumber(point.impressions);
-          const clicks = toFiniteNumber(point.clicks);
-          return impressions > 0 ? (clicks / impressions) * 100 : 0;
-        }),
+        series: buildDerivedSeriesTotals(
+          campaigns,
+          (point) => toFiniteNumber(point.clicks) * 100,
+          (point) => toFiniteNumber(point.impressions)
+        ),
         tone: "leads"
       }
     ];

@@ -192,3 +192,60 @@ test("the browser never falls back to a currency the account does not use", () =
     assert.deepEqual(dashboardEurFallbacks, [], `${file} still falls back to EUR`);
   }
 });
+
+test("no summing helper is handed an accessor that divides", () => {
+  // buildSeriesTotals and buildComparisonSeriesTotals add their accessor's output across
+  // campaigns, so an accessor that divides plots the sum of the ratios. Five campaigns at
+  // ROAS 2.0 drew a point at 10.0 under a headline reading 2.0. The defect existed in the
+  // server builders and again in their client copies, which is why a source guard earns
+  // its place here: the two were written at different times and fixed at different times.
+  //
+  // A multi-statement accessor is the tell. The correct calls all pass a one-expression
+  // accessor that just reads a field, and a rate goes through buildDerivedSeriesTotals,
+  // which sums numerator and denominator separately.
+  const files = ["app.js", join("api", "meta", "account-snapshot.js")];
+
+  for (const file of files) {
+    const source = readFileSync(join(root, file), "utf8");
+    const offenders = [];
+    const marker = /build(?:Comparison)?SeriesTotals\(/g;
+    let match = marker.exec(source);
+
+    while (match) {
+      // The accessor begins immediately after the call, so only the parameter list and
+      // arrow are allowed before its body. Scanning further ahead would pick up the next
+      // card's headline expression, which divides quite legitimately.
+      const head = source.slice(match.index + match[0].length, match.index + match[0].length + 70);
+      const arrowBlock = head.match(/^\s*campaigns\s*,\s*\([^)]*\)\s*=>\s*\{/);
+
+      if (arrowBlock) {
+        const bodyStart = match.index + match[0].length + arrowBlock[0].length;
+        let depth = 1;
+        let cursor = bodyStart;
+        while (cursor < source.length && depth > 0) {
+          if (source[cursor] === "{") depth += 1;
+          else if (source[cursor] === "}") depth -= 1;
+          cursor += 1;
+        }
+        const body = source.slice(bodyStart, cursor - 1);
+        if (body.includes("/") && !body.trimStart().startsWith("//")) {
+          offenders.push(body.replace(/\s+/g, " ").trim().slice(0, 120));
+        }
+      }
+
+      match = marker.exec(source);
+    }
+
+    assert.deepEqual(
+      offenders,
+      [],
+      `${file} adds up a ratio across campaigns; pass numerator and denominator to buildDerivedSeriesTotals instead`
+    );
+
+    // And the helper that does it correctly has to still be in use here.
+    assert.ok(
+      source.includes("buildDerivedSeriesTotals("),
+      `${file} no longer uses the derived-totals helper at all`
+    );
+  }
+});
