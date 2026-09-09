@@ -13870,8 +13870,10 @@ function renderDashboard() {
   renderPanelSafely("Hero Panel", () => {
     renderHeroPanel(buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
   });
+  let renderedStats = [];
   renderPanelSafely("Stats", () => {
-    renderStats(isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor));
+    renderedStats = isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor);
+    renderStats(renderedStats);
   });
   renderPanelSafely("Overview Grid", () => {
     renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
@@ -13916,7 +13918,7 @@ function renderDashboard() {
     playbookNextNode.hidden = overviewVisible || isEmptyLensState;
   }
   if (statsGridNode) {
-    statsGridNode.hidden = isEmptyLensState;
+    statsGridNode.hidden = isEmptyLensState || !renderedStats.length;
   }
   if (pulseNode) {
     pulseNode.hidden = overviewVisible || isEmptyLensState;
@@ -13983,12 +13985,12 @@ function renderDashboard() {
 
   if (overviewVisible) {
     if (overviewGridNode) overviewGridNode.hidden = false;
-    if (statsGridNode) statsGridNode.hidden = isEmptyLensState;
+    if (statsGridNode) statsGridNode.hidden = isEmptyLensState || !renderedStats.length;
     if (trendDeckNode) trendDeckNode.hidden = isEmptyLensState;
     moveToStack(playbookStatusStack, [statsGridNode, trendDeckNode, overviewGridNode]);
   } else {
     if (overviewGridNode) overviewGridNode.hidden = true;
-    if (statsGridNode) statsGridNode.hidden = isEmptyLensState;
+    if (statsGridNode) statsGridNode.hidden = isEmptyLensState || !renderedStats.length;
     if (trendDeckNode) trendDeckNode.hidden = isEmptyLensState;
     moveToStack(playbookStatusStack, [statsGridNode, trendDeckNode]);
   }
