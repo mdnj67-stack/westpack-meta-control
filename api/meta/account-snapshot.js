@@ -376,7 +376,7 @@ function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributio
     return { mode: "standard", source: "campaign field", explicit: true };
   }
 
-  return { mode: "standard", source: "non-inkrementel default", explicit: false };
+  return { mode: "standard", source: "no attribution tag in the campaign name", explicit: false };
 }
 
 function classifyConversionAttribution(campaign) {
