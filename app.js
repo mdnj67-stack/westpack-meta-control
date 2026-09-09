@@ -24,10 +24,6 @@ import {
   writeMetaStudioSnapshot
 } from "./src/meta-snapshot-cache.js?v=20260507-meta-snapshotcache1";
 import {
-  getComparisonWindowChange,
-  computeAggregateMetric
-} from "./src/meta-dashboard-metrics.js?v=20260507-meta-dashboardmetrics1";
-import {
   OBJECTIVE_GROUP_DISPLAY_ORDER,
   classifyCampaign,
   resolveObjectiveGroupLabel,
@@ -12576,57 +12572,6 @@ function buildIncrementalLensCampaigns(campaigns = []) {
     }));
 }
 
-function buildDashboardStatsV2(campaigns, lens) {
-  const spend = sumMetric(campaigns, "spend_value");
-  const reach = sumMetric(campaigns, "reach_value");
-  const impressions = sumMetric(campaigns, "impressions_value");
-  const clicks = sumMetric(campaigns, "clicks_value");
-  const cpm = impressions > 0 ? (spend / impressions) * 1000 : 0;
-  const frequency = reach > 0 ? impressions / reach : 0;
-
-  const purchases = sumMetric(campaigns, "purchases_value");
-  const revenue = sumMetric(campaigns, "revenue_value");
-  const roas = spend > 0 ? revenue / spend : 0;
-  const cpa = purchases > 0 ? spend / purchases : 0;
-
-  const leads = sumMetric(campaigns, "leads_value");
-  const cpl = leads > 0 ? spend / leads : 0;
-  const ctr = impressions > 0 ? (clicks / impressions) * 100 : 0;
-
-  if (lens === "conversion_standard") {
-    return [
-      { label: getDashboardSpendLabel(), value: formatDashboardCurrency(spend), meta: "Conversion campaigns" },
-      { label: "Purchases", value: String(Math.round(purchases)), meta: "From actions" },
-      { label: "CPA", value: purchases > 0 ? formatDashboardCurrency(cpa) : "--", meta: "Spend / purchases" },
-      { label: "ROAS", value: roas ? roas.toFixed(2) : "--", meta: "Revenue / spend" }
-    ];
-  }
-
-  if (lens === "conversion_incremental") {
-    return [
-      { label: getDashboardSpendLabel(), value: formatDashboardCurrency(spend), meta: "Incremental campaigns" },
-      { label: "Revenue", value: formatDashboardCurrency(revenue), meta: "Separated from standard view" },
-      { label: "CPA", value: purchases > 0 ? formatDashboardCurrency(cpa) : "--", meta: "Spend / purchases" },
-      { label: "ROAS", value: roas ? roas.toFixed(2) : "--", meta: "Revenue / spend" }
-    ];
-  }
-
-  if (lens === "leads") {
-    return [
-      { label: getDashboardSpendLabel(), value: formatDashboardCurrency(spend), meta: "Lead campaigns" },
-      { label: "Leads", value: String(Math.round(leads)), meta: "From actions" },
-      { label: "CPL", value: leads > 0 ? formatDashboardCurrency(cpl) : "--", meta: "Spend / leads" },
-      { label: "CTR", value: ctr ? `${ctr.toFixed(2)}%` : "--", meta: "Clicks / impressions" }
-    ];
-  }
-
-  return [
-    { label: getDashboardSpendLabel(), value: formatDashboardCurrency(spend), meta: "Awareness campaigns" },
-    { label: "Reach", value: reach ? String(Math.round(reach)) : "--", meta: getDashboardDateLabel() },
-    { label: "Frequency", value: frequency ? frequency.toFixed(2) : "--", meta: "Impressions / reach" },
-    { label: "CPM", value: cpm ? formatDashboardCurrency(cpm) : "--", meta: "Spend / 1,000 impressions" }
-  ];
-}
 
 function getLensCampaigns(campaigns, lens) {
   const buckets = splitByCategory(campaigns);
@@ -12658,79 +12603,6 @@ function getDashboardPeriodDays() {
 // Budget is always stated per 30-day month, because that is the unit the marketing team
 // budgets in. Actual spend stays the real amount spent in the selected range, and the two
 // are compared through a 30-day spend pace rather than by rescaling the budget.
-function buildGeneralSpendDistribution(campaigns = [], currency = appState.metaCurrency || "DKK") {
-  const normalizedCurrency = String(currency || "DKK").trim().toUpperCase() || "DKK";
-  const buckets = splitByCategory(campaigns);
-  const totalAmount = sumMetric(campaigns, "spend_value");
-  const budgetAllocation = appState.metaDashboard?.quality?.budgetAllocation || null;
-  const periodDays = getDashboardPeriodDays();
-  const monthlyBudgetByGroup = budgetAllocation?.monthlyBudgetByGroup || {};
-  const totalBudgetAmount = toFiniteNumber(budgetAllocation?.totalMonthlyBudget);
-  const spendToMonthlyPace = 30 / Math.max(1, periodDays);
-  const totalMonthlySpendPace = totalAmount * spendToMonthlyPace;
-
-  const formatValue = (value) => new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: normalizedCurrency,
-    maximumFractionDigits: 2
-  }).format(value);
-
-  const items = OBJECTIVE_GROUP_DISPLAY_ORDER
-    .map((group) => ({
-      key: group,
-      label: resolveObjectiveGroupLabel(group),
-      campaignCount: (buckets[group] || []).length,
-      amount: sumMetric(buckets[group] || [], "spend_value"),
-      budgetAmount: toFiniteNumber(monthlyBudgetByGroup[group])
-    }))
-    .filter((item) => item.campaignCount > 0 || item.amount > 0 || item.budgetAmount > 0)
-    .map((item) => {
-      const monthlySpendPace = item.amount * spendToMonthlyPace;
-      return {
-        ...item,
-        percentage: totalAmount > 0 ? Number(((item.amount / totalAmount) * 100).toFixed(1)) : 0,
-        formattedAmount: formatValue(item.amount),
-        formattedBudgetAmount: item.budgetAmount > 0 ? formatValue(item.budgetAmount) : "--",
-        budgetPercentage: totalBudgetAmount > 0 ? Number(((item.budgetAmount / totalBudgetAmount) * 100).toFixed(1)) : 0,
-        monthlySpendPace,
-        formattedMonthlySpendPace: formatValue(monthlySpendPace),
-        pacePercentage: item.budgetAmount > 0 ? Number(((monthlySpendPace / item.budgetAmount) * 100).toFixed(1)) : 0
-      };
-    });
-
-  return {
-    currency: normalizedCurrency,
-    totalAmount,
-    formattedTotalAmount: formatValue(totalAmount),
-    totalLabel: getDashboardSpendLabel(),
-    periodDays,
-    totalMonthlySpendPace,
-    formattedTotalMonthlySpendPace: formatValue(totalMonthlySpendPace),
-    totalPacePercentage: totalBudgetAmount > 0
-      ? Number(((totalMonthlySpendPace / totalBudgetAmount) * 100).toFixed(1))
-      : 0,
-    totalBudgetAmount,
-    formattedTotalBudgetAmount: totalBudgetAmount > 0 ? formatValue(totalBudgetAmount) : "--",
-    kpiBudgetAmount: totalBudgetAmount,
-    formattedKpiBudgetAmount: totalBudgetAmount > 0 ? formatValue(totalBudgetAmount) : "--",
-    kpiBudgetLabel: "Planned budget (30 days)",
-    kpiBudgetMeta: budgetAllocation
-      ? "Monthly budget from the active Meta campaign and ad set budgets, including lifetime budgets spread across their flight."
-      : "Planned budget needs a live Meta sync. Spend figures are real; budget figures stay blank rather than estimated.",
-    budgetAvailable: Boolean(budgetAllocation),
-    totalBudgetLabel: "Planned budget (30 days)",
-    budgetMixLabel: "Planned budget mix (30 days)",
-    spendMixLabel: `Actual spend mix (${appState.dashboardDateShortLabel || `${periodDays}d`})`,
-    paceLabel: periodDays === 30 ? "Spend vs monthly budget" : "30-day spend pace vs monthly budget",
-    rangeLabel: getDashboardDateLabel(),
-    summaryMeta: budgetAllocation
-      ? `Actual spend covers ${getDashboardDateLabel()}. Planned budget is always stated per 30-day month, and pacing compares a 30-day spend pace against it.`
-      : `Actual spend covers ${getDashboardDateLabel()}, grouped by the objective Meta reports on each campaign. Planned budget is unavailable without a live Meta sync.`,
-    title: "Spend and planned budget",
-    subtitle: `Actual spend for ${getDashboardDateLabel()} against the 30-day planned budget, grouped by the objective Meta reports on each campaign. Conversion combines standard and incremental campaigns here.`,
-    items
-  };
-}
 
 function getGeneralSpendDistributionModel(campaigns = []) {
   // The server builds this payload from the same objective grouping and from budgets it
@@ -12740,228 +12612,13 @@ function getGeneralSpendDistributionModel(campaigns = []) {
     return { ...backendSplit, budgetAvailable: toFiniteNumber(backendSplit.totalBudgetAmount) > 0 };
   }
 
-  return buildGeneralSpendDistribution(campaigns, appState.metaCurrency || "DKK");
+  // No server split means no split. The browser must never compute these: the rule
+  // already held for budgets, and spend shares are read the same way.
+  return null;
 }
 
-function buildSeriesTotals(campaigns, metricAccessor) {
-  const totals = new Map();
 
-  (campaigns || []).forEach((campaign) => {
-    (campaign.series || []).forEach((point) => {
-      const key = String(point.date || "");
-      const current = totals.get(key) || 0;
-      totals.set(key, current + metricAccessor(point, campaign));
-    });
-  });
 
-  return Array.from(totals.entries())
-    .sort((left, right) => left[0].localeCompare(right[0]))
-    .map(([date, value]) => ({ date, value }));
-}
-
-function buildDerivedSeriesTotals(campaigns, numeratorAccessor, denominatorAccessor) {
-  const totals = new Map();
-
-  (campaigns || []).forEach((campaign) => {
-    (campaign.series || []).forEach((point) => {
-      const key = String(point.date || "");
-      const current = totals.get(key) || { numerator: 0, denominator: 0 };
-
-      totals.set(key, {
-        numerator: current.numerator + toFiniteNumber(numeratorAccessor(point, campaign)),
-        denominator: current.denominator + toFiniteNumber(denominatorAccessor(point, campaign))
-      });
-    });
-  });
-
-  return Array.from(totals.entries())
-    .sort((left, right) => left[0].localeCompare(right[0]))
-    .map(([date, value]) => ({
-      date,
-      value: value.denominator > 0 ? value.numerator / value.denominator : 0
-    }));
-}
-
-function buildAggregateSeries(campaigns = []) {
-  const totals = new Map();
-
-  (campaigns || []).forEach((campaign) => {
-    (campaign.series || []).forEach((point) => {
-      const key = String(point.date || "");
-      const current = totals.get(key) || {
-        spend: 0,
-        impressions: 0,
-        clicks: 0,
-        add_to_cart: 0,
-        purchases: 0,
-        revenue: 0,
-        leads: 0
-      };
-
-      totals.set(key, {
-        spend: current.spend + toFiniteNumber(point.spend),
-        impressions: current.impressions + toFiniteNumber(point.impressions),
-        clicks: current.clicks + toFiniteNumber(point.clicks),
-        add_to_cart: current.add_to_cart + toFiniteNumber(point.add_to_cart),
-        purchases: current.purchases + toFiniteNumber(point.purchases),
-        revenue: current.revenue + toFiniteNumber(point.revenue),
-        leads: current.leads + toFiniteNumber(point.leads)
-      });
-    });
-  });
-
-  return Array.from(totals.entries())
-    .sort((left, right) => left[0].localeCompare(right[0]))
-    .map(([date, value]) => ({ date, ...value }));
-}
-
-// Aggregates Meta's real previous and current windows across a set of campaigns, rather
-// than halving the selected range and calling the first half "previous".
-function buildAggregateComparisonWindow(campaigns = []) {
-  const sumWindow = (pick) => {
-    const totals = new Map();
-    (campaigns || []).forEach((campaign) => {
-      const points = pick(campaign) || [];
-      points.forEach((point) => {
-        const key = String(point.date || "");
-        const current = totals.get(key) || {
-          spend: 0, impressions: 0, reach: 0, clicks: 0,
-          add_to_cart: 0, purchases: 0, revenue: 0, leads: 0
-        };
-        totals.set(key, {
-          spend: current.spend + toFiniteNumber(point.spend),
-          impressions: current.impressions + toFiniteNumber(point.impressions),
-          reach: current.reach + toFiniteNumber(point.reach),
-          clicks: current.clicks + toFiniteNumber(point.clicks),
-          add_to_cart: current.add_to_cart + toFiniteNumber(point.add_to_cart),
-          purchases: current.purchases + toFiniteNumber(point.purchases),
-          revenue: current.revenue + toFiniteNumber(point.revenue),
-          leads: current.leads + toFiniteNumber(point.leads)
-        });
-      });
-    });
-    return Array.from(totals.entries())
-      .sort((left, right) => left[0].localeCompare(right[0]))
-      .map(([date, value]) => ({ date, ...value }));
-  };
-
-  return {
-    previous: sumWindow((campaign) => campaign?.comparison_window?.previous),
-    current: sumWindow((campaign) => campaign?.comparison_window?.current || campaign?.series)
-  };
-}
-
-function buildGeneralKpiStrip(campaigns = []) {
-  const series = buildAggregateSeries(campaigns);
-  const window = buildAggregateComparisonWindow(campaigns);
-  const change = (metric, positiveDirection) => getComparisonWindowChange(window.previous, window.current, metric, {
-    positiveDirection,
-    windowDays: appState.dashboardDateDays
-  });
-  const spend = computeAggregateMetric(series, "spend");
-  const revenue = computeAggregateMetric(series, "revenue");
-  const purchases = computeAggregateMetric(series, "purchases");
-  const roas = computeAggregateMetric(series, "roas");
-  const cpa = computeAggregateMetric(series, "cpa");
-
-  return [
-    {
-      label: "Revenue",
-      value: formatDashboardCurrency(revenue),
-      meta: "Attributed revenue",
-      change: change("revenue", "up"),
-      tone: "success"
-    },
-    {
-      label: "ROAS",
-      value: spend > 0 ? formatDashboardNumber(roas, 2) : "--",
-      meta: "Revenue / spend",
-      change: change("roas", "up"),
-      tone: "success"
-    },
-    {
-      label: "Purchases",
-      value: formatDashboardNumber(purchases, 0),
-      meta: "Attributed conversions",
-      change: change("purchases", "up"),
-      tone: "neutral"
-    },
-    {
-      label: "CPA",
-      value: purchases > 0 ? formatDashboardCurrency(cpa) : "--",
-      meta: "Spend / purchases",
-      change: change("cpa", "down"),
-      tone: "warning"
-    }
-  ];
-}
-
-function buildGeneralObjectivePerformanceRows(campaigns = []) {
-  const buckets = splitByCategory(campaigns);
-  // Each objective family gets the headline metric that actually means something for it,
-  // and anything else falls back to CPM. Groups with no campaigns are dropped, so the
-  // rows mirror what the account really runs.
-  const metricByGroup = {
-    conversion: {
-      metricLabel: "ROAS",
-      resolve: (series) => {
-        const roas = computeAggregateMetric(series, "roas");
-        return roas > 0 ? formatDashboardNumber(roas, 2) : "--";
-      }
-    },
-    leads: {
-      metricLabel: "CPL",
-      resolve: (series) => {
-        const cpl = computeAggregateMetric(series, "cpl");
-        return cpl > 0 ? formatDashboardCurrency(cpl) : "--";
-      }
-    }
-  };
-  const defaultMetric = {
-    metricLabel: "CPM",
-    resolve: (series) => {
-      const cpm = computeAggregateMetric(series, "cpm");
-      return cpm > 0 ? formatDashboardCurrency(cpm) : "--";
-    }
-  };
-
-  const objectiveGroups = OBJECTIVE_GROUP_DISPLAY_ORDER
-    .filter((group) => (buckets[group] || []).length > 0)
-    .map((group) => {
-      const groupCampaigns = buckets[group] || [];
-      const metric = metricByGroup[group] || defaultMetric;
-      return {
-        key: group,
-        label: resolveObjectiveGroupLabel(group),
-        campaigns: groupCampaigns,
-        tone: group,
-        metricLabel: metric.metricLabel,
-        metricValue: metric.resolve(buildAggregateSeries(groupCampaigns))
-      };
-    });
-
-  const maxSpend = Math.max(
-    ...objectiveGroups.map((group) => sumMetric(group.campaigns, "spend_value")),
-    1
-  );
-  // Denominator is every campaign in scope, not just the groups rendered above, so the
-  // shares cannot silently add up to 100% while excluding spend.
-  const totalSpend = sumMetric(campaigns, "spend_value");
-
-  return objectiveGroups.map((group) => {
-    const spend = sumMetric(group.campaigns, "spend_value");
-    return {
-      key: group.key,
-      label: group.label,
-      tone: group.tone,
-      spend: formatDashboardCurrency(spend),
-      share: totalSpend > 0 ? formatDashboardPercent((spend / totalSpend) * 100, 1) : "0.0%",
-      width: Math.max(spend > 0 ? 12 : 0, (spend / maxSpend) * 100),
-      metricLabel: group.metricLabel,
-      metricValue: group.metricValue
-    };
-  });
-}
 
 
 function formatShortDate(value) {
@@ -12980,316 +12637,7 @@ function getDashboardSpendLabel() {
   return `Spend (${shortLabel})`;
 }
 
-function buildTrendCards(campaigns, lens) {
-  const trendDates = (campaigns || [])
-    .flatMap((campaign) => campaign.series || [])
-    .map((point) => point.date)
-    .filter(Boolean)
-    .sort();
-  const lastDate = trendDates[trendDates.length - 1];
 
-  const meta = lastDate ? `${getDashboardDateLabel()} ending ${formatShortDate(lastDate)}` : getDashboardDateLabel();
-
-  if (lens === "general") {
-    return [
-      {
-        title: "Spend over time",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "spend_value")),
-        series: buildSeriesTotals(campaigns, (point) => point.spend || 0),
-        tone: "conversion"
-      },
-      {
-        title: "Revenue over time",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "revenue_value")),
-        tone: "conversion",
-        series: buildSeriesTotals(campaigns, (point) => point.revenue || 0)
-      },
-      {
-        title: "ROAS over time",
-        meta,
-        value: (() => {
-          const totalSpend = sumMetric(campaigns, "spend_value");
-          const totalRevenue = sumMetric(campaigns, "revenue_value");
-          return totalSpend > 0 ? formatDashboardNumber(totalRevenue / totalSpend, 2) : "--";
-        })(),
-        tone: "conversion",
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => toFiniteNumber(point.revenue),
-          (point) => toFiniteNumber(point.spend)
-        )
-      },
-      {
-        title: "Objective performance",
-        meta: "Spend plus efficiency by objective",
-        kind: "objective-bars",
-        tone: "conversion",
-        rows: buildGeneralObjectivePerformanceRows(campaigns)
-      }
-    ];
-  }
-
-  if (lens === "awareness") {
-    return [
-      {
-        title: "Spend trend",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "spend_value")),
-        series: buildSeriesTotals(campaigns, (point) => point.spend || 0),
-        tone: "awareness"
-      },
-      {
-        title: "Reach delivery",
-        meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "reach_value"), 0),
-        series: buildSeriesTotals(campaigns, (point) => point.reach || 0),
-        tone: "awareness",
-        hero: true
-      },
-      {
-        title: "CPM trend",
-        meta,
-        value: (() => {
-          const impressions = sumMetric(campaigns, "impressions_value");
-          const spend = sumMetric(campaigns, "spend_value");
-          return impressions > 0 ? formatDashboardCurrency((spend / impressions) * 1000) : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => toFiniteNumber(point.spend) * 1000,
-          (point) => toFiniteNumber(point.impressions)
-        ),
-        tone: "awareness"
-      },
-      {
-        title: "Frequency trend",
-        meta,
-        value: (() => {
-          const totalImpressions = sumMetric(campaigns, "impressions_value");
-          const totalReach = sumMetric(campaigns, "reach_value");
-          return totalReach > 0 ? formatDashboardNumber(totalImpressions / totalReach, 2) : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => toFiniteNumber(point.impressions),
-          (point) => toFiniteNumber(point.reach)
-        ),
-        tone: "awareness"
-      }
-    ];
-  }
-
-  if (lens === "leads") {
-    return [
-      {
-        title: "Spend trend",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "spend_value")),
-        series: buildSeriesTotals(campaigns, (point) => point.spend || 0),
-        tone: "leads"
-      },
-      {
-        title: "Leads trend",
-        meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "leads_value"), 0),
-        series: buildSeriesTotals(campaigns, (point) => point.leads || 0),
-        tone: "leads",
-        hero: true
-      },
-      {
-        title: "CPL trend",
-        meta,
-        value: (() => {
-          const leads = sumMetric(campaigns, "leads_value");
-          const spend = sumMetric(campaigns, "spend_value");
-          return leads > 0 ? formatDashboardCurrency(spend / leads) : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => toFiniteNumber(point.spend),
-          (point) => toFiniteNumber(point.leads)
-        ),
-        tone: "leads"
-      },
-      {
-        title: "CTR trend",
-        meta,
-        value: (() => {
-          const impressions = sumMetric(campaigns, "impressions_value");
-          const clicks = sumMetric(campaigns, "clicks_value");
-          return impressions > 0 ? `${((clicks / impressions) * 100).toFixed(2)}%` : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => toFiniteNumber(point.clicks) * 100,
-          (point) => toFiniteNumber(point.impressions)
-        ),
-        tone: "leads"
-      }
-    ];
-  }
-
-  if (lens === "conversion_incremental") {
-    return [
-      {
-        title: "Spend trend",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "spend_value")),
-        series: buildSeriesTotals(campaigns, (point) => point.spend || 0),
-        tone: "incremental"
-      },
-      {
-        title: "Revenue trend",
-        meta,
-        value: formatDashboardCurrency(sumMetric(campaigns, "revenue_value")),
-        series: buildSeriesTotals(campaigns, (point) => point.revenue || 0),
-        tone: "incremental",
-        hero: true
-      },
-      {
-        title: "ROAS trend",
-        meta,
-        value: (() => {
-          const spend = sumMetric(campaigns, "spend_value");
-          const revenue = sumMetric(campaigns, "revenue_value");
-          return spend > 0 ? (revenue / spend).toFixed(2) : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => point.revenue || 0,
-          (point) => point.spend || 0
-        ),
-        tone: "incremental"
-      },
-      {
-        title: "CPA trend",
-        meta,
-        value: (() => {
-          const purchases = sumMetric(campaigns, "purchases_value");
-          const spend = sumMetric(campaigns, "spend_value");
-          return purchases > 0 ? formatDashboardCurrency(spend / purchases) : "--";
-        })(),
-        series: buildDerivedSeriesTotals(
-          campaigns,
-          (point) => point.spend || 0,
-          (point) => point.purchases || 0
-        ),
-        tone: "incremental"
-      },
-      {
-        title: "Purchase trend",
-        meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "purchases_value"), 0),
-        series: buildSeriesTotals(campaigns, (point) => point.purchases || 0),
-        tone: "incremental"
-      }
-    ];
-  }
-
-  return [
-    {
-      title: "Spend trend",
-      meta,
-      value: formatDashboardCurrency(sumMetric(campaigns, "spend_value")),
-      series: buildSeriesTotals(campaigns, (point) => point.spend || 0),
-      tone: "conversion"
-    },
-    {
-      title: "Revenue trend",
-      meta,
-      value: formatDashboardCurrency(sumMetric(campaigns, "revenue_value")),
-      series: buildSeriesTotals(campaigns, (point) => point.revenue || 0),
-      tone: "conversion",
-      hero: true
-    },
-    {
-      title: "ROAS trend",
-      meta,
-      value: (() => {
-        const spend = sumMetric(campaigns, "spend_value");
-        const revenue = sumMetric(campaigns, "revenue_value");
-        return spend > 0 ? (revenue / spend).toFixed(2) : "--";
-      })(),
-      series: buildDerivedSeriesTotals(
-        campaigns,
-        (point) => point.revenue || 0,
-        (point) => point.spend || 0
-      ),
-      tone: "conversion"
-    },
-    {
-      title: "CPA trend",
-      meta,
-      value: (() => {
-        const purchases = sumMetric(campaigns, "purchases_value");
-        const spend = sumMetric(campaigns, "spend_value");
-        return purchases > 0 ? formatDashboardCurrency(spend / purchases) : "--";
-      })(),
-      series: buildDerivedSeriesTotals(
-        campaigns,
-        (point) => point.spend || 0,
-        (point) => point.purchases || 0
-      ),
-      tone: "conversion"
-    },
-    {
-      title: "Purchase trend",
-      meta,
-      value: formatDashboardNumber(sumMetric(campaigns, "purchases_value"), 0),
-      series: buildSeriesTotals(campaigns, (point) => point.purchases || 0),
-      tone: "conversion"
-    }
-  ];
-}
-
-function buildOverviewCards(campaigns) {
-  const buckets = splitByCategory(campaigns);
-  const conversionBuckets = splitConversionByAttribution(buckets.conversion);
-  const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
-  const totalSpend = sumMetric(campaigns, "spend_value");
-  const spendShare = (value) => totalSpend > 0
-    ? `${((Number(value || 0) / totalSpend) * 100).toFixed(1)}% of spend`
-    : null;
-
-  const buildTopItems = (list, metricKey, formatter) => {
-    return [...list]
-      .sort((left, right) => toFiniteNumber(right?.[metricKey]) - toFiniteNumber(left?.[metricKey]))
-      .slice(0, 3)
-      .map((campaign) => ({
-        label: campaign.name,
-        value: formatter(toFiniteNumber(campaign?.[metricKey]))
-      }));
-  };
-
-  return [
-    {
-      key: "awareness",
-      meta: [ `${buckets.awareness.length} campaigns in lens`, spendShare(sumMetric(buckets.awareness, "spend_value")) ].filter(Boolean).join(" · "),
-      metric: formatDashboardNumber(sumMetric(buckets.awareness, "reach_value"), 0),
-      items: buildTopItems(buckets.awareness, "reach_value", (value) => `${formatDashboardNumber(value, 0)} reach`)
-    },
-    {
-      key: "leads",
-      meta: [ `${buckets.leads.length} campaigns in lens`, spendShare(sumMetric(buckets.leads, "spend_value")) ].filter(Boolean).join(" · "),
-      metric: formatDashboardNumber(sumMetric(buckets.leads, "leads_value"), 0),
-      items: buildTopItems(buckets.leads, "leads_value", (value) => `${formatDashboardNumber(value, 0)} leads`)
-    },
-    {
-      key: "convstd",
-      meta: [ `${conversionBuckets.standard.length} campaigns in lens`, spendShare(sumMetric(conversionBuckets.standard, "spend_value")) ].filter(Boolean).join(" · "),
-      metric: formatDashboardCurrency(sumMetric(conversionBuckets.standard, "revenue_value")),
-      items: buildTopItems(conversionBuckets.standard, "revenue_value", (value) => formatDashboardCurrency(value))
-    },
-    {
-      key: "convinc",
-      meta: [ `${incrementalCampaigns.length} campaigns in lens`, spendShare(sumMetric(incrementalCampaigns, "spend_value")) ].filter(Boolean).join(" · "),
-      metric: formatDashboardCurrency(sumMetric(incrementalCampaigns, "revenue_value")),
-      items: buildTopItems(incrementalCampaigns, "revenue_value", (value) => formatDashboardCurrency(value))
-    }
-  ];
-}
 
 function buildGeneralTableCampaigns(campaigns) {
   return (campaigns || [])
@@ -13350,49 +12698,14 @@ function getBackendOverviewCards() {
   return Array.isArray(cards) && cards.length ? cards : null;
 }
 
-function buildHeroPanelItems(lens, analysis, campaigns) {
-  const backendItems = getBackendHeroPanelItems(lens);
-  if (backendItems) {
-    return backendItems;
-  }
-
-  const topCampaign = analysis?.tableCampaigns?.[0];
-  const activeCount = Array.isArray(campaigns) ? campaigns.length : 0;
-
-  if (lens === "general") {
-    return buildGeneralKpiStrip(campaigns);
-  }
-
-  const topAction = analysis?.cards?.[0];
-  const secondAction = analysis?.cards?.[1];
-
-  return [
-    {
-      label: "Primary move",
-      value: topAction?.action || "Review",
-      meta: topAction?.campaign || topCampaign?.name || "No campaign",
-      tone: topAction?.tone || "neutral"
-    },
-    {
-      label: "Anchor",
-      value: secondAction?.action || "Hold",
-      meta: secondAction?.campaign || "--",
-      tone: secondAction?.tone || "neutral"
-    },
-    {
-      label: "Scope",
-      value: formatDashboardNumber(activeCount, 0),
-      meta: lens === "awareness"
-        ? "Awareness campaigns"
-        : lens === "leads"
-          ? "Lead campaigns"
-          : lens === "conversion_incremental"
-            ? "Incremental campaigns"
-            : "Standard campaigns",
-      tone: "neutral"
-    }
-  ];
+function buildHeroPanelItems(lens) {
+  // The server computes these. The old fallback for a non-General lens did not even
+  // return metrics - it printed the first two action words from the invented priority
+  // scores as if they were KPIs - so which of two unrelated panels appeared depended on
+  // whether the payload had arrived.
+  return getBackendHeroPanelItems(lens) || [];
 }
+
 
 function getGeneralHeroCopy(analysis, campaigns = []) {
   return {
@@ -13445,7 +12758,7 @@ function getDashboardStatsForLens(lens, campaigns) {
   if (lens === "general") {
     return [];
   }
-  return buildDashboardStatsV2(campaigns, lens);
+  return [];
 }
 
 function toFiniteNumber(value, fallback = 0) {
@@ -13780,6 +13093,10 @@ function renderDashboard() {
   const lensHasCampaigns = Array.isArray(lensCampaigns) && lensCampaigns.length > 0;
   const backendTrendCards = getBackendTrendCards(lens);
   const backendOverviewCards = getBackendOverviewCards();
+  // Every figure on this page is computed once, on the server. When that payload is
+  // absent there is nothing honest to draw, and a second implementation in the browser
+  // would only ever agree with the server by coincidence.
+  const dashboardFiguresSynced = Boolean(appState.metaDashboard);
   // The analysis phase is where the objectiveLabels ReferenceError lived, so it gets the
   // same treatment as a panel: on failure the dashboard draws empty panels rather than
   // nothing at all.
@@ -13872,7 +13189,7 @@ function renderDashboard() {
     renderStats(renderedStats);
   });
   renderPanelSafely("Overview Grid", () => {
-    renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns), overviewVisible);
+    renderOverviewGrid(backendOverviewCards || [], overviewVisible);
   });
   renderPanelSafely("Overview Spend Split", () => {
     renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
@@ -13881,13 +13198,25 @@ function renderDashboard() {
     renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
   });
   renderPanelSafely("Trend Deck", () => {
-    renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens)));
+    renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || []));
   });
   // An empty lens used to write its explanation into the executive brief, which was in a
   // container the render then hid, so the screen went blank with no reason given. The
   // message now goes to a node that is actually visible.
   renderPanelSafely("Lens Empty State", () => {
-    renderLensEmptyState(isEmptyLensState ? getLensEmptyStateCopy(lens) : null, getDashboardDateLabel());
+    // Not synced outranks an empty lens: without the server payload there is no way to
+    // know whether the lens is empty or simply unmeasured, and saying the wrong one of
+    // those is worse than saying neither.
+    const emptyStateCopy = !dashboardFiguresSynced
+      ? {
+        headline: "Dashboard figures are not synced",
+        body: "The campaign list loaded but the computed figures did not, so spend, reach, trends and the objective split cannot be shown for this range. Every figure on this page is computed once on the server, and the browser deliberately does not produce a second opinion.",
+        nextStep: "Press Refresh data. If it keeps failing, the data quality panel below says what the last sync managed to fetch."
+      }
+      : isEmptyLensState
+        ? getLensEmptyStateCopy(lens)
+        : null;
+    renderLensEmptyState(emptyStateCopy, getDashboardDateLabel());
   });
   renderPanelSafely("Meta Quality Panel", () => {
     renderMetaQualityPanel(buildMetaQualityCards());

@@ -203,7 +203,10 @@ test("no summing helper is handed an accessor that divides", () => {
   // A multi-statement accessor is the tell. The correct calls all pass a one-expression
   // accessor that just reads a field, and a rate goes through buildDerivedSeriesTotals,
   // which sums numerator and denominator separately.
-  const files = ["app.js", join("api", "meta", "account-snapshot.js")];
+  // Only the server builds series now. The browser copies were deleted, which is a
+  // stronger guarantee than getting them right - a copy can only ever agree with the
+  // server by coincidence, and this same defect had to be fixed in both of them.
+  const files = [join("api", "meta", "account-snapshot.js")];
 
   for (const file of files) {
     const source = readFileSync(join(root, file), "utf8");
@@ -247,6 +250,21 @@ test("no summing helper is handed an accessor that divides", () => {
       source.includes("buildDerivedSeriesTotals("),
       `${file} no longer uses the derived-totals helper at all`
     );
+  }
+
+  // The browser must not start computing series again. Every figure on the dashboard is
+  // computed once, on the server, and rendered here or reported as not synced.
+  const app = readFileSync(join(root, "app.js"), "utf8");
+  for (const builder of [
+    "function buildSeriesTotals",
+    "function buildDerivedSeriesTotals",
+    "function buildAggregateSeries",
+    "function buildTrendCards",
+    "function buildOverviewCards",
+    "function buildGeneralSpendDistribution",
+    "function buildDashboardStatsV2"
+  ]) {
+    assert.ok(!app.includes(builder), `app.js has grown a second copy of ${builder.replace("function ", "")}`);
   }
 });
 
