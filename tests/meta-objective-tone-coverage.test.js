@@ -161,10 +161,12 @@ test("each objective colour is defined once and both places read the same token"
     assert.ok(row, `no row rule for ${tone}`);
 
     for (const [label, body] of [["segment", segment], ["row", row]]) {
-      assert.ok(
-        body.includes(`var(--tone-${tone}-rgb)`) && body.includes(`var(--tone-${tone}-soft-rgb)`),
-        `the ${tone} ${label} does not read both tone tokens`
-      );
+      // Either variant is fine - the dark surface uses the lighter tint at both ends -
+      // but it has to be this tone's token and not another tone's, and not a literal.
+      const readsOwnToken = new RegExp(`var\\(--tone-${tone}-(soft-)?rgb\\)`).test(body);
+      const readsAnotherTone = new RegExp(`var\\(--tone-(?!${tone}-)`).test(body);
+      assert.ok(readsOwnToken, `the ${tone} ${label} does not read its own tone token`);
+      assert.ok(!readsAnotherTone, `the ${tone} ${label} is reading another objective's colour`);
       assert.ok(
         !/#[0-9a-fA-F]{3,8}|rgba?\(\s*\d/.test(body),
         `the ${tone} ${label} still hard-codes a colour: ${body.trim()}`
@@ -210,3 +212,61 @@ function readRuleBody(css, selector) {
   }
   return null;
 }
+
+test("an objective keeps one colour whichever panel it appears in", () => {
+  // The colour that identifies an objective used to change with the panel: awareness was
+  // the brand red in the overview cards, trend cards, sparklines and objective bars, and
+  // gold in the budget panel; conversion was green in one place and sage in another. That
+  // defeats the point of colour-coding, because the reader cannot carry a colour from one
+  // panel to the next.
+  //
+  // Every rule that paints an objective must now read that objective's token, so the hue
+  // is shared even where the lightness is not.
+  const css = readFileSync(join(__dirname, "..", "styles.css"), "utf8");
+  const painted = [
+    ".overview-card.tone-awareness::before",
+    ".overview-card.tone-leads::before",
+    ".overview-card.tone-conversion::before",
+    ".overview-card.tone-incremental::before",
+    ".trend-card.tone-awareness::before",
+    ".trend-card.tone-leads::before",
+    ".trend-card.tone-conversion::before",
+    ".trend-card.tone-incremental::before",
+    ".objective-bar-row.tone-awareness .objective-bar-fill",
+    ".objective-bar-row.tone-conversion .objective-bar-fill",
+    ".objective-bar-row.tone-leads .objective-bar-fill"
+  ];
+
+  for (const selector of painted) {
+    const tone = selector.match(/tone-([a-z-]+?)(?:::before| |$)/)[1];
+    const body = readRuleBody(css, selector);
+    assert.ok(body, `no rule for ${selector}`);
+    assert.ok(
+      new RegExp(`var\\(--tone-${tone}-(soft-)?rgb\\)`).test(body),
+      `${selector} paints ${tone} with something other than the ${tone} token: ${body.trim()}`
+    );
+    assert.ok(
+      !/#[0-9a-fA-F]{3,8}|rgba?\(\s*\d/.test(body),
+      `${selector} still hard-codes a colour: ${body.trim()}`
+    );
+  }
+});
+
+test("the dark budget surface uses the light tint of the same hue, not the dark one", () => {
+  // A solid #cf1f25 on the panel's navy goes muddy, so both ends of the gradient there
+  // come from the lighter tint. Sharing the hue is the point; sharing the lightness would
+  // cost legibility.
+  const css = readFileSync(join(__dirname, "..", "styles.css"), "utf8");
+
+  for (const tone of ["awareness", "conversion", "leads"]) {
+    const segment = readRuleBody(css, `.meta-budget-segment.tone-${tone}`);
+    assert.ok(
+      segment.includes(`--tone-${tone}-soft-rgb`),
+      `the ${tone} segment is not using the light tint`
+    );
+    assert.ok(
+      !new RegExp(`var\\(--tone-${tone}-rgb\\)`).test(segment),
+      `the ${tone} segment uses the dark identity hue, which is unreadable on this surface`
+    );
+  }
+});

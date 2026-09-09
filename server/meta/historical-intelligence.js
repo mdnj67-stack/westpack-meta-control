@@ -67,9 +67,11 @@ function metricRow(insight = {}) {
   const spend = number(insight.spend);
   const impressions = number(insight.impressions);
   const clicks = number(insight.inline_link_clicks || insight.clicks);
-  const purchases = actionValue(insight.actions, ["purchase", "omni_purchase"]);
+  // Same priority as the dashboard's PURCHASE_ACTION_TYPES. omni_purchase first,
+  // because it is the figure every other panel counts.
+  const purchases = actionValue(insight.actions, ["omni_purchase", "purchase", "offsite_conversion.purchase", "offsite_conversion.fb_pixel_purchase"]);
   const leads = actionValue(insight.actions, ["lead", "onsite_conversion.lead_grouped"]);
-  const purchaseValue = actionValue(insight.action_values, ["purchase", "omni_purchase"]);
+  const purchaseValue = actionValue(insight.action_values, ["omni_purchase", "purchase", "offsite_conversion.purchase", "offsite_conversion.fb_pixel_purchase"]);
   return {
     spend,
     impressions,
