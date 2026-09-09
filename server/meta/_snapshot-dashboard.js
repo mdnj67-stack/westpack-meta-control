@@ -86,6 +86,7 @@ function createMetaSnapshotDashboardBuilder({
     accountTimezone = "",
     deduplicatedReach = null,
     awarenessUsingAdSetInsights = 0,
+    awarenessAdSetBreakdownRejected = 0,
     totalSpend = 0,
     dateScope,
     accountCurrency,
@@ -110,7 +111,13 @@ function createMetaSnapshotDashboardBuilder({
     const campaignsWithPeriodDataCount = includedCampaigns.filter((campaign) => {
       return readNumber(campaign?.spend_value, 0) > 0;
     }).length;
-    const awarenessCampaignSpendTotal = buckets.awareness.reduce((sum, campaign) => sum + readNumber(campaign?.spend_value, 0), 0);
+    // spend_value may already be the ad-set sum, so comparing it against the ad-set total
+    // was the same number on both sides and the warning could never fire. The campaign
+    // level figure is what Meta reported before any override.
+    const awarenessCampaignSpendTotal = buckets.awareness.reduce(
+      (sum, campaign) => sum + readNumber(campaign?.campaign_level_spend_value ?? campaign?.spend_value, 0),
+      0
+    );
     const awarenessAdSetSpendTotal = adSets.reduce((sum, adSet) => {
       const campaignId = String(adSet?.campaignId || "");
       if (campaignCategoryById.get(campaignId) !== "awareness") {
@@ -175,6 +182,7 @@ function createMetaSnapshotDashboardBuilder({
       campaignsWithPeriodDataCount,
       awarenessCampaignCount: buckets.awareness.length,
       awarenessUsingAdSetInsights,
+      awarenessAdSetBreakdownRejected,
       conversionCampaignCount: buckets.conversion.length,
       explicitIncrementalCount,
       incrementalNamedCount,
@@ -251,6 +259,7 @@ function createMetaSnapshotDashboardBuilder({
         activeAdCount: activeAds.length,
         activeAdSetCount: adSets.length,
         awarenessUsingAdSetInsights,
+        awarenessAdSetBreakdownRejected,
         // Meta deduplicates reach only inside the entity you query, so these come from
         // account-level queries rather than from adding campaign reach together.
         deduplicatedReach,

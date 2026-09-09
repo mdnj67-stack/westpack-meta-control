@@ -255,6 +255,7 @@ function createMetaSnapshotTransformers({
     customerConversionActionTypes = {}
   }) {
     let awarenessUsingAdSetInsights = 0;
+    let awarenessAdSetBreakdownRejected = 0;
 
     const campaigns = includedCampaigns.map((campaign) => {
       const insight = insightMap[campaign.id] || {};
@@ -273,6 +274,9 @@ function createMetaSnapshotTransformers({
       let revenue = getPreferredActionValue(insight.action_values || [], purchaseActionTypes);
       let leads = getPreferredActionValue(insight.actions || [], leadActionTypes);
       let series = sortSeries(seriesMap[campaign.id] || []);
+      // Kept before any override so the reconciliation has a real other side to compare
+      // against, and so the payload can report what Meta actually said this campaign spent.
+      const campaignLevelSpend = spend;
       const incrementalInsight = incrementalInsightMap[campaign.id] || {};
       const incrementalPurchases = getPreferredActionValue(incrementalInsight.actions || [], purchaseActionTypes);
       const incrementalRevenue = getPreferredActionValue(incrementalInsight.action_values || [], purchaseActionTypes);
@@ -288,9 +292,21 @@ function createMetaSnapshotTransformers({
           return adSet.spend_value > 0 || (Array.isArray(adSet.series) && adSet.series.length > 0);
         });
 
-        if (adSetsWithInsights.length) {
+        const adSetSpendTotal = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.spend_value, 0), 0);
+        // Meta rounds per entity, so a small gap is expected; a real one means ad sets are
+        // missing from the breakdown.
+        const spendGap = Math.abs(campaignLevelSpend - adSetSpendTotal);
+        const adSetBreakdownReconciles = campaignLevelSpend > 0
+          ? (spendGap / campaignLevelSpend) <= 0.01
+          : adSetSpendTotal === 0;
+
+        if (adSetsWithInsights.length && !adSetBreakdownReconciles) {
+          awarenessAdSetBreakdownRejected += 1;
+        }
+
+        if (adSetsWithInsights.length && adSetBreakdownReconciles) {
           awarenessUsingAdSetInsights += 1;
-          spend = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.spend_value, 0), 0);
+          spend = adSetSpendTotal;
           clicks = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.clicks_value, 0), 0);
           impressions = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.impressions_value, 0), 0);
           reach = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.reach_value, 0), 0);
@@ -375,6 +391,7 @@ function createMetaSnapshotTransformers({
         lifetime_budget_raw: campaign.lifetime_budget || null,
         currency: accountCurrency,
         spend_value: spend,
+        campaign_level_spend_value: campaignLevelSpend,
         impressions_value: impressions,
         reach_value: reach,
         frequency_value: frequency,
@@ -407,6 +424,7 @@ function createMetaSnapshotTransformers({
 
     return {
       awarenessUsingAdSetInsights,
+      awarenessAdSetBreakdownRejected,
       campaigns
     };
   }

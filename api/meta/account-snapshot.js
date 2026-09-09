@@ -529,6 +529,7 @@ function buildQualityWarnings({
   campaignsWithPeriodDataCount = 0,
   awarenessCampaignCount = 0,
   awarenessUsingAdSetInsights = 0,
+  awarenessAdSetBreakdownRejected = 0,
   conversionCampaignCount = 0,
   explicitIncrementalCount = 0,
   incrementalNamedCount = 0,
@@ -594,16 +595,17 @@ function buildQualityWarnings({
     warnings.push("Some included campaigns are active now but have no spend data in the selected period.");
   }
 
-  if (awarenessCampaignCount > 0 && awarenessUsingAdSetInsights < awarenessCampaignCount) {
-    warnings.push("Not all awareness campaigns had ad set insight coverage.");
+  if (awarenessAdSetBreakdownRejected > 0) {
+    warnings.push(
+      `${awarenessAdSetBreakdownRejected} awareness campaign${awarenessAdSetBreakdownRejected === 1 ? "'s" : "s'"} ad sets did not add up to what Meta reported for the campaign, so the campaign totals are shown instead of the ad-set breakdown. Reach and CPM are still per campaign; only the per-ad-set detail is missing.`
+    );
   }
 
-  if (awarenessCampaignCount > 0 && awarenessCampaignSpendTotal > 0) {
-    const delta = Math.abs(awarenessCampaignSpendTotal - awarenessAdSetSpendTotal);
-    const deltaRatio = delta / Math.max(awarenessCampaignSpendTotal, 1);
-    if (deltaRatio > 0.03) {
-      warnings.push("Awareness campaign spend and ad set spend differ by more than 3%.");
-    }
+  const awarenessMissingAdSetData = awarenessCampaignCount - awarenessUsingAdSetInsights - awarenessAdSetBreakdownRejected;
+  if (awarenessMissingAdSetData > 0) {
+    warnings.push(
+      `${awarenessMissingAdSetData} awareness campaign${awarenessMissingAdSetData === 1 ? "" : "s"} returned no ad set insights, so ${awarenessMissingAdSetData === 1 ? "its" : "their"} figures come from the campaign level with no per-ad-set breakdown.`
+    );
   }
 
   if (!(campaignSpendTotal > 0)) {
@@ -1998,11 +2000,22 @@ module.exports = async (req, res) => {
       bypassCache: forceRefresh
     }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
 
-    const awarenessCampaignIds = new Set(
-      activeCampaigns
-        .filter((campaign) => classifyCampaign(campaign) === "awareness")
-        .map((campaign) => String(campaign?.id || ""))
+    // Matches the lens: active now, or spent in the selected period. Deriving it from
+    // the active list alone made the reach figure cover a different set of campaigns from
+    // the spend printed next to it.
+    const campaignIdsWithPeriodSpend = new Set(
+      (aggregatedInsightsResponse.data || [])
+        .map((row) => String(row?.campaign_id || ""))
         .filter(Boolean)
+    );
+    const awarenessCampaignIds = new Set(
+      (campaignResponse.data || [])
+        .filter((campaign) => classifyCampaign(campaign) === "awareness")
+        .filter((campaign) => {
+          const id = String(campaign?.id || "");
+          return id && (campaign.status === "ACTIVE" || campaignIdsWithPeriodSpend.has(id));
+        })
+        .map((campaign) => String(campaign?.id || ""))
     );
 
     const [accountReach, awarenessReach] = await Promise.all([
@@ -2093,6 +2106,7 @@ module.exports = async (req, res) => {
 
     const {
       awarenessUsingAdSetInsights,
+      awarenessAdSetBreakdownRejected,
       campaigns
     } = buildCampaignMetricCollections({
       includedCampaigns,
@@ -2131,6 +2145,7 @@ module.exports = async (req, res) => {
       accountTimezone: account.timezone_name || "",
       deduplicatedReach: { account: accountReach, awareness: awarenessReach },
       awarenessUsingAdSetInsights,
+      awarenessAdSetBreakdownRejected,
       totalSpend,
       dateScope,
       accountCurrency,
