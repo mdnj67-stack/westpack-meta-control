@@ -2161,6 +2161,7 @@ module.exports.__internals = {
   buildLensStats,
   buildQualityWarnings,
   buildPresetRange,
+  buildSnapshotDashboardAssembly,
   buildTrendCards,
   buildWindowChange,
   resolveTodayInTimeZone
