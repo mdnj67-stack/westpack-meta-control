@@ -498,6 +498,19 @@ function sumWindow(dailyRows = [], window, actionTypes = {}) {
   };
 }
 
+// One point per day inside a window, so a chart can be drawn from the same rows the
+// totals were summed from. Days Meta reported nothing for are absent rather than zero,
+// which is what the day-aligned sparkline overlay expects: a gap, not a false zero.
+function windowDailySeries(dailyRows = [], window, actionTypes = {}) {
+  return (dailyRows || [])
+    .filter((row) => withinWindow(row?.date_start, window))
+    .map((row) => ({
+      date: String(row.date_start),
+      value: extractCustomerAcquisition(row, actionTypes).new_customers_value
+    }))
+    .sort((left, right) => left.date.localeCompare(right.date));
+}
+
 // Shared comparison for one preset. Every preset uses the same maths, so a change to how
 // direction or the summary reads can never apply to some periods and not others.
 function compareAcquisitionWindow({
@@ -576,7 +589,8 @@ function compareAcquisitionWindow({
       formattedSpend: formatCurrency(current.spend, currency),
       costPerNewCustomer: current.newCustomers > 0 ? current.spend / current.newCustomers : 0,
       formattedCostPerNewCustomer: current.newCustomers > 0 ? formatCurrency(current.spend / current.newCustomers, currency) : "--",
-      daysWithData: current.daysWithData
+      daysWithData: current.daysWithData,
+      dailyNewCustomers: windowDailySeries(dailyRows, preset.current, actionTypes)
     },
     previous: {
       ...preset.previous,
@@ -591,7 +605,8 @@ function compareAcquisitionWindow({
       formattedSpend: formatCurrency(previous.spend, currency),
       costPerNewCustomer: previous.newCustomers > 0 ? previous.spend / previous.newCustomers : 0,
       formattedCostPerNewCustomer: previous.newCustomers > 0 ? formatCurrency(previous.spend / previous.newCustomers, currency) : "--",
-      daysWithData: previous.daysWithData
+      daysWithData: previous.daysWithData,
+      dailyNewCustomers: windowDailySeries(dailyRows, preset.previous, actionTypes)
     },
 
     delta,
@@ -735,6 +750,7 @@ module.exports = {
   compareAcquisitionWindow,
   resolveAcquisitionWindowPresets,
   resolveMonthToDateWindows,
+  windowDailySeries,
   buildCustomerAcquisitionWarnings,
   extractCustomerAcquisition,
   resolveCustomerConversionActionTypes,

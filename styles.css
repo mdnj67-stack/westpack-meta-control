@@ -17274,6 +17274,80 @@ body.campaign-studio-review-mode .main-content {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* New customers per day, with the previous period underneath. New customers is the
+   figure the department is measured on, and a count with a change badge cannot show
+   whether acquisition is climbing or collapsing inside the period. */
+.meta-acq-chart {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* The panel sits on a dark surface, so the sparkline's default light-surface ink would
+   disappear. These override the shared .trend-spark colours inside this panel only. */
+.meta-acq-chart .trend-spark {
+  height: 96px;
+  margin-top: 4px;
+}
+
+.meta-acq-chart .trend-spark .axis {
+  stroke: rgba(255, 255, 255, 0.16);
+}
+
+.meta-acq-chart .trend-spark .area {
+  fill: rgba(230, 201, 143, 0.16);
+}
+
+.meta-acq-chart .trend-spark .line {
+  stroke: rgb(var(--tone-awareness-soft-rgb));
+  filter: none;
+}
+
+.meta-acq-chart .trend-spark .dot {
+  fill: rgb(var(--tone-awareness-soft-rgb));
+  stroke: rgba(19, 18, 46, 0.85);
+  stroke-width: 2;
+}
+
+.meta-acq-chart .trend-spark .comparison-line {
+  stroke: rgba(245, 241, 255, 0.42);
+  stroke-dasharray: 5 5;
+}
+
+.meta-acq-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(245, 241, 255, 0.66);
+}
+
+.meta-acq-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.meta-acq-chart-legend span::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.meta-acq-chart-legend .is-current {
+  color: rgb(var(--tone-awareness-soft-rgb));
+}
+
+.meta-acq-chart-legend .is-peak::before {
+  display: none;
+}
+
 .meta-budget-segment.tone-acq-new {
   background: linear-gradient(135deg, rgba(210, 169, 95, 0.9) 0%, rgba(232, 204, 153, 0.95) 100%);
 }

@@ -625,6 +625,41 @@ function resolveAcquisitionPreset(model) {
   return presets.find((preset) => preset.key === wanted) || presets[0];
 }
 
+// A count and a change badge do not answer the question the team actually asks, which is
+// whether acquisition is improving or falling off. Two months that both end on 58 new
+// customers look identical in a badge and completely different on a chart, one climbing
+// and one collapsing after the first week.
+//
+// The previous period is drawn underneath on a shared day-of-window scale, so day four of
+// this month sits above day four of last month. Both series come from the preset the
+// panel is showing, so switching period moves the chart with the figures.
+function renderAcquisitionDailyChart(preset) {
+  if (!preset) return "";
+
+  const current = Array.isArray(preset.current?.dailyNewCustomers) ? preset.current.dailyNewCustomers : [];
+  const previous = Array.isArray(preset.previous?.dailyNewCustomers) ? preset.previous.dailyNewCustomers : [];
+  if (!current.length && !previous.length) return "";
+
+  const peak = Math.max(...[...current, ...previous].map((point) => Number(point.value) || 0), 0);
+  const currentLabel = preset.current?.label || "this period";
+  const previousLabel = preset.previous?.label || "the period before";
+
+  return `
+    <div class="meta-acq-chart">
+      <div class="meta-budget-stack-head">
+        <strong>New customers per day</strong>
+        <span>${escapeHtml(`${currentLabel} against ${previousLabel}`)}</span>
+      </div>
+      ${buildSparkline(current, "acq-new", previous)}
+      <p class="meta-acq-chart-legend">
+        <span class="is-current">${escapeHtml(currentLabel)}</span>
+        ${previous.length ? `<span class="is-previous">${escapeHtml(previousLabel)}</span>` : ""}
+        ${peak > 0 ? `<span class="is-peak">${escapeHtml(`Busiest day: ${peak}`)}</span>` : ""}
+      </p>
+    </div>
+  `;
+}
+
 // Cost per new customer needs its own direction, and it runs the opposite way to the
 // count: cheaper is better. Without this, a period can show more new customers in green
 // while quietly costing far more each - which is exactly what the last 90 days did, at
@@ -834,6 +869,8 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
           <p>${escapeHtml(active ? `${active.previous.existingCustomers} in ${active.previous.label}` : (model.formattedExistingCustomerRevenue || "--") + " in revenue")}</p>
         </article>
       </div>
+
+      ${renderAcquisitionDailyChart(active)}
 
       <div class="meta-acq-mix-card">
         <div class="meta-budget-stack-head">
