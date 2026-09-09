@@ -17,6 +17,23 @@
   --success: #2f7d32;
   --shadow: 0 26px 70px rgba(28, 20, 14, 0.08);
   --shadow-soft: 0 18px 44px rgba(28, 20, 14, 0.05);
+
+  /* Objective families on the dark budget surface. One token per family, used by both
+     the mix-bar segment and the per-objective row, so the two cannot drift apart. */
+  --tone-awareness-rgb: 212 162 79;
+  --tone-awareness-soft-rgb: 230 201 143;
+  --tone-conversion-rgb: 93 136 122;
+  --tone-conversion-soft-rgb: 142 185 170;
+  --tone-leads-rgb: 111 125 163;
+  --tone-leads-soft-rgb: 174 186 222;
+  --tone-traffic-rgb: 126 158 176;
+  --tone-traffic-soft-rgb: 184 210 222;
+  --tone-engagement-rgb: 163 132 168;
+  --tone-engagement-soft-rgb: 214 190 218;
+  --tone-app-promotion-rgb: 140 152 128;
+  --tone-app-promotion-soft-rgb: 197 206 184;
+  --tone-unclassified-rgb: 168 168 176;
+  --tone-unclassified-soft-rgb: 198 198 206;
 }
 
 /* Content Agent focus canvas */
@@ -9871,40 +9888,40 @@ h1 {
 }
 
 .meta-budget-segment.tone-awareness {
-  background: linear-gradient(135deg, rgba(210, 169, 95, 0.9) 0%, rgba(232, 204, 153, 0.95) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-awareness-rgb) / 0.9) 0%, rgb(var(--tone-awareness-soft-rgb) / 0.95) 100%);
 }
 
 .meta-budget-segment.tone-conversion {
-  background: linear-gradient(135deg, rgba(95, 137, 123, 0.92) 0%, rgba(153, 193, 178, 0.96) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-conversion-rgb) / 0.92) 0%, rgb(var(--tone-conversion-soft-rgb) / 0.96) 100%);
 }
 
 .meta-budget-segment.tone-leads {
-  background: linear-gradient(135deg, rgba(111, 125, 163, 0.9) 0%, rgba(176, 187, 214, 0.96) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-leads-rgb) / 0.9) 0%, rgb(var(--tone-leads-soft-rgb) / 0.96) 100%);
 }
 
 /* Objective families beyond awareness/conversion/leads. They only render for accounts
    that actually run them, but they need a tone so they never fall back to an unstyled
    transparent segment. */
 .meta-budget-segment.tone-traffic {
-  background: linear-gradient(135deg, rgba(126, 158, 176, 0.9) 0%, rgba(184, 210, 222, 0.96) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-traffic-rgb) / 0.9) 0%, rgb(var(--tone-traffic-soft-rgb) / 0.96) 100%);
 }
 
 .meta-budget-segment.tone-engagement {
-  background: linear-gradient(135deg, rgba(163, 132, 168, 0.9) 0%, rgba(214, 190, 218, 0.96) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-engagement-rgb) / 0.9) 0%, rgb(var(--tone-engagement-soft-rgb) / 0.96) 100%);
 }
 
 .meta-budget-segment.tone-app-promotion {
-  background: linear-gradient(135deg, rgba(140, 152, 128, 0.9) 0%, rgba(197, 206, 184, 0.96) 100%);
+  background: linear-gradient(135deg, rgb(var(--tone-app-promotion-rgb) / 0.9) 0%, rgb(var(--tone-app-promotion-soft-rgb) / 0.96) 100%);
 }
 
 .meta-budget-segment.tone-unclassified,
 .meta-budget-segment.tone-neutral {
   background: repeating-linear-gradient(
     135deg,
-    rgba(168, 168, 176, 0.85) 0px,
-    rgba(168, 168, 176, 0.85) 8px,
-    rgba(198, 198, 206, 0.9) 8px,
-    rgba(198, 198, 206, 0.9) 16px
+    rgb(var(--tone-unclassified-rgb) / 0.85) 0px,
+    rgb(var(--tone-unclassified-rgb) / 0.85) 8px,
+    rgb(var(--tone-unclassified-soft-rgb) / 0.9) 8px,
+    rgb(var(--tone-unclassified-soft-rgb) / 0.9) 16px
   );
 }
 
@@ -9999,32 +10016,32 @@ h1 {
 }
 
 .meta-budget-row.tone-awareness .meta-budget-row-fill {
-  background: linear-gradient(90deg, #d4a24f 0%, #e6c98f 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-awareness-rgb)) 0%, rgb(var(--tone-awareness-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-conversion .meta-budget-row-fill {
-  background: linear-gradient(90deg, #5d887a 0%, #8eb9aa 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-conversion-rgb)) 0%, rgb(var(--tone-conversion-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-leads .meta-budget-row-fill {
-  background: linear-gradient(90deg, #6f7da3 0%, #aebade 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-leads-rgb)) 0%, rgb(var(--tone-leads-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-traffic .meta-budget-row-fill {
-  background: linear-gradient(90deg, #7e9eb0 0%, #b8d2de 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-traffic-rgb)) 0%, rgb(var(--tone-traffic-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-engagement .meta-budget-row-fill {
-  background: linear-gradient(90deg, #a384a8 0%, #d6beda 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-engagement-rgb)) 0%, rgb(var(--tone-engagement-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-app-promotion .meta-budget-row-fill {
-  background: linear-gradient(90deg, #8c9880 0%, #c5ceb8 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-app-promotion-rgb)) 0%, rgb(var(--tone-app-promotion-soft-rgb)) 100%);
 }
 
 .meta-budget-row.tone-unclassified .meta-budget-row-fill,
 .meta-budget-row.tone-neutral .meta-budget-row-fill {
-  background: linear-gradient(90deg, #a8a8b0 0%, #c6c6ce 100%);
+  background: linear-gradient(90deg, rgb(var(--tone-unclassified-rgb)) 0%, rgb(var(--tone-unclassified-soft-rgb)) 100%);
 }
 
 /* Shown instead of the planned-budget bar when the snapshot carries no server-normalised

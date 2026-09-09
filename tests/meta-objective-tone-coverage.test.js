@@ -133,3 +133,80 @@ test("the budget-unavailable state and unknown pacing pill are styled", () => {
     "styles.css has no .meta-budget-variance-pill.is-unknown rule"
   );
 });
+
+test("each objective colour is defined once and both places read the same token", () => {
+  // The budget panel styled every objective twice with two slightly different colours:
+  // awareness was rgba(210,169,95) as a mix-bar segment and #d4a24f as a row fill,
+  // conversion rgba(95,137,123) against #5d887a. A bar segment and the row beneath it
+  // describe the same objective and the eye is meant to connect them, so the near-match
+  // both weakened that link and hid any real drift from review.
+  const css = readFileSync(join(__dirname, "..", "styles.css"), "utf8");
+  const tones = ["awareness", "conversion", "leads", "traffic", "engagement", "app-promotion", "unclassified"];
+
+  for (const tone of tones) {
+    assert.match(
+      css,
+      new RegExp(`--tone-${tone}-rgb:\\s*\\d+ \\d+ \\d+;`),
+      `no channel token for ${tone}`
+    );
+    assert.match(
+      css,
+      new RegExp(`--tone-${tone}-soft-rgb:\\s*\\d+ \\d+ \\d+;`),
+      `no soft channel token for ${tone}`
+    );
+
+    const segment = readRuleBody(css, `.meta-budget-segment.tone-${tone}`);
+    const row = readRuleBody(css, `.meta-budget-row.tone-${tone} .meta-budget-row-fill`);
+    assert.ok(segment, `no segment rule for ${tone}`);
+    assert.ok(row, `no row rule for ${tone}`);
+
+    for (const [label, body] of [["segment", segment], ["row", row]]) {
+      assert.ok(
+        body.includes(`var(--tone-${tone}-rgb)`) && body.includes(`var(--tone-${tone}-soft-rgb)`),
+        `the ${tone} ${label} does not read both tone tokens`
+      );
+      assert.ok(
+        !/#[0-9a-fA-F]{3,8}|rgba?\(\s*\d/.test(body),
+        `the ${tone} ${label} still hard-codes a colour: ${body.trim()}`
+      );
+    }
+  }
+});
+
+// Returns the body of the first rule whose selector list contains this exact selector.
+// The list is split on commas, so ".tone-unclassified, .tone-neutral" is found by either
+// member, and ".meta-acq" is never matched by ".meta-acq-kpi".
+//
+// This walks braces rather than matching a pattern: a plain regex loses its place at the
+// first at-rule, because a media block's body contains braces of its own.
+function readRuleBody(css, selector) {
+  let index = 0;
+  while (index < css.length) {
+    const open = css.indexOf("{", index);
+    if (open === -1) return null;
+
+    const prelude = css.slice(index, open).replace(/\/\*[\s\S]*?\*\//g, "").trim();
+
+    let depth = 0;
+    let close = open;
+    for (; close < css.length; close += 1) {
+      if (css[close] === "{") depth += 1;
+      else if (css[close] === "}") {
+        depth -= 1;
+        if (depth === 0) break;
+      }
+    }
+    const body = css.slice(open + 1, close);
+
+    if (prelude.startsWith("@")) {
+      // Recurse into the at-rule, which holds rules of its own.
+      const inner = readRuleBody(body, selector);
+      if (inner !== null) return inner;
+    } else if (prelude.split(",").map((part) => part.trim()).includes(selector)) {
+      return body;
+    }
+
+    index = close + 1;
+  }
+  return null;
+}
