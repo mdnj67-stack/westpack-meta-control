@@ -1145,14 +1145,28 @@ function buildSparkline(series = [], tone = "default", comparisonSeries = []) {
   const baseline = 54;
   const values = [...(series || []), ...(comparisonSeries || [])].map((point) => Number(point.value) || 0);
   const max = Math.max(...values, 1);
-  const buildPoints = (inputSeries = []) => {
-    const step = inputSeries.length > 1 ? width / (inputSeries.length - 1) : width;
-    return inputSeries.map((point, index) => {
-      const x = inputSeries.length > 1 ? index * step : width / 2;
-      const y = baseline - ((Math.max(0, Number(point.value) || 0) / max) * 42);
-      return { x, y };
-    });
+
+  // Both lines are placed by how many days into their own window each point falls, not by
+  // its position in the array. Meta omits days with no delivery, so a previous window with
+  // five rows and a current window with twenty-nine used to be stretched across the same
+  // width, putting day 3 of one above day 17 of the other while the card invited the
+  // reader to compare them directly.
+  const dayOffset = (inputSeries = [], index = 0) => {
+    const first = Date.parse(`${inputSeries[0]?.date}T00:00:00Z`);
+    const at = Date.parse(`${inputSeries[index]?.date}T00:00:00Z`);
+    if (Number.isNaN(first) || Number.isNaN(at)) return index;
+    return Math.round((at - first) / 86400000);
   };
+  const lastOffset = (inputSeries = []) => (
+    inputSeries.length ? dayOffset(inputSeries, inputSeries.length - 1) : 0
+  );
+  const span = Math.max(lastOffset(series || []), lastOffset(comparisonSeries || []), 1);
+
+  const buildPoints = (inputSeries = []) => inputSeries.map((point, index) => {
+    const x = inputSeries.length > 1 ? (dayOffset(inputSeries, index) / span) * width : width / 2;
+    const y = baseline - ((Math.max(0, Number(point.value) || 0) / max) * 42);
+    return { x, y };
+  });
   const buildPath = (inputPoints = []) => inputPoints.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
   const points = buildPoints(series || []);
   const comparisonPoints = buildPoints(comparisonSeries || []);
