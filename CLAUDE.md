@@ -206,6 +206,34 @@ Nine figures were wrong before this pass. Do not reintroduce any of them:
   inside the section the render hides there, so the first view people open was the one
   that never showed whether its own numbers could be trusted.
 
+### New customers is the first-class figure
+
+New customers acquired is what the marketing department is measured on, so the dashboard
+is arranged around it rather than treating it as one panel among many:
+
+- The **new-customer panel comes first** in the General overview, above the budget split.
+  Budget is the lever you pull once you know what acquisition is doing.
+- The **KPI strip leads with new customers and cost per new customer**, each carrying the
+  panel's own month-to-date comparison via `buildAcquisitionChange`. Cost runs the
+  opposite way, since cheaper is better. That window is month to date against the same
+  elapsed days of last month, which is **not** the dashboard's selected range that the
+  spend and ROAS badges use, so every badge names its own period in the tile caption.
+- The panel draws **new customers per day** with the previous period underneath, on a
+  shared day-of-window scale. A count with a change badge cannot distinguish a month
+  building steadily from one that died after the first week. The series comes from
+  `windowDailySeries`, attached to each preset's `current`/`previous` as
+  `dailyNewCustomers`, so switching the panel's period needs no browser date maths and
+  no extra Meta request - the daily rows were already fetched for the comparison.
+- Both **conversion tables carry New customers and Cost / new** per campaign, read from
+  `new_customers_value` on the snapshot row rather than recomputed. Awareness and leads
+  keep their own columns: those campaigns are not run against a customer count.
+- A day Meta reported nothing for stays **absent from the series, never a zero** - the
+  day-aligned overlay wants a gap, and a zero would claim Meta said there were no new
+  customers that day.
+- Where there is nothing honest to compare, there is **no badge**. On the first of the
+  month, or on an account with no `New_customer` conversion, a "0.0% flat" would assert
+  that nothing changed.
+
 Panels deleted in this pass, with the user's agreement: Executive brief, Decision buckets,
 Decision board and Signals (all four were computed every render and then hidden by the
 render itself, and all four were generated advice prose over invented priority scores),
