@@ -313,7 +313,19 @@ test("redis mode: readAgentState falls back to a safe initial state instead of t
     });
 
     const state = await agentStore.readAgentState();
-    assert.deepEqual(state, normalizeAgentState(createInitialAgentState()));
+
+    // createInitialAgentState stamps updatedAt with the current time, so comparing the
+    // whole object against a second one built in the assertion fails whenever the
+    // millisecond ticks between the two calls. That happened intermittently under a full
+    // suite run and had nothing to do with what this test is here to prove.
+    const expected = normalizeAgentState(createInitialAgentState());
+    const { updatedAt: actualUpdatedAt, ...actualRest } = state;
+    const { updatedAt: unusedExpectedUpdatedAt, ...expectedRest } = expected;
+    assert.deepEqual(actualRest, expectedRest);
+    assert.ok(
+      !Number.isNaN(Date.parse(actualUpdatedAt)),
+      `the fallback state carries an unparseable updatedAt: ${actualUpdatedAt}`
+    );
   } finally {
     global.fetch = originalFetch;
     cleanupLocalFiles();

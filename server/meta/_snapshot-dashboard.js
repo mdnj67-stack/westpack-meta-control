@@ -16,7 +16,6 @@ function createMetaSnapshotDashboardBuilder({
   formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
-  buildLensSummary,
   buildHeroPanelItems,
   buildTrendCards,
   buildOverviewCards,
@@ -201,13 +200,6 @@ function createMetaSnapshotDashboardBuilder({
         leads: buildLensStats(buckets.leads, "leads", dateScope, { currency: accountCurrency }),
         conversion_standard: buildLensStats(conversionBuckets.standard, "conversion_standard", dateScope, { currency: accountCurrency }),
         conversion_incremental: buildLensStats(incrementalLensCampaigns, "conversion_incremental", dateScope, { currency: accountCurrency })
-      },
-      summaryByLens: {
-        general: buildLensSummary(enrichedCampaigns, "general", dateScope),
-        awareness: buildLensSummary(buckets.awareness, "awareness", dateScope),
-        leads: buildLensSummary(buckets.leads, "leads", dateScope),
-        conversion_standard: buildLensSummary(conversionBuckets.standard, "conversion_standard", dateScope),
-        conversion_incremental: buildLensSummary(incrementalLensCampaigns, "conversion_incremental", dateScope)
       },
       visuals: {
         heroPanelByLens: {

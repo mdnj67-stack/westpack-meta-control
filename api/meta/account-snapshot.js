@@ -183,7 +183,6 @@ const {
   formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
-  buildLensSummary,
   buildHeroPanelItems,
   buildTrendCards,
   buildOverviewCards,
@@ -775,53 +774,6 @@ function computeAggregateMetric(series = [], metric) {
   if (metric === "cpa") return purchases > 0 ? spend / purchases : 0;
   if (metric === "roas") return spend > 0 ? revenue / spend : 0;
   return 0;
-}
-
-function describeMetricDirection(previousValue, currentValue, threshold = 0.05) {
-  const previous = readNumber(previousValue, 0);
-  const current = readNumber(currentValue, 0);
-
-  if (previous <= 0 && current <= 0) return "flat";
-  if (previous <= 0 && current > 0) return "up";
-
-  const delta = (current - previous) / Math.abs(previous);
-  if (Math.abs(delta) < threshold) return "flat";
-  return delta > 0 ? "up" : "down";
-}
-
-function buildMetricClause(label, previousValue, currentValue) {
-  return `${label} ${describeMetricDirection(previousValue, currentValue)}`;
-}
-
-function buildLensSummary(campaigns, lens, dateScope) {
-  const rangeLabel = dateScope?.label || "Selected range";
-  const { previous, current } = buildAggregateComparisonWindow(campaigns);
-
-  if (!current.length) {
-    return `${rangeLabel}: no meaningful data in the selected scope.`;
-  }
-
-  if (lens === "awareness") {
-    return `${rangeLabel}: ${buildMetricClause("spend", computeAggregateMetric(previous, "spend"), computeAggregateMetric(current, "spend"))}, ${buildMetricClause("CPM", computeAggregateMetric(previous, "cpm"), computeAggregateMetric(current, "cpm"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  if (lens === "leads") {
-    return `${rangeLabel}: ${buildMetricClause("lead volume", computeAggregateMetric(previous, "leads"), computeAggregateMetric(current, "leads"))}, ${buildMetricClause("CPL", computeAggregateMetric(previous, "cpl"), computeAggregateMetric(current, "cpl"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  if (lens === "conversion_standard" || lens === "conversion_incremental") {
-    return `${rangeLabel}: ${buildMetricClause("purchases", computeAggregateMetric(previous, "purchases"), computeAggregateMetric(current, "purchases"))}, ${buildMetricClause("CPA", computeAggregateMetric(previous, "cpa"), computeAggregateMetric(current, "cpa"))}, ${buildMetricClause("ROAS", computeAggregateMetric(previous, "roas"), computeAggregateMetric(current, "roas"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  const buckets = splitByCategory(campaigns);
-  const conversionBuckets = splitConversionByAttribution(buckets.conversion);
-  const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
-  const awareness = buildAggregateComparisonWindow(buckets.awareness);
-  const leads = buildAggregateComparisonWindow(buckets.leads);
-  const standard = buildAggregateComparisonWindow(conversionBuckets.standard);
-  const incremental = buildAggregateComparisonWindow(incrementalCampaigns);
-
-  return `${rangeLabel}: awareness ${buildMetricClause("CPM", computeAggregateMetric(awareness.previous, "cpm"), computeAggregateMetric(awareness.current, "cpm"))}, leads ${buildMetricClause("CPL", computeAggregateMetric(leads.previous, "cpl"), computeAggregateMetric(leads.current, "cpl"))}, standard conversion ${buildMetricClause("ROAS", computeAggregateMetric(standard.previous, "roas"), computeAggregateMetric(standard.current, "roas"))}, and incremental ${buildMetricClause("ROAS", computeAggregateMetric(incremental.previous, "roas"), computeAggregateMetric(incremental.current, "roas"))}.`;
 }
 
 function formatDashboardNumber(value, digits = 0, fallback = "--") {
@@ -1513,11 +1465,13 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
   ));
 
   const statsByLens = dashboard?.statsByLens || {};
-  const summaryByLens = dashboard?.summaryByLens || {};
   const heroByLens = visuals.heroPanelByLens || {};
   const trendByLens = visuals.trendCardsByLens || {};
-  const missingStatsLenses = requiredLenses.filter((lens) => !Array.isArray(statsByLens[lens]) || !statsByLens[lens].length);
-  const missingSummaryLenses = requiredLenses.filter((lens) => !String(summaryByLens[lens] || "").trim());
+  // General has no stat row by design: its totals and objective shares are the budget
+  // panel's, and repeating them was one fact in two places. Requiring one here would make
+  // a correct dashboard report itself invalid.
+  const statLenses = requiredLenses.filter((lens) => lens !== "general");
+  const missingStatsLenses = statLenses.filter((lens) => !Array.isArray(statsByLens[lens]) || !statsByLens[lens].length);
   const missingHeroLenses = requiredLenses.filter((lens) => !Array.isArray(heroByLens[lens]) || !heroByLens[lens].length);
   const missingTrendLenses = requiredLenses.filter((lens) => !Array.isArray(trendByLens[lens]) || !trendByLens[lens].length);
   const overviewCards = Array.isArray(visuals.overviewCards) ? visuals.overviewCards : [];
@@ -1525,10 +1479,10 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
   checks.push(buildValidationCheck(
     "lens-coverage",
     "Lens coverage",
-    (!missingStatsLenses.length && !missingSummaryLenses.length) ? "pass" : "fail",
-    (!missingStatsLenses.length && !missingSummaryLenses.length)
-      ? "All dashboard lenses have stats and summaries."
-      : `Missing stats for: ${missingStatsLenses.join(", ") || "none"}. Missing summaries for: ${missingSummaryLenses.join(", ") || "none"}.`
+    !missingStatsLenses.length ? "pass" : "fail",
+    !missingStatsLenses.length
+      ? "Every lens that has a stat row has one."
+      : `Missing stats for: ${missingStatsLenses.join(", ")}.`
   ));
 
   checks.push(buildValidationCheck(
