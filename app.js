@@ -14335,6 +14335,20 @@ async function refreshMetaData(options = {}) {
         setStudioStatus(error.message, "warning");
       }
       setSyncStatus(error.message, "warning");
+      // With no snapshot and no cache to fall back on, every panel stays empty and the
+      // only explanation was a line of status text above them. An unexplained blank page
+      // reads as a broken dashboard, so the reason goes where the figures would have been.
+      renderPanelSafely("Load Failure State", () => {
+        renderLensEmptyState({
+          headline: rateLimited ? "Meta is rate limited right now" : "Meta data could not be loaded",
+          body: rateLimited
+            ? "The ad account has no request quota left for the moment, so this range could not be fetched and there is no earlier snapshot cached in this browser to show instead."
+            : error.message,
+          nextStep: rateLimited
+            ? "Wait a few minutes and press Refresh data. Nothing is wrong with the figures; they simply could not be read."
+            : "Press Refresh data to try again."
+        }, appState.dashboardDateLabel || "");
+      });
       return null;
     } finally {
       if (refreshButton && !silent) {
