@@ -61,7 +61,7 @@ export function buildDashboardChangeLabel(direction = "flat", windowLabel = "sel
 }
 
 export function getWindowChangeSummary(series = [], metric, options = {}) {
-  const { previous, current } = splitAggregateSeries(series);
+  const { previous, current } = options.splitOverride || splitAggregateSeries(series);
   const windowLabel = options.windowLabel || formatDashboardComparisonWindowLabel(options.windowDays);
   if (!previous.length && !current.length) {
     return null;
@@ -97,7 +97,7 @@ export function getWindowChangeSummary(series = [], metric, options = {}) {
     };
   }
 
-  const change = ((currentValue - previousValue) / Math.max(Math.abs(previousValue), 1)) * 100;
+  const change = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
   const isPositive = options.positiveDirection === "down" ? change < 0 : change > 0;
   const isNeutral = Math.abs(change) < 0.1;
 
@@ -114,4 +114,18 @@ export function getWindowChangeSummary(series = [], metric, options = {}) {
 
 export function buildWindowChange(series = [], metric, options = {}) {
   return getWindowChangeSummary(series, metric, options);
+}
+
+// Same comparison, but given the two windows explicitly rather than guessing them by
+// halving one series. This is the path to use whenever the caller has Meta's real
+// previous window, which the snapshot supplies on every campaign.
+export function getComparisonWindowChange(previous = [], current = [], metric, options = {}) {
+  const combined = [...(previous || []), ...(current || [])];
+  if (!combined.length) {
+    return null;
+  }
+  return getWindowChangeSummary(combined, metric, {
+    ...options,
+    splitOverride: { previous: previous || [], current: current || [] }
+  });
 }

@@ -24,10 +24,8 @@ import {
   writeMetaStudioSnapshot
 } from "./src/meta-snapshot-cache.js?v=20260507-meta-snapshotcache1";
 import {
-  buildWindowChange as buildMetricWindowChange,
-  computeAggregateMetric,
-  getWindowChangeSummary,
-  splitAggregateSeries
+  getComparisonWindowChange,
+  computeAggregateMetric
 } from "./src/meta-dashboard-metrics.js?v=20260507-meta-dashboardmetrics1";
 import {
   OBJECTIVE_GROUP_DISPLAY_ORDER,
@@ -615,7 +613,7 @@ const appState = {
   metaSnapshotMeta: null,
   metaStudioCatalogGeneratedAt: "",
   metaDashboard: null,
-  metaCurrency: "EUR",
+  metaCurrency: "DKK",
   metaQuality: null,
   metaUploadedImageHashes: {},
   metaUploadedVideoVariants: {},
@@ -11526,7 +11524,7 @@ function getMetaTrustStatusTone() {
 }
 
 function buildMetaQualityLabel() {
-  const currency = appState.metaCurrency || "EUR";
+  const currency = appState.metaCurrency || "DKK";
   const normalization = appState.metaQuality?.budgetNormalization;
   const pagination = appState.metaQuality?.pagination || null;
   const awarenessUsingAdSetInsights = Number(appState.metaQuality?.awarenessUsingAdSetInsights || 0);
@@ -12268,7 +12266,7 @@ function resolveMetaCurrency({ accountData = null, dashboardData = null, campaig
   if (fromDashboard) return fromDashboard;
   const fromCampaign = String(campaigns?.[0]?.currency || "").trim().toUpperCase();
   if (fromCampaign) return fromCampaign;
-  return "EUR";
+  return "DKK";
 }
 
 function syncDuplicateSourceSelectors(preferred = {}) {
@@ -12785,6 +12783,11 @@ function getGeneralSpendDistributionModel(campaigns = []) {
 
 function buildGeneralStats(campaigns) {
   const series = buildAggregateSeries(campaigns);
+  const window = buildAggregateComparisonWindow(campaigns);
+  const change = (metric, positiveDirection) => getComparisonWindowChange(window.previous, window.current, metric, {
+    positiveDirection,
+    windowDays: appState.dashboardDateDays
+  });
   const totalSpend = computeAggregateMetric(series, "spend");
   const totalCpa = computeAggregateMetric(series, "cpa");
   const totalConversionRate = computeAggregateMetric(series, "conversion_rate");
@@ -12797,28 +12800,28 @@ function buildGeneralStats(campaigns) {
       label: "Current spend",
       value: formatDashboardCurrency(totalSpend),
       meta: getDashboardDateLabel(),
-      change: buildWindowChange(series, "spend", { positiveDirection: "up" }),
+      change: change("spend", "up"),
       compact: true
     },
     {
       label: "CPA",
       value: Number.isFinite(totalCpa) && totalCpa > 0 ? formatDashboardCurrency(totalCpa) : "--",
       meta: "Cost per purchase",
-      change: buildWindowChange(series, "cpa", { positiveDirection: "down" }),
+      change: change("cpa", "down"),
       compact: true
     },
     {
       label: "Conversion rate",
       value: clicks > 0 ? formatDashboardPercent(totalConversionRate, 2) : "--",
       meta: "Purchases / clicks",
-      change: buildWindowChange(series, "conversion_rate", { positiveDirection: "up" }),
+      change: change("conversion_rate", "up"),
       compact: true
     },
     {
       label: "Cost per add to cart",
       value: addToCart > 0 ? formatDashboardCurrency(totalCostPerAddToCart) : "--",
       meta: addToCart > 0 ? "Spend / add-to-cart" : "No add-to-cart events tracked",
-      change: buildWindowChange(series, "cost_per_add_to_cart", { positiveDirection: "down" }),
+      change: change("cost_per_add_to_cart", "down"),
       compact: true
     }
   ];
@@ -12896,15 +12899,49 @@ function buildAggregateSeries(campaigns = []) {
     .map(([date, value]) => ({ date, ...value }));
 }
 
-function buildWindowChange(series = [], metric, options = {}) {
-  return buildMetricWindowChange(series, metric, {
-    ...options,
-    windowDays: appState.dashboardDateDays
-  });
+// Aggregates Meta's real previous and current windows across a set of campaigns, rather
+// than halving the selected range and calling the first half "previous".
+function buildAggregateComparisonWindow(campaigns = []) {
+  const sumWindow = (pick) => {
+    const totals = new Map();
+    (campaigns || []).forEach((campaign) => {
+      const points = pick(campaign) || [];
+      points.forEach((point) => {
+        const key = String(point.date || "");
+        const current = totals.get(key) || {
+          spend: 0, impressions: 0, reach: 0, clicks: 0,
+          add_to_cart: 0, purchases: 0, revenue: 0, leads: 0
+        };
+        totals.set(key, {
+          spend: current.spend + toFiniteNumber(point.spend),
+          impressions: current.impressions + toFiniteNumber(point.impressions),
+          reach: current.reach + toFiniteNumber(point.reach),
+          clicks: current.clicks + toFiniteNumber(point.clicks),
+          add_to_cart: current.add_to_cart + toFiniteNumber(point.add_to_cart),
+          purchases: current.purchases + toFiniteNumber(point.purchases),
+          revenue: current.revenue + toFiniteNumber(point.revenue),
+          leads: current.leads + toFiniteNumber(point.leads)
+        });
+      });
+    });
+    return Array.from(totals.entries())
+      .sort((left, right) => left[0].localeCompare(right[0]))
+      .map(([date, value]) => ({ date, ...value }));
+  };
+
+  return {
+    previous: sumWindow((campaign) => campaign?.comparison_window?.previous),
+    current: sumWindow((campaign) => campaign?.comparison_window?.current || campaign?.series)
+  };
 }
 
 function buildGeneralKpiStrip(campaigns = []) {
   const series = buildAggregateSeries(campaigns);
+  const window = buildAggregateComparisonWindow(campaigns);
+  const change = (metric, positiveDirection) => getComparisonWindowChange(window.previous, window.current, metric, {
+    positiveDirection,
+    windowDays: appState.dashboardDateDays
+  });
   const spend = computeAggregateMetric(series, "spend");
   const revenue = computeAggregateMetric(series, "revenue");
   const purchases = computeAggregateMetric(series, "purchases");
@@ -12916,28 +12953,28 @@ function buildGeneralKpiStrip(campaigns = []) {
       label: "Revenue",
       value: formatDashboardCurrency(revenue),
       meta: "Attributed revenue",
-      change: buildWindowChange(series, "revenue", { positiveDirection: "up" }),
+      change: change("revenue", "up"),
       tone: "success"
     },
     {
       label: "ROAS",
       value: spend > 0 ? formatDashboardNumber(roas, 2) : "--",
       meta: "Revenue / spend",
-      change: buildWindowChange(series, "roas", { positiveDirection: "up" }),
+      change: change("roas", "up"),
       tone: "success"
     },
     {
       label: "Purchases",
       value: formatDashboardNumber(purchases, 0),
       meta: "Attributed conversions",
-      change: buildWindowChange(series, "purchases", { positiveDirection: "up" }),
+      change: change("purchases", "up"),
       tone: "neutral"
     },
     {
       label: "CPA",
       value: purchases > 0 ? formatDashboardCurrency(cpa) : "--",
       meta: "Spend / purchases",
-      change: buildWindowChange(series, "cpa", { positiveDirection: "down" }),
+      change: change("cpa", "down"),
       tone: "warning"
     }
   ];
@@ -13517,7 +13554,7 @@ function formatDashboardCurrency(value) {
   }
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: appState.metaCurrency || "EUR",
+    currency: appState.metaCurrency || "DKK",
     maximumFractionDigits: 2
   }).format(value);
 }
@@ -13854,9 +13891,9 @@ function renderDashboard() {
     }
     if (lens === "conversion_incremental") {
       return {
-        kicker: "Incremental operator view",
-        title: "Incremental conversion. Separate.",
-        subtitle: "Only campaigns assigned to the incremental track.",
+        kicker: "Incremental campaigns",
+        title: "The campaigns tagged Inkrementel.",
+        subtitle: "Conv 01 to 03, kept apart from the rest of conversion so they can be read on their own.",
         tableTitle: "Incremental conversion snapshot"
       };
     }
@@ -13943,7 +13980,7 @@ function renderDashboard() {
   renderPanelSafely("Campaign Table", () => {
     renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
       incrementalityFactor: factor,
-      currency: appState.metaCurrency || "EUR"
+      currency: appState.metaCurrency || "DKK"
     });
   });
 
@@ -14006,8 +14043,8 @@ function renderDashboard() {
       nextSub: "Scale, protect or fix standard conversion."
     },
     conversion_incremental: {
-      statusTitle: "Incremental health",
-      statusSub: "Separated incremental performance only.",
+      statusTitle: "Incremental campaigns",
+      statusSub: "How the campaigns tagged Inkrementel are performing.",
       nextTitle: "Next incremental moves",
       nextSub: "Priority actions inside incremental campaigns."
     }

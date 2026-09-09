@@ -57,7 +57,7 @@ function formatPercent(value, fallback = "--") {
   return `${formatDecimal(number, 2)}%`;
 }
 
-function formatCurrency(value, currency = "EUR", fallback = "--") {
+function formatCurrency(value, currency = "DKK", fallback = "--") {
   const number = Number(value);
   if (!Number.isFinite(number)) return fallback;
   return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(number);
@@ -72,7 +72,7 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
   const incrementalityFactor = Number.isFinite(options.incrementalityFactor)
     ? options.incrementalityFactor
     : 0.6;
-  const currency = String(options.currency || "EUR").trim().toUpperCase() || "EUR";
+  const currency = String(options.currency || "DKK").trim().toUpperCase() || "DKK";
 
   const columns = (() => {
     if (lens === 'general') {
@@ -191,10 +191,15 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
         return `<td>${formatPercent(ctrValue)}</td>`;
       }
       if (col.key === 'status') {
-        const status = campaign.status || 'Healthy';
+        // Meta's own delivery state. The old code printed a fixed "Healthy" for every
+        // row and styled a 'Watch' value the server never produced, so the column said
+        // the same thing whether a campaign was running, paused or rejected.
+        const status = campaign.status || 'Unknown';
+        const raw = String(campaign.effective_status || '').toUpperCase();
+        const attention = raw && raw !== 'ACTIVE';
         return `
           <td>
-            <span class="campaign-status ${status === 'Watch' ? 'attention' : ''}">
+            <span class="campaign-status ${attention ? 'attention' : ''}">
               ${escapeHtml(status)}
             </span>
           </td>

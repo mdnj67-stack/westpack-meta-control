@@ -163,6 +163,7 @@ function createMetaSnapshotFetchers({
             "date_start",
             "spend",
             "impressions",
+            "reach",
             "inline_link_clicks",
             "actions",
             "action_values"
@@ -340,10 +341,77 @@ function createMetaSnapshotFetchers({
     });
   }
 
+  // Reach is a count of distinct people, so it cannot be added up. Summing the reach of
+  // several campaigns counts everyone who saw more than one of them once per campaign,
+  // which on this account inflated the headline figure by millions. Meta deduplicates
+  // reach only within the entity you ask for, so the honest number has to come from a
+  // query at account level - optionally narrowed to a set of campaigns, which is exactly
+  // what Ads Manager shows when you tick those campaigns.
+  async function fetchDeduplicatedReach({
+    accountId,
+    accessToken,
+    dateScope,
+    campaignIds = null,
+    scopeKey = "account",
+    insightsCacheMaxAgeMs,
+    timings,
+    bypassCache = false
+  }) {
+    if (!dateScope?.since || !dateScope?.until) {
+      return null;
+    }
+    if (Array.isArray(campaignIds) && !campaignIds.length) {
+      return null;
+    }
+
+    const params = {
+      level: "account",
+      time_range: JSON.stringify({ since: dateScope.since, until: dateScope.until }),
+      limit: "1",
+      fields: "reach,impressions,frequency,spend"
+    };
+    if (Array.isArray(campaignIds) && campaignIds.length) {
+      params.filtering = JSON.stringify([
+        { field: "campaign.id", operator: "IN", value: campaignIds }
+      ]);
+    }
+
+    const response = await getCachedMetaCollection({
+      cacheKey: buildMetaResourceCacheKey("insights_reach_" + scopeKey, [
+        accountId,
+        dateScope.since,
+        dateScope.until,
+        Array.isArray(campaignIds) ? campaignIds.slice().sort().join("_") : "all"
+      ]),
+      maxAgeMs: insightsCacheMaxAgeMs,
+      timingStore: timings,
+      bypassCache,
+      timingLabel: "reach_" + scopeKey,
+      fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, params)
+      // Optional: without it the dashboard reports that deduplicated reach is
+      // unavailable rather than falling back to a sum it knows is wrong.
+    }).catch(() => null);
+
+    const row = response?.data?.[0];
+    if (!row) {
+      return null;
+    }
+
+    return {
+      reach: Number(row.reach || 0),
+      impressions: Number(row.impressions || 0),
+      frequency: Number(row.frequency || 0),
+      spend: Number(row.spend || 0),
+      since: dateScope.since,
+      until: dateScope.until
+    };
+  }
+
   return {
     fetchAwarenessAdSetInsightsCollections,
     fetchCampaignInsightsCollections,
     fetchCustomerAcquisitionTrend,
+    fetchDeduplicatedReach,
     fetchCatalogCollections,
     fetchDashboardMetadataCollections
   };

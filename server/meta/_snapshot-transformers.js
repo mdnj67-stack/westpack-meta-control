@@ -1,3 +1,27 @@
+// Meta's effective_status is the delivery state Ads Manager shows. It is reported here
+// verbatim in readable form rather than being replaced by a fixed label, so a campaign
+// that is paused, in review or rejected cannot read as healthy.
+const DELIVERY_STATUS_LABELS = {
+  ACTIVE: "Active",
+  PAUSED: "Paused",
+  CAMPAIGN_PAUSED: "Campaign paused",
+  ADSET_PAUSED: "Ad set paused",
+  PENDING_REVIEW: "In review",
+  IN_PROCESS: "In process",
+  PENDING_BILLING_INFO: "Billing needed",
+  PREAPPROVED: "Pre-approved",
+  DISAPPROVED: "Rejected",
+  WITH_ISSUES: "With issues",
+  ARCHIVED: "Archived",
+  DELETED: "Deleted"
+};
+
+function describeDeliveryStatus(campaign = {}) {
+  const raw = String(campaign.effective_status || campaign.status || "").trim().toUpperCase();
+  if (!raw) return "Unknown";
+  return DELIVERY_STATUS_LABELS[raw] || raw.toLowerCase().replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
+}
+
 function createMetaSnapshotTransformers({
   readNumber,
   getPreferredActionValue,
@@ -18,6 +42,7 @@ function createMetaSnapshotTransformers({
   function buildMetricSeriesPoint(row = {}) {
     const spend = readNumber(row.spend || "0", 0);
     const impressions = readNumber(row.impressions || "0", 0);
+    const reach = readNumber(row.reach || "0", 0);
     const clicks = readNumber(row.inline_link_clicks || "0", 0);
     const addToCart = getPreferredActionValue(row.actions || [], addToCartActionTypes);
     const purchases = getPreferredActionValue(row.actions || [], purchaseActionTypes);
@@ -28,6 +53,7 @@ function createMetaSnapshotTransformers({
       date: row.date_start,
       spend,
       impressions,
+      reach,
       clicks,
       add_to_cart: addToCart,
       purchases,
@@ -250,7 +276,6 @@ function createMetaSnapshotTransformers({
       const incrementalPurchases = getPreferredActionValue(incrementalInsight.actions || [], purchaseActionTypes);
       const incrementalRevenue = getPreferredActionValue(incrementalInsight.action_values || [], purchaseActionTypes);
       const incrementalRoas = getRoasFromInsight(incrementalInsight || {});
-      const incrementalCpa = incrementalPurchases > 0 ? spend / incrementalPurchases : 0;
       const incrementalSeries = sortSeries(incrementalSeriesMap[campaign.id] || []);
       const incrementalMetricsAvailable = incrementalInsightsAvailable && (
         Boolean(incrementalInsightMap[campaign.id])
@@ -312,6 +337,15 @@ function createMetaSnapshotTransformers({
       const roas = spend > 0 ? revenue / spend : 0;
       const cpa = purchases > 0 ? spend / purchases : 0;
       const cpl = leads > 0 ? spend / leads : 0;
+      const incrementalCpa = incrementalPurchases > 0 ? spend / incrementalPurchases : 0;
+
+      // Meta returns the incrementality attribution window for every campaign on this
+      // account, and on inspection it returns exactly the standard figures. When that is
+      // the case the incremental lens is a set of campaigns, not a separate measurement,
+      // and the dashboard has to say so rather than implying an uplift study exists.
+      const incrementalMatchesStandard = incrementalMetricsAvailable
+        && incrementalPurchases === purchases
+        && Math.abs(incrementalRevenue - revenue) < 0.01;
       const comparisonWindow = splitSeriesByDateRange(series, dateScope.since, dateScope.until);
       const incrementalComparisonWindow = splitSeriesByDateRange(incrementalSeries, dateScope.since, dateScope.until);
 
@@ -322,7 +356,8 @@ function createMetaSnapshotTransformers({
         spend: formatCurrency(spend, accountCurrency),
         roas: roas ? roas.toFixed(2) : "",
         ctr: `${ctr.toFixed(2)}%`,
-        status: "Healthy",
+        status: describeDeliveryStatus(campaign),
+        effective_status: campaign.effective_status || campaign.status || "",
         objective: campaign.objective || "",
         daily_budget: normalizeBudgetValue(campaign.daily_budget, budgetNormalization.divisor),
         lifetime_budget: normalizeBudgetValue(campaign.lifetime_budget, budgetNormalization.divisor),
@@ -355,7 +390,8 @@ function createMetaSnapshotTransformers({
         incremental_cpa_value: incrementalCpa,
         incremental_series: incrementalComparisonWindow.current,
         incremental_comparison_window: incrementalComparisonWindow,
-        incremental_metrics_available: incrementalMetricsAvailable
+        incremental_metrics_available: incrementalMetricsAvailable,
+        incremental_matches_standard: incrementalMatchesStandard
       };
     });
 

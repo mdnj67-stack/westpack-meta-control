@@ -129,6 +129,7 @@ const {
   fetchAwarenessAdSetInsightsCollections,
   fetchCampaignInsightsCollections,
   fetchCustomerAcquisitionTrend,
+  fetchDeduplicatedReach,
   fetchCatalogCollections,
   fetchDashboardMetadataCollections
 } = createMetaSnapshotFetchers({
@@ -208,28 +209,6 @@ function isAuthorizedCronRequest(req, config = {}) {
   return authHeader === `Bearer ${config.cronSecret}`;
 }
 
-function getCopenhagenNowParts() {
-  const formatter = new Intl.DateTimeFormat("en-GB", {
-    timeZone: COPENHAGEN_TIMEZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23"
-  });
-
-  const parts = formatter.formatToParts(new Date());
-  const read = (type) => Number(parts.find((part) => part.type === type)?.value || 0);
-  return {
-    year: read("year"),
-    month: read("month"),
-    day: read("day"),
-    hour: read("hour"),
-    minute: read("minute")
-  };
-}
-
 function buildScheduleDiagnostics() {
   return {
     timezone: COPENHAGEN_TIMEZONE,
@@ -258,7 +237,7 @@ function readNumber(value, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function normalizeCurrencyCode(value, fallback = "EUR") {
+function normalizeCurrencyCode(value, fallback = "DKK") {
   const normalized = String(value || "")
     .trim()
     .toUpperCase()
@@ -283,7 +262,7 @@ function resolveAttributionOverride(campaign) {
   return null;
 }
 
-function formatCurrency(value, currency = "EUR", fallback = "--") {
+function formatCurrency(value, currency = "DKK", fallback = "--") {
   const number = Number(value);
   if (!Number.isFinite(number)) {
     return fallback;
@@ -296,18 +275,6 @@ function formatCurrency(value, currency = "EUR", fallback = "--") {
   }).format(number);
 }
 
-function getActionValue(items, actionTypes) {
-  const list = Array.isArray(items) ? items : [];
-  const types = Array.isArray(actionTypes) ? actionTypes : [actionTypes];
-
-  return types.reduce((sum, type) => {
-    const match = list.find((entry) => entry.action_type === type);
-    if (!match || match.value == null) {
-      return sum;
-    }
-    return sum + readNumber(match.value, 0);
-  }, 0);
-}
 
 function getPreferredActionValue(items, actionTypes) {
   const list = Array.isArray(items) ? items : [];
@@ -554,6 +521,8 @@ function buildQualityWarnings({
   incrementalNamedCount = 0,
   attributionOverlapCount = 0,
   nonNamedIncrementalMetricsCount = 0,
+  incrementalMatchingStandardCount = 0,
+  incrementalLensCampaignCount = 0,
   campaignSpendTotal = 0,
   awarenessCampaignSpendTotal = 0,
   awarenessAdSetSpendTotal = 0,
@@ -639,6 +608,17 @@ function buildQualityWarnings({
     warnings.push(`Incremental insight rows existed for ${nonNamedIncrementalMetricsCount} non-'inkrementel' conversion campaigns and were kept out of the incremental lens.`);
   }
 
+  // The incremental lens is the three campaigns the marketing team tags 'Inkrementel'.
+  // That grouping is deliberate and correct. What is not guaranteed is that Meta returns
+  // a different measurement for them: when the incrementality attribution window gives
+  // back the standard figures, the lens is a view of those campaigns and nothing more,
+  // and saying otherwise would present an uplift study that does not exist.
+  if (incrementalLensCampaignCount > 0 && incrementalMatchingStandardCount >= incrementalLensCampaignCount) {
+    warnings.push(
+      `Meta returned the same purchases and revenue for the incrementality attribution window as for standard attribution on all ${incrementalLensCampaignCount} incremental campaigns, so the incremental lens shows those campaigns under standard attribution, not a measured uplift.`
+    );
+  }
+
   return warnings;
 }
 
@@ -650,12 +630,18 @@ function buildSpendShare(value, totalSpend) {
 }
 
 function buildLensStats(campaigns, lens, dateScope, options = {}) {
-  const currency = normalizeCurrencyCode(options.currency, "EUR");
+  const currency = normalizeCurrencyCode(options.currency, "DKK");
   const comparisonWindow = buildAggregateComparisonWindow(campaigns);
   const changeWindowLabel = formatComparisonWindowLabel(dateScope?.days);
   const spend = sumMetric(campaigns, "spend_value");
-  const reach = sumMetric(campaigns, "reach_value");
   const impressions = sumMetric(campaigns, "impressions_value");
+  // Reach counts people, so adding it up across campaigns counts anyone who saw two of
+  // them twice. Meta's own deduplicated figure for this set of campaigns is used where
+  // it is available; the summed value is kept only as a labelled fallback.
+  const deduplicatedReach = readNumber(options.deduplicatedReach?.reach, 0);
+  const summedReach = sumMetric(campaigns, "reach_value");
+  const reach = deduplicatedReach > 0 ? deduplicatedReach : summedReach;
+  const reachIsDeduplicated = deduplicatedReach > 0;
   const clicks = sumMetric(campaigns, "clicks_value");
   const purchases = sumMetric(campaigns, "purchases_value");
   const revenue = sumMetric(campaigns, "revenue_value");
@@ -688,8 +674,20 @@ function buildLensStats(campaigns, lens, dateScope, options = {}) {
   if (lens === "awareness") {
     return [
       { label: spendLabel, value: formatCurrency(spend, currency), meta: "Awareness campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
-      { label: "Reach", value: String(Math.round(reach)), meta: dateScope?.label || "Selected range", change: buildWindowChange(comparisonWindow, "reach", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
-      { label: "Frequency", value: frequency ? frequency.toFixed(2) : "--", meta: "Impressions / reach", change: buildWindowChange(comparisonWindow, "frequency", { positiveDirection: "down", windowLabel: changeWindowLabel }) },
+      {
+        label: "Reach",
+        value: String(Math.round(reach)),
+        meta: reachIsDeduplicated
+          ? `People reached, deduplicated ${dateScope?.label ? "- " + dateScope.label : ""}`.trim()
+          : "Sum of campaign reach - people in more than one campaign are counted twice",
+        change: buildWindowChange(comparisonWindow, "reach", { positiveDirection: "up", windowLabel: changeWindowLabel })
+      },
+      {
+        label: "Frequency",
+        value: frequency ? frequency.toFixed(2) : "--",
+        meta: reachIsDeduplicated ? "Impressions / deduplicated reach" : "Impressions / summed reach",
+        change: buildWindowChange(comparisonWindow, "frequency", { positiveDirection: "down", windowLabel: changeWindowLabel })
+      },
       { label: "CPM", value: cpm ? formatCurrency(cpm, currency) : "--", meta: "Spend / 1,000 impressions", change: buildWindowChange(comparisonWindow, "cpm", { positiveDirection: "down", windowLabel: changeWindowLabel }) }
     ];
   }
@@ -796,7 +794,7 @@ function describeMetricDirection(previousValue, currentValue, threshold = 0.05) 
   if (previous <= 0 && current <= 0) return "flat";
   if (previous <= 0 && current > 0) return "up";
 
-  const delta = (current - previous) / Math.max(Math.abs(previous), 1);
+  const delta = (current - previous) / Math.abs(previous);
   if (Math.abs(delta) < threshold) return "flat";
   return delta > 0 ? "up" : "down";
 }
@@ -1006,7 +1004,7 @@ function buildWindowChange(series = [], metric, options = {}) {
     };
   }
 
-  const change = ((currentValue - previousValue) / Math.max(Math.abs(previousValue), 1)) * 100;
+  const change = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
   const isPositive = options.positiveDirection === "down" ? change < 0 : change > 0;
   const isNeutral = Math.abs(change) < 0.1;
 
@@ -1021,7 +1019,7 @@ function buildWindowChange(series = [], metric, options = {}) {
   };
 }
 
-function buildGeneralObjectivePerformanceRows(campaigns = [], currency = "EUR") {
+function buildGeneralObjectivePerformanceRows(campaigns = [], currency = "DKK") {
   const buckets = splitByCategory(campaigns);
   const objectiveGroups = [
     {
@@ -1080,7 +1078,8 @@ function buildGeneralObjectivePerformanceRows(campaigns = [], currency = "EUR") 
   });
 }
 
-function buildTrendCards(campaigns = [], lens = "general", dateScope = null, currency = "EUR") {
+function buildTrendCards(campaigns = [], lens = "general", dateScope = null, currency = "DKK", options = {}) {
+  const deduplicatedReachTotal = readNumber(options.deduplicatedReach?.reach, 0);
   const trendDates = (campaigns || [])
     .flatMap((campaign) => campaign.series || [])
     .map((point) => point.date)
@@ -1118,11 +1117,11 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         meta,
         value: totalSpend > 0 ? formatDashboardNumber(totalRevenue / totalSpend, 2) : "--",
         tone: "conversion",
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => {
-          const spend = readNumber(point.spend, 0);
-          const revenue = readNumber(point.revenue, 0);
-          return spend > 0 ? revenue / spend : 0;
-        }))
+        ...withComparison(buildDerivedSeriesTotals(
+          campaigns,
+          (point) => readNumber(point.revenue, 0),
+          (point) => readNumber(point.spend, 0)
+        ))
       },
       {
         title: "Objective performance",
@@ -1148,8 +1147,8 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       {
         title: "Reach delivery",
         meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "reach_value"), 0),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.impressions || 0)),
+        value: formatDashboardNumber(deduplicatedReachTotal > 0 ? deduplicatedReachTotal : sumMetric(campaigns, "reach_value"), 0),
+        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.reach || 0)),
         tone: "awareness",
         hero: true
       },
@@ -1157,21 +1156,28 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "CPM trend",
         meta,
         value: impressions > 0 ? formatCurrency((spend / impressions) * 1000, currency) : "--",
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => {
-          const pointImpressions = readNumber(point.impressions, 0);
-          const pointSpend = readNumber(point.spend, 0);
-          return pointImpressions > 0 ? (pointSpend / pointImpressions) * 1000 : 0;
-        })),
+        ...withComparison(buildDerivedSeriesTotals(
+          campaigns,
+          (point) => readNumber(point.spend, 0) * 1000,
+          (point) => readNumber(point.impressions, 0)
+        )),
         tone: "awareness"
       },
       {
         title: "Frequency trend",
         meta,
-        value: formatDashboardNumber(sumMetric(campaigns, "frequency_value") / Math.max(1, campaigns.length), 2),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point, campaign) => {
-          const reach = readNumber(point.reach || campaign.reach_value, 0);
-          return reach > 0 ? readNumber(point.impressions, 0) / reach : 0;
-        })),
+        value: (() => {
+          // An unweighted mean of per-campaign frequency, divided by every campaign
+          // including the ones that never delivered, is not this set's frequency.
+          const totalImpressions = sumMetric(campaigns, "impressions_value");
+          const totalReach = deduplicatedReachTotal > 0 ? deduplicatedReachTotal : sumMetric(campaigns, "reach_value");
+          return totalReach > 0 ? formatDashboardNumber(totalImpressions / totalReach, 2) : "--";
+        })(),
+        ...withComparison(buildDerivedSeriesTotals(
+          campaigns,
+          (point) => readNumber(point.impressions, 0),
+          (point) => readNumber(point.reach, 0)
+        )),
         tone: "awareness"
       }
     ];
@@ -1202,22 +1208,22 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "CPL trend",
         meta,
         value: totalLeads > 0 ? formatCurrency(totalSpend / totalLeads, currency) : "--",
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => {
-          const leads = readNumber(point.leads, 0);
-          const spend = readNumber(point.spend, 0);
-          return leads > 0 ? spend / leads : 0;
-        })),
+        ...withComparison(buildDerivedSeriesTotals(
+          campaigns,
+          (point) => readNumber(point.spend, 0),
+          (point) => readNumber(point.leads, 0)
+        )),
         tone: "leads"
       },
       {
         title: "CTR trend",
         meta,
         value: totalImpressions > 0 ? `${((totalClicks / totalImpressions) * 100).toFixed(2)}%` : "--",
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => {
-          const impressions = readNumber(point.impressions, 0);
-          const clicks = readNumber(point.clicks, 0);
-          return impressions > 0 ? (clicks / impressions) * 100 : 0;
-        })),
+        ...withComparison(buildDerivedSeriesTotals(
+          campaigns,
+          (point) => readNumber(point.clicks, 0) * 100,
+          (point) => readNumber(point.impressions, 0)
+        )),
         tone: "leads"
       }
     ];
@@ -1276,7 +1282,8 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   ];
 }
 
-function buildOverviewCards(campaigns = [], currency = "EUR") {
+function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {
+  const deduplicatedAwarenessReach = readNumber(options.deduplicatedReach?.reach, 0);
   const buckets = splitByCategory(campaigns);
   const conversionBuckets = splitConversionByAttribution(buckets.conversion);
   const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
@@ -1299,7 +1306,7 @@ function buildOverviewCards(campaigns = [], currency = "EUR") {
     {
       key: "awareness",
       meta: [`${buckets.awareness.length} campaigns in lens`, spendShare(sumMetric(buckets.awareness, "spend_value"))].filter(Boolean).join(" · "),
-      metric: formatDashboardNumber(sumMetric(buckets.awareness, "reach_value"), 0),
+      metric: formatDashboardNumber(deduplicatedAwarenessReach > 0 ? deduplicatedAwarenessReach : sumMetric(buckets.awareness, "reach_value"), 0),
       items: buildTopItems(buckets.awareness, "reach_value", (value) => `${formatDashboardNumber(value, 0)} reach`)
     },
     {
@@ -1323,7 +1330,8 @@ function buildOverviewCards(campaigns = [], currency = "EUR") {
   ];
 }
 
-function buildHeroPanelItems(campaigns = [], lens = "general", currency = "EUR", dateScope = null) {
+function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK", dateScope = null, options = {}) {
+  const deduplicatedHeroReach = readNumber(options.deduplicatedReach?.reach, 0);
   const series = buildAggregateSeries(campaigns);
   const comparisonWindow = buildAggregateComparisonWindow(campaigns);
   const changeWindowLabel = formatComparisonWindowLabel(dateScope?.days);
@@ -1332,7 +1340,7 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "EUR",
   const purchases = computeAggregateMetric(series, "purchases");
   const roas = computeAggregateMetric(series, "roas");
   const cpa = computeAggregateMetric(series, "cpa");
-  const reach = sumMetric(campaigns, "reach_value");
+  const reach = deduplicatedHeroReach > 0 ? deduplicatedHeroReach : sumMetric(campaigns, "reach_value");
   const leads = sumMetric(campaigns, "leads_value");
   const cpl = computeAggregateMetric(series, "cpl");
   const cpm = computeAggregateMetric(series, "cpm");
@@ -1487,7 +1495,7 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
     isCloseEnough(expectedSpendTotal, splitSpendSum) ? "pass" : "fail",
     isCloseEnough(expectedSpendTotal, splitSpendSum)
       ? "General objective spend split reconciles to the total spend."
-      : `Expected ${formatCurrency(expectedSpendTotal, dashboard?.currency || "EUR")} but summed ${formatCurrency(splitSpendSum, dashboard?.currency || "EUR")}.`,
+      : `Expected ${formatCurrency(expectedSpendTotal, dashboard?.currency || "DKK")} but summed ${formatCurrency(splitSpendSum, dashboard?.currency || "DKK")}.`,
     {
       expected: expectedSpendTotal,
       actual: splitSpendSum,
@@ -1501,7 +1509,7 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
     isCloseEnough(expectedBudgetTotal, splitBudgetSum) ? "pass" : "fail",
     isCloseEnough(expectedBudgetTotal, splitBudgetSum)
       ? "Objective planned budget split reconciles to the planned total."
-      : `Expected ${formatCurrency(expectedBudgetTotal, dashboard?.currency || "EUR")} but summed ${formatCurrency(splitBudgetSum, dashboard?.currency || "EUR")}.`,
+      : `Expected ${formatCurrency(expectedBudgetTotal, dashboard?.currency || "DKK")} but summed ${formatCurrency(splitBudgetSum, dashboard?.currency || "DKK")}.`,
     {
       expected: expectedBudgetTotal,
       actual: splitBudgetSum,
@@ -1585,9 +1593,32 @@ function startOfMonth(date) {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
 }
 
-function buildPresetRange(preset) {
-  const today = new Date();
-  const todayUtc = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+function resolveTodayInTimeZone(timeZone = "", now = new Date()) {
+  if (!timeZone) {
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  }
+  try {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(now);
+    const read = (type) => Number(parts.find((part) => part.type === type)?.value || 0);
+    const year = read("year");
+    const month = read("month");
+    const day = read("day");
+    if (!year || !month || !day) {
+      throw new Error("incomplete parts");
+    }
+    return new Date(Date.UTC(year, month - 1, day));
+  } catch (error) {
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  }
+}
+
+function buildPresetRange(preset, timeZone = "") {
+  const todayUtc = resolveTodayInTimeZone(timeZone);
 
   if (preset === "today") {
     return { since: formatIsoDate(todayUtc), until: formatIsoDate(todayUtc), label: "Today" };
@@ -1621,7 +1652,7 @@ function formatScopeLabel(since, until, fallback) {
   return `${formatter.format(sinceDate)} - ${formatter.format(untilDate)}`;
 }
 
-function buildDateScope(query = {}) {
+function buildDateScope(query = {}, timeZone = "") {
   const preset = String(query.preset || "last_7d");
   const from = String(query.from || "");
   const to = String(query.to || "");
@@ -1651,7 +1682,7 @@ function buildDateScope(query = {}) {
     };
   }
 
-  const range = buildPresetRange(preset);
+  const range = buildPresetRange(preset, timeZone);
   const sinceDate = parseIsoDate(range.since);
   const untilDate = parseIsoDate(range.until);
   const diffDays = sinceDate && untilDate
@@ -1753,11 +1784,10 @@ module.exports = async (req, res) => {
     healthOnly = String(req.query?.health || "") === "1";
     catalogOnly = String(req.query?.catalog || "") === "1";
     forceRefresh = String(req.query?.force || "") === "1";
-    dateScope = buildDateScope(req.query || {});
-    comparisonDateScope = buildComparisonDateScope(dateScope);
-    snapshotCacheKey = buildSnapshotCacheKey(dateScope);
-
     const accountId = ensureAccountId(config.metaAdAccountId);
+    // The account is read first because its timezone decides what "today" means to Meta.
+    // Building the date range before knowing that produced ranges shifted by most of a
+    // day against the data they asked for.
     const account = await metaGet(
       `/${accountId}`,
       config.metaAccessToken,
@@ -1768,7 +1798,12 @@ module.exports = async (req, res) => {
         maxRetries: healthOnly ? 1 : 4
       }
     );
-    const accountCurrency = normalizeCurrencyCode(account.currency, "EUR");
+    const accountCurrency = normalizeCurrencyCode(account.currency, "DKK");
+    const accountTimeZone = String(account.timezone_name || "").trim();
+
+    dateScope = buildDateScope(req.query || {}, accountTimeZone);
+    comparisonDateScope = buildComparisonDateScope(dateScope);
+    snapshotCacheKey = buildSnapshotCacheKey(dateScope);
 
     if (healthOnly) {
       sendMetaHealthOk({
@@ -1938,6 +1973,28 @@ module.exports = async (req, res) => {
         .filter(Boolean)
     );
 
+    const [accountReach, awarenessReach] = await Promise.all([
+      fetchDeduplicatedReach({
+        accountId,
+        accessToken: config.metaAccessToken,
+        dateScope,
+        scopeKey: "account",
+        insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+        timings,
+        bypassCache: forceRefresh
+      }).catch(() => null),
+      fetchDeduplicatedReach({
+        accountId,
+        accessToken: config.metaAccessToken,
+        dateScope,
+        campaignIds: Array.from(awarenessCampaignIds),
+        scopeKey: "awareness",
+        insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+        timings,
+        bypassCache: forceRefresh
+      }).catch(() => null)
+    ]);
+
     let aggregatedAdSetInsightsResponse = { data: [], pageCount: 0 };
     let dailyAdSetInsightsResponse = { data: [], pageCount: 0 };
     if (awarenessCampaignIds.size > 0) {
@@ -2040,6 +2097,7 @@ module.exports = async (req, res) => {
       customerConversionActionTypes,
       acquisitionTrendRows: acquisitionTrendResponse?.data || [],
       accountTimezone: account.timezone_name || "",
+      deduplicatedReach: { account: accountReach, awareness: awarenessReach },
       awarenessUsingAdSetInsights,
       totalSpend,
       dateScope,

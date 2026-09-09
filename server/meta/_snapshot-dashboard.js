@@ -85,6 +85,7 @@ function createMetaSnapshotDashboardBuilder({
     customerConversionActionTypes = {},
     acquisitionTrendRows = [],
     accountTimezone = "",
+    deduplicatedReach = null,
     awarenessUsingAdSetInsights = 0,
     totalSpend = 0,
     dateScope,
@@ -122,6 +123,9 @@ function createMetaSnapshotDashboardBuilder({
     const incrementalNamedCount = conversionBuckets.incremental.filter((campaign) => hasIncrementalNameTag(campaign?.name)).length;
     const nonNamedIncrementalMetricsCount = conversionBuckets.standard.filter((campaign) => {
       return campaign?.incremental_metrics_available;
+    }).length;
+    const incrementalMatchingStandardCount = incrementalLensCampaigns.filter((campaign) => {
+      return campaign?.incremental_matches_standard;
     }).length;
     const budgetCampaigns = buildBudgetCampaigns({
       budgetCampaignsRaw,
@@ -171,6 +175,8 @@ function createMetaSnapshotDashboardBuilder({
       incrementalNamedCount,
       attributionOverlapCount: attributionOverlapIds.length,
       nonNamedIncrementalMetricsCount,
+      incrementalMatchingStandardCount,
+      incrementalLensCampaignCount: incrementalLensCampaigns.length,
       campaignSpendTotal: totalSpend,
       awarenessCampaignSpendTotal,
       awarenessAdSetSpendTotal,
@@ -188,7 +194,10 @@ function createMetaSnapshotDashboardBuilder({
           currency: accountCurrency,
           generalSpendDistribution
         }),
-        awareness: buildLensStats(buckets.awareness, "awareness", dateScope, { currency: accountCurrency }),
+        awareness: buildLensStats(buckets.awareness, "awareness", dateScope, {
+          currency: accountCurrency,
+          deduplicatedReach: deduplicatedReach?.awareness || null
+        }),
         leads: buildLensStats(buckets.leads, "leads", dateScope, { currency: accountCurrency }),
         conversion_standard: buildLensStats(conversionBuckets.standard, "conversion_standard", dateScope, { currency: accountCurrency }),
         conversion_incremental: buildLensStats(incrementalLensCampaigns, "conversion_incremental", dateScope, { currency: accountCurrency })
@@ -203,19 +212,25 @@ function createMetaSnapshotDashboardBuilder({
       visuals: {
         heroPanelByLens: {
           general: buildHeroPanelItems(enrichedCampaigns, "general", accountCurrency, dateScope),
-          awareness: buildHeroPanelItems(buckets.awareness, "awareness", accountCurrency, dateScope),
+          awareness: buildHeroPanelItems(buckets.awareness, "awareness", accountCurrency, dateScope, {
+            deduplicatedReach: deduplicatedReach?.awareness || null
+          }),
           leads: buildHeroPanelItems(buckets.leads, "leads", accountCurrency, dateScope),
           conversion_standard: buildHeroPanelItems(conversionBuckets.standard, "conversion_standard", accountCurrency, dateScope),
           conversion_incremental: buildHeroPanelItems(incrementalLensCampaigns, "conversion_incremental", accountCurrency, dateScope)
         },
         trendCardsByLens: {
           general: buildTrendCards(enrichedCampaigns, "general", dateScope, accountCurrency),
-          awareness: buildTrendCards(buckets.awareness, "awareness", dateScope, accountCurrency),
+          awareness: buildTrendCards(buckets.awareness, "awareness", dateScope, accountCurrency, {
+            deduplicatedReach: deduplicatedReach?.awareness || null
+          }),
           leads: buildTrendCards(buckets.leads, "leads", dateScope, accountCurrency),
           conversion_standard: buildTrendCards(conversionBuckets.standard, "conversion_standard", dateScope, accountCurrency),
           conversion_incremental: buildTrendCards(incrementalLensCampaigns, "conversion_incremental", dateScope, accountCurrency)
         },
-        overviewCards: buildOverviewCards(enrichedCampaigns, accountCurrency)
+        overviewCards: buildOverviewCards(enrichedCampaigns, accountCurrency, {
+          deduplicatedReach: deduplicatedReach?.awareness || null
+        })
       },
       currency: accountCurrency,
       quality: {
@@ -235,6 +250,9 @@ function createMetaSnapshotDashboardBuilder({
         activeAdCount: activeAds.length,
         activeAdSetCount: adSets.length,
         awarenessUsingAdSetInsights,
+        // Meta deduplicates reach only inside the entity you query, so these come from
+        // account-level queries rather than from adding campaign reach together.
+        deduplicatedReach,
         reconciliation: {
           campaignSpendTotal: totalSpend,
           awarenessCampaignSpendTotal,
@@ -245,7 +263,8 @@ function createMetaSnapshotDashboardBuilder({
           incrementalCount: incrementalLensCampaigns.length,
           overlapCount: attributionOverlapIds.length,
           overlapCampaignIds: attributionOverlapIds,
-          nonNamedIncrementalMetricsCount
+          nonNamedIncrementalMetricsCount,
+          incrementalMatchingStandardCount
         },
         pagination: {
           campaignsPages: campaignResponse.pageCount,
