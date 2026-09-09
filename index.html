@@ -216,42 +216,9 @@
               <p id="playbook-status-sub">Where the lens stands right now.</p>
             </div>
             <div class="playbook-stack" id="playbook-status-stack">
+              <div class="lens-empty" id="dashboard-lens-empty" hidden></div>
               <div class="stats-grid" id="stats-grid"></div>
               <section class="trend-deck" id="trend-deck"></section>
-            </div>
-          </section>
-
-          <section class="playbook-section" id="playbook-risk">
-            <div class="dashboard-section-head" id="action-board-head">
-              <div>
-                <p class="section-label">Risk</p>
-                <h3 id="playbook-risk-title">What needs attention</h3>
-              </div>
-              <p id="playbook-risk-sub">Scale, protect, fix or trim without noise.</p>
-            </div>
-            <div class="playbook-stack" id="playbook-risk-stack">
-              <section class="dashboard-executive" id="dashboard-executive-section">
-                <article class="card executive-card">
-                  <div class="card-header">
-                    <div>
-                      <h3>Executive brief</h3>
-                      <p class="field-hint" id="dashboard-brief-kicker">One sentence you can act on right now.</p>
-                    </div>
-                  </div>
-                  <div class="executive-brief" id="dashboard-executive-brief"></div>
-                </article>
-
-                <article class="card pressure-card">
-                  <div class="card-header">
-                    <div>
-                      <h3>Decision buckets</h3>
-                      <p class="field-hint">Scale, protect, fix and test without digging through Meta noise.</p>
-                    </div>
-                  </div>
-                  <div class="pressure-grid" id="dashboard-pressure-grid"></div>
-                </article>
-              </section>
-              <section class="decision-board" id="decision-board" aria-label="Decision board"></section>
             </div>
           </section>
 
@@ -274,18 +241,6 @@
                   </div>
                   <div class="campaign-pulse-list" id="campaign-pulse-list"></div>
                 </section>
-
-                <section class="card">
-                  <div class="card-header">
-                    <div>
-                      <h3>Recommended moves</h3>
-                    </div>
-                    <button class="ghost-button small" id="dashboard-agent-button" type="button">Get moves</button>
-                  </div>
-                  <p class="field-hint" id="dashboard-agent-hint">Concrete budget and creative moves from the active lens.</p>
-                  <div class="agent-status" id="dashboard-agent-status" aria-live="polite"></div>
-                  <div class="agent-list" id="dashboard-agent-list"></div>
-                </section>
               </div>
 
               <div class="dashboard-grid" id="dashboard-grid">
@@ -302,14 +257,6 @@
                     </table>
                   </div>
                 </section>
-
-                <details class="card accordion" id="dashboard-signals">
-                  <summary>
-                    <span>Signals</span>
-                    <span class="accordion-meta">What matters now</span>
-                  </summary>
-                  <div class="pattern-list" id="pattern-list"></div>
-                </details>
               </div>
 
               <section class="card" id="dashboard-quality-section">

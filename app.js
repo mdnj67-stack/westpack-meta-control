@@ -179,7 +179,6 @@ import {
   requestCampaignEmailVisuals,
   requestMetaFromMaster,
   requestMetaCreativeReview,
-  requestDashboardAgent,
   requestKlaviyoAgent,
   requestKlaviyoCampaignOverview,
   requestKlaviyoCreateTemplateVariant,
@@ -217,18 +216,14 @@ import {
   renderSettings,
   renderStats,
   renderVariants,
-  renderDecisionBoard,
   renderCampaignPulse,
-  renderExecutiveBrief,
-  renderPressureGrid,
+  renderLensEmptyState,
   renderMetaQualityPanel,
   renderOverviewGrid,
   renderOverviewCustomerAcquisition,
   renderOverviewSpendSplit,
   renderTrendDeck,
   renderHeroPanel,
-  renderDashboardAgentList,
-  setDashboardAgentStatus,
   setDashboardHero,
   setStudioMode,
   setStudioStatus,
@@ -365,8 +360,6 @@ const appState = {
   currentVariantIndex: 0,
   currentVideoAnalysis: null,
   lastGeneratedSignature: "",
-  dashboardAgentItems: [],
-  dashboardAgentLastLens: "",
   dashboardIncrementalityFactor: 0.6,
   dashboardDatePreset: "last_7d",
   dashboardDateFrom: "",
@@ -13017,179 +13010,6 @@ function buildGeneralObjectivePerformanceRows(campaigns = []) {
   });
 }
 
-function buildGeneralPerformerGroups(campaigns = []) {
-  const conversionCampaigns = splitByCategory(campaigns).conversion
-    .filter((campaign) => toFiniteNumber(campaign.spend_value) > 0);
-  const topRoas = [...conversionCampaigns]
-    .filter((campaign) => toFiniteNumber(campaign.roas_value) > 0)
-    .sort((left, right) => toFiniteNumber(right.roas_value) - toFiniteNumber(left.roas_value))
-    .slice(0, 3);
-  const worstEfficiency = [...conversionCampaigns]
-    .sort((left, right) => {
-      const leftCpa = toFiniteNumber(left.cpa_value);
-      const rightCpa = toFiniteNumber(right.cpa_value);
-      const leftHasPurchases = toFiniteNumber(left.purchases_value) > 0;
-      const rightHasPurchases = toFiniteNumber(right.purchases_value) > 0;
-      if (leftHasPurchases && rightHasPurchases) return rightCpa - leftCpa;
-      if (leftHasPurchases !== rightHasPurchases) return leftHasPurchases ? -1 : 1;
-      return toFiniteNumber(left.roas_value) - toFiniteNumber(right.roas_value);
-    })
-    .slice(0, 3);
-
-  return [
-    {
-      title: "Top performers",
-      meta: "Top 3 by ROAS",
-      body: "Best conversion campaigns right now across standard and incremental combined in General.",
-      tone: "success",
-      items: topRoas.map((campaign) => ({
-        name: campaign.name,
-        metric: `ROAS ${formatDashboardNumber(toFiniteNumber(campaign.roas_value), 2)}`
-      }))
-    },
-    {
-      title: "Watchlist",
-      meta: "Bottom efficiency",
-      body: "Campaigns most likely to need budget pressure review first.",
-      tone: "danger",
-      items: worstEfficiency.map((campaign) => ({
-        name: campaign.name,
-        metric: toFiniteNumber(campaign.purchases_value) > 0
-          ? `CPA ${formatDashboardCurrency(toFiniteNumber(campaign.cpa_value))}`
-          : `ROAS ${formatDashboardNumber(toFiniteNumber(campaign.roas_value), 2)}`
-      }))
-    }
-  ].filter((group) => group.items.length > 0);
-}
-
-function buildGeneralQuickInsight(campaigns = []) {
-  const series = buildAggregateSeries(campaigns);
-  const objectiveBuckets = splitByCategory(campaigns);
-  const changeCandidates = [
-    { label: "Spend", metric: "spend", positiveDirection: "up" },
-    { label: "Revenue", metric: "revenue", positiveDirection: "up" },
-    { label: "ROAS", metric: "roas", positiveDirection: "up" },
-    { label: "Purchases", metric: "purchases", positiveDirection: "up" },
-    { label: "CPA", metric: "cpa", positiveDirection: "down" }
-  ].map((item) => ({
-    ...item,
-    summary: getWindowChangeSummary(series, item.metric, { positiveDirection: item.positiveDirection })
-  })).filter((item) => item.summary && Number.isFinite(item.summary.percentChange));
-
-  const biggestChange = [...changeCandidates].sort((left, right) => {
-    return Math.abs(right.summary.percentChange) - Math.abs(left.summary.percentChange);
-  })[0];
-
-  const objectiveDriver = Object.entries(objectiveBuckets)
-    .map(([key, bucketCampaigns]) => ({
-      key,
-      summary: getWindowChangeSummary(buildAggregateSeries(bucketCampaigns), "spend", { positiveDirection: "up" })
-    }))
-    .filter((item) => item.summary && Number.isFinite(item.summary.percentChange))
-    .sort((left, right) => Math.abs(right.summary.percentChange) - Math.abs(left.summary.percentChange))[0];
-
-  const directionWord = biggestChange?.summary?.direction === "down"
-    ? "down"
-    : biggestChange?.summary?.direction === "flat"
-      ? "flat"
-      : "up";
-  const body = biggestChange
-    ? `${biggestChange.label} ${directionWord} ${Math.abs(biggestChange.summary.percentChange).toFixed(1)}% vs previous period${objectiveDriver ? `, driven most by ${resolveObjectiveGroupLabel(objectiveDriver.key)}.` : "."}`
-    : `${getDashboardDateLabel()}: not enough prior-period data to highlight a meaningful change yet.`;
-
-  const bestObjective = [...buildGeneralObjectivePerformanceRows(campaigns)]
-    .sort((left, right) => {
-      const leftMetric = left.key === "conversion"
-        ? parseFloat(left.metricValue)
-        : left.key === "awareness"
-          ? -parseCurrencyValue(left.metricValue)
-          : -parseCurrencyValue(left.metricValue);
-      const rightMetric = right.key === "conversion"
-        ? parseFloat(right.metricValue)
-        : right.key === "awareness"
-          ? -parseCurrencyValue(right.metricValue)
-          : -parseCurrencyValue(right.metricValue);
-      return rightMetric - leftMetric;
-    })[0];
-
-  return {
-    kicker: "Quick insight",
-    headline: "Biggest shift right now",
-    body,
-    points: [
-      {
-        label: "Current spend",
-        value: formatDashboardCurrency(computeAggregateMetric(series, "spend")),
-        meta: getDashboardDateLabel()
-      },
-      {
-        label: "Largest objective move",
-        value: objectiveDriver ? resolveObjectiveGroupLabel(objectiveDriver.key) : "--",
-        meta: objectiveDriver?.summary?.value || "No comparable period"
-      },
-      {
-        label: "Best objective snapshot",
-        value: bestObjective ? bestObjective.label : "--",
-        meta: bestObjective ? `${bestObjective.metricLabel} ${bestObjective.metricValue}` : "No objective data"
-      }
-    ]
-  };
-}
-
-function describeMetricDirection(previousValue, currentValue, threshold = 0.05) {
-  const previous = toFiniteNumber(previousValue);
-  const current = toFiniteNumber(currentValue);
-
-  if (previous <= 0 && current <= 0) {
-    return "flat";
-  }
-  if (previous <= 0 && current > 0) {
-    return "up";
-  }
-
-  const delta = (current - previous) / Math.max(Math.abs(previous), 1);
-  if (Math.abs(delta) < threshold) {
-    return "flat";
-  }
-
-  return delta > 0 ? "up" : "down";
-}
-
-function buildMetricClause(label, previousValue, currentValue) {
-  return `${label} ${describeMetricDirection(previousValue, currentValue)}`;
-}
-
-function buildLensSummarySentence(lens, campaigns = []) {
-  const rangeLabel = getDashboardDateLabel();
-  const series = buildAggregateSeries(campaigns);
-  const { previous, current } = splitAggregateSeries(series);
-
-  if (!current.length) {
-    return `${rangeLabel}: no meaningful data in the selected scope.`;
-  }
-
-  if (lens === "awareness") {
-    return `${rangeLabel}: ${buildMetricClause("spend", computeAggregateMetric(previous, "spend"), computeAggregateMetric(current, "spend"))}, ${buildMetricClause("CPM", computeAggregateMetric(previous, "cpm"), computeAggregateMetric(current, "cpm"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  if (lens === "leads") {
-    return `${rangeLabel}: ${buildMetricClause("lead volume", computeAggregateMetric(previous, "leads"), computeAggregateMetric(current, "leads"))}, ${buildMetricClause("CPL", computeAggregateMetric(previous, "cpl"), computeAggregateMetric(current, "cpl"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  if (lens === "conversion_standard" || lens === "conversion_incremental") {
-    return `${rangeLabel}: ${buildMetricClause("purchases", computeAggregateMetric(previous, "purchases"), computeAggregateMetric(current, "purchases"))}, ${buildMetricClause("CPA", computeAggregateMetric(previous, "cpa"), computeAggregateMetric(current, "cpa"))}, ${buildMetricClause("ROAS", computeAggregateMetric(previous, "roas"), computeAggregateMetric(current, "roas"))}, and ${buildMetricClause("CTR", computeAggregateMetric(previous, "ctr"), computeAggregateMetric(current, "ctr"))}.`;
-  }
-
-  const buckets = splitByCategory(campaigns);
-  const conversionBuckets = splitConversionByAttribution(buckets.conversion);
-  const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
-  const awareness = splitAggregateSeries(buildAggregateSeries(buckets.awareness));
-  const leads = splitAggregateSeries(buildAggregateSeries(buckets.leads));
-  const standard = splitAggregateSeries(buildAggregateSeries(conversionBuckets.standard));
-  const incremental = splitAggregateSeries(buildAggregateSeries(incrementalCampaigns));
-
-  return `${rangeLabel}: awareness ${buildMetricClause("CPM", computeAggregateMetric(awareness.previous, "cpm"), computeAggregateMetric(awareness.current, "cpm"))}, leads ${buildMetricClause("CPL", computeAggregateMetric(leads.previous, "cpl"), computeAggregateMetric(leads.current, "cpl"))}, standard conversion ${buildMetricClause("ROAS", computeAggregateMetric(standard.previous, "roas"), computeAggregateMetric(standard.current, "roas"))}, and incremental ${buildMetricClause("ROAS", computeAggregateMetric(incremental.previous, "roas"), computeAggregateMetric(incremental.current, "roas"))}.`;
-}
 
 function formatShortDate(value) {
   if (!value) return "";
@@ -13551,24 +13371,8 @@ function buildGeneralTableCampaigns(campaigns, incrementalityFactor = 0.6) {
 }
 
 function buildGeneralDashboardAnalysis(campaigns, incrementalityFactor = 0.6) {
-  const buckets = splitByCategory(campaigns);
-  const quickInsight = buildGeneralQuickInsight(campaigns);
-
   return {
-    executiveBrief: quickInsight,
-    pressureGroups: buildGeneralPerformerGroups(campaigns),
-    cards: [],
     pulseRows: [],
-    signals: [
-      {
-        title: "Brand awareness spend",
-        body: `${buckets.awareness.length} campaigns contribute to the awareness objective bucket in General.`
-      },
-      {
-        title: "Conversion stays combined here",
-        body: `${buckets.conversion.length} conversion campaigns are combined only in General for objective-level spend and performance reads.`
-      }
-    ],
     tableCampaigns: buildGeneralTableCampaigns(campaigns, incrementalityFactor)
   };
 }
@@ -13780,9 +13584,7 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
 
   if (!prepared.length) {
     return {
-      cards: [],
       pulseRows: [],
-      signals: [],
       tableCampaigns: []
     };
   }
@@ -13954,216 +13756,6 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
   });
 
   const sorted = [...scored].sort((left, right) => right.score - left.score);
-  const best = sorted[0];
-  const protector = [...sorted].sort((left, right) => {
-    if (lens === "awareness") return right.reach - left.reach;
-    if (lens === "leads") return right.leads - left.leads;
-    if (lens === "conversion_incremental") return right.purchases - left.purchases;
-    return right.purchases - left.purchases;
-  })[0] || best;
-  const waste = [...scored].sort((left, right) => {
-    const leftRisk = (left.spend / maxSpend) + (lens === "awareness"
-      ? ratio(left.cpm, maxCpm)
-      : lens === "leads"
-      ? ratio(left.cpl, maxCpl)
-      : lens === "conversion_incremental"
-        ? inverseRatio(left.roas, maxRoas)
-        : inverseRatio(left.roas, maxRoas));
-    const rightRisk = (right.spend / maxSpend) + (lens === "awareness"
-      ? ratio(right.cpm, maxCpm)
-      : lens === "leads"
-      ? ratio(right.cpl, maxCpl)
-      : lens === "conversion_incremental"
-        ? inverseRatio(right.roas, maxRoas)
-        : inverseRatio(right.roas, maxRoas));
-    return rightRisk - leftRisk;
-  })[0] || best;
-  const tension = [...scored].sort((left, right) => {
-    if (lens === "awareness") return right.frequency - left.frequency;
-    if (lens === "leads") return right.cpl - left.cpl;
-    if (lens === "conversion_incremental") return right.spend - left.spend;
-    return right.cpa - left.cpa;
-  })[0] || best;
-  const nextTest = [...sorted].find((item) => item.spend < avgSpend && item.score >= 58) || sorted[Math.min(1, sorted.length - 1)] || best;
-  const summarySentence = buildLensSummarySentence(lens, campaigns);
-
-  const cards = lens === "conversion_standard"
-    ? [
-        {
-          kicker: "Scale now",
-          title: "Top efficiency signal",
-          metric: `ROAS ${formatDashboardNumber(best.roas, 2)}`,
-          body: "Best balance of return, cost efficiency and order volume in the standard view.",
-          campaign: best.campaign.name,
-          tone: "success",
-          action: "Scale"
-        },
-        {
-          kicker: "Protect",
-          title: "Volume anchor",
-          metric: `${formatDashboardNumber(protector.purchases, 0)} purchases`,
-          body: "This campaign is carrying real conversion volume and should stay stable while you test around it.",
-          campaign: protector.campaign.name,
-          tone: "success",
-          action: "Protect"
-        },
-        {
-          kicker: "Fix waste",
-          title: "Margin leak",
-          metric: formatDashboardCurrency(waste.cpa),
-          body: "High spend is not converting well enough here. Tighten creative or reduce budget before scaling elsewhere.",
-          campaign: waste.campaign.name,
-          tone: "danger",
-          action: "Fix"
-        },
-        {
-          kicker: "Test next",
-          title: "Low-risk upside",
-          metric: `ROAS ${formatDashboardNumber(nextTest.roas, 2)}`,
-          body: "Cleaner efficiency at a lower spend level. Good candidate for a controlled budget step-up.",
-          campaign: nextTest.campaign.name,
-          tone: "warning",
-          action: "Test"
-        }
-      ]
-    : lens === "conversion_incremental"
-      ? [
-          {
-            kicker: "Scale now",
-            title: "Best incremental set efficiency",
-            metric: `ROAS ${formatDashboardNumber(best.roas, 2)}`,
-            body: "Strongest efficiency inside the campaigns explicitly separated into the incremental lens.",
-            campaign: best.campaign.name,
-            tone: "success",
-            action: "Scale"
-          },
-          {
-            kicker: "Protect",
-            title: "Volume anchor",
-            metric: `${formatDashboardNumber(protector.purchases, 0)} purchases`,
-            body: "This campaign is carrying the most conversion volume inside the incremental lens.",
-            campaign: protector.campaign.name,
-            tone: "success",
-            action: "Protect"
-          },
-          {
-            kicker: "Challenge",
-            title: "Budget under pressure",
-            metric: `CPA ${formatDashboardCurrency(waste.cpa)}`,
-            body: "Spend is outpacing return in this separated campaign set. Audit here first.",
-            campaign: waste.campaign.name,
-            tone: "danger",
-            action: "Question"
-          },
-          {
-            kicker: "Prove next",
-            title: "Next budget test",
-            metric: `ROAS ${formatDashboardNumber(nextTest.roas, 2)}`,
-            body: "Cleaner efficiency at lower spend. Good candidate for the next measured expansion in the incremental set.",
-            campaign: nextTest.campaign.name,
-            tone: "warning",
-            action: "Prove"
-          }
-        ]
-      : lens === "leads"
-        ? [
-            {
-              kicker: "Scale leads",
-              title: "Best lead efficiency",
-              metric: `${formatDashboardNumber(best.leads, 0)} leads`,
-              body: "Highest lead volume with a sane CPL. This is where budget increases belong first.",
-              campaign: best.campaign.name,
-              tone: "success",
-              action: "Scale"
-            },
-            {
-              kicker: "Protect",
-              title: "Lead volume anchor",
-              metric: `CPL ${formatDashboardCurrency(protector.cpl)}`,
-              body: "This campaign is carrying lead volume. Keep it stable while you iterate creatives elsewhere.",
-              campaign: protector.campaign.name,
-              tone: "success",
-              action: "Protect"
-            },
-            {
-              kicker: "Fix waste",
-              title: "CPL too high",
-              metric: `CPL ${formatDashboardCurrency(waste.cpl)}`,
-              body: "Spend is not producing enough qualified leads here. Tighten messaging or reduce budget.",
-              campaign: waste.campaign.name,
-              tone: "danger",
-              action: "Fix"
-            },
-            {
-              kicker: "Test next",
-              title: "Next efficiency test",
-              metric: `CPL ${formatDashboardCurrency(nextTest.cpl)}`,
-              body: "Smaller budget with enough efficiency to justify a controlled step-up test.",
-              campaign: nextTest.campaign.name,
-              tone: "warning",
-              action: "Test"
-            }
-          ]
-      : [
-          {
-            kicker: "Scale reach",
-            title: "Best awareness balance",
-            metric: formatDashboardNumber(best.reach, 0),
-            body: "This campaign combines strong reach with controlled cost and acceptable repetition.",
-            campaign: best.campaign.name,
-            tone: "success",
-            action: "Scale"
-          },
-          {
-            kicker: "Protect",
-            title: "Reach anchor",
-            metric: formatDashboardCurrency(protector.cpm),
-            body: "This campaign is carrying large awareness delivery. Keep it stable while you test around it.",
-            campaign: protector.campaign.name,
-            tone: "success",
-            action: "Protect"
-          },
-          {
-            kicker: "Cut waste",
-            title: "Expensive awareness",
-            metric: formatDashboardCurrency(waste.cpm),
-            body: "Cost per thousand is too heavy for the amount of awareness being bought here.",
-            campaign: waste.campaign.name,
-            tone: "danger",
-            action: "Trim"
-          },
-          {
-            kicker: "Refresh",
-            title: "Fatigue signal",
-            metric: `${formatDashboardNumber(tension.frequency, 2)} freq`,
-            body: "This is the clearest repetition warning in the current awareness view.",
-            campaign: tension.campaign.name,
-            tone: "warning",
-            action: "Refresh"
-          }
-        ];
-
-  const signals = lens === "conversion_standard"
-    ? [
-        { title: "Scale signal", body: `${best.campaign.name} is the cleanest efficiency leader with ROAS ${formatDashboardNumber(best.roas, 2)} and ${formatDashboardNumber(best.purchases, 0)} purchases.` },
-        { title: "Waste signal", body: `${waste.campaign.name} is burning the most margin right now with CPA ${formatDashboardCurrency(waste.cpa)} on meaningful spend.` },
-        { title: "Volume anchor", body: `${protector.campaign.name} should be protected because it is carrying the strongest purchase volume in this lens.` },
-        { title: "Next test", body: `${nextTest.campaign.name} has enough efficiency to justify a controlled budget increase before broader rollout.` }
-      ]
-    : lens === "conversion_incremental"
-      ? [
-          { title: "Incremental set leader", body: `${best.campaign.name} is the strongest efficiency signal inside the incremental campaign set with ROAS ${formatDashboardNumber(best.roas, 2)}.` },
-          { title: "Volume anchor", body: `${protector.campaign.name} is carrying the biggest purchase volume inside the incremental lens.` },
-          { title: "Budget pressure", body: `${waste.campaign.name} has the clearest spend-to-return pressure inside the incremental set.` },
-          { title: "Proof candidate", body: `${nextTest.campaign.name} looks ready for the next proof-of-scale test at relatively low risk.` }
-        ]
-      : [
-          { title: "Reach leader", body: `${best.campaign.name} is currently your strongest awareness balance with high reach and better cost discipline.` },
-          { title: "CPM pressure", body: `${waste.campaign.name} is where awareness is becoming too expensive relative to the rest of the account.` },
-          { title: "Fatigue watch", body: `${tension.campaign.name} is showing the highest repetition pressure. Refresh before attention softens further.` },
-          { title: "Next scale test", body: `${nextTest.campaign.name} has enough attention quality to justify a cautious reach expansion.` }
-        ];
-
   const pulseRows = sorted.slice(0, 6).map((item) => ({
     name: item.campaign.name,
     action: item.action,
@@ -14176,232 +13768,7 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
     scorePercent: item.scorePercent
   }));
 
-  const executiveBrief = lens === "conversion_standard"
-    ? {
-        kicker: "Fast operating read",
-        headline: "Standard conversion summary",
-        body: summarySentence,
-        points: [
-          {
-            label: "Scale",
-            value: best.campaign.name,
-            meta: `ROAS ${formatDashboardNumber(best.roas, 2)}`
-          },
-          {
-            label: "Protect",
-            value: protector.campaign.name,
-            meta: `${formatDashboardNumber(protector.purchases, 0)} purchases`
-          },
-          {
-            label: "Fix",
-            value: waste.campaign.name,
-            meta: `CPA ${formatDashboardCurrency(waste.cpa)}`
-          }
-        ]
-      }
-    : lens === "conversion_incremental"
-      ? {
-          kicker: "Incremental set read",
-          headline: "Incremental conversion summary",
-          body: summarySentence,
-          points: [
-            {
-              label: "Scale",
-              value: best.campaign.name,
-              meta: `ROAS ${formatDashboardNumber(best.roas, 2)}`
-            },
-            {
-              label: "Protect",
-              value: protector.campaign.name,
-              meta: `${formatDashboardNumber(protector.purchases, 0)} purchases`
-            },
-            {
-              label: "Question",
-              value: waste.campaign.name,
-              meta: `CPA ${formatDashboardCurrency(waste.cpa)}`
-            }
-          ]
-        }
-      : lens === "leads"
-        ? {
-            kicker: "Lead gen read",
-            headline: "Lead generation summary",
-            body: summarySentence,
-            points: [
-              {
-                label: "Scale",
-                value: best.campaign.name,
-                meta: `${formatDashboardNumber(best.leads, 0)} leads`
-              },
-              {
-                label: "Protect",
-                value: protector.campaign.name,
-                meta: `CPL ${formatDashboardCurrency(protector.cpl)}`
-              },
-              {
-                label: "Fix",
-                value: waste.campaign.name,
-                meta: `CPL ${formatDashboardCurrency(waste.cpl)}`
-              }
-            ]
-          }
-        : {
-            kicker: "Awareness read",
-            headline: "Awareness summary",
-            body: summarySentence,
-            points: [
-              {
-                label: "Scale",
-                value: best.campaign.name,
-                meta: `${formatDashboardNumber(best.reach, 0)} reach`
-              },
-              {
-                label: "Refresh",
-                value: tension.campaign.name,
-                meta: `${formatDashboardNumber(tension.frequency, 2)} frequency`
-              },
-              {
-                label: "Trim",
-                value: waste.campaign.name,
-                meta: `CPM ${formatDashboardCurrency(waste.cpm)}`
-              }
-            ]
-          };
-
-  const pressureGroups = lens === "conversion_standard"
-    ? [
-        {
-          title: "Scale now",
-          meta: "Best efficiency",
-          body: "These are the cleanest campaigns to expand first.",
-          tone: "success",
-          items: sorted.filter((item) => item.action === "Scale").slice(0, 2).map((item) => ({
-            name: item.campaign.name,
-            metric: `ROAS ${formatDashboardNumber(item.roas, 2)}`
-          }))
-        },
-        {
-          title: "Protect",
-          meta: "Volume anchor",
-          body: "Keep these stable while testing around them.",
-          tone: "success",
-          items: [protector, best].slice(0, 2).map((item) => ({
-            name: item.campaign.name,
-            metric: `${formatDashboardNumber(item.purchases, 0)} purchases`
-          }))
-        },
-        {
-          title: "Fix",
-          meta: "Margin pressure",
-          body: "Too much spend for the return coming back.",
-          tone: "danger",
-          items: [waste, tension].slice(0, 2).map((item) => ({
-            name: item.campaign.name,
-            metric: `CPA ${formatDashboardCurrency(item.cpa)}`
-          }))
-        },
-        {
-          title: "Test",
-          meta: "Next move",
-          body: "Good lower-risk candidates for the next experiment.",
-          tone: "warning",
-          items: [nextTest].map((item) => ({
-            name: item.campaign.name,
-            metric: `ROAS ${formatDashboardNumber(item.roas, 2)}`
-          }))
-        }
-      ]
-    : lens === "conversion_incremental"
-      ? [
-          {
-            title: "Scale now",
-            meta: "Best efficiency",
-            body: "Highest efficiency inside the separated incremental campaign set.",
-            tone: "success",
-            items: sorted.filter((item) => item.action === "Scale").slice(0, 2).map((item) => ({
-              name: item.campaign.name,
-              metric: `ROAS ${formatDashboardNumber(item.roas, 2)}`
-            }))
-          },
-          {
-            title: "Protect",
-            meta: "Volume anchor",
-            body: "Largest purchase contributors in the incremental lens.",
-            tone: "success",
-            items: [protector, best].slice(0, 2).map((item) => ({
-              name: item.campaign.name,
-              metric: `${formatDashboardNumber(item.purchases, 0)} purchases`
-            }))
-          },
-          {
-            title: "Question",
-            meta: "Budget pressure",
-            body: "Spend that still needs to prove clean return inside this separated set.",
-            tone: "danger",
-            items: [waste].map((item) => ({
-              name: item.campaign.name,
-              metric: `CPA ${formatDashboardCurrency(item.cpa)}`
-            }))
-          },
-          {
-            title: "Prove next",
-            meta: "Upside test",
-            body: "Candidates for the next controlled budget step-up.",
-            tone: "warning",
-            items: [nextTest].map((item) => ({
-              name: item.campaign.name,
-              metric: `ROAS ${formatDashboardNumber(item.roas, 2)}`
-            }))
-          }
-        ]
-      : [
-          {
-            title: "Scale now",
-            meta: "Clean reach",
-            body: "Best campaigns to buy more awareness through.",
-            tone: "success",
-            items: sorted.filter((item) => item.action === "Scale").slice(0, 2).map((item) => ({
-              name: item.campaign.name,
-              metric: `${formatDashboardNumber(item.reach, 0)} reach`
-            }))
-          },
-          {
-            title: "Protect",
-            meta: "Stable CPM",
-            body: "Awareness anchors worth keeping steady.",
-            tone: "success",
-            items: [protector].map((item) => ({
-              name: item.campaign.name,
-              metric: `CPM ${formatDashboardCurrency(item.cpm)}`
-            }))
-          },
-          {
-            title: "Trim",
-            meta: "Cost pressure",
-            body: "Awareness that is getting too expensive.",
-            tone: "danger",
-            items: [waste].map((item) => ({
-              name: item.campaign.name,
-              metric: `CPM ${formatDashboardCurrency(item.cpm)}`
-            }))
-          },
-          {
-            title: "Refresh",
-            meta: "Fatigue risk",
-            body: "Campaigns where repetition is becoming a problem.",
-            tone: "warning",
-            items: [tension].map((item) => ({
-              name: item.campaign.name,
-              metric: `${formatDashboardNumber(item.frequency, 2)} frequency`
-            }))
-          }
-        ];
-
   return {
-    executiveBrief,
-    pressureGroups,
-    cards,
-    signals,
     pulseRows,
     tableCampaigns: sorted.map((item) => item.campaign)
   };
@@ -14433,13 +13800,8 @@ function renderPanelSafely(label, render) {
 // panel instead of throwing on a missing property.
 function emptyDashboardAnalysis() {
   return {
-    executiveBrief: null,
-    pressureGroups: [],
-    cards: [],
     pulseRows: [],
-    signals: [],
-    tableCampaigns: [],
-    quickInsight: null
+    tableCampaigns: []
   };
 }
 
@@ -14524,30 +13886,21 @@ function renderDashboard() {
 
   const overviewVisible = lens === "general";
   const isEmptyLensState = !overviewVisible && !lensHasCampaigns;
-  const decisionBoardNode = document.getElementById("decision-board");
   const dashboardPanel = document.getElementById("dashboard-panel");
-  const executiveNode = document.getElementById("dashboard-executive-section");
-  const pressureCardNode = document.querySelector(".pressure-card");
   const pulseNode = document.getElementById("campaign-pulse-list")?.closest("section.card");
-  const signalsNode = document.getElementById("dashboard-signals");
   const statsGridNode = document.getElementById("stats-grid");
   const trendDeckNode = document.getElementById("trend-deck");
   const overviewGridNode = document.getElementById("overview-grid");
-  const actionBoardHeadNode = document.getElementById("action-board-head");
   const operatorFeedHeadNode = document.getElementById("operator-feed-head");
   const decisionRailNode = document.getElementById("decision-rail");
   const dashboardGridNode = document.getElementById("dashboard-grid");
   const playbookNode = document.getElementById("playbook");
   const playbookStatusNode = document.getElementById("playbook-status");
-  const playbookRiskNode = document.getElementById("playbook-risk");
   const playbookNextNode = document.getElementById("playbook-next");
   const playbookStatusStack = document.getElementById("playbook-status-stack");
-  const playbookRiskStack = document.getElementById("playbook-risk-stack");
   const playbookNextStack = document.getElementById("playbook-next-stack");
   const playbookStatusTitle = document.getElementById("playbook-status-title");
   const playbookStatusSub = document.getElementById("playbook-status-sub");
-  const playbookRiskTitle = document.getElementById("playbook-risk-title");
-  const playbookRiskSub = document.getElementById("playbook-risk-sub");
   const playbookNextTitle = document.getElementById("playbook-next-title");
   const playbookNextSub = document.getElementById("playbook-next-sub");
 
@@ -14574,56 +13927,18 @@ function renderDashboard() {
   renderPanelSafely("Trend Deck", () => {
     renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));
   });
-  if (isEmptyLensState) {
-    const emptyState = getLensEmptyStateCopy(lens);
-    renderPanelSafely("Executive Brief", () => {
-      renderExecutiveBrief({
-        kicker: getDashboardDateLabel(),
-        headline: emptyState.headline,
-        body: emptyState.body,
-        points: [
-          {
-            label: "Current scope",
-            value: "0 campaigns",
-            meta: "Nothing is available to rank in this lens."
-          },
-          {
-            label: "Date range",
-            value: getDashboardDateLabel(),
-            meta: "The current filter returned no campaigns in this track."
-          },
-          {
-            label: "Next step",
-            value: "Review scope",
-            meta: emptyState.nextStep
-          }
-        ]
-      });
-    });
-    renderPanelSafely("Pressure Grid", () => {
-      renderPressureGrid([]);
-    });
-  } else {
-    renderPanelSafely("Executive Brief", () => {
-      renderExecutiveBrief(analysis.executiveBrief);
-    });
-    renderPanelSafely("Pressure Grid", () => {
-      renderPressureGrid(analysis.pressureGroups);
-    });
-  }
+  // An empty lens used to write its explanation into the executive brief, which was in a
+  // container the render then hid, so the screen went blank with no reason given. The
+  // message now goes to a node that is actually visible.
+  renderPanelSafely("Lens Empty State", () => {
+    renderLensEmptyState(isEmptyLensState ? getLensEmptyStateCopy(lens) : null, getDashboardDateLabel());
+  });
   renderPanelSafely("Meta Quality Panel", () => {
     renderMetaQualityPanel(buildMetaQualityCards());
-  });
-  const actionCardLimit = lens === "awareness" || lens === "leads" ? 3 : 4;
-  renderPanelSafely("Decision Board", () => {
-    renderDecisionBoard(isEmptyLensState ? [] : (analysis.cards || []).slice(0, actionCardLimit));
   });
   const pulseLimit = lens === "awareness" || lens === "leads" ? 2 : 3;
   renderPanelSafely("Campaign Pulse", () => {
     renderCampaignPulse(isEmptyLensState ? [] : (analysis.pulseRows || []).slice(0, pulseLimit));
-  });
-  renderPanelSafely("Card List", () => {
-    renderCardList("pattern-list", isEmptyLensState ? [] : analysis.signals, "pattern-item");
   });
   renderPanelSafely("Campaign Table", () => {
     renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
@@ -14639,28 +13954,11 @@ function renderDashboard() {
   if (playbookStatusNode) {
     playbookStatusNode.hidden = false;
   }
-  if (playbookRiskNode) {
-    playbookRiskNode.hidden = true;
-  }
   if (playbookNextNode) {
     playbookNextNode.hidden = overviewVisible || isEmptyLensState;
   }
-  const hasActionCards = Array.isArray(analysis.cards) && analysis.cards.length > 0;
-  const hasPressureGroups = Array.isArray(analysis.pressureGroups) && analysis.pressureGroups.length > 0;
   if (statsGridNode) {
     statsGridNode.hidden = isEmptyLensState;
-  }
-  if (decisionBoardNode) {
-    decisionBoardNode.hidden = isEmptyLensState || !hasActionCards;
-  }
-  if (actionBoardHeadNode) {
-    actionBoardHeadNode.hidden = isEmptyLensState || !hasActionCards;
-  }
-  if (executiveNode) {
-    executiveNode.hidden = lens === "general" || overviewVisible || isEmptyLensState;
-  }
-  if (pressureCardNode) {
-    pressureCardNode.hidden = isEmptyLensState || !hasPressureGroups;
   }
   if (pulseNode) {
     pulseNode.hidden = overviewVisible || isEmptyLensState;
@@ -14674,15 +13972,10 @@ function renderDashboard() {
   if (dashboardGridNode) {
     dashboardGridNode.hidden = overviewVisible || isEmptyLensState;
   }
-  if (signalsNode) {
-    signalsNode.hidden = true;
-  }
 
   const setPlaybookCopy = (copy = {}) => {
     if (playbookStatusTitle) playbookStatusTitle.textContent = copy.statusTitle || "Current position";
     if (playbookStatusSub) playbookStatusSub.textContent = copy.statusSub || "Where the lens stands right now.";
-    if (playbookRiskTitle) playbookRiskTitle.textContent = copy.riskTitle || "What needs attention";
-    if (playbookRiskSub) playbookRiskSub.textContent = copy.riskSub || "Scale, protect, fix or trim without noise.";
     if (playbookNextTitle) playbookNextTitle.textContent = copy.nextTitle || "Priority queue";
     if (playbookNextSub) playbookNextSub.textContent = copy.nextSub || "Fast reads for the next budget, creative and hygiene moves.";
   };
@@ -14691,40 +13984,30 @@ function renderDashboard() {
     general: {
       statusTitle: "General performance overview",
       statusSub: "Key KPIs first, then diagnostics, trends, spend mix and lens detail.",
-      riskTitle: "Quick insight & performers",
-      riskSub: "What changed most and which campaigns stand out right now.",
       nextTitle: "Next actions",
       nextSub: "Highest leverage moves across the account."
     },
     awareness: {
       statusTitle: "Reach status",
       statusSub: "Reach, CPM and repetition health.",
-      riskTitle: "Fatigue & cost pressure",
-      riskSub: "Where reach is getting expensive or repetitive.",
       nextTitle: "Next awareness moves",
       nextSub: "Scale, protect or trim awareness delivery."
     },
     leads: {
       statusTitle: "Lead flow",
       statusSub: "Lead volume and CPL health.",
-      riskTitle: "Lead leakage",
-      riskSub: "Where CPL or volume is breaking.",
       nextTitle: "Next lead moves",
       nextSub: "Scale, fix or test lead acquisition."
     },
     conversion_standard: {
       statusTitle: "Revenue health",
       statusSub: "ROAS and CPA clarity for standard attribution.",
-      riskTitle: "Efficiency pressure",
-      riskSub: "Where spend is leaking margin.",
       nextTitle: "Next conversion moves",
       nextSub: "Scale, protect or fix standard conversion."
     },
     conversion_incremental: {
       statusTitle: "Incremental health",
       statusSub: "Separated incremental performance only.",
-      riskTitle: "Incremental pressure",
-      riskSub: "Where uplift is weakest or unstable.",
       nextTitle: "Next incremental moves",
       nextSub: "Priority actions inside incremental campaigns."
     }
@@ -14749,17 +14032,9 @@ function renderDashboard() {
     if (overviewGridNode) overviewGridNode.hidden = true;
     if (statsGridNode) statsGridNode.hidden = isEmptyLensState;
     if (trendDeckNode) trendDeckNode.hidden = isEmptyLensState;
-    moveToStack(playbookStatusStack, isEmptyLensState ? [executiveNode] : [statsGridNode, trendDeckNode]);
+    moveToStack(playbookStatusStack, [statsGridNode, trendDeckNode]);
   }
 
-  moveToStack(
-    playbookRiskStack,
-    overviewVisible
-      ? []
-      : isEmptyLensState
-        ? []
-        : [executiveNode, actionBoardHeadNode, decisionBoardNode]
-  );
   moveToStack(
     playbookNextStack,
     isEmptyLensState ? [] : [operatorFeedHeadNode, decisionRailNode, dashboardGridNode]
@@ -14778,98 +14053,10 @@ function renderDashboard() {
         : "Conversion ranking";
   }
 
-  const incrementalControls = document.getElementById("incremental-controls");
-  if (incrementalControls) {
-    incrementalControls.hidden = true;
-  }
-
-  const agentHint = document.getElementById("dashboard-agent-hint");
-  if (agentHint) {
-    agentHint.textContent = lens === "general"
-      ? "Ask AI to compare the four lenses without mixing their metrics."
-      : lens === "awareness"
-      ? "Ask AI to prioritise awareness scaling, fatigue risk and CPM pressure."
-      : lens === "leads"
-        ? "Ask AI to sharpen lead volume, CPL pressure and the next budget move."
-      : lens === "conversion_incremental"
-        ? "Ask AI to prioritise the clearest next action inside the incremental campaign set."
-        : "Ask AI to sharpen the next budget, creative and efficiency decisions."
-  }
-
-  // Reset agent UI if lens changed.
-  const agentLensKey = lens;
-  if (appState.dashboardAgentLastLens !== agentLensKey) {
-    appState.dashboardAgentItems = [];
-    appState.dashboardAgentLastLens = agentLensKey;
-    renderPanelSafely("Dashboard Agent List", () => {
-      renderDashboardAgentList([]);
-    });
-    setDashboardAgentStatus("");
-  }
 
   // Reported once, after every panel has had its turn, so a single failure is visible
   // without hiding the panels that rendered fine.
   reportDashboardPanelFailures();
-}
-
-function buildAgentPayload(lens, analysis) {
-  const kpiGuidelines = buildKpiGuidelines(appState.campaigns || []);
-  return {
-    lens,
-    executiveBrief: analysis.executiveBrief,
-    decisionBoard: analysis.cards,
-    pressureGroups: analysis.pressureGroups,
-    signals: analysis.signals,
-    campaigns: analysis.tableCampaigns,
-    stats: appState.stats,
-    kpiGuidelines
-  };
-}
-
-function median(values = []) {
-  const sorted = values.filter((value) => Number.isFinite(value)).sort((a, b) => a - b);
-  if (!sorted.length) return 0;
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
-}
-
-function buildKpiGuidelines(campaigns = []) {
-  const buckets = splitByCategory(campaigns);
-  const conversions = splitConversionByAttribution(buckets.conversion);
-
-  const awarenessCpms = buckets.awareness.map((item) => toFiniteNumber(item.cpm_value));
-  const awarenessFreq = buckets.awareness.map((item) => toFiniteNumber(item.frequency_value));
-  const leadsCpl = buckets.leads.map((item) => toFiniteNumber(item.cpl_value));
-  const stdRoas = conversions.standard.map((item) => toFiniteNumber(item.roas_value));
-  const stdCpa = conversions.standard.map((item) => toFiniteNumber(item.cpa_value));
-  const incRoas = conversions.incremental.map((item) => toFiniteNumber(item.roas_value));
-  const incCpa = conversions.incremental.map((item) => toFiniteNumber(item.cpa_value));
-
-  const awarenessCpmMedian = median(awarenessCpms);
-  const awarenessFreqMedian = median(awarenessFreq);
-  const leadsCplMedian = median(leadsCpl);
-  const stdRoasMedian = median(stdRoas);
-  const stdCpaMedian = median(stdCpa);
-  const incRoasMedian = median(incRoas);
-  const incCpaMedian = median(incCpa);
-
-  return {
-    awareness: {
-      cpm_max: awarenessCpmMedian ? awarenessCpmMedian * 1.25 : null,
-      frequency_max: awarenessFreqMedian ? awarenessFreqMedian * 1.15 : null
-    },
-    leads: {
-      cpl_max: leadsCplMedian ? leadsCplMedian * 1.25 : null
-    },
-    conversion_standard: {
-      roas_min: stdRoasMedian ? stdRoasMedian * 0.8 : null,
-      cpa_max: stdCpaMedian ? stdCpaMedian * 1.2 : null
-    },
-    conversion_incremental: {
-      roas_min: incRoasMedian ? incRoasMedian * 0.8 : null,
-      cpa_max: incCpaMedian ? incCpaMedian * 1.2 : null
-    }
-  };
 }
 
 function getInitialPreview(campaignData, adData, liveSnapshot, aiSnapshot) {
@@ -17017,36 +16204,6 @@ function attachEvents() {
       renderDashboard();
     });
   }
-
-  document.getElementById("dashboard-agent-button")?.addEventListener("click", async () => {
-    setDashboardAgentStatus("Thinking...", "loading");
-    renderDashboardAgentList([]);
-
-    try {
-      const analysis = appState.dashboardAnalysis || buildDashboardAnalysis(
-        appState.campaigns || [],
-        appState.dashboardLens,
-        appState.dashboardIncrementalityFactor
-      );
-      const payload = buildAgentPayload(appState.dashboardLens, analysis);
-      payload.campaigns = (payload.campaigns || appState.campaigns || []).slice(0, 25);
-      payload.stats = {
-        generatedAt: new Date().toISOString(),
-        activeCampaigns: (appState.campaigns || []).length
-      };
-      const result = await requestDashboardAgent(payload);
-
-      const insights = Array.isArray(result.insights) ? result.insights : [];
-      appState.dashboardAgentItems = insights.map((item) => ({
-        title: `[${(item.priority || "medium").toUpperCase()}] ${item.title}`,
-        body: item.body
-      }));
-      setDashboardAgentStatus(`AI suggestions ready (${insights.length}).`, "success");
-      renderDashboardAgentList(appState.dashboardAgentItems);
-    } catch (error) {
-      setDashboardAgentStatus(error.message, "warning");
-    }
-  });
 
   document.querySelectorAll("[data-jump='studio']").forEach((button) => {
     button.addEventListener("click", () => {

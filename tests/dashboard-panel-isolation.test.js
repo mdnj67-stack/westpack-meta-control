@@ -39,7 +39,7 @@ test("every top-level render call inside renderDashboard is guarded", () => {
 
   // And there must actually be guarded calls - an empty function would pass the above.
   const guarded = body.filter((line) => line.includes("renderPanelSafely(")).length;
-  assert.ok(guarded >= 15, `expected the panels to be guarded, found ${guarded} guards`);
+  assert.ok(guarded >= 10, `expected the panels to be guarded, found ${guarded} guards`);
 });
 
 test("the analysis phase and the hero copy are guarded too", () => {
@@ -79,11 +79,11 @@ test("renderPanelSafely catches, records and keeps going", () => {
   assert.equal(dashboardPanelFailures[1].message, "just a string");
 
   // The fallback analysis must have every shape the renderers read.
+  // The generated-advice panels (executive brief, decision buckets, decision board,
+  // signals) were deleted, so the fallback only has to cover what still renders.
   const empty = emptyDashboardAnalysis();
-  for (const key of ["executiveBrief", "pressureGroups", "cards", "pulseRows", "signals", "tableCampaigns"]) {
+  for (const key of ["pulseRows", "tableCampaigns"]) {
     assert.ok(key in empty, `the fallback analysis is missing ${key}`);
-  }
-  for (const key of ["pressureGroups", "cards", "pulseRows", "signals", "tableCampaigns"]) {
     assert.ok(Array.isArray(empty[key]), `${key} must be an array so .slice and .map are safe`);
   }
 });

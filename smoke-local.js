@@ -2,7 +2,6 @@ const cliArgs = process.argv.slice(2);
 const baseUrl = cliArgs.find((arg) => !arg.startsWith("--")) || "http://127.0.0.1:4173";
 const defaultTimeoutMs = 8000;
 const cookieJar = [];
-const withOpenAi = cliArgs.includes("--with-openai");
 
 function parseDotEnv(content = "") {
   return String(content || "")
@@ -422,29 +421,6 @@ async function run() {
     assert(klaviyoRolloutDryRun.status === 200, `POST /api/klaviyo/push-template-rollout rollout dry-run returned ${klaviyoRolloutDryRun.status}`);
     assert(klaviyoRolloutDryRun.json?.dryRun === true, "Klaviyo rollout dry-run response did not mark itself as dryRun");
     results.push(`PASS  POST /api/klaviyo/push-template-rollout rollout dry-run -> ${klaviyoRolloutDryRun.status} (${klaviyoRolloutDryRun.durationMs}ms) :: entries=${(klaviyoRolloutDryRun.json?.results || []).length}`);
-  }
-
-  if (withOpenAi) {
-    const openAiDashboard = await request("/api/openai/dashboard-agent", {
-      method: "POST",
-      timeoutMs: 30000,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        lens: "awareness",
-        kpiGuidelines: {},
-        executiveBrief: {},
-        decisionBoard: [],
-        pressureGroups: [],
-        signals: [],
-        campaigns: [],
-        stats: {}
-      })
-    });
-    assert(openAiDashboard.status === 200, `POST /api/openai/dashboard-agent returned ${openAiDashboard.status}`);
-    assert(Array.isArray(openAiDashboard.json?.insights), "OpenAI dashboard response is missing insights");
-    results.push(`PASS  POST /api/openai/dashboard-agent -> ${openAiDashboard.status} (${openAiDashboard.durationMs}ms) :: insights=${openAiDashboard.json.insights.length}`);
   }
 
   const authLogout = await request("/api/auth/logout", {

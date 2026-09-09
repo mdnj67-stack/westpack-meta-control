@@ -291,50 +291,25 @@ export function setDashboardHero({ kicker, title, subtitle, tableTitle }) {
   if (tableTitleNode) tableTitleNode.textContent = tableTitle;
 }
 
-export function setDashboardAgentStatus(message, tone = "neutral") {
-  const node = document.getElementById("dashboard-agent-status");
+// A lens with no campaigns in the selected range needs to say so somewhere the operator
+// can actually see it. The previous version wrote this explanation into the executive
+// brief, which sat inside a container the render then hid, so the page just went quiet.
+export function renderLensEmptyState(copy = null, rangeLabel = "") {
+  const node = document.getElementById("dashboard-lens-empty");
   if (!node) return;
-  node.textContent = message || "";
-  node.dataset.tone = tone;
-}
 
-export function renderDashboardAgentList(items = []) {
-  const node = document.getElementById("dashboard-agent-list");
-  if (!node) return;
-  if (!items.length) {
+  if (!copy) {
     node.innerHTML = "";
-    return;
-  }
-  node.innerHTML = items.map((item) => `
-    <article class="agent-item">
-      <strong>${escapeHtml(item.title || "")}</strong>
-      <p>${escapeHtml(item.body || "")}</p>
-    </article>
-  `).join("");
-}
-
-export function renderDecisionBoard(cards = []) {
-  const node = document.getElementById("decision-board");
-  if (!node) return;
-  if (!itemsHaveLength(cards)) {
-    node.innerHTML = "";
+    node.hidden = true;
     return;
   }
 
-  node.innerHTML = cards.map((card) => `
-    <article class="decision-card tone-${escapeHtml(card.tone || "neutral")}" data-action="${escapeHtml((card.action || "Review").toLowerCase())}">
-      <div class="decision-card-top">
-        <span class="section-label">${escapeHtml(card.kicker || "")}</span>
-        <span class="decision-chip">${escapeHtml(card.action || "Review")}</span>
-      </div>
-      <h4>${escapeHtml(card.title || "")}</h4>
-      <div class="decision-value">${escapeHtml(card.metric || "--")}</div>
-      <p>${escapeHtml(card.body || "")}</p>
-      <div class="decision-footer">
-        <strong>${escapeHtml(card.campaign || "")}</strong>
-      </div>
-    </article>
-  `).join("");
+  node.hidden = false;
+  node.innerHTML = `
+    <h4>${escapeHtml(copy.headline || "No campaigns in this view")}</h4>
+    <p>${escapeHtml(copy.body || "")}</p>
+    <p class="lens-empty-meta">Selected range: ${escapeHtml(rangeLabel || "not set")}. ${escapeHtml(copy.nextStep || "")}</p>
+  `;
 }
 
 export function renderCampaignPulse(rows = []) {
@@ -368,65 +343,6 @@ export function renderCampaignPulse(rows = []) {
       </div>
       <div class="pulse-bar">
         <span style="width:${Math.max(6, Math.min(100, Number(row.scorePercent) || 0))}%"></span>
-      </div>
-    </article>
-  `).join("");
-}
-
-export function renderExecutiveBrief(brief) {
-  const node = document.getElementById("dashboard-executive-brief");
-  const kickerNode = document.getElementById("dashboard-brief-kicker");
-  if (!node) return;
-
-  if (!brief) {
-    node.innerHTML = "";
-    if (kickerNode) kickerNode.textContent = "";
-    return;
-  }
-
-  if (kickerNode) {
-    kickerNode.textContent = brief.kicker || "";
-  }
-
-  node.innerHTML = `
-    <div class="executive-headline">
-      <h4>${escapeHtml(brief.headline || "")}</h4>
-      <p>${escapeHtml(brief.body || "")}</p>
-    </div>
-    <div class="brief-points">
-      ${(brief.points || []).map((point) => `
-        <article class="brief-point">
-          <span>${escapeHtml(point.label || "")}</span>
-          <strong>${escapeHtml(point.value || "--")}</strong>
-          <p>${escapeHtml(point.meta || "")}</p>
-        </article>
-      `).join("")}
-    </div>
-  `;
-}
-
-export function renderPressureGrid(groups = []) {
-  const node = document.getElementById("dashboard-pressure-grid");
-  if (!node) return;
-  if (!itemsHaveLength(groups)) {
-    node.innerHTML = "";
-    return;
-  }
-
-  node.innerHTML = groups.map((group) => `
-    <article class="pressure-group tone-${escapeHtml(group.tone || "neutral")}">
-      <div class="pressure-group-top">
-        <strong>${escapeHtml(group.title || "")}</strong>
-        <span>${escapeHtml(group.meta || "")}</span>
-      </div>
-      <p>${escapeHtml(group.body || "")}</p>
-      <div class="pressure-group-list">
-        ${(group.items || []).map((item) => `
-          <div class="pressure-item">
-            <strong>${escapeHtml(item.name || "")}</strong>
-            <span>${escapeHtml(item.metric || "--")}</span>
-          </div>
-        `).join("")}
       </div>
     </article>
   `).join("");
@@ -1062,7 +978,6 @@ function formatAcqNumber(value, currency = "DKK") {
     maximumFractionDigits: 0
   }).format(number);
 }
-
 
 export function renderTrendDeck(cards = []) {
   const node = document.getElementById("trend-deck");

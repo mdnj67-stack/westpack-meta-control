@@ -441,24 +441,6 @@ export async function requestMetaConnectionStatus() {
   return payload;
 }
 
-export async function requestDashboardAgent(requestBody) {
-  const response = await authenticatedFetch("/api/openai/dashboard-agent", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  const payload = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(payload?.error || "Dashboard agent request failed.");
-  }
-
-  return payload;
-}
-
 export async function requestKlaviyoCampaignOverview(options = {}) {
   const params = new URLSearchParams();
   if (options.days) params.set("days", String(options.days));
