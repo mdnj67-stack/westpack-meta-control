@@ -206,6 +206,42 @@ Nine figures were wrong before this pass. Do not reintroduce any of them:
   inside the section the render hides there, so the first view people open was the one
   that never showed whether its own numbers could be trusted.
 
+### The account was rebuilt on 2026-09-09
+
+The Meta setup was restructured from product themes to markets. What the dashboard now
+sees, and the two defects that surfaced with it:
+
+- **Active conversion:** `Conv - 01 - DE - Inkremental`, `Conv - 02 - FR - Inkremental`,
+  `Conv - 03 - IT - Inkremental` and `Conv - 04 - EU - Standard`. The old themed
+  campaigns (Smykkekunde, Giftpackaging, Forsendelse) are paused but still carry spend in
+  a 30-day window, so they stay in the lens.
+- **The new campaigns spell it "Inkremental" with an a**, where the previous set said
+  "Inkrementel". The matcher looked for those exact words and put all three in the
+  standard lens with 216,000 DKK of monthly budget, while validation reported five passes
+  and no failures. `hasIncrementalNameTag` now matches the stem `in[kc]rement`, and a
+  conversion campaign carrying neither tag is **named** in a data-quality warning rather
+  than silently counted as standard. The team tags both sides today, so an untagged
+  conversion campaign is a real signal.
+- **`BA - LAL`** is the new active awareness campaign and carries its budget on four ad
+  sets (`LAL - DE/FR/IT/EU`, 925 DKK each) rather than on the campaign. Ad-set budgets
+  are picked up correctly; nothing needed changing there.
+- **An ad-set breakdown may never replace a campaign total unless it reconciles.** Meta's
+  campaign-level figure is authoritative and the breakdown is a convenience. BA - LAL
+  spent 38,888 DKK while its four ad sets accounted for 22,753, so the old unconditional
+  override understated awareness spend by 16,103 DKK, 16.3% of the lens, and pulled CPM
+  down with it. The override now requires agreement within 1%; otherwise campaign totals
+  stand and the panel says so. Campaigns carry `campaign_level_spend_value` from before
+  any override so the reconciliation has a real other side - the previous check summed the
+  already-overridden value and compared it against the ad-set total, the same number twice,
+  and could never fire.
+- **Whatever set of campaigns a lens shows, every figure in it must cover that same set.**
+  The deduplicated reach query was keyed on active campaigns while the lens shows active
+  or spent-in-period, so Reach described different campaigns from the Spend beside it.
+
+Checked and correct after the rebuild: all objectives map with no unclassified spend, the
+`New_customer` and `Existing_customer` conversions resolve to exactly one each, and the
+dashboard's total spend now equals the account total to the krone.
+
 ### New customers is the first-class figure
 
 New customers acquired is what the marketing department is measured on, so the dashboard
