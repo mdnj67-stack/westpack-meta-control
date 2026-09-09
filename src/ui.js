@@ -82,21 +82,12 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
         { key: 'status', label: 'Status' }
       ];
     }
-    if (lens === 'conversion_incremental') {
+    if (lens === 'conversion_incremental' || lens === 'conversion_standard') {
       return [
         { key: 'name', label: 'Campaign' },
         { key: 'spend', label: 'Spend' },
-        { key: 'purchases', label: 'Purchases' },
-        { key: 'cpa', label: 'CPA' },
-        { key: 'roas', label: 'ROAS' },
-        { key: 'status', label: 'Status' }
-      ];
-    }
-    if (lens === 'conversion_standard') {
-      return [
-        { key: 'name', label: 'Campaign' },
-        { key: 'spend', label: 'Spend' },
-        { key: 'purchases', label: 'Purchases' },
+        { key: 'newCustomers', label: 'New customers' },
+        { key: 'costPerNewCustomer', label: 'Cost / new' },
         { key: 'cpa', label: 'CPA' },
         { key: 'roas', label: 'ROAS' },
         { key: 'status', label: 'Status' }
@@ -140,6 +131,15 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
     const leadsValue = campaign.leadsValue ?? campaign.leads_value;
     const cplValue = campaign.cplValue ?? campaign.cpl_value;
     const ctrValue = campaign.ctrValue ?? campaign.ctr_value;
+    const newCustomersValue = campaign.newCustomersValue ?? campaign.new_customers_value;
+    // Spend per new customer for this campaign. Left blank rather than shown as zero when
+    // the campaign brought none, because a cost per customer of nothing is not a bargain.
+    const newCustomerCount = Number(newCustomersValue);
+    const spendNumber = Number(spendValue);
+    const costPerNewCustomerValue = Number.isFinite(newCustomerCount) && newCustomerCount > 0
+        && Number.isFinite(spendNumber)
+      ? spendNumber / newCustomerCount
+      : null;
     const categoryValue = campaign.category ?? campaign.lens ?? '';
     const primaryMetricValue = campaign.primaryMetric ?? '--';
     const efficiencyValue = campaign.efficiencyMetric ?? '--';
@@ -171,6 +171,12 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
       }
       if (col.key === 'purchases') {
         return `<td>${formatCompactNumber(purchasesValue)}</td>`;
+      }
+      if (col.key === 'newCustomers') {
+        return `<td>${formatCompactNumber(newCustomersValue)}</td>`;
+      }
+      if (col.key === 'costPerNewCustomer') {
+        return `<td>${costPerNewCustomerValue === null ? "--" : formatCurrency(costPerNewCustomerValue, currency)}</td>`;
       }
       if (col.key === 'cpa') {
         return `<td>${formatCurrency(cpaValue, currency)}</td>`;
