@@ -358,7 +358,6 @@ const appState = {
   currentVariantIndex: 0,
   currentVideoAnalysis: null,
   lastGeneratedSignature: "",
-  dashboardIncrementalityFactor: 0.6,
   dashboardDatePreset: "last_7d",
   dashboardDateFrom: "",
   dashboardDateTo: "",
@@ -12575,7 +12574,7 @@ function buildIncrementalLensCampaigns(campaigns = []) {
     }));
 }
 
-function buildDashboardStatsV2(campaigns, lens, incrementalityFactor = 0.6) {
+function buildDashboardStatsV2(campaigns, lens) {
   const spend = sumMetric(campaigns, "spend_value");
   const reach = sumMetric(campaigns, "reach_value");
   const impressions = sumMetric(campaigns, "impressions_value");
@@ -12979,7 +12978,7 @@ function getDashboardSpendLabel() {
   return `Spend (${shortLabel})`;
 }
 
-function buildTrendCards(campaigns, lens, incrementalityFactor = 0.6) {
+function buildTrendCards(campaigns, lens) {
   const trendDates = (campaigns || [])
     .flatMap((campaign) => campaign.series || [])
     .map((point) => point.date)
@@ -13238,7 +13237,7 @@ function buildTrendCards(campaigns, lens, incrementalityFactor = 0.6) {
   ];
 }
 
-function buildOverviewCards(campaigns, incrementalityFactor = 0.6) {
+function buildOverviewCards(campaigns) {
   const buckets = splitByCategory(campaigns);
   const conversionBuckets = splitConversionByAttribution(buckets.conversion);
   const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
@@ -13285,7 +13284,7 @@ function buildOverviewCards(campaigns, incrementalityFactor = 0.6) {
   ];
 }
 
-function buildGeneralTableCampaigns(campaigns, incrementalityFactor = 0.6) {
+function buildGeneralTableCampaigns(campaigns) {
   return (campaigns || [])
     .map((campaign) => {
       const category = classifyCampaign(campaign);
@@ -13322,10 +13321,10 @@ function buildGeneralTableCampaigns(campaigns, incrementalityFactor = 0.6) {
     .sort((left, right) => right.spendSort - left.spendSort);
 }
 
-function buildGeneralDashboardAnalysis(campaigns, incrementalityFactor = 0.6) {
+function buildGeneralDashboardAnalysis(campaigns) {
   return {
     pulseRows: [],
-    tableCampaigns: buildGeneralTableCampaigns(campaigns, incrementalityFactor)
+    tableCampaigns: buildGeneralTableCampaigns(campaigns)
   };
 }
 
@@ -13426,7 +13425,7 @@ function getLensEmptyStateCopy(lens) {
   };
 }
 
-function getDashboardStatsForLens(lens, campaigns, factor = 0.6) {
+function getDashboardStatsForLens(lens, campaigns) {
   const backendStats = appState.metaDashboard?.statsByLens?.[lens];
   if (Array.isArray(backendStats) && backendStats.length) {
     return backendStats;
@@ -13439,7 +13438,7 @@ function getDashboardStatsForLens(lens, campaigns, factor = 0.6) {
   if (lens === "general") {
     return [];
   }
-  return buildDashboardStatsV2(campaigns, lens, factor);
+  return buildDashboardStatsV2(campaigns, lens);
 }
 
 function toFiniteNumber(value, fallback = 0) {
@@ -13502,7 +13501,7 @@ function parseCurrencyValue(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
+function buildDashboardAnalysis(campaigns, lens) {
   const prepared = (campaigns || []).map((campaign) => {
     const spend = toFiniteNumber(campaign.spend_value);
     const reach = toFiniteNumber(campaign.reach_value);
@@ -13517,9 +13516,6 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
     const ctr = Number.isFinite(Number(campaign.ctr_value))
       ? toFiniteNumber(campaign.ctr_value)
       : parsePercentValue(campaign.ctr);
-    const incRevenue = revenue * incrementalityFactor;
-    const iroas = roas * incrementalityFactor;
-    const incPurchases = purchases * incrementalityFactor;
 
     return {
       campaign,
@@ -13533,10 +13529,7 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
       cpa,
       leads,
       cpl,
-      ctr,
-      incRevenue,
-      iroas,
-      incPurchases
+      ctr
     };
   });
 
@@ -13557,9 +13550,6 @@ function buildDashboardAnalysis(campaigns, lens, incrementalityFactor = 0.6) {
   const maxCpa = Math.max(...prepared.map((item) => item.cpa), 1);
   const maxLeads = Math.max(...prepared.map((item) => item.leads), 1);
   const maxCpl = Math.max(...prepared.map((item) => item.cpl), 1);
-  const maxIncRevenue = Math.max(...prepared.map((item) => item.incRevenue), 1);
-  const maxIroas = Math.max(...prepared.map((item) => item.iroas), 1);
-  const maxIncPurchases = Math.max(...prepared.map((item) => item.incPurchases), 1);
 
   const avgSpend = sumMetric(prepared, "spend") / prepared.length;
   const avgFreq = sumMetric(prepared, "frequency") / prepared.length;
@@ -13779,7 +13769,6 @@ function renderDashboard() {
   dashboardPanelFailures.length = 0;
   const lens = appState.dashboardLens;
   const allCampaigns = appState.campaigns || [];
-  const factor = appState.dashboardIncrementalityFactor;
   const lensCampaigns = getLensCampaigns(allCampaigns, lens);
   const lensHasCampaigns = Array.isArray(lensCampaigns) && lensCampaigns.length > 0;
   const backendTrendCards = getBackendTrendCards(lens);
@@ -13790,8 +13779,8 @@ function renderDashboard() {
   let analysis = emptyDashboardAnalysis();
   renderPanelSafely("Analysis", () => {
     analysis = lens === "general"
-      ? buildGeneralDashboardAnalysis(allCampaigns, factor)
-      : buildDashboardAnalysis(lensCampaigns, lens, factor);
+      ? buildGeneralDashboardAnalysis(allCampaigns)
+      : buildDashboardAnalysis(lensCampaigns, lens);
   });
   appState.dashboardAnalysis = analysis;
 
@@ -13872,11 +13861,11 @@ function renderDashboard() {
   });
   let renderedStats = [];
   renderPanelSafely("Stats", () => {
-    renderedStats = isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns, factor);
+    renderedStats = isEmptyLensState ? [] : getDashboardStatsForLens(lens, overviewVisible ? allCampaigns : lensCampaigns);
     renderStats(renderedStats);
   });
   renderPanelSafely("Overview Grid", () => {
-    renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns, factor), overviewVisible);
+    renderOverviewGrid(backendOverviewCards || buildOverviewCards(allCampaigns), overviewVisible);
   });
   renderPanelSafely("Overview Spend Split", () => {
     renderOverviewSpendSplit(getGeneralSpendDistributionModel(allCampaigns), overviewVisible);
@@ -13885,7 +13874,7 @@ function renderDashboard() {
     renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
   });
   renderPanelSafely("Trend Deck", () => {
-    renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens, factor)));
+    renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || buildTrendCards(overviewVisible ? allCampaigns : lensCampaigns, lens)));
   });
   // An empty lens used to write its explanation into the executive brief, which was in a
   // container the render then hid, so the screen went blank with no reason given. The
@@ -13902,7 +13891,6 @@ function renderDashboard() {
   });
   renderPanelSafely("Campaign Table", () => {
     renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
-      incrementalityFactor: factor,
       currency: appState.metaCurrency || "DKK"
     });
   });
@@ -16150,20 +16138,6 @@ function attachEvents() {
       renderDashboard();
     });
   });
-
-  const factorInput = document.getElementById("incrementality-factor");
-  const factorLabel = document.getElementById("incrementality-factor-label");
-  if (factorInput) {
-    factorInput.addEventListener("input", () => {
-      const nextPercent = Number(factorInput.value);
-      const clamped = Number.isFinite(nextPercent) ? Math.max(0, Math.min(100, nextPercent)) : 60;
-      appState.dashboardIncrementalityFactor = clamped / 100;
-      if (factorLabel) {
-        factorLabel.textContent = `${clamped}%`;
-      }
-      renderDashboard();
-    });
-  }
 
   document.querySelectorAll("[data-jump='studio']").forEach((button) => {
     button.addEventListener("click", () => {

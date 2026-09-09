@@ -69,9 +69,6 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
   if (!table) return;
   if (!head) return;
 
-  const incrementalityFactor = Number.isFinite(options.incrementalityFactor)
-    ? options.incrementalityFactor
-    : 0.6;
   const currency = String(options.currency || "DKK").trim().toUpperCase() || "DKK";
 
   const columns = (() => {
