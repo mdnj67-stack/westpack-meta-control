@@ -115,6 +115,7 @@ function createMetaSnapshotFetchers({
     dateScope,
     comparisonDateScope,
     insightsCacheMaxAgeMs,
+    incrementalInsightsCacheMaxAgeMs = insightsCacheMaxAgeMs,
     timings,
     bypassCache = false
   }) {
@@ -177,7 +178,7 @@ function createMetaSnapshotFetchers({
       }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
       getCachedMetaCollection({
         cacheKey: buildMetaResourceCacheKey("insights_incremental_agg", [accountId, dateScope.since, dateScope.until]),
-        maxAgeMs: insightsCacheMaxAgeMs,
+        maxAgeMs: incrementalInsightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
         timingLabel: "incremental_insights_aggregated",
@@ -206,7 +207,7 @@ function createMetaSnapshotFetchers({
       }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
       getCachedMetaCollection({
         cacheKey: buildMetaResourceCacheKey("insights_incremental_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
-        maxAgeMs: insightsCacheMaxAgeMs,
+        maxAgeMs: incrementalInsightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
         timingLabel: "incremental_insights_daily",

@@ -62,6 +62,11 @@ const META_INSIGHTS_CACHE_MAX_AGE_MS = 15 * 60 * 1000;
 // finished, so the series barely changes; a long TTL keeps the widest query off the
 // per-refresh path, which matters while the app is on the development access tier.
 const META_ACQUISITION_TREND_CACHE_MAX_AGE_MS = 3 * 60 * 60 * 1000;
+// Meta returns the standard figures for the incrementality attribution window on this
+// account, so these two queries change nothing on screen. They stay only to notice if
+// that ever changes, which is a property of the account's measurement setup rather than
+// of its spend, so they do not need refetching every quarter hour.
+const META_INCREMENTAL_INSIGHTS_CACHE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const META_SERVER_CRON_SCHEDULES = ["45 5 * * *"];
 const META_REQUEST_TIMEOUT_MS = 15000;
 const META_TARGET_REFRESH_SLOTS = [
@@ -1895,6 +1900,7 @@ module.exports = async (req, res) => {
       dateScope,
       comparisonDateScope,
       insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+      incrementalInsightsCacheMaxAgeMs: META_INCREMENTAL_INSIGHTS_CACHE_MAX_AGE_MS,
       timings,
       bypassCache: forceRefresh
     });
