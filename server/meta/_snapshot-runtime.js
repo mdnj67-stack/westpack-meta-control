@@ -110,6 +110,14 @@ function createMetaSnapshotRuntime({
       || text.includes("fetch failed");
   }
 
+  // Worth retrying in the next few seconds. A rate limit is not: Meta measures its
+  // account, app and user limits over minutes to an hour, so retrying inside one request
+  // cannot succeed and spends quota that the next call needs. Failing fast is also what
+  // lets the stale-cache fallback serve the last good snapshot instead of an error.
+  function isRetryableMetaError(message = "") {
+    return isTransientMetaError(message) && !isRateLimitError(message);
+  }
+
   function buildSnapshotCacheKey(scope = {}) {
     return [
       String(scope?.preset || ""),
@@ -189,7 +197,7 @@ function createMetaSnapshotRuntime({
       }
 
       const message = getMetaErrorMessage(payload, `Meta request failed for ${requestPath}.`);
-      const shouldRetry = isTransientMetaError(message) && attempt < maxRetries;
+      const shouldRetry = isRetryableMetaError(message) && attempt < maxRetries;
       if (shouldRetry) {
         const retryAfterHeader = Number(response.headers.get("retry-after"));
         const retryDelay = Number.isFinite(retryAfterHeader) && retryAfterHeader > 0
@@ -202,7 +210,7 @@ function createMetaSnapshotRuntime({
       throw new Error(message);
     } catch (error) {
       const message = error?.message || `Meta request failed for ${requestPath}.`;
-      const shouldRetry = isTransientMetaError(message) && attempt < maxRetries;
+      const shouldRetry = isRetryableMetaError(message) && attempt < maxRetries;
       if (shouldRetry) {
         await delay(1200 * (attempt + 1));
         return metaFetchJson(url, requestPath, attempt + 1, maxRetries);
@@ -259,6 +267,7 @@ function createMetaSnapshotRuntime({
     getCachedSnapshot,
     isCacheFresh,
     isRateLimitError,
+    isRetryableMetaError,
     isTransientMetaError,
     metaGet,
     metaGetAll,
