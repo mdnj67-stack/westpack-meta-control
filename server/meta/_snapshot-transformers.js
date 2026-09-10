@@ -418,7 +418,13 @@ function createMetaSnapshotTransformers({
         incremental_series: incrementalComparisonWindow.current,
         incremental_comparison_window: incrementalComparisonWindow,
         incremental_metrics_available: incrementalMetricsAvailable,
-        incremental_matches_standard: incrementalMatchesStandard
+        incremental_matches_standard: incrementalMatchesStandard,
+        // Meta's own answer to the question the campaign name has been standing in for.
+        // Ads Manager prints this in its "Attribution setting" column, where the three
+        // Inkremental campaigns read "Incremental attribution" and Conv - 04 - EU -
+        // Standard reads "7-day click". Classifying from a field the account actually
+        // reports beats classifying from a hand-typed name.
+        attribution_setting: String(insight.attribution_setting || "")
       };
     });
 

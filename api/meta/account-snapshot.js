@@ -358,10 +358,58 @@ function resolveAttributionNameTag(campaign) {
   return null;
 }
 
+// Meta's `attribution_setting`, as returned on the campaign's insights row. Only a value
+// that actually names incremental attribution is treated as a reading; anything else -
+// "7-day click", an empty string on an account that does not report it, an unfamiliar
+// phrasing - falls through to the name tag rather than being read as a denial. An absent
+// field must not silently reclassify a campaign the team has tagged.
+function resolveReportedAttribution(campaign) {
+  const setting = String(campaign?.attribution_setting || "").trim().toLowerCase();
+  if (!setting) {
+    return null;
+  }
+
+  // Meta answers with machine values, not the wording Ads Manager prints: the account
+  // returns "incrementality", "1d_view_7d_click_1d_ev", "1d_view_28d_click", "7d_click"
+  // and "multiple". Underscores count as word characters, so a word-boundary pattern
+  // around "click" matches nothing inside 7d_click_1d_ev - the first version of this did
+  // exactly that and sent every standard campaign down to the name tag instead.
+  if (/in[kc]rement/.test(setting)) {
+    return { mode: "incremental", source: "Meta attribution setting", explicit: true };
+  }
+
+  // "multiple" means this campaign's ad sets disagree with each other. That is a real
+  // answer to a different question and must not be read as standard; it falls through so
+  // the name tag can speak, and is reported if nothing else can.
+  if (setting === "multiple") {
+    return null;
+  }
+
+  // A named conversion window - any combination of Nd_click, Nd_view, Nd_ev - is a
+  // positive statement that the campaign is on standard attribution.
+  if (/\d+d_(view|click|ev)/.test(setting)) {
+    return { mode: "standard", source: "Meta attribution setting", explicit: true };
+  }
+
+  return null;
+}
+
 function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributionSpecs = []) {
   const override = resolveAttributionOverride(campaign);
   if (override) {
     return override;
+  }
+
+  // Meta's own reading comes before the campaign name. The name tag was only ever a
+  // stand-in for a field the account did not report, and this dashboard's standing rule
+  // is that a category comes from the source system wherever the source system has one.
+  //
+  // Ads Manager shows this as the "Attribution setting" column: the three Inkremental
+  // campaigns read "Incremental attribution" there while Conv - 04 - EU - Standard reads
+  // "7-day click". A hand-typed name already misfiled all three once, on a single vowel.
+  const reported = resolveReportedAttribution(campaign);
+  if (reported) {
+    return reported;
   }
 
   const nameTag = resolveAttributionNameTag(campaign);
@@ -635,7 +683,7 @@ function buildQualityWarnings({
       ? ` and ${untaggedConversionCampaigns.length - 4} more`
       : "";
     warnings.push(
-      `${untaggedConversionCampaigns.length} conversion campaign${untaggedConversionCampaigns.length === 1 ? "" : "s"} carry neither an incremental nor a standard tag in the name (${names}${remainder}), so ${untaggedConversionCampaigns.length === 1 ? "it is" : "they are"} being counted as standard. Add the tag in Ads Manager if that is wrong.`
+      `${untaggedConversionCampaigns.length} conversion campaign${untaggedConversionCampaigns.length === 1 ? "" : "s"} have no attribution setting reported by Meta and no tag in the name (${names}${remainder}), so ${untaggedConversionCampaigns.length === 1 ? "it is" : "they are"} being counted as standard. Set the attribution in Ads Manager, or tag the name, if that is wrong.`
     );
   }
 
@@ -1969,7 +2017,7 @@ module.exports = async (req, res) => {
     });
 
     const {
-      aggregatedInsightsResponse,
+      aggregatedInsightsResponse: rawAggregatedInsightsResponse,
       dailyInsightsResponse,
       aggregatedIncrementalInsightsResponse,
       dailyIncrementalInsightsResponse
@@ -1983,6 +2031,25 @@ module.exports = async (req, res) => {
       timings,
       bypassCache: forceRefresh
     });
+    // Asking for `attribution_setting` makes Meta return a row for every campaign that
+    // has ever existed on the account, because an attribution setting is configuration
+    // and exists whether or not the campaign delivered. Without this the snapshot went
+    // from 15 campaigns to 358, of which 343 were entirely empty, and every lens table
+    // filled up with campaigns that spent nothing in the range.
+    //
+    // A row with no spend, no impressions, no clicks and no actions is a configuration
+    // echo rather than a result. Dropping it restores exactly the set Meta used to
+    // return, which is what `includedCampaigns` and the reach filters are built around.
+    const aggregatedInsightsResponse = {
+      ...rawAggregatedInsightsResponse,
+      data: (rawAggregatedInsightsResponse?.data || []).filter((row) => {
+        return readNumber(row?.spend, 0) > 0
+          || readNumber(row?.impressions, 0) > 0
+          || readNumber(row?.inline_link_clicks, 0) > 0
+          || (Array.isArray(row?.actions) && row.actions.length > 0);
+      })
+    };
+
     const incrementalInsightsAvailable = !aggregatedIncrementalInsightsResponse?.unavailable && !dailyIncrementalInsightsResponse?.unavailable;
 
     // New customers is the KPI the marketing team is measured on, so it needs a trend
@@ -2248,6 +2315,9 @@ module.exports = async (req, res) => {
 // attached so the objective split and its reconciliation checks can be unit tested
 // without standing up an HTTP request or calling the Meta Graph API.
 module.exports.__internals = {
+  resolveReportedAttribution,
+  resolveConversionAttribution,
+  classifyConversionAttribution,
   buildDashboardValidation,
   buildGeneralSpendDistribution,
   buildLensStats,

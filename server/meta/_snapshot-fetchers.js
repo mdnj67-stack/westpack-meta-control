@@ -144,7 +144,11 @@ function createMetaSnapshotFetchers({
             "actions",
             "action_values",
             "purchase_roas",
-            "website_purchase_roas"
+            "website_purchase_roas",
+            // What Ads Manager prints in its "Attribution setting" column. It is an
+            // insights field, not an ad set field, which is why asking for it on the ad
+            // set came back empty for every campaign including the standard one.
+            "attribution_setting"
           ].join(",")
         })
       }),

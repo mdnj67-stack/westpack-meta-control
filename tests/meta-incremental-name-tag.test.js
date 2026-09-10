@@ -124,7 +124,7 @@ test("a conversion campaign with no tag is named in a warning, not quietly filed
     ]
   });
 
-  const untagged = warnings.find((warning) => /neither an incremental nor a standard tag/.test(warning));
+  const untagged = warnings.find((warning) => /no attribution setting reported by Meta and no tag in the name/.test(warning));
   assert.ok(untagged, `no warning about untagged campaigns among: ${JSON.stringify(warnings)}`);
   assert.match(untagged, /Conv - 04 - IT/, "the warning must name the campaign");
   assert.match(untagged, /Conv - 05 - DE/);
@@ -143,7 +143,7 @@ test("the untagged warning stays quiet when every campaign is tagged", () => {
     untaggedConversionCampaigns: []
   });
 
-  assert.ok(!warnings.some((warning) => /neither an incremental nor a standard tag/.test(warning)));
+  assert.ok(!warnings.some((warning) => /no attribution setting reported by Meta and no tag in the name/.test(warning)));
 });
 
 test("a long list of untagged campaigns is capped rather than dumped", () => {
@@ -158,7 +158,7 @@ test("a long list of untagged campaigns is capped rather than dumped", () => {
     untaggedConversionCampaigns: Array.from({ length: 7 }, (unused, index) => ({ name: `Conv - ${index}` }))
   });
 
-  const untagged = warnings.find((warning) => /neither an incremental nor a standard tag/.test(warning));
+  const untagged = warnings.find((warning) => /no attribution setting reported by Meta and no tag in the name/.test(warning));
   assert.ok(untagged);
   assert.match(untagged, /and 3 more/, "the remainder must be counted rather than listed");
   assert.match(untagged, /^7 conversion campaigns/, "and the total stated up front");
