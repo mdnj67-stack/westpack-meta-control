@@ -196,12 +196,25 @@ Nine figures were wrong before this pass. Do not reintroduce any of them:
 - **Currency falls back to DKK everywhere**, matching the account and
   `budget-allocation.js`. A EUR fallback in the display path once meant kroner could print
   with a euro sign.
-- **The incremental lens is a campaign grouping, not a measurement.** Conv 01 to 03 carry
-  `Inkrementel` in the campaign name and the marketing team maintains that register
-  deliberately, so the name tag stays and is the correct source here. But Meta returns the
-  incrementality attribution window for every campaign on this account and gives back the
-  standard figures, verified field by field. `incremental_matches_standard` detects that
-  and `buildQualityWarnings` discloses it. Never present the lens as a measured uplift.
+- **The incremental split comes from Meta's `attribution_setting`, not from the campaign
+  name.** The account does report it, on the campaign's insights row, and Ads Manager
+  prints it in its "Attribution setting" column. Values seen here: `incrementality`,
+  `1d_view_7d_click_1d_ev`, `1d_view_7d_click`, `1d_view_28d_click`, `7d_click` and
+  `multiple` - machine values, not the wording the UI shows, so a word-boundary pattern
+  around "click" matches nothing inside `7d_click_1d_ev`. `resolveReportedAttribution`
+  reads it and outranks the name tag. The name tag stays as the fallback for when Meta
+  reports nothing, because the team maintains that register deliberately and a silent
+  field must never reclassify a campaign they have tagged. `multiple` means the
+  campaign's ad sets disagree and is **not** read as standard.
+  Asking for the field returns a row for every campaign that ever existed, because it is
+  configuration rather than a result - that took the snapshot from 15 campaigns to 358,
+  of which 343 had no spend, impressions, clicks or actions. The handler drops rows with
+  none of those four before anything reads them.
+  Meta still returns the standard figures for the incrementality attribution window on
+  this account, verified field by field. `incremental_matches_standard` detects that and
+  `buildQualityWarnings` discloses it. **Never present the lens as a measured uplift** -
+  the split is now sourced correctly, but the numbers inside it are still standard
+  attribution.
 - **The data quality panel is visible on every lens**, including General. It used to sit
   inside the section the render hides there, so the first view people open was the one
   that never showed whether its own numbers could be trusted.
@@ -215,6 +228,12 @@ sees, and the two defects that surfaced with it:
   `Conv - 03 - IT - Inkremental` and `Conv - 04 - EU - Standard`. The old themed
   campaigns (Smykkekunde, Giftpackaging, Forsendelse) are paused but still carry spend in
   a 30-day window, so they stay in the lens.
+- **The attribution setting supersedes all of this** (see above). Found on 2026-09-10
+  from a screenshot of Ads Manager, whose "Attribution setting" column read "Incremental
+  attribution" against the three Inkremental campaigns and "7-day click" against
+  Conv - 04 - EU - Standard. It also settles three of the four untagged campaigns, and
+  reveals that `Kick-off Placeholder` is on incremental attribution despite carrying no
+  tag. The name-tag history below is kept because the tag is still the fallback.
 - **The new campaigns spell it "Inkremental" with an a**, where the previous set said
   "Inkrementel". The matcher looked for those exact words and put all three in the
   standard lens with 216,000 DKK of monthly budget, while validation reported five passes
