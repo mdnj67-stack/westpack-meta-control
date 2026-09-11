@@ -1,4 +1,5 @@
 const { getConfig } = require("../../server/lib/config");
+const { recordAuditEvent } = require("../../server/campaign/audit-log");
 const { requireAuth } = require("../../server/lib/auth");
 const { fetchWithTimeout, readJsonBody, sendJson } = require("../../server/lib/http");
 const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-product-feed");
@@ -354,6 +355,17 @@ module.exports = async function handler(req, res) {
       });
       return;
     }
+
+    // Recorded after the fact and never allowed to fail the push: the templates already exist in
+    // Klaviyo by this point, so a failed audit write must not make the caller think otherwise.
+    await recordAuditEvent("klaviyo_draft_created", {
+      campaignKey: body?.campaignKey || "",
+      campaignTitle: body?.campaignTitle || "",
+      operator: body?.operator || "",
+      reference: results.filter((entry) => entry?.templateId).map((entry) => entry.templateId).join(", "),
+      target: results.map((entry) => entry?.account || entry?.country).filter(Boolean).join(", "),
+      dryRun
+    });
 
     sendJson(res, 200, {
       ok,

@@ -1,4 +1,5 @@
 const { getConfig } = require("../../server/lib/config");
+const { recordAuditEvent } = require("../../server/campaign/audit-log");
 const { requireAuth } = require("../../server/lib/auth");
 const { readJsonBody, sendJson } = require("../../server/lib/http");
 const { assertCampaignStudioCarouselContract } = require("../../server/campaign/meta-carousel-contract");
@@ -784,6 +785,14 @@ module.exports = async (req, res) => {
           { attempts: 4, delayMs: 5000 }
         );
 
+        await recordAuditEvent("meta_draft_created", {
+          campaignKey: body?.campaignKey || "",
+          campaignTitle: body?.campaignTitle || creativeName || "",
+          operator: body?.operator || "",
+          reference: adId,
+          target: targetAdSet.id,
+          note: "PAUSED draft, human approval still required"
+        });
         sendJson(res, 200, { ok: true, adId, creativeId, adSetId: targetAdSet.id, status: "PAUSED", draftOnly: true, language: body.target_language || "" });
         return;
       }
@@ -884,6 +893,14 @@ module.exports = async (req, res) => {
           { attempts: 4, delayMs: 5000 }
         );
 
+        await recordAuditEvent("meta_draft_created", {
+          campaignKey: body?.campaignKey || "",
+          campaignTitle: body?.campaignTitle || "",
+          operator: body?.operator || "",
+          reference: adId,
+          target: targetAdSet.id,
+          note: "PAUSED carousel draft, human approval still required"
+        });
         sendJson(res, 200, {
           ok: true,
           adId,
@@ -973,6 +990,14 @@ module.exports = async (req, res) => {
         creativeId
       );
 
+      await recordAuditEvent("meta_draft_created", {
+        campaignKey: body?.campaignKey || "",
+        campaignTitle: body?.campaignTitle || "",
+        operator: body?.operator || "",
+        reference: adId,
+        target: targetAdSet.id,
+        note: "PAUSED draft, human approval still required"
+      });
       sendJson(res, 200, {
         ok: true,
         adId,

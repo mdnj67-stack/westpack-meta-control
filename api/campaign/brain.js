@@ -57,6 +57,7 @@ const {
   readStudioDraft,
   writeStudioDraft
 } = require("../../server/campaign/studio-draft-store");
+const { getAuditLogProfile, listAuditEvents, recordAuditEvent } = require("../../server/campaign/audit-log");
 
 const CAMPAIGN_ASSET_MAX_REDIRECTS = 5;
 
@@ -174,8 +175,16 @@ module.exports = async (req, res) => {
 
   if (req.method === "GET") {
     const action = requestedAction;
-    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load"]).has(action)) {
+    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load", "audit_log"]).has(action)) {
       sendJson(res, 400, { error: "Unsupported Campaign Brain GET action." });
+      return;
+    }
+    if (action === "audit_log") {
+      sendJson(res, 200, {
+        ok: true,
+        entries: await listAuditEvents({ limit: req.query?.limit, campaignKey: req.query?.campaignKey || "" }),
+        store: getAuditLogProfile()
+      });
       return;
     }
     if (action === "studio_draft_load") {
@@ -466,6 +475,12 @@ module.exports = async (req, res) => {
 
     if (action === "agent_reject_restart") {
       const result = await rejectAndRestartContentAgentJob(config, rawInput?.jobId, rawInput?.reason);
+      await recordAuditEvent("job_rejected_restarted", {
+        jobId: String(rawInput?.jobId || ""),
+        campaignTitle: result.rejectedJob?.campaignTaskName || "",
+        operator: rawInput?.operator || "",
+        note: String(rawInput?.reason || "")
+      });
       sendJson(res, 200, {
         ok: true,
         rejectedJob: result.rejectedJob,
@@ -489,6 +504,11 @@ module.exports = async (req, res) => {
           environmentConfig: rawInput?.environmentConfig || null,
           metaAssets: rawInput?.metaAssets || null,
           environmentAssets: rawInput?.environmentAssets || null
+        });
+        await recordAuditEvent("studio_draft_saved", {
+          campaignKey: record.campaignKey,
+          campaignTitle: rawInput?.campaignTitle || "",
+          operator: rawInput?.operator || ""
         });
         sendJson(res, 200, { ok: true, savedAt: record.savedAt, store: getStudioDraftStoreProfile() });
       } catch (error) {

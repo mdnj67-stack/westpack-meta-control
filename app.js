@@ -6982,6 +6982,10 @@ function buildCampaignBrainMetaPayload(action = "validate_publish_draft") {
     target_language: "en_GB",
     campaign_studio_carousel: true,
     draft_only: true,
+    // Identifies the campaign in the audit trail, so a created ad can be traced back to the
+    // campaign it came from rather than only to an ad id.
+    campaignKey: getCampaignStudioDraftCampaignKey(),
+    campaignTitle: appState.campaignBrainResult?.input?.title || "",
     translated_attachments: config.adFormat === "Carousel"
       ? buildCampaignBrainCarouselTranslatedAttachments(carouselFiles.length)
       : [],
@@ -9614,6 +9618,10 @@ async function pushCampaignBrainEmailToKlaviyo() {
     const language = getKlaviyoLanguageByCode(languageCode);
     const payload = await requestKlaviyoPushTemplateRollout({
       sourceTemplateName: sourceName,
+      // Identifies the campaign in the audit trail. Without it the entry records that a template
+      // was created but not which campaign it belonged to, which is most of the question.
+      campaignKey: getCampaignStudioDraftCampaignKey(),
+      campaignTitle: sourceName,
       assignments: [
         {
           country: account,

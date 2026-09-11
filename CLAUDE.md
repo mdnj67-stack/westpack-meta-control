@@ -165,6 +165,34 @@ Still browser-only, and the remaining half of this problem: the **asset library 
 (`westpack-campaign-asset-library`, `app.js`). Those are locally cropped and generated image
 binaries, so moving them needs a blob store rather than this JSON one.
 
+### There is a record of what a human committed
+
+`server/campaign/audit-log.js` is an append-only trail of the decisions a person made: which
+campaign was pushed to Klaviyo, which paused ad was created in Meta, which run was rejected and
+restarted, when a Studio draft was saved. The agent logged its own reasoning in full, but nothing
+recorded what a human then did with it, so "who sent this email, and when" had no answer.
+
+Recorded server-side at the moment the thing actually happens — `api/klaviyo/push-template-rollout.js`,
+all three ad-creation paths in `api/meta/publish-ad.js` (single image, carousel, video) and two
+places in `api/campaign/brain.js`. Read it with `GET /api/campaign/brain?action=audit_log`
+(optionally `&campaignKey=`), newest first.
+
+Three properties that are deliberate:
+
+- **A failed audit write never fails the action.** By the time `recordAuditEvent` runs, the
+  template exists in Klaviyo or the ad exists in Meta. Throwing would tell the operator their
+  handoff failed when it did not, so failures come back in the return value instead.
+- **Bounded at 500 entries.** The whole log is read and written as one value, so it has to fit in
+  a single round trip.
+- **It is an activity trail, not an authenticated one.** The app sits behind a single shared
+  password, so there is no per-person identity to record. Entries carry a self-declared `operator`
+  label when the client supplies one and are honest in the module header about what that means.
+  Real attribution needs per-user accounts, which this app does not have.
+
+The client sends `campaignKey`/`campaignTitle` on both handoffs. Without them an entry records
+that a template or ad was created but not which campaign it belonged to, which is most of the
+question.
+
 ### Campaign Studio is live in production — check it, don't infer it
 
 `.env.production` is a stale partial `vercel env pull` from April and does **not** list the
