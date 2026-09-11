@@ -14,7 +14,7 @@ const {
   EMAIL_MODULE_SYSTEM_VERSION,
   WESTPACK_EMAIL_MASTER,
   buildEmailModulePromptBlock,
-  normalizeEmailSections
+  describeEmailSectionNormalization
 } = require("./email-module-library");
 
 function normalizeWhitespace(value) {
@@ -957,7 +957,8 @@ function normalizeCampaignArtifactResult(input, plan, parsed, model, memoryRefer
 }
 
 function compileCampaignEmailDraft(input = {}, email = {}, resolvedEmailImageUrls = []) {
-  const sections = normalizeEmailSections(email.sections);
+  const normalization = describeEmailSectionNormalization(email.sections);
+  const sections = normalization.sections;
   const normalizedEmail = { ...email, sections };
   return {
     ...normalizedEmail,
@@ -967,7 +968,12 @@ function compileCampaignEmailDraft(input = {}, email = {}, resolvedEmailImageUrl
       version: EMAIL_MODULE_SYSTEM_VERSION,
       master: WESTPACK_EMAIL_MASTER,
       locked: true,
-      modules: sections.map(({ moduleId, position }) => ({ moduleId, position }))
+      modules: sections.map(({ moduleId, position }) => ({ moduleId, position })),
+      // What the producer authored versus what survived compilation. The deterministic gate
+      // compares the two, so a silently discarded module is reported as a specific, fixable
+      // defect instead of reaching the Quality Director as an unexplained module-count mismatch.
+      authoredCount: normalization.authoredCount,
+      droppedSections: normalization.dropped
     },
     universalContent: {
       locked: true,

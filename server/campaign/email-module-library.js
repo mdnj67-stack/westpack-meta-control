@@ -36,10 +36,42 @@ function getEmailModuleDefinition(id = "") {
   return MODULE_BY_ID.get(String(id || "")) || MODULE_BY_ID.get("editorial_text");
 }
 
+// The producer's schema requires a `headline` string but an empty one satisfies it, so a model
+// that runs out of something to say emits a section that normalization then discards. That used
+// to happen silently: the locked plan promised four modules, three were compiled, and only the
+// Quality Director noticed - as an unfixable complaint, because the revision loop can only
+// rewrite copy and had no idea a section had been dropped at all. Describing the loss lets the
+// deterministic gate catch it first and tell the producer exactly what to repair.
+function describeEmailSectionNormalization(sections = []) {
+  const authored = Array.isArray(sections) ? sections : [];
+  const dropped = [];
+  const kept = [];
+
+  authored.forEach((section, index) => {
+    if (!section || typeof section !== "object") {
+      dropped.push({ position: index + 1, reason: "not_an_object" });
+      return;
+    }
+    if (!String(section.headline || "").trim()) {
+      dropped.push({ position: index + 1, reason: "empty_headline", moduleId: String(section.moduleId || section.layout || "") });
+      return;
+    }
+    if (kept.length >= 4) {
+      dropped.push({ position: index + 1, reason: "over_module_limit", moduleId: String(section.moduleId || section.layout || "") });
+      return;
+    }
+    kept.push(section);
+  });
+
+  return { sections: normalizeKeptSections(kept), dropped, authoredCount: authored.length };
+}
+
 function normalizeEmailSections(sections = []) {
-  return (Array.isArray(sections) ? sections : [])
-    .filter((section) => section && typeof section === "object" && String(section.headline || "").trim())
-    .slice(0, 4)
+  return describeEmailSectionNormalization(sections).sections;
+}
+
+function normalizeKeptSections(sections = []) {
+  return sections
     .map((section, index) => {
       const module = getEmailModuleDefinition(section.moduleId || section.layout);
       return {
@@ -69,6 +101,7 @@ function buildEmailModulePromptBlock() {
     "Choose exactly one moduleId for every section and set layout to the same value.",
     "Use image-required modules only when an exact approved static image URL is available.",
     "Use 3-4 modules with distinct persuasion jobs. Do not repeat a module unless the campaign genuinely needs the repetition.",
+    "Every section must carry a real, non-empty headline. A section with a blank headline is discarded during compilation, so the compiled email would silently contain fewer modules than the locked plan promises. If a module has nothing worth a headline, leave it out entirely and deliver fewer, stronger modules instead.",
     "Header, preheader, footer and legal content are locked master regions and may never be generated as campaign sections."
   ].join(" ");
 }
@@ -80,6 +113,7 @@ module.exports = {
   EMAIL_MODULE_SYSTEM_VERSION,
   WESTPACK_EMAIL_MASTER,
   buildEmailModulePromptBlock,
+  describeEmailSectionNormalization,
   getEmailModuleDefinition,
   normalizeEmailSections
 };

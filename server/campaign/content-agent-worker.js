@@ -459,6 +459,12 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
     && moduleSystem.locked === true
     && moduleSystem.version === EMAIL_MODULE_SYSTEM_VERSION
     && moduleSystem.master?.id === WESTPACK_EMAIL_MASTER.id;
+  // A module the producer authored but that never reached the compiled email is the defect the
+  // revision loop could never fix: it can only rewrite copy, and nothing told it a section had
+  // been discarded. Failing here instead means the producer is handed the actual repair.
+  const droppedEmailSections = Array.isArray(moduleSystem.droppedSections) ? moduleSystem.droppedSections : [];
+  const emailModuleIntegrityPassed = droppedEmailSections.length === 0
+    && (moduleSystem.authoredCount === undefined || compiledModuleIds.length === moduleSystem.authoredCount);
   const imageRequiredModuleIds = new Set(EMAIL_MODULES.filter((module) => module.image === "required").map((module) => module.id));
   // Boundaries include the locked-footer marker (not just module markers) so the last
   // module's block doesn't swallow the footer's own <img> social icons and false-pass.
@@ -489,6 +495,7 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
     { key: "universal_header_2023", passed: universalContent.header && universalContent.webView },
     { key: "universal_footer_2023", passed: universalContent.footer && universalContent.unsubscribe },
     { key: "email_module_contract", passed: emailModuleContractPassed },
+    { key: "email_module_integrity", passed: emailModuleIntegrityPassed },
     { key: "email_image_modules_rendered", passed: emailImageModulesRenderedPassed },
     { key: "email_media_integrity", passed: emailMediaIntegrityPassed },
     { key: "email_image_choreography", passed: emailImageChoreographyPassed },
@@ -513,6 +520,9 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
     verdict: passedCount === checks.length ? "ready" : passedCount >= 5 ? "ready_with_notes" : "needs_review",
     checks,
     missing: checks.filter((check) => !check.passed).map((check) => check.key),
+    // Named explicitly rather than left for the reviewer to infer, so the revision brief can say
+    // which module was lost and why instead of reporting an unexplained module-count mismatch.
+    droppedEmailSections,
     contentCraft,
     policy: CONTENT_AGENT_POLICY
   };

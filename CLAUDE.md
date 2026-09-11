@@ -104,6 +104,37 @@ rewritten too. Details that matter:
 - Klaviyo fetches the image itself via `import_from_url`, so a still-valid Asana link is handed
   straight over; the bytes never pass through this process.
 
+### A module the producer authored must reach the compiled email
+
+`normalizeEmailSections` (`email-module-library.js`) drops any section whose headline is blank,
+and caps the list at four. Both used to happen silently. The producer's schema requires a
+`headline` string but an **empty string satisfies it**, so a model with nothing left to say
+emits a fourth section that compilation then discards — the locked plan promises four modules,
+three are compiled, and the only party that notices is the Quality Director, which reports it as
+`brief_fidelity`: *"Compiled evidence reports only three modules, against the locked requirement
+for four."* The revision loop can only rewrite copy, so it burned all five revisions against a
+defect it was never told about.
+
+Three changes, and they belong together:
+
+- `describeEmailSectionNormalization` returns `{ sections, dropped, authoredCount }`.
+  `normalizeEmailSections` is now a thin wrapper over it, so existing callers are unaffected.
+- `compileCampaignEmailDraft` records `moduleSystem.authoredCount` and
+  `moduleSystem.droppedSections` beside the compiled module list.
+- `buildQualityAudit` has an `email_module_integrity` check, and the audit carries
+  `droppedEmailSections`. Because `evaluateQualityGate` only passes on
+  `deterministicAudit.verdict === "ready"`, a dropped module now fails deterministically and the
+  whole audit is in the reviewer's prompt, so the revision brief can name the lost module.
+
+Note that `email_module_contract` does **not** catch this: it only checks that the compiled count
+is between 3 and 4, and three compiled modules out of four authored is inside that range.
+
+The prompt block now also tells the producer that a blank headline destroys the module and that
+it should deliver fewer, stronger modules instead. The schema was deliberately **not** given a
+`minLength` on headline — the rest of this schema sticks to the subset the structured-output API
+is known to accept here (`enum`, `minItems`/`maxItems`, `additionalProperties: false`), and a
+rejected schema would fail every job rather than one section.
+
 ### Campaign Studio is live in production — check it, don't infer it
 
 `.env.production` is a stale partial `vercel env pull` from April and does **not** list the
