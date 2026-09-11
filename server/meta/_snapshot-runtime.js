@@ -98,16 +98,35 @@ function createMetaSnapshotRuntime({
       || text.includes("user request limit reached");
   }
 
+  // Our own timeout reads "Request timed out after 30000ms." - "timed out", with a space.
+  // The list below tested for "timeout" and therefore never matched the one error this
+  // code raises itself, so a single slow Meta call failed the whole snapshot with no
+  // retry at all. That is what the dashboard was showing as "Request timed out after
+  // 15000ms" with every panel empty.
+  function isMetaTimeoutError(message = "") {
+    const text = String(message || "").toLowerCase();
+    return text.includes("timed out") || text.includes("timeout") || text.includes("aborted");
+  }
+
   function isTransientMetaError(message = "") {
     const text = String(message || "").toLowerCase();
     return isRateLimitError(text)
+      || isMetaTimeoutError(text)
       || text.includes("temporarily unavailable")
       || text.includes("please reduce the amount of data")
       || text.includes("service unavailable")
       || text.includes("internal error")
-      || text.includes("timeout")
       || text.includes("econnreset")
       || text.includes("fetch failed");
+  }
+
+  // A timeout has already spent the full request budget before it fails, so it gets fewer
+  // attempts than an error that came back immediately. Four retries at thirty seconds
+  // each would be two and a half minutes on one query.
+  const META_TIMEOUT_MAX_RETRIES = 2;
+
+  function retryBudgetFor(message, maxRetries) {
+    return isMetaTimeoutError(message) ? Math.min(maxRetries, META_TIMEOUT_MAX_RETRIES) : maxRetries;
   }
 
   // Worth retrying in the next few seconds. A rate limit is not: Meta measures its
@@ -197,7 +216,7 @@ function createMetaSnapshotRuntime({
       }
 
       const message = getMetaErrorMessage(payload, `Meta request failed for ${requestPath}.`);
-      const shouldRetry = isRetryableMetaError(message) && attempt < maxRetries;
+      const shouldRetry = isRetryableMetaError(message) && attempt < retryBudgetFor(message, maxRetries);
       if (shouldRetry) {
         const retryAfterHeader = Number(response.headers.get("retry-after"));
         const retryDelay = Number.isFinite(retryAfterHeader) && retryAfterHeader > 0
@@ -210,7 +229,7 @@ function createMetaSnapshotRuntime({
       throw new Error(message);
     } catch (error) {
       const message = error?.message || `Meta request failed for ${requestPath}.`;
-      const shouldRetry = isRetryableMetaError(message) && attempt < maxRetries;
+      const shouldRetry = isRetryableMetaError(message) && attempt < retryBudgetFor(message, maxRetries);
       if (shouldRetry) {
         await delay(1200 * (attempt + 1));
         return metaFetchJson(url, requestPath, attempt + 1, maxRetries);

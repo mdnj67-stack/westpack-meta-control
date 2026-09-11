@@ -5537,20 +5537,17 @@ h1 {
   min-width: 360px;
 }
 
+/* The hero column is 360px at its narrowest. Forcing a fixed number of equal columns
+   gave each card about 87px of content inside `overflow: hidden`, so "DKK 56,428.94"
+   rendered as "DKK 56,42" and the change badge collided with its own label.
+   Letting the cards wrap keeps every figure readable at any width - a clipped number is
+   worse than a taller panel, because a clipped number is a wrong number. */
 .hero-panel {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
   gap: 10px;
   width: 100%;
   margin-left: auto;
-}
-
-.hero-panel.hero-panel-kpi {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.hero-panel.hero-panel-kpi[data-count="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .hero-glance {
@@ -5596,11 +5593,28 @@ h1 {
   line-height: 1.35;
 }
 
+/* The label and its change badge share one row and both need their full text. The badge
+   never shrinks, the label wraps instead, and neither is allowed to be cut short. */
 .hero-glance-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hero-glance-head > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hero-glance-head .hero-change {
+  flex: 0 0 auto;
+}
+
+/* A figure must never be clipped by its card. */
+.hero-glance strong {
+  overflow-wrap: anywhere;
 }
 
 .hero-change {

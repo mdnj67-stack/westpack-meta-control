@@ -68,7 +68,11 @@ const META_ACQUISITION_TREND_CACHE_MAX_AGE_MS = 3 * 60 * 60 * 1000;
 // of its spend, so they do not need refetching every quarter hour.
 const META_INCREMENTAL_INSIGHTS_CACHE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const META_SERVER_CRON_SCHEDULES = ["45 5 * * *"];
-const META_REQUEST_TIMEOUT_MS = 15000;
+// Fifteen seconds was tighter than this account's heaviest query: the ad-set daily
+// insights call was measured at 15,009ms, so it failed by nine milliseconds and took the
+// whole snapshot with it. The function itself has a 300s budget (vercel.json), so the
+// per-request limit was the binding constraint, not the platform.
+const META_REQUEST_TIMEOUT_MS = 30000;
 const META_TARGET_REFRESH_SLOTS = [
   { hour: 7, minute: 45, label: "07:45" },
   { hour: 13, minute: 0, label: "13:00" }
@@ -668,9 +672,14 @@ function buildQualityWarnings({
     warnings.push("Standard and incremental conversion lenses overlap. Review attribution classification immediately.");
   }
 
-  if (nonNamedIncrementalMetricsCount > 0) {
-    warnings.push(`Incremental insight rows existed for ${nonNamedIncrementalMetricsCount} conversion campaigns with no incremental tag, and were kept out of the incremental lens.`);
-  }
+  // "Incremental insight rows existed for N conversion campaigns with no incremental tag"
+  // used to live here. It was written when the name tag decided the split, and it counted
+  // standard campaigns that Meta returned incrementality rows for. Meta returns those rows
+  // for every campaign on this account, so the line fired on every standard campaign,
+  // every time, and its wording pointed at a tag that no longer decides anything.
+  //
+  // The substantive point - that those rows come back identical to standard attribution -
+  // is the warning immediately below, which says it once and says it properly.
 
   // Named, because knowing which campaign lost its tag is the difference between a
   // warning you can act on and one you scroll past.
@@ -1402,18 +1411,29 @@ function buildAcquisitionChange(acquisition = null, field = "newCustomers", posi
 
 function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK", dateScope = null, options = {}) {
   const deduplicatedHeroReach = readNumber(options.deduplicatedReach?.reach, 0);
-  const series = buildAggregateSeries(campaigns);
   const comparisonWindow = buildAggregateComparisonWindow(campaigns);
   const changeWindowLabel = formatComparisonWindowLabel(dateScope?.days);
-  const spend = computeAggregateMetric(series, "spend");
-  const revenue = computeAggregateMetric(series, "revenue");
-  const purchases = computeAggregateMetric(series, "purchases");
-  const roas = computeAggregateMetric(series, "roas");
-  const cpa = computeAggregateMetric(series, "cpa");
-  const reach = deduplicatedHeroReach > 0 ? deduplicatedHeroReach : sumMetric(campaigns, "reach_value");
+
+  // Every figure here comes from the campaign totals Meta reported for the range, which
+  // is the same basis `buildLensStats` uses for the cards directly below this strip.
+  //
+  // These used to be summed from the daily series instead. The series only carries the
+  // days Meta returned a row for, so the two panels disagreed whenever a day was missing
+  // or an action was attributed after the fact - the incremental lens showed 74 purchases
+  // in the strip and 78 in the card underneath it, on the same screen, for the same
+  // period. The daily series is for drawing shapes; the campaign total is the answer.
+  const spend = sumMetric(campaigns, "spend_value");
+  const impressions = sumMetric(campaigns, "impressions_value");
+  const revenue = sumMetric(campaigns, "revenue_value");
+  const purchases = sumMetric(campaigns, "purchases_value");
   const leads = sumMetric(campaigns, "leads_value");
-  const cpl = computeAggregateMetric(series, "cpl");
-  const cpm = computeAggregateMetric(series, "cpm");
+  const reach = deduplicatedHeroReach > 0 ? deduplicatedHeroReach : sumMetric(campaigns, "reach_value");
+  // Rates are summed numerator over summed denominator, never an average of per-campaign
+  // rates.
+  const roas = spend > 0 ? revenue / spend : 0;
+  const cpa = purchases > 0 ? spend / purchases : 0;
+  const cpl = leads > 0 ? spend / leads : 0;
+  const cpm = impressions > 0 ? (spend / impressions) * 1000 : 0;
 
   if (lens === "general") {
     const acquisition = options.customerAcquisition || null;
@@ -1457,81 +1477,19 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
     ];
   }
 
-  if (lens === "awareness") {
-    return [
-      {
-        label: "Spend",
-        value: formatCurrency(spend, currency),
-        meta: dateScope?.label || "Selected range",
-        change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-        tone: "awareness"
-      },
-      {
-        label: "Reach",
-        value: formatDashboardNumber(reach, 0),
-        meta: "Delivered reach",
-        change: buildWindowChange(comparisonWindow, "reach", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-        tone: "awareness"
-      },
-      {
-        label: "CPM",
-        value: cpm > 0 ? formatCurrency(cpm, currency) : "--",
-        meta: "Spend / 1,000 impressions",
-        change: buildWindowChange(comparisonWindow, "cpm", { positiveDirection: "down", windowLabel: changeWindowLabel }),
-        tone: "warning"
-      }
-    ];
-  }
-
-  if (lens === "leads") {
-    return [
-      {
-        label: "Spend",
-        value: formatCurrency(spend, currency),
-        meta: "Lead campaigns",
-        change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-        tone: "leads"
-      },
-      {
-        label: "Leads",
-        value: formatDashboardNumber(leads, 0),
-        meta: "Tracked leads",
-        change: buildWindowChange(comparisonWindow, "leads", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-        tone: "leads"
-      },
-      {
-        label: "CPL",
-        value: leads > 0 ? formatCurrency(cpl, currency) : "--",
-        meta: "Spend / leads",
-        change: buildWindowChange(comparisonWindow, "cpl", { positiveDirection: "down", windowLabel: changeWindowLabel }),
-        tone: "warning"
-      }
-    ];
-  }
-
-  return [
-    {
-      label: "Spend",
-      value: formatCurrency(spend, currency),
-      meta: lens === "conversion_incremental" ? "Incremental campaigns" : "Conversion campaigns",
-      change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-      tone: lens === "conversion_incremental" ? "incremental" : "conversion"
-    },
-    {
-      label: "Purchases",
-      value: formatDashboardNumber(purchases, 0),
-      meta: "Tracked purchases",
-      change: buildWindowChange(comparisonWindow, "purchases", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-      tone: "neutral"
-    },
-    {
-      label: "ROAS",
-      value: spend > 0 ? formatDashboardNumber(roas, 2) : "--",
-      meta: "Revenue / spend",
-      change: buildWindowChange(comparisonWindow, "roas", { positiveDirection: "up", windowLabel: changeWindowLabel }),
-      tone: "success"
-    }
-  ];
+  // Every other lens has a stat row directly below this strip, and the strip was a
+  // strict subset of it: Spend, Purchases and ROAS on the conversion lenses, Spend,
+  // Reach and CPM on awareness, Spend, Leads and CPL on leads. The same facts twice on
+  // one screen, which is the same reason General lost its stat row.
+  //
+  // It was not merely redundant. The two panels were computed from different sources -
+  // this one from the daily series, the cards from the campaign totals - so the
+  // incremental lens showed 74 purchases in the strip and 78 in the card underneath it.
+  // One number per fact is what stops that happening again.
+  //
+  // General keeps its strip because General has no stat row, and because new customers
+  // and cost per new customer belong at the top of the page.
+  return [];
 }
 
 function buildValidationCheck(id, label, status, detail, extra = {}) {
@@ -2315,6 +2273,7 @@ module.exports = async (req, res) => {
 // attached so the objective split and its reconciliation checks can be unit tested
 // without standing up an HTTP request or calling the Meta Graph API.
 module.exports.__internals = {
+  buildHeroPanelItems,
   resolveReportedAttribution,
   resolveConversionAttribution,
   classifyConversionAttribution,

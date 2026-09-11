@@ -31,17 +31,42 @@ test("a most-recent-any-key reader exists and is sorted newest first", () => {
   assert.match(fn, /catch \{[\s\S]*?return null;/);
 });
 
-test("the stale fallback is used only when throttled and only when today's key misses", () => {
+test("the fallback covers any failure to reach Meta, and today's key still wins", () => {
+  // It used to be restricted to rate limits. A timeout then fell through to the failure
+  // state, which writes its message without clearing the panels, so "Meta data could not
+  // be loaded" appeared above a full set of figures with nothing saying how old they
+  // were. From the reader's side a timeout and a throttle are the same event: Meta could
+  // not be reached, and what is on screen is older than it looks.
   const start = app.indexOf("const rateLimited = isMetaRateLimitMessage(error.message);");
-  assert.notEqual(start, -1, "the rate-limit fallback has changed shape");
-  const block = app.slice(start, start + 1200);
+  assert.notEqual(start, -1, "the fallback has changed shape");
+  const block = app.slice(start, start + 1600);
 
-  // Today's key still wins when it has data.
+  // Today's key still wins when it has data; the any-key reader is the second choice.
   assert.match(block, /const fallbackEntry = cachedEntry\?\.snapshot \? cachedEntry : staleEntry;/);
-  // The any-key reader is consulted only on a rate limit, and only as a second choice.
-  assert.match(block, /!cachedEntry\?\.snapshot && rateLimited\s*\?\s*readMostRecentMetaSnapshotCache\(\)/);
-  // And nothing is shown for a non-rate-limit failure, which stays a plain error.
-  assert.match(block, /if \(fallbackEntry\?\.snapshot && rateLimited\)/);
+  assert.match(block, /!cachedEntry\?\.snapshot\s*\?\s*readMostRecentMetaSnapshotCache\(\)/);
+  // And it is no longer gated on the failure being a rate limit.
+  assert.match(block, /if \(fallbackEntry\?\.snapshot\) \{/);
+  assert.ok(
+    !/if \(fallbackEntry\?\.snapshot && rateLimited\)/.test(block),
+    "the fallback is gated on rate limits again, so a timeout will show undated figures"
+  );
+
+  // The cause still has to reach the reader, in its own words.
+  assert.match(block, /const failureReason = rateLimited/);
+  assert.match(block, /Meta did not respond in time/);
+});
+
+test("a failure with nothing cached clears the panels before explaining itself", () => {
+  // Otherwise the explanation lands on top of figures from an earlier render, which reads
+  // as "these numbers are current and also could not be loaded".
+  const start = app.indexOf('renderPanelSafely("Load Failure Clear"');
+  assert.notEqual(start, -1, "the failure path no longer clears the panels");
+  assert.match(app.slice(start, start + 400), /renderCoreData\(\[\], \[\], \[\], \[\], null, null\)/);
+
+  // And the clear has to come before the message, or the message is what gets wiped.
+  const messageAt = app.indexOf('renderPanelSafely("Load Failure State"');
+  assert.notEqual(messageAt, -1, "the failure message is gone");
+  assert.ok(start < messageAt, "the panels are cleared after the message is written");
 });
 
 test("stale data always names the range it actually covers", () => {
@@ -53,7 +78,11 @@ test("stale data always names the range it actually covers", () => {
 
   assert.match(block, /snapshot\.scope\?\.label/);
   assert.match(block, /not the selected range/);
-  assert.match(block, /Meta rate limited/);
+  // The cause is named through failureReason now, so the line reads "Meta did not respond
+  // in time. Showing …" as readily as it reads "Meta is rate limited. Showing …".
+  assert.match(block, /\$\{failureReason\}/, "the stale line must say why the fresh read failed");
+  // A same-range cached snapshot is still not a fresh read, and has to say so.
+  assert.match(block, /not a fresh read|showing a snapshot/);
   // The age is surfaced too, so "cached 3 days ago" is visible rather than implied.
   assert.match(block, /formatRelativeAgeFromNow\(fallbackEntry\.cachedAt\)/);
   // The source label distinguishes it from a same-range fallback.

@@ -13126,8 +13126,8 @@ function renderDashboard() {
     if (lens === "conversion_incremental") {
       return {
         kicker: "Incremental campaigns",
-        title: "The campaigns tagged Inkrementel.",
-        subtitle: "Conv 01 to 03, kept apart from the rest of conversion so they can be read on their own.",
+        title: "Campaigns on incremental attribution.",
+        subtitle: "Meta reports these separately from the rest of conversion. The figures inside are still standard attribution - the split is the grouping, not a measured uplift.",
         tableTitle: "Incremental conversion snapshot"
       };
     }
@@ -13291,7 +13291,7 @@ function renderDashboard() {
     },
     conversion_incremental: {
       statusTitle: "Incremental campaigns",
-      statusSub: "How the campaigns tagged Inkrementel are performing.",
+      statusSub: "How the campaigns Meta reports on incremental attribution are performing.",
       nextTitle: "Next incremental moves",
       nextSub: "Priority actions inside incremental campaigns."
     }
@@ -13615,12 +13615,23 @@ async function refreshMetaData(options = {}) {
       // dashboard - clearly labelled with the range it actually covers, because stale
       // data must never read as current.
       const rateLimited = isMetaRateLimitMessage(error.message);
-      const staleEntry = !cachedEntry?.snapshot && rateLimited
+      // A timeout is no different from a throttle as far as the reader is concerned:
+      // Meta could not be reached. Restricting the fallback to rate limits meant a
+      // timeout fell through to the failure state, which writes its message but does not
+      // clear the panels - so "Meta data could not be loaded" appeared above a full set
+      // of figures from an earlier render, with nothing saying how old they were.
+      const staleEntry = !cachedEntry?.snapshot
         ? readMostRecentMetaSnapshotCache()
         : null;
       const fallbackEntry = cachedEntry?.snapshot ? cachedEntry : staleEntry;
+      // Named so the fallback can say why it is showing older figures instead of new ones.
+      const failureReason = rateLimited
+        ? "Meta is rate limited"
+        : /timed out/i.test(String(error.message || ""))
+          ? "Meta did not respond in time"
+          : "Meta could not be reached";
 
-      if (fallbackEntry?.snapshot && rateLimited) {
+      if (fallbackEntry?.snapshot) {
         const snapshot = fallbackEntry.snapshot;
         const isStaleRange = fallbackEntry === staleEntry;
         setMetaSnapshotMeta({
@@ -13649,15 +13660,17 @@ async function refreshMetaData(options = {}) {
         if (!silent) {
           setStudioStatus(
             isStaleRange
-              ? `Meta is rate limited. Showing ${staleRangeLabel}${cachedAge ? ` from ${cachedAge}` : ""} instead of the selected range.`
-              : "Meta rate limited. Using last verified snapshot.",
+              ? `${failureReason}. Showing ${staleRangeLabel}${cachedAge ? ` from ${cachedAge}` : ""} instead of the selected range.`
+              : `${failureReason}. Showing the last snapshot${cachedAge ? ` from ${cachedAge}` : ""}, not a fresh read.`,
             "warning"
           );
         }
+        // Even when the cached snapshot covers the range that was asked for, it is not a
+        // fresh read, and a figure nobody can date is a figure nobody can act on.
         setSyncStatus(
           isStaleRange
-            ? `Meta rate limited · showing ${staleRangeLabel}${cachedAge ? ` cached ${cachedAge}` : ""}, not the selected range · ${buildMetaQualityLabel()}`
-            : `${buildMetaQualityLabel()} · ${appState.dashboardDateLabel}`,
+            ? `${failureReason} · showing ${staleRangeLabel}${cachedAge ? ` cached ${cachedAge}` : ""}, not the selected range · ${buildMetaQualityLabel()}`
+            : `${failureReason} · showing a snapshot${cachedAge ? ` from ${cachedAge}` : ""} · ${appState.dashboardDateLabel} · ${buildMetaQualityLabel()}`,
           "warning"
         );
         return snapshot;
@@ -13666,15 +13679,21 @@ async function refreshMetaData(options = {}) {
         setStudioStatus(error.message, "warning");
       }
       setSyncStatus(error.message, "warning");
-      // With no snapshot and no cache to fall back on, every panel stays empty and the
-      // only explanation was a line of status text above them. An unexplained blank page
-      // reads as a broken dashboard, so the reason goes where the figures would have been.
+      // Nothing fetched and nothing cached, so anything still on screen is left over from
+      // an earlier render and has no date against it. Clearing first is the point: the
+      // message used to be written above a full set of figures, which reads as "these
+      // numbers are current and also could not be loaded".
+      renderPanelSafely("Load Failure Clear", () => {
+        renderCoreData([], [], [], [], null, null);
+      });
+      // With every panel now empty, an unexplained blank page reads as a broken
+      // dashboard, so the reason goes where the figures would have been.
       renderPanelSafely("Load Failure State", () => {
         renderLensEmptyState({
           headline: rateLimited ? "Meta is rate limited right now" : "Meta data could not be loaded",
           body: rateLimited
             ? "The ad account has no request quota left for the moment, so this range could not be fetched and there is no earlier snapshot cached in this browser to show instead."
-            : error.message,
+            : `${error.message} No earlier snapshot is cached in this browser, so there are no figures to show in the meantime.`,
           nextStep: rateLimited
             ? "Wait a few minutes and press Refresh data. Nothing is wrong with the figures; they simply could not be read."
             : "Press Refresh data to try again."
