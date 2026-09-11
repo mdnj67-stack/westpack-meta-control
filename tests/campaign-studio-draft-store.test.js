@@ -79,6 +79,19 @@ test("the API exposes load, save and clear", () => {
   assert.match(apiSource, /sendJson\(res, 413/, "a refused save must say so instead of failing quietly");
 });
 
+test("loading is reachable as a GET, because the client fetches it as one", () => {
+  // The router rejects any GET action that is not on its allowlist, so a handler placed only in
+  // the POST section answers "Unsupported Campaign Brain GET action" however correct it looks.
+  const allowlistStart = apiSource.indexOf('if (!new Set(["asana_status"');
+  const allowlistEnd = apiSource.indexOf("}", allowlistStart);
+  assert.match(apiSource.slice(allowlistStart, allowlistEnd), /"studio_draft_load"/);
+
+  const getSectionStart = apiSource.indexOf('if (req.method === "GET")');
+  const postSectionStart = apiSource.indexOf('if (req.method !== "POST")');
+  const loadHandler = apiSource.indexOf('if (action === "studio_draft_load")');
+  assert.ok(loadHandler > getSectionStart && loadHandler < postSectionStart, "the load handler must sit in the GET section");
+});
+
 test("the browser copy stays, and the server copy follows on a debounce", () => {
   // localStorage is written synchronously so an edit survives a reload immediately; the shared
   // copy is what survives a different machine or a cleared cache.

@@ -174,8 +174,16 @@ module.exports = async (req, res) => {
 
   if (req.method === "GET") {
     const action = requestedAction;
-    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status"]).has(action)) {
+    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load"]).has(action)) {
       sendJson(res, 400, { error: "Unsupported Campaign Brain GET action." });
+      return;
+    }
+    if (action === "studio_draft_load") {
+      sendJson(res, 200, {
+        ok: true,
+        draft: await readStudioDraft(req.query?.campaignKey || ""),
+        store: getStudioDraftStoreProfile()
+      });
       return;
     }
     if (action === "agent_status") {
@@ -470,18 +478,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // The Content Agent's own output has always been server-side. These three keep the operator's
-    // edits there too, so a campaign is not tied to one person's browser profile.
-    if (action === "studio_draft_load") {
-      const record = await readStudioDraft(rawInput?.campaignKey || req.query?.campaignKey || "");
-      sendJson(res, 200, {
-        ok: true,
-        draft: record,
-        store: getStudioDraftStoreProfile()
-      });
-      return;
-    }
-
+    // The Content Agent's own output has always been server-side. These keep the operator's edits
+    // there too, so a campaign is not tied to one person's browser profile. Loading is a GET and
+    // is handled with the other GET actions above.
     if (action === "studio_draft_save") {
       try {
         const record = await writeStudioDraft(rawInput?.campaignKey || "", {
