@@ -135,6 +135,36 @@ it should deliver fewer, stronger modules instead. The schema was deliberately *
 is known to accept here (`enum`, `minItems`/`maxItems`, `additionalProperties: false`), and a
 rejected schema would fail every job rather than one section.
 
+### The operator's draft lives on the server, not only in their browser
+
+The Content Agent's output was always server-side, but everything a human then did to it — module
+edits, carousel card drafts, the chosen creative route, Meta targeting — lived only in that
+operator's `localStorage`. Two people could not work on the same campaign, an edit did not survive
+a change of machine, and a cleared cache lost the work outright.
+
+`server/campaign/studio-draft-store.js` keeps the operator's draft beside the agent's own state,
+on the same three backends. It imports `canUseLocalFile` and `redisCommand` from `agent-store.js`
+rather than growing a second copy of the Redis plumbing, but it does **not** share the agent's
+state blob: that is read and written whole on every operation, so drafts in it would contend with
+the worker. Keys are `westpack:campaign-studio:draft:v1:<campaignKey>` with a 90-day TTL, and a
+draft above 4MB is refused with a message rather than half-written (rendered carousel cards can be
+data URIs). API actions: `studio_draft_load`, `studio_draft_save`, `studio_draft_clear`.
+
+The browser copy stays. It is written synchronously so an edit survives a reload instantly; the
+server copy follows on a 2.5s debounce. On opening a campaign the local copy paints first and
+`reconcileCampaignStudioDraftWithServer` then adopts the server copy **only if it is newer**, so
+a colleague's more recent work wins and this operator's does not get clobbered. Clearing a draft
+clears both copies and cancels any pending sync — otherwise the discarded draft would be adopted
+back on the next open and read as though it had returned by itself.
+
+Where the server copy cannot be written the UI says "Browser only" in the warning colour. That is
+deliberate: the operator needs to know the work is one cleared cache from being gone while they
+can still do something about it.
+
+Still browser-only, and the remaining half of this problem: the **asset library is IndexedDB**
+(`westpack-campaign-asset-library`, `app.js`). Those are locally cropped and generated image
+binaries, so moving them needs a blob store rather than this JSON one.
+
 ### Campaign Studio is live in production — check it, don't infer it
 
 `.env.production` is a stale partial `vercel env pull` from April and does **not** list the

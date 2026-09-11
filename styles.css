@@ -6336,6 +6336,26 @@ h1 {
   display: none;
 }
 
+/* Whether the operator's edits exist anywhere other than this browser. "Browser only" is a
+   warning, not a neutral state: the work is one cleared cache away from being gone. */
+.campaign-studio-draft-sync {
+  width: 100%;
+  margin: 4px 0 0;
+  color: rgba(104, 90, 79, 0.7);
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+  text-align: right;
+}
+
+.campaign-studio-draft-sync[data-state="saved"] {
+  color: rgba(47, 106, 72, 0.92);
+}
+
+.campaign-studio-draft-sync[data-state="error"],
+.campaign-studio-draft-sync[data-state="local"] {
+  color: rgba(174, 0, 57, 0.86);
+}
+
 #klaviyo-campaign-brain-panel.is-studio-focus .campaign-studio-master-card {
   padding: 24px 26px;
 }

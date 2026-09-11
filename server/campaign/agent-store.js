@@ -286,6 +286,10 @@ async function drainAgentControlCommands(limit = 20) {
 }
 
 module.exports = {
+  // Exported so other campaign stores can reuse the same three backends (Redis / atomic local
+  // file / volatile) instead of growing a second, subtly different copy of the plumbing.
+  canUseLocalFile,
+  redisCommand,
   acquireAgentLock,
   acquireLocalLock,
   drainAgentControlCommands,

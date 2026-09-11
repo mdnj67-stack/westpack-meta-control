@@ -159,6 +159,9 @@ import {
   requestContentAgentStart,
   requestContentAgentControl,
   requestContentAgentStatus,
+  requestStudioDraftClear,
+  requestStudioDraftLoad,
+  requestStudioDraftSave,
   requestContentAgentRetry,
   requestContentAgentRejectRestart,
   requestCampaignLearningFeedback,
@@ -469,6 +472,7 @@ const appState = {
   campaignStudioActiveView: "meta",
   campaignStudioReviewJob: null,
   campaignStudioReviewOpen: false,
+  campaignStudioDraftSync: { savedAt: "", error: "", store: null },
   campaignStudioSourceAssets: {
     loading: false,
     error: "",
@@ -4869,8 +4873,66 @@ function openContentAgentJob(jobId = "") {
       : "Opened the Content Agent output. Human review is required before any draft handoff.");
   renderCampaignBrainPanel();
   hydrateContentAgentCampaignAssets(job);
+  reconcileCampaignStudioDraftWithServer(storedDraft);
   window.requestAnimationFrame(() => document.getElementById("campaign-brain-artifact-section")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   return true;
+}
+
+// Restoring the browser copy stays synchronous so the panel paints immediately. The server copy
+// is then fetched and adopted if it is newer - which is what happens when a colleague edited the
+// campaign, or when this operator last worked on it from another machine.
+async function reconcileCampaignStudioDraftWithServer(localRecord = null) {
+  const campaignKey = getCampaignStudioDraftCampaignKey();
+  let remote = null;
+  try {
+    remote = (await requestStudioDraftLoad(campaignKey))?.draft || null;
+  } catch (error) {
+    appState.campaignStudioDraftSync = { savedAt: "", error: error.message || "Could not reach the shared draft store.", store: null };
+    renderCampaignStudioDraftSyncState();
+    return;
+  }
+
+  if (!remote?.draft?.artifacts) {
+    appState.campaignStudioDraftSync = { savedAt: "", error: "", store: null };
+    renderCampaignStudioDraftSyncState();
+    return;
+  }
+
+  const localSavedAt = Date.parse(localRecord?.savedAt || "") || 0;
+  const remoteSavedAt = Date.parse(remote.savedAt || "") || 0;
+  appState.campaignStudioDraftSync = { savedAt: remote.savedAt || "", error: "", store: null };
+
+  if (remoteSavedAt <= localSavedAt) {
+    renderCampaignStudioDraftSyncState();
+    return;
+  }
+
+  appState.campaignArtifactDraft = JSON.parse(JSON.stringify(remote.draft));
+  quarantineCampaignArtifactAsanaImages(appState.campaignArtifactDraft);
+  if (remote.metaConfig) appState.campaignBrainMetaConfig = remote.metaConfig;
+  if (remote.environmentConfig) appState.campaignBrainEnvironmentConfig = remote.environmentConfig;
+  if (Array.isArray(remote.metaAssets?.carouselCardDrafts)) {
+    appState.campaignBrainMetaAssets.carouselCardDrafts = remote.metaAssets.carouselCardDrafts;
+  }
+  hydrateCampaignStudioDraftStatus(`Adopted the shared draft saved ${formatKlaviyoDate(remote.savedAt || new Date().toISOString())}.`);
+  renderCampaignBrainPanel();
+}
+
+function renderCampaignStudioDraftSyncState() {
+  const node = document.querySelector("[data-campaign-studio-draft-sync]");
+  if (!node) return;
+  const sync = appState.campaignStudioDraftSync || {};
+  if (sync.error) {
+    node.textContent = `Browser only · ${sync.error}`;
+    node.dataset.state = "error";
+  } else if (sync.savedAt) {
+    node.textContent = `Shared draft saved ${formatKlaviyoDate(sync.savedAt)}`;
+    node.dataset.state = "saved";
+  } else {
+    node.textContent = "Saved in this browser";
+    node.dataset.state = "local";
+  }
+  node.hidden = false;
 }
 
 function parseCampaignBrainList(value = "") {
@@ -5473,26 +5535,78 @@ async function loadSelectedCampaignAsanaPair({ createStudio = false } = {}) {
   }
 }
 
-function getCampaignStudioDraftStorageKey() {
+// One key identifies the campaign in both the browser copy and the server copy, so the two can
+// be compared and the newer one wins.
+function getCampaignStudioDraftCampaignKey() {
   const campaignKey = appState.campaignAssemblyObject?.campaignObject?.campaignKey
     || appState.campaignBrainResult?.input?.campaignObject?.campaignKey
     || appState.campaignBrainResult?.input?.title
     || appState.campaignAssemblyObject?.campaignObject?.title
     || "untitled-campaign";
 
-  const safeKey = String(campaignKey || "untitled-campaign")
+  return String(campaignKey || "untitled-campaign")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 80) || "untitled-campaign";
+}
 
-  return `westpack.campaignStudioDraft.${safeKey}`;
+function getCampaignStudioDraftStorageKey() {
+  return `westpack.campaignStudioDraft.${getCampaignStudioDraftCampaignKey()}`;
+}
+
+function buildCampaignStudioDraftPayload() {
+  return {
+    draft: appState.campaignArtifactDraft,
+    metaConfig: appState.campaignBrainMetaConfig,
+    environmentConfig: appState.campaignBrainEnvironmentConfig,
+    metaAssets: {
+      carouselCardDrafts: getCampaignBrainCarouselCardDrafts(),
+      designTranslation: appState.campaignMetaMaster?.result?.designTranslation || null,
+      creativeRoutes: appState.campaignMetaMaster?.result?.creativeRoutes || null,
+      selectedRouteId: appState.campaignMetaMaster?.selectedRouteId || "",
+      qualityReview: appState.campaignMetaMaster?.qualityReview || null,
+      qualityHistory: appState.campaignMetaMaster?.qualityHistory || []
+    },
+    environmentAssets: {
+      approvedReference: appState.campaignBrainEnvironmentAssets?.approvedReference || null
+    }
+  };
+}
+
+// The browser copy is written synchronously so an edit is never lost to a reload, and the server
+// copy follows on a short debounce. Without the server copy a campaign belongs to whichever
+// browser profile happened to open it: a colleague cannot pick it up, and a cleared cache loses
+// the work outright.
+let campaignStudioDraftSyncTimer = null;
+
+function scheduleCampaignStudioDraftSync() {
+  if (typeof window === "undefined" || !appState.campaignArtifactDraft) return;
+  if (campaignStudioDraftSyncTimer) window.clearTimeout(campaignStudioDraftSyncTimer);
+  campaignStudioDraftSyncTimer = window.setTimeout(syncCampaignStudioDraftToServer, 2500);
+}
+
+async function syncCampaignStudioDraftToServer() {
+  campaignStudioDraftSyncTimer = null;
+  if (!appState.campaignArtifactDraft) return;
+  const campaignKey = getCampaignStudioDraftCampaignKey();
+  try {
+    const result = await requestStudioDraftSave({ campaignKey, ...buildCampaignStudioDraftPayload() });
+    appState.campaignStudioDraftSync = { savedAt: result.savedAt || "", error: "", store: result.store || null };
+  } catch (error) {
+    // Surfaced rather than swallowed: the operator needs to know their work is browser-only, so
+    // they can finish it in this session rather than discovering the loss tomorrow.
+    appState.campaignStudioDraftSync = { savedAt: appState.campaignStudioDraftSync?.savedAt || "", error: error.message || "Draft is saved in this browser only.", store: null };
+  }
+  renderCampaignStudioDraftSyncState();
 }
 
 function persistCampaignStudioDraft() {
   if (typeof window === "undefined" || !window.localStorage || !appState.campaignArtifactDraft) {
     return false;
   }
+
+  scheduleCampaignStudioDraftSync();
 
   try {
     window.localStorage.setItem(getCampaignStudioDraftStorageKey(), JSON.stringify({
@@ -5544,6 +5658,16 @@ function clearCampaignStudioDraftFromStorage() {
   if (typeof window === "undefined" || !window.localStorage) {
     return false;
   }
+
+  // Clear both copies. Removing only the browser one would leave the server copy to be adopted
+  // again on the next open, which would read as the discarded draft coming back by itself.
+  if (campaignStudioDraftSyncTimer) {
+    window.clearTimeout(campaignStudioDraftSyncTimer);
+    campaignStudioDraftSyncTimer = null;
+  }
+  const campaignKey = getCampaignStudioDraftCampaignKey();
+  requestStudioDraftClear(campaignKey).catch(() => {});
+  appState.campaignStudioDraftSync = { savedAt: "", error: "", store: null };
 
   try {
     window.localStorage.removeItem(getCampaignStudioDraftStorageKey());

@@ -51,6 +51,12 @@ const {
   uploadEmailVisualFileToKlaviyo,
   uploadEmailVisualToKlaviyo
 } = require("../../server/campaign/email-asset-hosting");
+const {
+  deleteStudioDraft,
+  getStudioDraftStoreProfile,
+  readStudioDraft,
+  writeStudioDraft
+} = require("../../server/campaign/studio-draft-store");
 
 const CAMPAIGN_ASSET_MAX_REDIRECTS = 5;
 
@@ -461,6 +467,42 @@ module.exports = async (req, res) => {
         health: (await getContentAgentStatus()).health,
         publishCapability: false
       });
+      return;
+    }
+
+    // The Content Agent's own output has always been server-side. These three keep the operator's
+    // edits there too, so a campaign is not tied to one person's browser profile.
+    if (action === "studio_draft_load") {
+      const record = await readStudioDraft(rawInput?.campaignKey || req.query?.campaignKey || "");
+      sendJson(res, 200, {
+        ok: true,
+        draft: record,
+        store: getStudioDraftStoreProfile()
+      });
+      return;
+    }
+
+    if (action === "studio_draft_save") {
+      try {
+        const record = await writeStudioDraft(rawInput?.campaignKey || "", {
+          draft: rawInput?.draft || null,
+          metaConfig: rawInput?.metaConfig || null,
+          environmentConfig: rawInput?.environmentConfig || null,
+          metaAssets: rawInput?.metaAssets || null,
+          environmentAssets: rawInput?.environmentAssets || null
+        });
+        sendJson(res, 200, { ok: true, savedAt: record.savedAt, store: getStudioDraftStoreProfile() });
+      } catch (error) {
+        // A refused save must say so plainly. Silently keeping only the browser copy is how work
+        // gets lost, which is the whole problem this store exists to fix.
+        sendJson(res, 413, { error: error.message || "Campaign Studio draft could not be saved." });
+      }
+      return;
+    }
+
+    if (action === "studio_draft_clear") {
+      await deleteStudioDraft(rawInput?.campaignKey || "");
+      sendJson(res, 200, { ok: true, store: getStudioDraftStoreProfile() });
       return;
     }
 

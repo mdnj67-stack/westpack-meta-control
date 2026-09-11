@@ -531,6 +531,39 @@ export async function requestCampaignAsanaTask(taskGid) {
   return payload;
 }
 
+// Campaign Studio keeps a browser copy of the operator's draft for speed and offline editing,
+// but the server copy is the one that survives a different machine, a cleared cache, or a
+// colleague picking the campaign up.
+export async function requestStudioDraftLoad(campaignKey) {
+  const params = new URLSearchParams({ action: "studio_draft_load", campaignKey: String(campaignKey || "") });
+  const response = await authenticatedFetch(`/api/campaign/brain?${params.toString()}`);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not load the saved campaign draft.");
+  return payload;
+}
+
+export async function requestStudioDraftSave(requestBody) {
+  const response = await authenticatedFetch("/api/campaign/brain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "studio_draft_save", ...requestBody })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not save the campaign draft.");
+  return payload;
+}
+
+export async function requestStudioDraftClear(campaignKey) {
+  const response = await authenticatedFetch("/api/campaign/brain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "studio_draft_clear", campaignKey: String(campaignKey || "") })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not clear the campaign draft.");
+  return payload;
+}
+
 export async function requestContentAgentStatus() {
   const response = await authenticatedFetch("/api/campaign/brain?action=agent_status");
   const payload = await response.json().catch(() => ({}));

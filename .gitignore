@@ -39,3 +39,11 @@ westpack-fr-check.png
 
 # Test output
 test-results/
+
+# Local-mode Campaign Studio and Content Agent state. These are per-machine runtime files that
+# the Redis backend replaces in production; committing them would publish an operator's drafts.
+data/campaign-studio-drafts/
+data/content-agent-state.json
+data/content-agent-state.lock.json
+data/content-agent-controls.json
+data/content-agent-controls.lock.json
