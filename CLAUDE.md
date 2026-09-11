@@ -212,6 +212,15 @@ are read-only and neither touches the Meta quota:
 Note that `/api/system/health` reports nothing about Redis, QStash or the agent itself, which is
 exactly the layer that decides whether 24/7 production runs. Use `agent_status` for that.
 
+Two more places README drifts from what production actually reports: the live policy is
+`maximumQualityRevisions: 2`, not the five README describes, and `automaticCreativeResets: 0`.
+Read the policy off `agent_status` rather than off README.
+
+A deploy is confirmed by calling a **new API action**, not by fetching a new server file over
+HTTP. Server sources are served statically, but a newly added one can 404 long after the
+function itself is live, so the file probe reports failure when the deploy has actually landed.
+Deploys observed here took roughly three to five minutes to answer on the API.
+
 As of 2026-09-11 the agent had produced 60 jobs — 44 `quality_blocked`, 10 `superseded`, 3
 `failed`, 2 `rejected` and **1** `ready_for_review` (2026-09-02, score 89, tier `excellent`).
 Blocked scores ran 42–83 with a median of 79 against a pass mark of 87, so nothing else has ever
