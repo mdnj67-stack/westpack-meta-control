@@ -261,6 +261,38 @@ Checked and correct after the rebuild: all objectives map with no unclassified s
 `New_customer` and `Existing_customer` conversions resolve to exactly one each, and the
 dashboard's total spend now equals the account total to the krone.
 
+### One number per fact, and one place for it
+
+The KPI strip and the stat cards beneath it described the same metrics and disagreed:
+the incremental lens read 74 purchases in the strip and 78 in the card, at the same
+time, because the strip summed the daily series while the cards summed the campaign
+totals - and the series only carries days Meta returned a row for.
+
+- **The strip exists only on General**, which has no stat row. On every other lens it
+  was a strict subset of the cards below it, so it is gone. Two panels that never show
+  the same figure cannot contradict each other, which is a stronger guarantee than
+  getting the arithmetic to agree.
+- **Headline figures come from campaign totals, never the daily series.** The series is
+  for drawing shapes. `tests/meta-hero-stats-agreement.test.js` fails if either rule is
+  broken.
+
+### Reaching Meta, and saying so when it fails
+
+- `fetchWithTimeout` throws **"Request timed out after 30000ms"** - "timed out", with a
+  space. The transient-error list tested for `timeout` and so never matched the one
+  error this code raises itself, meaning a single slow call failed the whole snapshot
+  with no retry at all. `isMetaTimeoutError` now covers both spellings.
+- **The per-request limit is 30s**, not 15s. The ad-set daily query measured 15,009ms on
+  this account and failed by nine milliseconds. The function has a 300s budget
+  (`vercel.json`), so the per-request limit was the binding constraint, not the
+  platform. A timeout gets two retries rather than four, because it has already spent
+  its budget before it fails.
+- **Any failure to reach Meta falls back to the last cached snapshot**, not just a rate
+  limit, labelled with its age and with why the fresh read failed. Where nothing is
+  cached the panels are **cleared before** the explanation is written - the failure
+  state does not clear them by itself, so "Meta data could not be loaded" used to appear
+  above a full set of undated figures.
+
 ### New customers is the first-class figure
 
 New customers acquired is what the marketing department is measured on, so the dashboard
