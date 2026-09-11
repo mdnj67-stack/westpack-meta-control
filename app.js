@@ -7749,6 +7749,79 @@ function buildCampaignEmailBuilderMarkup(email = {}, sections = [], context = {}
     </section>`;
 }
 
+// Email hands off to Klaviyo and the carousel hands off to Meta, but the blog article had no way
+// out of Studio at all: an operator had to select the raw HTML inside a textarea by hand. These
+// two exports read the draft at click time, so whatever the operator has just edited is what
+// leaves the building.
+function buildCampaignBlogExportDocument() {
+  const blog = appState.campaignArtifactDraft?.artifacts?.blog || {};
+  const title = String(blog.title || "Westpack campaign article").trim();
+  const excerpt = String(blog.excerpt || "").trim();
+  const body = String(blog.bodyHtml || "").trim();
+  return [
+    "<!doctype html>",
+    '<html lang="en">',
+    "<head>",
+    '<meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1">',
+    `<title>${escapeHtml(title)}</title>`,
+    excerpt ? `<meta name="description" content="${escapeHtml(excerpt)}">` : "",
+    blog.slug ? `<link rel="canonical" href="/${escapeHtml(String(blog.slug).replace(/^\/+/, ""))}">` : "",
+    "</head>",
+    "<body>",
+    `<h1>${escapeHtml(title)}</h1>`,
+    excerpt ? `<p><em>${escapeHtml(excerpt)}</em></p>` : "",
+    body,
+    "</body>",
+    "</html>"
+  ].filter(Boolean).join("\n");
+}
+
+function buildCampaignBlogExportFilename() {
+  const blog = appState.campaignArtifactDraft?.artifacts?.blog || {};
+  const base = String(blog.slug || blog.title || "westpack-campaign-article")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "westpack-campaign-article";
+  return `${base}.html`;
+}
+
+async function exportCampaignBlogArticle(mode = "copy") {
+  const blog = appState.campaignArtifactDraft?.artifacts?.blog || {};
+  if (!String(blog.bodyHtml || "").trim()) {
+    setCampaignStudioBlogExportFeedback("There is no article HTML to export yet.");
+    return;
+  }
+  const documentHtml = buildCampaignBlogExportDocument();
+  if (mode === "download") {
+    const blobUrl = URL.createObjectURL(new Blob([documentHtml], { type: "text/html;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = buildCampaignBlogExportFilename();
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    // Revoking immediately can cancel the download in some browsers, so let the click settle.
+    window.setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+    setCampaignStudioBlogExportFeedback(`Saved ${buildCampaignBlogExportFilename()}.`);
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(documentHtml);
+    setCampaignStudioBlogExportFeedback("Article HTML copied to the clipboard.");
+  } catch (error) {
+    setCampaignStudioBlogExportFeedback("The browser blocked clipboard access. Use Download instead.");
+  }
+}
+
+function setCampaignStudioBlogExportFeedback(message) {
+  const node = document.querySelector("[data-campaign-blog-export-feedback]");
+  if (!node) return;
+  node.textContent = message;
+  node.hidden = !message;
+}
+
 function renderCampaignBrainPanel() {
   renderCampaignAsanaSource();
   renderCampaignMetaMasterSource();
@@ -8807,8 +8880,12 @@ function renderCampaignBrainPanel() {
               <p class="section-label">03 / Editorial HTML</p>
               <h4>${escapeHtml(blog.title || "Blog draft")}</h4>
             </div>
-            <span class="decision-chip">Source asset</span>
+            <div class="campaign-studio-blog-actions">
+              <button type="button" class="ghost-button small" data-campaign-blog-export="copy"${blog.bodyHtml ? "" : " disabled"}>Copy HTML</button>
+              <button type="button" class="ghost-button small" data-campaign-blog-export="download"${blog.bodyHtml ? "" : " disabled"}>Download</button>
+            </div>
           </div>
+          <p class="campaign-studio-blog-export-feedback" data-campaign-blog-export-feedback role="status" hidden></p>
           <div class="campaign-studio-blog-artboard">
             <div class="campaign-studio-blog-artboard-nav">
               <span>Westpack journal</span>
@@ -14583,6 +14660,12 @@ function attachEvents() {
     }
     if (target.closest("#campaign-meta-intelligence-sync")) {
       await loadMetaHistoricalIntelligence({ sync: true });
+      return;
+    }
+
+    const blogExportButton = target.closest("[data-campaign-blog-export]");
+    if (blogExportButton) {
+      await exportCampaignBlogArticle(blogExportButton.getAttribute("data-campaign-blog-export") || "copy");
       return;
     }
 

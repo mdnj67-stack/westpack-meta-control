@@ -3302,6 +3302,23 @@ h1 {
   letter-spacing: -0.025em;
 }
 
+/* Email leaves Studio as a Klaviyo draft and the carousel as a paused Meta ad. The article
+   leaves through these, so they sit in the card head beside the other channels' status. */
+.campaign-studio-blog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.campaign-studio-blog-export-feedback {
+  margin: 6px 2px 0;
+  color: rgba(104, 90, 79, 0.86);
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+}
+
 .campaign-studio-channel-status {
   display: flex;
   align-items: center;
