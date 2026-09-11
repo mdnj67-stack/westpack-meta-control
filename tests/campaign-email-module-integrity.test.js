@@ -68,6 +68,7 @@ test("the deterministic audit fails when the compiled email lost a module the pr
           locked: true,
           version: "westpack-email-modules-v2",
           master: { id: "westpack-campaign-master-v2" },
+          modules: [{ moduleId: "editorial_text", position: 1 }, { moduleId: "statement", position: 2 }, { moduleId: "steps", position: 3 }],
           authoredCount: 4,
           droppedSections: [{ position: 2, reason: "empty_headline", moduleId: "image_full" }]
         }
@@ -97,6 +98,7 @@ test("an email that lost nothing passes the integrity check", () => {
           locked: true,
           version: "westpack-email-modules-v2",
           master: { id: "westpack-campaign-master-v2" },
+          modules: [{ moduleId: "editorial_text", position: 1 }, { moduleId: "statement", position: 2 }, { moduleId: "steps", position: 3 }],
           authoredCount: 3,
           droppedSections: []
         }
@@ -108,6 +110,39 @@ test("an email that lost nothing passes the integrity check", () => {
 
   assert.equal(audit.checks.find((check) => check.key === "email_module_integrity").passed, true);
   assert.deepEqual(audit.droppedEmailSections, []);
+});
+
+test("the hero's own module marker does not count as a lost module", () => {
+  // renderPremiumCampaignEmail emits data-email-module for the hero as well as for each section,
+  // and some layouts emit more than one row, so the marker count in the compiled HTML is never
+  // equal to the number of sections the producer wrote. Counting markers made this check fail on
+  // every campaign, which blocked the deterministic gate and with it the reviewable tier.
+  const artifactPack = {
+    artifacts: {
+      email: {
+        bodyHtml: [
+          '<tr data-email-module="image_full" data-email-region="hero"></tr>',
+          '<!-- Email module: editorial_text --><tr data-email-module="editorial_text"></tr>',
+          '<!-- Email module: statement --><tr data-email-module="statement"></tr>',
+          '<!-- Email module: steps --><tr data-email-module="steps"></tr>'
+        ].join(""),
+        moduleSystem: {
+          locked: true,
+          version: "westpack-email-modules-v2",
+          master: { id: "westpack-campaign-master-v2" },
+          modules: [{ moduleId: "editorial_text", position: 1 }, { moduleId: "statement", position: 2 }, { moduleId: "steps", position: 3 }],
+          authoredCount: 3,
+          droppedSections: []
+        }
+      }
+    }
+  };
+
+  const audit = buildQualityAudit({}, {}, artifactPack, [], null);
+  const compiledMarkers = (artifactPack.artifacts.email.bodyHtml.match(/data-email-module=/g) || []).length;
+
+  assert.equal(compiledMarkers, 4, "four markers for three authored sections, because of the hero");
+  assert.equal(audit.checks.find((check) => check.key === "email_module_integrity").passed, true);
 });
 
 test("the deterministic failure reaches the producer, because a failed check blocks the gate", () => {

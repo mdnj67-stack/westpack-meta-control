@@ -463,8 +463,13 @@ function buildQualityAudit(assembled, plan, artifactPack, validatedImageUrls = [
   // revision loop could never fix: it can only rewrite copy, and nothing told it a section had
   // been discarded. Failing here instead means the producer is handed the actual repair.
   const droppedEmailSections = Array.isArray(moduleSystem.droppedSections) ? moduleSystem.droppedSections : [];
+  // Compared against the compiler's own recorded module list, never against the markers in the
+  // HTML: the hero emits a data-email-module marker of its own (email-design.js) and some layouts
+  // emit more than one row, so a marker count is always some number of modules plus the hero and
+  // can never equal what the producer authored.
+  const compiledModuleRecords = Array.isArray(moduleSystem.modules) ? moduleSystem.modules : [];
   const emailModuleIntegrityPassed = droppedEmailSections.length === 0
-    && (moduleSystem.authoredCount === undefined || compiledModuleIds.length === moduleSystem.authoredCount);
+    && (moduleSystem.authoredCount === undefined || compiledModuleRecords.length === moduleSystem.authoredCount);
   const imageRequiredModuleIds = new Set(EMAIL_MODULES.filter((module) => module.image === "required").map((module) => module.id));
   // Boundaries include the locked-footer marker (not just module markers) so the last
   // module's block doesn't swallow the footer's own <img> social icons and false-pass.
