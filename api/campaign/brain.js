@@ -46,18 +46,11 @@ const {
   normalizeMetaCreativeReview
 } = require("../../server/campaign/meta-quality-director");
 const { getCampaignLearningStatus, moderateArtifactLearning, recordArtifactLearning } = require("../../server/campaign/campaign-learning-service");
-
-const EMAIL_VISUAL_REVISION = "2026-04-15";
-
-function assertSafeCampaignAssetUrl(value = "") {
-  const url = new URL(String(value || ""));
-  const host = url.hostname.toLowerCase();
-  if (url.protocol !== "https:") throw new Error("Campaign assets must use HTTPS.");
-  if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".local") || /^10\.|^192\.168\.|^169\.254\.|^172\.(1[6-9]|2\d|3[01])\./.test(host)) {
-    throw new Error("Campaign asset host is not allowed.");
-  }
-  return url.toString();
-}
+const {
+  assertSafeCampaignAssetUrl,
+  uploadEmailVisualFileToKlaviyo,
+  uploadEmailVisualToKlaviyo
+} = require("../../server/campaign/email-asset-hosting");
 
 const CAMPAIGN_ASSET_MAX_REDIRECTS = 5;
 
@@ -130,79 +123,6 @@ function decodeCampaignImageDataUri(dataUri = "") {
   const bytes = Buffer.from(match[2], "base64");
   if (!bytes.length || bytes.length > 5_000_000) throw new Error("Cropped campaign image is empty or too large.");
   return { bytes, contentType: match[1].toLowerCase() };
-}
-
-function parseKlaviyoMarkets(raw) {
-  try {
-    const parsed = JSON.parse(raw || "[]");
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-async function uploadEmailVisualToKlaviyo(config, account, dataUri, name) {
-  const market = parseKlaviyoMarkets(config.klaviyoMarketsJson)
-    .find((item) => String(item?.country || "").trim().toUpperCase() === String(account || "DK").trim().toUpperCase());
-  if (!market?.privateKey) throw new Error(`No Klaviyo image library is configured for ${account || "DK"}.`);
-  const response = await fetch("https://a.klaviyo.com/api/images", {
-    method: "POST",
-    headers: {
-      Authorization: `Klaviyo-API-Key ${String(market.privateKey).trim()}`,
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-      revision: EMAIL_VISUAL_REVISION
-    },
-    signal: AbortSignal.timeout(25_000),
-    body: JSON.stringify({
-      data: {
-        type: "image",
-        attributes: {
-          import_from_url: dataUri,
-          name,
-          hidden: false
-        }
-      }
-    })
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.errors?.[0]?.detail || `Klaviyo image upload failed (${response.status}).`);
-  const imageUrl = String(payload?.data?.attributes?.image_url || "");
-  if (!imageUrl) throw new Error("Klaviyo image upload returned no hosted URL.");
-  return {
-    id: String(payload?.data?.id || ""),
-    imageUrl
-  };
-}
-
-async function uploadEmailVisualFileToKlaviyo(config, account, file, name) {
-  const market = parseKlaviyoMarkets(config.klaviyoMarketsJson)
-    .find((item) => String(item?.country || "").trim().toUpperCase() === String(account || "DK").trim().toUpperCase());
-  if (!market?.privateKey) throw new Error(`No Klaviyo image library is configured for ${account || "DK"}.`);
-  const extension = file.contentType === "image/png" ? ".png" : file.contentType === "image/gif" ? ".gif" : ".jpg";
-  const filename = /\.(?:jpe?g|png|gif)$/i.test(name) ? name : `${name}${extension}`;
-  const form = new FormData();
-  form.append("file", new Blob([file.bytes], { type: file.contentType }), filename);
-  form.append("name", filename);
-  form.append("hidden", "false");
-  const response = await fetch("https://a.klaviyo.com/api/image-upload", {
-    method: "POST",
-    headers: {
-      Authorization: `Klaviyo-API-Key ${String(market.privateKey).trim()}`,
-      Accept: "application/vnd.api+json",
-      revision: "2026-07-15"
-    },
-    signal: AbortSignal.timeout(25_000),
-    body: form
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.errors?.[0]?.detail || `Klaviyo image upload failed (${response.status}).`);
-  const imageUrl = String(payload?.data?.attributes?.image_url || "");
-  if (!imageUrl) throw new Error("Klaviyo image upload returned no hosted URL.");
-  return {
-    id: String(payload?.data?.id || ""),
-    imageUrl
-  };
 }
 
 function buildEmailVisualPrompts(input, plan, emailArtifact) {

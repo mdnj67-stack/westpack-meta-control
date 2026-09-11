@@ -13,6 +13,7 @@ const {
   normalizeCampaignBrainResult,
   selectReachableCampaignEmailImages
 } = require("./brain");
+const { hostCampaignImageUrls } = require("./email-asset-hosting");
 const {
   CONTENT_AGENT_PIPELINE_VERSION,
   CONTENT_AGENT_SOURCE_SECTION,
@@ -589,6 +590,7 @@ async function processAgentJob(config, stateValue, job) {
     let artifactPack;
     let deterministicAudit;
     let resolvedEmailImageUrls;
+    let hostedAssetUrls;
     let artifactMemoryReferences;
     let referenceImageInputs;
     let qualityIterations;
@@ -609,6 +611,27 @@ async function processAgentJob(config, stateValue, job) {
     const metaIntelligenceBlock = buildMetaIntelligencePromptBlock(historicalIntelligence);
     const learningBlock = (channel = "general") => buildCampaignLearningPromptBlock(learningEvents, input || {}, channel);
 
+    // Asana serves attachments from short-lived signed URLs. Refreshing them per stage keeps a run
+    // alive, but everything the run leaves behind - the compiled email in Redis, the images the
+    // Quality Director fetches, the draft a human opens days later - would still point at a link
+    // that is dead within hours. So each campaign image is copied into Klaviyo's permanent library
+    // once, and the hosted URL is what production, review and review-by-human all see. The map is
+    // carried in the checkpoint because every stage runs in a fresh invocation.
+    const hostCampaignImagery = async (urls = []) => {
+      const identityByUrl = new Map();
+      for (const asset of Array.isArray(input?.assets) ? input.assets : []) {
+        const assetUrl = firstAssetUrl(asset);
+        if (assetUrl) identityByUrl.set(assetUrl, assetIdentity(asset) || assetUrl);
+      }
+      const hosting = await hostCampaignImageUrls(config, urls, {
+        cache: hostedAssetUrls || {},
+        keyForUrl: (url) => identityByUrl.get(url) || url,
+        namePrefix: `westpack-${job.campaignTaskName || job.id}`
+      });
+      hostedAssetUrls = hosting.cache;
+      return hosting;
+    };
+
     const createCheckpoint = () => ({
       assembled,
       input,
@@ -616,6 +639,7 @@ async function processAgentJob(config, stateValue, job) {
       artifactPack,
       deterministicAudit,
       resolvedEmailImageUrls,
+      hostedAssetUrls,
       artifactMemoryReferences,
       qualityIterations,
       revisionCount,
@@ -686,6 +710,7 @@ async function processAgentJob(config, stateValue, job) {
       channelDrafts = checkpoint.channelDrafts || {};
       productionNotes = Array.isArray(checkpoint.productionNotes) ? checkpoint.productionNotes : [];
       revisionScopes = Array.isArray(checkpoint.revisionScopes) ? checkpoint.revisionScopes : [];
+      hostedAssetUrls = checkpoint.hostedAssetUrls && typeof checkpoint.hostedAssetUrls === "object" ? checkpoint.hostedAssetUrls : {};
       const refreshedSource = await readAgentJobSource(config, job);
       const assetUrlReplacements = buildRefreshedAssetUrlMap(input.assets, refreshedSource.input.assets);
       input = { ...input, assets: refreshedSource.input.assets };
@@ -697,6 +722,22 @@ async function processAgentJob(config, stateValue, job) {
       if (assignedArtifactUrls.length) {
         const reachableAssignedUrls = await selectReachableCampaignEmailImages(assignedArtifactUrls, 16);
         resolvedEmailImageUrls = [...new Set([...resolvedEmailImageUrls, ...reachableAssignedUrls])];
+      }
+      const resumeHosting = await hostCampaignImagery(resolvedEmailImageUrls);
+      resolvedEmailImageUrls = resolvedEmailImageUrls.map((url) => resumeHosting.hostedByUrl.get(url) || url);
+      if (resumeHosting.replacements.size) {
+        // A job checkpointed before this stage still carries expiring Asana URLs inside its
+        // artifacts, so rewrite them onto the hosted copies rather than leaving half the pack
+        // pointing at links that will be gone by the time a human opens the draft.
+        artifactPack = remapAssetUrls(artifactPack, resumeHosting.replacements);
+        bestArtifactPack = remapAssetUrls(bestArtifactPack, resumeHosting.replacements);
+        channelDrafts = remapAssetUrls(channelDrafts, resumeHosting.replacements);
+      }
+      if (resumeHosting.failures.length) {
+        productionNotes = [...new Set([
+          ...productionNotes,
+          `${resumeHosting.failures.length} campaign image(s) could not be copied to the Klaviyo library and still use an expiring source URL.`
+        ])];
       }
       referenceImageInputs = await loadReferenceImageInputs(artifactMemoryReferences);
       const previousReview = qualityIterations.at(-1)?.review;
@@ -1012,6 +1053,11 @@ async function processAgentJob(config, stateValue, job) {
         statusMessage: "Building the cross-channel campaign plan and production pack."
       }));
       resolvedEmailImageUrls = await selectReachableCampaignEmailImages(input.assets, 6);
+      hostedAssetUrls = {};
+      // Host before anything is generated, so the producer assigns permanent URLs into the
+      // artifacts in the first place and no later stage has to rewrite them.
+      const sourceHosting = await hostCampaignImagery(resolvedEmailImageUrls);
+      resolvedEmailImageUrls = resolvedEmailImageUrls.map((url) => sourceHosting.hostedByUrl.get(url) || url);
       const sourceReadiness = evaluateSourceReadiness(input, resolvedEmailImageUrls);
       if (!sourceReadiness.passed) {
         return persistTransition(state, job.id, "quality_blocked", {
@@ -1036,7 +1082,9 @@ async function processAgentJob(config, stateValue, job) {
       creativeDirections = null;
       conceptSelection = null;
       channelDrafts = {};
-      productionNotes = [];
+      productionNotes = sourceHosting.failures.length
+        ? [`${sourceHosting.failures.length} campaign image(s) could not be copied to the Klaviyo library and still use an expiring source URL.`]
+        : [];
       revisionScopes = [];
       return checkpointAndContinue(
         "plan_generation",

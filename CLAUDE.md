@@ -20,10 +20,12 @@ over from a prior AI (Codex/Codex CLI) session, so future sessions don't have to
   than calling exported functions. They catch string/pattern drift, not behavior — keep that in
   mind when a "passing test" is used as evidence a change is correct.
 - `tests/e2e/campaign-brain-ui.spec.js` (Playwright) is committed but not runnable from a fresh
-  clone as-is: no `playwright` package and no `node_modules` exist at the repo root. A prior
-  session used an ad-hoc, gitignored `tmp/playwright-runner/` sub-project with its own
-  `package.json` for manual visual verification (screenshots under `tmp/`, also gitignored). If
-  e2e/visual QA needs to continue, that harness has to be recreated or the setup documented.
+  clone as-is: no `playwright` package and no `node_modules` exist at the repo root. The ad-hoc
+  `tmp/playwright-runner/` sub-project a prior session built for this **still exists** as of
+  2026-09-11, with its own `package.json`, an installed `playwright` and six spec files
+  (`campaign-studio-smoke`, `content-agent-ui`, `meta-master-ui`, `meta-master-live`,
+  `asana-campaign-picker`, `asana-content-assets`). It is gitignored, so it is one `git clean`
+  away from being lost — check whether it is there before assuming e2e QA has to be rebuilt.
 
 ## Campaign Studio architecture
 
@@ -63,6 +65,73 @@ quality gate → human review → (separately) Meta/Klaviyo publish. Key files:
   5-card structural contract, separate visual Creative Director rubric (90 overall / 80 per-dimension).
 - The worker cannot publish under any code path: `publishCapability: false` and a `draft_only`
   health check are hard-coded, not just conventional.
+- `server/campaign/email-asset-hosting.js` — the single Klaviyo image uploader, shared by
+  `api/campaign/brain.js` (the `host_email_asset` route) and the worker. See below for why the
+  worker has to call it.
+
+### Campaign images must be hosted, not merely refreshed
+
+Asana serves attachments from signed URLs that expire within hours. Until 2026-09-11 the worker
+only ever *refreshed* them — `buildRefreshedAssetUrlMap` swaps an expired Asana URL for a fresh
+Asana URL — while permanent hosting (`host_email_asset`, Klaviyo's image library) ran solely from
+the browser, when an operator happened to be sitting in Campaign Studio. Everything the worker
+left behind therefore pointed at links that were dead within hours.
+
+Measured against production on 2026-09-11: of 52 unique image URLs across the stored compiled
+emails, 46 were Asana URLs returning **403** and 6 were on Klaviyo's CDN — and five of those six
+were the locked footer's social icons. Effectively no campaign photograph had ever been hosted.
+
+That is the mechanical reason the pipeline had a ~2% admission rate (see below). `email_quality`
+(avg 64.2) and `visual_design` (avg 64.5) were by far the worst dimensions and the two most
+frequent veto failures, while every copy dimension sat in the low 80s. The Quality Director was
+correctly reporting missing imagery; the revision loop could only rewrite copy, so five revisions
+burned against a defect the producer could not reach.
+
+The rule now: **every campaign image is copied into Klaviyo's permanent library before it can
+enter an artifact, a quality review or a human's screen.** `hostCampaignImagery` in the worker
+runs on the fresh path before any AI generation, and on every resume so in-flight jobs are
+rewritten too. Details that matter:
+
+- The hosted map lives in the job checkpoint (`hostedAssetUrls`). Every stage is a fresh
+  invocation that re-reads Asana and gets new signed URLs, so the cache is keyed by
+  `assetIdentity` (the asset's descriptive text, URL stripped) rather than by the URL. Keying on
+  the URL would re-import the same photograph at all ten-odd stages and fill the image library
+  with duplicates.
+- A URL already on the Klaviyo CDN passes through untouched — re-importing it would duplicate it.
+- Hosting failures are **not** fatal. A failed image keeps its source URL and is recorded as a
+  production note. Losing a whole campaign because one attachment could not be copied would be
+  worse than compiling with a URL that may expire.
+- Klaviyo fetches the image itself via `import_from_url`, so a still-valid Asana link is handed
+  straight over; the bytes never pass through this process.
+
+### Campaign Studio is live in production — check it, don't infer it
+
+`.env.production` is a stale partial `vercel env pull` from April and does **not** list the
+Content Agent's keys. Do not read its absence as evidence that anything is unconfigured. The
+real deployment (`https://project-4fcxa.vercel.app`, Vercel project `project-4fcxa`) has Asana,
+Redis and QStash all wired, and as of 2026-09-11 the agent reported `status: healthy`, Redis
+persistence and an hourly heartbeat.
+
+To check the truth cheaply, log in the way `smoke-local.js` does and read two endpoints — both
+are read-only and neither touches the Meta quota:
+
+- `GET /api/system/health` — OpenAI, Meta, Asana and Klaviyo configuration.
+- `GET /api/campaign/brain?action=agent_status` — store mode, health contract, heartbeat age and
+  the full job history with every quality audit. This is the only place the real production
+  behaviour of the pipeline is visible, and it is worth saving to a file and analysing offline.
+
+Note that `/api/system/health` reports nothing about Redis, QStash or the agent itself, which is
+exactly the layer that decides whether 24/7 production runs. Use `agent_status` for that.
+
+As of 2026-09-11 the agent had produced 60 jobs — 44 `quality_blocked`, 10 `superseded`, 3
+`failed`, 2 `rejected` and **1** `ready_for_review` (2026-09-02, score 89, tier `excellent`).
+Blocked scores ran 42–83 with a median of 79 against a pass mark of 87, so nothing else has ever
+come close. The queue is empty because all 41 eligible Asana tasks are already in
+`processedTasks`, not because there is no work. See the image-hosting section above for the
+mechanical cause of that admission rate.
+
+Fourteen tasks sit outside the `Kampagner` section (`Årshjulet`, `WTP Nyheder`, and others) and
+are therefore never produced. That is a workflow question for the marketing team, not a defect.
 
 ## Where the prior session (Codex) left off
 
