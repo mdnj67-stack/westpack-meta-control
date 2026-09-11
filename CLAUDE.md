@@ -161,9 +161,31 @@ Where the server copy cannot be written the UI says "Browser only" in the warnin
 deliberate: the operator needs to know the work is one cleared cache from being gone while they
 can still do something about it.
 
-Still browser-only, and the remaining half of this problem: the **asset library is IndexedDB**
-(`westpack-campaign-asset-library`, `app.js`). Those are locally cropped and generated image
-binaries, so moving them needs a blob store rather than this JSON one.
+### The asset library is shared, and holds no image bytes
+
+The library was IndexedDB (`westpack-campaign-asset-library`) with the image inlined in each
+record's `imageUrl` as a data URI. Every cropped variant, generated environment shot and approved
+source photograph was therefore private to one machine, and clearing site data destroyed it.
+
+The fix is not a blob store. Image bytes go to **Klaviyo's image library** — the client calls
+`host_email_asset` before saving, so the record carries a permanent CDN URL — and
+`server/campaign/asset-library-store.js` holds metadata only. That keeps the whole library small
+enough to move in one round trip, and the images end up somewhere a campaign email can use
+directly. `normalizeRecord` **refuses** a record whose `imageUrl` is still a `data:` URI; that is
+the backstop against putting binaries back where they came from.
+
+- A save **merges by id** rather than replacing the library. Two operators add assets to the same
+  campaign, and a wholesale replacement would silently delete a colleague's uploads.
+- Hydration merges the shared library into the local one and **the local record wins on id**: an
+  operator's own IndexedDB copy may hold an unhosted image the server does not have, and losing
+  it to a merge would be worse than showing it only locally.
+- A failed host keeps the asset on its data URI rather than dropping it. It stays browser-only,
+  and `syncCampaignAssetRecordToServer` refuses to push it, so an unhosted asset can never reach
+  the shared library.
+- A failed read of the shared library still renders the operator's own assets.
+- API: `asset_library_load` (GET), `asset_library_save`, `asset_library_delete`. There is no
+  delete path in the UI today — assets are archived by flipping `approved` — but tag and approval
+  changes do sync, or a colleague would keep seeing the asset as first saved.
 
 ### There is a record of what a human committed
 

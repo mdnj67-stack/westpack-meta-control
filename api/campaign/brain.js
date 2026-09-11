@@ -58,6 +58,12 @@ const {
   writeStudioDraft
 } = require("../../server/campaign/studio-draft-store");
 const { getAuditLogProfile, listAuditEvents, recordAuditEvent } = require("../../server/campaign/audit-log");
+const {
+  deleteAssetRecord,
+  getAssetLibraryStoreProfile,
+  readAssetLibrary,
+  saveAssetRecord
+} = require("../../server/campaign/asset-library-store");
 
 const CAMPAIGN_ASSET_MAX_REDIRECTS = 5;
 
@@ -175,8 +181,16 @@ module.exports = async (req, res) => {
 
   if (req.method === "GET") {
     const action = requestedAction;
-    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load", "audit_log"]).has(action)) {
+    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load", "audit_log", "asset_library_load"]).has(action)) {
       sendJson(res, 400, { error: "Unsupported Campaign Brain GET action." });
+      return;
+    }
+    if (action === "asset_library_load") {
+      sendJson(res, 200, {
+        ok: true,
+        records: await readAssetLibrary(req.query?.campaignKey || ""),
+        store: getAssetLibraryStoreProfile()
+      });
       return;
     }
     if (action === "audit_log") {
@@ -496,6 +510,23 @@ module.exports = async (req, res) => {
     // The Content Agent's own output has always been server-side. These keep the operator's edits
     // there too, so a campaign is not tied to one person's browser profile. Loading is a GET and
     // is handled with the other GET actions above.
+    // The library holds metadata only. Image bytes go to Klaviyo first, so a record carries a
+    // CDN URL rather than the base64 payload that kept the whole library inside one browser.
+    if (action === "asset_library_save") {
+      try {
+        const result = await saveAssetRecord(rawInput?.record || {});
+        sendJson(res, 200, { ok: true, record: result.record, count: result.count, store: getAssetLibraryStoreProfile() });
+      } catch (error) {
+        sendJson(res, 400, { error: error.message || "Campaign asset could not be saved." });
+      }
+      return;
+    }
+
+    if (action === "asset_library_delete") {
+      const result = await deleteAssetRecord(rawInput?.campaignKey || "", rawInput?.id || "");
+      sendJson(res, 200, { ok: true, count: result.count, store: getAssetLibraryStoreProfile() });
+      return;
+    }
     if (action === "studio_draft_save") {
       try {
         const record = await writeStudioDraft(rawInput?.campaignKey || "", {

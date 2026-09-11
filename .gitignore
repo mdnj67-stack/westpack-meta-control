@@ -48,3 +48,4 @@ data/content-agent-state.lock.json
 data/content-agent-controls.json
 data/content-agent-controls.lock.json
 data/campaign-audit-log.json
+data/campaign-asset-library/

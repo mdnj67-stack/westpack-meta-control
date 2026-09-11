@@ -564,6 +564,37 @@ export async function requestStudioDraftClear(campaignKey) {
   return payload;
 }
 
+// The asset library stores metadata only; image bytes are hosted in Klaviyo first. That is what
+// lets a colleague open the same campaign and see the same library.
+export async function requestAssetLibraryLoad(campaignKey) {
+  const params = new URLSearchParams({ action: "asset_library_load", campaignKey: String(campaignKey || "") });
+  const response = await authenticatedFetch(`/api/campaign/brain?${params.toString()}`);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not load the shared asset library.");
+  return payload;
+}
+
+export async function requestAssetLibrarySave(record) {
+  const response = await authenticatedFetch("/api/campaign/brain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "asset_library_save", record })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not save the campaign asset.");
+  return payload;
+}
+
+export async function requestAssetLibraryDelete(campaignKey, id) {
+  const response = await authenticatedFetch("/api/campaign/brain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "asset_library_delete", campaignKey: String(campaignKey || ""), id: String(id || "") })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Could not remove the campaign asset.");
+  return payload;
+}
 export async function requestContentAgentStatus() {
   const response = await authenticatedFetch("/api/campaign/brain?action=agent_status");
   const payload = await response.json().catch(() => ({}));

@@ -159,6 +159,8 @@ import {
   requestContentAgentStart,
   requestContentAgentControl,
   requestContentAgentStatus,
+  requestAssetLibraryLoad,
+  requestAssetLibrarySave,
   requestStudioDraftClear,
   requestStudioDraftLoad,
   requestStudioDraftSave,
@@ -5825,10 +5827,29 @@ async function putCampaignAssetLibraryRecord(record) {
   });
 }
 
+// Reaching the shared library must never stop the local one from rendering: an operator offline
+// or hitting a failed request still has their own assets and should see them.
+async function listSharedCampaignAssetRecords(campaignKey = "") {
+  if (!campaignKey) return [];
+  try {
+    const payload = await requestAssetLibraryLoad(campaignKey);
+    return Array.isArray(payload?.records) ? payload.records : [];
+  } catch (error) {
+    return [];
+  }
+}
+
 async function hydrateCampaignAssetLibrary(campaignKey = getCampaignAssetLibraryCampaignKey()) {
   try {
-    const records = await listCampaignAssetLibraryRecords();
+    const localRecords = await listCampaignAssetLibraryRecords();
     const activeKey = String(campaignKey || getCampaignAssetLibraryCampaignKey() || "");
+    // Merge in whatever colleagues have added to the same campaign. The local copy wins on id,
+    // because an operator's own IndexedDB record may hold an unhosted image the server does not
+    // have, and losing it to a merge would be worse than showing it only here.
+    const sharedRecords = await listSharedCampaignAssetRecords(activeKey);
+    const byId = new Map(sharedRecords.map((item) => [String(item?.id || ""), item]));
+    for (const item of localRecords) byId.set(String(item?.id || ""), item);
+    const records = [...byId.values()];
     const filtered = records.filter((item) => String(item?.campaignKey || "") === activeKey);
     setCampaignAssetLibraryState({
       items: sortCampaignAssetLibraryItems(filtered),
@@ -5875,6 +5896,36 @@ async function imageUrlToDataUrl(imageUrl = "") {
   return fileToDataUrl(blob);
 }
 
+// A library record used to inline the image as a data URI, which is what kept the whole library
+// inside one browser profile. Hosting it in Klaviyo first turns the record into metadata plus a
+// permanent CDN URL, small enough to share and usable directly in a campaign email.
+async function hostCampaignAssetImageUrl(imageUrl = "", name = "campaign-asset") {
+  const value = String(imageUrl || "");
+  if (!value.startsWith("data:")) return { imageUrl: value, hosted: false, error: "" };
+  try {
+    const hosted = await requestCampaignEmailAssetHosting({
+      imageDataUri: value,
+      name,
+      klaviyoAccount: appState.campaignBrainKlaviyoAccount || "DK"
+    });
+    return { imageUrl: hosted?.imageUrl || value, hosted: Boolean(hosted?.imageUrl), error: "" };
+  } catch (error) {
+    // Keep the local record working on the data URI rather than losing the asset. It stays
+    // browser-only until hosting succeeds, and the library says so.
+    return { imageUrl: value, hosted: false, error: error.message || "Could not host this asset." };
+  }
+}
+
+async function syncCampaignAssetRecordToServer(record) {
+  if (String(record?.imageUrl || "").startsWith("data:")) return false;
+  try {
+    await requestAssetLibrarySave(record);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 async function saveCampaignAssetLibraryRecord(input = {}) {
   const campaignKey = String(input.campaignKey || getCampaignAssetLibraryCampaignKey() || "global-studio");
   const familyKey = buildCampaignAssetLibraryFamilyKey({
@@ -5904,7 +5955,12 @@ async function saveCampaignAssetLibraryRecord(input = {}) {
     createdAt: now,
     updatedAt: now
   };
+  const hosting = await hostCampaignAssetImageUrl(record.imageUrl, record.name);
+  record.imageUrl = hosting.imageUrl;
+  record.hosted = hosting.hosted;
+  record.hostingError = hosting.error;
   await putCampaignAssetLibraryRecord(record);
+  record.shared = await syncCampaignAssetRecordToServer(record);
   await hydrateCampaignAssetLibrary(campaignKey);
   return record;
 }
@@ -5921,6 +5977,9 @@ async function updateCampaignAssetLibraryRecord(id, updates = {}) {
     updatedAt: new Date().toISOString()
   };
   await putCampaignAssetLibraryRecord(next);
+  // Tag and approval changes have to reach the shared copy too, or a colleague keeps seeing the
+  // asset as it was when it was first saved.
+  await syncCampaignAssetRecordToServer(next);
   await hydrateCampaignAssetLibrary(next.campaignKey || getCampaignAssetLibraryCampaignKey());
   return next;
 }
