@@ -3,6 +3,8 @@ const { buildKlaviyoCurrencyContext, normalizeMarketRevenueRow } = require("../.
 const { requireAuth } = require("../../server/lib/auth");
 const { fetchWithTimeout, sendJson } = require("../../server/lib/http");
 const { recordArtifactLearning } = require("../../server/campaign/campaign-learning-service");
+const { fetchListProfileCount, resolveNewsletterList } = require("../../server/klaviyo/newsletter-lists");
+const { buildSubscriberFlowSeries, readSubscriberHistory } = require("../../server/klaviyo/subscriber-history");
 const fs = require("fs");
 const path = require("path");
 
@@ -314,32 +316,10 @@ async function getPlacedOrderMetricId(headers) {
   return match?.id || "";
 }
 
-async function detectSubscriberList(headers, configuredListId) {
-  const lists = await getAllPages("https://a.klaviyo.com/api/lists/", headers);
-  if (configuredListId) {
-    const exact = lists.find((list) => list?.id === configuredListId);
-    if (exact) {
-      return { id: exact.id, name: exact.attributes?.name || exact.id };
-    }
-  }
-
-  const scored = lists
-    .map((list) => {
-      const name = String(list?.attributes?.name || "");
-      const lower = name.toLowerCase();
-      let score = 0;
-      if (lower.includes("nyhedsbrev")) score += 5;
-      if (lower.includes("newsletter")) score += 4;
-      if (lower.includes("westpack")) score += 2;
-      if (lower.includes("test")) score -= 4;
-      return { id: list?.id, name, score };
-    })
-    .filter((item) => item.id && item.score > 0)
-    .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
-
-  return scored[0] || null;
-}
-
+// List resolution and counting now live in server/klaviyo/newsletter-lists.js, which prefers an
+// explicitly configured list over guessing at its name and reads Klaviyo's own profile_count rather
+// than walking every profile. The walk is kept here only as a fallback for an account where the
+// count field is unavailable.
 async function countListProfiles(headers, listId) {
   if (!listId) return 0;
   let total = 0;
@@ -477,12 +457,18 @@ async function resolveSubscriberCount(headers, subscriberList, fallbackSubscribe
   }
 
   try {
-    const count = await countListProfiles(headers, subscriberList.id);
+    const count = await fetchListProfileCount(headers, subscriberList.id);
     return {
       count,
       countSource: "live"
     };
   } catch (error) {
+    try {
+      // Klaviyo could not report the count directly; the slow walk returns the same number.
+      return { count: await countListProfiles(headers, subscriberList.id), countSource: "live_walked" };
+    } catch (walkError) {
+      // Fall through to the snapshot fallback below.
+    }
     if (Number.isFinite(Number(fallbackSubscriber))) {
       return {
         count: Number(fallbackSubscriber),
@@ -503,7 +489,7 @@ async function fetchMarketOverview(market, { config, timeframe, from, marketCode
   const currencyContext = buildKlaviyoCurrencyContext(config);
   const [conversionMetricId, subscriberList, campaigns, flows] = await Promise.all([
     getPlacedOrderMetricId(headers),
-    detectSubscriberList(headers, market.listId),
+    resolveNewsletterList(headers, { listId: market.listId, listName: market.listName }),
     getRecentCampaigns(headers, from),
     getAllPages(
       "https://a.klaviyo.com/api/flows/?fields%5Bflow%5D=name,status,trigger_type,created,updated&sort=-updated",
@@ -604,6 +590,7 @@ async function fetchMarketOverview(market, { config, timeframe, from, marketCode
       country,
       listId: subscriberList?.id || "",
       listName: subscriberList?.name || "",
+      resolvedBy: subscriberList?.resolvedBy || "",
       count: subscriberInfo.count,
       countSource: subscriberInfo.countSource
     },
@@ -870,6 +857,97 @@ function buildInsightCards(campaignGroups, flowGroups, subscribers, marketCodes)
   return cards.slice(0, 5);
 }
 
+// One list lookup and one count per market - about two requests each, against the 268 the old walk
+// cost - so a fresh subscriber level is affordable even on the snapshot path.
+async function refreshSubscriberLevels(markets = [], config = {}) {
+  const usable = (Array.isArray(markets) ? markets : [])
+    .filter((market) => String(market?.country || "").trim() && String(market?.privateKey || "").trim());
+  if (!usable.length) {
+    return { markets: [], failed: [], warning: "" };
+  }
+
+  const results = await mapWithConcurrencySettled(usable, 4, async (market) => {
+    const country = String(market.country).trim();
+    const headers = buildHeaders(String(market.privateKey).trim(), config.klaviyoRevision);
+    const list = await resolveNewsletterList(headers, { listId: market.listId, listName: market.listName });
+    if (!list?.id) throw new Error(`${country}: no newsletter list could be identified.`);
+    return {
+      country,
+      listId: list.id,
+      listName: list.name,
+      resolvedBy: list.resolvedBy,
+      count: await fetchListProfileCount(headers, list.id),
+      countSource: "live"
+    };
+  });
+
+  const rows = [];
+  const failed = [];
+  results.forEach((result, index) => {
+    if (result?.status === "fulfilled" && result.value) {
+      rows.push(result.value);
+      return;
+    }
+    failed.push(String(usable[index]?.country || "").trim() || "unknown");
+  });
+
+  return {
+    markets: rows,
+    failed,
+    warning: failed.length
+      ? `Live subscriber counts could not be read for ${failed.join(", ")}; the last recorded figure is shown for those markets.`
+      : ""
+  };
+}
+
+// A market whose live count failed keeps its last known figure and says so, rather than dropping out
+// of the sum. A silently smaller total still looks like a valid number, which is worse than a stale
+// one that is labelled.
+async function composeSubscribers({ snapshot = null, levels = { markets: [], failed: [] }, marketCodes = [] } = {}) {
+  const previous = new Map((snapshot?.subscribers?.markets || []).map((item) => [String(item.country || "").trim(), item]));
+  const live = new Map(levels.markets.map((item) => [item.country, item]));
+  const countries = [...new Set([...previous.keys(), ...live.keys()])].filter(Boolean).sort();
+
+  const rows = countries.map((country) => {
+    const liveRow = live.get(country);
+    if (liveRow) return { ...liveRow };
+    const previousRow = previous.get(country) || {};
+    return {
+      country,
+      listId: previousRow.listId || "",
+      listName: previousRow.listName || "",
+      resolvedBy: "",
+      count: Number(previousRow.count || 0),
+      countSource: "last_recorded"
+    };
+  });
+
+  const history = await readSubscriberHistory().catch(() => null);
+  const flow = history
+    ? buildSubscriberFlowSeries(history, { markets: marketCodes.length ? marketCodes : countries })
+    : { available: false, reason: "The subscriber history store could not be read.", periods: [], markets: [], totals: { joined: [], removed: [], net: [] } };
+
+  return {
+    total: rows.reduce((sum, row) => sum + (Number(row.count) || 0), 0),
+    markets: rows,
+    timeline: snapshot?.subscribers?.timeline || null,
+    snapshots: snapshot?.subscribers?.snapshots || null,
+    countSource: levels.failed.length ? "mixed_live_last_recorded" : (rows.length ? "live" : "unavailable"),
+    countMeasuredAt: new Date().toISOString(),
+    historySource: history?.entries?.length ? "subscriber_history" : "unavailable",
+    historyGeneratedAt: snapshot?.generatedAt || "",
+    flow
+  };
+}
+
+function describeSnapshotAge(generatedAt) {
+  const stamp = Date.parse(generatedAt || "");
+  if (!Number.isFinite(stamp)) return "";
+  const days = Math.floor((Date.now() - stamp) / 86_400_000);
+  if (days < 2) return "";
+  return `Campaign and flow figures come from a snapshot taken ${days} days ago (${new Date(stamp).toISOString().slice(0, 10)}). Subscriber counts on this page are live.`;
+}
+
 module.exports = async (req, res) => {
   if (req.method !== "GET") {
     sendJson(res, 405, { error: "Method not allowed." });
@@ -884,17 +962,45 @@ module.exports = async (req, res) => {
   const forceLive = String(req.query?.forceLive || "").trim() === "1";
   const timeframeDays = Math.max(1, Math.min(90, Number(req.query?.days || config.klaviyoTimeframeDays || 30)));
   let bundledSnapshot = loadBundledSnapshot();
+
+  let configuredMarkets = [];
+  try {
+    configuredMarkets = parseMarkets(config.klaviyoMarketsJson);
+  } catch (error) {
+    configuredMarkets = [];
+  }
+
   if (!forceLive && bundledSnapshot && Number(bundledSnapshot.timeframeDays || timeframeDays) === timeframeDays) {
     bundledSnapshot = normalizeSnapshotRevenue(bundledSnapshot, currencyContext, bundledSnapshot.markets);
     await recordKlaviyoPerformanceLearning(bundledSnapshot.campaignGroups, timeframeDays).catch(() => null);
+    // Campaign and flow performance can come from the bundled snapshot - it is a record of sends
+    // that already happened and does not change. A subscriber count does change, every day, and
+    // serving a months-old one with no warning was the single most misleading thing this route did.
+    // Klaviyo reports the count itself in one request per market, so there is no reason not to ask.
+    const levels = await refreshSubscriberLevels(configuredMarkets, config);
+    const subscribers = await composeSubscribers({
+      snapshot: bundledSnapshot,
+      levels,
+      marketCodes: configuredMarkets.map((market) => String(market.country || "").trim()).filter(Boolean)
+    });
     sendJson(res, 200, {
       ...bundledSnapshot,
-      source: "snapshot"
+      subscribers,
+      overview: buildOverview(
+        bundledSnapshot.campaignGroups || [],
+        bundledSnapshot.flowGroups || [],
+        subscribers,
+        bundledSnapshot.markets || []
+      ),
+      source: "snapshot",
+      snapshotGeneratedAt: bundledSnapshot.generatedAt || "",
+      refreshWarning: describeSnapshotAge(bundledSnapshot.generatedAt),
+      subscriberWarning: levels.warning
     });
     return;
   }
 
-  let markets = [];
+  let markets = configuredMarkets;
   try {
     markets = parseMarkets(config.klaviyoMarketsJson);
   } catch (error) {
@@ -1087,14 +1193,41 @@ module.exports = async (req, res) => {
       ? "snapshot_history"
       : "unavailable";
 
+    // A market whose fetch rejected never reached subscriberMarkets, so the total used to sum
+    // seventeen markets and still report itself as a clean live read. Carry the last recorded figure
+    // for it instead, labelled, so the number stays whole and the gap is visible.
+    const measuredCountries = new Set(subscriberMarkets.map((item) => String(item.country || "").trim()));
+    const missingSubscriberMarkets = marketCodes
+      .filter((country) => country && !measuredCountries.has(country))
+      .map((country) => {
+        const previous = (bundledSnapshot?.subscribers?.markets || [])
+          .find((item) => String(item.country || "").trim() === country) || {};
+        return {
+          country,
+          listId: previous.listId || "",
+          listName: previous.listName || "",
+          count: Number(previous.count || 0),
+          countSource: "last_recorded"
+        };
+      });
+
+    const allSubscriberMarkets = [...subscriberMarkets, ...missingSubscriberMarkets]
+      .sort((a, b) => String(a.country).localeCompare(String(b.country)));
+
+    const history = await readSubscriberHistory().catch(() => null);
     const subscribers = {
-      total: subscriberMarkets.reduce((sum, item) => sum + (item.count || 0), 0),
-      markets: subscriberMarkets.sort((a, b) => String(a.country).localeCompare(String(b.country))),
+      total: allSubscriberMarkets.reduce((sum, item) => sum + (item.count || 0), 0),
+      markets: allSubscriberMarkets,
       timeline: bundledSnapshot?.subscribers?.timeline || null,
       snapshots: bundledSnapshot?.subscribers?.snapshots || null,
-      countSource: subscriberCountSource,
-      historySource: subscriberHistorySource,
-      historyGeneratedAt: bundledSnapshot?.generatedAt || ""
+      countSource: missingSubscriberMarkets.length ? "mixed_live_last_recorded" : subscriberCountSource,
+      countMeasuredAt: new Date().toISOString(),
+      historySource: history?.entries?.length ? "subscriber_history" : subscriberHistorySource,
+      historyGeneratedAt: bundledSnapshot?.generatedAt || "",
+      flow: history
+        ? buildSubscriberFlowSeries(history, { markets: marketCodes })
+        : { available: false, reason: "The subscriber history store could not be read.", periods: [], markets: [], totals: { joined: [], removed: [], net: [] } },
+      missingMarkets: missingSubscriberMarkets.map((item) => item.country)
     };
 
     await recordKlaviyoPerformanceLearning(groups, timeframeDays).catch(() => null);
@@ -1122,11 +1255,13 @@ module.exports = async (req, res) => {
       refreshWarning: failedMarkets.length
         ? `Live refresh completed with gaps in ${failedMarkets.length} market${failedMarkets.length === 1 ? "" : "s"}. ${failedMarkets.slice(0, 3).join(" | ")}`
         : "",
-      subscriberWarning: hasSnapshotFallbackCounts
-        ? "Some subscriber counts used snapshot fallback because live list counts could not be fetched for every market."
-        : hasMissingListCounts
-          ? "Some subscriber counts may be incomplete because a newsletter list could not be identified for every market."
-          : ""
+      subscriberWarning: subscribers.missingMarkets.length
+        ? `No live subscriber count for ${subscribers.missingMarkets.join(", ")}; the last recorded figure is included for ${subscribers.missingMarkets.length === 1 ? "that market" : "those markets"}.`
+        : hasSnapshotFallbackCounts
+          ? "Some subscriber counts used snapshot fallback because live list counts could not be fetched for every market."
+          : hasMissingListCounts
+            ? "Some subscriber counts may be incomplete because a newsletter list could not be identified for every market."
+            : ""
     });
   } catch (error) {
     if (bundledSnapshot) {

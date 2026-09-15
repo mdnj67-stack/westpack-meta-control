@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-15T06:46:19.843Z",
+  "entries": [
+    {
+      "date": "2026-04-16",
+      "recordedAt": "2026-04-16T12:38:44.750Z",
+      "markets": {
+        "CZ": {
+          "total": 68,
+          "joined": 0,
+          "listId": "RgEnRn",
+          "listName": "News from Westpack (CZ)"
+        },
+        "DE": {
+          "total": 2149,
+          "joined": 0,
+          "listId": "WaGU4J",
+          "listName": "Neuheiten von Westpack (DE)"
+        },
+        "DK": {
+          "total": 1204,
+          "joined": 0,
+          "listId": "SbvRDH",
+          "listName": "Westpack Nyhedsbrev (DK)"
+        },
+        "ES": {
+          "total": 909,
+          "joined": 0,
+          "listId": "SiM7Sm",
+          "listName": "Noticias de Westpack (ES)"
+        },
+        "EU": {
+          "total": 4260,
+          "joined": 0,
+          "listId": "Ue5ZZe",
+          "listName": "News from Westpack (EU)"
+        },
+        "FI": {
+          "total": 535,
+          "joined": 0,
+          "listId": "WegqiS",
+          "listName": "Westpackin uutiskirje (FI)"
+        },
+        "FR": {
+          "total": 3567,
+          "joined": 0,
+          "listId": "SWpazR",
+          "listName": "Nouveauté de Westpack (FR)"
+        },
+        "HU": {
+          "total": 39,
+          "joined": 0,
+          "listId": "YjQqnR",
+          "listName": "News from Westpack (HU)"
+        },
+        "IT": {
+          "total": 1550,
+          "joined": 0,
+          "listId": "WBKFUe",
+          "listName": "Notizie da Westpack (IT)"
+        },
+        "NL": {
+          "total": 2138,
+          "joined": 0,
+          "listId": "VyamuZ",
+          "listName": "Westpack Nieuwsbrief (NL)"
+        },
+        "NO": {
+          "total": 103,
+          "joined": 0,
+          "listId": "V6S5Ez",
+          "listName": "Westpack Nyhetsbrev (NO)"
+        },
+        "PL": {
+          "total": 1285,
+          "joined": 0,
+          "listId": "XFkwqv",
+          "listName": "Newsletter z Westpack (PL)"
+        },
+        "PT": {
+          "total": 465,
+          "joined": 0,
+          "listId": "QTQvXe",
+          "listName": "Notícias da Westpack (PT)"
+        },
+        "RO": {
+          "total": 240,
+          "joined": 0,
+          "listId": "TBmyB7",
+          "listName": "News from Westpack (RO)"
+        },
+        "SE": {
+          "total": 958,
+          "joined": 0,
+          "listId": "SZmaQa",
+          "listName": "Nyheter från Westpack (SE)"
+        },
+        "SK": {
+          "total": 48,
+          "joined": 0,
+          "listId": "SQgvnq",
+          "listName": "News from Westpack (SK)"
+        },
+        "UK": {
+          "total": 4553,
+          "joined": 0,
+          "listId": "RVh6qy",
+          "listName": "Westpack Newsletter (UK)"
+        },
+        "US": {
+          "total": 1984,
+          "joined": 0,
+          "listId": "W29TuN",
+          "listName": "Westpack News (US)"
+        }
+      }
+    }
+  ]
+}

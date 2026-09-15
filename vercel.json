@@ -8,6 +8,12 @@
     },
     "api/meta/account-snapshot.js": {
       "maxDuration": 300
+    },
+    "api/klaviyo/subscriber-history.js": {
+      "maxDuration": 300
+    },
+    "api/klaviyo/campaign-overview.js": {
+      "maxDuration": 300
     }
   },
   "crons": [
@@ -18,6 +24,10 @@
     {
       "path": "/api/meta/account-snapshot?historical=sync",
       "schedule": "20 3 * * *"
+    },
+    {
+      "path": "/api/klaviyo/subscriber-history",
+      "schedule": "30 4 * * *"
     }
   ],
   "rewrites": [

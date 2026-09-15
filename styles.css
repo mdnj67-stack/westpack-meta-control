@@ -17660,3 +17660,193 @@ body.campaign-studio-review-mode .main-content {
     padding: 5px 10px;
   }
 }
+
+/* Subscriber joins vs removals. The dashboard used to report one level per market, so a list could
+   take in 3,414 people, lose 3,661 and still look like it was standing still. Joined is green
+   because it is the number the team is trying to move; removed is the danger tone because it is the
+   one that has been quietly winning. */
+.klaviyo-subscriber-flow {
+  margin-bottom: 18px;
+}
+
+.klaviyo-flow-card {
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(231, 224, 213, 0.92);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 245, 239, 0.96) 100%);
+}
+
+.klaviyo-flow-card.is-empty p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  max-width: 68ch;
+}
+
+.klaviyo-flow-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.klaviyo-flow-head strong {
+  display: block;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  margin-top: 6px;
+}
+
+.klaviyo-flow-head p {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.klaviyo-flow-figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 18px;
+}
+
+.klaviyo-flow-figures article {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.klaviyo-flow-figures article span {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.klaviyo-flow-figures article strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.klaviyo-flow-figures article p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.klaviyo-flow-figures .is-joined strong { color: var(--success); }
+.klaviyo-flow-figures .is-removed strong { color: var(--danger); }
+.klaviyo-flow-figures .is-net.is-up strong { color: var(--success); }
+.klaviyo-flow-figures .is-net.is-down strong { color: var(--danger); }
+
+.klaviyo-flow-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.klaviyo-flow-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 68px 72px 66px;
+  align-items: center;
+  gap: 10px;
+}
+
+.klaviyo-flow-row.is-head {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.klaviyo-flow-row.is-head .klaviyo-flow-track-label {
+  text-align: center;
+}
+
+.klaviyo-flow-market {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.klaviyo-flow-track {
+  position: relative;
+  display: block;
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(230, 222, 211, 0.85);
+  overflow: hidden;
+}
+
+.klaviyo-flow-axis {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.klaviyo-flow-bar {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  min-width: 2px;
+}
+
+.klaviyo-flow-bar.is-removed {
+  right: 50%;
+  border-radius: 4px 0 0 4px;
+  background: rgba(154, 63, 49, 0.9);
+}
+
+.klaviyo-flow-bar.is-joined {
+  left: 50%;
+  border-radius: 0 4px 4px 0;
+  background: rgba(47, 125, 50, 0.9);
+}
+
+.klaviyo-flow-num {
+  text-align: right;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.klaviyo-flow-num.is-joined { color: var(--success); }
+.klaviyo-flow-num.is-removed { color: var(--danger); }
+
+.klaviyo-flow-foot {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.76rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .klaviyo-flow-figures {
+    grid-template-columns: 1fr;
+  }
+
+  .klaviyo-flow-row {
+    grid-template-columns: 38px minmax(0, 1fr) 60px 64px;
+  }
+
+  .klaviyo-flow-row > :last-child {
+    display: none;
+  }
+}

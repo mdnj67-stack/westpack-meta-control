@@ -391,8 +391,10 @@ const appState = {
     timeline: null,
     snapshots: null,
     countSource: "",
+    countMeasuredAt: "",
     historySource: "",
-    historyGeneratedAt: ""
+    historyGeneratedAt: "",
+    flow: null
   },
   klaviyoSubscriberMarket: "total",
   klaviyoSubscriberMode: "net",
@@ -2964,7 +2966,101 @@ function buildKlaviyoSubscriberModeNote(mode, snapshotDates) {
     : "Cumulative growth is join-based for now. As snapshot history builds up, it becomes easier to compare modeled growth with actual list size movement.";
 }
 
+// A subscriber total on its own cannot distinguish a list that is standing still from one taking in
+// 3,414 people and losing 3,661. This panel keeps the two flows apart, over the interval between the
+// two most recent recorded snapshots.
+function renderKlaviyoSubscriberFlow() {
+  const node = document.getElementById("klaviyo-subscriber-flow");
+  if (!node) return;
+
+  const flow = appState.klaviyoSubscribers?.flow || null;
+  if (!flow || !flow.available) {
+    const reason = String(flow?.reason || "Subscriber joins and removals have not been recorded yet.");
+    node.innerHTML = `
+      <section class="klaviyo-flow-card is-empty">
+        <span class="section-label">Joined vs removed</span>
+        <p>${escapeHtml(reason)} The daily snapshot builds this series; the first comparison appears once two have been recorded.</p>
+      </section>
+    `;
+    return;
+  }
+
+  const index = flow.periods.length - 1;
+  const period = flow.periods[index];
+  const joined = Number(flow.totals.joined[index] || 0);
+  const removed = Number(flow.totals.removed[index] || 0);
+  const net = Number(flow.totals.net[index] || 0);
+  const days = Math.max(1, Number(period?.days || 1));
+  const perDay = (value) => `${(value / days).toFixed(1)}/day`;
+
+  const rows = flow.markets
+    .map((row) => ({
+      country: row.country,
+      joined: Number(row.joined[index] || 0),
+      removed: Number(row.removed[index] || 0),
+      net: Number(row.net[index] || 0),
+      total: row.total
+    }))
+    .filter((row) => row.joined || row.removed)
+    .sort((a, b) => (b.joined + b.removed) - (a.joined + a.removed));
+
+  const scale = Math.max(1, ...rows.map((row) => Math.max(Math.abs(row.joined), Math.abs(row.removed))));
+
+  node.innerHTML = `
+    <section class="klaviyo-flow-card">
+      <div class="klaviyo-flow-head">
+        <div>
+          <span class="section-label">Joined vs removed</span>
+          <strong>${escapeHtml(period?.from || "")} → ${escapeHtml(period?.to || "")} · ${days} days</strong>
+        </div>
+        <p>${escapeHtml(flow.basis?.removed || "")}</p>
+      </div>
+      <div class="klaviyo-flow-figures">
+        <article class="is-joined">
+          <span>Joined</span>
+          <strong>+${escapeHtml(formatKlaviyoNumber(joined, 0))}</strong>
+          <p>${escapeHtml(perDay(joined))}</p>
+        </article>
+        <article class="is-removed">
+          <span>Removed</span>
+          <strong>−${escapeHtml(formatKlaviyoNumber(Math.abs(removed), 0))}</strong>
+          <p>${escapeHtml(perDay(Math.abs(removed)))}</p>
+        </article>
+        <article class="is-net ${net > 0 ? "is-up" : net < 0 ? "is-down" : ""}">
+          <span>Net</span>
+          <strong>${net > 0 ? "+" : net < 0 ? "−" : ""}${escapeHtml(formatKlaviyoNumber(Math.abs(net), 0))}</strong>
+          <p>${escapeHtml(perDay(Math.abs(net)))}</p>
+        </article>
+      </div>
+      <div class="klaviyo-flow-rows">
+        <div class="klaviyo-flow-row is-head">
+          <span>Market</span>
+          <span class="klaviyo-flow-track-label">Removed · Joined</span>
+          <span class="klaviyo-flow-num">Joined</span>
+          <span class="klaviyo-flow-num">Removed</span>
+          <span class="klaviyo-flow-num">Net</span>
+        </div>
+        ${rows.map((row) => `
+          <div class="klaviyo-flow-row">
+            <span class="klaviyo-flow-market">${escapeHtml(row.country)}</span>
+            <span class="klaviyo-flow-track">
+              <i class="klaviyo-flow-axis"></i>
+              <i class="klaviyo-flow-bar is-removed" style="width: ${((Math.max(0, row.removed) / scale) * 50).toFixed(2)}%"></i>
+              <i class="klaviyo-flow-bar is-joined" style="width: ${((Math.max(0, row.joined) / scale) * 50).toFixed(2)}%"></i>
+            </span>
+            <span class="klaviyo-flow-num is-joined">+${escapeHtml(formatKlaviyoNumber(row.joined, 0))}</span>
+            <span class="klaviyo-flow-num is-removed">−${escapeHtml(formatKlaviyoNumber(Math.abs(row.removed), 0))}</span>
+            <span class="klaviyo-flow-num ${row.net > 0 ? "is-joined" : row.net < 0 ? "is-removed" : ""}">${row.net > 0 ? "+" : row.net < 0 ? "−" : ""}${escapeHtml(formatKlaviyoNumber(Math.abs(row.net), 0))}</span>
+          </div>
+        `).join("")}
+      </div>
+      <p class="klaviyo-flow-foot">${escapeHtml(flow.basis?.joined || "")}</p>
+    </section>
+  `;
+}
+
 function renderKlaviyoSubscriberSection() {
+  renderKlaviyoSubscriberFlow();
   const totalNode = document.getElementById("klaviyo-subscriber-total");
   const chartNode = document.getElementById("klaviyo-subscriber-chart");
   const metaNode = document.getElementById("klaviyo-subscriber-meta");
@@ -4042,8 +4138,10 @@ function applyKlaviyoSnapshot(snapshot, source = "live") {
       timeline: incomingSubscribers.timeline || null,
       snapshots: incomingSubscribers.snapshots || null,
       countSource: nextCountSource,
+      countMeasuredAt: String(incomingSubscribers.countMeasuredAt || ""),
       historySource: nextHistorySource,
-      historyGeneratedAt: nextHistoryGeneratedAt
+      historyGeneratedAt: nextHistoryGeneratedAt,
+      flow: incomingSubscribers.flow || null
     };
   }
   appState.klaviyoDataSource = source;
