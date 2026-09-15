@@ -14,9 +14,13 @@ const {
   buildHeaders,
   collectListJoinTallies,
   countJoinsSince,
-  resolveNewsletterList
+  resolveNewsletterList,
+  sliceJoinsSince
 } = require("../../server/klaviyo/newsletter-lists");
 const {
+  buildConsentBreakdown,
+  buildDailyJoinSeries,
+  buildRecordedTotalsSeries,
   buildSubscriberFlowSeries,
   getSubscriberHistoryStoreProfile,
   readSubscriberHistory,
@@ -81,11 +85,13 @@ async function measureMarket(market, { config, since }) {
   const list = await resolveNewsletterList(headers, { listId: market.listId, listName: market.listName });
   if (!list?.id) throw new Error(`${country}: no newsletter list could be identified.`);
 
-  const { total, joinedByDate } = await collectListJoinTallies(headers, list.id);
+  const { total, joinedByDate, consent } = await collectListJoinTallies(headers, list.id);
   return {
     country,
     total,
     joined: countJoinsSince(joinedByDate, since),
+    joinedDaily: sliceJoinsSince(joinedByDate, since),
+    consent,
     listId: list.id,
     listName: list.name,
     resolvedBy: list.resolvedBy
@@ -124,7 +130,10 @@ module.exports = async (req, res) => {
       store,
       snapshotCount: history.entries.length,
       lastRecordedAt: history.entries[history.entries.length - 1]?.date || "",
-      flow: buildSubscriberFlowSeries(history, { markets: marketCodes })
+      flow: buildSubscriberFlowSeries(history, { markets: marketCodes }),
+      dailyJoins: buildDailyJoinSeries(history, { markets: marketCodes }),
+      totalsSeries: buildRecordedTotalsSeries(history, { markets: marketCodes }),
+      consent: buildConsentBreakdown(history, { markets: marketCodes })
     });
     return;
   }
@@ -136,8 +145,11 @@ module.exports = async (req, res) => {
 
   const existing = await readSubscriberHistory();
   // Joins are counted since the previous snapshot, so the interval the series draws is exactly the
-  // interval the joins were measured over.
-  const since = existing.entries[existing.entries.length - 1]?.date || "";
+  // interval the joins were measured over. Today's own entry is excluded deliberately: recording
+  // twice in one day would otherwise measure joins "since today", write ~0, and overwrite the real
+  // interval it had already captured. Re-running has to be safe, because a cron that retries will.
+  const priorEntries = existing.entries.filter((entry) => entry.date < todayKey());
+  const since = priorEntries[priorEntries.length - 1]?.date || "";
 
   const results = await mapWithConcurrencySettled(
     markets.filter((market) => String(market.country || "").trim() && String(market.privateKey || "").trim()),
@@ -155,7 +167,14 @@ module.exports = async (req, res) => {
       continue;
     }
     const row = result.value;
-    measured[row.country] = { total: row.total, joined: row.joined, listId: row.listId, listName: row.listName };
+    measured[row.country] = {
+      total: row.total,
+      joined: row.joined,
+      joinedDaily: row.joinedDaily,
+      consent: row.consent,
+      listId: row.listId,
+      listName: row.listName
+    };
     if (row.resolvedBy === "keyword_guess" || row.resolvedBy === "branded_name_ambiguous") {
       keywordGuesses.push(`${row.country} → ${row.listName} (${row.resolvedBy})`);
     }
@@ -179,6 +198,9 @@ module.exports = async (req, res) => {
       failures.length ? `${failures.length} market(s) could not be measured: ${failures.slice(0, 3).join(" | ")}` : "",
       keywordGuesses.length ? `List identified by name guess in: ${keywordGuesses.join(", ")}` : ""
     ].filter(Boolean),
-    flow: buildSubscriberFlowSeries(history, { markets: marketCodes })
+    flow: buildSubscriberFlowSeries(history, { markets: marketCodes }),
+    dailyJoins: buildDailyJoinSeries(history, { markets: marketCodes }),
+    totalsSeries: buildRecordedTotalsSeries(history, { markets: marketCodes }),
+    consent: buildConsentBreakdown(history, { markets: marketCodes })
   });
 };

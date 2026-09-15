@@ -397,7 +397,7 @@ const appState = {
     flow: null
   },
   klaviyoSubscriberMarket: "total",
-  klaviyoSubscriberMode: "net",
+  klaviyoSubscriberMode: "daily",
   klaviyoSubscriberRange: 30,
   klaviyoView: "dashboard",
   klaviyoDashboardTab: "general",
@@ -2757,7 +2757,9 @@ function sliceSeriesByRange(series = [], dates = [], days = 30) {
 
 function buildUnsubTimeline(key = "total") {
   const subscribers = appState.klaviyoSubscribers || {};
-  const timelineDates = Array.isArray(subscribers.timeline?.dates) ? subscribers.timeline.dates : [];
+  // Keyed to the recorded join dates, not the April snapshot's window. Against that frozen window
+  // every campaign send fell outside the map and silently scored zero unsubscribes.
+  const timelineDates = Array.isArray(subscribers.dailyJoins?.dates) ? subscribers.dailyJoins.dates : [];
   const dateMap = new Map(timelineDates.map((date) => [date, 0]));
   const groups = Array.isArray(appState.klaviyoCampaignGroups) ? appState.klaviyoCampaignGroups : [];
 
@@ -2810,89 +2812,41 @@ function buildPermissionMetrics(key = "total", rangeDays = 30) {
   };
 }
 
+// The Audience chart used to draw the April snapshot's frozen 180-day curve, whose final value sat
+// directly above a live total it no longer agreed with. It now reads the recorded archive, which
+// supports exactly two honest views: how many joined each day, and what the list actually measured
+// at each recorded snapshot. The old 'net' and 'snapshot' modes are gone - net per day was daily
+// joins minus unsubscribes estimated from campaign unsub rates, which is not the same thing as
+// removals at all, and the flow panel now reports the real figure.
 function buildSubscriberSeriesForKey(key, mode = "cumulative") {
   const subscribers = appState.klaviyoSubscribers || {};
-  const timeline = subscribers.timeline || {};
-  const snapshots = subscribers.snapshots || {};
-  const markets = Array.isArray(timeline.markets) ? timeline.markets : [];
-
-  if (key === "total") {
-    if (mode === "net") {
-      const unsubs = buildUnsubTimeline("total");
-      const subs = Array.isArray(timeline.totalJoinedDaily) ? timeline.totalJoinedDaily : [];
-      return {
-        label: "Total net growth",
-        listName: "All newsletter lists",
-        series: subs.map((value, index) => Number(((value || 0) - (unsubs.series[index] || 0)).toFixed(2))),
-        dates: Array.isArray(timeline.dates) ? timeline.dates : []
-      };
-    }
-    if (mode === "daily") {
-      return {
-        label: "Total new subscribers",
-        listName: "All newsletter lists",
-        series: Array.isArray(timeline.totalJoinedDaily) ? timeline.totalJoinedDaily : [],
-        dates: Array.isArray(timeline.dates) ? timeline.dates : []
-      };
-    }
-    if (mode === "snapshot") {
-      return {
-        label: "Total snapshot subscribers",
-        listName: "All newsletter lists",
-        series: Array.isArray(snapshots.totalSeries) ? snapshots.totalSeries : [],
-        dates: Array.isArray(snapshots.dates) ? snapshots.dates : []
-      };
-    }
-    return {
-      label: "Total subscribers",
-      listName: "All newsletter lists",
-      series: Array.isArray(timeline.totalCumulative) ? timeline.totalCumulative : [],
-      dates: Array.isArray(timeline.dates) ? timeline.dates : []
-    };
-  }
-
-  const market = markets.find((item) => item.country === key);
-  const snapshotMarket = (snapshots.markets || []).find((item) => item.country === key);
-  if (!market && !snapshotMarket) {
-    return {
-      label: `${key} subscribers`,
-      listName: "Newsletter list",
-      series: [],
-      dates: []
-    };
-  }
+  const dailyJoins = subscribers.dailyJoins || {};
+  const totalsSeries = subscribers.totalsSeries || {};
+  const isTotal = key === "total";
+  const listName = isTotal
+    ? "All newsletter lists"
+    : (subscribers.markets || []).find((item) => item.country === key)?.listName || "Newsletter list";
 
   if (mode === "daily") {
+    const row = isTotal ? null : (dailyJoins.markets || []).find((item) => item.country === key);
     return {
-      label: `${key} new subscribers`,
-      listName: market?.listName || snapshotMarket?.listName || "Newsletter list",
-      series: Array.isArray(market?.joinedDaily) ? market.joinedDaily : [],
-      dates: Array.isArray(timeline.dates) ? timeline.dates : []
-    };
-  }
-  if (mode === "net") {
-    const unsubs = buildUnsubTimeline(key);
-    return {
-      label: `${key} net growth`,
-      listName: market?.listName || snapshotMarket?.listName || "Newsletter list",
-      series: (Array.isArray(market?.joinedDaily) ? market.joinedDaily : []).map((value, index) => Number(((value || 0) - (unsubs.series[index] || 0)).toFixed(2))),
-      dates: Array.isArray(timeline.dates) ? timeline.dates : []
-    };
-  }
-  if (mode === "snapshot") {
-    return {
-      label: `${key} snapshot subscribers`,
-      listName: market?.listName || snapshotMarket?.listName || "Newsletter list",
-      series: Array.isArray(snapshotMarket?.series) ? snapshotMarket.series : [],
-      dates: Array.isArray(snapshots.dates) ? snapshots.dates : []
+      label: isTotal ? "New subscribers per day" : `${key} new subscribers per day`,
+      listName,
+      series: isTotal
+        ? (Array.isArray(dailyJoins.joined) ? dailyJoins.joined : [])
+        : (Array.isArray(row?.joined) ? row.joined : []),
+      dates: Array.isArray(dailyJoins.dates) ? dailyJoins.dates : []
     };
   }
 
+  const row = isTotal ? null : (totalsSeries.markets || []).find((item) => item.country === key);
   return {
-    label: `${key} subscribers`,
-    listName: market?.listName || snapshotMarket?.listName || "Newsletter list",
-    series: Array.isArray(market?.cumulative) ? market.cumulative : [],
-    dates: Array.isArray(timeline.dates) ? timeline.dates : []
+    label: isTotal ? "Recorded list size" : `${key} recorded list size`,
+    listName,
+    series: isTotal
+      ? (Array.isArray(totalsSeries.totals) ? totalsSeries.totals : [])
+      : (Array.isArray(row?.totals) ? row.totals : []),
+    dates: Array.isArray(totalsSeries.dates) ? totalsSeries.dates : []
   };
 }
 
@@ -2945,25 +2899,15 @@ function buildKlaviyoSubscriberMetricCards(mode, series, permissionMetrics) {
 }
 
 function buildKlaviyoSubscriberModeNote(mode, snapshotDates) {
-  const hasSnapshotHistory = Array.isArray(snapshotDates) && snapshotDates.length > 1;
-
-  if (mode === "snapshot") {
-    return hasSnapshotHistory
-      ? `Snapshot history is live from ${snapshotDates[0]} to ${snapshotDates[snapshotDates.length - 1]}. This view shows real list size changes between saved snapshots.`
-      : "Snapshot tracking has started, but there is not enough history yet to show a meaningful before/after change.";
-  }
+  const recorded = Array.isArray(snapshotDates) ? snapshotDates : [];
 
   if (mode === "daily") {
-    return "This view shows new subscribers added per day. Use it to spot acquisition spikes, soft days, and uneven market pacing.";
+    return "New members per day, counted from each current member's joined_group_at. Someone who joined and was removed again before the last nightly reading is not in this curve.";
   }
 
-  if (mode === "net") {
-    return "This view estimates net subscriber movement per day by subtracting estimated unsubscribes from daily joins.";
-  }
-
-  return hasSnapshotHistory
-    ? `Cumulative growth shows join-based build-up over time. Snapshot history from ${snapshotDates[0]} to ${snapshotDates[snapshotDates.length - 1]} helps compare modeled growth with real list movement.`
-    : "Cumulative growth is join-based for now. As snapshot history builds up, it becomes easier to compare modeled growth with actual list size movement.";
+  return recorded.length > 1
+    ? `List size as actually measured on ${recorded[0]} through ${recorded[recorded.length - 1]}. One point per nightly reading - the line between two points is drawn, not observed.`
+    : "List size as actually measured. The curve fills in from one nightly reading to the next.";
 }
 
 // A subscriber total on its own cannot distinguish a list that is standing still from one taking in
@@ -3059,8 +3003,72 @@ function renderKlaviyoSubscriberFlow() {
   `;
 }
 
+// The headline count is list membership, which is the figure the marketing team asks for. It is not
+// the figure that predicts reach: of 25,808 members on 2026-09-15 only 19,118 had actually opted in,
+// and the share ran from 53% in DK to 99% in CZ. Showing the split next to the total is what makes a
+// market's reach explicable without opening Klaviyo.
+function renderKlaviyoSubscriberConsent() {
+  const node = document.getElementById("klaviyo-subscriber-consent");
+  if (!node) return;
+
+  const consent = appState.klaviyoSubscribers?.consent || null;
+  if (!consent || !consent.available) {
+    node.innerHTML = "";
+    return;
+  }
+
+  const share = (value) => (consent.total ? (value / consent.total) * 100 : 0);
+  const rows = [...(consent.markets || [])].sort((a, b) => a.subscribedShare - b.subscribedShare);
+
+  node.innerHTML = `
+    <section class="klaviyo-consent-card">
+      <div class="klaviyo-flow-head">
+        <div>
+          <span class="section-label">Who has actually opted in</span>
+          <strong>${escapeHtml(formatKlaviyoNumber(consent.subscribed, 0))} of ${escapeHtml(formatKlaviyoNumber(consent.total, 0))} · ${escapeHtml(formatKlaviyoPercent(consent.subscribedShare))}</strong>
+        </div>
+        <p>Measured ${escapeHtml(consent.measuredAt || "")}. Membership is the headline count; consent is what decides whether a campaign can reach them.</p>
+      </div>
+
+      <div class="klaviyo-consent-bar" role="img" aria-label="Consent split across all newsletter lists">
+        <i class="is-subscribed" style="width: ${share(consent.subscribed).toFixed(2)}%"></i>
+        <i class="is-never" style="width: ${share(consent.neverSubscribed).toFixed(2)}%"></i>
+        <i class="is-unsub" style="width: ${share(consent.unsubscribed).toFixed(2)}%"></i>
+      </div>
+      <div class="klaviyo-consent-legend">
+        <span><i class="is-subscribed"></i>Opted in · ${escapeHtml(formatKlaviyoNumber(consent.subscribed, 0))}</span>
+        <span><i class="is-never"></i>Never opted in · ${escapeHtml(formatKlaviyoNumber(consent.neverSubscribed, 0))}</span>
+        <span><i class="is-unsub"></i>Opted out · ${escapeHtml(formatKlaviyoNumber(consent.unsubscribed, 0))}</span>
+      </div>
+
+      <div class="klaviyo-consent-rows">
+        <div class="klaviyo-consent-row is-head">
+          <span>Market</span>
+          <span>Share opted in</span>
+          <span class="klaviyo-flow-num">Members</span>
+          <span class="klaviyo-flow-num">Opted in</span>
+          <span class="klaviyo-flow-num">Share</span>
+        </div>
+        ${rows.map((row) => `
+          <div class="klaviyo-consent-row ${row.subscribedShare < 70 ? "is-weak" : ""}">
+            <span class="klaviyo-flow-market">${escapeHtml(row.country)}</span>
+            <span class="klaviyo-consent-track">
+              <i style="width: ${Math.max(1, row.subscribedShare).toFixed(2)}%"></i>
+            </span>
+            <span class="klaviyo-flow-num">${escapeHtml(formatKlaviyoNumber(row.total, 0))}</span>
+            <span class="klaviyo-flow-num">${escapeHtml(formatKlaviyoNumber(row.subscribed, 0))}</span>
+            <span class="klaviyo-flow-num">${escapeHtml(formatKlaviyoPercent(row.subscribedShare))}</span>
+          </div>
+        `).join("")}
+      </div>
+      <p class="klaviyo-flow-foot">Sorted weakest first. A market below 70% is carrying a large block of members it cannot email, which is also the pool the account's deletion flows draw from.</p>
+    </section>
+  `;
+}
+
 function renderKlaviyoSubscriberSection() {
   renderKlaviyoSubscriberFlow();
+  renderKlaviyoSubscriberConsent();
   const totalNode = document.getElementById("klaviyo-subscriber-total");
   const chartNode = document.getElementById("klaviyo-subscriber-chart");
   const metaNode = document.getElementById("klaviyo-subscriber-meta");
@@ -3127,7 +3135,7 @@ function renderKlaviyoSubscriberSection() {
   }
 
   if (modeNode) {
-    modeNode.value = appState.klaviyoSubscriberMode || "net";
+    modeNode.value = appState.klaviyoSubscriberMode || "daily";
   }
 
   if (rangeNode) {
@@ -3150,9 +3158,9 @@ function renderKlaviyoSubscriberSection() {
   const yBounds = buildTrendBounds(series, appState.klaviyoSubscriberMode || "cumulative");
   const path = buildLinePath(series, chartWidth, chartHeight, 24, yBounds);
   const currentValue = series[series.length - 1] || 0;
-  const snapshotDates = subscribers.snapshots?.dates || [];
+  const snapshotDates = subscribers.totalsSeries?.dates || [];
   const maxCount = Math.max(...markets.map((item) => item.count || 0), 1);
-  const mode = appState.klaviyoSubscriberMode || "net";
+  const mode = appState.klaviyoSubscriberMode || "daily";
   const metricCards = buildKlaviyoSubscriberMetricCards(mode, series, permissionMetrics);
   const modeNote = buildKlaviyoSubscriberModeNote(mode, snapshotDates);
   chartNode.innerHTML = markets

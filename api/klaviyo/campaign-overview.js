@@ -4,7 +4,13 @@ const { requireAuth } = require("../../server/lib/auth");
 const { fetchWithTimeout, sendJson } = require("../../server/lib/http");
 const { recordArtifactLearning } = require("../../server/campaign/campaign-learning-service");
 const { fetchListProfileCount, resolveNewsletterList } = require("../../server/klaviyo/newsletter-lists");
-const { buildSubscriberFlowSeries, readSubscriberHistory } = require("../../server/klaviyo/subscriber-history");
+const {
+  buildConsentBreakdown,
+  buildDailyJoinSeries,
+  buildRecordedTotalsSeries,
+  buildSubscriberFlowSeries,
+  readSubscriberHistory
+} = require("../../server/klaviyo/subscriber-history");
 const fs = require("fs");
 const path = require("path");
 
@@ -923,11 +929,15 @@ async function composeSubscribers({ snapshot = null, levels = { markets: [], fai
   });
 
   const history = await readSubscriberHistory().catch(() => null);
+  const seriesMarkets = marketCodes.length ? marketCodes : countries;
   const flow = history
-    ? buildSubscriberFlowSeries(history, { markets: marketCodes.length ? marketCodes : countries })
+    ? buildSubscriberFlowSeries(history, { markets: seriesMarkets })
     : { available: false, reason: "The subscriber history store could not be read.", periods: [], markets: [], totals: { joined: [], removed: [], net: [] } };
 
   return {
+    dailyJoins: history ? buildDailyJoinSeries(history, { markets: seriesMarkets }) : { available: false, dates: [], joined: [] },
+    totalsSeries: history ? buildRecordedTotalsSeries(history, { markets: seriesMarkets }) : { available: false, dates: [], totals: [] },
+    consent: history ? buildConsentBreakdown(history, { markets: seriesMarkets }) : { available: false, markets: [] },
     total: rows.reduce((sum, row) => sum + (Number(row.count) || 0), 0),
     markets: rows,
     timeline: snapshot?.subscribers?.timeline || null,
@@ -1227,6 +1237,9 @@ module.exports = async (req, res) => {
       flow: history
         ? buildSubscriberFlowSeries(history, { markets: marketCodes })
         : { available: false, reason: "The subscriber history store could not be read.", periods: [], markets: [], totals: { joined: [], removed: [], net: [] } },
+      dailyJoins: history ? buildDailyJoinSeries(history, { markets: marketCodes }) : { available: false, dates: [], joined: [] },
+      totalsSeries: history ? buildRecordedTotalsSeries(history, { markets: marketCodes }) : { available: false, dates: [], totals: [] },
+      consent: history ? buildConsentBreakdown(history, { markets: marketCodes }) : { available: false, markets: [] },
       missingMarkets: missingSubscriberMarkets.map((item) => item.country)
     };
 

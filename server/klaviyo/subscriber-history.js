@@ -69,9 +69,22 @@ function normalizeHistory(raw) {
       if (!code) continue;
       const total = Number(value?.total);
       if (!Number.isFinite(total)) continue;
+      const joinedDaily = {};
+      for (const [day, count] of Object.entries(value?.joinedDaily || {})) {
+        if (!isDateKey(day)) continue;
+        const parsed = Number(count);
+        if (Number.isFinite(parsed) && parsed > 0) joinedDaily[day] = parsed;
+      }
+      const consent = {};
+      for (const [state, count] of Object.entries(value?.consent || {})) {
+        const parsed = Number(count);
+        if (Number.isFinite(parsed) && parsed >= 0) consent[String(state).toUpperCase()] = parsed;
+      }
       markets[code] = {
         total,
         joined: Number.isFinite(Number(value?.joined)) ? Number(value.joined) : 0,
+        joinedDaily,
+        consent,
         listId: String(value?.listId || ""),
         listName: String(value?.listName || "")
       };
@@ -171,6 +184,131 @@ function buildSubscriberFlowSeries(history, { markets = [], limit = 60 } = {}) {
   };
 }
 
+// Joins at daily grain, assembled from every interval the archive holds. This is the series the
+// Audience chart draws; it used to draw the April snapshot's frozen 180-day curve, whose final value
+// sat directly above a live total it no longer agreed with.
+function buildDailyJoinSeries(history, { markets = [], days = 180 } = {}) {
+  const normalized = withSeed(history);
+  const wanted = new Set((Array.isArray(markets) ? markets : [])
+    .map((code) => String(code || "").trim().toUpperCase())
+    .filter(Boolean));
+
+  const byDate = new Map();
+  const byMarket = new Map();
+  for (const entry of normalized.entries) {
+    for (const [country, value] of Object.entries(entry.markets)) {
+      if (wanted.size && !wanted.has(country)) continue;
+      if (!byMarket.has(country)) byMarket.set(country, new Map());
+      const marketDates = byMarket.get(country);
+      for (const [day, count] of Object.entries(value.joinedDaily || {})) {
+        byDate.set(day, (byDate.get(day) || 0) + count);
+        marketDates.set(day, (marketDates.get(day) || 0) + count);
+      }
+    }
+  }
+
+  if (!byDate.size) {
+    return { available: false, reason: "No daily join detail has been recorded yet.", dates: [], joined: [], markets: [] };
+  }
+
+  const sorted = [...byDate.keys()].sort();
+  const last = sorted[sorted.length - 1];
+  const cutoff = new Date(Date.parse(last) - Math.max(1, days) * 86_400_000).toISOString().slice(0, 10);
+  const dates = sorted.filter((date) => date > cutoff);
+  return {
+    available: true,
+    reason: "",
+    dates,
+    // A day nobody joined is a real zero here - the walk covered it - unlike a day that was never
+    // measured at all, which simply is not in the list.
+    joined: dates.map((date) => byDate.get(date) || 0),
+    markets: [...byMarket.entries()]
+      .map(([country, marketDates]) => ({ country, joined: dates.map((date) => marketDates.get(date) || 0) }))
+      .sort((a, b) => a.country.localeCompare(b.country))
+  };
+}
+
+// The recorded totals, one point per snapshot. Real levels at real dates, rather than a cumulative
+// curve reconstructed from the join dates of whoever happens to have survived until now.
+function buildRecordedTotalsSeries(history, { markets = [] } = {}) {
+  const normalized = withSeed(history);
+  const wanted = (Array.isArray(markets) ? markets : [])
+    .map((code) => String(code || "").trim().toUpperCase())
+    .filter(Boolean);
+
+  const dates = [];
+  const totals = [];
+  const perMarket = new Map();
+  for (const entry of normalized.entries) {
+    const codes = wanted.length ? wanted : Object.keys(entry.markets);
+    const sum = codes.reduce((acc, code) => acc + (Number(entry.markets[code]?.total) || 0), 0);
+    dates.push(entry.date);
+    totals.push(sum);
+    for (const code of codes) {
+      if (!perMarket.has(code)) perMarket.set(code, []);
+      // A market absent from a snapshot gets a gap, never a zero: it was not measured that day.
+      const value = entry.markets[code]?.total;
+      perMarket.get(code).push(Number.isFinite(Number(value)) ? Number(value) : null);
+    }
+  }
+  return {
+    available: dates.length > 0,
+    dates,
+    totals,
+    markets: [...perMarket.entries()]
+      .map(([country, series]) => ({ country, totals: series }))
+      .sort((a, b) => a.country.localeCompare(b.country))
+  };
+}
+
+// How much of the headline number has actually opted in. Taken from the most recent snapshot that
+// recorded consent at all, so an older archive degrades to "unavailable" rather than to a guess.
+function buildConsentBreakdown(history, { markets = [] } = {}) {
+  const normalized = withSeed(history);
+  const wanted = new Set((Array.isArray(markets) ? markets : [])
+    .map((code) => String(code || "").trim().toUpperCase())
+    .filter(Boolean));
+
+  for (let index = normalized.entries.length - 1; index >= 0; index -= 1) {
+    const entry = normalized.entries[index];
+    const rows = Object.entries(entry.markets)
+      .filter(([country, value]) => (!wanted.size || wanted.has(country)) && Object.keys(value.consent || {}).length)
+      .map(([country, value]) => {
+        const consent = value.consent || {};
+        const subscribed = Number(consent.SUBSCRIBED || 0);
+        const total = Number(value.total || 0);
+        return {
+          country,
+          total,
+          subscribed,
+          unsubscribed: Number(consent.UNSUBSCRIBED || 0),
+          neverSubscribed: Number(consent.NEVER_SUBSCRIBED || 0),
+          unknown: Number(consent.UNKNOWN || 0),
+          subscribedShare: total ? Number(((subscribed / total) * 100).toFixed(1)) : 0
+        };
+      })
+      .sort((a, b) => b.total - a.total);
+
+    if (!rows.length) continue;
+
+    const sum = (key) => rows.reduce((acc, row) => acc + row[key], 0);
+    const total = sum("total");
+    return {
+      available: true,
+      measuredAt: entry.date,
+      markets: rows,
+      total,
+      subscribed: sum("subscribed"),
+      unsubscribed: sum("unsubscribed"),
+      neverSubscribed: sum("neverSubscribed"),
+      unknown: sum("unknown"),
+      subscribedShare: total ? Number(((sum("subscribed") / total) * 100).toFixed(1)) : 0
+    };
+  }
+
+  return { available: false, reason: "Consent has not been recorded yet.", markets: [] };
+}
+
 function describeBasis() {
   return {
     joined: "Counted from each current member's joined_group_at, so a member who joined and was removed inside the same interval is not counted.",
@@ -246,6 +384,9 @@ module.exports = {
   STORE_KEY,
   loadSeedHistory,
   appendSubscriberSnapshot,
+  buildConsentBreakdown,
+  buildDailyJoinSeries,
+  buildRecordedTotalsSeries,
   buildSubscriberFlowSeries,
   createEmptyHistory,
   getSubscriberHistoryStoreProfile,

@@ -4,6 +4,9 @@ const assert = require("node:assert/strict");
 const {
   MAX_ENTRIES,
   appendSubscriberSnapshot,
+  buildConsentBreakdown,
+  buildDailyJoinSeries,
+  buildRecordedTotalsSeries,
   buildSubscriberFlowSeries,
   createEmptyHistory,
   normalizeHistory
@@ -140,4 +143,106 @@ test("the basis of each series is stated, because removals cannot be measured di
   assert.match(series.basis.removed, /Derived/i);
   assert.match(series.basis.joined, /joined_group_at/);
   assert.match(series.basis.net, /Exact/i);
+});
+
+test("daily joins come out at daily grain, summed across markets", () => {
+  const series = buildDailyJoinSeries(history([
+    { date: "2026-09-13", markets: { DE: { total: 100, joined: 0 } } },
+    {
+      date: "2026-09-15",
+      markets: {
+        DE: { total: 104, joined: 4, joinedDaily: { "2026-09-14": 3, "2026-09-15": 1 } },
+        UK: { total: 210, joined: 5, joinedDaily: { "2026-09-14": 2, "2026-09-15": 3 } }
+      }
+    }
+  ]));
+
+  assert.equal(series.available, true);
+  assert.deepEqual(series.dates, ["2026-09-14", "2026-09-15"]);
+  assert.deepEqual(series.joined, [5, 4]);
+  assert.deepEqual(series.markets.find((row) => row.country === "UK").joined, [2, 3]);
+});
+
+test("a market filter narrows the daily series to that market alone", () => {
+  const series = buildDailyJoinSeries(history([
+    { date: "2026-09-13", markets: { DE: { total: 100, joined: 0 } } },
+    {
+      date: "2026-09-15",
+      markets: {
+        DE: { total: 104, joined: 4, joinedDaily: { "2026-09-14": 3, "2026-09-15": 1 } },
+        UK: { total: 210, joined: 5, joinedDaily: { "2026-09-14": 2, "2026-09-15": 3 } }
+      }
+    }
+  ]), { markets: ["DE"] });
+
+  assert.deepEqual(series.joined, [3, 1]);
+  assert.equal(series.markets.length, 1);
+});
+
+test("with no daily detail recorded the join series says so instead of drawing zeroes", () => {
+  const series = buildDailyJoinSeries(history([
+    { date: "2026-04-16", markets: { DE: { total: 2149, joined: 0 } } }
+  ]));
+  assert.equal(series.available, false);
+  assert.deepEqual(series.joined, []);
+});
+
+test("recorded totals are the measured levels, one point per snapshot", () => {
+  const series = buildRecordedTotalsSeries(history([
+    { date: "2026-04-16", markets: { DE: { total: 2149, joined: 0 }, UK: { total: 4553, joined: 0 } } },
+    { date: "2026-09-15", markets: { DE: { total: 1946, joined: 217 }, UK: { total: 4356, joined: 444 } } }
+  ]), { markets: ["DE", "UK"] });
+
+  assert.deepEqual(series.dates, ["2026-04-16", "2026-09-15"]);
+  assert.deepEqual(series.totals, [6702, 6302]);
+  assert.deepEqual(series.markets.find((row) => row.country === "DE").totals, [2149, 1946]);
+});
+
+test("a market missing from a snapshot leaves a gap in its totals, not a zero", () => {
+  const series = buildRecordedTotalsSeries(history([
+    { date: "2026-04-16", markets: { DE: { total: 2149, joined: 0 }, UK: { total: 4553, joined: 0 } } },
+    { date: "2026-09-15", markets: { DE: { total: 1946, joined: 217 } } }
+  ]), { markets: ["DE", "UK"] });
+
+  assert.deepEqual(series.markets.find((row) => row.country === "UK").totals, [4553, null]);
+});
+
+test("the consent split reports the share that actually opted in", () => {
+  // DK as measured on 2026-09-15: 1,158 members, 612 of them opted in.
+  const consent = buildConsentBreakdown(history([
+    {
+      date: "2026-09-15",
+      markets: {
+        DK: { total: 1158, joined: 103, consent: { SUBSCRIBED: 612, UNSUBSCRIBED: 62, NEVER_SUBSCRIBED: 484 } },
+        CZ: { total: 72, joined: 19, consent: { SUBSCRIBED: 71, UNSUBSCRIBED: 1, NEVER_SUBSCRIBED: 0 } }
+      }
+    }
+  ]));
+
+  assert.equal(consent.available, true);
+  assert.equal(consent.total, 1230);
+  assert.equal(consent.subscribed, 683);
+  assert.equal(consent.neverSubscribed, 484);
+  const dk = consent.markets.find((row) => row.country === "DK");
+  assert.equal(dk.subscribedShare, 52.8);
+  const cz = consent.markets.find((row) => row.country === "CZ");
+  assert.equal(cz.subscribedShare, 98.6);
+});
+
+test("consent falls back to the most recent snapshot that recorded it", () => {
+  const consent = buildConsentBreakdown(history([
+    { date: "2026-09-14", markets: { DK: { total: 1150, joined: 5, consent: { SUBSCRIBED: 600 } } } },
+    { date: "2026-09-15", markets: { DK: { total: 1158, joined: 8 } } }
+  ]));
+  assert.equal(consent.available, true);
+  assert.equal(consent.measuredAt, "2026-09-14");
+  assert.equal(consent.subscribed, 600);
+});
+
+test("consent that has never been recorded reports unavailable rather than 0%", () => {
+  const consent = buildConsentBreakdown(history([
+    { date: "2026-04-16", markets: { DE: { total: 2149, joined: 0 } } }
+  ]));
+  assert.equal(consent.available, false);
+  assert.deepEqual(consent.markets, []);
 });

@@ -133,12 +133,16 @@ async function fetchListProfileCount(headers, listId) {
   return count;
 }
 
-// The slow walk, kept for the history job and as a fallback. It is the only way to learn *when*
-// each current member joined, which is what turns a level into a flow.
+// The slow walk, kept for the history job and as a fallback. It is the only way to learn *when* each
+// current member joined, which is what turns a level into a flow - and, in the same pass, whether
+// they ever actually consented. Of the 25,808 members counted on 2026-09-15 only 19,118 had said
+// yes; 5,438 had never subscribed and 1,252 had opted out, and the share varies from 53% in DK to
+// 99% in CZ. Since the walk is already paying for every profile, the consent tally is free.
 async function collectListJoinTallies(headers, listId, { pageSize = 100 } = {}) {
   const joinedByDate = new Map();
+  const consent = { SUBSCRIBED: 0, UNSUBSCRIBED: 0, NEVER_SUBSCRIBED: 0, UNKNOWN: 0 };
   let total = 0;
-  let next = `https://a.klaviyo.com/api/lists/${listId}/profiles/?page%5Bsize%5D=${pageSize}`;
+  let next = `https://a.klaviyo.com/api/lists/${listId}/profiles/?page%5Bsize%5D=${pageSize}&additional-fields%5Bprofile%5D=subscriptions`;
 
   while (next) {
     const payload = await klaviyoRequest(next, headers);
@@ -147,13 +151,31 @@ async function collectListJoinTallies(headers, listId, { pageSize = 100 } = {}) 
     for (const profile of profiles) {
       const joinedAt = profile?.attributes?.joined_group_at || profile?.attributes?.created;
       const key = String(joinedAt || "").slice(0, 10);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) continue;
-      joinedByDate.set(key, (joinedByDate.get(key) || 0) + 1);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+        joinedByDate.set(key, (joinedByDate.get(key) || 0) + 1);
+      }
+      const state = String(profile?.attributes?.subscriptions?.email?.marketing?.consent || "").toUpperCase();
+      if (state === "SUBSCRIBED" || state === "UNSUBSCRIBED" || state === "NEVER_SUBSCRIBED") {
+        consent[state] += 1;
+      } else {
+        consent.UNKNOWN += 1;
+      }
     }
     next = payload?.links?.next || "";
   }
 
-  return { total, joinedByDate };
+  return { total, joinedByDate, consent };
+}
+
+// The joins that fall inside the interval this snapshot covers, at daily grain. Daily snapshots make
+// this one day at a time; the first run after the April baseline carries the whole 152-day back run,
+// which is what gives the chart a real curve from the very first night.
+function sliceJoinsSince(joinedByDate, sinceDate) {
+  const slice = {};
+  for (const [date, value] of joinedByDate.entries()) {
+    if (!sinceDate || date > sinceDate) slice[date] = value;
+  }
+  return slice;
 }
 
 function countJoinsSince(joinedByDate, sinceDate) {
@@ -176,5 +198,6 @@ module.exports = {
   fetchListProfileCount,
   getAllPages,
   klaviyoRequest,
-  resolveNewsletterList
+  resolveNewsletterList,
+  sliceJoinsSince
 };
