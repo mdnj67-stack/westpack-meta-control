@@ -445,6 +445,123 @@ function buildStackSegments(items = [], valueKey = "amount", minimumPercent = 4)
   return items.map((item, index) => ({ item, width: rounded[index] }));
 }
 
+// Nyt reach: the people the incremental campaigns reached for the first time
+// each month, against the people they had already reached. The split is the
+// expansion signal - when the repeat share climbs while net-new falls, the
+// audience is saturating and more budget buys the same faces again.
+//
+// The series comes from the stored nightly snapshot, never from a live call:
+// the cumulative curve behind it costs one Meta call per month, which is more
+// than the whole dashboard snapshot spends.
+export function renderOverviewExpansionReach(model = null, visible = false, currency = "DKK") {
+  const node = document.getElementById("overview-expansion");
+  const subNode = document.getElementById("overview-expansion-sub");
+  if (!node) return;
+
+  const months = Array.isArray(model?.months) ? model.months.filter((month) => Number(month?.monthlyReach) > 0) : [];
+  if (!visible || !model?.available || months.length < 2) {
+    node.innerHTML = "";
+    if (subNode && visible && model && !model.available) {
+      subNode.textContent = model.unavailableReason || "No campaign on this account reports incrementality attribution.";
+    }
+    return;
+  }
+
+  const latest = months[months.length - 1];
+  const previous = months[months.length - 2];
+  const peak = Math.max(...months.map((month) => Number(month.monthlyReach) || 0), 1);
+  const totalNew = Number(latest.cumulativeReach) || 0;
+  const syncedAt = model.generatedAt ? new Date(model.generatedAt) : null;
+  const anchorLabel = months[0]?.month || "";
+
+  if (subNode) {
+    subNode.textContent = `Unique people the ${Number(model.campaignCount) || 0} incrementality campaigns have reached since ${anchorLabel}, split into first-time and repeat.`;
+  }
+
+  // Danish abbreviates months with a trailing point ("sep."), which reads as a
+  // sentence break when the label is dropped into prose, so the axis tick keeps
+  // the abbreviation and the prose form strips it.
+  const monthName = (month) => {
+    const [year, index] = String(month.month).split("-");
+    return new Date(Date.UTC(Number(year), Number(index) - 1, 1))
+      .toLocaleString(undefined, { month: "short", timeZone: "UTC" });
+  };
+  const monthLabel = (month) => (month.partial ? `${monthName(month)}*` : monthName(month));
+  const monthProse = (month) => monthName(month).replace(/\.$/, "");
+
+  const costLabel = Number.isFinite(Number(latest.costPerThousandNewlyReached))
+    ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
+    : "--";
+  const repeatShare = Number.isFinite(Number(latest.repeatShare))
+    ? `${Math.round(Number(latest.repeatShare) * 100)}%`
+    : "--";
+
+  node.innerHTML = `
+    <section class="meta-expansion">
+      <div class="meta-expansion-kpis">
+        <article class="meta-expansion-kpi">
+          <span>Reached for the first time</span>
+          <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
+          <p>${escapeHtml(`${monthProse(latest)}, against ${formatCompactNumber(previous.netNewReach)} in ${monthProse(previous)}`)}</p>
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Unique people in total</span>
+          <strong>${escapeHtml(formatCompactNumber(totalNew))}</strong>
+          <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Cost per 1,000 new</span>
+          <strong>${escapeHtml(costLabel)}</strong>
+          <p>Spend divided by first-time reach. The price of expansion.</p>
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Repeat share</span>
+          <strong>${escapeHtml(repeatShare)}</strong>
+          <p>Of this month's reach, people already reached before.</p>
+        </article>
+      </div>
+
+      <div class="meta-expansion-chart">
+        <div class="meta-budget-stack-head">
+          <strong>Reach per month</strong>
+          <span>First-time against repeat</span>
+        </div>
+        <ol class="meta-expansion-bars">
+          ${months.map((month) => {
+            const monthly = Number(month.monthlyReach) || 0;
+            const net = Math.max(0, Number(month.netNewReach) || 0);
+            const repeat = Math.max(0, Number(month.repeatReach) || 0);
+            const height = Math.max(2, (monthly / peak) * 100);
+            const netShare = monthly > 0 ? (net / monthly) * 100 : 0;
+            return `
+              <li class="meta-expansion-bar${month.partial ? " is-partial" : ""}"
+                  title="${escapeHtml(`${month.month}: ${formatCompactNumber(net)} first-time, ${formatCompactNumber(repeat)} repeat`)}">
+                <span class="meta-expansion-column" style="height:${height.toFixed(1)}%">
+                  <em class="is-repeat" style="height:${(100 - netShare).toFixed(1)}%"></em>
+                  <em class="is-new" style="height:${netShare.toFixed(1)}%"></em>
+                </span>
+                <span class="meta-expansion-tick">${escapeHtml(monthLabel(month))}</span>
+              </li>
+            `;
+          }).join("")}
+        </ol>
+        <p class="meta-expansion-legend">
+          <span class="is-new">First-time</span>
+          <span class="is-repeat">Repeat</span>
+          ${latest.partial ? `<span class="is-note">* ${escapeHtml(`${latest.since} to ${latest.until}, part month`)}</span>` : ""}
+        </p>
+      </div>
+
+      <p class="meta-expansion-foot">
+        Reach is read at account level and never summed across campaigns. First-time reach is
+        the rise in cumulative unique reach, so it counts people reached for the first time
+        since ${escapeHtml(anchorLabel)}.
+        ${syncedAt ? escapeHtml(`Synced ${syncedAt.toLocaleString()}.`) : ""}
+      </p>
+    </section>
+  `;
+}
+
 export function renderOverviewSpendSplit(model = null, visible = false) {
   const node = document.getElementById("overview-spend-split");
   const titleNode = document.getElementById("overview-spend-title");

@@ -17965,3 +17965,193 @@ body.campaign-studio-review-mode .main-content {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   New reach per month.
+
+   Two series, and they mean opposite things: the blue block is people the
+   incremental campaigns had never reached, the muted block is people they had
+   reached already. The colours are declared as their own tokens rather than
+   borrowed from the objective tones, because this panel is not an objective
+   split and a shared token would repaint it whenever the objective palette
+   changed.
+--------------------------------------------------------------------------- */
+:root {
+  --tone-reach-new-rgb: 42 120 214;
+  --tone-reach-repeat-rgb: 138 146 178;
+}
+
+/* The panel paints its own dark surface, the same way the budget panel beside it
+   does. The overview card itself is light, so without this the panel's light ink
+   would sit on a light ground. */
+.meta-expansion {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 26px;
+  border: 1px solid rgba(33, 28, 58, 0.08);
+  background:
+    radial-gradient(circle at top right, rgba(111, 125, 163, 0.14) 0%, rgba(111, 125, 163, 0) 36%),
+    linear-gradient(160deg, rgba(24, 24, 55, 0.98) 0%, rgba(33, 30, 75, 0.98) 48%, rgba(19, 18, 46, 0.99) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 46px rgba(15, 13, 40, 0.18);
+  color: #f5f1ff;
+}
+
+.meta-expansion-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.meta-expansion-kpi {
+  background: rgba(14, 20, 42, 0.55);
+  border: 1px solid rgba(124, 140, 196, 0.22);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-expansion-kpi span {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(204, 214, 255, 0.62);
+}
+
+.meta-expansion-kpi strong {
+  font-size: 1.5rem;
+  line-height: 1.1;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta-expansion-kpi p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(204, 214, 255, 0.68);
+}
+
+.meta-expansion-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meta-expansion-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 168px;
+}
+
+.meta-expansion-bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-expansion-column {
+  width: 100%;
+  max-width: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  /* A 2px surface gap separates the two blocks instead of a border: a stroke
+     around each segment would read as a third mark. */
+  gap: 2px;
+}
+
+.meta-expansion-column em {
+  display: block;
+  width: 100%;
+  min-height: 2px;
+}
+
+.meta-expansion-column .is-new {
+  background: rgb(var(--tone-reach-new-rgb) / 0.95);
+}
+
+.meta-expansion-column .is-repeat {
+  background: rgb(var(--tone-reach-repeat-rgb) / 0.55);
+  border-radius: 5px 5px 0 0;
+}
+
+/* A part month is not comparable with the full months beside it, so it is
+   drawn back rather than left to look like a finished bar. */
+.meta-expansion-bar.is-partial .meta-expansion-column {
+  opacity: 0.68;
+}
+
+.meta-expansion-tick {
+  font-size: 0.72rem;
+  color: rgba(204, 214, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.meta-expansion-legend {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 0.78rem;
+  color: rgba(204, 214, 255, 0.72);
+}
+
+.meta-expansion-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-expansion-legend span::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.meta-expansion-legend .is-new::before {
+  background: rgb(var(--tone-reach-new-rgb) / 0.95);
+}
+
+.meta-expansion-legend .is-repeat::before {
+  background: rgb(var(--tone-reach-repeat-rgb) / 0.55);
+}
+
+.meta-expansion-legend .is-note::before {
+  display: none;
+}
+
+.meta-expansion-foot {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: rgba(204, 214, 255, 0.58);
+}
+
+@media (max-width: 720px) {
+  .meta-expansion-bars {
+    height: 140px;
+    gap: 5px;
+  }
+
+  .meta-expansion-tick {
+    font-size: 0.66rem;
+  }
+}

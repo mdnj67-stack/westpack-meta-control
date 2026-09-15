@@ -28,6 +28,10 @@
     {
       "path": "/api/klaviyo/subscriber-history",
       "schedule": "30 4 * * *"
+    },
+    {
+      "path": "/api/meta/account-snapshot?expansion=sync",
+      "schedule": "10 3 * * *"
     }
   ],
   "rewrites": [

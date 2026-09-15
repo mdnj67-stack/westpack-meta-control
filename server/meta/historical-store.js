@@ -1,9 +1,20 @@
 const fs = require("fs");
 const path = require("path");
 
-const STORE_KEY = "westpack:meta-historical-intelligence:v1";
-const LOCAL_PATH = path.join(process.cwd(), "data", "meta-historical-intelligence.json");
-let volatileSnapshot = null;
+// Two snapshots share this module's storage plumbing: the historical creative
+// intelligence the Content Agent reads, and the expansion reach series the Meta
+// dashboard renders. They are kept under separate keys rather than in one blob,
+// because each is written by its own nightly job and a shared value would make
+// one job's write clobber the other's.
+const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
+const EXPANSION_STORE_KEY = "westpack:meta-expansion-reach:v1";
+
+const LOCAL_PATHS = {
+  [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
+  [EXPANSION_STORE_KEY]: path.join(process.cwd(), "data", "meta-expansion-reach.json")
+};
+
+const volatileSnapshots = new Map();
 
 function getRedisConfig() {
   return {
@@ -31,31 +42,45 @@ async function redisCommand(command) {
   return payload.result;
 }
 
-async function readHistoricalIntelligence() {
+async function readSnapshot(storeKey) {
   const profile = getHistoricalStoreProfile();
   if (profile.mode === "redis") {
-    const raw = await redisCommand(["GET", STORE_KEY]);
+    const raw = await redisCommand(["GET", storeKey]);
     return raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : null;
   }
   if (profile.mode === "local_file") {
-    try { return JSON.parse(fs.readFileSync(LOCAL_PATH, "utf8")); } catch { return null; }
+    try { return JSON.parse(fs.readFileSync(LOCAL_PATHS[storeKey], "utf8")); } catch { return null; }
   }
-  return volatileSnapshot;
+  return volatileSnapshots.get(storeKey) || null;
 }
 
-async function writeHistoricalIntelligence(snapshot) {
+async function writeSnapshot(storeKey, snapshot) {
   const profile = getHistoricalStoreProfile();
   if (profile.mode === "redis") {
-    await redisCommand(["SET", STORE_KEY, JSON.stringify(snapshot)]);
+    await redisCommand(["SET", storeKey, JSON.stringify(snapshot)]);
   } else if (profile.mode === "local_file") {
-    fs.mkdirSync(path.dirname(LOCAL_PATH), { recursive: true });
-    const tempPath = `${LOCAL_PATH}.${process.pid}.tmp`;
+    const localPath = LOCAL_PATHS[storeKey];
+    fs.mkdirSync(path.dirname(localPath), { recursive: true });
+    // Written to a temp file and renamed, so a reader never sees a half-written
+    // snapshot: the nightly job and a dashboard request can overlap.
+    const tempPath = `${localPath}.${process.pid}.tmp`;
     fs.writeFileSync(tempPath, JSON.stringify(snapshot, null, 2), "utf8");
-    fs.renameSync(tempPath, LOCAL_PATH);
+    fs.renameSync(tempPath, localPath);
   } else {
-    volatileSnapshot = snapshot;
+    volatileSnapshots.set(storeKey, snapshot);
   }
   return snapshot;
 }
 
-module.exports = { getHistoricalStoreProfile, readHistoricalIntelligence, writeHistoricalIntelligence };
+const readHistoricalIntelligence = () => readSnapshot(HISTORICAL_STORE_KEY);
+const writeHistoricalIntelligence = (snapshot) => writeSnapshot(HISTORICAL_STORE_KEY, snapshot);
+const readExpansionReach = () => readSnapshot(EXPANSION_STORE_KEY);
+const writeExpansionReach = (snapshot) => writeSnapshot(EXPANSION_STORE_KEY, snapshot);
+
+module.exports = {
+  getHistoricalStoreProfile,
+  readHistoricalIntelligence,
+  writeHistoricalIntelligence,
+  readExpansionReach,
+  writeExpansionReach
+};

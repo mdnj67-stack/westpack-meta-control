@@ -25,10 +25,13 @@ const {
   splitByCategory
 } = require("../../server/meta/budget-allocation");
 const { syncHistoricalIntelligence } = require("../../server/meta/historical-intelligence");
+const { syncExpansionReach } = require("../../server/meta/expansion-reach");
 const {
   getHistoricalStoreProfile,
   readHistoricalIntelligence,
-  writeHistoricalIntelligence
+  writeHistoricalIntelligence,
+  readExpansionReach,
+  writeExpansionReach
 } = require("../../server/meta/historical-store");
 const {
   sendMetaCatalogCacheHit,
@@ -1808,6 +1811,40 @@ module.exports = async (req, res) => {
       });
     } catch (error) {
       sendJson(res, 500, { ok: false, error: error.message || "Meta historical intelligence failed." });
+    }
+    return;
+  }
+
+  // The expansion reach series. "status" is what the dashboard calls on every
+  // load and costs no Meta quota at all - it reads the stored snapshot. "sync"
+  // is the nightly cron, and is the only path that spends calls. Keep it that
+  // way: the cumulative curve behind this series costs one call per month on a
+  // cold run, which is more than the whole dashboard snapshot.
+  const expansionAction = String(req.query?.expansion || "").toLowerCase();
+  if (["status", "sync"].includes(expansionAction)) {
+    try {
+      if (expansionAction === "sync") {
+        const previous = await readExpansionReach().catch(() => null);
+        const snapshot = await syncExpansionReach({
+          accountId: config.metaAdAccountId,
+          accessToken: config.metaAccessToken,
+          previous,
+          months: req.query?.months,
+          force: String(req.query?.force || "") === "1"
+        });
+        await writeExpansionReach(snapshot);
+        sendJson(res, 200, { ok: true, ready: true, store: getHistoricalStoreProfile(), expansion: snapshot });
+        return;
+      }
+      const snapshot = await readExpansionReach();
+      sendJson(res, 200, {
+        ok: true,
+        ready: Boolean(snapshot),
+        store: getHistoricalStoreProfile(),
+        expansion: snapshot || null
+      });
+    } catch (error) {
+      sendJson(res, 500, { ok: false, error: error.message || "Meta expansion reach sync failed." });
     }
     return;
   }

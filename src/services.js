@@ -746,6 +746,16 @@ export async function requestMetaHistoricalIntelligence({ sync = false, days = 3
   return payload;
 }
 
+// Reads the stored expansion reach snapshot. "status" costs no Meta quota at
+// all - the series is built by the nightly cron, because the cumulative curve
+// behind it spends one Meta call per month and must never run on a page load.
+export async function requestMetaExpansionReach() {
+  const response = await authenticatedFetch("/api/meta/account-snapshot?expansion=status");
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || "Meta expansion reach is unavailable.");
+  return payload;
+}
+
 export async function requestMetaFromMaster(requestBody) {
   const response = await authenticatedFetch("/api/campaign/brain", {
     method: "POST",

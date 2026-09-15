@@ -187,6 +187,7 @@ import {
   requestKlaviyoTemplates,
   requestMetaConnectionStatus,
   requestMetaHistoricalIntelligence,
+  requestMetaExpansionReach,
   requestMetaStudioCatalog,
   requestVideoAnalysis,
   requestMetaPublish,
@@ -220,6 +221,7 @@ import {
   renderMetaQualityPanel,
   renderOverviewGrid,
   renderOverviewCustomerAcquisition,
+  renderOverviewExpansionReach,
   renderOverviewSpendSplit,
   renderTrendDeck,
   renderHeroPanel,
@@ -616,6 +618,7 @@ const appState = {
   metaSnapshotMeta: null,
   metaStudioCatalogGeneratedAt: "",
   metaDashboard: null,
+  metaExpansionReach: null,
   metaCurrency: "DKK",
   metaQuality: null,
   metaUploadedImageHashes: {},
@@ -13459,6 +13462,29 @@ function reportDashboardPanelFailures() {
   );
 }
 
+
+// The expansion reach series comes from the nightly snapshot, so this costs no Meta
+// quota at all - the cumulative curve behind it spends one Graph call per month and
+// must never run on a page load. It is fetched once per session, after the dashboard
+// has painted, and a missing snapshot leaves the panel empty rather than raising an
+// error: before the first nightly sync there is simply nothing stored yet.
+let metaExpansionReachRequest = null;
+let metaOverviewVisible = false;
+
+function ensureMetaExpansionReachLoaded() {
+  if (metaExpansionReachRequest || appState.metaExpansionReach) return;
+  metaExpansionReachRequest = requestMetaExpansionReach()
+    .then((payload) => {
+      appState.metaExpansionReach = payload?.expansion || null;
+      renderPanelSafely("Overview Expansion Reach", () => {
+        renderOverviewExpansionReach(appState.metaExpansionReach, metaOverviewVisible, appState.metaCurrency || "DKK");
+      });
+    })
+    .catch(() => {
+      metaExpansionReachRequest = null;
+    });
+}
+
 function renderDashboard() {
   dashboardPanelFailures.length = 0;
   const lens = appState.dashboardLens;
@@ -13570,6 +13596,11 @@ function renderDashboard() {
   });
   renderPanelSafely("Overview Customer Acquisition", () => {
     renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
+  });
+  renderPanelSafely("Overview Expansion Reach", () => {
+    metaOverviewVisible = Boolean(overviewVisible);
+    renderOverviewExpansionReach(appState.metaExpansionReach || null, overviewVisible, appState.metaCurrency || "DKK");
+    if (overviewVisible) ensureMetaExpansionReachLoaded();
   });
   renderPanelSafely("Trend Deck", () => {
     renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || []));
