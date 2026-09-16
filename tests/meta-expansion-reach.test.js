@@ -55,6 +55,10 @@ const COUNTRY_MONTHLY = {
 // The like-for-like point: the same elapsed stretch of the previous month.
 const LIKE_FOR_LIKE_CUMULATIVE = 210000;
 const LIKE_FOR_LIKE_SPEND = 60000;
+// Spend and customers over the elapsed window are read directly, not derived
+// from two cumulative points, so the stub answers that window on its own.
+const LIKE_FOR_LIKE_WINDOW_SPEND = 24000;
+const LIKE_FOR_LIKE_WINDOW_CUSTOMERS = 15;
 const LIKE_FOR_LIKE_COUNTRIES = { IT: 135000, DE: 70000 };
 
 const lastMonth = delivering[delivering.length - 1];
@@ -122,6 +126,16 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
     // Cumulative: keyed by the window end, which is the month's last day, or the
     // like-for-like date inside the previous month.
     const range = JSON.parse(params.time_range);
+    if (range.until === likeForLikeWindow.until && range.since === likeForLikeWindow.since) {
+      // The plain window: the same elapsed days of the previous month.
+      return {
+        data: [{
+          spend: String(LIKE_FOR_LIKE_WINDOW_SPEND),
+          impressions: "40000",
+          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(LIKE_FOR_LIKE_WINDOW_CUSTOMERS) }]
+        }]
+      };
+    }
     if (range.until === likeForLikeWindow.until) {
       if (params.breakdowns === "country") {
         return {
@@ -411,7 +425,8 @@ test("a part month is compared against the same elapsed days of the month before
   // Net-new over the same elapsed days: the like-for-like cumulative point minus
   // the last complete month before it.
   assert.equal(likeForLike.netNewReach, LIKE_FOR_LIKE_CUMULATIVE - CUMULATIVE[1]);
-  assert.equal(likeForLike.spend, LIKE_FOR_LIKE_SPEND - CUMULATIVE_SPEND[1]);
+  assert.equal(likeForLike.spend, LIKE_FOR_LIKE_WINDOW_SPEND);
+  assert.equal(likeForLike.newCustomers, LIKE_FOR_LIKE_WINDOW_CUSTOMERS);
   assert.equal(likeForLike.comparison.comparable, true);
   assert.equal(likeForLike.comparison.elapsedDays, snapshot.months[snapshot.months.length - 1].days);
 });
@@ -500,4 +515,45 @@ test("a breakdown key is never asked for in the fields param", async () => {
       `${call.params.breakdowns} must not appear in fields alongside breakdowns=${call.params.breakdowns}`
     );
   }
+});
+
+test("new customers are compared over the same elapsed days, not month against month", () => {
+  // Setting a part month's customers against a whole previous month understates
+  // it twice over: fewer days, and a person first reached two days ago has had
+  // two days to buy. September read 30 against August's 70 and looked like a
+  // collapse; the same sixteen days is the comparison that holds.
+  return syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN }).then((snapshot) => {
+    const comparison = snapshot.likeForLike.comparison;
+    assert.equal(comparison.newCustomers, MONTHLY_NEW_CUSTOMERS[MONTHLY_NEW_CUSTOMERS.length - 1]);
+    assert.equal(comparison.customersComparable, true);
+    assert.equal(
+      comparison.newCustomersChange,
+      Math.round(((40 - LIKE_FOR_LIKE_WINDOW_CUSTOMERS) / LIKE_FOR_LIKE_WINDOW_CUSTOMERS) * 10000) / 10000
+    );
+    assert.equal(snapshot.likeForLike.costPerNewCustomer, LIKE_FOR_LIKE_WINDOW_SPEND / LIKE_FOR_LIKE_WINDOW_CUSTOMERS);
+  });
+});
+
+test("a baseline with no customers is given no percentage", async () => {
+  // Zero is not a baseline to divide by, and a month where customers could not
+  // be counted at all is not a month with none.
+  reset({ withCustomConversion: false });
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  assert.equal(snapshot.likeForLike.newCustomers, null);
+  assert.equal(snapshot.likeForLike.comparison.customersComparable, false);
+  assert.equal(snapshot.likeForLike.comparison.newCustomersChange, null);
+});
+
+test("the elapsed window is measured once and then reused with its customers", async () => {
+  reset();
+  const first = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  reset();
+  const second = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first });
+  assert.equal(second.likeForLike.fromCache, true);
+  assert.equal(second.likeForLike.newCustomers, LIKE_FOR_LIKE_WINDOW_CUSTOMERS);
+  const windowCalls = calls.filter((call) => {
+    if (call.params.level !== "account" || call.params.time_increment) return false;
+    return JSON.parse(call.params.time_range).until === likeForLikeWindow.until;
+  });
+  assert.equal(windowCalls.length, 0, "a closed window must never be measured twice");
 });

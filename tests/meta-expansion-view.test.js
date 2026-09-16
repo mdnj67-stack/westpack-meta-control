@@ -143,7 +143,7 @@ test("the tab carries no method or provenance panel", () => {
   // The two rules that do change a reading are still on screen, each next to
   // what it qualifies.
   assert.match(ui, /not a measured uplift/);
-  assert.match(ui, /a ratio, not a cohort/);
+  assert.match(ui, /not a cohort of the people newly reached/i);
   assert.match(ui, /must not be added together/i);
 });
 
@@ -209,4 +209,20 @@ test("the explanation opens inwards, and is nudged back when it still falls out"
   assert.match(ui, /const overflowRight = left \+ width - \(bounds\.right - 8\);/);
   assert.match(ui, /th\.style\.setProperty\("--tip-shift"/);
   assert.match(ui, /bindExpansionTips\(node\);/);
+});
+
+test("new customers is shown as the count, compared over the same elapsed days", () => {
+  // "New customers per 1,000 new" read as a conversion rate on the people newly
+  // reached, which it is not: most of a month's customers were first reached in
+  // an earlier month, and a person reached two days ago has had two days to buy.
+  // September's 0,04 against August's 0,23 looked like a collapse and was mostly
+  // the part month.
+  assert.doesNotMatch(ui, /New customers per 1,000 new/);
+  assert.match(ui, /<span>New customers<\/span>/);
+  assert.match(ui, /latest\.newCustomers == null \? "--" : formatCompactNumber\(latest\.newCustomers\)/);
+
+  // The comparison is the same elapsed days, and it is absent when there is no
+  // baseline to divide by.
+  assert.match(ui, /Against \$\{formatCompactNumber\(likeForLike\.newCustomers\)\} over the same \$\{likeForLike\.elapsedDays\} days/);
+  assert.match(ui, /likeForLike\.comparison\.customersComparable/);
 });

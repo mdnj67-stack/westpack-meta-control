@@ -752,9 +752,24 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
   const costLabel = expansionMeasured(latest.costPerThousandNewlyReached)
     ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
     : "--";
-  const customerRate = expansionMeasured(latest.newCustomersPerThousandNewlyReached)
-    ? formatDecimal(latest.newCustomersPerThousandNewlyReached, 2)
-    : "--";
+  // New customers is the figure the department is measured on, so it is shown as
+  // the count it is rather than as a rate per thousand reached. The rate read as
+  // a conversion rate on the newly reached, which it is not: a person first
+  // reached two days ago has had two days to buy, and most of a month's
+  // customers were first reached in an earlier month. The count against the same
+  // elapsed days of the previous month is a comparison that holds.
+  const customerCaption = (() => {
+    if (!model.customerConversion) {
+      return "This snapshot was written before new customers were measured here. The nightly job adds the figure on its next run.";
+    }
+    if (!model.customerConversion.available) {
+      return model.customerConversion.unavailableReason || "New customers cannot be counted on this account.";
+    }
+    if (likeForLike && likeForLike.newCustomers != null) {
+      return `Against ${formatCompactNumber(likeForLike.newCustomers)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}. Attributed to these campaigns, not only to the people newly reached.`;
+    }
+    return "Attributed to these campaigns in this window. Not a cohort of the people newly reached in it.";
+  })();
 
   // The like-for-like cost is the honest read on whether expansion got cheaper:
   // both sides cover the same number of days.
@@ -799,13 +814,12 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
           ${costChange === null ? "" : expansionChangeBadge(costChange, true, "", true)}
         </article>
         <article class="meta-expansion-kpi">
-          <span>New customers per 1,000 new</span>
-          <strong>${escapeHtml(customerRate)}</strong>
-          <p>${escapeHtml(model.customerConversion
-            ? (model.customerConversion.available
-              ? "Customers counted in the month, against the people first reached in it. Not the same people - a ratio, not a cohort."
-              : model.customerConversion.unavailableReason || "New customers cannot be counted on this account.")
-            : "This snapshot was written before new customers were measured here. The nightly job adds the column on its next run.")}</p>
+          <span>New customers</span>
+          <strong>${escapeHtml(latest.newCustomers == null ? "--" : formatCompactNumber(latest.newCustomers))}</strong>
+          <p>${escapeHtml(customerCaption)}</p>
+          ${likeForLike && likeForLike.comparison.customersComparable
+            ? expansionChangeBadge(likeForLike.comparison.newCustomersChange, true)
+            : ""}
         </article>
         <article class="meta-expansion-kpi">
           <span>Unique people in total</span>

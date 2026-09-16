@@ -299,6 +299,30 @@ async function readCumulativePoint(reader, anchor, until, campaignIds, label) {
   return { reach: number(row.reach), spend: number(row.spend) };
 }
 
+// One plain window, read directly rather than differenced. Spend and new
+// customers over an arbitrary stretch of days are just that stretch's figures,
+// so there is no reason to derive them from two cumulative reads - and deriving
+// new customers that way would have meant carrying actions on every cached
+// cumulative point, which would have re-measured the whole curve to add them.
+// Reach is the exception and is not taken from here: the month's own reach is
+// not the same thing as the people it reached for the first time.
+async function readWindowTotals(reader, since, until, campaignIds, actionTypes, label) {
+  const payload = await reader.get(`/${reader.accountId}/insights`, {
+    level: "account",
+    time_range: JSON.stringify({ since, until }),
+    filtering: campaignFilter(campaignIds),
+    limit: "1",
+    fields: "spend,impressions,actions"
+  }, label || `window ${since} to ${until}`);
+  const row = (payload.data || [])[0] || {};
+  return {
+    since,
+    until,
+    spend: number(row.spend),
+    newCustomers: newCustomersFrom(row, actionTypes)
+  };
+}
+
 async function readCumulativeCountries(reader, anchor, until, campaignIds, label) {
   const rows = await reader.getAll(`/${reader.accountId}/insights`, {
     level: "account",
@@ -346,10 +370,15 @@ function reusableLikeForLike(previous, anchor, campaignKey, until) {
   const stored = previous.likeForLike;
   if (!stored || stored.until !== until) return null;
   if (!(number(stored.cumulativeReach) > 0) || !stored.cumulativeByCountry) return null;
+  // The window totals arrived after the cumulative point did. A stored window
+  // without them is measured again rather than reported as a window with no
+  // customers in it.
+  if (!stored.windowTotals) return null;
   return {
     reach: number(stored.cumulativeReach),
     spend: number(stored.cumulativeSpend),
-    byCountry: stored.cumulativeByCountry
+    byCountry: stored.cumulativeByCountry,
+    windowTotals: stored.windowTotals
   };
 }
 
@@ -506,7 +535,7 @@ function buildMarketSeries(rows) {
 // so the previous month is measured again over the same elapsed days.
 // Cumulative spend comes back on the same call, which makes the cost per
 // thousand comparable too: both sides then cover the same number of days.
-async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey, previous, force }) {
+async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey, actionTypes, previous, force }) {
   const latest = rows[rows.length - 1];
   if (!latest || !latest.partial) return null;
 
@@ -521,15 +550,27 @@ async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey
   const cachedPoint = force ? null : reusableLikeForLike(previous, anchor, campaignKey, window.until);
   const point = cachedPoint || {
     ...(await readCumulativePoint(reader, anchor, window.until, campaignIds, `like-for-like to ${window.until}`)),
-    byCountry: await readCumulativeCountries(reader, anchor, window.until, campaignIds, `like-for-like by country to ${window.until}`)
+    byCountry: await readCumulativeCountries(reader, anchor, window.until, campaignIds, `like-for-like by country to ${window.until}`),
+    windowTotals: await readWindowTotals(
+      reader,
+      window.since,
+      window.until,
+      campaignIds,
+      actionTypes,
+      `like-for-like window ${window.since} to ${window.until}`
+    )
   };
 
   const baseCumulative = baseline ? number(baseline.cumulativeReach) : 0;
-  const baseSpend = baseline ? number(baseline.cumulativeSpend) : 0;
   const baseByCountry = baseline ? (baseline.cumulativeByCountry || {}) : {};
 
   const netNewReach = Math.max(0, number(point.reach) - baseCumulative);
-  const spend = Math.max(0, number(point.spend) - baseSpend);
+  // Spend and customers come from the window itself rather than from the
+  // difference of two cumulative reads, which is both simpler and one fewer
+  // place for a restatement to leak in.
+  const spend = number(point.windowTotals?.spend);
+  const windowNewCustomers = point.windowTotals?.newCustomers;
+  const newCustomers = windowNewCustomers == null ? null : number(windowNewCustomers);
 
   const markets = {};
   for (const code of Object.keys(point.byCountry || {})) {
@@ -538,6 +579,11 @@ async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey
   }
 
   const change = netNewReach > 0 ? round((latest.netNewReach - netNewReach) / netNewReach, 4) : null;
+  const latestNewCustomers = latest.newCustomers == null ? null : number(latest.newCustomers);
+  // A baseline of zero customers has no rate of change, and neither has a month
+  // where customers could not be counted at all. Both report no comparison
+  // rather than an infinity or a flat nothing.
+  const customersComparable = newCustomers != null && latestNewCustomers != null && newCustomers > 0;
 
   return {
     month: window.month,
@@ -550,9 +596,12 @@ async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey
     cumulativeReach: number(point.reach),
     cumulativeSpend: round(point.spend, 2),
     cumulativeByCountry: point.byCountry || {},
+    windowTotals: point.windowTotals || null,
     netNewReach,
     spend: round(spend, 2),
+    newCustomers,
     costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
+    costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
     markets,
     comparison: {
       month: latest.month,
@@ -560,7 +609,13 @@ async function buildLikeForLike({ reader, rows, anchor, campaignIds, campaignKey
       netNewReach: latest.netNewReach,
       spend: latest.spend,
       costPerThousandNewlyReached: latest.costPerThousandNewlyReached,
+      newCustomers: latestNewCustomers,
+      costPerNewCustomer: latest.costPerNewCustomer,
       change,
+      newCustomersChange: customersComparable
+        ? round((latestNewCustomers - newCustomers) / newCustomers, 4)
+        : null,
+      customersComparable,
       // A market with no delivery at all in the baseline window has no honest
       // percentage: "up from nothing" is not a rate of change. The UI names it
       // as a new market instead of printing an infinity.
@@ -706,6 +761,7 @@ async function syncExpansionReach({
     anchor,
     campaignIds,
     campaignKey,
+    actionTypes,
     previous,
     force
   });
