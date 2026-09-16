@@ -742,7 +742,7 @@ export function renderExpansionView(model = null, visible = false, currency = "D
     ${renderExpansionCurve(months, latest)}
     ${renderExpansionMarkets(model, latest, likeForLike, currency)}
     ${renderExpansionMonths(months, model, currency, perDay)}
-    ${renderExpansionIntegrity(model, latest)}
+    ${renderExpansionRestatements(model)}
   `;
 }
 
@@ -770,9 +770,9 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
         <div>
           <h3>Expansion</h3>
           <p class="field-hint">
-            How many people the ${Number(model.campaignCount) || 0} incrementality campaigns reached for the
-            first time since ${escapeHtml(anchorLabel)}, what it cost, and where. Whole calendar months from a
-            nightly snapshot - this view does not follow the date range above and costs no Meta quota to open.
+            People the ${Number(model.campaignCount) || 0} incrementality campaigns reached for the first time
+            since ${escapeHtml(anchorLabel)}. Whole calendar months - this view does not follow the date range
+            above. The incrementality set is a grouping Meta reports separately, not a measured uplift.
           </p>
         </div>
       </div>
@@ -801,7 +801,7 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
           <strong>${escapeHtml(customerRate)}</strong>
           <p>${escapeHtml(model.customerConversion
             ? (model.customerConversion.available
-              ? "New customers counted in the same month, against the people reached for the first time in it."
+              ? "Customers counted in the month, against the people first reached in it. Not the same people - a ratio, not a cohort."
               : model.customerConversion.unavailableReason || "New customers cannot be counted on this account.")
             : "This snapshot was written before new customers were measured here. The nightly job adds the column on its next run.")}</p>
         </article>
@@ -811,11 +811,6 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
           <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
         </article>
       </div>
-      <p class="meta-expansion-foot">
-        New customers are a monthly count set beside a monthly reach figure, not a cohort: the customers
-        counted in a month are not necessarily the people first reached in it. The incrementality set is a
-        grouping Meta reports separately, not a measured uplift.
-      </p>
       </section>
     </article>
   `;
@@ -1014,62 +1009,39 @@ function renderExpansionMonths(months, model, currency, perDay) {
   `;
 }
 
-// What the measurement itself has done. The campaign set behind this series
-// comes from Meta's current attribution_setting over a rolling window, so it can
-// change under the history; when it does, every completed month is measured
-// again and both figures are recorded here rather than one quietly replacing
-// the other.
-function renderExpansionIntegrity(model, latest) {
+// A restatement log that permanently announces that nothing was restated is
+// furniture. The campaign set behind this series comes from Meta's current
+// attribution_setting over a rolling window, so it can change under the history
+// and rewrite completed months - when that happens it has to be said, and when
+// it has not happened there is nothing to say. Everything else about how this is
+// measured - the anchor, the call budget, the timezone, the standing caveats -
+// lives in the code and in CLAUDE.md, not on the operator's screen.
+function renderExpansionRestatements(model) {
   const restatements = Array.isArray(model.restatements) ? model.restatements.slice(0, 8) : [];
-  const campaigns = Array.isArray(model.campaigns) ? model.campaigns : [];
+  if (!restatements.length) return "";
 
   return `
     <article class="card expansion-card">
       <div class="card-header">
         <div>
-          <h3>How this is measured</h3>
-          <p class="field-hint">Everything needed to argue with the numbers above.</p>
+          <h3>Restated figures</h3>
+          <p class="field-hint">Completed months whose first-time reach moved after they closed.</p>
         </div>
       </div>
-
-      <dl class="meta-expansion-method">
-        <div><dt>Anchor</dt><dd>${escapeHtml(String(model.anchor || "--"))} - first-time means first time since this date</dd></div>
-        <div><dt>Campaign set</dt><dd>${escapeHtml(String(model.campaignCount || 0))} campaigns on Meta's own incrementality attribution</dd></div>
-        <div><dt>Markets</dt><dd>${escapeHtml(Array.isArray(model.marketSeries)
-          ? `${model.marketSeries.length} countries with delivery`
-          : "not in this snapshot yet")}</dd></div>
-        <div><dt>Account timezone</dt><dd>${escapeHtml(String(model.timezone || "--"))} - month boundaries are drawn here, not in Copenhagen</dd></div>
-        <div><dt>Last run</dt><dd>${escapeHtml(String(model.graphCalls || 0))} Graph calls; completed months are reused, only the month in progress is re-measured</dd></div>
-        <div><dt>Measured to</dt><dd>${escapeHtml(String(latest.until || "--"))}</dd></div>
-      </dl>
-
-      <h4 class="meta-expansion-subhead">Restatements</h4>
-      ${restatements.length
-        ? `<ul class="meta-expansion-restatements">
-            ${restatements.map((entry) => `
-              <li>
-                <strong>${escapeHtml(expansionMonthProse(entry.month))}</strong>
-                first-time reach moved from ${escapeHtml(formatCompactNumber(entry.from))}
-                to ${escapeHtml(formatCompactNumber(entry.to))}
-                ${expansionMeasured(entry.deltaShare) ? `(${(Number(entry.deltaShare) * 100).toFixed(1)}%)` : ""}
-                <span class="is-quiet">${escapeHtml(entry.reason || "")}</span>
-              </li>
-            `).join("")}
-          </ul>`
-        : `<p class="expansion-note">No completed month has changed since the previous run.</p>`}
-
-      <h4 class="meta-expansion-subhead">The campaigns behind it</h4>
-      <p class="meta-expansion-campaigns">
-        ${campaigns.slice(0, 20).map((campaign) => `<span>${escapeHtml(campaign.name)}</span>`).join("")}
-      </p>
-
-      <ul class="meta-expansion-caveats">
-        ${(model.notes || []).map((note) => `<li>${escapeHtml(note)}</li>`).join("")}
+      <ul class="meta-expansion-restatements">
+        ${restatements.map((entry) => `
+          <li>
+            <strong>${escapeHtml(expansionMonthProse(entry.month))}</strong>
+            moved from ${escapeHtml(formatCompactNumber(entry.from))}
+            to ${escapeHtml(formatCompactNumber(entry.to))}
+            ${expansionMeasured(entry.deltaShare) ? `(${(Number(entry.deltaShare) * 100).toFixed(1)}%)` : ""}
+            <span class="is-quiet">${escapeHtml(entry.reason || "")}</span>
+          </li>
+        `).join("")}
       </ul>
     </article>
   `;
 }
-
 
 export function renderOverviewSpendSplit(model = null, visible = false) {
   const node = document.getElementById("overview-spend-split");

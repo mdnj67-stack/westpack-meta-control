@@ -128,3 +128,36 @@ test("a market that went dark and came back is not labelled new", () => {
   assert.match(ui, /const emptyLabel = likeForLike && market\.firstMonth && market\.firstMonth < likeForLike\.month/);
   assert.match(ui, /\? "Resumed"/);
 });
+
+test("the tab carries no method or provenance panel", () => {
+  // A "how this is measured" block - anchor, campaign set, timezone, Graph call
+  // counts, a standing caveat list - was built to make the view defensible and
+  // was noise on the operator's screen. Provenance lives in the code and in
+  // CLAUDE.md; only the caveats that change how a number is read stay, inline
+  // with that number.
+  assert.doesNotMatch(ui, /How this is measured/);
+  assert.doesNotMatch(ui, /meta-expansion-method/);
+  assert.doesNotMatch(ui, /The campaigns behind it/i);
+  assert.doesNotMatch(ui, /Everything needed to argue with the numbers above/);
+
+  // The two rules that do change a reading are still on screen, each next to
+  // what it qualifies.
+  assert.match(ui, /not a measured uplift/);
+  assert.match(ui, /a ratio, not a cohort/);
+  assert.match(ui, /must not be added together/i);
+});
+
+test("the restatement log renders only when something was restated", () => {
+  // "No completed month has changed since the previous run" is furniture. The
+  // same log appearing only when a figure moved is the useful half.
+  assert.match(ui, /function renderExpansionRestatements\(model\)/);
+  assert.match(ui, /if \(!restatements\.length\) return "";/);
+  assert.doesNotMatch(ui, /No completed month has changed since the previous run/);
+});
+
+test("the data quality panel does not follow onto the Expansion tab", () => {
+  // It describes the live snapshot - freshness, pagination, validation - which
+  // this tab never reads. It also sits outside the playbook, so hiding the
+  // playbook does not reach it.
+  assert.match(app, /renderMetaQualityPanel\(expansionVisible \? \[\] : buildMetaQualityCards\(\)\)/);
+});

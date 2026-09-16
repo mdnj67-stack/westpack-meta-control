@@ -13672,7 +13672,12 @@ function renderDashboard() {
     renderLensEmptyState(emptyStateCopy, getDashboardDateLabel());
   });
   renderPanelSafely("Meta Quality Panel", () => {
-    renderMetaQualityPanel(buildMetaQualityCards());
+    // The data quality panel describes the live snapshot: its freshness, its
+    // pagination, its validation. Expansion reads none of that - it reads a
+    // nightly stored snapshot - so on that tab the panel is not just noise, it
+    // describes a different set of numbers than the ones on screen. It sits
+    // outside the playbook, so hiding the playbook does not reach it.
+    renderMetaQualityPanel(expansionVisible ? [] : buildMetaQualityCards());
   });
   const pulseLimit = lens === "awareness" || lens === "leads" ? 2 : 3;
   renderPanelSafely("Campaign Pulse", () => {
