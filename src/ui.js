@@ -910,10 +910,191 @@ function bindExpansionTips(root) {
   };
   root.addEventListener("pointerover", handle);
   root.addEventListener("focusin", handle);
+
+  // Sorting, the window and the show-all toggle all change how the same stored
+  // figures are looked at, never what they are, so they redraw the one card
+  // rather than asking the server for anything.
+  root.addEventListener("click", (event) => {
+    const windowButton = event.target?.closest?.("[data-expansion-window]");
+    if (windowButton) {
+      expansionTableState.window = windowButton.dataset.expansionWindow;
+      redrawExpansionMarkets();
+      return;
+    }
+
+    const showAll = event.target?.closest?.("[data-expansion-show-all]");
+    if (showAll) {
+      expansionTableState.showAll = showAll.dataset.expansionShowAll === "1";
+      redrawExpansionMarkets();
+      return;
+    }
+
+    const sortHeader = event.target?.closest?.("[data-expansion-sort]");
+    if (sortHeader) {
+      const key = sortHeader.dataset.expansionSort;
+      const column = EXPANSION_MARKET_COLUMNS.find((item) => item.key === key);
+      if (expansionTableState.sortKey === key) {
+        expansionTableState.sortDirection = expansionTableState.sortDirection === "desc" ? "asc" : "desc";
+      } else {
+        expansionTableState.sortKey = key;
+        // First click on a column sorts it the way that column is read: the
+        // largest volume first, the cheapest cost first.
+        expansionTableState.sortDirection = column?.high === "down" ? "asc" : "desc";
+      }
+      redrawExpansionMarkets();
+    }
+  });
+}
+
+function redrawExpansionMarkets() {
+  const node = document.getElementById("expansion-markets");
+  if (!node) return;
+  node.innerHTML = renderExpansionMarketsCard();
+}
+
+// The markets table is where the budget decision is actually made, so it is the
+// one surface here that carries state: which window it describes, how it is
+// sorted, and whether every market is listed or only the ones that moved most.
+// That state lives here rather than in appState because none of it is a figure -
+// it is how the same stored figures are being looked at.
+const expansionTableState = {
+  model: null,
+  currency: "DKK",
+  likeForLike: null,
+  latest: null,
+  window: "current",
+  sortKey: "netNewReach",
+  sortDirection: "desc",
+  showAll: false
+};
+
+const EXPANSION_WINDOWS = [
+  ["current", "This month"],
+  ["quarter", "Last 3 months"],
+  ["all", "Since the anchor"]
+];
+
+// Every column the table can be sorted by, with the rule for reading it. `high`
+// says which direction is the good one, which is what lets a cost column sort
+// cheapest-first by default while a volume column sorts largest-first.
+const EXPANSION_MARKET_COLUMNS = [
+  {
+    key: "label", label: "Market", type: "text",
+    tip: "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed."
+  },
+  {
+    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
+    tip: "What this market cost over the selected window. Where the money is now, which is the other half of any decision to move it."
+  },
+  {
+    key: "revenue", label: "Revenue", numeric: true, money: true, high: "up",
+    tip: "Purchase value Meta attributes to these campaigns in this market, on standard attribution. It is what the market returned, not what it returned because of the campaigns."
+  },
+  {
+    key: "roas", label: "ROAS", numeric: true, decimals: 2, high: "up",
+    tip: "Revenue divided by spend in this market. Below 1,00 the market is returning less than it costs on Meta's own attribution."
+  },
+  {
+    key: "netNewReach", label: "First-time", numeric: true, high: "up",
+    tip: "People in this market reached for the first time since the anchor month. The rise in that country's cumulative unique reach across the window, so nobody is counted twice."
+  },
+  {
+    key: "costPerThousandNewlyReached", label: "Cost / 1,000 new", numeric: true, money: true, high: "down",
+    tip: "Spend divided by first-time reach. What a thousand people you had never reached before cost here. Cheap reach and poor return can sit in the same row - read it beside ROAS."
+  },
+  {
+    key: "newCustomers", label: "New customers", numeric: true, high: "up",
+    tip: "Purchases matching the New_customer conversion in this market and window. About a fifth of purchases on this account match neither customer conversion, so this is a floor rather than a total."
+  },
+  {
+    key: "costPerNewCustomer", label: "Cost / new customer", numeric: true, money: true, high: "down",
+    tip: "The market's whole spend in the window divided by its new customers - all of it, not only the spend that happened to reach them."
+  },
+  {
+    key: "latestRepeatShare", label: "Repeat share", numeric: true, percent: true, high: "down",
+    tip: "Of the people reached in the window's last month, the share already reached before. It cannot be averaged across months, so it is read from that month alone. A rising share means you are paying to hit the same people again."
+  },
+  {
+    key: "latestFrequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
+    tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both climbing is a market running out of new people."
+  },
+  {
+    key: "cpm", label: "CPM", numeric: true, money: true, high: "down",
+    tip: "Cost per thousand impressions in this market. The price of attention here, before anything is said about what that attention did."
+  },
+  {
+    key: "cumulativeReach", label: "Unique total", numeric: true, high: "up",
+    tip: "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both."
+  },
+  {
+    key: "trend", label: "Trend", sortable: false,
+    tip: "First-time reach in each month of the series, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."
+  }
+];
+
+function expansionMarketRows(model, windowKey) {
+  const series = Array.isArray(model?.marketSeries) ? model.marketSeries : [];
+  return series
+    .map((market) => {
+      const windowRow = market.windows?.[windowKey] || null;
+      if (!windowRow) return null;
+      return {
+        code: market.code,
+        label: market.label,
+        firstMonth: market.firstMonth,
+        months: market.months,
+        // Cumulative unique reach is a property of the market, not of the
+        // window: it is everyone it has ever reached since the anchor.
+        cumulativeReach: market.cumulativeReach,
+        ...windowRow
+      };
+    })
+    .filter(Boolean)
+    .filter((row) => Number(row.netNewReach) > 0 || Number(row.spend) > 0);
+}
+
+function expansionSortRows(rows, key, direction) {
+  const column = EXPANSION_MARKET_COLUMNS.find((item) => item.key === key);
+  const factor = direction === "asc" ? 1 : -1;
+  return rows.slice().sort((left, right) => {
+    if (column?.type === "text") {
+      return String(left[key] || "").localeCompare(String(right[key] || "")) * factor;
+    }
+    const a = left[key];
+    const b = right[key];
+    // A value the account could not report is not a small value. It sorts to
+    // the bottom whichever way the column is pointing, rather than reading as
+    // the cheapest row in a cost column.
+    const aMissing = !expansionMeasured(a);
+    const bMissing = !expansionMeasured(b);
+    if (aMissing && bMissing) return 0;
+    if (aMissing) return 1;
+    if (bMissing) return -1;
+    return (Number(a) - Number(b)) * factor;
+  });
+}
+
+function expansionFormatCell(row, column, currency) {
+  const value = row[column.key];
+  if (!expansionMeasured(value)) return "--";
+  if (column.money) return formatCurrency(Math.round(Number(value)), currency);
+  if (column.percent) return `${Math.round(Number(value) * 100)}%`;
+  if (column.decimals) return formatDecimal(value, column.decimals);
+  return formatCompactNumber(value);
 }
 
 function renderExpansionMarkets(model, latest, likeForLike, currency) {
-  const series = Array.isArray(model.marketSeries) ? model.marketSeries : [];
+  expansionTableState.model = model;
+  expansionTableState.currency = currency;
+  expansionTableState.likeForLike = likeForLike;
+  expansionTableState.latest = latest;
+  return `<div id="expansion-markets">${renderExpansionMarketsCard()}</div>`;
+}
+
+function renderExpansionMarketsCard() {
+  const { model, currency, likeForLike, window: windowKey, sortKey, sortDirection, showAll } = expansionTableState;
+  const series = Array.isArray(model?.marketSeries) ? model.marketSeries : [];
+
   // A stored snapshot from before the market split carries no country data. The
   // card says so rather than disappearing, because a missing panel reads as
   // "no markets" when it really means "not measured yet".
@@ -926,16 +1107,31 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
   `;
   }
 
-  // Sorted by what each market added last, not by its accumulated total: the
-  // question this table answers is where expansion is happening now.
-  const ranked = series
-    .slice()
-    .sort((left, right) => Number(right.latestNetNewReach || 0) - Number(left.latestNetNewReach || 0))
-    .filter((market) => Number(market.latestNetNewReach) > 0 || Number(market.cumulativeReach) > 0)
-    .slice(0, 12);
+  const rows = expansionMarketRows(model, windowKey);
+  if (!rows.length) {
+    return `
+    <article class="card expansion-card">
+      <div class="card-header"><div><h3>Markets</h3>
+      <p class="field-hint">No market delivered anything in this window.</p></div></div>
+      ${renderExpansionWindowPicker(windowKey)}
+    </article>
+  `;
+  }
 
-  const peak = Math.max(...ranked.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
+  const sorted = expansionSortRows(rows, sortKey, sortDirection);
+  const visible = showAll ? sorted : sorted.slice(0, 12);
+  const sample = rows[0];
+  const windowLabel = sample.from === sample.to
+    ? expansionMonthProse(sample.to)
+    : `${expansionMonthProse(sample.from)} to ${expansionMonthProse(sample.to)}`;
+  const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
   const overlap = model.marketOverlap;
+
+  // The like-for-like badge belongs only to the month in progress. Over three
+  // months or since the anchor there is no matching elapsed window to compare
+  // against, and a badge borrowed from a different period would be worse than
+  // none.
+  const showBadges = windowKey === "current" && Boolean(likeForLike);
 
   return `
     <article class="card expansion-card">
@@ -943,71 +1139,66 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
         <div>
           <h3>Markets</h3>
           <p class="field-hint">
-            From Meta's country breakdown, for ${escapeHtml(latest.partial ? expansionDayRange(latest) : expansionMonthProse(latest.month))}.
+            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial ? ", part month" : ""}.
             Each country's reach is deduplicated inside that country. They must not be added together -
             someone reached in two countries counts in both.
           </p>
         </div>
       </div>
+      ${renderExpansionWindowPicker(windowKey)}
       <div class="table-wrap">
-        <table class="meta-expansion-table">
+        <table class="meta-expansion-table is-sortable">
           <thead>
             <tr>
-              ${expansionHeadRow([
-                ["Market", "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed."],
-                ["Since", "The first month this market delivered anything inside the measured window. A market that ran, stopped and came back still shows the month it first ran."],
-                ["First-time", "People in this market reached for the first time since the anchor month. Measured as the rise in that country's cumulative unique reach, so someone reached again later is not counted twice.", true],
-                ["Per day", "First-time reach divided by the days the row covers. The only column here that can be read straight down, because the month in progress is shorter than the rest.", true],
-                ["Cost / 1,000 new", "This market's spend divided by its first-time reach. What a thousand people you had never reached before cost here. Lower is cheaper expansion.", true],
-                ["Repeat share", "Of everyone reached in this market this month, the share already reached before. A rising share means you are paying to hit the same people again.", true],
-                ["Frequency", "Average impressions per person reached in this market this month. Read it beside repeat share: both climbing is the market running out of new people.", true],
-                ["New customers", "Purchases matching the New_customer conversion in this market this month. Not a cohort - these are not necessarily the people first reached this month.", true],
-                ["Unique total", "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both.", true],
-                ["Trend", "First-time reach in each month of the window, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."]
-              ])}
+              ${EXPANSION_MARKET_COLUMNS.map((column, index) => {
+                const active = column.key === sortKey;
+                const classes = [
+                  column.numeric ? "is-numeric" : "",
+                  "has-tip",
+                  index >= EXPANSION_MARKET_COLUMNS.length / 2 ? "tip-end" : "tip-start",
+                  column.sortable === false ? "" : "is-sortable",
+                  active ? `is-sorted is-${sortDirection}` : ""
+                ].filter(Boolean).join(" ");
+                const sortAttributes = column.sortable === false
+                  ? ""
+                  : ` data-expansion-sort="${escapeHtml(column.key)}" aria-sort="${active ? (sortDirection === "asc" ? "ascending" : "descending") : "none"}"`;
+                return `<th class="${classes}" data-tip="${escapeHtml(column.tip)}" tabindex="0"${sortAttributes}>${escapeHtml(column.label)}</th>`;
+              }).join("\n              ")}
             </tr>
           </thead>
           <tbody>
-            ${ranked.map((market) => {
-              const days = expansionRowDays(latest);
-              const perDay = days > 0 ? Number(market.latestNetNewReach) / days : null;
-              const baseline = likeForLike?.markets?.[market.code];
+            ${visible.map((row) => {
+              const baseline = likeForLike?.markets?.[row.code];
               const comparable = baseline ? Number(baseline.netNewReach) > 0 : false;
               const change = comparable
-                ? (Number(market.latestNetNewReach) - Number(baseline.netNewReach)) / Number(baseline.netNewReach)
+                ? (Number(row.netNewReach) - Number(baseline.netNewReach)) / Number(baseline.netNewReach)
                 : null;
               // A market that delivered earlier in the year and nothing in the
-              // baseline window has not just appeared - it came back. Calling
-              // that "New" contradicts the first-delivery date in the row
-              // beside it, which is exactly what Italy, France and Germany did
-              // after four months dark.
-              const emptyLabel = likeForLike && market.firstMonth && market.firstMonth < likeForLike.month
+              // baseline window has not just appeared - it came back.
+              const emptyLabel = likeForLike && row.firstMonth && row.firstMonth < likeForLike.month
                 ? "Resumed"
                 : "New";
               return `
                 <tr>
-                  <td>
-                    <strong>${escapeHtml(market.label)}</strong>
-                    <span class="is-quiet">${escapeHtml(market.code)}</span>
-                  </td>
-                  <td>${escapeHtml(market.firstMonth || "--")}</td>
-                  <td class="is-numeric">
-                    ${escapeHtml(formatCompactNumber(market.latestNetNewReach))}
-                    ${likeForLike ? expansionChangeBadge(change, comparable, "", false, emptyLabel) : ""}
-                  </td>
-                  <td class="is-numeric">${escapeHtml(perDay === null ? "--" : formatCompactNumber(Math.round(perDay)))}</td>
-                  <td class="is-numeric">${escapeHtml(expansionMeasured(market.latestCostPerThousandNewlyReached)
-                    ? formatCurrency(Math.round(Number(market.latestCostPerThousandNewlyReached)), currency)
-                    : "--")}</td>
-                  <td class="is-numeric">${escapeHtml(expansionMeasured(market.latestRepeatShare)
-                    ? `${Math.round(Number(market.latestRepeatShare) * 100)}%`
-                    : "--")}</td>
-                  <td class="is-numeric">${escapeHtml(formatDecimal(market.latestFrequency, 1))}</td>
-                  <td class="is-numeric">${escapeHtml(market.latestNewCustomers == null
-                    ? "--"
-                    : formatCompactNumber(market.latestNewCustomers))}</td>
-                  <td class="is-numeric">${escapeHtml(formatCompactNumber(market.cumulativeReach))}</td>
-                  <td>${expansionSparkline(market.months, peak)}</td>
+                  ${EXPANSION_MARKET_COLUMNS.map((column) => {
+                    if (column.key === "label") {
+                      return `<td>
+                        <strong>${escapeHtml(row.label)}</strong>
+                        <span class="is-quiet">${escapeHtml(row.code)} · since ${escapeHtml(row.firstMonth || "--")}</span>
+                      </td>`;
+                    }
+                    if (column.key === "trend") {
+                      return `<td>${expansionSparkline(row.months, peak)}</td>`;
+                    }
+                    const cell = expansionFormatCell(row, column, currency);
+                    const badge = column.key === "netNewReach" && showBadges
+                      ? expansionChangeBadge(change, comparable, "", false, emptyLabel)
+                      : "";
+                    const tone = column.key === "roas" && expansionMeasured(row.roas)
+                      ? (Number(row.roas) < 1 ? " class=\"is-numeric is-below-one\"" : " class=\"is-numeric\"")
+                      : (column.numeric ? " class=\"is-numeric\"" : "");
+                    return `<td${tone}>${escapeHtml(cell)}${badge}</td>`;
+                  }).join("")}
                 </tr>
               `;
             }).join("")}
@@ -1015,12 +1206,24 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
         </table>
       </div>
       <p class="expansion-note">
-        ${overlap && expansionMeasured(overlap.share)
+        ${windowKey === "current" && overlap && expansionMeasured(overlap.share)
           ? escapeHtml(`The markets add to ${formatCompactNumber(overlap.marketReachSum)} against the deduplicated account figure of ${formatCompactNumber(overlap.accountReach)} - ${(Number(overlap.share) * 100).toFixed(1)}% of people were reached in more than one country. The account figure is the one that speaks for the whole set.`)
           : "The account figure is the one that speaks for the whole set; the markets are a breakdown of it, not a sum."}
-        ${series.length > ranked.length ? escapeHtml(` ${ranked.length} of ${series.length} markets shown.`) : ""}
+        ${sorted.length > visible.length
+          ? `<button type="button" class="expansion-link" data-expansion-show-all="1">Show all ${sorted.length} markets</button>`
+          : (showAll && sorted.length > 12 ? `<button type="button" class="expansion-link" data-expansion-show-all="0">Show the top 12 only</button>` : "")}
       </p>
     </article>
+  `;
+}
+
+function renderExpansionWindowPicker(active) {
+  return `
+    <div class="expansion-window-picker" role="group" aria-label="Window">
+      ${EXPANSION_WINDOWS.map(([key, label]) => `
+        <button type="button" data-expansion-window="${key}" class="${key === active ? "is-active" : ""}" aria-pressed="${key === active ? "true" : "false"}">${escapeHtml(label)}</button>
+      `).join("")}
+    </div>
   `;
 }
 

@@ -125,7 +125,7 @@ test("a market that went dark and came back is not labelled new", () => {
   // August, and returned in September. With no baseline in the comparison
   // window they were labelled "New", which contradicted the first-delivery date
   // printed in the same row.
-  assert.match(ui, /const emptyLabel = likeForLike && market\.firstMonth && market\.firstMonth < likeForLike\.month/);
+  assert.match(ui, /const emptyLabel = likeForLike && row\.firstMonth && row\.firstMonth < likeForLike\.month/);
   assert.match(ui, /\? "Resumed"/);
 });
 

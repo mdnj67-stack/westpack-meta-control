@@ -1,5 +1,7 @@
 const { ensureAccountId, graphRequest, isRateLimitMessage } = require("../lib/meta");
 const {
+  PURCHASE_ACTION_TYPES,
+  firstActionValue,
   resolveCustomerConversionActionTypes,
   sumActionTypes
 } = require("./customer-acquisition");
@@ -233,6 +235,20 @@ function newCustomersFrom(row, actionTypes) {
   return sumActionTypes(row?.actions || [], types);
 }
 
+// Meta reports the same purchase money under several action types at once - on
+// every country row measured here, purchase, fb_pixel_purchase and
+// omni_purchase all carried the identical value. The first match is the money;
+// the sum would be three times it.
+function revenueFrom(row) {
+  return firstActionValue(row?.action_values || [], PURCHASE_ACTION_TYPES);
+}
+
+function newCustomerRevenueFrom(row, actionTypes) {
+  const types = actionTypes?.newCustomerActionTypes || [];
+  if (!types.length) return null;
+  return sumActionTypes(row?.action_values || [], types);
+}
+
 async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
   const rows = await reader.getAll(`/${reader.accountId}/insights`, {
     level: "account",
@@ -240,7 +256,7 @@ async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
     time_increment: "monthly",
     filtering: campaignFilter(campaignIds),
     limit: "50",
-    fields: "date_start,date_stop,reach,impressions,frequency,spend,actions"
+    fields: "date_start,date_stop,reach,impressions,frequency,spend,actions,action_values"
   }, "monthly reach", 2);
 
   return Object.fromEntries(rows.map((row) => [String(row.date_start).slice(0, 7), {
@@ -248,7 +264,9 @@ async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
     impressions: number(row.impressions),
     frequency: number(row.frequency),
     spend: number(row.spend),
-    newCustomers: newCustomersFrom(row, actionTypes)
+    newCustomers: newCustomersFrom(row, actionTypes),
+    revenue: revenueFrom(row),
+    newCustomerRevenue: newCustomerRevenueFrom(row, actionTypes)
   }]));
 }
 
@@ -267,7 +285,7 @@ async function readMonthlyCountryRows(reader, window, campaignIds, actionTypes) 
     // The breakdown key comes back on its own. Asking for `country` in fields
     // is rejected outright by Graph v25 - the field list describes metrics, and
     // the breakdown describes how they are cut.
-    fields: "date_start,date_stop,reach,impressions,frequency,spend,actions"
+    fields: "date_start,date_stop,reach,impressions,frequency,spend,actions,action_values"
   }, "monthly reach by country", 4);
 
   const byMonth = {};
@@ -281,7 +299,9 @@ async function readMonthlyCountryRows(reader, window, campaignIds, actionTypes) 
       impressions: number(row.impressions),
       frequency: number(row.frequency),
       spend: number(row.spend),
-      newCustomers: newCustomersFrom(row, actionTypes)
+      newCustomers: newCustomersFrom(row, actionTypes),
+      revenue: revenueFrom(row),
+      newCustomerRevenue: newCustomerRevenueFrom(row, actionTypes)
     };
   }
   return byMonth;
@@ -448,6 +468,9 @@ function buildMarketRow({ code, monthly, cumulative, previousCumulative }) {
   const spend = number(monthly?.spend);
   const newCustomers = monthly?.newCustomers == null ? null : number(monthly.newCustomers);
   const repeatReach = Math.max(0, monthlyReach - netNewReach);
+  const impressions = number(monthly?.impressions);
+  const revenue = number(monthly?.revenue);
+  const newCustomerRevenue = monthly?.newCustomerRevenue == null ? null : number(monthly.newCustomerRevenue);
   return {
     code,
     label: countryLabel(code),
@@ -458,13 +481,70 @@ function buildMarketRow({ code, monthly, cumulative, previousCumulative }) {
     repeatReach,
     repeatShare: monthlyReach > 0 ? round(repeatReach / monthlyReach, 4) : null,
     spend,
+    impressions,
     frequency: number(monthly?.frequency),
     newCustomers,
+    // Revenue is Meta's reported purchase value on standard attribution. It is
+    // what this market returned, not what it returned because of this campaign
+    // set - the set is a grouping, not a measured uplift.
+    revenue,
+    newCustomerRevenue,
+    roas: spend > 0 ? round(revenue / spend, 3) : null,
+    cpm: impressions > 0 ? round((spend / impressions) * 1000, 2) : null,
     costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
     costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
     newCustomersPerThousandNewlyReached: newCustomers != null && netNewReach > 0
       ? round((newCustomers / netNewReach) * 1000, 3)
       : null
+  };
+}
+
+// The windows the table can be read over. A single part month is a thin basis
+// for moving budget - Denmark had five customers in it - so the same market is
+// also aggregated over the last three months and over everything since the
+// anchor. Spend, customers and revenue add up across months; reach does not,
+// so net-new over a window is the rise in that market's cumulative curve across
+// it, which is the only figure here that cannot be summed.
+function buildMarketWindow({ code, months, from, to }) {
+  const slice = months.slice(from, to + 1);
+  if (!slice.length) return null;
+
+  const spend = slice.reduce((total, month) => total + number(month.spend), 0);
+  const revenue = slice.reduce((total, month) => total + number(month.revenue), 0);
+  const impressions = slice.reduce((total, month) => total + number(month.impressions), 0);
+  const anyCustomers = slice.some((month) => month.newCustomers != null);
+  const newCustomers = anyCustomers
+    ? slice.reduce((total, month) => total + (month.newCustomers == null ? 0 : number(month.newCustomers)), 0)
+    : null;
+
+  const before = from > 0 ? number(months[from - 1]?.cumulativeReach) : 0;
+  const last = slice[slice.length - 1];
+  const netNewReach = Math.max(0, number(last?.cumulativeReach) - before);
+  const days = slice.reduce((total, month) => total + number(month.days), 0);
+
+  return {
+    code,
+    from: slice[0].month,
+    to: last.month,
+    months: slice.length,
+    days,
+    partial: slice.some((month) => month.partial),
+    netNewReach,
+    cumulativeReach: number(last?.cumulativeReach),
+    spend: round(spend, 2),
+    revenue: round(revenue, 2),
+    impressions,
+    newCustomers,
+    roas: spend > 0 ? round(revenue / spend, 3) : null,
+    cpm: impressions > 0 ? round((spend / impressions) * 1000, 2) : null,
+    costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
+    costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
+    // Frequency and repeat share cannot be added across months either - both are
+    // ratios over a reach figure that deduplicates inside its own window - so
+    // over a multi-month window they are reported from its last month and named
+    // that way rather than averaged into something Meta never measured.
+    latestFrequency: number(last?.frequency),
+    latestRepeatShare: last?.repeatShare == null ? null : number(last.repeatShare)
   };
 }
 
@@ -476,6 +556,9 @@ function buildMarketSeries(rows) {
     for (const code of Object.keys(row.marketsByCode || {})) codes.add(code);
   }
 
+  const lastIndex = rows.length - 1;
+  const threeFrom = Math.max(0, rows.length - 3);
+
   return [...codes]
     .map((code) => {
       const months = rows.map((row) => {
@@ -483,14 +566,20 @@ function buildMarketSeries(rows) {
         return {
           month: row.month,
           partial: row.partial,
+          days: row.days,
           monthlyReach: market ? market.monthlyReach : 0,
           netNewReach: market ? market.netNewReach : 0,
           repeatReach: market ? market.repeatReach : 0,
           repeatShare: market ? market.repeatShare : null,
           cumulativeReach: market ? market.cumulativeReach : 0,
           spend: market ? market.spend : 0,
+          impressions: market ? market.impressions : 0,
           frequency: market ? market.frequency : 0,
           newCustomers: market ? market.newCustomers : null,
+          revenue: market ? market.revenue : 0,
+          newCustomerRevenue: market ? market.newCustomerRevenue : null,
+          roas: market ? market.roas : null,
+          cpm: market ? market.cpm : null,
           costPerThousandNewlyReached: market ? market.costPerThousandNewlyReached : null,
           costPerNewCustomer: market ? market.costPerNewCustomer : null,
           newCustomersPerThousandNewlyReached: market ? market.newCustomersPerThousandNewlyReached : null
@@ -499,16 +588,20 @@ function buildMarketSeries(rows) {
 
       const delivering = months.filter((month) => month.monthlyReach > 0);
       const latest = delivering[delivering.length - 1] || null;
-      const spend = months.reduce((total, month) => total + number(month.spend), 0);
-      const anyCustomerData = months.some((month) => month.newCustomers != null);
-      const newCustomers = months.reduce((total, month) => (
-        month.newCustomers == null ? total : total + number(month.newCustomers)
-      ), 0);
+
+      // Three windows over the same market, so a budget decision is not forced
+      // to rest on whatever fraction of a month has elapsed today.
+      const windows = {
+        current: buildMarketWindow({ code, months, from: lastIndex, to: lastIndex }),
+        quarter: buildMarketWindow({ code, months, from: threeFrom, to: lastIndex }),
+        all: buildMarketWindow({ code, months, from: 0, to: lastIndex })
+      };
 
       return {
         code,
         label: countryLabel(code),
         months,
+        windows,
         firstMonth: delivering[0]?.month || null,
         deliveringMonths: delivering.length,
         // Measured, not accumulated from the monthly rows, so this is the
@@ -522,8 +615,9 @@ function buildMarketSeries(rows) {
         latestNewCustomers: latest ? latest.newCustomers : null,
         latestCostPerThousandNewlyReached: latest ? latest.costPerThousandNewlyReached : null,
         latestNewCustomersPerThousandNewlyReached: latest ? latest.newCustomersPerThousandNewlyReached : null,
-        spend: round(spend, 2),
-        newCustomers: anyCustomerData ? newCustomers : null
+        spend: round(windows.all?.spend, 2),
+        revenue: round(windows.all?.revenue, 2),
+        newCustomers: windows.all ? windows.all.newCustomers : null
       };
     })
     .filter((market) => market.cumulativeReach > 0 || market.spend > 0)
@@ -696,6 +790,8 @@ async function syncExpansionReach({
     const spend = number(monthly?.spend);
     const newCustomers = monthly?.newCustomers == null ? null : number(monthly.newCustomers);
     const repeatReach = Math.max(0, monthlyReach - netNewReach);
+    const monthlyImpressions = number(monthly?.impressions);
+    const revenue = number(monthly?.revenue);
 
     const marketsByCode = {};
     const marketCodes = new Set([
@@ -736,6 +832,10 @@ async function syncExpansionReach({
       repeatShare: monthlyReach > 0 ? round(repeatReach / monthlyReach, 4) : null,
       spend,
       newCustomers,
+      revenue,
+      newCustomerRevenue: monthly?.newCustomerRevenue == null ? null : number(monthly.newCustomerRevenue),
+      roas: spend > 0 ? round(revenue / spend, 3) : null,
+      cpm: monthlyImpressions > 0 ? round((spend / monthlyImpressions) * 1000, 2) : null,
       costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
       costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
       newCustomersPerThousandNewlyReached: newCustomers != null && netNewReach > 0

@@ -744,6 +744,12 @@ function buildCustomerAcquisitionWarnings(acquisition = null) {
 module.exports = {
   EXISTING_CUSTOMER_NAMES,
   NEW_CUSTOMER_NAMES,
+  // Meta reports the same purchase money under several action types at once -
+  // purchase, fb_pixel_purchase and omni_purchase all carried the identical
+  // value on every country row measured on this account. Reading it takes the
+  // first match, never the sum, or the revenue triples.
+  PURCHASE_ACTION_TYPES,
+  firstActionValue,
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWindows,

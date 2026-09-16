@@ -104,7 +104,13 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
               impressions: String(COUNTRY_MONTHLY[code][index] * 4),
               frequency: "4",
               spend: String(1000 * (index + 1)),
-              actions: [{ action_type: NEW_CUSTOMER_ACTION, value: "5" }]
+              actions: [{ action_type: NEW_CUSTOMER_ACTION, value: "5" }],
+              action_values: [
+                { action_type: "purchase", value: "4000" },
+                { action_type: "offsite_conversion.fb_pixel_purchase", value: "4000" },
+                { action_type: "omni_purchase", value: "4000" },
+                { action_type: NEW_CUSTOMER_ACTION, value: "900" }
+              ]
             });
           }
         });
@@ -118,7 +124,12 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
           impressions: String(MONTHLY[index] * 4),
           frequency: "4",
           spend: String(12000 * (index + 1)),
-          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(MONTHLY_NEW_CUSTOMERS[index]) }]
+          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(MONTHLY_NEW_CUSTOMERS[index]) }],
+          action_values: [
+            { action_type: "purchase", value: "30000" },
+            { action_type: "omni_purchase", value: "30000" },
+            { action_type: NEW_CUSTOMER_ACTION, value: "5000" }
+          ]
         }))
       };
     }
@@ -556,4 +567,49 @@ test("the elapsed window is measured once and then reused with its customers", a
     return JSON.parse(call.params.time_range).until === likeForLikeWindow.until;
   });
   assert.equal(windowCalls.length, 0, "a closed window must never be measured twice");
+});
+
+test("revenue is the first purchase action value, never the sum of its aliases", async () => {
+  // Meta reports the same purchase money under several action types at once. On
+  // the live account, purchase, fb_pixel_purchase and omni_purchase all carried
+  // an identical value on every country row - summing them would have trebled
+  // every market's revenue and its ROAS with it.
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const italy = snapshot.marketSeries.find((market) => market.code === "IT");
+  const latestMonth = italy.months[italy.months.length - 1];
+  assert.equal(latestMonth.revenue, 4000, "revenue was summed across the aliases");
+  assert.equal(latestMonth.roas, Math.round((4000 / latestMonth.spend) * 1000) / 1000);
+
+  const accountMonth = snapshot.months[snapshot.months.length - 1];
+  assert.equal(accountMonth.revenue, 30000);
+});
+
+test("a market can be read over three windows, and reach is never summed across them", async () => {
+  // A single part month is a thin basis for moving budget. Spend, revenue and
+  // customers add up across months; reach does not, so a window's first-time
+  // reach is the rise in that market's cumulative curve across it.
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  const italy = snapshot.marketSeries.find((market) => market.code === "IT");
+
+  assert.ok(italy.windows.current && italy.windows.quarter && italy.windows.all);
+  assert.equal(italy.windows.current.months, 1);
+  assert.equal(italy.windows.all.months, italy.months.length);
+
+  // Over everything since the anchor, first-time reach is simply the market's
+  // own cumulative total - every one of those people was new at some point.
+  assert.equal(italy.windows.all.netNewReach, italy.cumulativeReach);
+
+  // Spend adds up; the window figure is the sum of its months.
+  const quarterMonths = italy.months.slice(-3);
+  assert.equal(
+    italy.windows.quarter.spend,
+    Math.round(quarterMonths.reduce((total, month) => total + month.spend, 0) * 100) / 100
+  );
+
+  // Frequency and repeat share are ratios over a deduplicated reach figure and
+  // cannot be averaged, so a multi-month window reports its last month's.
+  assert.equal(italy.windows.quarter.latestFrequency, quarterMonths[quarterMonths.length - 1].frequency);
 });
