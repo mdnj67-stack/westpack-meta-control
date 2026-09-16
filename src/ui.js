@@ -1035,6 +1035,19 @@ const EXPANSION_MARKET_COLUMNS = [
   }
 ];
 
+// An ad set in the learning phase is delivering without much to optimise on,
+// and every significant edit restarts it. A market in that state cannot carry a
+// decision, and the row has to say so rather than looking like every other row.
+function expansionLearningBadge(delivery) {
+  const since = delivery.lastSignificantEdit ? new Date(delivery.lastSignificantEdit) : null;
+  const sinceLabel = since && !Number.isNaN(since.getTime()) ? since.toLocaleDateString() : "";
+  const conversions = delivery.conversionsSinceEdit == null
+    ? ""
+    : `${delivery.conversionsSinceEdit} conversion${delivery.conversionsSinceEdit === 1 ? "" : "s"} since then. `;
+  const tip = `Meta has this market's ad set in its learning phase${sinceLabel ? `, restarted ${sinceLabel}` : ""}. ${conversions}It needs roughly fifty optimisation events a week to leave it, and until it does the figures move for reasons that have nothing to do with the market. Every significant edit starts the clock again.`;
+  return `<span class="meta-expansion-badge is-learning has-tip tip-start" data-tip="${escapeHtml(tip)}" tabindex="0">Learning</span>`;
+}
+
 function expansionMarketRows(model, windowKey) {
   const series = Array.isArray(model?.marketSeries) ? model.marketSeries : [];
   return series
@@ -1191,10 +1204,12 @@ function renderExpansionMarketsCard() {
                 <tr class="is-expandable${open ? " is-open" : ""}" data-expansion-market="${escapeHtml(row.code)}" tabindex="0" role="button" aria-expanded="${open ? "true" : "false"}">
                   ${EXPANSION_MARKET_COLUMNS.map((column) => {
                     if (column.key === "label") {
+                      const delivery = model.marketDelivery?.[row.code] || null;
                       const unattributed = /^(UNKNOWN|XX)$/i.test(row.code);
                       return `<td${unattributed ? " class=\"is-unattributed\"" : ""}>
                         <strong>${escapeHtml(row.label)}</strong>
                         <span class="is-quiet">${escapeHtml(unattributed ? "Meta could not place this delivery" : `${row.code} · since ${row.firstMonth || "--"}`)}</span>
+                        ${delivery?.learning ? expansionLearningBadge(delivery) : ""}
                       </td>`;
                     }
                     if (column.key === "trend") {

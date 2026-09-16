@@ -18624,3 +18624,17 @@ body.campaign-studio-review-mode .main-content {
   line-height: 1.5;
   color: rgba(120, 72, 20, 0.98);
 }
+
+/* A market whose ad set is still in Meta's learning phase. Its figures move for
+   reasons that have nothing to do with the market, so the row says so. */
+.meta-expansion-badge.is-learning {
+  display: inline-block;
+  margin-top: 4px;
+  background: rgba(198, 120, 40, 0.14);
+  color: rgba(130, 78, 22, 0.98);
+  cursor: help;
+}
+
+.meta-expansion-table td .meta-expansion-badge.is-learning {
+  position: relative;
+}

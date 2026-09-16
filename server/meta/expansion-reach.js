@@ -454,6 +454,66 @@ async function readAdThumbnails(reader, adIds) {
 }
 
 
+// Whether a market's delivery is stable enough for its figures to mean
+// anything. Meta puts an ad set into a learning phase after it is created and
+// after every significant edit, and needs roughly fifty optimisation events a
+// week to leave it; until then it is delivering without much to optimise on and
+// the numbers move for reasons that have nothing to do with the market.
+//
+// Measured on this account on 2026-09-16: the German and Italian ad sets both
+// reported LEARNING with zero conversions since an edit made that morning. A
+// market row that looks like every other row while that is true is a row that
+// cannot carry a decision, and there was nothing on screen saying so.
+//
+// An ad set is attributed to a market only when it targets exactly one country.
+// The broad EU sets deliver into thirty-odd countries at once and say nothing
+// about any single one of them, so they are left out rather than guessed at.
+async function readMarketDelivery(reader, campaignIds) {
+  const wanted = new Set(campaignIds.map(String));
+  let rows = [];
+  try {
+    rows = await reader.getAll(`/${reader.accountId}/adsets`, {
+      fields: "id,name,status,effective_status,campaign_id,optimization_goal,updated_time,learning_stage_info,targeting{geo_locations}",
+      limit: "200"
+    }, "ad set delivery", 3);
+  } catch (error) {
+    // Delivery state is a caveat on the figures, not one of the figures. Losing
+    // it must never cost the snapshot.
+    return {};
+  }
+
+  const byCountry = {};
+  for (const row of rows) {
+    if (!wanted.has(String(row.campaign_id))) continue;
+    const countries = row.targeting?.geo_locations?.countries || [];
+    if (countries.length !== 1) continue;
+
+    const code = String(countries[0]).toUpperCase();
+    const learning = row.learning_stage_info || {};
+    const lastEdit = Number(learning.last_sig_edit_ts);
+    const entry = {
+      adSetId: String(row.id || ""),
+      adSetName: String(row.name || ""),
+      status: String(row.effective_status || row.status || ""),
+      optimizationGoal: String(row.optimization_goal || ""),
+      // Meta only reports a learning status while there is one to report, so an
+      // absent status means "not in learning", not "unknown".
+      learningStatus: String(learning.status || ""),
+      learning: String(learning.status || "").toUpperCase() === "LEARNING",
+      conversionsSinceEdit: learning.conversions === undefined ? null : number(learning.conversions),
+      lastSignificantEdit: Number.isFinite(lastEdit) ? new Date(lastEdit * 1000).toISOString() : "",
+      updatedTime: String(row.updated_time || "")
+    };
+
+    // A market with more than one single-country ad set keeps the one still
+    // learning, because that is the one that qualifies the figures.
+    const existing = byCountry[code];
+    if (!existing || (entry.learning && !existing.learning)) byCountry[code] = entry;
+  }
+  return byCountry;
+}
+
+
 async function readCumulativeCountries(reader, anchor, until, campaignIds, label) {
   const rows = await reader.getAll(`/${reader.accountId}/insights`, {
     level: "account",
@@ -981,6 +1041,7 @@ async function syncExpansionReach({
   });
 
   const marketSeries = buildMarketSeries(rows);
+  const marketDelivery = await readMarketDelivery(reader, campaignIds);
   const latest = rows[rows.length - 1] || null;
   const restatements = collectRestatements(previous, rows, restatementReason);
 
@@ -1047,6 +1108,7 @@ async function syncExpansionReach({
     months: rows,
     marketSeries,
     marketCount: marketSeries.length,
+    marketDelivery,
     adBreakdown,
     likeForLike,
     restatements,

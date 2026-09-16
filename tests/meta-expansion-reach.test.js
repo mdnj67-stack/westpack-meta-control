@@ -731,3 +731,67 @@ test("the ad breakdown is reconciled against the market it claims to explain", a
   assert.equal(germany.adSpend, 0);
   assert.equal(germany.reconciles, false);
 });
+
+test("a market in the learning phase is recorded, and only where an ad set speaks for it", async () => {
+  // Meta puts an ad set into a learning phase after every significant edit and
+  // needs roughly fifty optimisation events a week to leave it. On 2026-09-16
+  // the German and Italian sets both reported LEARNING with zero conversions
+  // since an edit made that morning, and nothing on screen said so.
+  calls.length = 0;
+  const base = buildResponder();
+  responder = (params, pathname) => {
+    if (String(pathname).includes("/adsets")) {
+      return {
+        data: [
+          {
+            id: "s1", name: "Broad - IT", campaign_id: "1", status: "ACTIVE",
+            optimization_goal: "OFFSITE_CONVERSIONS",
+            learning_stage_info: { status: "LEARNING", conversions: 0, last_sig_edit_ts: 1789540115 },
+            targeting: { geo_locations: { countries: ["IT"] } }
+          },
+          {
+            id: "s2", name: "Broad - Alle EU-lande", campaign_id: "1", status: "ACTIVE",
+            learning_stage_info: { status: "SUCCESS" },
+            // Thirty-odd countries at once says nothing about any one of them.
+            targeting: { geo_locations: { countries: ["DE", "FR", "IT", "ES"] } }
+          },
+          {
+            id: "s3", name: "Broad - DE", campaign_id: "9", status: "ACTIVE",
+            learning_stage_info: { status: "LEARNING", conversions: 0 },
+            targeting: { geo_locations: { countries: ["DE"] } }
+          }
+        ]
+      };
+    }
+    return base(params, pathname);
+  };
+
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  assert.equal(snapshot.marketDelivery.IT.learning, true);
+  assert.equal(snapshot.marketDelivery.IT.conversionsSinceEdit, 0);
+  assert.match(snapshot.marketDelivery.IT.lastSignificantEdit, /^2026-/);
+
+  // A multi-country ad set is attributed to no market rather than to all of
+  // them, so nothing here claims to describe Spain.
+  assert.equal(snapshot.marketDelivery.ES, undefined);
+  assert.equal(snapshot.marketDelivery.FR, undefined);
+
+  // And an ad set belonging to a campaign outside the incremental set is not
+  // read at all.
+  assert.equal(snapshot.marketDelivery.DE, undefined);
+});
+
+test("losing the delivery state costs the caveat, never the snapshot", async () => {
+  calls.length = 0;
+  const base = buildResponder();
+  responder = (params, pathname) => {
+    if (String(pathname).includes("/adsets")) throw new Error("ad sets unavailable");
+    return base(params, pathname);
+  };
+
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  assert.deepEqual(snapshot.marketDelivery, {});
+  assert.equal(snapshot.available, true, "the series itself still came back");
+  assert.ok(snapshot.marketSeries.length > 0);
+});
