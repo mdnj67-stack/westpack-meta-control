@@ -1085,15 +1085,15 @@ const EXPANSION_MARKET_COLUMNS = [
     tip: "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed - these ad sets target a country and nothing else."
   },
   {
-    key: "newCustomers", label: "New customers", numeric: true, high: "up",
+    key: "newCustomers", label: "New cust.", numeric: true, high: "up",
     tip: "Purchases matching the New_customer conversion in this market over the selected window. This is the figure the department is measured on, and what the table sorts by. About a fifth of purchases on this account match neither customer conversion, so it is a floor rather than a total."
   },
   {
-    key: "costPerNewCustomer", label: "Cost / new customer", numeric: true, money: true, high: "down",
+    key: "costPerNewCustomer", label: "Cost/cust.", numeric: true, money: true, high: "down",
     tip: "The market's whole spend in the window divided by its new customers. The clearest sign that a market is being worked through: customers flattening while this rises, whatever the budget is doing."
   },
   {
-    key: "purchases", label: "Purchases", numeric: true, high: "up",
+    key: "purchases", label: "Purch.", numeric: true, high: "up",
     tip: "All purchases Meta attributes to this market, new and returning customers together. Events rather than people, so these do add up across the rows."
   },
   {
@@ -1109,19 +1109,19 @@ const EXPANSION_MARKET_COLUMNS = [
     tip: "First-time reach divided by the days the window covers. The column that can be read straight down when the window includes a month still in progress."
   },
   {
-    key: "costPerThousandNewlyReached", label: "Cost / 1,000 new", numeric: true, money: true, high: "down",
+    key: "costPerThousandNewlyReached", label: "Cost/1k", numeric: true, money: true, high: "down",
     tip: "Spend divided by first-time reach. A delivery diagnostic, never a goal: the targeting is broad, so cheap reach means cheap strangers. Italy led this column at 57 kr. per thousand and produced no new customers at all. Read it to explain why a market is cheap or expensive, not to choose between markets."
   },
   {
-    key: "latestRepeatShare", label: "Repeat share", numeric: true, percent: true, high: "down",
+    key: "latestRepeatShare", label: "Repeat", numeric: true, percent: true, high: "down",
     tip: "Of the people reached in the window's last month, the share already reached before. It says whether the budget bought repetition or new impressions - not how much of the market is left, which reach cannot measure against an audience this narrow."
   },
   {
-    key: "latestFrequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
+    key: "latestFrequency", label: "Freq.", numeric: true, decimals: 1, high: "down",
     tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both high means the budget is larger than the pool Meta found at this bid."
   },
   {
-    key: "cumulativeReach", label: "Unique total", numeric: true, high: "up",
+    key: "cumulativeReach", label: "Unique", numeric: true, high: "up",
     tip: "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both."
   },
   {
@@ -1192,9 +1192,10 @@ function expansionFormatCell(row, column, currency) {
   if (!expansionMeasured(value)) return "--";
   if (column.money) {
     const amount = Number(value);
-    return Math.abs(amount) < 1 && amount !== 0
-      ? formatCurrency(amount, currency)
-      : formatCurrency(Math.round(amount), currency);
+    // A real amount must never print as nothing, so anything below one unit
+    // keeps enough precision to be visible.
+    if (Math.abs(amount) < 1 && amount !== 0) return formatDecimal(amount, 2);
+    return formatCompactNumber(Math.round(amount));
   }
   if (column.percent) return `${Math.round(Number(value) * 100)}%`;
   if (column.decimals) return formatDecimal(value, column.decimals);
@@ -1257,7 +1258,7 @@ function renderExpansionMarketsCard() {
         <div>
           <h3>Markets</h3>
           <p class="field-hint">
-            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial && sample.from !== sample.to ? " - the last of them still in progress" : ""}.
+            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial && sample.from !== sample.to ? " - the last of them still in progress" : ""}. Amounts in ${escapeHtml(currency)}.
             Each country's reach is deduplicated inside that country. They must not be added together -
             someone reached in two countries counts in both.
           </p>
@@ -1305,7 +1306,7 @@ function renderExpansionMarketsCard() {
                       const unattributed = /^(UNKNOWN|XX)$/i.test(row.code);
                       return `<td${unattributed ? " class=\"is-unattributed\"" : ""}>
                         <strong>${escapeHtml(row.label)}</strong>
-                        <span class="is-quiet">${escapeHtml(unattributed ? "Meta could not place this delivery" : `${row.code} · since ${row.firstMonth || "--"}`)}</span>
+                        <span class="is-quiet">${escapeHtml(unattributed ? "Meta could not place this delivery" : `${row.code} · from ${String(row.firstMonth || "--").replace(/^d{2}(d{2})-(d{2})$/, "$2/$1")}`)}</span>
                         ${delivery?.learning ? expansionLearningBadge(delivery) : ""}
                       </td>`;
                     }
@@ -1363,11 +1364,11 @@ const EXPANSION_AD_COLUMNS = [
     tip: "Purchase value Meta attributes to this ad in this country, on standard attribution. It is what happened while the ad was running, not what the ad caused."
   },
   {
-    key: "purchases", label: "Purchases", numeric: true, high: "up",
+    key: "purchases", label: "Purch.", numeric: true, high: "up",
     tip: "Purchases Meta attributes to this ad in this country. Events, not people, so these do add up across the rows."
   },
   {
-    key: "newCustomers", label: "New customers", numeric: true, high: "up",
+    key: "newCustomers", label: "New cust.", numeric: true, high: "up",
     tip: "Purchases matching the New_customer conversion. About a fifth of purchases on this account match neither customer conversion, so this is a floor rather than a total."
   },
   {
@@ -1387,7 +1388,7 @@ const EXPANSION_AD_COLUMNS = [
     tip: "This ad's own deduplicated reach inside this country. Do not add the column up: one person who saw three of these ads counts in all three rows."
   },
   {
-    key: "frequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
+    key: "frequency", label: "Freq.", numeric: true, decimals: 1, high: "down",
     tip: "Average impressions per person this ad reached in this country."
   }
 ];
@@ -1527,12 +1528,12 @@ function renderExpansionMonths(months, model, currency, perDay) {
                 ["Reached", "Distinct people reached in the month, deduplicated by Meta across the incremental campaigns. It is read at account level, never added up from the campaigns.", true],
                 ["First-time", "Of those people, the ones never reached by this set before. Measured as the rise in cumulative unique reach since the anchor month.", true],
                 ["Per day", "First-time reach divided by the days the row covers. The only column that compares the month in progress with a complete month honestly.", true],
-                ["Repeat share", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true],
-                ["Frequency", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true],
+                ["Repeat", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true],
+                ["Freq.", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true],
                 ["Spend", "What the incremental campaigns spent in the month, in the account currency.", true],
-                ["Cost / 1,000 new", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true],
-                ["New customers", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true],
-                ["Cost / new customer", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true]
+                ["Cost/1k", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true],
+                ["New cust.", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true],
+                ["Cost/cust.", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true]
               ])}
             </tr>
           </thead>

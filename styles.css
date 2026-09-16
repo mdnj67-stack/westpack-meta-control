@@ -18648,3 +18648,103 @@ body.campaign-studio-review-mode .main-content {
   color: rgba(226, 232, 255, 0.92);
   font-variant-numeric: tabular-nums;
 }
+
+/* The market table is a decision table and carries every diagnostic a row needs
+   to explain itself. That makes it wide, so it is also tight: a horizontal
+   scrollbar hides exactly the columns someone is trying to compare. */
+.meta-expansion-table {
+  font-size: 0.74rem;
+}
+
+.meta-expansion-table th,
+.meta-expansion-table td {
+  padding: 6px 8px;
+}
+
+.meta-expansion-table th {
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+}
+
+.meta-expansion-table td strong {
+  font-size: 0.78rem;
+}
+
+.meta-expansion-table .is-quiet {
+  font-size: 0.62rem;
+}
+
+.meta-expansion-table .meta-expansion-badge {
+  font-size: 0.6rem;
+  padding: 1px 5px;
+}
+
+.meta-expansion-spark {
+  min-width: 56px;
+  height: 20px;
+}
+
+.meta-expansion-spark em {
+  width: 4px;
+}
+
+/* The market name is the only column that may wrap, because a country name is
+   the one cell a reader can still parse across two lines. */
+.meta-expansion-table td:first-child {
+  white-space: normal;
+  min-width: 118px;
+}
+
+/* One more pass on density, so the whole row survives on a 1100px content
+   column as well. Below that the table scrolls rather than hiding a column:
+   a column someone cannot find is worse than one they have to reach for. */
+.meta-expansion-table th,
+.meta-expansion-table td {
+  padding: 5px 6px;
+}
+
+.meta-expansion-table td:first-child {
+  min-width: 104px;
+}
+
+.meta-expansion-spark {
+  min-width: 46px;
+}
+
+.meta-expansion-table {
+  font-size: 0.72rem;
+}
+
+.meta-expansion-table th,
+.meta-expansion-table td {
+  padding: 5px 5px;
+}
+
+/* Headers may wrap onto two lines; the figures under them may not. The header
+   is what sets most of these column widths - "New customers" is wider than any
+   count it ever holds - so letting it stack is where the last of the width
+   comes from, and it costs one taller row rather than a column. */
+.meta-expansion-table th {
+  white-space: normal;
+  max-width: 78px;
+  vertical-align: bottom;
+}
+
+.meta-expansion-table th:first-child {
+  max-width: none;
+}
+
+/* The last few pixels on the narrowest laptops. The day count is two digits and
+   never needs the width its header asks for. */
+.meta-expansion-table th {
+  max-width: 70px;
+}
+
+/* Headers stay on one line and are abbreviated instead. max-width on a table
+   cell is not honoured reliably by the auto layout, so relying on it to wrap
+   clipped the labels mid-word - "NEW CUSTOMI" - which is worse than a short
+   one. The full wording is in the tooltip on every header. */
+.meta-expansion-table th {
+  white-space: nowrap;
+  max-width: none;
+}
