@@ -839,6 +839,17 @@ function renderExpansionCurve(months, latest) {
   `;
 }
 
+// Every column in these tables carries a definition that changes how the figure
+// should be read - which window it covers, whether it may be added up, what it
+// is a floor rather than a total of. A header alone cannot say that, and a
+// paragraph above the table is the panel that was just removed for being noise.
+// The explanation therefore lives on the header it belongs to, out of the way
+// until asked for. tabindex makes it reachable without a mouse, which is also
+// what makes it tappable on a phone.
+function expansionHeadCell(label, tip, numeric = false) {
+  return `<th class="${numeric ? "is-numeric " : ""}has-tip" data-tip="${escapeHtml(tip)}" tabindex="0">${escapeHtml(label)}</th>`;
+}
+
 function renderExpansionMarkets(model, latest, likeForLike, currency) {
   const series = Array.isArray(model.marketSeries) ? model.marketSeries : [];
   // A stored snapshot from before the market split carries no country data. The
@@ -880,16 +891,16 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
         <table class="meta-expansion-table">
           <thead>
             <tr>
-              <th>Market</th>
-              <th>Since</th>
-              <th class="is-numeric">First-time</th>
-              <th class="is-numeric">Per day</th>
-              <th class="is-numeric">Cost / 1,000 new</th>
-              <th class="is-numeric">Repeat share</th>
-              <th class="is-numeric">Frequency</th>
-              <th class="is-numeric">New customers</th>
-              <th class="is-numeric">Unique total</th>
-              <th>Trend</th>
+              ${expansionHeadCell("Market", "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed.")}
+              ${expansionHeadCell("Since", "The first month this market delivered anything inside the measured window. A market that ran, stopped and came back still shows the month it first ran.")}
+              ${expansionHeadCell("First-time", "People in this market reached for the first time since the anchor month. Measured as the rise in that country's cumulative unique reach, so someone reached again later is not counted twice.", true)}
+              ${expansionHeadCell("Per day", "First-time reach divided by the days the row covers. The only column here that can be read straight down, because the month in progress is shorter than the rest.", true)}
+              ${expansionHeadCell("Cost / 1,000 new", "This market's spend divided by its first-time reach. What a thousand people you had never reached before cost here. Lower is cheaper expansion.", true)}
+              ${expansionHeadCell("Repeat share", "Of everyone reached in this market this month, the share already reached before. A rising share means you are paying to hit the same people again.", true)}
+              ${expansionHeadCell("Frequency", "Average impressions per person reached in this market this month. Read it beside repeat share: both climbing is the market running out of new people.", true)}
+              ${expansionHeadCell("New customers", "Purchases matching the New_customer conversion in this market this month. Not a cohort - these are not necessarily the people first reached this month.", true)}
+              ${expansionHeadCell("Unique total", "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both.", true)}
+              ${expansionHeadCell("Trend", "First-time reach in each month of the window, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other.")}
             </tr>
           </thead>
           <tbody>
@@ -965,17 +976,17 @@ function renderExpansionMonths(months, model, currency, perDay) {
         <table class="meta-expansion-table">
           <thead>
             <tr>
-              <th>Month</th>
-              <th class="is-numeric">Days</th>
-              <th class="is-numeric">Reached</th>
-              <th class="is-numeric">First-time</th>
-              <th class="is-numeric">Per day</th>
-              <th class="is-numeric">Repeat share</th>
-              <th class="is-numeric">Frequency</th>
-              <th class="is-numeric">Spend</th>
-              <th class="is-numeric">Cost / 1,000 new</th>
-              <th class="is-numeric">New customers</th>
-              <th class="is-numeric">Cost / new customer</th>
+              ${expansionHeadCell("Month", "Calendar month in the ad account's own timezone, America/Los_Angeles. Meta draws this account's days about nine hours behind Copenhagen.")}
+              ${expansionHeadCell("Days", "How many days the row actually covers. The month in progress is shorter than the others, which is the whole reason Per day is here.", true)}
+              ${expansionHeadCell("Reached", "Distinct people reached in the month, deduplicated by Meta across the incremental campaigns. It is read at account level, never added up from the campaigns.", true)}
+              ${expansionHeadCell("First-time", "Of those people, the ones never reached by this set before. Measured as the rise in cumulative unique reach since the anchor month.", true)}
+              ${expansionHeadCell("Per day", "First-time reach divided by the days the row covers. The only column that compares the month in progress with a complete month honestly.", true)}
+              ${expansionHeadCell("Repeat share", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true)}
+              ${expansionHeadCell("Frequency", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true)}
+              ${expansionHeadCell("Spend", "What the incremental campaigns spent in the month, in the account currency.", true)}
+              ${expansionHeadCell("Cost / 1,000 new", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true)}
+              ${expansionHeadCell("New customers", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true)}
+              ${expansionHeadCell("Cost / new customer", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true)}
             </tr>
           </thead>
           <tbody>

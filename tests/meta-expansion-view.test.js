@@ -161,3 +161,35 @@ test("the data quality panel does not follow onto the Expansion tab", () => {
   // playbook does not reach it.
   assert.match(app, /renderMetaQualityPanel\(expansionVisible \? \[\] : buildMetaQualityCards\(\)\)/);
 });
+
+test("every column in both tables explains itself on hover", () => {
+  // The headers carry definitions that change how a figure is read - which
+  // window it covers, whether it may be added up, that the customer count is a
+  // floor. A header alone cannot say that, and a paragraph above the table is
+  // the panel that was removed for being noise.
+  assert.match(ui, /function expansionHeadCell\(label, tip, numeric = false\)/);
+  assert.match(ui, /data-tip="\$\{escapeHtml\(tip\)\}"/);
+
+  // No bare header is left in either table.
+  const tables = ui.slice(ui.indexOf("function expansionHeadCell"), ui.indexOf("function renderExpansionRestatements"));
+  const bareHeaders = tables
+    .split("\n")
+    .filter((line) => /<th[ >]/.test(line))
+    // The helper itself is the one place a <th> is written out.
+    .filter((line) => !line.includes("data-tip="));
+  assert.deepEqual(bareHeaders, [], "these headers carry no explanation");
+
+  // The two counts that are most often misread say so explicitly.
+  assert.match(ui, /Do not add this column up/);
+  assert.match(ui, /floor rather than a total/);
+});
+
+test("the explanation is reachable without a mouse and cannot be clipped away", () => {
+  // The table scrolls horizontally, so a bubble rising above the header row
+  // would be cut off by that container, and one anchored left would leave it at
+  // the right-hand edge.
+  assert.match(ui, /tabindex="0"/);
+  assert.match(styles, /\.meta-expansion-table th\.has-tip:focus::after/);
+  assert.match(styles, /\.meta-expansion-table th\.has-tip\.is-numeric::after,\s*\n\s*\.meta-expansion-table th\.has-tip:last-child::after/);
+  assert.match(styles, /top: calc\(100% \+ 6px\)/);
+});

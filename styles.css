@@ -18355,3 +18355,75 @@ body.campaign-studio-review-mode .main-content {
   color: rgba(33, 28, 58, 0.55);
 }
 
+
+/* Column explanations. The header carries the definition that changes how the
+   figure is read, and it stays out of the way until the reader asks for it.
+   The bubble drops downwards into the table body, because the header sits at
+   the top of a container that scrolls horizontally and would clip anything
+   rising above it. It anchors to whichever edge the column is aligned to, so
+   the first and last columns cannot push it outside that container either. */
+.meta-expansion-table th.has-tip {
+  cursor: help;
+  position: relative;
+}
+
+.meta-expansion-table th.has-tip::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  border-bottom: 1px dotted rgba(33, 28, 58, 0.35);
+}
+
+.meta-expansion-table th.has-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 3;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(33, 28, 58, 0.1);
+  background: rgba(24, 24, 55, 0.97);
+  color: rgba(245, 241, 255, 0.95);
+  box-shadow: 0 18px 38px rgba(15, 13, 40, 0.28);
+  font-size: 0.76rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms ease;
+}
+
+/* Numeric columns are right-aligned, and the last column sits against the right
+   edge, so both anchor the bubble from the right instead. */
+.meta-expansion-table th.has-tip.is-numeric::after,
+.meta-expansion-table th.has-tip:last-child::after {
+  left: auto;
+  right: 0;
+}
+
+.meta-expansion-table th.has-tip:hover::after,
+.meta-expansion-table th.has-tip:focus::after,
+.meta-expansion-table th.has-tip:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.meta-expansion-table th.has-tip:focus-visible {
+  outline: 2px solid rgba(79, 124, 255, 0.55);
+  outline-offset: -2px;
+}
+
+@media (max-width: 720px) {
+  .meta-expansion-table th.has-tip::after {
+    max-width: 210px;
+  }
+}
