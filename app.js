@@ -1,10 +1,12 @@
-﻿import {
+﻿// The demo campaigns, ads, ad sets and stats that used to be imported here are
+// deliberately gone. They were five invented campaigns priced in euros, each
+// carrying the hard-coded "Healthy" status this dashboard removed everywhere
+// else, and they seeded the dashboard and the Studio publish targets on every
+// page load until the live read landed about a minute later.
+import {
   adaptationGoals,
-  ads,
-  adSets,
   auditLog,
   campaignMatches,
-  campaigns,
   integrationConfig,
   klaviyoCampaignGroups,
   klaviyoMarkets,
@@ -12,9 +14,8 @@
   loadLiveKlaviyoSnapshot,
   loadLiveMetaSnapshot,
   previewTemplate,
-  promptRecipe,
-  stats
-} from "./src/data.js?v=20260421-metavideofix1";
+  promptRecipe
+} from "./src/data.js?v=20260916-nodemoseed1";
 import {
   buildStudioCatalogSnapshot,
   readMetaSnapshotCache,
@@ -342,11 +343,11 @@ const klaviyoTranslationGuardrails = [
 ];
 
 const appState = {
-  ads,
-  adSets,
-  campaigns,
+  ads: [],
+  adSets: [],
+  campaigns: [],
   workspace: "meta",
-  stats,
+  stats: [],
   mode: "duplicate",
   dashboardLens: "general",
   createStep: 1,
@@ -619,6 +620,10 @@ const appState = {
   metaSnapshotMeta: null,
   metaStudioCatalogGeneratedAt: "",
   metaDashboard: null,
+  // Whether a snapshot read is in flight. A read that has not finished and a
+  // read that failed are different facts, and this account takes about a minute
+  // to answer, so the difference is on screen for a long time.
+  metaSnapshotLoading: false,
   metaExpansionReach: null,
   metaCurrency: "DKK",
   metaQuality: null,
@@ -3189,8 +3194,12 @@ function renderKlaviyoSubscriberSection() {
                 <stop offset="100%" stop-color="rgba(207, 31, 37, 0.01)"></stop>
               </linearGradient>
             </defs>
+            ${path ? `
             <path d="${path} L ${chartWidth - 24} ${chartHeight - 24} L 24 ${chartHeight - 24} Z" fill="url(#klaviyoTrendFill)"></path>
             <path d="${path}" fill="none" stroke="rgba(207, 31, 37, 0.92)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            ` : `
+            <text x="${chartWidth / 2}" y="${chartHeight / 2}" text-anchor="middle" dominant-baseline="middle" fill="rgba(33, 28, 58, 0.45)" font-size="13">No points in this range</text>
+            `}
           </svg>
           <div class="klaviyo-line-chart-scale">
             <span>Scale</span>
@@ -13658,12 +13667,21 @@ function renderDashboard() {
     // Not synced outranks an empty lens: without the server payload there is no way to
     // know whether the lens is empty or simply unmeasured, and saying the wrong one of
     // those is worse than saying neither.
+    // A read that has not finished yet is not a read that failed. This account
+    // answers a full snapshot in about a minute, so saying the figures "did
+    // not" load reported a failure for the whole of every page load.
     const emptyStateCopy = expansionVisible
       ? null
+      : !dashboardFiguresSynced && appState.metaSnapshotLoading
+      ? {
+        headline: "Reading the figures from Meta",
+        body: "Spend, reach, trends and the objective split are computed once on the server, over every campaign in the selected range. On this account that read takes around a minute, and nothing is shown until it lands - a half-filled dashboard is worse than a waiting one.",
+        nextStep: "Nothing to do. The page fills itself in when the read returns."
+      }
       : !dashboardFiguresSynced
       ? {
         headline: "Dashboard figures are not synced",
-        body: "The campaign list loaded but the computed figures did not, so spend, reach, trends and the objective split cannot be shown for this range. Every figure on this page is computed once on the server, and the browser deliberately does not produce a second opinion.",
+        body: "The computed figures did not come back, so spend, reach, trends and the objective split cannot be shown for this range. Every figure on this page is computed once on the server, and the browser deliberately does not produce a second opinion.",
         nextStep: "Press Refresh data. If it keeps failing, the data quality panel below says what the last sync managed to fetch."
       }
       : isEmptyLensState
@@ -13863,10 +13881,18 @@ function initializeApp() {
   const liveSnapshot = loadLiveMetaSnapshot();
   const aiSnapshot = loadAiPreviewSnapshot();
   const klaviyoSnapshot = loadLiveKlaviyoSnapshot();
-  const campaignData = liveSnapshot?.campaigns?.length ? liveSnapshot.campaigns : campaigns;
-  const adSetData = liveSnapshot?.adSets?.length ? liveSnapshot.adSets : adSets;
-  const adData = liveSnapshot?.ads?.length ? liveSnapshot.ads : ads;
-  const statData = liveSnapshot?.stats?.length ? liveSnapshot.stats : stats;
+  // Nothing here may be seeded with invented data. The bundled fallback is demo
+  // content - five campaigns that have never existed on this account, priced in
+  // euros, each carrying the hard-coded "Healthy" status this dashboard removed
+  // everywhere else - and it painted both the dashboard and the Studio's publish
+  // targets until the live read landed. That read takes about a minute on this
+  // account, so it was a minute of fabricated campaigns every session, offered
+  // as the real thing. An empty page that says it is loading is the honest
+  // version of that minute.
+  const campaignData = liveSnapshot?.campaigns?.length ? liveSnapshot.campaigns : [];
+  const adSetData = liveSnapshot?.adSets?.length ? liveSnapshot.adSets : [];
+  const adData = liveSnapshot?.ads?.length ? liveSnapshot.ads : [];
+  const statData = liveSnapshot?.stats?.length ? liveSnapshot.stats : [];
   applySnapshotScope(liveSnapshot?.scope || { label: "Last 7 days", shortLabel: "Last 7 days" });
 
   if (klaviyoSnapshot) {
@@ -14012,6 +14038,11 @@ async function refreshMetaData(options = {}) {
     refreshButton.disabled = true;
     refreshButton.textContent = "Refreshing...";
   }
+
+  appState.metaSnapshotLoading = true;
+  renderPanelSafely("Snapshot Loading State", () => {
+    renderDashboard();
+  });
 
   dashboardRefreshPromise = (async () => {
     try {
@@ -14162,6 +14193,7 @@ async function refreshMetaData(options = {}) {
       });
       return null;
     } finally {
+      appState.metaSnapshotLoading = false;
       if (refreshButton && !silent) {
         refreshButton.disabled = false;
       }

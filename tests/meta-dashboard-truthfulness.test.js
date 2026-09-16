@@ -330,3 +330,48 @@ test("a degraded ad-set daily query does not wipe the awareness trend", () => {
     "an empty rebuild can still overwrite the campaign series"
   );
 });
+
+test("the dashboard is never seeded with invented campaigns", () => {
+  // The bundled demo set - five campaigns that have never existed on this
+  // account, priced in euros, each carrying the hard-coded "Healthy" status
+  // corrected everywhere else - was the initial value of appState and the
+  // fallback on the boot render. It painted the dashboard and the Studio's
+  // publish targets on every page load until the live read landed, which on
+  // this account takes about 55 seconds.
+  const app = readFileSync(join(root, "app.js"), "utf8");
+
+  assert.match(app, /const appState = \{\s*\n\s*ads: \[\],\s*\n\s*adSets: \[\],\s*\n\s*campaigns: \[\],/);
+
+  // And the demo constants are no longer pulled in at all, so they cannot come
+  // back as a fallback somewhere else.
+  const dataImport = app.slice(0, app.indexOf('} from "./src/data.js'));
+  for (const name of ["\n  ads,", "\n  adSets,", "\n  campaigns,", "\n  stats"]) {
+    assert.ok(!dataImport.includes(name), `app.js still imports the demo ${name.trim()} from src/data.js`);
+  }
+});
+
+test("a read still in flight is not reported as a read that failed", () => {
+  // "The campaign list loaded but the computed figures did not" was shown for
+  // the whole of every page load, because the snapshot takes about a minute and
+  // nothing distinguished waiting from failing.
+  const app = readFileSync(join(root, "app.js"), "utf8");
+  assert.match(app, /metaSnapshotLoading: false,/);
+  assert.match(app, /appState\.metaSnapshotLoading = true;/);
+  assert.match(app, /appState\.metaSnapshotLoading = false;/);
+  assert.match(app, /!dashboardFiguresSynced && appState\.metaSnapshotLoading/);
+  assert.match(app, /headline: "Reading the figures from Meta"/);
+});
+
+test("an empty series draws no path at all, rather than an invalid one", () => {
+  // buildLinePath returns an empty string when there are no points, and the
+  // Klaviyo trend dropped it straight into d="", producing d=" L 696 164 L 24
+  // 164 Z" - rejected by the browser, three console errors on every page load.
+  const app = readFileSync(join(root, "app.js"), "utf8");
+
+  // Every place the path is concatenated into a d attribute has to sit behind a
+  // check that there is a path at all.
+  const concatenations = app.split("\n").filter((line) => line.includes('d="${path} L '));
+  assert.equal(concatenations.length, 1, "a second unreviewed concatenation appeared");
+  assert.match(app, /\$\{path \? `\s*\n\s*<path d="\$\{path\} L /);
+  assert.match(app, /No points in this range/);
+});
