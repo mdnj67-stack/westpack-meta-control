@@ -583,14 +583,14 @@ function expansionBars(months, options = {}) {
 
 // A market's own curve, drawn small enough to sit in a table cell. Every market
 // is scaled to the same peak, so the rows can be read against each other.
-function expansionSparkline(months, peak) {
+function expansionSparkline(months, peak, key = "netNewReach") {
   // A stored snapshot can lag the code that reads it, so a series that is not a
   // series draws nothing rather than taking the whole tab down with it.
   if (!Array.isArray(months) || !months.length) return "";
   return `
     <span class="meta-expansion-spark" aria-hidden="true">
       ${months.map((month) => {
-        const value = Math.max(0, Number(month.netNewReach) || 0);
+        const value = Math.max(0, Number(month[key]) || 0);
         const height = peak > 0 ? Math.max(3, (value / peak) * 100) : 3;
         return `<em class="${month.partial ? "is-partial" : ""}" style="height:${height.toFixed(1)}%"></em>`;
       }).join("")}
@@ -641,7 +641,7 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
     <section class="meta-expansion">
       ${expansionFreshnessStrip(model)}
       <div class="meta-expansion-kpis">
-        <article class="meta-expansion-kpi">
+        <article class="meta-expansion-kpi is-lead">
           <span>Reached for the first time</span>
           <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
           <p>${escapeHtml(comparisonLine)}</p>
@@ -742,8 +742,9 @@ export function renderExpansionView(model = null, visible = false, currency = "D
 
   node.innerHTML = `
     ${renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency)}
-    ${renderExpansionCurve(months, latest)}
+    ${renderExpansionCustomerCurve(months, latest, currency)}
     ${renderExpansionMarkets(model, latest, likeForLike, currency)}
+    ${renderExpansionCurve(months, latest)}
     ${renderExpansionMonths(months, model, currency, perDay)}
     ${renderExpansionRestatements(model)}
   `;
@@ -752,9 +753,6 @@ export function renderExpansionView(model = null, visible = false, currency = "D
 }
 
 function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency) {
-  const costLabel = expansionMeasured(latest.costPerThousandNewlyReached)
-    ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
-    : "--";
   // New customers is the figure the department is measured on, so it is shown as
   // the count it is rather than as a rate per thousand reached. The rate read as
   // a conversion rate on the newly reached, which it is not: a person first
@@ -774,10 +772,18 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
     return "Attributed to these campaigns in this window. Not a cohort of the people newly reached in it.";
   })();
 
-  // The like-for-like cost is the honest read on whether expansion got cheaper:
-  // both sides cover the same number of days.
-  const costChange = likeForLike && Number(likeForLike.costPerThousandNewlyReached) > 0
-    ? (Number(latest.costPerThousandNewlyReached) - Number(likeForLike.costPerThousandNewlyReached)) / Number(likeForLike.costPerThousandNewlyReached)
+  // The like-for-like cost per new customer is the honest read on whether a
+  // market is getting harder: both sides cover the same number of days, and it
+  // moves with the business rather than with the budget.
+  const customerCostChange = likeForLike && Number(likeForLike.costPerNewCustomer) > 0 && expansionMeasured(latest.costPerNewCustomer)
+    ? (Number(latest.costPerNewCustomer) - Number(likeForLike.costPerNewCustomer)) / Number(likeForLike.costPerNewCustomer)
+    : null;
+
+  // How many countries actually produced a customer, against how many were
+  // reached at all. With broad targeting into a narrow business audience the
+  // gap between those two is the whole point.
+  const marketsWithCustomers = model.customerConversion?.available
+    ? (model.marketSeries || []).filter((market) => Number(market.windows?.all?.newCustomers) > 0).length
     : null;
 
   const windowLine = latest.partial
@@ -790,9 +796,11 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
         <div>
           <h3>Expansion</h3>
           <p class="field-hint">
-            People the ${Number(model.campaignCount) || 0} incrementality campaigns reached for the first time
-            since ${escapeHtml(anchorLabel)}. Whole calendar months - this view does not follow the date range
-            above. The incrementality set is a grouping Meta reports separately, not a measured uplift.
+            New customers by market since ${escapeHtml(anchorLabel)}, and what they cost. Whole calendar
+            months - this view does not follow the date range above. It currently covers the
+            ${Number(model.campaignCount) || 0} campaigns Meta reports on incrementality attribution, which is
+            a grouping and not a measured uplift; reach figures here are a diagnostic, because these ad sets
+            target a country and nothing else.
           </p>
         </div>
       </div>
@@ -800,22 +808,6 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
       ${expansionFreshnessStrip(model)}
       <p class="meta-expansion-window">${escapeHtml(windowLine)}</p>
       <div class="meta-expansion-kpis is-wide">
-        <article class="meta-expansion-kpi">
-          <span>Reached for the first time</span>
-          <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
-          <p>${escapeHtml(likeForLike
-            ? `Against ${formatCompactNumber(likeForLike.netNewReach)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}.`
-            : "People who had never been reached by this set before.")}</p>
-          ${likeForLike ? expansionChangeBadge(likeForLike.comparison.change, likeForLike.comparison.comparable) : ""}
-        </article>
-        <article class="meta-expansion-kpi">
-          <span>Cost per 1,000 new</span>
-          <strong>${escapeHtml(costLabel)}</strong>
-          <p>${escapeHtml(likeForLike && expansionMeasured(likeForLike.costPerThousandNewlyReached)
-            ? `Against ${formatCurrency(Math.round(Number(likeForLike.costPerThousandNewlyReached)), currency)} over the same days last month.`
-            : "Spend over first-time reach. The price of one more person.")}</p>
-          ${costChange === null ? "" : expansionChangeBadge(costChange, true, "", true)}
-        </article>
         <article class="meta-expansion-kpi">
           <span>New customers</span>
           <strong>${escapeHtml(latest.newCustomers == null ? "--" : formatCompactNumber(latest.newCustomers))}</strong>
@@ -825,11 +817,87 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
             : ""}
         </article>
         <article class="meta-expansion-kpi">
-          <span>Unique people in total</span>
-          <strong>${escapeHtml(formatCompactNumber(latest.cumulativeReach))}</strong>
-          <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
+          <span>Cost per new customer</span>
+          <strong>${escapeHtml(expansionMeasured(latest.costPerNewCustomer)
+            ? formatCurrency(Math.round(Number(latest.costPerNewCustomer)), currency)
+            : "--")}</strong>
+          <p>${escapeHtml(likeForLike && expansionMeasured(likeForLike.costPerNewCustomer)
+            ? `Against ${formatCurrency(Math.round(Number(likeForLike.costPerNewCustomer)), currency)} over the same days of ${expansionMonthProse(likeForLike.month)}. All spend, not only what reached them.`
+            : "The window's whole spend over its new customers. All of it, not only the spend that reached them.")}</p>
+          ${customerCostChange === null ? "" : expansionChangeBadge(customerCostChange, true, "", true)}
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Markets producing customers</span>
+          <strong>${escapeHtml(marketsWithCustomers == null ? "--" : String(marketsWithCustomers))}</strong>
+          <p>${escapeHtml(marketsWithCustomers == null
+            ? "New customers cannot be counted on this account."
+            : `Of ${model.marketCount || 0} countries with delivery since ${anchorLabel}. The rest were reached and bought nothing.`)}</p>
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Reached for the first time</span>
+          <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
+          <p>A diagnostic, not a goal: the targeting is broad, so almost none of these people were ever possible customers.</p>
         </article>
       </div>
+      </section>
+    </article>
+  `;
+}
+
+// New customers per month, which is what the department is measured on and the
+// only figure on this tab that is budget-neutral. A market getting harder shows
+// up here as customers flattening while their cost rises - reach cannot say
+// that, because the targeting is broad and almost everyone it counts was never
+// a possible customer.
+function renderExpansionCustomerCurve(months, latest, currency) {
+  const rows = months.filter((month) => month.newCustomers != null);
+  if (rows.length < 2) {
+    return `
+    <article class="card expansion-card">
+      <div class="card-header"><div><h3>New customers per month</h3>
+      <p class="field-hint">New customers could not be counted for enough months to draw a series.</p></div></div>
+    </article>`;
+  }
+
+  const peak = Math.max(...rows.map((month) => Number(month.newCustomers) || 0), 1);
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>New customers per month</h3>
+          <p class="field-hint">
+            Purchases matching the New_customer conversion, across the whole account. About a fifth of
+            purchases match neither customer conversion, so each month is a floor rather than a total.
+            The month in progress is hatched and covers fewer days than the ones beside it.
+          </p>
+        </div>
+      </div>
+      <section class="meta-expansion">
+        <div class="meta-expansion-chart">
+          <ol class="meta-expansion-bars">
+            ${rows.map((month) => {
+              const value = Number(month.newCustomers) || 0;
+              const height = Math.max(2, (value / peak) * 100);
+              const tick = month.partial ? expansionDayRange(month) : expansionMonthName(month.month);
+              const cost = expansionMeasured(month.costPerNewCustomer)
+                ? `, ${formatCurrency(Math.round(Number(month.costPerNewCustomer)), currency)} each`
+                : "";
+              return `
+                <li class="meta-expansion-bar${month.partial ? " is-partial" : ""}"
+                    title="${escapeHtml(`${month.month}: ${formatCompactNumber(value)} new customers${cost}`)}">
+                  <span class="meta-expansion-column" style="height:${height.toFixed(1)}%">
+                    <em class="is-new" style="height:100%"></em>
+                  </span>
+                  <span class="meta-expansion-tick">${escapeHtml(tick)}</span>
+                  <span class="meta-expansion-value">${escapeHtml(formatCompactNumber(value))}</span>
+                </li>`;
+            }).join("")}
+          </ol>
+          <p class="meta-expansion-legend">
+            <span class="is-new">New customers</span>
+            ${latest.partial ? `<span class="is-note">${escapeHtml(`${latest.since} to ${latest.until}, part month`)}</span>` : ""}
+          </p>
+        </div>
       </section>
     </article>
   `;
@@ -842,8 +910,10 @@ function renderExpansionCurve(months, latest) {
         <div>
           <h3>Reach per month</h3>
           <p class="field-hint">
-            First-time against repeat. The month in progress is hatched and labelled with its day range,
-            because it covers fewer days than the bars beside it.
+            A diagnostic, not a goal. These ad sets target a country and nothing else, so almost everyone
+            counted here was never a possible customer - a rising bar is not progress on its own. What it
+            does say is whether the budget bought new impressions or repetition. First-time against repeat;
+            the month in progress is hatched.
           </p>
         </div>
       </div>
@@ -982,8 +1052,8 @@ const expansionTableState = {
   currency: "DKK",
   likeForLike: null,
   latest: null,
-  window: "current",
-  sortKey: "netNewReach",
+  window: "quarter",
+  sortKey: "newCustomers",
   sortDirection: "desc",
   showAll: false,
   // Which market is opened to its ads. One at a time: the point is to look at
@@ -997,41 +1067,56 @@ const EXPANSION_WINDOWS = [
   ["all", "Since the anchor"]
 ];
 
-// Every column the table can be sorted by, with the rule for reading it. `high`
-// says which direction is the good one, which is what lets a cost column sort
-// cheapest-first by default while a volume column sorts largest-first.
+// The columns are ordered by what the tab is for. New customers first, because
+// that is what the department is measured on and the only figure here that is
+// budget-neutral: a market getting harder shows up as customers flattening
+// while their cost rises, whatever the budget is doing.
+//
+// Reach comes last and is diagnostic, not a ranking. Westpack sells packaging
+// to businesses - jewellery businesses at its core - and these ad sets run
+// broad: a country, ages 18-65, no detailed targeting at all. Every person in a
+// reach figure is therefore a more or less random adult, and the addressable set
+// is a few thousand companies per market. Cheap reach is what you get for
+// finding the cheapest strangers: Italy had the cheapest new reach on the
+// account, 57 kr. per thousand, and produced no new customers at all. A column
+// that would rank Italy first is measuring the wrong thing, so cost per
+// thousand reached is not in this table.
 const EXPANSION_MARKET_COLUMNS = [
   {
     key: "label", label: "Market", type: "text",
-    tip: "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed."
-  },
-  {
-    key: "netNewReach", label: "First-time", numeric: true, high: "up",
-    tip: "People in this market reached for the first time since the anchor month. The rise in that country's cumulative unique reach across the window, so nobody is counted twice."
-  },
-  {
-    key: "costPerThousandNewlyReached", label: "Cost / 1,000 new", numeric: true, money: true, high: "down",
-    tip: "Spend divided by first-time reach. What a thousand people you had never reached before cost here. Cheap reach and poor return can sit in the same row - read it beside ROAS."
+    tip: "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed - these ad sets target a country and nothing else."
   },
   {
     key: "newCustomers", label: "New customers", numeric: true, high: "up",
-    tip: "Purchases matching the New_customer conversion in this market and window. About a fifth of purchases on this account match neither customer conversion, so this is a floor rather than a total."
+    tip: "Purchases matching the New_customer conversion in this market over the selected window. This is the figure the department is measured on. About a fifth of purchases on this account match neither customer conversion, so it is a floor rather than a total."
+  },
+  {
+    key: "costPerNewCustomer", label: "Cost / new customer", numeric: true, money: true, high: "down",
+    tip: "The market's whole spend in the window divided by its new customers. The clearest sign that a market is being worked through: customers flattening while this rises, whatever the budget is doing."
+  },
+  {
+    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
+    tip: "What this market cost over the window. Here to read the cost per customer against, not as a ranking of its own."
+  },
+  {
+    key: "purchases", label: "Purchases", numeric: true, high: "up",
+    tip: "All purchases Meta attributes to this market, new and returning customers together. Events rather than people, so these do add up across the rows."
+  },
+  {
+    key: "netNewReach", label: "First-time reach", numeric: true, high: "up",
+    tip: "People in this market reached for the first time since the anchor month. A diagnostic, not a goal: the targeting is broad, so almost none of them are packaging buyers, and a market can lead this column while producing no customers at all. Italy did exactly that."
   },
   {
     key: "latestRepeatShare", label: "Repeat share", numeric: true, percent: true, high: "down",
-    tip: "Of the people reached in the window's last month, the share already reached before. It cannot be averaged across months, so it is read from that month alone. A rising share means you are paying to hit the same people again."
+    tip: "Of the people reached in the window's last month, the share already reached before. It says whether the budget bought repetition or new impressions - not how much of the market is left, which reach cannot measure against an audience this narrow."
   },
   {
     key: "latestFrequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
-    tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both climbing is a market running out of new people."
+    tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both high means the budget is larger than the pool Meta found at this bid."
   },
   {
-    key: "cumulativeReach", label: "Unique total", numeric: true, high: "up",
-    tip: "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both."
-  },
-  {
-    key: "trend", label: "Trend", sortable: false,
-    tip: "First-time reach in each month of the series, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."
+    key: "trend", label: "New customers by month", sortable: false,
+    tip: "New customers in each month of the series, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."
   }
 ];
 
@@ -1145,7 +1230,7 @@ function renderExpansionMarketsCard() {
   const windowLabel = sample.from === sample.to
     ? (sample.partial ? expansionDayRange(expansionTableState.latest || {}) : expansionMonthProse(sample.to))
     : `${expansionMonthProse(sample.from)} to ${expansionMonthProse(sample.to)}`;
-  const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
+  const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.newCustomers) || 0)), 1);
   const overlap = model.marketOverlap;
 
   // The like-for-like badge belongs only to the month in progress. Over three
@@ -1213,12 +1298,15 @@ function renderExpansionMarketsCard() {
                       </td>`;
                     }
                     if (column.key === "trend") {
-                      return `<td>${expansionSparkline(row.months, peak)}</td>`;
+                      return `<td>${expansionSparkline(row.months, peak, "newCustomers")}</td>`;
                     }
                     const cell = expansionFormatCell(row, column, currency);
-                    const badge = column.key === "netNewReach" && showBadges
-                      ? expansionChangeBadge(change, comparable, "", false, emptyLabel)
-                      : "";
+                    // The like-for-like badge belonged to first-time reach, which
+                    // is now a diagnostic rather than the figure the table ranks
+                    // on. It is not moved onto new customers, because the
+                    // baseline window only carries reach per market - the trend
+                    // that matters is in the sparkline instead.
+                    const badge = "";
                     const tone = column.key === "roas" && expansionMeasured(row.roas)
                       ? (Number(row.roas) < 1 ? " class=\"is-numeric is-below-one\"" : " class=\"is-numeric\"")
                       : (column.numeric ? " class=\"is-numeric\"" : "");

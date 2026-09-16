@@ -60,6 +60,31 @@ const MARKET_OVERLAP_NOTICE_SHARE = 0.05;
 // below it the ratio is reported as unmeasurable rather than as a triumph.
 const MINIMUM_ROAS_SPEND = 1;
 
+// What belongs in this panel is decided by Meta attribution_setting alone. That
+// is deliberate and stays that way, but it means an awareness or traffic
+// campaign switched to incrementality attribution would join the set and inflate
+// reach while purchases stayed flat. Objectives outside sales are therefore
+// reported rather than filtered out: a set that has quietly stopped being what
+// it was should be visible, not silently corrected.
+const SALES_OBJECTIVES = new Set(["OUTCOME_SALES", "CONVERSIONS", "PRODUCT_CATALOG_SALES"]);
+
+function describeObjectiveMix(campaigns) {
+  const counts = {};
+  for (const campaign of campaigns) {
+    const objective = String(campaign.objective || "unreported");
+    counts[objective] = (counts[objective] || 0) + 1;
+  }
+  const foreign = Object.keys(counts).filter((objective) => !SALES_OBJECTIVES.has(objective) && objective !== "unreported");
+  return {
+    counts,
+    salesOnly: foreign.length === 0,
+    foreignObjectives: foreign,
+    foreignCampaigns: campaigns
+      .filter((campaign) => foreign.includes(String(campaign.objective || "")))
+      .map((campaign) => ({ name: campaign.name, objective: campaign.objective, spend: campaign.spend }))
+  };
+}
+
 // A breakdown may never quietly stand in for the total it breaks down. The
 // ad-level read is reconciled against the market figure it claims to explain,
 // and anything further apart than this is named on screen with the amount it
@@ -234,7 +259,7 @@ async function readIncrementalCampaigns(reader, window) {
     level: "campaign",
     time_range: JSON.stringify(window),
     limit: "500",
-    fields: "campaign_id,campaign_name,attribution_setting,spend,impressions,reach"
+    fields: "campaign_id,campaign_name,attribution_setting,objective,spend,impressions,reach"
   }, "campaign attribution", 4);
 
   return rows
@@ -243,6 +268,11 @@ async function readIncrementalCampaigns(reader, window) {
     .map((row) => ({
       id: String(row.campaign_id),
       name: String(row.campaign_name || ""),
+      // Carried so the set can be checked, never to filter on. What belongs
+      // here is decided by Meta attribution_setting and nothing else - the same
+      // rule the rest of this dashboard follows - so an objective that does not
+      // belong is reported rather than quietly dropped.
+      objective: String(row.objective || ""),
       spend: number(row.spend),
       // Named "delivered" as a warning: this is one campaign's own deduplicated
       // reach and must never be added to its siblings'.
@@ -269,6 +299,12 @@ function revenueFrom(row) {
   return firstActionValue(row?.action_values || [], PURCHASE_ACTION_TYPES);
 }
 
+// The same aliasing applies to the count as to the value: purchase,
+// fb_pixel_purchase and omni_purchase are one number reported three times.
+function purchasesFrom(row) {
+  return firstActionValue(row?.actions || [], PURCHASE_ACTION_TYPES);
+}
+
 function newCustomerRevenueFrom(row, actionTypes) {
   const types = actionTypes?.newCustomerActionTypes || [];
   if (!types.length) return null;
@@ -291,6 +327,7 @@ async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
     frequency: number(row.frequency),
     spend: number(row.spend),
     newCustomers: newCustomersFrom(row, actionTypes),
+    purchases: purchasesFrom(row),
     revenue: revenueFrom(row),
     newCustomerRevenue: newCustomerRevenueFrom(row, actionTypes)
   }]));
@@ -326,6 +363,7 @@ async function readMonthlyCountryRows(reader, window, campaignIds, actionTypes) 
       frequency: number(row.frequency),
       spend: number(row.spend),
       newCustomers: newCustomersFrom(row, actionTypes),
+      purchases: purchasesFrom(row),
       revenue: revenueFrom(row),
       newCustomerRevenue: newCustomerRevenueFrom(row, actionTypes)
     };
@@ -655,6 +693,7 @@ function buildMarketRow({ code, monthly, cumulative, previousCumulative }) {
     impressions,
     frequency: number(monthly?.frequency),
     newCustomers,
+    purchases: number(monthly?.purchases),
     // Revenue is Meta's reported purchase value on standard attribution. It is
     // what this market returned, not what it returned because of this campaign
     // set - the set is a grouping, not a measured uplift.
@@ -682,6 +721,7 @@ function buildMarketWindow({ code, months, from, to }) {
 
   const spend = slice.reduce((total, month) => total + number(month.spend), 0);
   const revenue = slice.reduce((total, month) => total + number(month.revenue), 0);
+  const purchases = slice.reduce((total, month) => total + number(month.purchases), 0);
   const impressions = slice.reduce((total, month) => total + number(month.impressions), 0);
   const anyCustomers = slice.some((month) => month.newCustomers != null);
   const newCustomers = anyCustomers
@@ -707,6 +747,7 @@ function buildMarketWindow({ code, months, from, to }) {
     cumulativeReach: number(last?.cumulativeReach),
     spend: round(spend, 2),
     revenue: round(revenue, 2),
+    purchases,
     impressions,
     newCustomers,
     roas: roasFrom(revenue, spend),
@@ -750,6 +791,7 @@ function buildMarketSeries(rows) {
           impressions: market ? market.impressions : 0,
           frequency: market ? market.frequency : 0,
           newCustomers: market ? market.newCustomers : null,
+          purchases: market ? market.purchases : 0,
           revenue: market ? market.revenue : 0,
           newCustomerRevenue: market ? market.newCustomerRevenue : null,
           roas: market ? market.roas : null,
@@ -1130,6 +1172,7 @@ async function syncExpansionReach({
       : null,
     campaigns,
     campaignCount: campaigns.length,
+    objectiveMix: describeObjectiveMix(campaigns),
     graphCalls: reader.state.calls,
     notes: [
       "Reach is read at account level, filtered to the incremental campaigns. It is never summed across campaigns.",
@@ -1144,6 +1187,7 @@ async function syncExpansionReach({
 module.exports = {
   syncExpansionReach,
   readAdBreakdown,
+  describeObjectiveMix,
   buildMonths,
   buildMarketSeries,
   buildLikeForLike,

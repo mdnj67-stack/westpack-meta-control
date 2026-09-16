@@ -64,7 +64,7 @@ test("a market with no baseline is labelled new rather than given a percentage",
 test("a rising cost per thousand is not coloured as an improvement", () => {
   assert.match(ui, /function expansionChangeBadge\(change, comparable, suffix = "", invert = false, emptyLabel = "New"\)/);
   assert.match(ui, /const good = invert \? value < 0 : value > 0;/);
-  assert.match(ui, /expansionChangeBadge\(costChange, true, "", true\)/);
+  assert.match(ui, /expansionChangeBadge\(customerCostChange, true, "", true\)/);
 });
 
 test("the month in progress is hatched and labelled with its day range", () => {
@@ -179,8 +179,10 @@ test("every column in both tables explains itself on hover", () => {
     .filter((line) => !line.includes("data-tip="));
   assert.deepEqual(bareHeaders, [], "these headers carry no explanation");
 
-  // The two counts that are most often misread say so explicitly.
-  assert.match(ui, /Do not add this column up/);
+  // The two counts that are most often misread say so explicitly. Reach that
+  // cannot be added up now lives on the ad table, where each row is one ad's
+  // own deduplicated count inside one country.
+  assert.match(ui, /Do not add the column up/);
   assert.match(ui, /floor rather than a total/);
 });
 
@@ -254,19 +256,41 @@ test("ad-level reach is named as a figure that cannot be added up", () => {
   assert.match(ui, /not what the ad caused/);
 });
 
-test("the market table no longer carries the money columns", () => {
-  // The user's steer: revenue, ROAS, spend, cost per new customer and CPM are
-  // not what the market row is for. The market is the entry point; the value
-  // question is answered one level down, on the ads.
+test("the market table ranks on new customers, not on the price of reach", () => {
+  // Westpack sells packaging to businesses - jewellery businesses at its core -
+  // and these ad sets run broad: a country, ages 18-65, no detailed targeting at
+  // all. A reach figure therefore counts strangers by design, and cost per
+  // thousand reached would rank whichever market finds the cheapest of them.
+  // Italy led that column at 57 kr. per thousand and produced no new customers.
   const columns = ui.slice(ui.indexOf("const EXPANSION_MARKET_COLUMNS"), ui.indexOf("function expansionMarketRows"));
-  for (const key of ["revenue", "roas", "costPerNewCustomer", "cpm"]) {
+  assert.ok(
+    !columns.includes('key: "costPerThousandNewlyReached"'),
+    "the market table still ranks on the price of reach"
+  );
+  for (const key of ["revenue", "roas", "cpm"]) {
     assert.ok(!columns.includes(`key: "${key}"`), `the market table still carries ${key}`);
   }
-  assert.ok(!/key: "spend"/.test(columns), "the market table still carries spend");
 
-  // They live on the ad table instead, where the question is what created value.
-  const adColumns = ui.slice(ui.indexOf("const EXPANSION_AD_COLUMNS"), ui.indexOf("function expansionAdRows"));
-  for (const key of ["revenue", "purchases", "spend", "roas"]) {
-    assert.ok(adColumns.includes(`key: "${key}"`), `the ad table is missing ${key}`);
-  }
+  // What it leads with instead, and in that order.
+  const order = [...columns.matchAll(/key: "([a-zA-Z]+)"/g)].map((match) => match[1]);
+  assert.equal(order[0], "label");
+  assert.equal(order[1], "newCustomers", "new customers must be the first figure in the row");
+  assert.equal(order[2], "costPerNewCustomer");
+  assert.ok(
+    order.indexOf("netNewReach") > order.indexOf("costPerNewCustomer"),
+    "reach must sit after the customer figures, as a diagnostic"
+  );
+
+  // And it sorts on that figure by default, over a window wide enough to carry
+  // it: a single part month leaves most markets on zero customers.
+  assert.match(ui, /sortKey: "newCustomers"/);
+  assert.match(ui, /window: "quarter"/);
+});
+
+test("reach is named on screen as a diagnostic rather than a goal", () => {
+  // The whole premise correction: a rising reach bar is not progress when
+  // almost everyone counted was never a possible customer.
+  assert.match(ui, /A diagnostic, not a goal/);
+  assert.match(ui, /never a possible customer/);
+  assert.match(ui, /function renderExpansionCustomerCurve/);
 });

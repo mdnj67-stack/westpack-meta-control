@@ -18638,3 +18638,13 @@ body.campaign-studio-review-mode .main-content {
 .meta-expansion-table td .meta-expansion-badge.is-learning {
   position: relative;
 }
+
+/* The value under each bar on the new-customer chart. The counts are small
+   enough - single and double digits - that reading them off a bar height is
+   guesswork, so the number is printed. */
+.meta-expansion-value {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(226, 232, 255, 0.92);
+  font-variant-numeric: tabular-nums;
+}
