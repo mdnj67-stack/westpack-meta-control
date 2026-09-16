@@ -351,6 +351,55 @@ The marketing department budgets monthly and treats a month as 30 days — "the 
   and the semi-transparent mix-bar segment. Both rules must read the tokens and neither
   may hard-code a colour; the tone-coverage test enforces that too.
 
+## Expansion reach — its own tab, its own rules
+
+`server/meta/expansion-reach.js` + `renderExpansionView`/`renderOverviewExpansionReach`
+(`src/ui.js`). The question is how many people the incremental campaigns reached for the
+**first time**, which Meta has no field for. The only route is the cumulative curve: unique
+reach from a fixed anchor to each month end, differenced. Every point costs a Graph call, so
+this is a nightly snapshot (`?expansion=sync`, cron 03:10 UTC) and the browser only ever
+reads it (`?expansion=status`, zero quota).
+
+- **The Expansion sub-tab is not a lens.** `lens === "expansion"` hides the playbook, the
+  hero panel and the range-driven "figures are not synced" state, because it reads whole
+  calendar months from a stored snapshot and never touches the date picker. Two periods on
+  one screen with nothing saying so is the defect this replaced.
+- **A part month is never compared against a whole one.** The nightly job measures
+  cumulative reach to the *same day of the previous month* (`buildLikeForLike`), so both
+  sides cover the same elapsed days; cumulative spend comes back on the same call, so the
+  cost per thousand is comparable too. Same rule as the new-customer month-to-date
+  comparison. A baseline window with no delivery gets a label, never a percentage.
+- **Markets come from `breakdowns=country`, not from campaign names.** One call returns
+  every country for every month, so the split costs the same as the unbroken series.
+  **Graph v25 rejects `country` in `fields` when it is also the breakdown** — the breakdown
+  key comes back on its own. This failed the whole live sync once; `tests/meta-expansion-reach.test.js`
+  pins the rule for every breakdown, not just this field. (Probes on v21 tolerated it, so
+  probe against v25 — `GRAPH_BASE` in `server/lib/meta.js`.)
+- **Country reach must never be summed.** Countries are deduplicated inside each country,
+  not across them: measured 2026-09-16, the countries add to 960,654 against a deduplicated
+  account figure of 940,699, so 2.1% of people were reached in more than one. The account
+  figure stays authoritative and the gap is reported, never corrected for.
+- **`Number(null)` is 0 and 0 is finite.** Every optional figure goes through
+  `expansionMeasured`, because rendering a null as a measured zero says something the
+  account never reported.
+- **The campaign set is Meta's current `attribution_setting` over a rolling window**, so it
+  changes under the series and rewrites completed months. `collectRestatements` records both
+  figures and the reason; the anchor also moves once the first delivering month rolls out of
+  the window, which re-bases every figure.
+- Cold sync ≈ 24 Graph calls, warm ≈ 7. Rate limits are never retried here.
+
+What the live data showed on 2026-09-16, worth knowing before re-deriving it:
+
+- IT, FR and DE delivered from January, ran **nothing from May to August**, and returned on
+  9 September. Do not read two months of country data and conclude they are new markets.
+- September 1–16: 780,874 first time at 125 kr/1,000, against 171,729 at 252 kr/1,000 over
+  the same 16 days of August. The cheap new reach is real.
+- But new customers per 1,000 newly reached is 0.04 in September against 0.23 in August, and
+  IT contributed 0 new customers on 291k first-time reach. Reach and customers disagree —
+  do not report the reach figure alone as a win.
+- GB and DK have run all year and are saturating: DK is 761 kr/1,000 at 46% repeat and
+  frequency 7.8.
+
 ## What the dashboard is allowed to claim
 
 Reworked 2026-09-09. The standing rule for this dashboard, from the user: it must be
