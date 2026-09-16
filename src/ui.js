@@ -744,6 +744,8 @@ export function renderExpansionView(model = null, visible = false, currency = "D
     ${renderExpansionMonths(months, model, currency, perDay)}
     ${renderExpansionRestatements(model)}
   `;
+
+  bindExpansionTips(node);
 }
 
 function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency) {
@@ -846,8 +848,54 @@ function renderExpansionCurve(months, latest) {
 // The explanation therefore lives on the header it belongs to, out of the way
 // until asked for. tabindex makes it reachable without a mouse, which is also
 // what makes it tappable on a phone.
-function expansionHeadCell(label, tip, numeric = false) {
-  return `<th class="${numeric ? "is-numeric " : ""}has-tip" data-tip="${escapeHtml(tip)}" tabindex="0">${escapeHtml(label)}</th>`;
+// Which edge the bubble hangs from comes from the column's position in the row,
+// not from its text alignment. Anchoring it to the right because the figures are
+// right-aligned pushed a 280px bubble leftwards out of the container from narrow
+// columns near the left edge - measured at 168px outside on "Days". Columns in
+// the first half hang left, the rest hang right, so the bubble always opens into
+// the table rather than off it.
+function expansionHeadRow(columns) {
+  const half = columns.length / 2;
+  return columns.map(([label, tip, numeric], index) => {
+    const classes = [numeric ? "is-numeric" : "", "has-tip", index >= half ? "tip-end" : "tip-start"]
+      .filter(Boolean)
+      .join(" ");
+    return `<th class="${classes}" data-tip="${escapeHtml(tip)}" tabindex="0">${escapeHtml(label)}</th>`;
+  }).join("\n              ");
+}
+
+// Position in the row is a good default, but it cannot know how far the reader
+// has scrolled a table that is wider than its container, and on a phone the
+// container is narrower than the bubble's own width. So the bubble is nudged
+// back inside when it would fall out. An ::after cannot be measured directly,
+// but its used `left` and `width` do resolve to pixels, which is enough.
+function bindExpansionTips(root) {
+  if (!root || root.dataset.tipsBound === "true") return;
+  root.dataset.tipsBound = "true";
+
+  const place = (th) => {
+    if (!th) return;
+    th.style.setProperty("--tip-shift", "0px");
+    const wrap = th.closest(".table-wrap");
+    if (!wrap) return;
+    const style = getComputedStyle(th, "::after");
+    const width = parseFloat(style.width);
+    const left = th.getBoundingClientRect().left + parseFloat(style.left);
+    if (!Number.isFinite(width) || !Number.isFinite(left)) return;
+
+    const bounds = wrap.getBoundingClientRect();
+    const overflowRight = left + width - (bounds.right - 8);
+    const overflowLeft = (bounds.left + 8) - left;
+    const shift = overflowRight > 0 ? -overflowRight : overflowLeft > 0 ? overflowLeft : 0;
+    if (shift) th.style.setProperty("--tip-shift", `${Math.round(shift)}px`);
+  };
+
+  const handle = (event) => {
+    const th = event.target?.closest?.("th.has-tip");
+    if (th) place(th);
+  };
+  root.addEventListener("pointerover", handle);
+  root.addEventListener("focusin", handle);
 }
 
 function renderExpansionMarkets(model, latest, likeForLike, currency) {
@@ -891,16 +939,18 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
         <table class="meta-expansion-table">
           <thead>
             <tr>
-              ${expansionHeadCell("Market", "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed.")}
-              ${expansionHeadCell("Since", "The first month this market delivered anything inside the measured window. A market that ran, stopped and came back still shows the month it first ran.")}
-              ${expansionHeadCell("First-time", "People in this market reached for the first time since the anchor month. Measured as the rise in that country's cumulative unique reach, so someone reached again later is not counted twice.", true)}
-              ${expansionHeadCell("Per day", "First-time reach divided by the days the row covers. The only column here that can be read straight down, because the month in progress is shorter than the rest.", true)}
-              ${expansionHeadCell("Cost / 1,000 new", "This market's spend divided by its first-time reach. What a thousand people you had never reached before cost here. Lower is cheaper expansion.", true)}
-              ${expansionHeadCell("Repeat share", "Of everyone reached in this market this month, the share already reached before. A rising share means you are paying to hit the same people again.", true)}
-              ${expansionHeadCell("Frequency", "Average impressions per person reached in this market this month. Read it beside repeat share: both climbing is the market running out of new people.", true)}
-              ${expansionHeadCell("New customers", "Purchases matching the New_customer conversion in this market this month. Not a cohort - these are not necessarily the people first reached this month.", true)}
-              ${expansionHeadCell("Unique total", "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both.", true)}
-              ${expansionHeadCell("Trend", "First-time reach in each month of the window, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other.")}
+              ${expansionHeadRow([
+                ["Market", "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed."],
+                ["Since", "The first month this market delivered anything inside the measured window. A market that ran, stopped and came back still shows the month it first ran."],
+                ["First-time", "People in this market reached for the first time since the anchor month. Measured as the rise in that country's cumulative unique reach, so someone reached again later is not counted twice.", true],
+                ["Per day", "First-time reach divided by the days the row covers. The only column here that can be read straight down, because the month in progress is shorter than the rest.", true],
+                ["Cost / 1,000 new", "This market's spend divided by its first-time reach. What a thousand people you had never reached before cost here. Lower is cheaper expansion.", true],
+                ["Repeat share", "Of everyone reached in this market this month, the share already reached before. A rising share means you are paying to hit the same people again.", true],
+                ["Frequency", "Average impressions per person reached in this market this month. Read it beside repeat share: both climbing is the market running out of new people.", true],
+                ["New customers", "Purchases matching the New_customer conversion in this market this month. Not a cohort - these are not necessarily the people first reached this month.", true],
+                ["Unique total", "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both.", true],
+                ["Trend", "First-time reach in each month of the window, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."]
+              ])}
             </tr>
           </thead>
           <tbody>
@@ -976,17 +1026,19 @@ function renderExpansionMonths(months, model, currency, perDay) {
         <table class="meta-expansion-table">
           <thead>
             <tr>
-              ${expansionHeadCell("Month", "Calendar month in the ad account's own timezone, America/Los_Angeles. Meta draws this account's days about nine hours behind Copenhagen.")}
-              ${expansionHeadCell("Days", "How many days the row actually covers. The month in progress is shorter than the others, which is the whole reason Per day is here.", true)}
-              ${expansionHeadCell("Reached", "Distinct people reached in the month, deduplicated by Meta across the incremental campaigns. It is read at account level, never added up from the campaigns.", true)}
-              ${expansionHeadCell("First-time", "Of those people, the ones never reached by this set before. Measured as the rise in cumulative unique reach since the anchor month.", true)}
-              ${expansionHeadCell("Per day", "First-time reach divided by the days the row covers. The only column that compares the month in progress with a complete month honestly.", true)}
-              ${expansionHeadCell("Repeat share", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true)}
-              ${expansionHeadCell("Frequency", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true)}
-              ${expansionHeadCell("Spend", "What the incremental campaigns spent in the month, in the account currency.", true)}
-              ${expansionHeadCell("Cost / 1,000 new", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true)}
-              ${expansionHeadCell("New customers", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true)}
-              ${expansionHeadCell("Cost / new customer", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true)}
+              ${expansionHeadRow([
+                ["Month", "Calendar month in the ad account's own timezone, America/Los_Angeles. Meta draws this account's days about nine hours behind Copenhagen."],
+                ["Days", "How many days the row actually covers. The month in progress is shorter than the others, which is the whole reason Per day is here.", true],
+                ["Reached", "Distinct people reached in the month, deduplicated by Meta across the incremental campaigns. It is read at account level, never added up from the campaigns.", true],
+                ["First-time", "Of those people, the ones never reached by this set before. Measured as the rise in cumulative unique reach since the anchor month.", true],
+                ["Per day", "First-time reach divided by the days the row covers. The only column that compares the month in progress with a complete month honestly.", true],
+                ["Repeat share", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true],
+                ["Frequency", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true],
+                ["Spend", "What the incremental campaigns spent in the month, in the account currency.", true],
+                ["Cost / 1,000 new", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true],
+                ["New customers", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true],
+                ["Cost / new customer", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true]
+              ])}
             </tr>
           </thead>
           <tbody>

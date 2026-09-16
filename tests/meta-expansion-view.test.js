@@ -167,7 +167,7 @@ test("every column in both tables explains itself on hover", () => {
   // window it covers, whether it may be added up, that the customer count is a
   // floor. A header alone cannot say that, and a paragraph above the table is
   // the panel that was removed for being noise.
-  assert.match(ui, /function expansionHeadCell\(label, tip, numeric = false\)/);
+  assert.match(ui, /function expansionHeadRow\(columns\)/);
   assert.match(ui, /data-tip="\$\{escapeHtml\(tip\)\}"/);
 
   // No bare header is left in either table.
@@ -190,6 +190,23 @@ test("the explanation is reachable without a mouse and cannot be clipped away", 
   // the right-hand edge.
   assert.match(ui, /tabindex="0"/);
   assert.match(styles, /\.meta-expansion-table th\.has-tip:focus::after/);
-  assert.match(styles, /\.meta-expansion-table th\.has-tip\.is-numeric::after,\s*\n\s*\.meta-expansion-table th\.has-tip:last-child::after/);
+  assert.match(styles, /\.meta-expansion-table th\.has-tip\.tip-end::after/);
+  assert.match(styles, /transform: translateX\(var\(--tip-shift, 0px\)\)/);
+  assert.match(ui, /function bindExpansionTips\(root\)/);
   assert.match(styles, /top: calc\(100% \+ 6px\)/);
+});
+
+test("the explanation opens inwards, and is nudged back when it still falls out", () => {
+  // Anchoring the bubble to the right because the figures are right-aligned
+  // pushed it out of the scroll container from narrow columns near the left
+  // edge - measured at 168px outside on "Days" and 84px on "Reached". The edge
+  // it hangs from now follows the column's position in the row.
+  assert.match(ui, /const half = columns\.length \/ 2;/);
+  assert.match(ui, /index >= half \? "tip-end" : "tip-start"/);
+
+  // Position alone cannot know how far a wide table has been scrolled, nor that
+  // a phone is narrower than the bubble, so the rest is measured at runtime.
+  assert.match(ui, /const overflowRight = left \+ width - \(bounds\.right - 8\);/);
+  assert.match(ui, /th\.style\.setProperty\("--tip-shift"/);
+  assert.match(ui, /bindExpansionTips\(node\);/);
 });

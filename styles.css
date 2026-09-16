@@ -18397,15 +18397,19 @@ body.campaign-studio-review-mode .main-content {
   text-transform: none;
   white-space: normal;
   text-align: left;
+  transform: translateX(var(--tip-shift, 0px));
   opacity: 0;
   visibility: hidden;
   transition: opacity 120ms ease;
 }
 
-/* Numeric columns are right-aligned, and the last column sits against the right
-   edge, so both anchor the bubble from the right instead. */
-.meta-expansion-table th.has-tip.is-numeric::after,
-.meta-expansion-table th.has-tip:last-child::after {
+/* Which edge the bubble hangs from follows the column's position in the row,
+   not its text alignment: anchoring it right because the figures are
+   right-aligned pushed it out of the container from narrow columns near the
+   left edge. Columns in the second half hang right, so it always opens inwards.
+   --tip-shift is the runtime nudge for what position alone cannot know: how far
+   a wide table has been scrolled, and a phone narrower than the bubble. */
+.meta-expansion-table th.has-tip.tip-end::after {
   left: auto;
   right: 0;
 }
