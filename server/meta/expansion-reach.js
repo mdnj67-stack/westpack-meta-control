@@ -423,6 +423,12 @@ async function readAdBreakdown(reader, since, until, campaignIds, actionTypes) {
 // than by listing the account: asking for every ad it has ever had is refused
 // outright for being too much data. A failure here costs the pictures and
 // nothing else, so it never fails the snapshot.
+//
+// The URLs are signed and expire - measured at about 47 hours from the moment
+// they are issued. The nightly run replaces them every 24, so they hold with a
+// day to spare; a run that fails for two nights takes the pictures with it,
+// which is the same stale-snapshot state the freshness strip already warns
+// about. Storing the bytes instead would be the fix if that ever bites.
 async function readAdThumbnails(reader, adIds) {
   const unique = [...new Set(adIds)].filter(Boolean);
   const thumbnails = {};
