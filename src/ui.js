@@ -483,6 +483,15 @@ function expansionMonthProse(monthKey) {
   return expansionMonthName(monthKey).replace(/\.$/, "");
 }
 
+// Number(null) is 0, and 0 is finite. A null from the server means "this could
+// not be measured", and rendering it as a measured zero says something the
+// account never reported - a month with no new customers and a month where new
+// customers could not be counted are different facts.
+function expansionMeasured(value) {
+  if (value === null || value === undefined || value === "") return false;
+  return Number.isFinite(Number(value));
+}
+
 function expansionRowDays(row) {
   const stored = Number(row?.days);
   if (Number.isFinite(stored) && stored > 0) return stored;
@@ -517,8 +526,8 @@ function describeSnapshotAge(generatedAt) {
 // window is new, not infinitely improved, and the caption has to say which.
 // `invert` is for costs, where a rise is the bad direction. Colouring a rising
 // cost per thousand green would read as good news for the opposite of it.
-function expansionChangeBadge(change, comparable, suffix = "", invert = false) {
-  if (!comparable) return `<span class="meta-expansion-badge is-new-market">New${suffix}</span>`;
+function expansionChangeBadge(change, comparable, suffix = "", invert = false, emptyLabel = "New") {
+  if (!comparable) return `<span class="meta-expansion-badge is-new-market">${emptyLabel}${suffix}</span>`;
   if (!Number.isFinite(Number(change))) return "";
   const value = Number(change) * 100;
   const good = invert ? value < 0 : value > 0;
@@ -618,10 +627,10 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
       : `${expansionDayRange(latest)}. No like-for-like baseline was measured, so there is nothing honest to compare against yet.`)
     : `${expansionMonthProse(latest.month)}, against ${formatCompactNumber(months[months.length - 2].netNewReach)} in ${expansionMonthProse(months[months.length - 2].month)}`;
 
-  const costLabel = Number.isFinite(Number(latest.costPerThousandNewlyReached))
+  const costLabel = expansionMeasured(latest.costPerThousandNewlyReached)
     ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
     : "--";
-  const repeatShare = Number.isFinite(Number(latest.repeatShare))
+  const repeatShare = expansionMeasured(latest.repeatShare)
     ? `${Math.round(Number(latest.repeatShare) * 100)}%`
     : "--";
 
@@ -738,10 +747,10 @@ export function renderExpansionView(model = null, visible = false, currency = "D
 }
 
 function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency) {
-  const costLabel = Number.isFinite(Number(latest.costPerThousandNewlyReached))
+  const costLabel = expansionMeasured(latest.costPerThousandNewlyReached)
     ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
     : "--";
-  const customerRate = Number.isFinite(Number(latest.newCustomersPerThousandNewlyReached))
+  const customerRate = expansionMeasured(latest.newCustomersPerThousandNewlyReached)
     ? formatDecimal(latest.newCustomersPerThousandNewlyReached, 2)
     : "--";
 
@@ -782,7 +791,7 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
         <article class="meta-expansion-kpi">
           <span>Cost per 1,000 new</span>
           <strong>${escapeHtml(costLabel)}</strong>
-          <p>${escapeHtml(likeForLike && Number.isFinite(Number(likeForLike.costPerThousandNewlyReached))
+          <p>${escapeHtml(likeForLike && expansionMeasured(likeForLike.costPerThousandNewlyReached)
             ? `Against ${formatCurrency(Math.round(Number(likeForLike.costPerThousandNewlyReached)), currency)} over the same days last month.`
             : "Spend over first-time reach. The price of one more person.")}</p>
           ${costChange === null ? "" : expansionChangeBadge(costChange, true, "", true)}
@@ -897,6 +906,14 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
               const change = comparable
                 ? (Number(market.latestNetNewReach) - Number(baseline.netNewReach)) / Number(baseline.netNewReach)
                 : null;
+              // A market that delivered earlier in the year and nothing in the
+              // baseline window has not just appeared - it came back. Calling
+              // that "New" contradicts the first-delivery date in the row
+              // beside it, which is exactly what Italy, France and Germany did
+              // after four months dark.
+              const emptyLabel = likeForLike && market.firstMonth && market.firstMonth < likeForLike.month
+                ? "Resumed"
+                : "New";
               return `
                 <tr>
                   <td>
@@ -906,13 +923,13 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
                   <td>${escapeHtml(market.firstMonth || "--")}</td>
                   <td class="is-numeric">
                     ${escapeHtml(formatCompactNumber(market.latestNetNewReach))}
-                    ${likeForLike ? expansionChangeBadge(change, comparable) : ""}
+                    ${likeForLike ? expansionChangeBadge(change, comparable, "", false, emptyLabel) : ""}
                   </td>
                   <td class="is-numeric">${escapeHtml(perDay === null ? "--" : formatCompactNumber(Math.round(perDay)))}</td>
-                  <td class="is-numeric">${escapeHtml(Number.isFinite(Number(market.latestCostPerThousandNewlyReached))
+                  <td class="is-numeric">${escapeHtml(expansionMeasured(market.latestCostPerThousandNewlyReached)
                     ? formatCurrency(Math.round(Number(market.latestCostPerThousandNewlyReached)), currency)
                     : "--")}</td>
-                  <td class="is-numeric">${escapeHtml(Number.isFinite(Number(market.latestRepeatShare))
+                  <td class="is-numeric">${escapeHtml(expansionMeasured(market.latestRepeatShare)
                     ? `${Math.round(Number(market.latestRepeatShare) * 100)}%`
                     : "--")}</td>
                   <td class="is-numeric">${escapeHtml(formatDecimal(market.latestFrequency, 1))}</td>
@@ -928,7 +945,7 @@ function renderExpansionMarkets(model, latest, likeForLike, currency) {
         </table>
       </div>
       <p class="expansion-note">
-        ${overlap && Number.isFinite(Number(overlap.share))
+        ${overlap && expansionMeasured(overlap.share)
           ? escapeHtml(`The markets add to ${formatCompactNumber(overlap.marketReachSum)} against the deduplicated account figure of ${formatCompactNumber(overlap.accountReach)} - ${(Number(overlap.share) * 100).toFixed(1)}% of people were reached in more than one country. The account figure is the one that speaks for the whole set.`)
           : "The account figure is the one that speaks for the whole set; the markets are a breakdown of it, not a sum."}
         ${series.length > ranked.length ? escapeHtml(` ${ranked.length} of ${series.length} markets shown.`) : ""}
@@ -978,14 +995,14 @@ function renderExpansionMonths(months, model, currency, perDay) {
                 <td class="is-numeric">${escapeHtml(formatCompactNumber(row.monthlyReach))}</td>
                 <td class="is-numeric">${escapeHtml(formatCompactNumber(row.netNewReach))}</td>
                 <td class="is-numeric">${escapeHtml(perDay(row) === null ? "--" : formatCompactNumber(Math.round(perDay(row))))}</td>
-                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.repeatShare)) ? `${Math.round(Number(row.repeatShare) * 100)}%` : "--")}</td>
+                <td class="is-numeric">${escapeHtml(expansionMeasured(row.repeatShare) ? `${Math.round(Number(row.repeatShare) * 100)}%` : "--")}</td>
                 <td class="is-numeric">${escapeHtml(formatDecimal(row.frequency, 1))}</td>
                 <td class="is-numeric">${escapeHtml(formatCurrency(Math.round(Number(row.spend) || 0), currency))}</td>
-                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.costPerThousandNewlyReached))
+                <td class="is-numeric">${escapeHtml(expansionMeasured(row.costPerThousandNewlyReached)
                   ? formatCurrency(Math.round(Number(row.costPerThousandNewlyReached)), currency)
                   : "--")}</td>
                 <td class="is-numeric">${escapeHtml(row.newCustomers == null ? "--" : formatCompactNumber(row.newCustomers))}</td>
-                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.costPerNewCustomer))
+                <td class="is-numeric">${escapeHtml(expansionMeasured(row.costPerNewCustomer)
                   ? formatCurrency(Math.round(Number(row.costPerNewCustomer)), currency)
                   : "--")}</td>
               </tr>
@@ -1034,7 +1051,7 @@ function renderExpansionIntegrity(model, latest) {
                 <strong>${escapeHtml(expansionMonthProse(entry.month))}</strong>
                 first-time reach moved from ${escapeHtml(formatCompactNumber(entry.from))}
                 to ${escapeHtml(formatCompactNumber(entry.to))}
-                ${Number.isFinite(Number(entry.deltaShare)) ? `(${(Number(entry.deltaShare) * 100).toFixed(1)}%)` : ""}
+                ${expansionMeasured(entry.deltaShare) ? `(${(Number(entry.deltaShare) * 100).toFixed(1)}%)` : ""}
                 <span class="is-quiet">${escapeHtml(entry.reason || "")}</span>
               </li>
             `).join("")}

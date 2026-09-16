@@ -57,12 +57,12 @@ test("the market breakdown never replaces the deduplicated account figure", () =
 
 test("a market with no baseline is labelled new rather than given a percentage", () => {
   assert.match(ui, /is-new-market/);
-  assert.match(ui, /if \(!comparable\) return `<span class="meta-expansion-badge is-new-market">New/);
+  assert.match(ui, /if \(!comparable\) return `<span class="meta-expansion-badge is-new-market">\$\{emptyLabel\}/);
   assert.match(styles, /\.meta-expansion-badge\.is-new-market/);
 });
 
 test("a rising cost per thousand is not coloured as an improvement", () => {
-  assert.match(ui, /function expansionChangeBadge\(change, comparable, suffix = "", invert = false\)/);
+  assert.match(ui, /function expansionChangeBadge\(change, comparable, suffix = "", invert = false, emptyLabel = "New"\)/);
   assert.match(ui, /const good = invert \? value < 0 : value > 0;/);
   assert.match(ui, /expansionChangeBadge\(costChange, true, "", true\)/);
 });
@@ -100,4 +100,31 @@ test("the view survives a snapshot stored before the market split", () => {
   // fills them in, but the page must stay honest in between.
   assert.match(ui, /function expansionRowDays/);
   assert.match(ui, /The stored snapshot carries no country breakdown yet/);
+});
+
+test("a value the server could not measure is never rendered as a zero", () => {
+  // Number(null) is 0 and 0 is finite, so the old guard turned "not measured"
+  // into a measured zero: January printed a cost per new customer of 0,00 kr.
+  // against no new customers at all.
+  assert.match(ui, /function expansionMeasured\(value\)/);
+  assert.match(ui, /if \(value === null \|\| value === undefined \|\| value === ""\) return false;/);
+
+  // And nothing in the expansion renderers may go back to the raw finite check.
+  const expansionSource = ui.slice(ui.indexOf("function expansionMeasured"), ui.indexOf("export function renderOverviewSpendSplit"));
+  const rawChecks = expansionSource
+    .split("\n")
+    .filter((line) => line.includes("Number.isFinite(Number("))
+    .filter((line) => !line.includes("Number(change)"))
+    // The helper itself is where the finite check belongs.
+    .filter((line) => !line.includes("return Number.isFinite(Number(value));"));
+  assert.deepEqual(rawChecks, [], "these still treat an unmeasurable value as zero");
+});
+
+test("a market that went dark and came back is not labelled new", () => {
+  // Italy, France and Germany delivered from January, ran nothing from May to
+  // August, and returned in September. With no baseline in the comparison
+  // window they were labelled "New", which contradicted the first-delivery date
+  // printed in the same row.
+  assert.match(ui, /const emptyLabel = likeForLike && market\.firstMonth && market\.firstMonth < likeForLike\.month/);
+  assert.match(ui, /\? "Resumed"/);
 });
