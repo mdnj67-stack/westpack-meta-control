@@ -18521,3 +18521,92 @@ body.campaign-studio-review-mode .main-content {
   color: rgba(33, 28, 58, 0.55);
   font-style: italic;
 }
+
+/* --- Expansion: the ads behind a market ------------------------------
+   A market total says Poland returned ten times what it cost. It cannot say
+   which ad did it, which is the only form of the answer anyone can act on, so
+   the row opens onto its ads. */
+.meta-expansion-table tr.is-expandable {
+  cursor: pointer;
+}
+
+.meta-expansion-table tr.is-expandable:hover td {
+  background: rgba(79, 124, 255, 0.05);
+}
+
+.meta-expansion-table tr.is-expandable:focus-visible {
+  outline: 2px solid rgba(79, 124, 255, 0.55);
+  outline-offset: -2px;
+}
+
+.meta-expansion-table tr.is-open td {
+  background: rgba(79, 124, 255, 0.08);
+}
+
+.meta-expansion-table tr.is-open td:first-child strong::after {
+  content: " ▾";
+  color: rgba(46, 78, 166, 0.85);
+}
+
+.meta-expansion-table tr.expansion-ads-row > td {
+  padding: 0;
+  background: rgba(247, 241, 232, 0.5);
+  white-space: normal;
+}
+
+.expansion-ads {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px 18px;
+}
+
+.expansion-ads-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(33, 28, 58, 0.62);
+}
+
+.expansion-ads-head strong {
+  font-size: 0.95rem;
+  color: rgba(33, 28, 58, 0.92);
+}
+
+.meta-expansion-ads-table {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+/* The picture is what makes a creative decision real, so the ad cell carries
+   the thumbnail, the name and the campaign it runs in. */
+.expansion-ad-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: normal;
+  min-width: 260px;
+}
+
+.expansion-ad-cell img,
+.expansion-ad-thumb-missing {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: rgba(33, 28, 58, 0.08);
+}
+
+.expansion-ad-cell > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expansion-ad-cell strong {
+  font-size: 0.82rem;
+  line-height: 1.3;
+}

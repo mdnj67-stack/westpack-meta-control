@@ -391,10 +391,15 @@ test("the market split costs no call per market", async () => {
   reset();
   await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
 
-  const countryCalls = calls.filter((call) => call.params.breakdowns === "country").length;
+  const countryCalls = calls.filter((call) => call.params.breakdowns === "country" && call.params.level === "account").length;
   // One monthly breakdown, plus one cumulative breakdown per month on the curve,
   // plus the like-for-like point. Never one per country.
   assert.equal(countryCalls, 1 + delivering.length + 1);
+
+  // The ad-level drill-down is one more read over the whole window, not one per
+  // market either.
+  const adCalls = calls.filter((call) => call.params.level === "ad").length;
+  assert.equal(adCalls, 1);
 });
 
 test("the markets carry new customers beside the newly reached", async () => {

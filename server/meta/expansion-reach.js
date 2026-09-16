@@ -363,6 +363,85 @@ async function readWindowTotals(reader, since, until, campaignIds, actionTypes, 
   };
 }
 
+// What actually created the value in a country, which a market total cannot
+// answer: the ads themselves, read one country at a time. Rows are ad x country
+// over a single window - 1.293 of them across 50 ads and 44 countries on this
+// account, three pages - so the whole drill-down costs a handful of calls once
+// a night rather than one per market.
+//
+// Reach here is each ad's own deduplicated figure inside that country and is
+// named deliveredReach as a warning: adding it across ads counts the same
+// person once per ad they saw. Purchases and revenue are events and do add up.
+async function readAdBreakdown(reader, since, until, campaignIds, actionTypes) {
+  const rows = await reader.getAll(`/${reader.accountId}/insights`, {
+    level: "ad",
+    time_range: JSON.stringify({ since, until }),
+    breakdowns: "country",
+    filtering: campaignFilter(campaignIds),
+    limit: "500",
+    fields: "ad_id,ad_name,adset_name,campaign_name,spend,impressions,reach,frequency,actions,action_values"
+  }, "ads by country", 8);
+
+  return rows
+    .map((row) => {
+      const spend = number(row.spend);
+      const impressions = number(row.impressions);
+      const revenue = revenueFrom(row);
+      const purchases = firstActionValue(row.actions || [], PURCHASE_ACTION_TYPES);
+      const newCustomers = newCustomersFrom(row, actionTypes);
+      return {
+        adId: String(row.ad_id || ""),
+        adName: String(row.ad_name || ""),
+        adSetName: String(row.adset_name || ""),
+        campaignName: String(row.campaign_name || ""),
+        country: String(row.country || "").trim().toUpperCase(),
+        spend,
+        impressions,
+        // Never "reach": this is one ad's own deduplicated count inside one
+        // country and must not be added to its siblings'.
+        deliveredReach: number(row.reach),
+        frequency: number(row.frequency),
+        purchases,
+        revenue,
+        newCustomers,
+        newCustomerRevenue: newCustomerRevenueFrom(row, actionTypes),
+        roas: roasFrom(revenue, spend),
+        costPerPurchase: purchases > 0 ? round(spend / purchases, 2) : null,
+        cpm: impressions > 0 ? round((spend / impressions) * 1000, 2) : null
+      };
+    })
+    .filter((row) => row.country && (row.impressions > 0 || row.spend > 0));
+}
+
+// Thumbnails are requested by id for the ads that actually delivered, rather
+// than by listing the account: asking for every ad it has ever had is refused
+// outright for being too much data. A failure here costs the pictures and
+// nothing else, so it never fails the snapshot.
+async function readAdThumbnails(reader, adIds) {
+  const unique = [...new Set(adIds)].filter(Boolean);
+  const thumbnails = {};
+  for (let index = 0; index < unique.length; index += 50) {
+    const chunk = unique.slice(index, index + 50);
+    try {
+      const payload = await reader.get("", {
+        ids: chunk.join(","),
+        fields: "name,effective_status,creative{thumbnail_url}"
+      }, "ad thumbnails");
+      for (const [id, ad] of Object.entries(payload || {})) {
+        if (!ad || typeof ad !== "object") continue;
+        thumbnails[id] = {
+          thumbnailUrl: ad.creative?.thumbnail_url || "",
+          status: String(ad.effective_status || "")
+        };
+      }
+    } catch (error) {
+      return thumbnails;
+    }
+  }
+  return thumbnails;
+}
+
+
 async function readCumulativeCountries(reader, anchor, until, campaignIds, label) {
   const rows = await reader.getAll(`/${reader.accountId}/insights`, {
     level: "account",
@@ -893,6 +972,32 @@ async function syncExpansionReach({
   const latest = rows[rows.length - 1] || null;
   const restatements = collectRestatements(previous, rows, restatementReason);
 
+  // The ad-level drill-down covers the last three months, which is the same
+  // stretch the markets table's middle window describes, so the two can be read
+  // against each other without converting anything. One window rather than
+  // three: this is the only read here that is per ad, and a creative decision
+  // does not need the month in progress on its own.
+  const adWindowRows = rows.slice(-3);
+  const adWindow = adWindowRows.length
+    ? { since: adWindowRows[0].since, until: adWindowRows[adWindowRows.length - 1].until }
+    : null;
+  let adBreakdown = null;
+  if (adWindow) {
+    const adRows = await readAdBreakdown(reader, adWindow.since, adWindow.until, campaignIds, actionTypes);
+    const thumbnails = adRows.length
+      ? await readAdThumbnails(reader, adRows.map((row) => row.adId))
+      : {};
+    adBreakdown = {
+      since: adWindow.since,
+      until: adWindow.until,
+      months: adWindowRows.map((row) => row.month),
+      rows: adRows,
+      thumbnails,
+      adCount: new Set(adRows.map((row) => row.adId)).size,
+      countryCount: new Set(adRows.map((row) => row.country)).size
+    };
+  }
+
   return {
     generatedAt: new Date().toISOString(),
     accountId: normalizedAccountId,
@@ -905,6 +1010,7 @@ async function syncExpansionReach({
     months: rows,
     marketSeries,
     marketCount: marketSeries.length,
+    adBreakdown,
     likeForLike,
     restatements,
     customerConversion: {
@@ -938,6 +1044,7 @@ async function syncExpansionReach({
 
 module.exports = {
   syncExpansionReach,
+  readAdBreakdown,
   buildMonths,
   buildMarketSeries,
   buildLikeForLike,

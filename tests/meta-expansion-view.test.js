@@ -226,3 +226,47 @@ test("new customers is shown as the count, compared over the same elapsed days",
   assert.match(ui, /Against \$\{formatCompactNumber\(likeForLike\.newCustomers\)\} over the same \$\{likeForLike\.elapsedDays\} days/);
   assert.match(ui, /likeForLike\.comparison\.customersComparable/);
 });
+
+test("a market opens onto the ads that produced its value", () => {
+  // A market total says Poland returned ten times what it cost. It cannot say
+  // which ad did it, which is the only form of the answer anyone can act on.
+  assert.match(ui, /function renderExpansionAdPanel\(model, code, label, currency\)/);
+  assert.match(ui, /data-expansion-market="\$\{escapeHtml\(row\.code\)\}"/);
+  assert.match(ui, /expansionTableState\.openMarket === code \? "" : code/);
+
+  // Reachable without a mouse, since the row is the only way in.
+  assert.match(ui, /root\.addEventListener\("keydown"/);
+  assert.match(ui, /if \(event\.key !== "Enter" && event\.key !== " "\) return;/);
+
+  // The creative itself, not just its name.
+  assert.match(ui, /row\.thumbnailUrl/);
+  assert.match(ui, /loading="lazy"/);
+});
+
+test("ad-level reach is named as a figure that cannot be added up", () => {
+  // Each row is one ad's own deduplicated count inside one country. Summing the
+  // column counts a person once per ad they saw.
+  assert.match(ui, /key: "deliveredReach", label: "Reach"/);
+  assert.match(ui, /Do not add the column up: one person who saw three of these ads counts in all three rows/);
+  assert.match(ui, /is never added across the rows/);
+
+  // And the attribution caveat sits with the revenue it qualifies.
+  assert.match(ui, /not what the ad caused/);
+});
+
+test("the market table no longer carries the money columns", () => {
+  // The user's steer: revenue, ROAS, spend, cost per new customer and CPM are
+  // not what the market row is for. The market is the entry point; the value
+  // question is answered one level down, on the ads.
+  const columns = ui.slice(ui.indexOf("const EXPANSION_MARKET_COLUMNS"), ui.indexOf("function expansionMarketRows"));
+  for (const key of ["revenue", "roas", "costPerNewCustomer", "cpm"]) {
+    assert.ok(!columns.includes(`key: "${key}"`), `the market table still carries ${key}`);
+  }
+  assert.ok(!/key: "spend"/.test(columns), "the market table still carries spend");
+
+  // They live on the ad table instead, where the question is what created value.
+  const adColumns = ui.slice(ui.indexOf("const EXPANSION_AD_COLUMNS"), ui.indexOf("function expansionAdRows"));
+  for (const key of ["revenue", "purchases", "spend", "roas"]) {
+    assert.ok(adColumns.includes(`key: "${key}"`), `the ad table is missing ${key}`);
+  }
+});

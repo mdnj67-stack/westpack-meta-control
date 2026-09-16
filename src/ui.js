@@ -913,6 +913,15 @@ function bindExpansionTips(root) {
   };
   root.addEventListener("pointerover", handle);
   root.addEventListener("focusin", handle);
+  root.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const row = event.target?.closest?.("[data-expansion-market]");
+    if (!row) return;
+    event.preventDefault();
+    const code = row.dataset.expansionMarket;
+    expansionTableState.openMarket = expansionTableState.openMarket === code ? "" : code;
+    redrawExpansionMarkets();
+  });
 
   // Sorting, the window and the show-all toggle all change how the same stored
   // figures are looked at, never what they are, so they redraw the one card
@@ -928,6 +937,14 @@ function bindExpansionTips(root) {
     const showAll = event.target?.closest?.("[data-expansion-show-all]");
     if (showAll) {
       expansionTableState.showAll = showAll.dataset.expansionShowAll === "1";
+      redrawExpansionMarkets();
+      return;
+    }
+
+    const marketRow = event.target?.closest?.("[data-expansion-market]");
+    if (marketRow) {
+      const code = marketRow.dataset.expansionMarket;
+      expansionTableState.openMarket = expansionTableState.openMarket === code ? "" : code;
       redrawExpansionMarkets();
       return;
     }
@@ -968,7 +985,10 @@ const expansionTableState = {
   window: "current",
   sortKey: "netNewReach",
   sortDirection: "desc",
-  showAll: false
+  showAll: false,
+  // Which market is opened to its ads. One at a time: the point is to look at
+  // one country closely, not to turn the table into a longer table.
+  openMarket: ""
 };
 
 const EXPANSION_WINDOWS = [
@@ -986,18 +1006,6 @@ const EXPANSION_MARKET_COLUMNS = [
     tip: "The country Meta attributed the impression to. That is where the person was, not where the campaign was aimed."
   },
   {
-    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
-    tip: "What this market cost over the selected window. Where the money is now, which is the other half of any decision to move it."
-  },
-  {
-    key: "revenue", label: "Revenue", numeric: true, money: true, high: "up",
-    tip: "Purchase value Meta attributes to these campaigns in this market, on standard attribution. It is what the market returned, not what it returned because of the campaigns."
-  },
-  {
-    key: "roas", label: "ROAS", numeric: true, decimals: 2, high: "up",
-    tip: "Revenue divided by spend in this market. Below 1,00 the market is returning less than it costs on Meta's own attribution."
-  },
-  {
     key: "netNewReach", label: "First-time", numeric: true, high: "up",
     tip: "People in this market reached for the first time since the anchor month. The rise in that country's cumulative unique reach across the window, so nobody is counted twice."
   },
@@ -1010,20 +1018,12 @@ const EXPANSION_MARKET_COLUMNS = [
     tip: "Purchases matching the New_customer conversion in this market and window. About a fifth of purchases on this account match neither customer conversion, so this is a floor rather than a total."
   },
   {
-    key: "costPerNewCustomer", label: "Cost / new customer", numeric: true, money: true, high: "down",
-    tip: "The market's whole spend in the window divided by its new customers - all of it, not only the spend that happened to reach them."
-  },
-  {
     key: "latestRepeatShare", label: "Repeat share", numeric: true, percent: true, high: "down",
     tip: "Of the people reached in the window's last month, the share already reached before. It cannot be averaged across months, so it is read from that month alone. A rising share means you are paying to hit the same people again."
   },
   {
     key: "latestFrequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
     tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both climbing is a market running out of new people."
-  },
-  {
-    key: "cpm", label: "CPM", numeric: true, money: true, high: "down",
-    tip: "Cost per thousand impressions in this market. The price of attention here, before anything is said about what that attention did."
   },
   {
     key: "cumulativeReach", label: "Unique total", numeric: true, high: "up",
@@ -1186,8 +1186,9 @@ function renderExpansionMarketsCard() {
               const emptyLabel = likeForLike && row.firstMonth && row.firstMonth < likeForLike.month
                 ? "Resumed"
                 : "New";
+              const open = expansionTableState.openMarket === row.code;
               return `
-                <tr>
+                <tr class="is-expandable${open ? " is-open" : ""}" data-expansion-market="${escapeHtml(row.code)}" tabindex="0" role="button" aria-expanded="${open ? "true" : "false"}">
                   ${EXPANSION_MARKET_COLUMNS.map((column) => {
                     if (column.key === "label") {
                       const unattributed = /^(UNKNOWN|XX)$/i.test(row.code);
@@ -1209,6 +1210,7 @@ function renderExpansionMarketsCard() {
                     return `<td${tone}>${escapeHtml(cell)}${badge}</td>`;
                   }).join("")}
                 </tr>
+                ${open ? `<tr class="expansion-ads-row"><td colspan="${EXPANSION_MARKET_COLUMNS.length}">${renderExpansionAdPanel(model, row.code, row.label, currency)}</td></tr>` : ""}
               `;
             }).join("")}
           </tbody>
@@ -1225,6 +1227,147 @@ function renderExpansionMarketsCard() {
     </article>
   `;
 }
+
+// What created the value in one country. A market total says Poland returned
+// ten times what it cost; it cannot say which ad did it, which is the only form
+// of the answer anyone can act on. Each row is one ad in one country, read from
+// Meta at ad level with the country breakdown.
+//
+// Two things about these figures that the columns cannot say on their own:
+// reach is each ad's own deduplicated count inside that country and is never
+// added up across the rows, because the same person sees several ads; and
+// purchases and revenue are Meta's standard attribution, so they are what the
+// country returned while the ad was running, not what the ad caused.
+const EXPANSION_AD_COLUMNS = [
+  {
+    key: "adName", label: "Ad", type: "text",
+    tip: "The ad as it is named in Meta, with the campaign it runs in. The same creative can appear twice under one name when it runs in more than one campaign - they are separate ads and are kept apart here."
+  },
+  {
+    key: "revenue", label: "Revenue", numeric: true, money: true, high: "up",
+    tip: "Purchase value Meta attributes to this ad in this country, on standard attribution. It is what happened while the ad was running, not what the ad caused."
+  },
+  {
+    key: "purchases", label: "Purchases", numeric: true, high: "up",
+    tip: "Purchases Meta attributes to this ad in this country. Events, not people, so these do add up across the rows."
+  },
+  {
+    key: "newCustomers", label: "New customers", numeric: true, high: "up",
+    tip: "Purchases matching the New_customer conversion. About a fifth of purchases on this account match neither customer conversion, so this is a floor rather than a total."
+  },
+  {
+    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
+    tip: "What this ad cost in this country over the window."
+  },
+  {
+    key: "roas", label: "ROAS", numeric: true, decimals: 2, high: "up",
+    tip: "Revenue divided by spend for this ad in this country. Reported only where there is at least one unit of currency to divide by."
+  },
+  {
+    key: "costPerPurchase", label: "Cost / purchase", numeric: true, money: true, high: "down",
+    tip: "This ad's spend in this country divided by the purchases attributed to it there."
+  },
+  {
+    key: "deliveredReach", label: "Reach", numeric: true, high: "up",
+    tip: "This ad's own deduplicated reach inside this country. Do not add the column up: one person who saw three of these ads counts in all three rows."
+  },
+  {
+    key: "frequency", label: "Frequency", numeric: true, decimals: 1, high: "down",
+    tip: "Average impressions per person this ad reached in this country."
+  }
+];
+
+function expansionAdRows(model, code) {
+  const breakdown = model?.adBreakdown;
+  if (!breakdown || !Array.isArray(breakdown.rows)) return [];
+  const thumbnails = breakdown.thumbnails || {};
+  return breakdown.rows
+    .filter((row) => row.country === code)
+    .map((row) => ({ ...row, ...(thumbnails[row.adId] || {}) }));
+}
+
+function renderExpansionAdPanel(model, code, label, currency) {
+  const breakdown = model?.adBreakdown;
+  if (!breakdown) {
+    return `<div class="expansion-ads"><p class="expansion-note">The stored snapshot carries no ad-level breakdown yet. The nightly job adds it on its next run.</p></div>`;
+  }
+
+  const rows = expansionAdRows(model, code);
+  if (!rows.length) {
+    return `<div class="expansion-ads"><p class="expansion-note">No ad delivered in ${escapeHtml(label)} between ${escapeHtml(breakdown.since)} and ${escapeHtml(breakdown.until)}.</p></div>`;
+  }
+
+  const sorted = rows.slice().sort((left, right) => {
+    // Sorted by what they returned, then by what they cost: the rows that
+    // produced nothing still have to be visible, because an ad spending money
+    // for no return is the other half of the decision.
+    if (Number(right.revenue || 0) !== Number(left.revenue || 0)) {
+      return Number(right.revenue || 0) - Number(left.revenue || 0);
+    }
+    return Number(right.spend || 0) - Number(left.spend || 0);
+  });
+
+  const totals = sorted.reduce((acc, row) => ({
+    spend: acc.spend + Number(row.spend || 0),
+    revenue: acc.revenue + Number(row.revenue || 0),
+    purchases: acc.purchases + Number(row.purchases || 0)
+  }), { spend: 0, revenue: 0, purchases: 0 });
+
+  return `
+    <div class="expansion-ads">
+      <p class="expansion-ads-head">
+        <strong>${escapeHtml(label)}</strong>
+        <span>${escapeHtml(`${sorted.length} ad${sorted.length === 1 ? "" : "s"} delivered, ${breakdown.since} to ${breakdown.until}`)}</span>
+        <span>${escapeHtml(`${formatCurrency(Math.round(totals.spend), currency)} spent, ${formatCurrency(Math.round(totals.revenue), currency)} returned, ${formatCompactNumber(totals.purchases)} purchases`)}</span>
+      </p>
+      <div class="table-wrap">
+        <table class="meta-expansion-table meta-expansion-ads-table">
+          <thead>
+            <tr>
+              ${EXPANSION_AD_COLUMNS.map((column, index) => {
+                const classes = [
+                  column.numeric ? "is-numeric" : "",
+                  "has-tip",
+                  index >= EXPANSION_AD_COLUMNS.length / 2 ? "tip-end" : "tip-start"
+                ].filter(Boolean).join(" ");
+                return `<th class="${classes}" data-tip="${escapeHtml(column.tip)}" tabindex="0">${escapeHtml(column.label)}</th>`;
+              }).join("\n              ")}
+            </tr>
+          </thead>
+          <tbody>
+            ${sorted.map((row) => `
+              <tr>
+                <td class="expansion-ad-cell">
+                  ${row.thumbnailUrl
+                    ? `<img src="${escapeHtml(row.thumbnailUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
+                    : `<span class="expansion-ad-thumb-missing" aria-hidden="true"></span>`}
+                  <span>
+                    <strong>${escapeHtml(row.adName || row.adId)}</strong>
+                    <span class="is-quiet">${escapeHtml([row.campaignName, row.adSetName].filter(Boolean).join(" · "))}</span>
+                  </span>
+                </td>
+                ${EXPANSION_AD_COLUMNS.slice(1).map((column) => {
+                  const cell = expansionFormatCell(row, column, currency);
+                  const tone = column.key === "roas" && expansionMeasured(row.roas) && Number(row.roas) < 1
+                    ? " is-below-one"
+                    : "";
+                  return `<td class="is-numeric${tone}">${escapeHtml(cell)}</td>`;
+                }).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+      <p class="expansion-note">
+        Reach is each ad's own deduplicated count inside this country and is never added across the rows -
+        one person who saw three of these ads appears in all three. Purchases and revenue are Meta's
+        standard attribution over ${escapeHtml(`${breakdown.since} to ${breakdown.until}`)}, so they say what
+        happened while an ad was running, not what it caused.
+      </p>
+    </div>
+  `;
+}
+
 
 function renderExpansionWindowPicker(active) {
   return `
