@@ -263,22 +263,22 @@ test("the market table ranks on new customers, not on the price of reach", () =>
   // thousand reached would rank whichever market finds the cheapest of them.
   // Italy led that column at 57 kr. per thousand and produced no new customers.
   const columns = ui.slice(ui.indexOf("const EXPANSION_MARKET_COLUMNS"), ui.indexOf("function expansionMarketRows"));
-  assert.ok(
-    !columns.includes('key: "costPerThousandNewlyReached"'),
-    "the market table still ranks on the price of reach"
-  );
-  for (const key of ["revenue", "roas", "cpm"]) {
-    assert.ok(!columns.includes(`key: "${key}"`), `the market table still carries ${key}`);
-  }
 
-  // What it leads with instead, and in that order.
+  // The price of reach stays in the table. Demoting a metric means changing
+  // what the view ranks and headlines on, not deleting the column - a row has
+  // to explain itself, and cost per thousand is what says why a market is cheap
+  // or expensive. It is named as a diagnostic in its own tooltip.
+  assert.ok(columns.includes('key: "costPerThousandNewlyReached"'), "the delivery diagnostic was removed again");
+  assert.match(columns, /A delivery diagnostic, never a goal/);
+
+  // What it leads with, and in that order.
   const order = [...columns.matchAll(/key: "([a-zA-Z]+)"/g)].map((match) => match[1]);
   assert.equal(order[0], "label");
   assert.equal(order[1], "newCustomers", "new customers must be the first figure in the row");
   assert.equal(order[2], "costPerNewCustomer");
   assert.ok(
     order.indexOf("netNewReach") > order.indexOf("costPerNewCustomer"),
-    "reach must sit after the customer figures, as a diagnostic"
+    "reach must sit after the customer figures"
   );
 
   // And it sorts on that figure by default, over a window wide enough to carry

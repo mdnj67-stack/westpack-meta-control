@@ -1067,20 +1067,18 @@ const EXPANSION_WINDOWS = [
   ["all", "Since the anchor"]
 ];
 
-// The columns are ordered by what the tab is for. New customers first, because
-// that is what the department is measured on and the only figure here that is
-// budget-neutral: a market getting harder shows up as customers flattening
-// while their cost rises, whatever the budget is doing.
+// A row here has to explain itself, so the table is wide on purpose: the reach
+// columns give the customer counts their context. New customers run in single
+// digits over three months, and a market with one customer at 733 kr. looks
+// like the cheapest on the account until the delivery figures beside it say how
+// little was spent to get there.
 //
-// Reach comes last and is diagnostic, not a ranking. Westpack sells packaging
-// to businesses - jewellery businesses at its core - and these ad sets run
-// broad: a country, ages 18-65, no detailed targeting at all. Every person in a
-// reach figure is therefore a more or less random adult, and the addressable set
-// is a few thousand companies per market. Cheap reach is what you get for
-// finding the cheapest strangers: Italy had the cheapest new reach on the
-// account, 57 kr. per thousand, and produced no new customers at all. A column
-// that would rank Italy first is measuring the wrong thing, so cost per
-// thousand reached is not in this table.
+// What changed after cost per thousand reached turned out to be a misleading
+// goal - the audience is narrow B2B and the ad sets run broad, so it rewards
+// whichever market finds the cheapest strangers - is what the table RANKS on,
+// not which columns it carries. It sorts on new customers, the headline is new
+// customers, and the price of reach is a diagnostic sitting where it can
+// explain why a market is cheap or expensive.
 const EXPANSION_MARKET_COLUMNS = [
   {
     key: "label", label: "Market", type: "text",
@@ -1088,23 +1086,31 @@ const EXPANSION_MARKET_COLUMNS = [
   },
   {
     key: "newCustomers", label: "New customers", numeric: true, high: "up",
-    tip: "Purchases matching the New_customer conversion in this market over the selected window. This is the figure the department is measured on. About a fifth of purchases on this account match neither customer conversion, so it is a floor rather than a total."
+    tip: "Purchases matching the New_customer conversion in this market over the selected window. This is the figure the department is measured on, and what the table sorts by. About a fifth of purchases on this account match neither customer conversion, so it is a floor rather than a total."
   },
   {
     key: "costPerNewCustomer", label: "Cost / new customer", numeric: true, money: true, high: "down",
     tip: "The market's whole spend in the window divided by its new customers. The clearest sign that a market is being worked through: customers flattening while this rises, whatever the budget is doing."
   },
   {
-    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
-    tip: "What this market cost over the window. Here to read the cost per customer against, not as a ranking of its own."
-  },
-  {
     key: "purchases", label: "Purchases", numeric: true, high: "up",
     tip: "All purchases Meta attributes to this market, new and returning customers together. Events rather than people, so these do add up across the rows."
   },
   {
-    key: "netNewReach", label: "First-time reach", numeric: true, high: "up",
-    tip: "People in this market reached for the first time since the anchor month. A diagnostic, not a goal: the targeting is broad, so almost none of them are packaging buyers, and a market can lead this column while producing no customers at all. Italy did exactly that."
+    key: "spend", label: "Spend", numeric: true, money: true, high: "up",
+    tip: "What this market cost over the window. Here to read the cost per customer against, not as a ranking of its own."
+  },
+  {
+    key: "netNewReach", label: "First-time", numeric: true, high: "up",
+    tip: "People in this market reached for the first time since the anchor month. The rise in that country's cumulative unique reach across the window, so nobody is counted twice."
+  },
+  {
+    key: "perDay", label: "Per day", numeric: true, high: "up",
+    tip: "First-time reach divided by the days the window covers. The column that can be read straight down when the window includes a month still in progress."
+  },
+  {
+    key: "costPerThousandNewlyReached", label: "Cost / 1,000 new", numeric: true, money: true, high: "down",
+    tip: "Spend divided by first-time reach. A delivery diagnostic, never a goal: the targeting is broad, so cheap reach means cheap strangers. Italy led this column at 57 kr. per thousand and produced no new customers at all. Read it to explain why a market is cheap or expensive, not to choose between markets."
   },
   {
     key: "latestRepeatShare", label: "Repeat share", numeric: true, percent: true, high: "down",
@@ -1115,8 +1121,12 @@ const EXPANSION_MARKET_COLUMNS = [
     tip: "Average impressions per person reached in the window's last month. Read it beside repeat share: both high means the budget is larger than the pool Meta found at this bid."
   },
   {
-    key: "trend", label: "New customers by month", sortable: false,
-    tip: "New customers in each month of the series, oldest on the left. Every market is drawn to the same scale, so the rows can be compared with each other."
+    key: "cumulativeReach", label: "Unique total", numeric: true, high: "up",
+    tip: "Distinct people this market has reached since the anchor month, deduplicated by Meta. Do not add this column up: someone reached in two countries counts in both."
+  },
+  {
+    key: "trend", label: "Trend", sortable: false,
+    tip: "First-time reach in each month of the series, oldest on the left. Reach rather than customers, because a sparkline of single digits is noise. Every market is drawn to the same scale, so the rows compare with each other."
   }
 ];
 
@@ -1139,11 +1149,13 @@ function expansionMarketRows(model, windowKey) {
     .map((market) => {
       const windowRow = market.windows?.[windowKey] || null;
       if (!windowRow) return null;
+      const days = Number(windowRow.days) || 0;
       return {
         code: market.code,
         label: market.label,
         firstMonth: market.firstMonth,
         months: market.months,
+        perDay: days > 0 ? Math.round(Number(windowRow.netNewReach) / days) : null,
         // Cumulative unique reach is a property of the market, not of the
         // window: it is everyone it has ever reached since the anchor.
         cumulativeReach: market.cumulativeReach,
@@ -1230,7 +1242,7 @@ function renderExpansionMarketsCard() {
   const windowLabel = sample.from === sample.to
     ? (sample.partial ? expansionDayRange(expansionTableState.latest || {}) : expansionMonthProse(sample.to))
     : `${expansionMonthProse(sample.from)} to ${expansionMonthProse(sample.to)}`;
-  const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.newCustomers) || 0)), 1);
+  const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
   const overlap = model.marketOverlap;
 
   // The like-for-like badge belongs only to the month in progress. Over three
@@ -1298,15 +1310,15 @@ function renderExpansionMarketsCard() {
                       </td>`;
                     }
                     if (column.key === "trend") {
-                      return `<td>${expansionSparkline(row.months, peak, "newCustomers")}</td>`;
+                      return `<td>${expansionSparkline(row.months, peak)}</td>`;
                     }
                     const cell = expansionFormatCell(row, column, currency);
-                    // The like-for-like badge belonged to first-time reach, which
-                    // is now a diagnostic rather than the figure the table ranks
-                    // on. It is not moved onto new customers, because the
-                    // baseline window only carries reach per market - the trend
-                    // that matters is in the sparkline instead.
-                    const badge = "";
+                    // The badge sits on first-time reach because that is the only
+                    // figure the like-for-like window carries per market. It is a
+                    // diagnostic either way - the table ranks on new customers.
+                    const badge = column.key === "netNewReach" && showBadges
+                      ? expansionChangeBadge(change, comparable, "", false, emptyLabel)
+                      : "";
                     const tone = column.key === "roas" && expansionMeasured(row.roas)
                       ? (Number(row.roas) < 1 ? " class=\"is-numeric is-below-one\"" : " class=\"is-numeric\"")
                       : (column.numeric ? " class=\"is-numeric\"" : "");
