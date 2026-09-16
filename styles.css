@@ -18514,3 +18514,10 @@ body.campaign-studio-review-mode .main-content {
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* Delivery Meta could not place in a country. It is real spend and stays in the
+   table, but it is not a market and must not read as one. */
+.meta-expansion-table td.is-unattributed strong {
+  color: rgba(33, 28, 58, 0.55);
+  font-style: italic;
+}

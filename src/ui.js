@@ -584,6 +584,9 @@ function expansionBars(months, options = {}) {
 // A market's own curve, drawn small enough to sit in a table cell. Every market
 // is scaled to the same peak, so the rows can be read against each other.
 function expansionSparkline(months, peak) {
+  // A stored snapshot can lag the code that reads it, so a series that is not a
+  // series draws nothing rather than taking the whole tab down with it.
+  if (!Array.isArray(months) || !months.length) return "";
   return `
     <span class="meta-expansion-spark" aria-hidden="true">
       ${months.map((month) => {
@@ -1077,7 +1080,12 @@ function expansionSortRows(rows, key, direction) {
 function expansionFormatCell(row, column, currency) {
   const value = row[column.key];
   if (!expansionMeasured(value)) return "--";
-  if (column.money) return formatCurrency(Math.round(Number(value)), currency);
+  if (column.money) {
+    const amount = Number(value);
+    return Math.abs(amount) < 1 && amount !== 0
+      ? formatCurrency(amount, currency)
+      : formatCurrency(Math.round(amount), currency);
+  }
   if (column.percent) return `${Math.round(Number(value) * 100)}%`;
   if (column.decimals) return formatDecimal(value, column.decimals);
   return formatCompactNumber(value);
@@ -1122,7 +1130,7 @@ function renderExpansionMarketsCard() {
   const visible = showAll ? sorted : sorted.slice(0, 12);
   const sample = rows[0];
   const windowLabel = sample.from === sample.to
-    ? expansionMonthProse(sample.to)
+    ? (sample.partial ? expansionDayRange(expansionTableState.latest || {}) : expansionMonthProse(sample.to))
     : `${expansionMonthProse(sample.from)} to ${expansionMonthProse(sample.to)}`;
   const peak = Math.max(...series.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
   const overlap = model.marketOverlap;
@@ -1139,7 +1147,7 @@ function renderExpansionMarketsCard() {
         <div>
           <h3>Markets</h3>
           <p class="field-hint">
-            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial ? ", part month" : ""}.
+            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial && sample.from !== sample.to ? " - the last of them still in progress" : ""}.
             Each country's reach is deduplicated inside that country. They must not be added together -
             someone reached in two countries counts in both.
           </p>
@@ -1182,9 +1190,10 @@ function renderExpansionMarketsCard() {
                 <tr>
                   ${EXPANSION_MARKET_COLUMNS.map((column) => {
                     if (column.key === "label") {
-                      return `<td>
+                      const unattributed = /^(UNKNOWN|XX)$/i.test(row.code);
+                      return `<td${unattributed ? " class=\"is-unattributed\"" : ""}>
                         <strong>${escapeHtml(row.label)}</strong>
-                        <span class="is-quiet">${escapeHtml(row.code)} · since ${escapeHtml(row.firstMonth || "--")}</span>
+                        <span class="is-quiet">${escapeHtml(unattributed ? "Meta could not place this delivery" : `${row.code} · since ${row.firstMonth || "--"}`)}</span>
                       </td>`;
                     }
                     if (column.key === "trend") {

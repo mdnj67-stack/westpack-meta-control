@@ -53,6 +53,17 @@ const RESTATEMENT_LOG_LIMIT = 60;
 // is large enough to name on screen rather than treat as noise.
 const MARKET_OVERLAP_NOTICE_SHARE = 0.05;
 
+// A return on spend needs spend to divide by. Meta placed 0,33 kr. of delivery
+// in no country at all and attributed 7.482 kr. of revenue to it, which is a
+// ROAS of 22.670 and, sorted by return, the best market on the account. One
+// unit of the account currency is the smallest denominator that means anything;
+// below it the ratio is reported as unmeasurable rather than as a triumph.
+const MINIMUM_ROAS_SPEND = 1;
+
+function roasFrom(revenue, spend) {
+  return number(spend) >= MINIMUM_ROAS_SPEND ? round(number(revenue) / number(spend), 3) : null;
+}
+
 function number(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -72,7 +83,16 @@ function todayInAccountTimeZone(timeZone = ACCOUNT_TIME_ZONE) {
   }).format(new Date());
 }
 
+// Meta reports delivery it could not place under the country code UNKNOWN. It
+// is not a market and must never read as one, but it is not dropped either: it
+// is real spend, and unplaced spend has to stay visible the same way unmapped
+// objective spend does.
+const UNATTRIBUTED_COUNTRY_CODES = new Set(["UNKNOWN", "XX", ""]);
+
 function countryLabel(code) {
+  if (UNATTRIBUTED_COUNTRY_CODES.has(String(code).toUpperCase())) {
+    return "Unattributed delivery";
+  }
   try {
     return new Intl.DisplayNames(["en"], { type: "region" }).of(code) || code;
   } catch (error) {
@@ -489,7 +509,7 @@ function buildMarketRow({ code, monthly, cumulative, previousCumulative }) {
     // set - the set is a grouping, not a measured uplift.
     revenue,
     newCustomerRevenue,
-    roas: spend > 0 ? round(revenue / spend, 3) : null,
+    roas: roasFrom(revenue, spend),
     cpm: impressions > 0 ? round((spend / impressions) * 1000, 2) : null,
     costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
     costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
@@ -526,7 +546,10 @@ function buildMarketWindow({ code, months, from, to }) {
     code,
     from: slice[0].month,
     to: last.month,
-    months: slice.length,
+    // Named for what it is, and never "months": a window is spread over a
+    // market that has its own months series, and a count under the same name
+    // silently replaced the series when the two were merged.
+    monthCount: slice.length,
     days,
     partial: slice.some((month) => month.partial),
     netNewReach,
@@ -535,7 +558,7 @@ function buildMarketWindow({ code, months, from, to }) {
     revenue: round(revenue, 2),
     impressions,
     newCustomers,
-    roas: spend > 0 ? round(revenue / spend, 3) : null,
+    roas: roasFrom(revenue, spend),
     cpm: impressions > 0 ? round((spend / impressions) * 1000, 2) : null,
     costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
     costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,
@@ -834,7 +857,7 @@ async function syncExpansionReach({
       newCustomers,
       revenue,
       newCustomerRevenue: monthly?.newCustomerRevenue == null ? null : number(monthly.newCustomerRevenue),
-      roas: spend > 0 ? round(revenue / spend, 3) : null,
+      roas: roasFrom(revenue, spend),
       cpm: monthlyImpressions > 0 ? round((spend / monthlyImpressions) * 1000, 2) : null,
       costPerThousandNewlyReached: netNewReach > 0 ? round((spend / netNewReach) * 1000, 2) : null,
       costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null,

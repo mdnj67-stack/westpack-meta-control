@@ -21,7 +21,8 @@ const {
   todayInAccountTimeZone,
   reusableCumulative,
   previousMonthElapsedWindow,
-  collectRestatements
+  collectRestatements,
+  countryLabel
 } = require("../server/meta/expansion-reach");
 
 const ACCOUNT = "act_123";
@@ -595,8 +596,8 @@ test("a market can be read over three windows, and reach is never summed across 
   const italy = snapshot.marketSeries.find((market) => market.code === "IT");
 
   assert.ok(italy.windows.current && italy.windows.quarter && italy.windows.all);
-  assert.equal(italy.windows.current.months, 1);
-  assert.equal(italy.windows.all.months, italy.months.length);
+  assert.equal(italy.windows.current.monthCount, 1);
+  assert.equal(italy.windows.all.monthCount, italy.months.length);
 
   // Over everything since the anchor, first-time reach is simply the market's
   // own cumulative total - every one of those people was new at some point.
@@ -612,4 +613,72 @@ test("a market can be read over three windows, and reach is never summed across 
   // Frequency and repeat share are ratios over a deduplicated reach figure and
   // cannot be averaged, so a multi-month window reports its last month's.
   assert.equal(italy.windows.quarter.latestFrequency, quarterMonths[quarterMonths.length - 1].frequency);
+});
+
+test("a window carries no field that collides with the market it describes", async () => {
+  // The window is merged onto the market row for rendering, so a field the two
+  // share silently replaces the market's. A count named "months" replaced the
+  // market's months series and the whole tab stopped rendering - caught only by
+  // opening the page, because every unit test still passed.
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  const market = snapshot.marketSeries[0];
+  const marketKeys = new Set(Object.keys(market));
+
+  // A window deliberately overrides the market's own scalar totals - that is
+  // the point of choosing a window. What it must never do is replace a
+  // structure with a scalar: the count named "months" landed on top of the
+  // market's months series and the sparkline had nothing left to draw.
+  for (const [name, windowRow] of Object.entries(market.windows)) {
+    if (!windowRow) continue;
+    for (const key of Object.keys(windowRow)) {
+      if (!marketKeys.has(key)) continue;
+      const marketValue = market[key];
+      const isStructure = Array.isArray(marketValue) || (marketValue && typeof marketValue === "object");
+      assert.ok(
+        !isStructure,
+        `window "${name}" would replace the market's "${key}" structure with a plain value`
+      );
+    }
+  }
+});
+
+test("a return on spend is not reported when there is no spend to divide by", async () => {
+  // Meta placed 0,33 kr. of delivery in no country at all and attributed
+  // 7.482 kr. of revenue to it. That is a ROAS of 22.670 and, sorted by return,
+  // the best market on the account.
+  calls.length = 0;
+  const base = buildResponder();
+  responder = (params, pathname) => {
+    if (params.time_increment === "monthly" && params.breakdowns === "country") {
+      const rows = base(params, pathname).data;
+      // One country with revenue and effectively no spend at all.
+      for (const row of rows) {
+        if (row.country === "DE") {
+          row.spend = "0.33";
+          row.action_values = [{ action_type: "omni_purchase", value: "7481.5" }];
+        }
+      }
+      return { data: rows };
+    }
+    return base(params, pathname);
+  };
+
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  const germany = snapshot.marketSeries.find((market) => market.code === "DE");
+  const latest = germany.months[germany.months.length - 1];
+
+  assert.equal(latest.spend, 0.33, "the spend itself is still reported");
+  assert.equal(latest.revenue, 7481.5, "so is the revenue");
+  assert.equal(latest.roas, null, "but the ratio between them is not");
+  assert.equal(germany.windows.current.roas, null);
+});
+
+test("delivery Meta could not place is labelled, not passed off as a country", () => {
+  // The country code UNKNOWN is real spend that Meta could not attribute to a
+  // market. It stays in the table - unplaced spend has to stay visible - but it
+  // is not somewhere budget can be moved to.
+  assert.equal(countryLabel("UNKNOWN"), "Unattributed delivery");
+  assert.equal(countryLabel("XX"), "Unattributed delivery");
+  assert.equal(countryLabel("IT"), "Italy");
 });
