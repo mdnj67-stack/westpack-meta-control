@@ -124,6 +124,9 @@
           <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion_incremental" aria-selected="false">
             Inkrementel
           </button>
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="expansion" aria-selected="false">
+            Expansion
+          </button>
         </section>
 
         <div class="hero">
@@ -212,6 +215,16 @@
             <div class="overview-metric" id="overview-convinc-metric"></div>
             <div class="overview-list" id="overview-convinc-list"></div>
           </article>
+        </section>
+
+        <!-- The expansion view stands outside the playbook because it answers a
+             different question from the lenses: not how the selected range is
+             performing, but how many people the programme has reached for the
+             first time since it began. It reads a nightly snapshot rather than
+             the live account, so it is deliberately independent of the date
+             range and of whether the live snapshot synced. -->
+        <section class="expansion-view" id="expansion-view" hidden>
+          <div id="expansion-content"></div>
         </section>
 
         <section class="playbook" id="playbook">

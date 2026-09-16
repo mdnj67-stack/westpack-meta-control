@@ -222,6 +222,7 @@ import {
   renderOverviewGrid,
   renderOverviewCustomerAcquisition,
   renderOverviewExpansionReach,
+  renderExpansionView,
   renderOverviewSpendSplit,
   renderTrendDeck,
   renderHeroPanel,
@@ -13470,18 +13471,39 @@ function reportDashboardPanelFailures() {
 // error: before the first nightly sync there is simply nothing stored yet.
 let metaExpansionReachRequest = null;
 let metaOverviewVisible = false;
+let metaExpansionViewVisible = false;
+// A read that failed is reported rather than leaving an empty panel with no
+// reason. The Expansion tab is the only place this snapshot is visible, so a
+// silent failure there looks like "no data" when it is really "no answer".
+let metaExpansionReachError = "";
+
+function renderExpansionSurfaces() {
+  const currency = appState.metaCurrency || "DKK";
+  renderPanelSafely("Overview Expansion Reach", () => {
+    renderOverviewExpansionReach(appState.metaExpansionReach || null, metaOverviewVisible, currency);
+  });
+  renderPanelSafely("Expansion View", () => {
+    renderExpansionView(
+      appState.metaExpansionReach || null,
+      metaExpansionViewVisible,
+      currency,
+      metaExpansionReachError
+    );
+  });
+}
 
 function ensureMetaExpansionReachLoaded() {
   if (metaExpansionReachRequest || appState.metaExpansionReach) return;
   metaExpansionReachRequest = requestMetaExpansionReach()
     .then((payload) => {
       appState.metaExpansionReach = payload?.expansion || null;
-      renderPanelSafely("Overview Expansion Reach", () => {
-        renderOverviewExpansionReach(appState.metaExpansionReach, metaOverviewVisible, appState.metaCurrency || "DKK");
-      });
+      metaExpansionReachError = "";
+      renderExpansionSurfaces();
     })
-    .catch(() => {
+    .catch((error) => {
       metaExpansionReachRequest = null;
+      metaExpansionReachError = error?.message || "Expansion reach could not be read.";
+      renderExpansionSurfaces();
     });
 }
 
@@ -13502,6 +13524,10 @@ function renderDashboard() {
   // nothing at all.
   let analysis = emptyDashboardAnalysis();
   renderPanelSafely("Analysis", () => {
+    // Expansion draws none of the range-driven panels, so the analysis that
+    // feeds them is not run for it. Running it would only risk a panel failure
+    // on a view that never reads the result.
+    if (lens === "expansion") return;
     analysis = lens === "general"
       ? buildGeneralDashboardAnalysis(allCampaigns)
       : buildDashboardAnalysis(lensCampaigns, lens);
@@ -13522,6 +13548,14 @@ function renderDashboard() {
         copy = getGeneralHeroCopy(analysis, allCampaigns);
       });
       return copy;
+    }
+    if (lens === "expansion") {
+      return {
+        kicker: "Expansion",
+        title: "People reached for the first time.",
+        subtitle: "Whole calendar months from a nightly snapshot. This view does not follow the date range above, and it costs no Meta quota to open.",
+        tableTitle: "Expansion"
+      };
     }
     if (lens === "conversion_incremental") {
       return {
@@ -13556,7 +13590,13 @@ function renderDashboard() {
   })();
 
   const overviewVisible = lens === "general";
-  const isEmptyLensState = !overviewVisible && !lensHasCampaigns;
+  // Expansion is not a lens over the selected range. It reads a nightly snapshot
+  // of whole calendar months, so none of the range-driven furniture applies to
+  // it - including the "figures are not synced" state, which is about a payload
+  // this view never uses.
+  const expansionVisible = lens === "expansion";
+  const isEmptyLensState = !overviewVisible && !expansionVisible && !lensHasCampaigns;
+  const expansionViewNode = document.getElementById("expansion-view");
   const dashboardPanel = document.getElementById("dashboard-panel");
   const pulseNode = document.getElementById("campaign-pulse-list")?.closest("section.card");
   const statsGridNode = document.getElementById("stats-grid");
@@ -13581,7 +13621,12 @@ function renderDashboard() {
 
   setDashboardHero(lensCopy);
   renderPanelSafely("Hero Panel", () => {
-    renderHeroPanel(buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
+    // The hero panel reads the selected range. Expansion does not use that range
+    // at all, so showing range figures above it would put two different periods
+    // on one screen with nothing saying so.
+    renderHeroPanel(expansionVisible
+      ? []
+      : buildHeroPanelItems(lens, analysis, overviewVisible ? allCampaigns : lensCampaigns));
   });
   let renderedStats = [];
   renderPanelSafely("Stats", () => {
@@ -13597,10 +13642,11 @@ function renderDashboard() {
   renderPanelSafely("Overview Customer Acquisition", () => {
     renderOverviewCustomerAcquisition(appState.metaDashboard?.quality?.customerAcquisition || null, overviewVisible);
   });
-  renderPanelSafely("Overview Expansion Reach", () => {
+  renderPanelSafely("Expansion Surfaces", () => {
     metaOverviewVisible = Boolean(overviewVisible);
-    renderOverviewExpansionReach(appState.metaExpansionReach || null, overviewVisible, appState.metaCurrency || "DKK");
-    if (overviewVisible) ensureMetaExpansionReachLoaded();
+    metaExpansionViewVisible = Boolean(expansionVisible);
+    renderExpansionSurfaces();
+    if (overviewVisible || expansionVisible) ensureMetaExpansionReachLoaded();
   });
   renderPanelSafely("Trend Deck", () => {
     renderTrendDeck(isEmptyLensState ? [] : (backendTrendCards || []));
@@ -13612,7 +13658,9 @@ function renderDashboard() {
     // Not synced outranks an empty lens: without the server payload there is no way to
     // know whether the lens is empty or simply unmeasured, and saying the wrong one of
     // those is worse than saying neither.
-    const emptyStateCopy = !dashboardFiguresSynced
+    const emptyStateCopy = expansionVisible
+      ? null
+      : !dashboardFiguresSynced
       ? {
         headline: "Dashboard figures are not synced",
         body: "The campaign list loaded but the computed figures did not, so spend, reach, trends and the objective split cannot be shown for this range. Every figure on this page is computed once on the server, and the browser deliberately does not produce a second opinion.",
@@ -13636,12 +13684,15 @@ function renderDashboard() {
     });
   });
 
+  if (expansionViewNode) {
+    expansionViewNode.hidden = !expansionVisible;
+  }
   if (playbookNode) {
-    playbookNode.hidden = false;
+    playbookNode.hidden = expansionVisible;
     playbookNode.dataset.layout = lens;
   }
   if (playbookStatusNode) {
-    playbookStatusNode.hidden = false;
+    playbookStatusNode.hidden = expansionVisible;
   }
   if (playbookNextNode) {
     playbookNextNode.hidden = overviewVisible || isEmptyLensState;

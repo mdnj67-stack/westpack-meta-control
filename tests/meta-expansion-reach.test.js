@@ -12,18 +12,21 @@ let responder = () => ({ data: [] });
 metaLib.graphRequest = async (pathname, accessToken, options = {}) => {
   const params = options.params || {};
   calls.push({ pathname, params });
-  return responder(params);
+  return responder(params, pathname);
 };
 
 const {
   syncExpansionReach,
   buildMonths,
   todayInAccountTimeZone,
-  reusableCumulative
+  reusableCumulative,
+  previousMonthElapsedWindow,
+  collectRestatements
 } = require("../server/meta/expansion-reach");
 
 const ACCOUNT = "act_123";
 const TOKEN = "token";
+const NEW_CUSTOMER_ACTION = "offsite_conversion.custom.111";
 
 const months = buildMonths(todayInAccountTimeZone(), 12);
 const delivering = months.slice(-4);
@@ -31,12 +34,46 @@ const delivering = months.slice(-4);
 // Cumulative rises every month; monthly reach is larger than the month's net-new
 // from the second month on, so there is a real repeat share to assert against.
 const CUMULATIVE = [100000, 180000, 240000, 300000];
+const CUMULATIVE_SPEND = [12000, 36000, 72000, 120000];
 const MONTHLY = [100000, 100000, 90000, 95000];
 const EXPECTED_NET_NEW = [100000, 80000, 60000, 60000];
 const EXPECTED_REPEAT = [0, 20000, 30000, 35000];
+const MONTHLY_NEW_CUSTOMERS = [10, 20, 30, 40];
 
-function buildResponder({ campaignIds = ["1", "2"] } = {}) {
-  return (params) => {
+// Two markets, so the country split has something to divide. IT carries most of
+// the reach; DE only starts delivering in the third month, which is the shape
+// the real account has after a market rebuild.
+const COUNTRY_CUMULATIVE = {
+  IT: [70000, 120000, 150000, 180000],
+  DE: [0, 0, 60000, 100000]
+};
+const COUNTRY_MONTHLY = {
+  IT: [70000, 60000, 55000, 55000],
+  DE: [0, 0, 60000, 50000]
+};
+
+// The like-for-like point: the same elapsed stretch of the previous month.
+const LIKE_FOR_LIKE_CUMULATIVE = 210000;
+const LIKE_FOR_LIKE_SPEND = 60000;
+const LIKE_FOR_LIKE_COUNTRIES = { IT: 135000, DE: 70000 };
+
+const lastMonth = delivering[delivering.length - 1];
+const likeForLikeWindow = previousMonthElapsedWindow({ key: lastMonth.key, until: lastMonth.until });
+
+function isCumulativeCall(params) {
+  return params.level === "account" && !params.time_increment && params.filtering;
+}
+
+function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true } = {}) {
+  return (params, pathname = "") => {
+    if (String(pathname).includes("customconversions")) {
+      return {
+        data: withCustomConversion
+          ? [{ id: "111", name: "New_customer", is_archived: false }]
+          : []
+      };
+    }
+
     if (params.level === "campaign") {
       return {
         data: campaignIds.map((id, index) => ({
@@ -49,7 +86,26 @@ function buildResponder({ campaignIds = ["1", "2"] } = {}) {
         }))
       };
     }
+
     if (params.time_increment === "monthly") {
+      if (params.breakdowns === "country") {
+        const rows = [];
+        delivering.forEach((month, index) => {
+          for (const code of Object.keys(COUNTRY_MONTHLY)) {
+            rows.push({
+              date_start: month.since,
+              date_stop: month.until,
+              country: code,
+              reach: String(COUNTRY_MONTHLY[code][index]),
+              impressions: String(COUNTRY_MONTHLY[code][index] * 4),
+              frequency: "4",
+              spend: String(1000 * (index + 1)),
+              actions: [{ action_type: NEW_CUSTOMER_ACTION, value: "5" }]
+            });
+          }
+        });
+        return { data: rows };
+      }
       return {
         data: delivering.map((month, index) => ({
           date_start: month.since,
@@ -57,14 +113,41 @@ function buildResponder({ campaignIds = ["1", "2"] } = {}) {
           reach: String(MONTHLY[index]),
           impressions: String(MONTHLY[index] * 4),
           frequency: "4",
-          spend: String(12000 * (index + 1))
+          spend: String(12000 * (index + 1)),
+          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(MONTHLY_NEW_CUSTOMERS[index]) }]
         }))
       };
     }
-    // Cumulative: keyed by the window end, which is the month's last day.
+
+    // Cumulative: keyed by the window end, which is the month's last day, or the
+    // like-for-like date inside the previous month.
     const range = JSON.parse(params.time_range);
+    if (range.until === likeForLikeWindow.until) {
+      if (params.breakdowns === "country") {
+        return {
+          data: Object.entries(LIKE_FOR_LIKE_COUNTRIES)
+            .map(([code, reach]) => ({ country: code, reach: String(reach), spend: "0" }))
+        };
+      }
+      return { data: [{ reach: String(LIKE_FOR_LIKE_CUMULATIVE), spend: String(LIKE_FOR_LIKE_SPEND) }] };
+    }
+
     const index = delivering.findIndex((month) => month.until === range.until);
-    return { data: [{ reach: String(index >= 0 ? CUMULATIVE[index] : 0) }] };
+    if (params.breakdowns === "country") {
+      return {
+        data: Object.keys(COUNTRY_CUMULATIVE).map((code) => ({
+          country: code,
+          reach: String(index >= 0 ? COUNTRY_CUMULATIVE[code][index] : 0),
+          spend: "0"
+        }))
+      };
+    }
+    return {
+      data: [{
+        reach: String(index >= 0 ? CUMULATIVE[index] : 0),
+        spend: String(index >= 0 ? CUMULATIVE_SPEND[index] : 0)
+      }]
+    };
   };
 }
 
@@ -74,7 +157,14 @@ function reset(options) {
 }
 
 function cumulativeCallCount() {
-  return calls.filter((call) => call.params.level === "account" && !call.params.time_increment).length;
+  return calls.filter((call) => isCumulativeCall(call.params) && !call.params.breakdowns).length;
+}
+
+function monthCurveCallCount() {
+  return calls.filter((call) => {
+    if (!isCumulativeCall(call.params) || call.params.breakdowns) return false;
+    return JSON.parse(call.params.time_range).until !== likeForLikeWindow.until;
+  }).length;
 }
 
 test("net-new reach is the rise in cumulative unique reach, and repeat is the remainder", async () => {
@@ -105,16 +195,16 @@ test("reach is only ever read at account level, never summed from campaign rows"
 test("a repeat share is never negative when Meta restates a cumulative window", async () => {
   calls.length = 0;
   const base = buildResponder();
-  // Cumulative for the last month comes back slightly higher than monthly reach
-  // allows, which would make monthly minus net-new go negative.
-  responder = (params) => {
-    if (params.level === "account" && !params.time_increment) {
+  // Cumulative for the last month comes back higher than monthly reach allows,
+  // which would make monthly minus net-new go negative.
+  responder = (params, pathname) => {
+    if (isCumulativeCall(params) && !params.breakdowns) {
       const range = JSON.parse(params.time_range);
       if (range.until === delivering[delivering.length - 1].until) {
-        return { data: [{ reach: "999999" }] };
+        return { data: [{ reach: "999999", spend: "120000" }] };
       }
     }
-    return base(params);
+    return base(params, pathname);
   };
 
   const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
@@ -123,19 +213,56 @@ test("a repeat share is never negative when Meta restates a cumulative window", 
   }
 });
 
+test("a cumulative window that shrinks is clamped to zero and flagged, never shown negative", async () => {
+  calls.length = 0;
+  const base = buildResponder();
+  // Meta restates the last cumulative window downward, below the month before
+  // it. The difference is negative, which is an artefact rather than a fact.
+  responder = (params, pathname) => {
+    if (isCumulativeCall(params) && !params.breakdowns) {
+      const range = JSON.parse(params.time_range);
+      if (range.until === delivering[delivering.length - 1].until) {
+        return { data: [{ reach: "200000", spend: "120000" }] };
+      }
+    }
+    return base(params, pathname);
+  };
+
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  const last = snapshot.months[snapshot.months.length - 1];
+  assert.equal(last.netNewReach, 0);
+  assert.equal(last.cumulativeRestated, true);
+  assert.ok(last.repeatShare <= 1, "repeat share must never exceed the whole month");
+});
+
 test("a second run reuses completed months and only re-measures the month in progress", async () => {
   reset();
   const first = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
-  const coldCumulativeCalls = cumulativeCallCount();
-  assert.equal(coldCumulativeCalls, delivering.length);
+  const coldCurveCalls = monthCurveCallCount();
+  assert.equal(coldCurveCalls, delivering.length);
 
   reset();
   const second = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first });
 
   const partialCount = first.months.filter((month) => month.partial).length;
-  assert.equal(cumulativeCallCount(), partialCount);
-  assert.ok(cumulativeCallCount() < coldCumulativeCalls, "the warm run must cost fewer calls than the cold one");
+  assert.equal(monthCurveCallCount(), partialCount);
+  assert.ok(monthCurveCallCount() < coldCurveCalls, "the warm run must cost fewer calls than the cold one");
   assert.deepEqual(second.months.map((month) => month.netNewReach), EXPECTED_NET_NEW);
+});
+
+test("the like-for-like point is measured once and then reused", async () => {
+  reset();
+  const first = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  assert.equal(first.likeForLike.fromCache, false);
+
+  reset();
+  const second = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first });
+  assert.equal(second.likeForLike.fromCache, true);
+  const likeForLikeCalls = calls.filter((call) => {
+    if (!isCumulativeCall(call.params)) return false;
+    return JSON.parse(call.params.time_range).until === likeForLikeWindow.until;
+  });
+  assert.equal(likeForLikeCalls.length, 0, "a closed like-for-like window must never be measured twice");
 });
 
 test("adding an incremental campaign re-measures the whole curve", async () => {
@@ -146,7 +273,7 @@ test("adding an incremental campaign re-measures the whole curve", async () => {
   // the old numbers describe a different question, so none may be reused.
   reset({ campaignIds: ["1", "2", "3"] });
   await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first });
-  assert.equal(cumulativeCallCount(), delivering.length);
+  assert.equal(monthCurveCallCount(), delivering.length);
 });
 
 test("force re-measures even when the cache is valid", async () => {
@@ -155,7 +282,7 @@ test("force re-measures even when the cache is valid", async () => {
 
   reset();
   await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first, force: true });
-  assert.equal(cumulativeCallCount(), delivering.length);
+  assert.equal(monthCurveCallCount(), delivering.length);
 });
 
 test("an account with no incrementality campaign reports why instead of throwing", async () => {
@@ -187,8 +314,8 @@ test("reusableCumulative refuses a cache from a different anchor or campaign set
     anchor: "2026-01-01",
     campaignKey: "1,2",
     months: [
-      { month: "2026-01", partial: false, cumulativeReach: 100 },
-      { month: "2026-02", partial: true, cumulativeReach: 200 }
+      { month: "2026-01", partial: false, cumulativeReach: 100, cumulativeByCountry: { IT: { reach: 60 } } },
+      { month: "2026-02", partial: true, cumulativeReach: 200, cumulativeByCountry: { IT: { reach: 120 } } }
     ]
   };
 
@@ -196,4 +323,161 @@ test("reusableCumulative refuses a cache from a different anchor or campaign set
   assert.equal(reusableCumulative(previous, "2026-02-01", "1,2").size, 0);
   assert.equal(reusableCumulative(previous, "2026-01-01", "1,2,3").size, 0);
   assert.equal(reusableCumulative(null, "2026-01-01", "1,2").size, 0);
+});
+
+test("a month cached without its country map is measured again rather than half-drawn", () => {
+  const previous = {
+    anchor: "2026-01-01",
+    campaignKey: "1,2",
+    months: [{ month: "2026-01", partial: false, cumulativeReach: 100 }]
+  };
+  assert.equal(reusableCumulative(previous, "2026-01-01", "1,2").size, 0);
+});
+
+// --- Markets -------------------------------------------------------------
+
+test("markets come from the country breakdown and are never summed into the total", async () => {
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const italy = snapshot.marketSeries.find((market) => market.code === "IT");
+  const germany = snapshot.marketSeries.find((market) => market.code === "DE");
+  assert.ok(italy, "Italy must appear in the market series");
+  assert.ok(germany, "Germany must appear in the market series");
+
+  // Each market's net-new is its own cumulative curve, differenced.
+  assert.deepEqual(italy.months.map((month) => month.netNewReach), [70000, 50000, 30000, 30000]);
+  assert.deepEqual(germany.months.map((month) => month.netNewReach), [0, 0, 60000, 40000]);
+
+  // A market that only starts later reports when it started rather than
+  // pretending it was flat before.
+  assert.equal(germany.firstMonth, delivering[2].key);
+  assert.equal(germany.deliveringMonths, 2);
+
+  // The account total is never replaced by the sum of the markets.
+  const last = snapshot.months[snapshot.months.length - 1];
+  assert.equal(last.monthlyReach, MONTHLY[MONTHLY.length - 1]);
+  assert.equal(last.marketReachSum, COUNTRY_MONTHLY.IT[3] + COUNTRY_MONTHLY.DE[3]);
+  assert.ok(last.marketOverlapShare !== null, "the gap between the markets and the total must be reported");
+});
+
+test("the market split costs no call per market", async () => {
+  reset();
+  await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const countryCalls = calls.filter((call) => call.params.breakdowns === "country").length;
+  // One monthly breakdown, plus one cumulative breakdown per month on the curve,
+  // plus the like-for-like point. Never one per country.
+  assert.equal(countryCalls, 1 + delivering.length + 1);
+});
+
+test("the markets carry new customers beside the newly reached", async () => {
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  assert.equal(snapshot.customerConversion.available, true);
+  const last = snapshot.months[snapshot.months.length - 1];
+  assert.equal(last.newCustomers, MONTHLY_NEW_CUSTOMERS[MONTHLY_NEW_CUSTOMERS.length - 1]);
+  assert.equal(last.newCustomersPerThousandNewlyReached, Math.round((40 / 60000) * 1000 * 1000) / 1000);
+
+  const italy = snapshot.marketSeries.find((market) => market.code === "IT");
+  assert.equal(italy.latestNewCustomers, 5);
+});
+
+test("an account without the New_customer conversion says so instead of reporting zero", async () => {
+  reset({ withCustomConversion: false });
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  assert.equal(snapshot.customerConversion.available, false);
+  assert.match(snapshot.customerConversion.unavailableReason, /New_customer/);
+  for (const month of snapshot.months) {
+    assert.equal(month.newCustomers, null, "no conversion means no count, not a count of zero");
+    assert.equal(month.newCustomersPerThousandNewlyReached, null);
+  }
+});
+
+// --- Like-for-like -------------------------------------------------------
+
+test("a part month is compared against the same elapsed days of the month before", async () => {
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const likeForLike = snapshot.likeForLike;
+  assert.ok(likeForLike, "a part month must carry a like-for-like baseline");
+  assert.equal(likeForLike.month, likeForLikeWindow.month);
+  assert.equal(likeForLike.until, likeForLikeWindow.until);
+  assert.equal(likeForLike.elapsedDays, likeForLikeWindow.elapsedDays);
+
+  // Net-new over the same elapsed days: the like-for-like cumulative point minus
+  // the last complete month before it.
+  assert.equal(likeForLike.netNewReach, LIKE_FOR_LIKE_CUMULATIVE - CUMULATIVE[1]);
+  assert.equal(likeForLike.spend, LIKE_FOR_LIKE_SPEND - CUMULATIVE_SPEND[1]);
+  assert.equal(likeForLike.comparison.comparable, true);
+  assert.equal(likeForLike.comparison.elapsedDays, snapshot.months[snapshot.months.length - 1].days);
+});
+
+test("a market with no delivery in the baseline window is not given a percentage", async () => {
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  // Germany only starts in the third month, so the like-for-like window for it
+  // is measured but the comparison has to be readable as "new market".
+  assert.ok(snapshot.likeForLike.markets.DE);
+  assert.equal(typeof snapshot.likeForLike.markets.DE.netNewReach, "number");
+});
+
+test("previousMonthElapsedWindow clamps to a short month and says that it did", () => {
+  const window = previousMonthElapsedWindow({ key: "2026-03", until: "2026-03-31" });
+  assert.equal(window.month, "2026-02");
+  assert.equal(window.until, "2026-02-28");
+  assert.equal(window.clamped, true);
+  assert.equal(window.requestedDays, 31);
+
+  const january = previousMonthElapsedWindow({ key: "2026-01", until: "2026-01-15" });
+  assert.equal(january.month, "2025-12");
+  assert.equal(january.until, "2025-12-15");
+  assert.equal(january.clamped, false);
+});
+
+// --- Restatements --------------------------------------------------------
+
+test("a completed month that changes between runs is recorded with both figures", () => {
+  const previous = {
+    months: [
+      { month: "2026-07", partial: false, netNewReach: 342550 },
+      { month: "2026-08", partial: false, netNewReach: 309186 }
+    ],
+    restatements: []
+  };
+  const rows = [
+    { month: "2026-07", partial: false, netNewReach: 342550 },
+    { month: "2026-08", partial: false, netNewReach: 401000 }
+  ];
+
+  const log = collectRestatements(previous, rows, "Three campaigns joined the incremental set.");
+  assert.equal(log.length, 1);
+  assert.equal(log[0].month, "2026-08");
+  assert.equal(log[0].from, 309186);
+  assert.equal(log[0].to, 401000);
+  assert.match(log[0].reason, /joined/);
+});
+
+test("the month in progress is never logged as a restatement", () => {
+  const previous = {
+    months: [{ month: "2026-09", partial: true, netNewReach: 700000 }],
+    restatements: []
+  };
+  const rows = [{ month: "2026-09", partial: true, netNewReach: 750153 }];
+  assert.deepEqual(collectRestatements(previous, rows, ""), []);
+});
+
+test("restatements from earlier runs are carried forward", () => {
+  const previous = {
+    months: [{ month: "2026-08", partial: false, netNewReach: 309186 }],
+    restatements: [{ month: "2026-05", metric: "netNewReach", from: 1, to: 2 }]
+  };
+  const rows = [{ month: "2026-08", partial: false, netNewReach: 309186 }];
+  const log = collectRestatements(previous, rows, "");
+  assert.equal(log.length, 1);
+  assert.equal(log[0].month, "2026-05");
 });

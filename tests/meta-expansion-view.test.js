@@ -1,0 +1,103 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
+
+// The Expansion surfaces are rendered from src/ui.js, which is ESM in a repo
+// with no package.json, so Node cannot import it here. These are pattern tests
+// over the source, in the same style as the rest of the UI-adjacent suite: they
+// pin the rules that were broken before, not the behaviour.
+//
+// The rules, all of them mistakes this panel actually made:
+//
+//  1. A part month is never set against a complete month.
+//  2. The panel says it ignores the dashboard's date range, because it does.
+//  3. The snapshot's age is stated and goes to a warning when it is stale.
+//  4. Country reach is never summed into a total.
+//  5. A market with no baseline gets a label, not a percentage.
+//  6. A rising cost is never coloured as good news.
+
+const root = join(__dirname, "..");
+const ui = readFileSync(join(root, "src", "ui.js"), "utf8");
+const app = readFileSync(join(root, "app.js"), "utf8");
+const html = readFileSync(join(root, "index.html"), "utf8");
+const styles = readFileSync(join(root, "styles.css"), "utf8");
+
+test("the part month is compared like for like, never against a whole month", () => {
+  // The old copy read "sep, against 309.186 in aug" with September covering 15
+  // days and August 31. The comparison now comes from the server's like-for-like
+  // window and names the elapsed days.
+  assert.match(ui, /likeForLike\.elapsedDays/);
+  assert.match(ui, /over the same \$\{likeForLike\.elapsedDays\} days of/);
+
+  // And when no baseline was measured, it says so rather than reaching for the
+  // previous month's complete figure.
+  assert.match(ui, /No like-for-like baseline was measured/);
+});
+
+test("the panel states that it does not follow the date picker", () => {
+  assert.match(ui, /does not follow the date picker/i);
+  assert.match(ui, /does not follow the date range/i);
+});
+
+test("the snapshot age is shown, and a stale snapshot is called out", () => {
+  assert.match(ui, /const EXPANSION_STALE_HOURS = \d+/);
+  assert.match(ui, /function describeSnapshotAge/);
+  assert.match(ui, /The nightly sync has not landed/);
+  // The warning needs a colour of its own, or it is just more grey text.
+  assert.match(styles, /\.meta-expansion-freshness\.is-stale/);
+  assert.match(styles, /\.meta-expansion-freshness \.is-warn/);
+});
+
+test("the market breakdown never replaces the deduplicated account figure", () => {
+  assert.match(ui, /must not be added together/i);
+  assert.match(ui, /reached in more than one country/i);
+  assert.match(ui, /The account figure is the one that speaks for the whole set/);
+});
+
+test("a market with no baseline is labelled new rather than given a percentage", () => {
+  assert.match(ui, /is-new-market/);
+  assert.match(ui, /if \(!comparable\) return `<span class="meta-expansion-badge is-new-market">New/);
+  assert.match(styles, /\.meta-expansion-badge\.is-new-market/);
+});
+
+test("a rising cost per thousand is not coloured as an improvement", () => {
+  assert.match(ui, /function expansionChangeBadge\(change, comparable, suffix = "", invert = false\)/);
+  assert.match(ui, /const good = invert \? value < 0 : value > 0;/);
+  assert.match(ui, /expansionChangeBadge\(costChange, true, "", true\)/);
+});
+
+test("the month in progress is hatched and labelled with its day range", () => {
+  assert.match(ui, /function expansionDayRange/);
+  assert.match(ui, /month\.partial \? expansionDayRange\(month\) : expansionMonthName\(month\.month\)/);
+  assert.match(styles, /\.meta-expansion-bar\.is-partial \.meta-expansion-column em/);
+});
+
+test("the Expansion tab exists and is wired to its own lens", () => {
+  assert.match(html, /data-dashboard-lens="expansion"/);
+  assert.match(html, /id="expansion-view"/);
+  assert.match(html, /id="expansion-content"/);
+  assert.match(app, /const expansionVisible = lens === "expansion";/);
+  assert.match(ui, /export function renderExpansionView/);
+});
+
+test("the Expansion tab does not inherit the range-driven not-synced banner", () => {
+  // The banner is about a payload this view never reads. Showing it above a full
+  // set of figures was the contradiction that started this work.
+  assert.match(app, /const emptyStateCopy = expansionVisible\s*\n\s*\? null/);
+  // And the hero panel, which does read the range, is empty on this tab.
+  assert.match(app, /renderHeroPanel\(expansionVisible\s*\n\s*\? \[\]/);
+});
+
+test("every expansion render is guarded like the rest of the dashboard", () => {
+  assert.match(app, /renderPanelSafely\("Expansion Surfaces"/);
+  assert.match(app, /renderPanelSafely\("Expansion View"/);
+  assert.match(app, /renderPanelSafely\("Overview Expansion Reach"/);
+});
+
+test("the view survives a snapshot stored before the market split", () => {
+  // A day count and a country breakdown are both new fields. The nightly job
+  // fills them in, but the page must stay honest in between.
+  assert.match(ui, /function expansionRowDays/);
+  assert.match(ui, /The stored snapshot carries no country breakdown yet/);
+});

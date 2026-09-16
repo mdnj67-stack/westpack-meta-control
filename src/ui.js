@@ -453,6 +453,139 @@ function buildStackSegments(items = [], valueKey = "amount", minimumPercent = 4)
 // The series comes from the stored nightly snapshot, never from a live call:
 // the cumulative curve behind it costs one Meta call per month, which is more
 // than the whole dashboard snapshot spends.
+// --- Expansion reach -----------------------------------------------------
+//
+// Two surfaces over one stored snapshot: a summary card on General and a tab of
+// its own. Both obey the same rules.
+//
+//  - The series is always calendar months from the anchor. It does not follow
+//    the dashboard's date picker, and it says so, because a reach figure sitting
+//    under a "Last 7 days" selector otherwise reads as a figure for last 7 days.
+//  - The month in progress is a part month. It is never set against a complete
+//    month: the comparison is the same elapsed days of the month before,
+//    measured separately by the nightly job.
+//  - The snapshot is nightly. Its age is stated, and goes to the warning colour
+//    once it is old enough that the figures may have moved, because a failed
+//    cron otherwise leaves yesterday's numbers on screen indefinitely.
+
+const EXPANSION_STALE_HOURS = 36;
+
+function expansionMonthName(monthKey) {
+  const [year, index] = String(monthKey).split("-");
+  const date = new Date(Date.UTC(Number(year), Number(index) - 1, 1));
+  if (Number.isNaN(date.getTime())) return String(monthKey);
+  return date.toLocaleString(undefined, { month: "short", timeZone: "UTC" });
+}
+
+// Danish abbreviates months with a trailing point ("sep."), which reads as a
+// sentence break when the label is dropped into prose.
+function expansionMonthProse(monthKey) {
+  return expansionMonthName(monthKey).replace(/\.$/, "");
+}
+
+function expansionRowDays(row) {
+  const stored = Number(row?.days);
+  if (Number.isFinite(stored) && stored > 0) return stored;
+  const from = Date.parse(`${row?.since}T00:00:00Z`);
+  const to = Date.parse(`${row?.until}T00:00:00Z`);
+  if (!Number.isFinite(from) || !Number.isFinite(to) || to < from) return 0;
+  return Math.round((to - from) / 86400000) + 1;
+}
+
+function expansionDayRange(row) {
+  const from = Number(String(row.since).slice(8, 10));
+  const to = Number(String(row.until).slice(8, 10));
+  return `${from}-${to} ${expansionMonthProse(row.month)}`;
+}
+
+function describeSnapshotAge(generatedAt) {
+  if (!generatedAt) return { label: "Never synced", stale: true, iso: "" };
+  const synced = new Date(generatedAt);
+  if (Number.isNaN(synced.getTime())) return { label: "Never synced", stale: true, iso: "" };
+  const hours = (Date.now() - synced.getTime()) / 3600000;
+  const stale = hours >= EXPANSION_STALE_HOURS;
+  const rounded = Math.max(0, Math.round(hours));
+  const label = rounded < 1
+    ? "Synced under an hour ago"
+    : rounded < 48
+      ? `Synced ${rounded} hour${rounded === 1 ? "" : "s"} ago`
+      : `Synced ${Math.round(rounded / 24)} days ago`;
+  return { label, stale, iso: synced.toLocaleString(), hours: rounded };
+}
+
+// A percentage needs a real baseline. A market with no delivery in the baseline
+// window is new, not infinitely improved, and the caption has to say which.
+// `invert` is for costs, where a rise is the bad direction. Colouring a rising
+// cost per thousand green would read as good news for the opposite of it.
+function expansionChangeBadge(change, comparable, suffix = "", invert = false) {
+  if (!comparable) return `<span class="meta-expansion-badge is-new-market">New${suffix}</span>`;
+  if (!Number.isFinite(Number(change))) return "";
+  const value = Number(change) * 100;
+  const good = invert ? value < 0 : value > 0;
+  const tone = value === 0 ? "is-flat" : good ? "is-up" : "is-down";
+  const sign = value > 0 ? "+" : "";
+  return `<span class="meta-expansion-badge ${tone}">${sign}${value.toFixed(1)}%${suffix}</span>`;
+}
+
+function expansionFreshnessStrip(model) {
+  const age = describeSnapshotAge(model?.generatedAt);
+  return `
+    <p class="meta-expansion-freshness${age.stale ? " is-stale" : ""}">
+      <span>${escapeHtml(age.label)}</span>
+      ${age.iso ? `<span class="is-quiet">${escapeHtml(age.iso)}</span>` : ""}
+      ${age.stale ? `<span class="is-warn">The nightly sync has not landed. These figures may have moved.</span>` : ""}
+    </p>
+  `;
+}
+
+// The stacked bar chart. The month in progress is hatched and its tick carries
+// the day range rather than a bare month name, because it is a shorter bar for a
+// shorter window and must not read as a complete month.
+function expansionBars(months, options = {}) {
+  const peak = Math.max(...months.map((month) => Number(month.monthlyReach) || 0), 1);
+  return `
+    <ol class="meta-expansion-bars">
+      ${months.map((month) => {
+        const monthly = Number(month.monthlyReach) || 0;
+        const net = Math.max(0, Number(month.netNewReach) || 0);
+        const repeat = Math.max(0, Number(month.repeatReach) || 0);
+        const height = Math.max(2, (monthly / peak) * 100);
+        const netShare = monthly > 0 ? Math.min(100, (net / monthly) * 100) : 0;
+        const tick = month.partial ? expansionDayRange(month) : expansionMonthName(month.month);
+        const title = `${month.month}${month.partial ? ` (${expansionDayRange(month)})` : ""}: ${formatCompactNumber(net)} first-time, ${formatCompactNumber(repeat)} repeat`;
+        return `
+          <li class="meta-expansion-bar${month.partial ? " is-partial" : ""}" title="${escapeHtml(title)}">
+            <span class="meta-expansion-column" style="height:${height.toFixed(1)}%">
+              <em class="is-repeat" style="height:${(100 - netShare).toFixed(1)}%"></em>
+              <em class="is-new" style="height:${netShare.toFixed(1)}%"></em>
+            </span>
+            <span class="meta-expansion-tick">${escapeHtml(tick)}</span>
+          </li>
+        `;
+      }).join("")}
+    </ol>
+    <p class="meta-expansion-legend">
+      <span class="is-new">First-time</span>
+      <span class="is-repeat">Repeat</span>
+      ${options.partialNote ? `<span class="is-note">${escapeHtml(options.partialNote)}</span>` : ""}
+    </p>
+  `;
+}
+
+// A market's own curve, drawn small enough to sit in a table cell. Every market
+// is scaled to the same peak, so the rows can be read against each other.
+function expansionSparkline(months, peak) {
+  return `
+    <span class="meta-expansion-spark" aria-hidden="true">
+      ${months.map((month) => {
+        const value = Math.max(0, Number(month.netNewReach) || 0);
+        const height = peak > 0 ? Math.max(3, (value / peak) * 100) : 3;
+        return `<em class="${month.partial ? "is-partial" : ""}" style="height:${height.toFixed(1)}%"></em>`;
+      }).join("")}
+    </span>
+  `;
+}
+
 export function renderOverviewExpansionReach(model = null, visible = false, currency = "DKK") {
   const node = document.getElementById("overview-expansion");
   const subNode = document.getElementById("overview-expansion-sub");
@@ -468,26 +601,22 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
   }
 
   const latest = months[months.length - 1];
-  const previous = months[months.length - 2];
-  const peak = Math.max(...months.map((month) => Number(month.monthlyReach) || 0), 1);
-  const totalNew = Number(latest.cumulativeReach) || 0;
-  const syncedAt = model.generatedAt ? new Date(model.generatedAt) : null;
   const anchorLabel = months[0]?.month || "";
+  const likeForLike = model.likeForLike && model.likeForLike.comparison?.month === latest.month
+    ? model.likeForLike
+    : null;
 
   if (subNode) {
-    subNode.textContent = `Unique people the ${Number(model.campaignCount) || 0} incrementality campaigns have reached since ${anchorLabel}, split into first-time and repeat.`;
+    subNode.textContent = `Unique people the ${Number(model.campaignCount) || 0} incrementality campaigns have reached since ${anchorLabel}, split into first-time and repeat. Always whole calendar months - this panel does not follow the date picker above.`;
   }
 
-  // Danish abbreviates months with a trailing point ("sep."), which reads as a
-  // sentence break when the label is dropped into prose, so the axis tick keeps
-  // the abbreviation and the prose form strips it.
-  const monthName = (month) => {
-    const [year, index] = String(month.month).split("-");
-    return new Date(Date.UTC(Number(year), Number(index) - 1, 1))
-      .toLocaleString(undefined, { month: "short", timeZone: "UTC" });
-  };
-  const monthLabel = (month) => (month.partial ? `${monthName(month)}*` : monthName(month));
-  const monthProse = (month) => monthName(month).replace(/\.$/, "");
+  // The headline comparison is like-for-like or it is absent. Setting a part
+  // month against a complete one is the trap this dashboard avoids elsewhere.
+  const comparisonLine = latest.partial
+    ? (likeForLike
+      ? `${expansionDayRange(latest)}, against ${formatCompactNumber(likeForLike.netNewReach)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}`
+      : `${expansionDayRange(latest)}. No like-for-like baseline was measured, so there is nothing honest to compare against yet.`)
+    : `${expansionMonthProse(latest.month)}, against ${formatCompactNumber(months[months.length - 2].netNewReach)} in ${expansionMonthProse(months[months.length - 2].month)}`;
 
   const costLabel = Number.isFinite(Number(latest.costPerThousandNewlyReached))
     ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
@@ -498,26 +627,28 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
 
   node.innerHTML = `
     <section class="meta-expansion">
+      ${expansionFreshnessStrip(model)}
       <div class="meta-expansion-kpis">
         <article class="meta-expansion-kpi">
           <span>Reached for the first time</span>
           <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
-          <p>${escapeHtml(`${monthProse(latest)}, against ${formatCompactNumber(previous.netNewReach)} in ${monthProse(previous)}`)}</p>
+          <p>${escapeHtml(comparisonLine)}</p>
+          ${likeForLike ? expansionChangeBadge(likeForLike.comparison.change, likeForLike.comparison.comparable, " like for like") : ""}
         </article>
         <article class="meta-expansion-kpi">
           <span>Unique people in total</span>
-          <strong>${escapeHtml(formatCompactNumber(totalNew))}</strong>
+          <strong>${escapeHtml(formatCompactNumber(latest.cumulativeReach))}</strong>
           <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
         </article>
         <article class="meta-expansion-kpi">
           <span>Cost per 1,000 new</span>
           <strong>${escapeHtml(costLabel)}</strong>
-          <p>Spend divided by first-time reach. The price of expansion.</p>
+          <p>${escapeHtml(latest.partial ? `Spend over first-time reach, ${expansionDayRange(latest)}.` : "Spend over first-time reach. The price of expansion.")}</p>
         </article>
         <article class="meta-expansion-kpi">
           <span>Repeat share</span>
           <strong>${escapeHtml(repeatShare)}</strong>
-          <p>Of this month's reach, people already reached before.</p>
+          <p>Of the people reached in ${escapeHtml(latest.partial ? expansionDayRange(latest) : expansionMonthProse(latest.month))}, the share already reached before.</p>
         </article>
       </div>
 
@@ -526,41 +657,402 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
           <strong>Reach per month</strong>
           <span>First-time against repeat</span>
         </div>
-        <ol class="meta-expansion-bars">
-          ${months.map((month) => {
-            const monthly = Number(month.monthlyReach) || 0;
-            const net = Math.max(0, Number(month.netNewReach) || 0);
-            const repeat = Math.max(0, Number(month.repeatReach) || 0);
-            const height = Math.max(2, (monthly / peak) * 100);
-            const netShare = monthly > 0 ? (net / monthly) * 100 : 0;
-            return `
-              <li class="meta-expansion-bar${month.partial ? " is-partial" : ""}"
-                  title="${escapeHtml(`${month.month}: ${formatCompactNumber(net)} first-time, ${formatCompactNumber(repeat)} repeat`)}">
-                <span class="meta-expansion-column" style="height:${height.toFixed(1)}%">
-                  <em class="is-repeat" style="height:${(100 - netShare).toFixed(1)}%"></em>
-                  <em class="is-new" style="height:${netShare.toFixed(1)}%"></em>
-                </span>
-                <span class="meta-expansion-tick">${escapeHtml(monthLabel(month))}</span>
-              </li>
-            `;
-          }).join("")}
-        </ol>
-        <p class="meta-expansion-legend">
-          <span class="is-new">First-time</span>
-          <span class="is-repeat">Repeat</span>
-          ${latest.partial ? `<span class="is-note">* ${escapeHtml(`${latest.since} to ${latest.until}, part month`)}</span>` : ""}
-        </p>
+        ${expansionBars(months, {
+          partialNote: latest.partial ? `${latest.since} to ${latest.until}, part month` : ""
+        })}
       </div>
 
       <p class="meta-expansion-foot">
         Reach is read at account level and never summed across campaigns. First-time reach is
         the rise in cumulative unique reach, so it counts people reached for the first time
-        since ${escapeHtml(anchorLabel)}.
-        ${syncedAt ? escapeHtml(`Synced ${syncedAt.toLocaleString()}.`) : ""}
+        since ${escapeHtml(anchorLabel)}. Open the Expansion tab for the market split, the
+        cost curve and the measurement record.
       </p>
     </section>
   `;
 }
+
+// The Expansion tab. Everything the summary card leaves out: the market split,
+// the cost of reaching one more person, whether new reach becomes customers, and
+// the record of what the measurement itself has done.
+export function renderExpansionView(model = null, visible = false, currency = "DKK", errorMessage = "") {
+  const node = document.getElementById("expansion-content");
+  if (!node) return;
+
+  if (!visible) {
+    node.innerHTML = "";
+    return;
+  }
+
+  if (!model) {
+    node.innerHTML = `
+      <article class="card">
+        <div class="lens-empty">
+          <h4>Expansion reach is not loaded</h4>
+          <p>This view reads a nightly snapshot rather than the live account, so it costs no Meta quota. Nothing has been stored yet, or the read did not come back.</p>
+          ${errorMessage ? `<p class="lens-empty-meta">${escapeHtml(errorMessage)}</p>` : ""}
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  if (!model.available) {
+    node.innerHTML = `
+      <article class="card">
+        <div class="lens-empty">
+          <h4>No incrementality campaigns to measure</h4>
+          <p>${escapeHtml(model.unavailableReason || "No campaign on this account reports incrementality attribution.")}</p>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  const months = (model.months || []).filter((month) => Number(month?.monthlyReach) > 0);
+  if (months.length < 1) {
+    node.innerHTML = `
+      <article class="card"><div class="lens-empty"><h4>Nothing delivered yet</h4>
+      <p>The incremental set exists but has not reached anyone inside the window.</p></div></article>
+    `;
+    return;
+  }
+
+  const latest = months[months.length - 1];
+  const anchorLabel = months[0].month;
+  const likeForLike = model.likeForLike && model.likeForLike.comparison?.month === latest.month
+    ? model.likeForLike
+    : null;
+  const perDay = (row) => {
+    const days = expansionRowDays(row);
+    return days > 0 ? Number(row.netNewReach) / days : null;
+  };
+
+  node.innerHTML = `
+    ${renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency)}
+    ${renderExpansionCurve(months, latest)}
+    ${renderExpansionMarkets(model, latest, likeForLike, currency)}
+    ${renderExpansionMonths(months, model, currency, perDay)}
+    ${renderExpansionIntegrity(model, latest)}
+  `;
+}
+
+function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency) {
+  const costLabel = Number.isFinite(Number(latest.costPerThousandNewlyReached))
+    ? formatCurrency(Math.round(Number(latest.costPerThousandNewlyReached)), currency)
+    : "--";
+  const customerRate = Number.isFinite(Number(latest.newCustomersPerThousandNewlyReached))
+    ? formatDecimal(latest.newCustomersPerThousandNewlyReached, 2)
+    : "--";
+
+  // The like-for-like cost is the honest read on whether expansion got cheaper:
+  // both sides cover the same number of days.
+  const costChange = likeForLike && Number(likeForLike.costPerThousandNewlyReached) > 0
+    ? (Number(latest.costPerThousandNewlyReached) - Number(likeForLike.costPerThousandNewlyReached)) / Number(likeForLike.costPerThousandNewlyReached)
+    : null;
+
+  const windowLine = latest.partial
+    ? `${expansionDayRange(latest)} - the month in progress, ${expansionRowDays(latest)} of its days`
+    : `${expansionMonthProse(latest.month)}, complete month`;
+
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>Expansion</h3>
+          <p class="field-hint">
+            How many people the ${Number(model.campaignCount) || 0} incrementality campaigns reached for the
+            first time since ${escapeHtml(anchorLabel)}, what it cost, and where. Whole calendar months from a
+            nightly snapshot - this view does not follow the date range above and costs no Meta quota to open.
+          </p>
+        </div>
+      </div>
+      <section class="meta-expansion">
+      ${expansionFreshnessStrip(model)}
+      <p class="meta-expansion-window">${escapeHtml(windowLine)}</p>
+      <div class="meta-expansion-kpis is-wide">
+        <article class="meta-expansion-kpi">
+          <span>Reached for the first time</span>
+          <strong>${escapeHtml(formatCompactNumber(latest.netNewReach))}</strong>
+          <p>${escapeHtml(likeForLike
+            ? `Against ${formatCompactNumber(likeForLike.netNewReach)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}.`
+            : "People who had never been reached by this set before.")}</p>
+          ${likeForLike ? expansionChangeBadge(likeForLike.comparison.change, likeForLike.comparison.comparable) : ""}
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Cost per 1,000 new</span>
+          <strong>${escapeHtml(costLabel)}</strong>
+          <p>${escapeHtml(likeForLike && Number.isFinite(Number(likeForLike.costPerThousandNewlyReached))
+            ? `Against ${formatCurrency(Math.round(Number(likeForLike.costPerThousandNewlyReached)), currency)} over the same days last month.`
+            : "Spend over first-time reach. The price of one more person.")}</p>
+          ${costChange === null ? "" : expansionChangeBadge(costChange, true, "", true)}
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>New customers per 1,000 new</span>
+          <strong>${escapeHtml(customerRate)}</strong>
+          <p>${escapeHtml(model.customerConversion
+            ? (model.customerConversion.available
+              ? "New customers counted in the same month, against the people reached for the first time in it."
+              : model.customerConversion.unavailableReason || "New customers cannot be counted on this account.")
+            : "This snapshot was written before new customers were measured here. The nightly job adds the column on its next run.")}</p>
+        </article>
+        <article class="meta-expansion-kpi">
+          <span>Unique people in total</span>
+          <strong>${escapeHtml(formatCompactNumber(latest.cumulativeReach))}</strong>
+          <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
+        </article>
+      </div>
+      <p class="meta-expansion-foot">
+        New customers are a monthly count set beside a monthly reach figure, not a cohort: the customers
+        counted in a month are not necessarily the people first reached in it. The incrementality set is a
+        grouping Meta reports separately, not a measured uplift.
+      </p>
+      </section>
+    </article>
+  `;
+}
+
+function renderExpansionCurve(months, latest) {
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>Reach per month</h3>
+          <p class="field-hint">
+            First-time against repeat. The month in progress is hatched and labelled with its day range,
+            because it covers fewer days than the bars beside it.
+          </p>
+        </div>
+      </div>
+      <section class="meta-expansion">
+        <div class="meta-expansion-chart">
+          ${expansionBars(months, {
+            partialNote: latest.partial ? `${latest.since} to ${latest.until}, part month` : ""
+          })}
+        </div>
+      </section>
+    </article>
+  `;
+}
+
+function renderExpansionMarkets(model, latest, likeForLike, currency) {
+  const series = Array.isArray(model.marketSeries) ? model.marketSeries : [];
+  // A stored snapshot from before the market split carries no country data. The
+  // card says so rather than disappearing, because a missing panel reads as
+  // "no markets" when it really means "not measured yet".
+  if (!series.length) {
+    return `
+    <article class="card expansion-card">
+      <div class="card-header"><div><h3>Markets</h3>
+      <p class="field-hint">The stored snapshot carries no country breakdown yet. The nightly job adds it on its next run.</p></div></div>
+    </article>
+  `;
+  }
+
+  // Sorted by what each market added last, not by its accumulated total: the
+  // question this table answers is where expansion is happening now.
+  const ranked = series
+    .slice()
+    .sort((left, right) => Number(right.latestNetNewReach || 0) - Number(left.latestNetNewReach || 0))
+    .filter((market) => Number(market.latestNetNewReach) > 0 || Number(market.cumulativeReach) > 0)
+    .slice(0, 12);
+
+  const peak = Math.max(...ranked.flatMap((market) => market.months.map((month) => Number(month.netNewReach) || 0)), 1);
+  const overlap = model.marketOverlap;
+
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>Markets</h3>
+          <p class="field-hint">
+            From Meta's country breakdown, for ${escapeHtml(latest.partial ? expansionDayRange(latest) : expansionMonthProse(latest.month))}.
+            Each country's reach is deduplicated inside that country. They must not be added together -
+            someone reached in two countries counts in both.
+          </p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="meta-expansion-table">
+          <thead>
+            <tr>
+              <th>Market</th>
+              <th>Since</th>
+              <th class="is-numeric">First-time</th>
+              <th class="is-numeric">Per day</th>
+              <th class="is-numeric">Cost / 1,000 new</th>
+              <th class="is-numeric">Repeat share</th>
+              <th class="is-numeric">Frequency</th>
+              <th class="is-numeric">New customers</th>
+              <th class="is-numeric">Unique total</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ranked.map((market) => {
+              const days = expansionRowDays(latest);
+              const perDay = days > 0 ? Number(market.latestNetNewReach) / days : null;
+              const baseline = likeForLike?.markets?.[market.code];
+              const comparable = baseline ? Number(baseline.netNewReach) > 0 : false;
+              const change = comparable
+                ? (Number(market.latestNetNewReach) - Number(baseline.netNewReach)) / Number(baseline.netNewReach)
+                : null;
+              return `
+                <tr>
+                  <td>
+                    <strong>${escapeHtml(market.label)}</strong>
+                    <span class="is-quiet">${escapeHtml(market.code)}</span>
+                  </td>
+                  <td>${escapeHtml(market.firstMonth || "--")}</td>
+                  <td class="is-numeric">
+                    ${escapeHtml(formatCompactNumber(market.latestNetNewReach))}
+                    ${likeForLike ? expansionChangeBadge(change, comparable) : ""}
+                  </td>
+                  <td class="is-numeric">${escapeHtml(perDay === null ? "--" : formatCompactNumber(Math.round(perDay)))}</td>
+                  <td class="is-numeric">${escapeHtml(Number.isFinite(Number(market.latestCostPerThousandNewlyReached))
+                    ? formatCurrency(Math.round(Number(market.latestCostPerThousandNewlyReached)), currency)
+                    : "--")}</td>
+                  <td class="is-numeric">${escapeHtml(Number.isFinite(Number(market.latestRepeatShare))
+                    ? `${Math.round(Number(market.latestRepeatShare) * 100)}%`
+                    : "--")}</td>
+                  <td class="is-numeric">${escapeHtml(formatDecimal(market.latestFrequency, 1))}</td>
+                  <td class="is-numeric">${escapeHtml(market.latestNewCustomers == null
+                    ? "--"
+                    : formatCompactNumber(market.latestNewCustomers))}</td>
+                  <td class="is-numeric">${escapeHtml(formatCompactNumber(market.cumulativeReach))}</td>
+                  <td>${expansionSparkline(market.months, peak)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+      <p class="expansion-note">
+        ${overlap && Number.isFinite(Number(overlap.share))
+          ? escapeHtml(`The markets add to ${formatCompactNumber(overlap.marketReachSum)} against the deduplicated account figure of ${formatCompactNumber(overlap.accountReach)} - ${(Number(overlap.share) * 100).toFixed(1)}% of people were reached in more than one country. The account figure is the one that speaks for the whole set.`)
+          : "The account figure is the one that speaks for the whole set; the markets are a breakdown of it, not a sum."}
+        ${series.length > ranked.length ? escapeHtml(` ${ranked.length} of ${series.length} markets shown.`) : ""}
+      </p>
+    </article>
+  `;
+}
+
+function renderExpansionMonths(months, model, currency, perDay) {
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>Month by month</h3>
+          <p class="field-hint">
+            Per day is first-time reach divided by the days the row actually covers, so the month in
+            progress can be read against the complete ones.
+          </p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="meta-expansion-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th class="is-numeric">Days</th>
+              <th class="is-numeric">Reached</th>
+              <th class="is-numeric">First-time</th>
+              <th class="is-numeric">Per day</th>
+              <th class="is-numeric">Repeat share</th>
+              <th class="is-numeric">Frequency</th>
+              <th class="is-numeric">Spend</th>
+              <th class="is-numeric">Cost / 1,000 new</th>
+              <th class="is-numeric">New customers</th>
+              <th class="is-numeric">Cost / new customer</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${months.slice().reverse().map((row) => `
+              <tr${row.partial ? ` class="is-partial"` : ""}>
+                <td>
+                  <strong>${escapeHtml(expansionMonthProse(row.month))}</strong>
+                  ${row.partial ? `<span class="is-quiet">${escapeHtml(expansionDayRange(row))}</span>` : ""}
+                  ${row.cumulativeRestated ? `<span class="is-quiet">Meta restated this window</span>` : ""}
+                </td>
+                <td class="is-numeric">${escapeHtml(String(expansionRowDays(row)))}</td>
+                <td class="is-numeric">${escapeHtml(formatCompactNumber(row.monthlyReach))}</td>
+                <td class="is-numeric">${escapeHtml(formatCompactNumber(row.netNewReach))}</td>
+                <td class="is-numeric">${escapeHtml(perDay(row) === null ? "--" : formatCompactNumber(Math.round(perDay(row))))}</td>
+                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.repeatShare)) ? `${Math.round(Number(row.repeatShare) * 100)}%` : "--")}</td>
+                <td class="is-numeric">${escapeHtml(formatDecimal(row.frequency, 1))}</td>
+                <td class="is-numeric">${escapeHtml(formatCurrency(Math.round(Number(row.spend) || 0), currency))}</td>
+                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.costPerThousandNewlyReached))
+                  ? formatCurrency(Math.round(Number(row.costPerThousandNewlyReached)), currency)
+                  : "--")}</td>
+                <td class="is-numeric">${escapeHtml(row.newCustomers == null ? "--" : formatCompactNumber(row.newCustomers))}</td>
+                <td class="is-numeric">${escapeHtml(Number.isFinite(Number(row.costPerNewCustomer))
+                  ? formatCurrency(Math.round(Number(row.costPerNewCustomer)), currency)
+                  : "--")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    </article>
+  `;
+}
+
+// What the measurement itself has done. The campaign set behind this series
+// comes from Meta's current attribution_setting over a rolling window, so it can
+// change under the history; when it does, every completed month is measured
+// again and both figures are recorded here rather than one quietly replacing
+// the other.
+function renderExpansionIntegrity(model, latest) {
+  const restatements = Array.isArray(model.restatements) ? model.restatements.slice(0, 8) : [];
+  const campaigns = Array.isArray(model.campaigns) ? model.campaigns : [];
+
+  return `
+    <article class="card expansion-card">
+      <div class="card-header">
+        <div>
+          <h3>How this is measured</h3>
+          <p class="field-hint">Everything needed to argue with the numbers above.</p>
+        </div>
+      </div>
+
+      <dl class="meta-expansion-method">
+        <div><dt>Anchor</dt><dd>${escapeHtml(String(model.anchor || "--"))} - first-time means first time since this date</dd></div>
+        <div><dt>Campaign set</dt><dd>${escapeHtml(String(model.campaignCount || 0))} campaigns on Meta's own incrementality attribution</dd></div>
+        <div><dt>Markets</dt><dd>${escapeHtml(Array.isArray(model.marketSeries)
+          ? `${model.marketSeries.length} countries with delivery`
+          : "not in this snapshot yet")}</dd></div>
+        <div><dt>Account timezone</dt><dd>${escapeHtml(String(model.timezone || "--"))} - month boundaries are drawn here, not in Copenhagen</dd></div>
+        <div><dt>Last run</dt><dd>${escapeHtml(String(model.graphCalls || 0))} Graph calls; completed months are reused, only the month in progress is re-measured</dd></div>
+        <div><dt>Measured to</dt><dd>${escapeHtml(String(latest.until || "--"))}</dd></div>
+      </dl>
+
+      <h4 class="meta-expansion-subhead">Restatements</h4>
+      ${restatements.length
+        ? `<ul class="meta-expansion-restatements">
+            ${restatements.map((entry) => `
+              <li>
+                <strong>${escapeHtml(expansionMonthProse(entry.month))}</strong>
+                first-time reach moved from ${escapeHtml(formatCompactNumber(entry.from))}
+                to ${escapeHtml(formatCompactNumber(entry.to))}
+                ${Number.isFinite(Number(entry.deltaShare)) ? `(${(Number(entry.deltaShare) * 100).toFixed(1)}%)` : ""}
+                <span class="is-quiet">${escapeHtml(entry.reason || "")}</span>
+              </li>
+            `).join("")}
+          </ul>`
+        : `<p class="expansion-note">No completed month has changed since the previous run.</p>`}
+
+      <h4 class="meta-expansion-subhead">The campaigns behind it</h4>
+      <p class="meta-expansion-campaigns">
+        ${campaigns.slice(0, 20).map((campaign) => `<span>${escapeHtml(campaign.name)}</span>`).join("")}
+      </p>
+
+      <ul class="meta-expansion-caveats">
+        ${(model.notes || []).map((note) => `<li>${escapeHtml(note)}</li>`).join("")}
+      </ul>
+    </article>
+  `;
+}
+
 
 export function renderOverviewSpendSplit(model = null, visible = false) {
   const node = document.getElementById("overview-spend-split");

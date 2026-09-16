@@ -18155,3 +18155,268 @@ body.campaign-studio-review-mode .main-content {
     font-size: 0.66rem;
   }
 }
+
+/* --- Expansion view ---------------------------------------------------
+   The Expansion tab. The KPI and chart blocks reuse the dark .meta-expansion
+   surface the General card already uses, so the two surfaces read as the same
+   feature; the tables around them are ordinary light cards. */
+.expansion-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.expansion-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.expansion-note {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(33, 28, 58, 0.62);
+}
+
+/* Freshness is a correctness affordance, not decoration: this panel reads a
+   nightly snapshot, so a failed cron would otherwise leave old figures standing
+   with nothing on screen to say so. */
+.meta-expansion-freshness {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(204, 214, 255, 0.72);
+}
+
+.meta-expansion-freshness .is-quiet {
+  color: rgba(204, 214, 255, 0.45);
+}
+
+.meta-expansion-freshness.is-stale {
+  color: rgba(255, 206, 128, 0.95);
+}
+
+.meta-expansion-freshness .is-warn {
+  color: rgba(255, 186, 96, 0.95);
+  font-weight: 600;
+}
+
+.meta-expansion-window {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(226, 232, 255, 0.86);
+}
+
+.meta-expansion-kpis.is-wide {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.meta-expansion-badge {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.meta-expansion-badge.is-up {
+  background: rgba(88, 214, 141, 0.18);
+  color: rgba(140, 240, 180, 0.98);
+}
+
+.meta-expansion-badge.is-down {
+  background: rgba(255, 128, 128, 0.16);
+  color: rgba(255, 170, 170, 0.98);
+}
+
+.meta-expansion-badge.is-flat {
+  background: rgba(204, 214, 255, 0.12);
+  color: rgba(204, 214, 255, 0.78);
+}
+
+/* A market with no delivery in the baseline window is new, not infinitely
+   improved. It gets its own label rather than a percentage. */
+.meta-expansion-badge.is-new-market {
+  background: rgba(120, 164, 255, 0.18);
+  color: rgba(176, 202, 255, 0.98);
+}
+
+/* The month in progress covers fewer days than the bars beside it, so it is
+   hatched as well as labelled with its day range. */
+.meta-expansion-bar.is-partial .meta-expansion-column em {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28) 0 3px,
+    rgba(255, 255, 255, 0) 3px 7px
+  );
+}
+
+.meta-expansion-spark {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 26px;
+  min-width: 78px;
+}
+
+.meta-expansion-spark em {
+  display: block;
+  width: 5px;
+  border-radius: 2px;
+  background: rgba(79, 124, 255, 0.72);
+}
+
+.meta-expansion-spark em.is-partial {
+  background: rgba(79, 124, 255, 0.38);
+}
+
+.meta-expansion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.meta-expansion-table th,
+.meta-expansion-table td {
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(33, 28, 58, 0.08);
+  white-space: nowrap;
+}
+
+.meta-expansion-table th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(33, 28, 58, 0.55);
+}
+
+.meta-expansion-table .is-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta-expansion-table td strong {
+  display: block;
+}
+
+.meta-expansion-table .is-quiet {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(33, 28, 58, 0.5);
+}
+
+.meta-expansion-table tr.is-partial td {
+  background: rgba(79, 124, 255, 0.05);
+}
+
+.meta-expansion-table .meta-expansion-badge {
+  display: inline-block;
+  margin: 4px 0 0;
+  background: rgba(33, 28, 58, 0.06);
+  color: rgba(33, 28, 58, 0.72);
+}
+
+.meta-expansion-table .meta-expansion-badge.is-up {
+  background: rgba(24, 150, 90, 0.12);
+  color: rgba(18, 112, 68, 0.98);
+}
+
+.meta-expansion-table .meta-expansion-badge.is-down {
+  background: rgba(198, 60, 60, 0.1);
+  color: rgba(166, 44, 44, 0.98);
+}
+
+.meta-expansion-table .meta-expansion-badge.is-new-market {
+  background: rgba(60, 96, 198, 0.12);
+  color: rgba(46, 78, 166, 0.98);
+}
+
+.meta-expansion-subhead {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(33, 28, 58, 0.55);
+}
+
+.meta-expansion-method {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px 18px;
+  margin: 0;
+}
+
+.meta-expansion-method div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meta-expansion-method dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(33, 28, 58, 0.5);
+}
+
+.meta-expansion-method dd {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(33, 28, 58, 0.85);
+}
+
+.meta-expansion-restatements {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: rgba(33, 28, 58, 0.82);
+}
+
+.meta-expansion-restatements .is-quiet {
+  display: block;
+  font-size: 0.74rem;
+  color: rgba(33, 28, 58, 0.55);
+}
+
+.meta-expansion-campaigns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+
+.meta-expansion-campaigns span {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(33, 28, 58, 0.06);
+  font-size: 0.72rem;
+  color: rgba(33, 28, 58, 0.75);
+}
+
+.meta-expansion-caveats {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: rgba(33, 28, 58, 0.58);
+}
+
+@media (max-width: 720px) {
+  .meta-expansion-method {
+    grid-template-columns: 1fr;
+  }
+}
