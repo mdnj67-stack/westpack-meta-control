@@ -687,3 +687,47 @@ test("delivery Meta could not place is labelled, not passed off as a country", (
   assert.equal(countryLabel("XX"), "Unattributed delivery");
   assert.equal(countryLabel("IT"), "Italy");
 });
+
+test("the ad breakdown is reconciled against the market it claims to explain", async () => {
+  // Meta reports some campaigns at campaign level and attributes almost none of
+  // that spend to their individual ads. Measured on the live account: the three
+  // new market campaigns spent 53.473 kr. in September and the ad-level read
+  // accounted for 1.441 of it, so the drill-down was blind in exactly the
+  // markets being expanded into - and said nothing about it.
+  calls.length = 0;
+  const base = buildResponder();
+  responder = (params, pathname) => {
+    if (params.level === "ad") {
+      return {
+        data: [{
+          ad_id: "a1",
+          ad_name: "AD01",
+          adset_name: "Set",
+          campaign_name: "Conv 1",
+          country: "IT",
+          // A fraction of what the market itself reports for the same window.
+          spend: "12",
+          impressions: "900",
+          reach: "700",
+          frequency: "1.3",
+          actions: [{ action_type: "omni_purchase", value: "1" }],
+          action_values: [{ action_type: "omni_purchase", value: "400" }]
+        }]
+      };
+    }
+    return base(params, pathname);
+  };
+
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  const italy = snapshot.adBreakdown.reconciliation.IT;
+  const germany = snapshot.adBreakdown.reconciliation.DE;
+
+  assert.equal(italy.adSpend, 12);
+  assert.ok(italy.marketSpend > italy.adSpend, "the market spent more than its ads account for");
+  assert.equal(italy.unaccounted, Math.round((italy.marketSpend - 12) * 100) / 100);
+  assert.equal(italy.reconciles, false, "a gap this size must not pass as reconciled");
+
+  // A market with no ad rows at all and real spend does not reconcile either.
+  assert.equal(germany.adSpend, 0);
+  assert.equal(germany.reconciles, false);
+});

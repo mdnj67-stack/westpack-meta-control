@@ -60,6 +60,12 @@ const MARKET_OVERLAP_NOTICE_SHARE = 0.05;
 // below it the ratio is reported as unmeasurable rather than as a triumph.
 const MINIMUM_ROAS_SPEND = 1;
 
+// A breakdown may never quietly stand in for the total it breaks down. The
+// ad-level read is reconciled against the market figure it claims to explain,
+// and anything further apart than this is named on screen with the amount it
+// cannot account for. Same tolerance the ad-set reconciliation uses.
+const AD_RECONCILIATION_TOLERANCE = 0.01;
+
 function roasFrom(revenue, spend) {
   return number(spend) >= MINIMUM_ROAS_SPEND ? round(number(revenue) / number(spend), 3) : null;
 }
@@ -987,12 +993,37 @@ async function syncExpansionReach({
     const thumbnails = adRows.length
       ? await readAdThumbnails(reader, adRows.map((row) => row.adId))
       : {};
+    // Meta reports spend for some campaigns at campaign level and attributes
+    // almost none of it to their individual ads. On this account the three new
+    // market campaigns spent 53.473 kr. in September and the ad-level read
+    // accounts for 1.441 of it, so the drill-down is blind in exactly the
+    // markets being expanded into. Each country therefore carries what its ads
+    // account for against what the market itself reports.
+    const reconciliation = {};
+    for (const market of marketSeries) {
+      const windowSpend = number(market.windows?.quarter?.spend);
+      const adSpend = adRows
+        .filter((row) => row.country === market.code)
+        .reduce((total, row) => total + number(row.spend), 0);
+      const unaccounted = round(windowSpend - adSpend, 2);
+      reconciliation[market.code] = {
+        marketSpend: round(windowSpend, 2),
+        adSpend: round(adSpend, 2),
+        unaccounted,
+        share: windowSpend > 0 ? round(unaccounted / windowSpend, 4) : null,
+        reconciles: windowSpend > 0
+          ? Math.abs(unaccounted) / windowSpend <= AD_RECONCILIATION_TOLERANCE
+          : adSpend === 0
+      };
+    }
+
     adBreakdown = {
       since: adWindow.since,
       until: adWindow.until,
       months: adWindowRows.map((row) => row.month),
       rows: adRows,
       thumbnails,
+      reconciliation,
       adCount: new Set(adRows.map((row) => row.adId)).size,
       countryCount: new Set(adRows.map((row) => row.country)).size
     };

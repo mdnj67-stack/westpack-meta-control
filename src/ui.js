@@ -1293,8 +1293,18 @@ function renderExpansionAdPanel(model, code, label, currency) {
   }
 
   const rows = expansionAdRows(model, code);
+
+  // A breakdown may never quietly stand in for the total it breaks down. Meta
+  // reports some campaigns at campaign level and attributes almost none of that
+  // spend to their individual ads, so the gap is stated in the amount it is,
+  // above the table rather than under it.
+  const check = breakdown.reconciliation?.[code] || null;
+  const gap = check && !check.reconciles
+    ? `<p class="expansion-ads-gap">${escapeHtml(`Meta attributes ${formatCurrency(Math.round(check.adSpend), currency)} of this market's ${formatCurrency(Math.round(check.marketSpend), currency)} to individual ads. The remaining ${formatCurrency(Math.round(check.unaccounted), currency)} is reported at campaign level only, so the ads below cannot explain it.`)}</p>`
+    : "";
+
   if (!rows.length) {
-    return `<div class="expansion-ads"><p class="expansion-note">No ad delivered in ${escapeHtml(label)} between ${escapeHtml(breakdown.since)} and ${escapeHtml(breakdown.until)}.</p></div>`;
+    return `<div class="expansion-ads">${gap}<p class="expansion-note">No ad delivered in ${escapeHtml(label)} between ${escapeHtml(breakdown.since)} and ${escapeHtml(breakdown.until)}.</p></div>`;
   }
 
   const sorted = rows.slice().sort((left, right) => {
@@ -1315,6 +1325,7 @@ function renderExpansionAdPanel(model, code, label, currency) {
 
   return `
     <div class="expansion-ads">
+      ${gap}
       <p class="expansion-ads-head">
         <strong>${escapeHtml(label)}</strong>
         <span>${escapeHtml(`${sorted.length} ad${sorted.length === 1 ? "" : "s"} delivered, ${breakdown.since} to ${breakdown.until}`)}</span>
