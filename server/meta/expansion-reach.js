@@ -264,7 +264,10 @@ async function readMonthlyCountryRows(reader, window, campaignIds, actionTypes) 
     breakdowns: "country",
     filtering: campaignFilter(campaignIds),
     limit: "500",
-    fields: "date_start,date_stop,country,reach,impressions,frequency,spend,actions"
+    // The breakdown key comes back on its own. Asking for `country` in fields
+    // is rejected outright by Graph v25 - the field list describes metrics, and
+    // the breakdown describes how they are cut.
+    fields: "date_start,date_stop,reach,impressions,frequency,spend,actions"
   }, "monthly reach by country", 4);
 
   const byMonth = {};
@@ -303,7 +306,7 @@ async function readCumulativeCountries(reader, anchor, until, campaignIds, label
     breakdowns: "country",
     filtering: campaignFilter(campaignIds),
     limit: "500",
-    fields: "country,reach,impressions,spend"
+    fields: "reach,impressions,spend"
   }, label || `cumulative by country to ${until}`, 3);
 
   const byCountry = {};

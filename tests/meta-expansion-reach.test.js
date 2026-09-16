@@ -481,3 +481,23 @@ test("restatements from earlier runs are carried forward", () => {
   assert.equal(log.length, 1);
   assert.equal(log[0].month, "2026-05");
 });
+
+test("a breakdown key is never asked for in the fields param", async () => {
+  // Graph v25 rejects `country` in `fields` outright when it is also the
+  // breakdown: the field list describes metrics, the breakdown describes how
+  // they are cut. Asking for both failed the whole sync against the live
+  // account, and it failed on the first country call, after the calls before it
+  // had already been spent.
+  reset();
+  await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const breakdownCalls = calls.filter((call) => call.params.breakdowns);
+  assert.ok(breakdownCalls.length > 0, "the market split must actually ask for a breakdown");
+  for (const call of breakdownCalls) {
+    const fields = String(call.params.fields || "").split(",").map((field) => field.trim());
+    assert.ok(
+      !fields.includes(call.params.breakdowns),
+      `${call.params.breakdowns} must not appear in fields alongside breakdowns=${call.params.breakdowns}`
+    );
+  }
+});
