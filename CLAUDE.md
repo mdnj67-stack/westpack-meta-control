@@ -586,6 +586,103 @@ worth of quota spent per failure, for nothing. Failing fast is also what lets th
 stale-cache fallback serve the last good snapshot. Do not fold rate limits back into
 `isTransientMetaError`'s retry path.
 
+## The design system owns how this product looks
+
+Reworked 2026-09-18, when the app stopped being one person's tool and started being rolled
+out across the company. The standing rule for anything visual from here on: **there is one
+source of truth, and it is `design-system.css`.**
+
+### How the two stylesheets fit together
+
+- `styles.css` (18k lines) is wrapped in `@layer wp-legacy { ... }`. `design-system.css` is
+  **unlayered**, so every property it declares beats the legacy sheet regardless of how
+  specific the legacy selector is. That is the whole mechanism: it is what let one palette
+  and one set of primitives take over the app without rewriting the layout work.
+  `index.html` must keep loading them in that order. `tests/design-system.test.js` fails if
+  either half comes apart.
+- Consequence to remember: an `!important` inside the layer still beats an unlayered
+  `!important`, because layer order reverses for important declarations. There are about
+  twenty of them and none currently conflicts, but that is where to look if an override
+  mysteriously does not apply.
+- The legacy `:root` block no longer holds colours. `--accent`, `--line`, `--surface`,
+  `--muted` and the rest are **aliases** onto `--wp-*` tokens, so the hundreds of legacy
+  rules that read them follow the system automatically.
+- New styling goes in `design-system.css`. `styles.css` is edited only to delete something
+  the system now owns, or to fix a layout rule with no home in the system.
+
+### What the system is
+
+Tokens (colour, type, space, radius, elevation, motion), then `.wp-*` components: button,
+icon button, input/select/textarea, field, check, badge, status, delta, card, metric strip,
+data table, pagination, toolbar, search, filter chip, tabs, segmented control, empty/error/
+loading/partial states, alert, modal, drawer, menu, tooltip, chart container, and the app
+shell. `design-system.html` renders all of it and loads **only** `design-system.css` — if
+that page needs a rule from `styles.css`, the rule belongs in the system and has not moved
+yet.
+
+Decisions worth not re-litigating:
+
+- **Brand is `#34453F`, used as an accent, not a theme.** It marks the primary action, the
+  current page and the focus ring. The interface is otherwise neutral grey. The old cream
+  and crimson identity is gone from both stylesheets and the test asserts it stays gone.
+- **One typeface, IBM Plex Sans.** Space Grotesk was dropped; headings earn their place
+  through size and weight. Numerals are tabular everywhere.
+- **Radius collapses to 4/6/8/12px plus pills.** It was 26 distinct values.
+- **Depth comes from borders and surface contrast**, not shadows. Shadows are only for
+  things that genuinely float: menus, modals, drawers.
+- **Metrics share one bordered strip divided by hairlines**, not a row of floating cards.
+  `.stats-grid` / `.stat-card` are retargeted onto that.
+- **Three dark panels, all deep green**: new customers, budget split, expansion reach. That
+  is a hierarchy decision (new customers is the KPI the department is measured on), and
+  `tests/meta-panel-contrast.test.js` enforces that a light-text panel keeps a dark
+  background. Nothing else in the product is dark.
+- **A previous "Premium dashboard pass"** — about 600 lines of id-scoped overrides under
+  `#meta-product-panel` / `#dashboard-panel`, plus a 420px radial wash and a rainbow rule
+  across the header — was deleted. Do not reintroduce a second design pass scoped to one
+  screen; fix the component instead.
+
+### Navigation: both platforms, always visible
+
+The old header had a workspace toggle, so half the product (Klaviyo, or Meta) was invisible
+unless you already knew it was there. The rail now lists **Meta ads** (Performance, Create &
+manage ads) and **Klaviyo email** (Overview, Duplicate & translate, Template AI, Campaign
+Studio) at the same time.
+
+- Existing handlers are untouched. Each nav item carries `data-nav-workspace`, and a
+  delegated listener registered **before** the per-button handlers sets the workspace first;
+  otherwise `setWorkspace` re-applies the previously active Klaviyo view and undoes the click.
+- Only the group matching `body[data-workspace]` may render as current, enforced in CSS so
+  it cannot drift.
+- **Template AI was orphaned**: `campaign_ai` was a valid view with no way to reach it. It is
+  in the rail now.
+- `syncKlaviyoNavigation` was missing `campaign_brain` from its supported list, so every
+  render of the Klaviyo workspace reset the state to the overview while Campaign Studio was
+  still on screen. Fixed in `src/klaviyo-dashboard-domain.js`.
+
+### Page structure
+
+Page header (title, one line of context, page actions) → toolbar (filters, one control
+height) → content. `switchTab` writes both the title and the description from
+`META_VIEW_COPY` in `src/ui.js`, and hides the dashboard toolbar on the ads screen, because a
+date range that scopes nothing is worse than no filter. `.topbar-sub` was `display: none` in
+the legacy sheet, so every screen had lost its one sentence of context; it is visible again.
+
+The `#openai-status-pill` used to be the literal string "OpenAI ready", set in markup and
+never updated — it claimed a working connection whatever the truth was. `renderSettings` now
+writes the reported status into it.
+
+### Verifying visual work
+
+Log in for real. `startApp()` only runs once authenticated, so removing `auth-locked` from
+the body gives you inert markup and every screenshot is a lie. Start the server with
+`AUTH_PASSWORD` set in the environment (it takes precedence over the config file) and log in
+through the form.
+
+`tmp/playwright-runner/ds-review.js` screenshots every screen and viewport from **one** page
+load — reloading per screenshot spends the marketing department's Meta quota, and this
+session hit the rate limit doing exactly that. Re-read the rate-limit warning in "What the
+dashboard is allowed to claim" before running anything against live.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

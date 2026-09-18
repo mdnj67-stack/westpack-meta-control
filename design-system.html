@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design system - Westpack Marketing OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Deliberately loads only design-system.css. This page is the system on its own:
+       if something here needs a rule from styles.css to look right, that rule belongs
+       in the system and has not been moved yet. -->
+  <link rel="stylesheet" href="design-system.css?v=20260918-ds1">
+  <style>
+    /* Page furniture for this reference only. Nothing here is part of the system. */
+    body { background: var(--wp-bg); }
+    .ref { max-width: 1080px; margin: 0 auto; padding: var(--wp-space-10) var(--wp-space-8) var(--wp-space-16); }
+    .ref > header { margin-bottom: var(--wp-space-10); padding-bottom: var(--wp-space-6); border-bottom: 1px solid var(--wp-border); }
+    .ref h1 { font-size: var(--wp-text-2xl); margin-bottom: var(--wp-space-2); }
+    .ref > header p { max-width: 70ch; font-size: var(--wp-text-md); color: var(--wp-text-muted); }
+    .ref section { margin-bottom: var(--wp-space-12); scroll-margin-top: var(--wp-space-6); }
+    .ref section > h2 { font-size: var(--wp-text-xl); padding-bottom: var(--wp-space-2); border-bottom: 1px solid var(--wp-border-subtle); margin-bottom: var(--wp-space-4); }
+    .ref section > p { max-width: 74ch; font-size: var(--wp-text-sm); color: var(--wp-text-muted); margin-bottom: var(--wp-space-5); }
+    .ref h3 { font-size: var(--wp-text-base); margin: var(--wp-space-6) 0 var(--wp-space-3); }
+    .demo { display: flex; align-items: flex-start; gap: var(--wp-space-3); flex-wrap: wrap; padding: var(--wp-space-5); border: 1px solid var(--wp-border); border-radius: var(--wp-radius-lg); background: var(--wp-surface); }
+    .demo.is-stack { display: grid; gap: var(--wp-space-4); }
+    .demo.is-plain { padding: 0; border: 0; background: none; }
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--wp-space-3); }
+    .swatch { display: grid; gap: 2px; }
+    .swatch i { display: block; height: 44px; border: 1px solid var(--wp-border); border-radius: var(--wp-radius-md); }
+    .swatch code { font-size: var(--wp-text-2xs); color: var(--wp-text-muted); }
+    .swatch strong { font-size: var(--wp-text-xs); font-weight: var(--wp-weight-medium); }
+    .scale-row { display: flex; align-items: baseline; gap: var(--wp-space-4); padding: var(--wp-space-2) 0; border-bottom: 1px solid var(--wp-border-subtle); }
+    .scale-row code { flex: 0 0 150px; font-size: var(--wp-text-2xs); color: var(--wp-text-muted); }
+    .space-row { display: flex; align-items: center; gap: var(--wp-space-4); padding: 5px 0; }
+    .space-row code { flex: 0 0 150px; font-size: var(--wp-text-2xs); color: var(--wp-text-muted); }
+    .space-row i { display: block; height: 10px; background: var(--wp-brand-surface-strong); border-radius: 2px; }
+    .ref-toc { display: flex; gap: var(--wp-space-4); flex-wrap: wrap; font-size: var(--wp-text-sm); margin-top: var(--wp-space-4); }
+    .note { max-width: 74ch; font-size: var(--wp-text-sm); color: var(--wp-text-muted); margin-top: var(--wp-space-3); }
+  </style>
+</head>
+<body>
+  <main class="ref">
+    <header>
+      <p class="wp-eyebrow">Westpack Marketing OS</p>
+      <h1>Design system</h1>
+      <p>
+        Every rule on this page comes from <code>design-system.css</code>, which is the only
+        place the look of this product is defined. The page loads that file and nothing
+        else, so if something here renders wrongly, the system is genuinely missing it.
+      </p>
+      <p class="note">
+        Working rule: reach for a pattern that already exists before writing a new one. Eight
+        patterns used everywhere beat forty used once each, and consistency is worth more here
+        than novelty - this is a tool people use every day, not a thing they look at once.
+      </p>
+      <nav class="ref-toc">
+        <a href="#colour">Colour</a>
+        <a href="#type">Typography</a>
+        <a href="#space">Space &amp; radius</a>
+        <a href="#buttons">Buttons</a>
+        <a href="#forms">Forms</a>
+        <a href="#badges">Badges &amp; status</a>
+        <a href="#metrics">Metrics</a>
+        <a href="#tables">Tables</a>
+        <a href="#toolbar">Toolbar &amp; filters</a>
+        <a href="#tabs">Tabs</a>
+        <a href="#states">States</a>
+        <a href="#alerts">Alerts</a>
+      </nav>
+    </header>
+
+    <section id="colour">
+      <h2>Colour</h2>
+      <p>
+        The interface is neutral. Westpack green marks the primary action, the current page
+        and the focus ring; it is not a background. Status colours carry meaning, and every
+        one of them is paired with a word, because colour alone is not a signal everybody can
+        read.
+      </p>
+
+      <h3>Brand</h3>
+      <div class="swatches">
+        <div class="swatch"><i style="background: var(--wp-brand)"></i><strong>Brand</strong><code>--wp-brand</code></div>
+        <div class="swatch"><i style="background: var(--wp-brand-hover)"></i><strong>Hover</strong><code>--wp-brand-hover</code></div>
+        <div class="swatch"><i style="background: var(--wp-brand-strong)"></i><strong>Pressed</strong><code>--wp-brand-strong</code></div>
+        <div class="swatch"><i style="background: var(--wp-brand-surface)"></i><strong>Surface</strong><code>--wp-brand-surface</code></div>
+        <div class="swatch"><i style="background: var(--wp-surface-inverse)"></i><strong>Inverse surface</strong><code>--wp-surface-inverse</code></div>
+      </div>
+
+      <h3>Neutrals</h3>
+      <div class="swatches">
+        <div class="swatch"><i style="background: var(--wp-grey-0)"></i><strong>0</strong><code>--wp-grey-0</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-50)"></i><strong>50 - page</strong><code>--wp-bg</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-100)"></i><strong>100 - sunken</strong><code>--wp-surface-sunken</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-200)"></i><strong>200 - border</strong><code>--wp-border</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-300)"></i><strong>300</strong><code>--wp-border-strong</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-500)"></i><strong>500</strong><code>--wp-text-subtle</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-600)"></i><strong>600</strong><code>--wp-text-muted</code></div>
+        <div class="swatch"><i style="background: var(--wp-grey-900)"></i><strong>900 - text</strong><code>--wp-text</code></div>
+      </div>
+
+      <h3>Status</h3>
+      <div class="swatches">
+        <div class="swatch"><i style="background: var(--wp-success)"></i><strong>Success</strong><code>--wp-success</code></div>
+        <div class="swatch"><i style="background: var(--wp-warning)"></i><strong>Warning</strong><code>--wp-warning</code></div>
+        <div class="swatch"><i style="background: var(--wp-danger)"></i><strong>Danger</strong><code>--wp-danger</code></div>
+        <div class="swatch"><i style="background: var(--wp-info)"></i><strong>Info</strong><code>--wp-info</code></div>
+      </div>
+
+      <h3>Objective tones</h3>
+      <p>
+        These identify a campaign objective, and they are the one place in the product where
+        colour is doing real work: the reader has to carry a hue from a stacked bar to the row
+        beneath it. They live in <code>styles.css</code> as <code>--tone-*-rgb</code> channel
+        triples so one token serves a solid fill and a translucent one, and a test fails if a
+        panel paints an objective with anything but its own token.
+      </p>
+      <div class="swatches">
+        <div class="swatch"><i style="background: rgb(176 86 60)"></i><strong>Awareness</strong><code>--tone-awareness-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(47 107 79)"></i><strong>Conversion</strong><code>--tone-conversion-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(154 116 32)"></i><strong>Leads</strong><code>--tone-leads-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(47 111 143)"></i><strong>Traffic</strong><code>--tone-traffic-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(111 92 150)"></i><strong>Engagement</strong><code>--tone-engagement-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(111 122 82)"></i><strong>App promotion</strong><code>--tone-app-promotion-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(138 138 134)"></i><strong>Unclassified</strong><code>--tone-unclassified-rgb</code></div>
+        <div class="swatch"><i style="background: rgb(61 90 138)"></i><strong>Incremental</strong><code>--tone-incremental-rgb</code></div>
+      </div>
+    </section>
+
+    <section id="type">
+      <h2>Typography</h2>
+      <p>
+        One family, IBM Plex Sans, at every size. The scale is built for density: the page
+        title is 22px and the body is 14px, because this is a tool full of figures rather than
+        a page to be read once. Numerals are tabular everywhere, so a column of figures lines
+        up without anyone asking it to.
+      </p>
+      <div class="demo is-stack">
+        <div class="scale-row"><code>--wp-text-2xl / page title</code><span style="font-size: var(--wp-text-2xl); font-weight: var(--wp-weight-semibold); letter-spacing: var(--wp-tracking-tight)">Brand awareness</span></div>
+        <div class="scale-row"><code>--wp-text-xl / section</code><span style="font-size: var(--wp-text-xl); font-weight: var(--wp-weight-semibold)">Objective spend split</span></div>
+        <div class="scale-row"><code>--wp-text-lg / subsection</code><span style="font-size: var(--wp-text-lg); font-weight: var(--wp-weight-semibold)">New customers from Meta</span></div>
+        <div class="scale-row"><code>--wp-text-base / body</code><span style="font-size: var(--wp-text-base)">Spend is the real amount spent in the selected range.</span></div>
+        <div class="scale-row"><code>--wp-text-sm / label, cell</code><span style="font-size: var(--wp-text-sm)">Cost per new customer</span></div>
+        <div class="scale-row"><code>--wp-text-xs / helper</code><span style="font-size: var(--wp-text-xs); color: var(--wp-text-muted)">Month to date against the same days of last month</span></div>
+        <div class="scale-row"><code>--wp-text-2xs / eyebrow</code><span class="wp-eyebrow" style="margin: 0">Conversion</span></div>
+        <div class="scale-row"><code>--wp-text-3xl / metric</code><span style="font-size: var(--wp-text-3xl); font-weight: var(--wp-weight-semibold); letter-spacing: -0.02em">128.402</span></div>
+        <div class="scale-row"><code>--wp-text-4xl / lead metric</code><span style="font-size: var(--wp-text-4xl); font-weight: var(--wp-weight-semibold); letter-spacing: -0.02em">1.002.781</span></div>
+      </div>
+    </section>
+
+    <section id="space">
+      <h2>Space and radius</h2>
+      <p>
+        Spacing is on a 4px base. It is how the interface says what belongs together, so it is
+        worth taking from the scale rather than picking a number that looks right on one
+        screen. Radius is small and consistent: above 12px an interface starts to read as a
+        set of bubbles rather than a set of surfaces.
+      </p>
+      <div class="demo is-stack">
+        <div class="space-row"><code>--wp-space-1 · 4px</code><i style="width: 4px"></i></div>
+        <div class="space-row"><code>--wp-space-2 · 8px</code><i style="width: 8px"></i></div>
+        <div class="space-row"><code>--wp-space-3 · 12px</code><i style="width: 12px"></i></div>
+        <div class="space-row"><code>--wp-space-4 · 16px</code><i style="width: 16px"></i></div>
+        <div class="space-row"><code>--wp-space-5 · 20px · card padding</code><i style="width: 20px"></i></div>
+        <div class="space-row"><code>--wp-space-6 · 24px</code><i style="width: 24px"></i></div>
+        <div class="space-row"><code>--wp-space-8 · 32px · page gutter</code><i style="width: 32px"></i></div>
+        <div class="space-row"><code>--wp-space-12 · 48px</code><i style="width: 48px"></i></div>
+      </div>
+      <div class="demo" style="margin-top: var(--wp-space-4)">
+        <div class="swatch"><i style="border-radius: var(--wp-radius-sm); background: var(--wp-surface-sunken)"></i><strong>sm · 4px</strong><code>badges, chips</code></div>
+        <div class="swatch"><i style="border-radius: var(--wp-radius-md); background: var(--wp-surface-sunken)"></i><strong>md · 6px</strong><code>controls</code></div>
+        <div class="swatch"><i style="border-radius: var(--wp-radius-lg); background: var(--wp-surface-sunken)"></i><strong>lg · 8px</strong><code>cards, tables</code></div>
+        <div class="swatch"><i style="border-radius: var(--wp-radius-xl); background: var(--wp-surface-sunken)"></i><strong>xl · 12px</strong><code>modals</code></div>
+      </div>
+    </section>
+
+    <section id="buttons">
+      <h2>Buttons</h2>
+      <p>
+        Four levels. Within any one context there is exactly one primary action; everything
+        else is secondary, ghost or danger. A screen where every button is loud is a screen
+        where none of them is, which is what the old red-gradient primary and cream-gradient
+        secondary amounted to.
+      </p>
+      <div class="demo">
+        <button class="wp-button is-primary">Create draft</button>
+        <button class="wp-button">Refresh data</button>
+        <button class="wp-button is-ghost">Cancel</button>
+        <button class="wp-button is-danger">Delete campaign</button>
+        <button class="wp-button" disabled>Unavailable</button>
+        <button class="wp-button is-primary is-loading">Pushing</button>
+      </div>
+      <div class="demo" style="margin-top: var(--wp-space-3)">
+        <button class="wp-button is-sm">Small</button>
+        <button class="wp-button">Default</button>
+        <button class="wp-button is-lg">Large</button>
+        <button class="wp-icon-button" aria-label="More actions">&#8943;</button>
+      </div>
+      <p class="note">
+        A destructive action never looks like the default one, and anything irreversible asks
+        first. Hover changes colour rather than moving the control: a button that lifts on
+        hover moves the row under the reader&apos;s cursor.
+      </p>
+    </section>
+
+    <section id="forms">
+      <h2>Forms</h2>
+      <p>
+        Label above, control, helper or error beneath. Every control is 34px so a row of them
+        shares one baseline without anyone nudging it. Labels are sentence case everywhere -
+        they used to be uppercase on the ads screens and sentence case on the Klaviyo ones,
+        which made one control look like two.
+      </p>
+      <div class="demo is-stack">
+        <div class="wp-form-grid">
+          <label class="wp-field">
+            <span class="wp-label">Campaign name</span>
+            <input class="wp-input" type="text" value="Conv - 04 - EU - Standard">
+          </label>
+          <label class="wp-field">
+            <span class="wp-label">Objective</span>
+            <select class="wp-select">
+              <option>Conversion</option>
+              <option>Brand awareness</option>
+              <option>Leads</option>
+            </select>
+          </label>
+          <label class="wp-field">
+            <span class="wp-label">Monthly budget <span class="wp-required">*</span></span>
+            <input class="wp-input" type="text" value="200000">
+            <span class="wp-help">Always a 30-day figure, the way the department budgets.</span>
+          </label>
+          <label class="wp-field">
+            <span class="wp-label">Market</span>
+            <input class="wp-input is-invalid" type="text" value="">
+            <span class="wp-error">Choose at least one market.</span>
+          </label>
+        </div>
+        <label class="wp-field">
+          <span class="wp-label">Operator note</span>
+          <textarea class="wp-textarea" rows="3">No discount angle. Show the numbers and the business case.</textarea>
+        </label>
+        <div class="wp-button-group">
+          <label class="wp-check"><input type="checkbox" checked> Create paused</label>
+          <label class="wp-check"><input type="checkbox"> Copy the creative</label>
+        </div>
+        <div class="wp-form-actions">
+          <button class="wp-button is-primary">Save</button>
+          <button class="wp-button is-ghost">Discard</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="badges">
+      <h2>Badges and status</h2>
+      <p>
+        A badge carries a word. Colour supports it and never replaces it, so a reader who
+        cannot tell the green from the amber still reads &ldquo;Active&rdquo; and
+        &ldquo;Paused&rdquo;. A change badge carries an arrow as well as a tone, and it names
+        the period it was measured over, because two badges on one screen can cover different
+        windows.
+      </p>
+      <div class="demo">
+        <span class="wp-badge">Draft</span>
+        <span class="wp-badge is-success">Active</span>
+        <span class="wp-badge is-warning">Paused</span>
+        <span class="wp-badge is-danger">Rejected</span>
+        <span class="wp-badge is-info">Incremental</span>
+        <span class="wp-badge is-brand">Ready for review</span>
+      </div>
+      <div class="demo" style="margin-top: var(--wp-space-3)">
+        <span class="wp-status is-success">Delivering</span>
+        <span class="wp-status is-warning">In learning</span>
+        <span class="wp-status is-danger">Not delivering</span>
+        <span class="wp-status">Unknown</span>
+      </div>
+      <div class="demo" style="margin-top: var(--wp-space-3)">
+        <span class="wp-delta is-positive">&#8593; 12,4%</span>
+        <span class="wp-delta is-negative">&#8595; 3,1%</span>
+        <span class="wp-delta is-neutral">&#8594; flat</span>
+        <span class="wp-metric-caption">vs the same days of last month</span>
+      </div>
+    </section>
+
+    <section id="metrics">
+      <h2>Metrics</h2>
+      <p>
+        The number is the message; the label above and the comparison below are set smaller so
+        the eye lands on the figure. Metrics that belong together share one bordered strip
+        divided by hairlines rather than sitting in a row of floating cards - shared edges
+        make figures easier to compare, and stop a page of eight numbers reading as eight
+        competing objects.
+      </p>
+      <div class="wp-metrics">
+        <div class="wp-metric is-lead">
+          <span class="wp-metric-label">New customers</span>
+          <span class="wp-metric-value">1.284</span>
+          <span class="wp-metric-foot"><span class="wp-delta is-positive">&#8593; 12,4%</span></span>
+          <span class="wp-metric-caption">1-18 sep vs 1-18 aug</span>
+        </div>
+        <div class="wp-metric">
+          <span class="wp-metric-label">Cost per new customer</span>
+          <span class="wp-metric-value">186 kr.</span>
+          <span class="wp-metric-foot"><span class="wp-delta is-positive">&#8595; 8,2%</span></span>
+          <span class="wp-metric-caption">1-18 sep vs 1-18 aug</span>
+        </div>
+        <div class="wp-metric">
+          <span class="wp-metric-label">Spend</span>
+          <span class="wp-metric-value">238.904 kr.</span>
+          <span class="wp-metric-foot"><span class="wp-delta is-neutral">&#8594; 0,4%</span></span>
+          <span class="wp-metric-caption">last 30 days</span>
+        </div>
+        <div class="wp-metric">
+          <span class="wp-metric-label">ROAS</span>
+          <span class="wp-metric-value">3,12</span>
+          <span class="wp-metric-foot"><span class="wp-delta is-negative">&#8595; 5,8%</span></span>
+          <span class="wp-metric-caption">last 30 days</span>
+        </div>
+      </div>
+      <p class="note">
+        Where there is nothing honest to compare against, there is no badge. A
+        &ldquo;0,0% flat&rdquo; on the first of the month asserts that nothing changed, which
+        is a different claim from saying nothing.
+      </p>
+    </section>
+
+    <section id="tables">
+      <h2>Tables</h2>
+      <p>
+        The most important component in the product. Rows are compact, separators are
+        hairlines rather than zebra stripes, headers stay put when the body scrolls, and every
+        figure is right-aligned with tabular numerals so two rows can be compared by eye.
+      </p>
+      <div class="wp-table-wrap">
+        <table class="wp-table">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Status</th>
+              <th class="is-numeric">Spend</th>
+              <th class="is-numeric">New customers</th>
+              <th class="is-numeric">Cost / new</th>
+              <th class="is-numeric" aria-sort="descending">ROAS</th>
+              <th class="is-actions">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Conv - 01 - DE - Inkremental</td>
+              <td><span class="wp-status is-success">Delivering</span></td>
+              <td class="is-numeric">84.210 kr.</td>
+              <td class="is-numeric">412</td>
+              <td class="is-numeric">204 kr.</td>
+              <td class="is-numeric">4,08</td>
+              <td class="is-actions"><button class="wp-icon-button is-sm" aria-label="Actions for Conv - 01 - DE">&#8943;</button></td>
+            </tr>
+            <tr class="is-selected">
+              <td>Conv - 02 - FR - Inkremental</td>
+              <td><span class="wp-status is-success">Delivering</span></td>
+              <td class="is-numeric">61.880 kr.</td>
+              <td class="is-numeric">308</td>
+              <td class="is-numeric">201 kr.</td>
+              <td class="is-numeric">3,74</td>
+              <td class="is-actions"><button class="wp-icon-button is-sm" aria-label="Actions for Conv - 02 - FR">&#8943;</button></td>
+            </tr>
+            <tr>
+              <td>Conv - 03 - IT - Inkremental</td>
+              <td><span class="wp-status is-warning">In learning</span></td>
+              <td class="is-numeric">54.902 kr.</td>
+              <td class="is-numeric">0</td>
+              <td class="is-numeric">&ndash;</td>
+              <td class="is-numeric">0,00</td>
+              <td class="is-actions"><button class="wp-icon-button is-sm" aria-label="Actions for Conv - 03 - IT">&#8943;</button></td>
+            </tr>
+            <tr>
+              <td>Conv - 04 - EU - Standard</td>
+              <td><span class="wp-status is-danger">Not delivering</span></td>
+              <td class="is-numeric">37.912 kr.</td>
+              <td class="is-numeric">96</td>
+              <td class="is-numeric">395 kr.</td>
+              <td class="is-numeric">1,82</td>
+              <td class="is-actions"><button class="wp-icon-button is-sm" aria-label="Actions for Conv - 04 - EU">&#8943;</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="wp-pagination">
+          <span>4 of 17 campaigns</span>
+          <span class="wp-button-group">
+            <button class="wp-button is-sm" disabled>Previous</button>
+            <button class="wp-button is-sm">Next</button>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="toolbar">
+      <h2>Toolbar and filters</h2>
+      <p>
+        One toolbar for the whole product: filters on the left, actions on the right,
+        everything on the same control height. What is filtered has to be visible without
+        opening anything, and there is always a way back to the default.
+      </p>
+      <div class="wp-toolbar">
+        <div class="wp-toolbar-group">
+          <span class="wp-toolbar-label">Period</span>
+          <select class="wp-select" style="width: auto; min-width: 150px">
+            <option>Last 30 days</option>
+            <option>Last 7 days</option>
+            <option>This month</option>
+          </select>
+          <span class="wp-toolbar-divider"></span>
+          <label class="wp-search">
+            <input class="wp-input" type="search" placeholder="Search campaigns">
+          </label>
+          <span class="wp-filter-chip">Conversion <button type="button" aria-label="Remove the conversion filter">&times;</button></span>
+          <span class="wp-filter-chip">Delivering <button type="button" aria-label="Remove the delivering filter">&times;</button></span>
+          <button class="wp-button is-ghost is-sm">Reset</button>
+        </div>
+        <div class="wp-toolbar-group is-end">
+          <button class="wp-button is-sm">Export</button>
+          <button class="wp-button is-primary is-sm">Refresh</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tabs">
+      <h2>Tabs</h2>
+      <p>
+        Underline tabs switch between views of the same thing. A segmented control chooses one
+        option from a small fixed set. They do different jobs and never appear on the same
+        screen for the same decision.
+      </p>
+      <div class="demo is-plain is-stack">
+        <div class="wp-tabs">
+          <button class="wp-tab active">General</button>
+          <button class="wp-tab">Brand awareness</button>
+          <button class="wp-tab">Leads</button>
+          <button class="wp-tab">Conversion</button>
+          <button class="wp-tab">Expansion</button>
+        </div>
+        <div class="wp-segment">
+          <button class="wp-segment-item active">Month</button>
+          <button class="wp-segment-item">Quarter</button>
+          <button class="wp-segment-item">Year</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="states">
+      <h2>States</h2>
+      <p>
+        Nothing in this product is allowed to render as a blank area or a raw technical
+        message. Each state says what happened and, where the reader can do something about
+        it, what that is. A missing number is acceptable; a wrong one is not.
+      </p>
+      <div class="demo is-stack is-plain">
+        <div class="wp-state">
+          <p class="wp-state-title">No campaigns in this range</p>
+          <p class="wp-state-body">Nothing in the conversion lens delivered between 1 and 18 September. Widen the period, or check another lens.</p>
+          <div class="wp-state-actions"><button class="wp-button is-sm">Switch to last 30 days</button></div>
+        </div>
+
+        <div class="wp-state is-error">
+          <p class="wp-state-title">Meta data could not be loaded</p>
+          <p class="wp-state-body">There have been too many calls to this ad account. Meta measures that limit in minutes to an hour, so this resolves on its own.</p>
+        </div>
+
+        <div class="wp-state is-disconnected">
+          <p class="wp-state-title">Klaviyo is not connected</p>
+          <p class="wp-state-body">Add the API key in Settings to see campaign and flow performance for this market.</p>
+        </div>
+
+        <div class="wp-card">
+          <div class="wp-loading"><span class="wp-spinner"></span> Reading the figures from Meta</div>
+          <div class="wp-skeleton wp-skeleton-text" style="width: 40%"></div>
+          <div class="wp-skeleton wp-skeleton-text"></div>
+          <div class="wp-skeleton wp-skeleton-text"></div>
+        </div>
+
+        <p class="wp-partial">
+          Ad-set figures cover four of the seven ad sets in this campaign. The campaign total
+          above is Meta&apos;s own and stands whatever the breakdown adds up to.
+        </p>
+      </div>
+    </section>
+
+    <section id="alerts">
+      <h2>Alerts</h2>
+      <p>
+        A banner about the state of the page rather than about one control. It always carries
+        a word for its severity as well as a colour.
+      </p>
+      <div class="demo is-stack is-plain">
+        <div class="wp-alert is-info"><div><strong>Snapshot mode</strong>These figures come from the last stored snapshot, taken on 16 April 2026. Nothing here costs Meta quota.</div></div>
+        <div class="wp-alert is-warning"><div><strong>Attribution</strong>The incremental lens is a grouping from Meta&apos;s attribution setting, not a measured uplift. The numbers inside it are standard attribution.</div></div>
+        <div class="wp-alert is-danger"><div><strong>Ad set totals do not reconcile</strong>The four ad sets account for 22.753 kr. against a campaign total of 38.888 kr., so campaign totals are shown.</div></div>
+        <div class="wp-alert is-success"><div><strong>Draft created</strong>The Klaviyo template was created as a draft. Nothing has been sent.</div></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -3000,6 +3000,18 @@ export function renderSettings({ meta, openAi, promptCards }) {
     <li>${action}</li>
   `).join("");
   document.getElementById("openai-status").textContent = `Status: ${openAi.status}`;
+
+  // The rail pill used to be the literal string "OpenAI ready", set in the markup and
+  // never updated, so it claimed a working connection whatever the truth was. It now
+  // reports whatever the settings load actually found.
+  const openAiPill = document.getElementById("openai-status-pill");
+  if (openAiPill) {
+    const status = String(openAi.status || "").trim();
+    const isReady = /ready|connected|ok|available/i.test(status);
+    openAiPill.classList.toggle("online", isReady);
+    openAiPill.classList.toggle("warning", Boolean(status) && !isReady);
+    openAiPill.textContent = status ? `OpenAI ${status.toLowerCase()}` : "OpenAI";
+  }
   document.getElementById("openai-model").textContent = `Model target: ${openAi.model}`;
   document.getElementById("openai-purpose").textContent = `Purpose: ${openAi.purpose}`;
   document.getElementById("prompt-stack").innerHTML = promptCards.map((item) => `
@@ -3010,6 +3022,20 @@ export function renderSettings({ meta, openAi, promptCards }) {
   `).join("");
 }
 
+// Each Meta page states what it is and what it is for. The description is the line that
+// lets someone who did not build this dashboard work out whether they are in the right
+// place, so it is kept beside the title rather than left to the reader to infer.
+const META_VIEW_COPY = {
+  dashboard: {
+    title: "Performance",
+    description: "How Meta advertising is performing, by objective. New customers first, then the budget behind them."
+  },
+  studio: {
+    title: "Create & manage ads",
+    description: "Build a new ad from your own files, or duplicate and translate an existing one across markets. Everything is created paused."
+  }
+};
+
 export function switchTab(nextTab) {
   const isDashboard = nextTab === "dashboard";
   document.querySelectorAll(".tab-button").forEach((button) => {
@@ -3018,7 +3044,17 @@ export function switchTab(nextTab) {
   document.getElementById("dashboard-panel").classList.toggle("active", isDashboard);
   document.getElementById("studio-panel").classList.toggle("active", !isDashboard);
   document.getElementById("meta-product-panel")?.classList.toggle("is-studio-active", !isDashboard);
-  document.getElementById("view-title").textContent = isDashboard ? "Dashboard" : "Ads";
+
+  const copy = META_VIEW_COPY[isDashboard ? "dashboard" : "studio"];
+  document.getElementById("view-title").textContent = copy.title;
+  const description = document.getElementById("view-description");
+  if (description) description.textContent = copy.description;
+
+  // The dashboard toolbar sets the date range for the dashboard. On the ads screen it
+  // controls nothing, and a filter that does not filter anything is worse than no filter.
+  document.querySelectorAll("#meta-product-panel > .wp-toolbar").forEach((toolbar) => {
+    toolbar.hidden = !isDashboard;
+  });
 }
 
 export function toggleSettings(forceOpen) {

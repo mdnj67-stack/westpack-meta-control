@@ -1,0 +1,4448 @@
+/* ===========================================================================
+   WESTPACK MARKETING OS - DESIGN SYSTEM
+   ===========================================================================
+
+   One file, one source of truth for how this product looks.
+
+   The app grew as a personal tool and its stylesheet grew with it: 26 different corner
+   radii, 300-odd gradients, 600-odd colour literals, and the same control drawn three
+   different ways on three different screens. styles.css still holds all of that layout
+   work and it still runs - it is just held in the `wp-legacy` cascade layer, so every
+   declaration in this (unlayered) file wins over it no matter how specific the legacy
+   selector is. That is what lets one palette and one set of primitives take over the
+   whole application without touching working behaviour.
+
+   Layout of this file:
+
+     1. Tokens        colour, type, space, radius, border, shadow, motion
+     2. Base          reset, document, typography, focus
+     3. Shell         sidebar, navigation, page frame
+     4. Components    the reusable patterns, each named .wp-*
+     5. Legacy map    existing class names retargeted onto those patterns
+     6. Responsive    how the frame adapts below desktop
+
+   When something needs styling, look for a component in section 4 before writing a new
+   rule. If a new pattern is genuinely needed, add it there - not next to the screen that
+   happens to need it first.
+   =========================================================================== */
+
+
+/* ===========================================================================
+   1. TOKENS
+   =========================================================================== */
+
+:root {
+  /* -- Brand ---------------------------------------------------------------
+     Westpack's dark green. It is an accent, not a theme: it marks the primary
+     action, the current page and the focus ring, and appears almost nowhere else.
+     An interface that is green all over tells the reader nothing. */
+  --wp-brand: #34453f;
+  --wp-brand-hover: #2c3b36;
+  --wp-brand-strong: #26332e;
+  --wp-brand-contrast: #ffffff;
+  --wp-brand-surface: #eef1ef;
+  --wp-brand-surface-strong: #e0e7e3;
+  --wp-brand-border: #c3d0ca;
+
+  /* -- Neutrals ------------------------------------------------------------
+     A single grey ramp with a barely-there green cast, so neutrals sit next to the
+     brand without looking like a different product. */
+  --wp-grey-0: #ffffff;
+  --wp-grey-25: #fbfbfa;
+  --wp-grey-50: #f7f7f6;
+  --wp-grey-100: #f1f1ef;
+  --wp-grey-150: #ebebe8;
+  --wp-grey-200: #e1e1de;
+  --wp-grey-300: #cfcfcb;
+  --wp-grey-400: #a8a8a3;
+  --wp-grey-500: #81817b;
+  --wp-grey-600: #63635e;
+  --wp-grey-700: #4a4a46;
+  --wp-grey-800: #2e2e2b;
+  --wp-grey-900: #1a1a18;
+
+  /* -- Surfaces ------------------------------------------------------------ */
+  --wp-bg: var(--wp-grey-50);
+  --wp-surface: var(--wp-grey-0);
+  --wp-surface-subtle: var(--wp-grey-25);
+  --wp-surface-sunken: var(--wp-grey-100);
+  --wp-surface-hover: var(--wp-grey-50);
+  --wp-surface-active: var(--wp-grey-100);
+  --wp-surface-selected: var(--wp-brand-surface);
+
+  /* The one dark surface in the product, used for the panel carrying the figure the
+     department is measured on. Deep green rather than black so it reads as Westpack. */
+  --wp-surface-inverse: #22302b;
+  --wp-surface-inverse-raised: #2b3a34;
+  --wp-text-inverse: #f2f5f3;
+  --wp-text-inverse-muted: #a9bab3;
+  --wp-border-inverse: #3a4a44;
+
+  /* -- Text ---------------------------------------------------------------- */
+  --wp-text: var(--wp-grey-900);
+  --wp-text-secondary: var(--wp-grey-700);
+  --wp-text-muted: var(--wp-grey-600);
+  --wp-text-subtle: var(--wp-grey-500);
+  --wp-text-disabled: var(--wp-grey-400);
+
+  /* -- Lines --------------------------------------------------------------- */
+  --wp-border-subtle: var(--wp-grey-150);
+  --wp-border: var(--wp-grey-200);
+  --wp-border-strong: var(--wp-grey-300);
+  --wp-border-focus: var(--wp-brand);
+
+  /* -- Status --------------------------------------------------------------
+     Each has a text tone for type and icons, a surface for filled badges and banners,
+     and a border. Never used as the only signal - every status also carries a word. */
+  --wp-success: #17724a;
+  --wp-success-text: #145f3e;
+  --wp-success-surface: #e9f3ee;
+  --wp-success-border: #bcd9c9;
+
+  --wp-warning: #8a6015;
+  --wp-warning-text: #7a5412;
+  --wp-warning-surface: #fbf2e2;
+  --wp-warning-border: #e7d3ae;
+
+  --wp-danger: #b0322b;
+  --wp-danger-text: #96291f;
+  --wp-danger-surface: #fbecea;
+  --wp-danger-border: #eec9c5;
+  --wp-danger-hover: #96291f;
+
+  --wp-info: #2c5d99;
+  --wp-info-text: #27527f;
+  --wp-info-surface: #eaf0f8;
+  --wp-info-border: #c5d7ea;
+
+  --wp-neutral-surface: var(--wp-grey-100);
+  --wp-neutral-border: var(--wp-grey-200);
+
+  /* -- Typography ----------------------------------------------------------
+     One family. IBM Plex Sans is a workhorse grotesque with enough character to avoid
+     the default-UI look, and its numerals line up in a table, which matters more here
+     than anything else. A second display face would only make headings louder. */
+  --wp-font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --wp-font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* A data-dense scale. The page title is 22px: unmistakable, but it does not take the
+     top sixth of the screen the way a 40px heading does. */
+  --wp-text-2xs: 0.6875rem;  /* 11px - micro labels, badges */
+  --wp-text-xs: 0.75rem;     /* 12px - table headers, metadata, helper text */
+  --wp-text-sm: 0.8125rem;   /* 13px - labels, table cells, buttons, inputs */
+  --wp-text-base: 0.875rem;  /* 14px - body */
+  --wp-text-md: 0.9375rem;   /* 15px - lead paragraphs */
+  --wp-text-lg: 1.0625rem;   /* 17px - subsection titles */
+  --wp-text-xl: 1.1875rem;   /* 19px - section titles */
+  --wp-text-2xl: 1.375rem;   /* 22px - page title */
+  --wp-text-3xl: 1.75rem;    /* 28px - metric figure */
+  --wp-text-4xl: 2.25rem;    /* 36px - the one headline metric per page */
+
+  --wp-weight-regular: 400;
+  --wp-weight-medium: 500;
+  --wp-weight-semibold: 600;
+  --wp-weight-bold: 700;
+
+  --wp-leading-tight: 1.15;
+  --wp-leading-snug: 1.35;
+  --wp-leading-normal: 1.5;
+  --wp-leading-relaxed: 1.6;
+
+  --wp-tracking-tight: -0.011em;
+  --wp-tracking-normal: 0;
+  --wp-tracking-label: 0.04em;
+  --wp-tracking-caps: 0.06em;
+
+  /* -- Space --------------------------------------------------------------
+     4px base. Spacing is how the interface says what belongs together, so it is worth
+     using the scale rather than eyeballing a number that looks right on one screen. */
+  --wp-space-0: 0;
+  --wp-space-1: 4px;
+  --wp-space-2: 8px;
+  --wp-space-3: 12px;
+  --wp-space-4: 16px;
+  --wp-space-5: 20px;
+  --wp-space-6: 24px;
+  --wp-space-7: 28px;
+  --wp-space-8: 32px;
+  --wp-space-10: 40px;
+  --wp-space-12: 48px;
+  --wp-space-16: 64px;
+
+  --wp-page-gutter: var(--wp-space-8);
+  --wp-page-max: 1560px;
+  --wp-sidebar-width: 232px;
+
+  /* -- Radius --------------------------------------------------------------
+     Small and consistent. Anything above 12px starts to read as a bubble. */
+  --wp-radius-xs: 3px;
+  --wp-radius-sm: 4px;
+  --wp-radius-md: 6px;
+  --wp-radius-lg: 8px;
+  --wp-radius-xl: 12px;
+  --wp-radius-pill: 999px;
+
+  /* -- Elevation -----------------------------------------------------------
+     Depth is carried by borders and surface contrast. Shadows are reserved for things
+     that genuinely float above the page: menus, modals, drawers, sticky bars. */
+  --wp-shadow-xs: 0 1px 2px rgba(26, 26, 24, 0.05);
+  --wp-shadow-sm: 0 1px 2px rgba(26, 26, 24, 0.04), 0 1px 3px rgba(26, 26, 24, 0.06);
+  --wp-shadow-md: 0 2px 4px rgba(26, 26, 24, 0.04), 0 4px 12px rgba(26, 26, 24, 0.08);
+  --wp-shadow-lg: 0 8px 16px rgba(26, 26, 24, 0.06), 0 16px 40px rgba(26, 26, 24, 0.12);
+  --wp-ring: 0 0 0 3px rgba(52, 69, 63, 0.16);
+  --wp-ring-danger: 0 0 0 3px rgba(176, 50, 43, 0.16);
+
+  /* -- Controls ------------------------------------------------------------
+     One height for every control on a filter bar, so a row of them lines up. */
+  --wp-control-height-sm: 28px;
+  --wp-control-height: 34px;
+  --wp-control-height-lg: 40px;
+
+  /* -- Motion --------------------------------------------------------------
+     Fast enough to feel like a response rather than an animation. */
+  --wp-duration-fast: 100ms;
+  --wp-duration: 140ms;
+  --wp-duration-slow: 220ms;
+  --wp-ease: cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* -- Layering ------------------------------------------------------------ */
+  --wp-z-sticky: 20;
+  --wp-z-sidebar: 30;
+  --wp-z-dropdown: 40;
+  --wp-z-overlay: 50;
+  --wp-z-modal: 60;
+  --wp-z-toast: 70;
+}
+
+
+/* ===========================================================================
+   2. BASE
+   =========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-base);
+  line-height: var(--wp-leading-normal);
+  letter-spacing: var(--wp-tracking-normal);
+  color: var(--wp-text);
+  background: var(--wp-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "cv05" 1;
+}
+
+/* One family across the product. The legacy sheet set a display face on every heading
+   and table header; headings earn their place through weight and size instead. */
+h1, h2, h3, h4, h5, h6,
+th, button, input, select, textarea, optgroup {
+  font-family: var(--wp-font);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 var(--wp-space-2);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+h1 { font-size: var(--wp-text-2xl); }
+h2 { font-size: var(--wp-text-xl); }
+h3 { font-size: var(--wp-text-lg); }
+h4 { font-size: var(--wp-text-base); }
+h5, h6 { font-size: var(--wp-text-sm); }
+
+p {
+  margin: 0 0 var(--wp-space-3);
+  line-height: var(--wp-leading-normal);
+}
+
+p:last-child { margin-bottom: 0; }
+
+a {
+  color: var(--wp-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--wp-brand-border);
+  transition: text-decoration-color var(--wp-duration) var(--wp-ease);
+}
+
+a:hover { text-decoration-color: currentColor; }
+
+small { font-size: var(--wp-text-xs); }
+
+code, kbd, samp, pre {
+  font-family: var(--wp-font-mono);
+  font-size: 0.9em;
+}
+
+hr {
+  height: 1px;
+  margin: var(--wp-space-6) 0;
+  border: 0;
+  background: var(--wp-border);
+}
+
+/* Every figure in this product is read down a column, so numerals line up everywhere by
+   default rather than being switched on panel by panel. */
+table, .wp-numeric,
+[class*="value"], [class*="metric"], [class*="kpi"], [class*="stat"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* -- Focus ----------------------------------------------------------------
+   Visible for keyboard users on every interactive element, and never removed. The ring
+   sits outside the control so it is legible against both light and dark surfaces. */
+:focus-visible {
+  outline: 2px solid var(--wp-brand);
+  outline-offset: 2px;
+  border-radius: var(--wp-radius-sm);
+}
+
+.wp-inverse :focus-visible,
+[class*="inverse"] :focus-visible {
+  outline-color: var(--wp-text-inverse);
+}
+
+::selection {
+  background: var(--wp-brand-surface-strong);
+  color: var(--wp-text);
+}
+
+/* Screen-reader-only text, for the cases where an icon carries the meaning. */
+.wp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ===========================================================================
+   3. SHELL
+
+   A fixed rail on the left, one scrolling column on the right. The rail answers
+   "where am I and what else is there"; it is always visible, so Meta and Klaviyo are
+   never hidden behind a mode switch the way they were when the two halves of the
+   product shared one set of tabs.
+   =========================================================================== */
+
+.shell {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  background: var(--wp-bg);
+}
+
+/* -- Rail ------------------------------------------------------------------ */
+
+.wp-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: var(--wp-z-sidebar);
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--wp-sidebar-width);
+  width: var(--wp-sidebar-width);
+  height: 100vh;
+  padding: var(--wp-space-4) var(--wp-space-3);
+  border-right: 1px solid var(--wp-border);
+  background: var(--wp-surface-sunken);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.wp-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-1) var(--wp-space-2) var(--wp-space-5);
+}
+
+.wp-brandmark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-brand);
+  color: var(--wp-brand-contrast);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.wp-brand-name {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.wp-brand-name strong {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+  letter-spacing: var(--wp-tracking-tight);
+}
+
+.wp-brand-name small {
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+.wp-nav {
+  display: grid;
+  gap: var(--wp-space-5);
+  align-content: start;
+  flex: 1 1 auto;
+}
+
+.wp-nav-group {
+  display: grid;
+  gap: 1px;
+}
+
+/* The group label is what tells a new employee that this product covers two platforms.
+   It is quiet, but it is always there. */
+.wp-nav-group-label {
+  margin: 0 0 var(--wp-space-2);
+  padding: 0 var(--wp-space-2);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.wp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  width: 100%;
+  min-height: 30px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--wp-radius-md);
+  background: transparent;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  line-height: var(--wp-leading-snug);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--wp-duration) var(--wp-ease), color var(--wp-duration) var(--wp-ease);
+}
+
+.wp-nav-item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wp-nav-icon {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  color: var(--wp-text-subtle);
+  transition: color var(--wp-duration) var(--wp-ease);
+}
+
+.wp-nav-item:hover {
+  background: var(--wp-grey-150);
+  color: var(--wp-text);
+}
+
+.wp-nav-item:hover .wp-nav-icon { color: var(--wp-text-muted); }
+
+.wp-nav-item.active,
+.wp-nav-item[aria-current="page"] {
+  background: var(--wp-surface);
+  border-color: var(--wp-border);
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: var(--wp-shadow-xs);
+}
+
+.wp-nav-item.active .wp-nav-icon { color: var(--wp-brand); }
+
+.wp-sidebar-foot {
+  display: grid;
+  gap: var(--wp-space-1);
+  margin-top: var(--wp-space-6);
+  padding-top: var(--wp-space-3);
+  border-top: 1px solid var(--wp-border);
+}
+
+/* Integration health lives in the rail rather than in the page header: it is a property
+   of the workspace, not of whichever screen happens to be open. */
+.wp-connection {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-1) var(--wp-space-2);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.wp-connection-dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-grey-400);
+}
+
+.wp-connection.is-online .wp-connection-dot { background: var(--wp-success); }
+.wp-connection.is-warning .wp-connection-dot { background: var(--wp-warning); }
+.wp-connection.is-offline .wp-connection-dot { background: var(--wp-danger); }
+
+/* -- Page frame ------------------------------------------------------------ */
+
+.main-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: var(--wp-bg);
+}
+
+.wp-page {
+  width: 100%;
+  max-width: var(--wp-page-max);
+  margin: 0 auto;
+  padding: var(--wp-space-6) var(--wp-page-gutter) var(--wp-space-16);
+}
+
+/* -- Page header -----------------------------------------------------------
+   Same three parts on every screen: what this page is, one line of context, and the
+   actions that belong to the page as a whole. */
+.wp-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-6);
+  flex-wrap: wrap;
+  margin-bottom: var(--wp-space-5);
+}
+
+.wp-page-header-main {
+  min-width: 0;
+  flex: 1 1 340px;
+}
+
+.wp-page-title {
+  margin: 0;
+  font-size: var(--wp-text-2xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.wp-page-description {
+  margin: var(--wp-space-1) 0 0;
+  max-width: 76ch;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.wp-page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+}
+
+/* -- Section --------------------------------------------------------------- */
+
+.wp-section {
+  margin-bottom: var(--wp-space-6);
+}
+
+.wp-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--wp-space-3);
+}
+
+.wp-section-title {
+  margin: 0;
+  font-size: var(--wp-text-lg);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.wp-section-description {
+  margin: var(--wp-space-1) 0 0;
+  max-width: 80ch;
+  font-size: var(--wp-text-sm);
+  color: var(--wp-text-muted);
+}
+
+/* The eyebrow above a section title. Uppercase, small, quiet - it orients, it does not
+   compete with the title underneath it. */
+.wp-eyebrow {
+  margin: 0 0 var(--wp-space-1);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+
+/* ===========================================================================
+   4. COMPONENTS
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Button
+
+   Four levels, and the hierarchy is the point: within any one context there is one
+   primary action. Everything else is secondary, ghost or danger. A screen where every
+   button is loud is a screen where none of them is.
+
+     .wp-button                 secondary  (default - bordered, white)
+     .wp-button.is-primary      primary    (brand green, one per context)
+     .wp-button.is-ghost        tertiary   (no border until hover)
+     .wp-button.is-danger       destructive
+     .wp-button.is-sm / .is-lg  size
+--------------------------------------------------------------------------- */
+
+.wp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wp-space-2);
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--wp-shadow-xs);
+  transition:
+    background var(--wp-duration) var(--wp-ease),
+    border-color var(--wp-duration) var(--wp-ease),
+    color var(--wp-duration) var(--wp-ease),
+    box-shadow var(--wp-duration) var(--wp-ease);
+}
+
+.wp-button:hover {
+  background: var(--wp-surface-hover);
+  border-color: var(--wp-grey-400);
+}
+
+.wp-button:active {
+  background: var(--wp-surface-active);
+  box-shadow: none;
+}
+
+.wp-button.is-primary {
+  border-color: var(--wp-brand);
+  background: var(--wp-brand);
+  color: var(--wp-brand-contrast);
+}
+
+.wp-button.is-primary:hover {
+  border-color: var(--wp-brand-hover);
+  background: var(--wp-brand-hover);
+}
+
+.wp-button.is-primary:active {
+  background: var(--wp-brand-strong);
+}
+
+.wp-button.is-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--wp-text-secondary);
+  box-shadow: none;
+}
+
+.wp-button.is-ghost:hover {
+  border-color: transparent;
+  background: var(--wp-surface-active);
+  color: var(--wp-text);
+}
+
+.wp-button.is-danger {
+  border-color: var(--wp-danger);
+  background: var(--wp-danger);
+  color: #ffffff;
+}
+
+.wp-button.is-danger:hover {
+  border-color: var(--wp-danger-hover);
+  background: var(--wp-danger-hover);
+}
+
+.wp-button.is-sm {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-2);
+  font-size: var(--wp-text-xs);
+}
+
+.wp-button.is-lg {
+  height: var(--wp-control-height-lg);
+  padding: 0 var(--wp-space-4);
+  font-size: var(--wp-text-base);
+}
+
+.wp-button.is-block {
+  width: 100%;
+}
+
+/* A disabled control has to look unavailable without disappearing: the reader still
+   needs to see what the action is in order to work out how to enable it. */
+.wp-button:disabled,
+.wp-button[aria-disabled="true"],
+.wp-button.is-disabled {
+  background: var(--wp-surface-sunken);
+  border-color: var(--wp-border);
+  color: var(--wp-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.wp-button.is-primary:disabled,
+.wp-button.is-primary[aria-disabled="true"] {
+  background: var(--wp-grey-300);
+  border-color: var(--wp-grey-300);
+  color: var(--wp-grey-0);
+}
+
+/* A button that has started work says so, and stops accepting a second click. */
+.wp-button.is-loading {
+  position: relative;
+  color: transparent;
+  cursor: progress;
+}
+
+.wp-button.is-loading::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-radius: var(--wp-radius-pill);
+  border-top-color: transparent;
+  color: var(--wp-text-muted);
+  animation: wp-spin 700ms linear infinite;
+}
+
+.wp-button.is-primary.is-loading::after,
+.wp-button.is-danger.is-loading::after {
+  color: var(--wp-brand-contrast);
+}
+
+@keyframes wp-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Icon-only button. Square, so a row of them keeps its rhythm, and it always carries an
+   aria-label because there is no text to read. */
+.wp-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: var(--wp-control-height);
+  height: var(--wp-control-height);
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--wp-radius-md);
+  background: transparent;
+  color: var(--wp-text-muted);
+  cursor: pointer;
+  transition: background var(--wp-duration) var(--wp-ease), color var(--wp-duration) var(--wp-ease);
+}
+
+.wp-icon-button:hover {
+  background: var(--wp-surface-active);
+  color: var(--wp-text);
+}
+
+.wp-icon-button.is-sm {
+  width: var(--wp-control-height-sm);
+  height: var(--wp-control-height-sm);
+}
+
+/* A group of buttons that belong to one decision reads as one object. */
+.wp-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Form controls
+
+   Every control is the same height as every button, so a filter bar lines up on one
+   baseline without anyone having to nudge it.
+--------------------------------------------------------------------------- */
+
+.wp-input,
+.wp-select,
+.wp-textarea {
+  width: 100%;
+  min-width: 0;
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-snug);
+  transition: border-color var(--wp-duration) var(--wp-ease), box-shadow var(--wp-duration) var(--wp-ease);
+}
+
+.wp-textarea {
+  height: auto;
+  min-height: 80px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  resize: vertical;
+}
+
+.wp-select {
+  padding-right: var(--wp-space-7);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cpath fill=%22none%22 stroke=%22%2363635e%22 stroke-width=%221.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22M3 4.75 6 7.75l3-3%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--wp-space-3) center;
+  cursor: pointer;
+}
+
+.wp-input:hover,
+.wp-select:hover,
+.wp-textarea:hover {
+  border-color: var(--wp-grey-400);
+}
+
+.wp-input:focus,
+.wp-select:focus,
+.wp-textarea:focus {
+  outline: none;
+  border-color: var(--wp-border-focus);
+  box-shadow: var(--wp-ring);
+}
+
+.wp-input::placeholder,
+.wp-textarea::placeholder {
+  color: var(--wp-text-disabled);
+}
+
+.wp-input:disabled,
+.wp-select:disabled,
+.wp-textarea:disabled {
+  background: var(--wp-surface-sunken);
+  color: var(--wp-text-disabled);
+  cursor: not-allowed;
+}
+
+.wp-input.is-invalid,
+.wp-select.is-invalid,
+.wp-textarea.is-invalid {
+  border-color: var(--wp-danger);
+  box-shadow: var(--wp-ring-danger);
+}
+
+/* Field: label above the control, helper or error beneath it. The same shape every
+   time, so a form is read rather than deciphered. */
+/* align-content matters here: without it the grid stretches its rows to fill the tallest
+   field in the row, so a field with helper text under it pushes its own control down and
+   the controls beside it no longer share a baseline. */
+.wp-field {
+  display: grid;
+  align-content: start;
+  gap: var(--wp-space-1);
+  min-width: 0;
+}
+
+.wp-label {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-secondary);
+}
+
+.wp-label .wp-required {
+  margin-left: 2px;
+  color: var(--wp-danger);
+}
+
+.wp-help {
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.wp-error {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-1);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-danger-text);
+}
+
+.wp-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--wp-space-4);
+}
+
+.wp-form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  margin-top: var(--wp-space-5);
+  padding-top: var(--wp-space-4);
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+/* Checkbox and radio. Native controls, brand-tinted, with a label that is itself a
+   click target. */
+.wp-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  font-size: var(--wp-text-sm);
+  color: var(--wp-text-secondary);
+  cursor: pointer;
+}
+
+.wp-check input[type="checkbox"],
+.wp-check input[type="radio"] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--wp-brand);
+  cursor: pointer;
+}
+
+.wp-check:hover { color: var(--wp-text); }
+
+.wp-check input:disabled { cursor: not-allowed; }
+
+
+/* ---------------------------------------------------------------------------
+   Badge and status
+
+   A badge carries a word. Colour supports it, it never replaces it - the reader who
+   cannot tell the green from the amber still reads "Active" and "Paused".
+--------------------------------------------------------------------------- */
+
+.wp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-1);
+  height: 20px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-neutral-border);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-neutral-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wp-badge.is-success { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.wp-badge.is-warning { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.wp-badge.is-danger  { border-color: var(--wp-danger-border);  background: var(--wp-danger-surface);  color: var(--wp-danger-text); }
+.wp-badge.is-info    { border-color: var(--wp-info-border);    background: var(--wp-info-surface);    color: var(--wp-info-text); }
+.wp-badge.is-brand   { border-color: var(--wp-brand-border);   background: var(--wp-brand-surface);   color: var(--wp-brand-strong); }
+
+/* A status badge leads with a dot, so the state is scannable down a column of rows
+   before any of the words are read. */
+.wp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-secondary);
+  white-space: nowrap;
+}
+
+.wp-status::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-grey-400);
+}
+
+.wp-status.is-success::before { background: var(--wp-success); }
+.wp-status.is-warning::before { background: var(--wp-warning); }
+.wp-status.is-danger::before  { background: var(--wp-danger); }
+.wp-status.is-info::before    { background: var(--wp-info); }
+
+/* A change against a previous period. Direction is carried by the arrow as well as the
+   colour, and a metric where down is good simply gets the inverted tone. */
+.wp-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-delta.is-positive { color: var(--wp-success-text); }
+.wp-delta.is-negative { color: var(--wp-danger-text); }
+.wp-delta.is-neutral  { color: var(--wp-text-muted); }
+
+
+/* ---------------------------------------------------------------------------
+   Card
+
+   A surface with a border. Not a shadow, not a gradient, and never nested inside
+   another card: if content needs separating inside a card, that is what a rule and a
+   heading are for.
+--------------------------------------------------------------------------- */
+
+.wp-card {
+  display: block;
+  padding: var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.wp-card.is-flush { padding: 0; }
+.wp-card.is-sunken { background: var(--wp-surface-subtle); }
+
+.wp-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  margin-bottom: var(--wp-space-4);
+}
+
+.wp-card-title {
+  margin: 0;
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.wp-card-subtitle {
+  margin: 2px 0 0;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+/* A footer carries the secondary note or link that would otherwise float loose at the
+   bottom of the card. */
+.wp-card-footer {
+  margin-top: var(--wp-space-4);
+  padding-top: var(--wp-space-3);
+  border-top: 1px solid var(--wp-border-subtle);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.wp-grid {
+  display: grid;
+  gap: var(--wp-space-4);
+}
+
+.wp-grid.is-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.wp-grid.is-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.wp-grid.is-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+
+/* ---------------------------------------------------------------------------
+   Metric
+
+   The number is the message. Everything around it - the label above, the comparison
+   below - is set smaller and quieter so the eye lands on the figure first.
+
+   Metrics that belong together sit in one bordered strip divided by rules, not in a row
+   of separate floating cards. Shared edges make the figures easier to compare, and stop
+   a page of eight numbers reading as eight competing objects.
+--------------------------------------------------------------------------- */
+
+.wp-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.wp-metric {
+  display: grid;
+  align-content: start;
+  gap: var(--wp-space-1);
+  padding: var(--wp-space-4) var(--wp-space-5);
+  border-right: 1px solid var(--wp-border-subtle);
+  min-width: 0;
+}
+
+.wp-metric:last-child { border-right: 0; }
+
+.wp-metric-label {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-1);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-muted);
+}
+
+.wp-metric-value {
+  font-size: var(--wp-text-3xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-metric.is-lead .wp-metric-value { font-size: var(--wp-text-4xl); }
+.wp-metric.is-compact .wp-metric-value { font-size: var(--wp-text-xl); }
+
+.wp-metric-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+/* Every comparison names its own window. Two badges on one screen can be measured over
+   different periods, and saying so is the difference between a figure and a claim. */
+.wp-metric-caption {
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Toolbar and filters
+
+   One toolbar pattern for the whole product: filters on the left, actions on the
+   right, everything on one control height. What is filtered has to be visible without
+   opening anything, and there is always a way back to the default.
+--------------------------------------------------------------------------- */
+
+.wp-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--wp-space-4);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.wp-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.wp-toolbar-group.is-end { margin-left: auto; }
+
+/* A thin rule between clusters of controls that do different jobs. */
+.wp-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--wp-border);
+}
+
+.wp-toolbar-label {
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-muted);
+  white-space: nowrap;
+}
+
+/* Search reads as a search box rather than as a text input that happens to be there. */
+.wp-search {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 200px;
+}
+
+.wp-search .wp-input {
+  padding-left: var(--wp-space-8);
+}
+
+.wp-search::before {
+  content: "";
+  position: absolute;
+  left: var(--wp-space-3);
+  width: 13px;
+  height: 13px;
+  background: currentColor;
+  color: var(--wp-text-subtle);
+  pointer-events: none;
+  mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Cg fill=%22none%22 stroke=%22black%22 stroke-width=%221.6%22 stroke-linecap=%22round%22%3E%3Ccircle cx=%227%22 cy=%227%22 r=%224.6%22/%3E%3Cpath d=%22M10.5 10.5 14 14%22/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* An active filter is shown as a removable chip. The reader can see what is being
+   applied and undo it in one click, which is the whole job of a filter bar. */
+.wp-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-1);
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-brand-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-brand-surface);
+  color: var(--wp-brand-strong);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  white-space: nowrap;
+}
+
+.wp-filter-chip button {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--wp-radius-xs);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+.wp-filter-chip button:hover { opacity: 1; background: rgba(52, 69, 63, 0.12); }
+
+
+/* ---------------------------------------------------------------------------
+   Tabs
+
+   Two kinds, used for different jobs and never mixed on one screen:
+
+     .wp-tabs      underline tabs - switching between views of the same thing
+     .wp-segment   a segmented control - choosing one option from a small, fixed set
+--------------------------------------------------------------------------- */
+
+.wp-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-4);
+  margin-bottom: var(--wp-space-5);
+  border-bottom: 1px solid var(--wp-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.wp-tabs::-webkit-scrollbar { display: none; }
+
+.wp-tab {
+  position: relative;
+  padding: var(--wp-space-2) 0 var(--wp-space-3);
+  border: 0;
+  background: transparent;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--wp-duration) var(--wp-ease);
+}
+
+.wp-tab:hover { color: var(--wp-text); }
+
+.wp-tab.active,
+.wp-tab[aria-selected="true"] {
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.wp-tab.active::after,
+.wp-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--wp-brand);
+}
+
+.wp-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-sunken);
+}
+
+.wp-segment-item {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  border: 0;
+  border-radius: var(--wp-radius-sm);
+  background: transparent;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--wp-duration) var(--wp-ease), color var(--wp-duration) var(--wp-ease);
+}
+
+.wp-segment-item:hover { color: var(--wp-text); }
+
+.wp-segment-item.active,
+.wp-segment-item[aria-selected="true"] {
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: var(--wp-shadow-xs);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Data table
+
+   The most important component in the product. Compact rows, quiet separators, headers
+   that stay put, and numbers that line up down the column.
+--------------------------------------------------------------------------- */
+
+.wp-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.wp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--wp-text-sm);
+}
+
+.wp-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border-bottom: 1px solid var(--wp-border);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-label);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.wp-table tbody td {
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border-bottom: 1px solid var(--wp-border-subtle);
+  color: var(--wp-text-secondary);
+  vertical-align: middle;
+}
+
+.wp-table tbody tr:last-child td { border-bottom: 0; }
+
+/* The first column is the identity of the row, so it is the one that gets the weight. */
+.wp-table tbody td:first-child {
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-medium);
+}
+
+.wp-table tbody tr {
+  transition: background var(--wp-duration-fast) var(--wp-ease);
+}
+
+.wp-table tbody tr:hover { background: var(--wp-surface-hover); }
+
+.wp-table tbody tr.is-selected {
+  background: var(--wp-surface-selected);
+}
+
+/* Figures are right-aligned so the digits stack and two rows can be compared by eye. */
+.wp-table .is-numeric,
+.wp-table th.is-numeric,
+.wp-table td.is-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-table .is-actions { width: 1%; white-space: nowrap; text-align: right; }
+
+/* A sortable header says so on hover and shows which way it is sorted when it is. */
+.wp-table th.is-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.wp-table th.is-sortable:hover { color: var(--wp-text); }
+
+.wp-table th[aria-sort] { color: var(--wp-text); }
+
+.wp-table th[aria-sort]::after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  vertical-align: middle;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+}
+
+.wp-table th[aria-sort="ascending"]::after { border-bottom: 4px solid currentColor; }
+.wp-table th[aria-sort="descending"]::after { border-top: 4px solid currentColor; }
+
+/* A denser variant for tables that carry many rows of short values. */
+.wp-table.is-compact thead th,
+.wp-table.is-compact tbody td {
+  padding: 5px var(--wp-space-3);
+}
+
+.wp-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border-top: 1px solid var(--wp-border);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+
+/* ---------------------------------------------------------------------------
+   States
+
+   Nothing in this product is allowed to render as a blank area or as a raw technical
+   message. Each state says what happened, and where there is something the reader can
+   do about it, it says that too.
+--------------------------------------------------------------------------- */
+
+.wp-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-10) var(--wp-space-6);
+  border: 1px dashed var(--wp-border-strong);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-subtle);
+  text-align: center;
+}
+
+.wp-state-title {
+  margin: 0;
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.wp-state-body {
+  margin: 0;
+  max-width: 54ch;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.wp-state-actions { margin-top: var(--wp-space-2); }
+
+.wp-state.is-error {
+  border-style: solid;
+  border-color: var(--wp-danger-border);
+  background: var(--wp-danger-surface);
+}
+
+.wp-state.is-error .wp-state-title { color: var(--wp-danger-text); }
+
+/* An integration that is not connected is a state, not an error: nothing has gone
+   wrong, something has not been set up. */
+.wp-state.is-disconnected {
+  border-color: var(--wp-warning-border);
+  background: var(--wp-warning-surface);
+}
+
+.wp-state.is-disconnected .wp-state-title { color: var(--wp-warning-text); }
+
+/* Loading. A skeleton rather than a spinner wherever the shape of what is coming is
+   already known, because it keeps the layout still. */
+.wp-skeleton {
+  border-radius: var(--wp-radius-sm);
+  background: linear-gradient(90deg, var(--wp-grey-100) 25%, var(--wp-grey-150) 50%, var(--wp-grey-100) 75%);
+  background-size: 200% 100%;
+  animation: wp-shimmer 1.4s linear infinite;
+}
+
+@keyframes wp-shimmer {
+  to { background-position: -200% 0; }
+}
+
+.wp-skeleton-text {
+  height: 10px;
+  margin-bottom: var(--wp-space-2);
+}
+
+.wp-skeleton-text:last-child { width: 60%; margin-bottom: 0; }
+
+.wp-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-6);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+}
+
+.wp-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--wp-border-strong);
+  border-top-color: var(--wp-brand);
+  border-radius: var(--wp-radius-pill);
+  animation: wp-spin 700ms linear infinite;
+}
+
+/* Partial data. The figures are shown, with an honest note about what is missing -
+   hiding the panel would cost more than the caveat does. */
+.wp-partial {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-warning-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-warning-surface);
+  color: var(--wp-warning-text);
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Alert
+
+   A banner about the state of the page, not about a single control. It always carries
+   a word for its severity as well as a colour.
+--------------------------------------------------------------------------- */
+
+.wp-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-subtle);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-secondary);
+}
+
+.wp-alert strong {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.wp-alert.is-success { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.wp-alert.is-warning { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.wp-alert.is-danger  { border-color: var(--wp-danger-border);  background: var(--wp-danger-surface);  color: var(--wp-danger-text); }
+.wp-alert.is-info    { border-color: var(--wp-info-border);    background: var(--wp-info-surface);    color: var(--wp-info-text); }
+
+.wp-alert.is-success strong,
+.wp-alert.is-warning strong,
+.wp-alert.is-danger strong,
+.wp-alert.is-info strong { color: inherit; }
+
+
+/* ---------------------------------------------------------------------------
+   Overlays: modal, drawer, menu, tooltip
+--------------------------------------------------------------------------- */
+
+.wp-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--wp-z-overlay);
+  background: rgba(26, 26, 24, 0.44);
+}
+
+.wp-modal {
+  position: fixed;
+  z-index: var(--wp-z-modal);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, calc(100vw - var(--wp-space-8)));
+  max-height: calc(100vh - var(--wp-space-16));
+  overflow: auto;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-xl);
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-lg);
+}
+
+.wp-modal-header,
+.wp-drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  padding: var(--wp-space-4) var(--wp-space-5);
+  border-bottom: 1px solid var(--wp-border);
+}
+
+.wp-modal-body,
+.wp-drawer-body { padding: var(--wp-space-5); }
+
+.wp-modal-footer,
+.wp-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-3) var(--wp-space-5);
+  border-top: 1px solid var(--wp-border);
+  background: var(--wp-surface-subtle);
+}
+
+.wp-drawer {
+  position: fixed;
+  z-index: var(--wp-z-modal);
+  inset: 0 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: min(520px, 100vw);
+  border-left: 1px solid var(--wp-border);
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-lg);
+}
+
+.wp-drawer-body { flex: 1 1 auto; overflow-y: auto; }
+
+.wp-menu {
+  min-width: 180px;
+  padding: var(--wp-space-1);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-md);
+}
+
+.wp-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  width: 100%;
+  padding: 6px var(--wp-space-2);
+  border: 0;
+  border-radius: var(--wp-radius-sm);
+  background: transparent;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.wp-menu-item:hover { background: var(--wp-surface-active); color: var(--wp-text); }
+.wp-menu-item.is-danger { color: var(--wp-danger-text); }
+.wp-menu-item.is-danger:hover { background: var(--wp-danger-surface); }
+
+.wp-menu-separator {
+  height: 1px;
+  margin: var(--wp-space-1) 0;
+  background: var(--wp-border-subtle);
+}
+
+
+/* Tooltip. Used for the metrics whose definition is not obvious: cost per new customer
+   means something specific here, and a reader who does not know should not have to ask
+   the person who built the dashboard. */
+.wp-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.wp-tip > [data-tip] {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: var(--wp-z-dropdown);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 260px;
+  padding: 6px var(--wp-space-2);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-grey-900);
+  color: var(--wp-grey-0);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-regular);
+  line-height: var(--wp-leading-snug);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--wp-duration) var(--wp-ease), visibility var(--wp-duration);
+  pointer-events: none;
+}
+
+.wp-tip:hover > [data-tip],
+.wp-tip:focus-within > [data-tip] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* The marker that says a definition is available. Quiet, but a real target. */
+.wp-tip-marker {
+  display: inline-grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-pill);
+  color: var(--wp-text-subtle);
+  font-size: 9px;
+  font-weight: var(--wp-weight-semibold);
+  cursor: help;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Chart container
+
+   Charts sit in the same frame as everything else, with the figure they illustrate
+   beside them rather than buried in a legend.
+--------------------------------------------------------------------------- */
+
+.wp-chart {
+  display: grid;
+  gap: var(--wp-space-3);
+}
+
+.wp-chart-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  flex-wrap: wrap;
+}
+
+.wp-chart-body { min-height: 120px; }
+
+.wp-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-4);
+  flex-wrap: wrap;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.wp-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wp-chart-legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--wp-grey-400);
+}
+
+/* Axis and gridline styling, shared by every chart the app draws inline. */
+.wp-chart .axis,
+.wp-chart line.axis {
+  stroke: var(--wp-border);
+  stroke-width: 1;
+}
+
+.wp-chart text {
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-2xs);
+  fill: var(--wp-text-subtle);
+}
+
+
+/* ===========================================================================
+   5. LEGACY MAP
+
+   The markup in index.html, app.js and src/ui.js uses class names that predate this
+   system. Rather than rename several hundred of them across three files and risk
+   breaking behaviour, the existing names are retargeted here onto the components
+   above. The rule is one-way: a legacy name maps onto a system pattern, never the
+   other way round, and nothing in this section introduces a look that does not already
+   exist in section 4.
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Page chrome
+
+   .topbar was a floating translucent bar with its own border, radius and blur. It is
+   now simply the page header: title, one line of context, the actions for the page.
+--------------------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-5);
+  flex-wrap: wrap;
+  margin: 0 0 var(--wp-space-5);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.topbar-copy {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+/* The breadcrumb line above the title said "Mads bibel / Meta" on every Meta screen.
+   The rail already says which platform you are in, so it is redundant here and it is
+   hidden rather than repeated. */
+.topbar-copy > .section-label {
+  display: none;
+}
+
+.topbar-copy h2 {
+  margin: 0;
+  font-size: var(--wp-text-2xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+/* This line was set to display:none in the old sheet, so every page lost its one
+   sentence of context. It is the thing that tells someone who did not build the
+   dashboard what they are looking at, so it is back. */
+.topbar-sub {
+  display: block;
+  margin: var(--wp-space-1) 0 0;
+  max-width: 76ch;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+}
+
+.status-cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+}
+
+/* The controls that decide what the page is showing are a toolbar, not a scatter of
+   selects in the header. */
+.dashboard-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.dashboard-date-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+}
+
+.sync-status {
+  min-height: 0;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+  white-space: nowrap;
+}
+
+.sync-status[data-tone="loading"] { color: var(--wp-text-muted); }
+.sync-status[data-tone="success"] { color: var(--wp-success-text); }
+.sync-status[data-tone="warning"] { color: var(--wp-warning-text); }
+.sync-status[data-tone="error"] { color: var(--wp-danger-text); }
+
+/* The connection pills were three different shapes in three different places. They are
+   one status badge now, and the state is a dot plus a word rather than colour alone. */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.status-pill::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-grey-400);
+}
+
+.status-pill.online { color: var(--wp-success-text); border-color: var(--wp-success-border); background: var(--wp-success-surface); }
+.status-pill.online::before { background: var(--wp-success); }
+.status-pill.warning { color: var(--wp-warning-text); border-color: var(--wp-warning-border); background: var(--wp-warning-surface); }
+.status-pill.warning::before { background: var(--wp-warning); }
+.status-pill.offline,
+.status-pill.error { color: var(--wp-danger-text); border-color: var(--wp-danger-border); background: var(--wp-danger-surface); }
+.status-pill.offline::before,
+.status-pill.error::before { background: var(--wp-danger); }
+
+
+/* ---------------------------------------------------------------------------
+   Navigation
+
+   The Meta tabs and the Klaviyo sub-navigation both live in the rail now, so they take
+   the rail item pattern. Their data attributes and click handlers are untouched.
+--------------------------------------------------------------------------- */
+
+.tab-list,
+.subnav-list {
+  display: grid;
+  gap: 1px;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.tab-button,
+.subnav-button,
+.workspace-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  width: 100%;
+  min-height: 30px;
+  flex: none;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--wp-radius-md);
+  background: transparent;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  text-align: left;
+  box-shadow: none;
+  transition: background var(--wp-duration) var(--wp-ease), color var(--wp-duration) var(--wp-ease);
+}
+
+.tab-button:hover,
+.subnav-button:hover,
+.workspace-tab:hover {
+  background: var(--wp-grey-150);
+  color: var(--wp-text);
+  transform: none;
+  box-shadow: none;
+}
+
+.tab-button.active,
+.subnav-button.active,
+.workspace-tab.active {
+  background: var(--wp-surface);
+  border-color: var(--wp-border);
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: var(--wp-shadow-xs);
+}
+
+.tab-button.active .wp-nav-icon,
+.subnav-button.active .wp-nav-icon { color: var(--wp-brand); }
+
+/* Lens selection inside a page is a view switch, so it takes the underline tabs rather
+   than a raised panel of pills. */
+.dashboard-subtabs,
+.klaviyo-dashboard-subtabs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--wp-space-4);
+  flex-wrap: wrap;
+  margin: 0 0 var(--wp-space-5);
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--wp-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.dashboard-subtab,
+.klaviyo-dashboard-subtab {
+  position: relative;
+  padding: var(--wp-space-2) 0 var(--wp-space-3);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+.dashboard-subtab:hover,
+.klaviyo-dashboard-subtab:hover {
+  background: transparent;
+  color: var(--wp-text);
+  transform: none;
+}
+
+.dashboard-subtab.active,
+.klaviyo-dashboard-subtab.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: none;
+}
+
+.dashboard-subtab.active::after,
+.klaviyo-dashboard-subtab.active::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--wp-brand);
+}
+
+/* Anything that lets the operator pick one option out of a fixed handful is the same
+   segmented control, whichever screen it happens to be on. */
+.campaign-brain-mode-switch,
+.workspace-switch,
+.studio-mode-switch,
+.expansion-window-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  margin-bottom: var(--wp-space-4);
+  padding: 2px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-sunken);
+  box-shadow: none;
+}
+
+.campaign-brain-mode-button,
+.studio-mode-button,
+.expansion-window-button {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  border: 0;
+  border-radius: var(--wp-radius-sm);
+  background: transparent;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+.campaign-brain-mode-button:hover,
+.studio-mode-button:hover,
+.expansion-window-button:hover {
+  background: transparent;
+  color: var(--wp-text);
+  transform: none;
+}
+
+.campaign-brain-mode-button.active,
+.studio-mode-button.active,
+.expansion-window-button.active,
+.expansion-window-button[aria-pressed="true"] {
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: var(--wp-shadow-xs);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Surfaces
+
+   Every panel in the product was a white card with a 20px radius and a 34px drop
+   shadow, which made a page of eight panels look like eight things floating at
+   different heights. They are all the same bordered surface now.
+--------------------------------------------------------------------------- */
+
+.card,
+.stat-card,
+.settings-card,
+.playbook-section,
+.klaviyo-operator-card,
+.klaviyo-diagnostics-panel,
+.klaviyo-diagnostic-card,
+.hero,
+.sidebar-card {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.card,
+.playbook-section,
+.klaviyo-operator-card {
+  padding: var(--wp-space-5);
+}
+
+.stat-card,
+.klaviyo-diagnostic-card,
+.sidebar-card {
+  padding: var(--wp-space-4);
+}
+
+/* The coloured bar across the top of every stat card was decoration: it carried no
+   information that the label beneath it did not already carry. */
+.stat-card::after,
+.stat-card::before {
+  content: none;
+}
+
+.card-header,
+.dashboard-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  margin: 0 0 var(--wp-space-4);
+  padding: 0;
+}
+
+.card-header h3,
+.dashboard-section-head h3 {
+  margin: 0;
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.dashboard-section-head p:last-child {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  text-align: right;
+  color: var(--wp-text-muted);
+}
+
+/* The eyebrow above a panel title. It used to be the brand colour at every size, which
+   made a page of ten panels read as ten alerts. */
+.section-label,
+.eyebrow,
+.hero-kicker,
+.sidebar-label {
+  margin: 0 0 var(--wp-space-1);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.hero {
+  padding: var(--wp-space-5);
+  margin-bottom: var(--wp-space-5);
+  overflow: visible;
+}
+
+.hero::before,
+.hero::after { content: none; }
+
+.playbook { gap: var(--wp-space-5); }
+
+.overview-card::before { width: 3px; }
+
+.overview-metric {
+  margin: var(--wp-space-1) 0 var(--wp-space-3);
+  font-size: var(--wp-text-3xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Metric strip
+
+   The stat row was four to five separate floating cards. It is one bordered strip
+   divided by hairlines, so the figures sit on a shared baseline and can be compared
+   without the eye crossing a gap and a shadow between each pair.
+--------------------------------------------------------------------------- */
+
+.stats-grid {
+  display: grid;
+  gap: 0;
+  margin-bottom: var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.stats-grid .stat-card,
+.stats-grid.stats-grid-kpi .stat-card:first-child,
+.stats-grid.stats-grid-compact .stat-card:first-child,
+.stats-grid .stat-card:first-child {
+  display: grid;
+  align-content: start;
+  gap: var(--wp-space-1);
+  grid-column: auto;
+  min-height: 0;
+  padding: var(--wp-space-4) var(--wp-space-5);
+  border: 0;
+  border-right: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.stats-grid .stat-card:last-child { border-right: 0; }
+
+.stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-2);
+  margin: 0;
+}
+
+.stat-head .section-label { margin: 0; }
+
+.stat-value,
+.stats-grid .stat-card:first-child .stat-value,
+.stats-grid.stats-grid-kpi .stat-card:first-child .stat-value,
+.stats-grid.stats-grid-compact .stat-card:first-child .stat-value {
+  margin: 0;
+  font-size: var(--wp-text-3xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+}
+
+.stat-meta {
+  margin: 0;
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+/* Each badge names the window it was measured over, because the acquisition comparison
+   runs month-to-date while the spend comparison runs over the selected range. */
+.stat-compare {
+  margin: 0;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--wp-text-muted);
+}
+
+.stat-change.tone-positive,
+.stat-change.tone-up,
+.stat-change.tone-good { color: var(--wp-success-text); }
+
+.stat-change.tone-negative,
+.stat-change.tone-down,
+.stat-change.tone-bad { color: var(--wp-danger-text); }
+
+.stat-change.tone-neutral,
+.stat-change.tone-flat { color: var(--wp-text-muted); }
+
+
+/* ---------------------------------------------------------------------------
+   Buttons
+
+   .primary-button was a red gradient with a 36px coloured shadow that lifted two pixels
+   on hover; .ghost-button was a cream gradient with a shadow of its own. There were
+   never two levels of emphasis on screen, only two different decorations. They map onto
+   the primary and secondary button.
+--------------------------------------------------------------------------- */
+
+.primary-button,
+.ghost-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wp-space-2);
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: var(--wp-shadow-xs);
+  transition:
+    background var(--wp-duration) var(--wp-ease),
+    border-color var(--wp-duration) var(--wp-ease),
+    color var(--wp-duration) var(--wp-ease);
+}
+
+.primary-button {
+  border-color: var(--wp-brand);
+  background: var(--wp-brand);
+  color: var(--wp-brand-contrast);
+}
+
+/* The lift on hover was the only feedback either button gave, and it moved the layout.
+   A colour change says the same thing and holds the row still. */
+.primary-button:hover {
+  border-color: var(--wp-brand-hover);
+  background: var(--wp-brand-hover);
+  transform: none;
+}
+
+.ghost-button:hover {
+  border-color: var(--wp-grey-400);
+  background: var(--wp-surface-hover);
+  transform: none;
+}
+
+.primary-button:active { background: var(--wp-brand-strong); }
+.ghost-button:active { background: var(--wp-surface-active); }
+
+.ghost-button.small,
+.primary-button.small {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-2);
+  font-size: var(--wp-text-xs);
+}
+
+.ghost-button.tiny {
+  height: 24px;
+  padding: 0 6px;
+  font-size: var(--wp-text-2xs);
+}
+
+/* A destructive action never looks like the default one. */
+.ghost-button.danger,
+.primary-button.danger,
+.ghost-button.is-danger,
+.danger-button {
+  border-color: var(--wp-danger-border);
+  background: var(--wp-danger-surface);
+  color: var(--wp-danger-text);
+}
+
+.ghost-button.danger:hover,
+.primary-button.danger:hover,
+.ghost-button.is-danger:hover,
+.danger-button:hover {
+  border-color: var(--wp-danger);
+  background: var(--wp-danger);
+  color: #ffffff;
+}
+
+.primary-button:disabled,
+.ghost-button:disabled,
+.primary-button[disabled],
+.ghost-button[disabled] {
+  background: var(--wp-surface-sunken);
+  border-color: var(--wp-border);
+  color: var(--wp-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.primary-button.is-loading::before,
+.ghost-button.is-loading::before {
+  width: 13px;
+  height: 13px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: currentColor;
+  border-top-color: transparent;
+}
+
+.primary-button.is-loading::before { border-color: rgba(255, 255, 255, 0.4); border-top-color: #ffffff; }
+.ghost-button.is-loading::before { border-color: var(--wp-border-strong); border-top-color: var(--wp-brand); }
+
+.action-stack,
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Controls and forms
+--------------------------------------------------------------------------- */
+
+.dashboard-control-select,
+.dashboard-date-custom input[type="date"],
+.klaviyo-search,
+.campaign-studio-input,
+input[type="text"].dashboard-control-select,
+select.dashboard-control-select {
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  box-shadow: none;
+  transition: border-color var(--wp-duration) var(--wp-ease), box-shadow var(--wp-duration) var(--wp-ease);
+}
+
+select.dashboard-control-select {
+  padding-right: var(--wp-space-7);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cpath fill=%22none%22 stroke=%22%2363635e%22 stroke-width=%221.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22M3 4.75 6 7.75l3-3%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--wp-space-3) center;
+  cursor: pointer;
+}
+
+.dashboard-control-select:hover,
+.dashboard-date-custom input[type="date"]:hover { border-color: var(--wp-grey-400); }
+
+.dashboard-control-select:focus,
+.dashboard-date-custom input[type="date"]:focus,
+.campaign-studio-input:focus,
+.campaign-studio-textarea:focus,
+.preview-textarea:focus,
+textarea:focus,
+input:focus {
+  outline: none;
+  border-color: var(--wp-border-focus);
+  box-shadow: var(--wp-ring);
+}
+
+textarea,
+.campaign-studio-textarea,
+.preview-textarea {
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  box-shadow: none;
+  resize: vertical;
+}
+
+/* The label of a field, wherever it appears. */
+.field > span,
+.field > label,
+.control-form label > span {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-secondary);
+}
+
+.field {
+  display: grid;
+  gap: var(--wp-space-1);
+  min-width: 0;
+}
+
+.field-hint,
+.help-text {
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.control-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--wp-space-4);
+}
+
+.toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  min-height: var(--wp-control-height);
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  box-shadow: none;
+}
+
+.toggle-chip:hover { border-color: var(--wp-grey-400); color: var(--wp-text); }
+.toggle-chip input { accent-color: var(--wp-brand); }
+
+
+/* ---------------------------------------------------------------------------
+   Tables
+
+   Rows were 48px tall with zebra striping and a translucent warm hover. They are
+   compact now, separated by hairlines rather than by alternating fills, because on a
+   table of fifteen campaigns the stripe competes with the hover and with the selected
+   row for the same job.
+--------------------------------------------------------------------------- */
+
+.table-wrap {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: none;
+}
+
+table { border-collapse: separate; border-spacing: 0; }
+
+thead {
+  background: var(--wp-surface-subtle);
+}
+
+th,
+td {
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border-bottom: 1px solid var(--wp-border-subtle);
+  vertical-align: middle;
+}
+
+th {
+  border-bottom-color: var(--wp-border);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-label);
+  text-transform: none;
+  white-space: nowrap;
+}
+
+td {
+  font-size: var(--wp-text-sm);
+  color: var(--wp-text-secondary);
+}
+
+td:first-child {
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-medium);
+}
+
+tbody tr { transition: background var(--wp-duration-fast) var(--wp-ease); }
+tbody tr:hover { background: var(--wp-surface-hover); }
+tbody tr:nth-child(even) { background: transparent; }
+tbody tr:nth-child(even):hover { background: var(--wp-surface-hover); }
+tbody tr.is-selected { background: var(--wp-surface-selected); }
+tbody tr:last-child td { border-bottom: 0; }
+
+/* Figures belong on the right so the digits stack down the column. */
+td.is-numeric,
+th.is-numeric,
+td[data-numeric],
+th[data-numeric] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dashboard-panel .table-wrap table { font-size: var(--wp-text-sm); }
+
+#dashboard-panel .table-wrap thead th {
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  letter-spacing: var(--wp-tracking-label);
+  text-transform: none;
+}
+
+#dashboard-panel .table-wrap tbody tr:nth-child(odd) { background: transparent; }
+#dashboard-panel .table-wrap tbody tr:hover { background: var(--wp-surface-hover); }
+
+
+/* ---------------------------------------------------------------------------
+   States
+--------------------------------------------------------------------------- */
+
+.empty-state,
+.lens-empty,
+.klaviyo-rollout-empty,
+.campaign-studio-library-empty {
+  display: grid;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-8) var(--wp-space-6);
+  border: 1px dashed var(--wp-border-strong);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+}
+
+.lens-empty h4 {
+  margin: 0;
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.lens-empty p,
+.lens-empty .lens-empty-meta {
+  font-size: var(--wp-text-sm);
+  color: var(--wp-text-muted);
+}
+
+/* Feedback under an action. It reports what happened, in the tone that matches. */
+.inline-feedback {
+  min-height: 0;
+  margin-top: var(--wp-space-3);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.inline-feedback.loading { color: var(--wp-text-muted); }
+.inline-feedback.success { color: var(--wp-success-text); }
+.inline-feedback.error { color: var(--wp-danger-text); }
+.inline-feedback.warning { color: var(--wp-warning-text); }
+
+.is-invalid {
+  border-color: var(--wp-danger);
+  box-shadow: var(--wp-ring-danger);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Settings drawer and the login wall
+--------------------------------------------------------------------------- */
+
+.settings-drawer {
+  background: rgba(26, 26, 24, 0.44);
+  backdrop-filter: none;
+}
+
+.settings-sheet {
+  border: 0;
+  border-left: 1px solid var(--wp-border);
+  border-radius: 0;
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-lg);
+}
+
+.settings-card {
+  padding: var(--wp-space-4);
+}
+
+.settings-card h4 {
+  margin: 0 0 var(--wp-space-2);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.auth-wall {
+  background: var(--wp-bg);
+  backdrop-filter: none;
+}
+
+.auth-wall-card {
+  padding: var(--wp-space-8);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-xl);
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-md);
+}
+
+.auth-wall-card h2 {
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.auth-wall-copy {
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.auth-wall-form { display: grid; gap: var(--wp-space-2); }
+
+.auth-wall-label {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-secondary);
+}
+
+.auth-wall-form input {
+  height: var(--wp-control-height-lg);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  font-size: var(--wp-text-base);
+}
+
+.auth-submit { height: var(--wp-control-height-lg); width: 100%; }
+
+.auth-wall-status {
+  min-height: 18px;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+
+/* ---------------------------------------------------------------------------
+   The dark panels
+
+   Three panels are deliberately dark: new customers, the budget split and expansion
+   reach. That is a hierarchy decision rather than a decoration - new customers is the
+   figure the department is measured on, so it gets the one surface on the page that is
+   not white. They were navy with a violet glow over a radial gradient; they are now a
+   flat deep green from the brand ramp, which is quieter and reads as the same product
+   as everything around it.
+--------------------------------------------------------------------------- */
+
+.meta-acq,
+.meta-budget-premium,
+.meta-expansion {
+  padding: var(--wp-space-5);
+  border: 1px solid var(--wp-surface-inverse);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-inverse);
+  box-shadow: none;
+  color: var(--wp-text-inverse);
+}
+
+.meta-acq-kpi,
+.meta-budget-kpi-card,
+.meta-expansion-kpi,
+.meta-budget-stack-card {
+  border: 1px solid var(--wp-border-inverse);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-inverse-raised);
+  box-shadow: none;
+}
+
+.meta-acq-kpi span,
+.meta-expansion-kpi span,
+.meta-budget-kpi-card span {
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: var(--wp-tracking-label);
+  text-transform: none;
+  color: var(--wp-text-inverse-muted);
+}
+
+.meta-acq-kpi strong,
+.meta-expansion-kpi strong,
+.meta-budget-kpi-card strong {
+  font-size: var(--wp-text-3xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text-inverse);
+  font-variant-numeric: tabular-nums;
+}
+
+.meta-acq-kpi p,
+.meta-expansion-kpi p,
+.meta-budget-kpi-card p {
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-inverse-muted);
+}
+
+.meta-budget-empty {
+  border: 1px dashed var(--wp-border-inverse);
+  border-radius: var(--wp-radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--wp-text-inverse-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.meta-expansion-table th,
+.meta-acq-row.is-head {
+  color: var(--wp-text-inverse-muted);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-label);
+  text-transform: none;
+}
+
+.meta-expansion-table td,
+.meta-expansion-table th {
+  border-bottom-color: var(--wp-border-inverse);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Campaign Studio
+
+   The Studio canvas carried a noise texture, three stacked radial gradients and a
+   100px drop shadow. None of it was telling the operator anything, and it made the one
+   screen in the product where real work happens the hardest one to read.
+--------------------------------------------------------------------------- */
+
+.content-agent-focus-stage,
+.content-agent-console {
+  margin: 0 0 var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: none;
+  color: var(--wp-text);
+}
+
+.content-agent-focus-stage::before,
+.content-agent-focus-stage::after { content: none; }
+
+.content-agent-stage-top,
+.content-agent-stage-foot {
+  padding: var(--wp-space-3) var(--wp-space-5);
+  border-bottom: 1px solid var(--wp-border-subtle);
+}
+
+.content-agent-stage-foot {
+  border-bottom: 0;
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.content-agent-wordmark {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  color: var(--wp-text-subtle);
+}
+
+.content-agent-wordmark > i {
+  background: var(--wp-success);
+  box-shadow: none;
+}
+
+.studio-shell,
+.campaign-design-studio-shell {
+  gap: var(--wp-space-5);
+}
+
+.studio-side { gap: var(--wp-space-4); }
+
+
+/* ---------------------------------------------------------------------------
+   Chips, pills and small markers
+
+   Every screen had grown its own. They are all the badge now, so a pill means the same
+   thing in Campaign Studio as it does on the dashboard.
+--------------------------------------------------------------------------- */
+
+.campaign-brain-pill,
+.campaign-studio-module-pill,
+.klaviyo-flow-pill,
+.duplicate-bulk-badge,
+.decision-chip,
+.campaign-status,
+.meta-expansion-badge,
+.campaign-studio-priority-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-1);
+  height: 20px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-neutral-border);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-neutral-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.campaign-status.is-active,
+.decision-chip.is-success,
+.campaign-brain-pill.is-success {
+  border-color: var(--wp-success-border);
+  background: var(--wp-success-surface);
+  color: var(--wp-success-text);
+}
+
+.campaign-status.is-paused,
+.decision-chip.is-warning,
+.campaign-brain-pill.is-warning {
+  border-color: var(--wp-warning-border);
+  background: var(--wp-warning-surface);
+  color: var(--wp-warning-text);
+}
+
+.campaign-status.is-error,
+.decision-chip.is-danger,
+.campaign-brain-pill.is-error,
+.campaign-brain-pill.is-danger {
+  border-color: var(--wp-danger-border);
+  background: var(--wp-danger-surface);
+  color: var(--wp-danger-text);
+}
+
+.agent-item,
+.campaign-studio-intake-card,
+.campaign-brain-glance-card,
+.campaign-brain-brief-card,
+.klaviyo-variant-card,
+.klaviyo-market-stat,
+.overview-item {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  box-shadow: none;
+}
+
+
+/* ===========================================================================
+   6. RESPONSIVE
+
+   Desktop is the real use case, so nothing is designed mobile-first here. What the
+   smaller sizes get is a frame that stays usable: the rail collapses to a bar rather
+   than disappearing, tables scroll sideways instead of shrinking their type, and
+   toolbars wrap rather than overflow.
+
+   The legacy sheet had sixteen different breakpoints. The frame uses three.
+   =========================================================================== */
+
+/* Laptops: give the content back the space the rail is taking. */
+@media (max-width: 1280px) {
+  :root {
+    --wp-sidebar-width: 208px;
+    --wp-page-gutter: var(--wp-space-6);
+  }
+}
+
+/* Below this the vertical rail costs more width than it is worth, so it becomes a
+   horizontal bar across the top. It stays visible rather than collapsing behind a menu,
+   because a navigation the reader cannot see is a navigation they will not use, and this
+   product has two platforms inside it that people need to know about.
+
+   The bar scrolls sideways rather than wrapping: six items on two rows makes a 150px-tall
+   header, which costs more vertical space than the rail was costing horizontal. */
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+
+  .wp-sidebar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    flex: 0 0 auto;
+    height: auto;
+    max-height: none;
+    padding: var(--wp-space-2) var(--wp-space-4);
+    border-right: 0;
+    border-bottom: 1px solid var(--wp-border);
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .wp-sidebar-brand {
+    padding: 0 var(--wp-space-3) 0 0;
+    margin-right: var(--wp-space-3);
+    border-right: 1px solid var(--wp-border);
+  }
+
+  .wp-sidebar,
+  .wp-nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--wp-space-4);
+  }
+
+  .wp-sidebar-brand,
+  .wp-nav,
+  .wp-nav-group,
+  .wp-sidebar-foot { flex: 0 0 auto; }
+
+  .wp-nav-group {
+    display: flex;
+    align-items: center;
+    gap: var(--wp-space-1);
+  }
+
+  /* The group label becomes a prefix on the row rather than a heading above it. */
+  .wp-nav-group-label {
+    margin: 0 var(--wp-space-1) 0 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .tab-list,
+  .subnav-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--wp-space-1);
+  }
+
+  .wp-nav-item,
+  .tab-button,
+  .subnav-button {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .wp-sidebar-foot {
+    margin: 0 0 0 auto;
+    padding: 0 0 0 var(--wp-space-3);
+    border-top: 0;
+    border-left: 1px solid var(--wp-border);
+    display: flex;
+    align-items: center;
+    gap: var(--wp-space-2);
+  }
+}
+
+/* Phones and small tablets. The priority is that the important figures and the table
+   survive: the metric strip stacks into a single column and the table keeps its
+   density and scrolls sideways rather than reflowing into something unreadable. */
+@media (max-width: 720px) {
+  :root {
+    --wp-page-gutter: var(--wp-space-4);
+  }
+
+  .wp-page { padding-top: var(--wp-space-4); }
+
+  .wp-page-header,
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--wp-space-3);
+  }
+
+  .wp-page-header-actions,
+  .topbar-actions,
+  .status-cluster {
+    justify-content: flex-start;
+  }
+
+  /* A full-width select is easier to hit than a row of half-width ones. */
+  .dashboard-controls { width: 100%; }
+  .dashboard-controls > * { flex: 1 1 160px; }
+
+  .wp-metrics,
+  .stats-grid,
+  .stats-grid.stats-grid-kpi,
+  .stats-grid.stats-grid-compact {
+    grid-template-columns: 1fr;
+  }
+
+  .wp-metric,
+  .stats-grid .stat-card {
+    border-right: 0;
+    border-bottom: 1px solid var(--wp-border-subtle);
+  }
+
+  .wp-metric:last-child,
+  .stats-grid .stat-card:last-child { border-bottom: 0; }
+
+  .wp-table-wrap,
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+
+  .card,
+  .playbook-section,
+  .klaviyo-operator-card { padding: var(--wp-space-4); }
+
+  .dashboard-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--wp-space-1);
+  }
+
+  .dashboard-section-head p:last-child { text-align: left; }
+
+  .wp-modal { width: calc(100vw - var(--wp-space-4)); }
+  .wp-drawer { width: 100vw; }
+}
+
+
+/* ===========================================================================
+   7. CORRECTIONS FOUND IN REVIEW
+
+   Things the first pass over the legacy sheet did not reach, found by looking at the
+   running app rather than at the CSS. Kept together so it is obvious what is patching
+   older markup and what is the system proper.
+   =========================================================================== */
+
+/* -- Decoration left over from the old identity ---------------------------
+   Washes, glows and coloured rules painted on pseudo-elements. None of them carried
+   information, and several of them tinted whole screens. */
+#meta-product-panel::before,
+#meta-product-panel::after,
+#klaviyo-product-panel::before,
+#klaviyo-product-panel::after,
+#dashboard-panel .hero::before,
+#dashboard-panel .hero::after,
+.sidebar::after,
+.hero-glance::before {
+  content: none;
+}
+
+/* -- The rail shows one current page, not two -----------------------------
+   Meta and Klaviyo are both listed, and each group keeps its own active item in the
+   DOM. Only the group belonging to the open workspace may render as current, or the
+   rail says you are in two places at once. */
+body[data-workspace="klaviyo"] .tab-button.active,
+body[data-workspace="meta"] .subnav-button.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--wp-text-secondary);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+body[data-workspace="klaviyo"] .tab-button.active .wp-nav-icon,
+body[data-workspace="meta"] .subnav-button.active .wp-nav-icon {
+  color: var(--wp-text-subtle);
+}
+
+/* -- The dashboard banner -------------------------------------------------
+   Its heading was clamped to 3.6rem inside a 9ch box, so a five-word line broke one
+   word per row and took a fifth of the screen before a single figure appeared. It is a
+   banner with a call to action, so it is sized like one. */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-5);
+  flex-wrap: wrap;
+  padding: var(--wp-space-4) var(--wp-space-5);
+  background: var(--wp-surface);
+}
+
+.hero-copy { flex: 1 1 420px; min-width: 0; }
+
+.hero h3 {
+  max-width: 48ch;
+  margin: 0;
+  font-size: var(--wp-text-lg);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  letter-spacing: var(--wp-tracking-tight);
+}
+
+.hero-sub,
+.hero p {
+  margin: var(--wp-space-1) 0 0;
+  max-width: 76ch;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.hero-cta {
+  align-self: center;
+  justify-self: auto;
+  min-width: 0;
+}
+
+/* The glance strip beside the banner is a metric row, so it is the metric row. */
+.hero-panel {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex-wrap: wrap;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.hero-glance {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  flex: 1 1 130px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 0;
+  border-right: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hero-glance:last-child { border-right: 0; }
+
+.hero-glance span {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--wp-text-muted);
+}
+
+.hero-glance strong {
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-glance p {
+  margin: 0;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+
+/* -- The dashboard toolbar ------------------------------------------------
+   The selects were stretching to fill the row, so three controls stacked into a column
+   600px wide. A filter control is sized to its content, with a floor that keeps the
+   labels readable and a ceiling that stops one long option name setting the width of
+   the whole bar. */
+.wp-toolbar .dashboard-controls,
+.wp-toolbar .topbar-actions {
+  flex: 0 1 auto;
+  width: auto;
+  justify-content: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.dashboard-controls .dashboard-control-select,
+.dashboard-date-custom input[type="date"] {
+  width: auto;
+  min-width: 132px;
+  max-width: 240px;
+  flex: 0 0 auto;
+}
+
+/* Outside the toolbar the same class is used for ordinary form fields, where the control
+   should fill its column. Capping it there clipped campaign and ad-set names, which are
+   long and are the whole point of the field. */
+.control-form .dashboard-control-select,
+.field .dashboard-control-select {
+  width: 100%;
+  max-width: none;
+}
+
+/* On the ads screen the date range and the snapshot controls decide nothing, because
+   nothing on that screen is scoped to a period. A filter that filters nothing is worse
+   than no filter, so they are not shown there. */
+#meta-product-panel.is-studio-active > .wp-toolbar,
+#meta-product-panel.is-studio-active #update-snapshot-button,
+#meta-product-panel.is-studio-active #refresh-data-button {
+  display: none;
+}
+
+/* -- Panels that render empty ---------------------------------------------
+   Several panels are filled entirely from JavaScript. Before the data lands they were
+   an empty bordered box with a heading and nothing under it, which reads as broken
+   rather than as loading. An empty container collapses instead. */
+.playbook-section:has(> .dashboard-section-head + :empty:last-child),
+.trend-deck:empty,
+.hero-panel:empty,
+.overview-grid:empty,
+.agent-list:empty,
+.klaviyo-rollout-summary:empty,
+.campaign-studio-asset-map:empty {
+  display: none;
+}
+
+/* -- Sub-navigation spacing ------------------------------------------------ */
+.dashboard-subtabs,
+.klaviyo-dashboard-subtabs {
+  position: static;
+}
+
+.dashboard-subtab-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  margin-left: auto;
+  padding-bottom: var(--wp-space-2);
+}
+
+/* -- Panel rhythm ----------------------------------------------------------
+   Sections were separated by 18-24px in some places and by nothing in others. One gap
+   between panels, one between a panel and the section above it. */
+.tab-panel > section,
+.klaviyo-view-panel > section {
+  margin-bottom: var(--wp-space-5);
+}
+
+.tab-panel > section:last-child,
+.klaviyo-view-panel > section:last-child {
+  margin-bottom: 0;
+}
+
+.dashboard-grid,
+.overview-grid,
+.dashboard-bento,
+.playbook-stack,
+.klaviyo-rollout-summary {
+  gap: var(--wp-space-4);
+}
+
+
+/* -- The rail footer -------------------------------------------------------
+   Log out kept a 14px top margin from when it sat inside a card of its own, which read
+   as a gap in the list rather than as the last item of it. */
+.auth-logout-button {
+  margin-top: 0;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Connection labels carry the account name, which can be longer than the rail. They
+   truncate rather than wrapping onto three lines or pushing the rail wider. */
+.wp-sidebar-foot .status-pill {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -- Sync status -----------------------------------------------------------
+   This line reports what happened on the last read from Meta, and a rate-limit message
+   is a paragraph. Pinning it to one line pushed it across the whole toolbar; it wraps
+   inside a sensible column instead. */
+.sync-status {
+  flex: 1 1 260px;
+  max-width: 62ch;
+  white-space: normal;
+  line-height: var(--wp-leading-snug);
+  text-align: right;
+}
+
+.wp-toolbar-group.is-end {
+  flex: 1 1 260px;
+  justify-content: flex-end;
+}
+
+
+/* ---------------------------------------------------------------------------
+   The Klaviyo morning briefing
+
+   It was a second dark hero, in a different dark (near-black brown) from the one on the
+   Meta side, with a red status chip, uppercase pills, gradient stat tiles and a heading
+   in a colour that did not survive on its own background. Two unrelated dark treatments
+   in one product make it read as two products.
+
+   The Meta dashboard keeps the one dark panel it earns, and this becomes an ordinary
+   light panel: the same card, the same metric strip, the same badges as everywhere else.
+--------------------------------------------------------------------------- */
+
+.klaviyo-command-hero {
+  position: relative;
+  isolation: auto;
+  overflow: visible;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: var(--wp-space-5);
+  padding: var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: none;
+  color: var(--wp-text);
+}
+
+.klaviyo-command-hero::before,
+.klaviyo-command-hero::after { content: none; }
+
+.klaviyo-command-hero h3,
+.klaviyo-command-hero-copy h3,
+#klaviyo-product-panel .klaviyo-command-hero h3,
+#klaviyo-product-panel .klaviyo-command-hero-copy h3 {
+  max-width: 52ch;
+  margin: 0;
+  font-size: var(--wp-text-lg);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.klaviyo-command-hero-copy p,
+.klaviyo-command-bullets p {
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.klaviyo-command-bullets {
+  padding: var(--wp-space-3);
+  border: 1px solid var(--wp-border-subtle);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+}
+
+/* The status chip is a badge, sized and weighted like every other badge. It was 800
+   weight, uppercase and letterspaced, which made it the loudest thing on the page. */
+.klaviyo-command-badge,
+.klaviyo-command-meta-pill {
+  height: 20px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-neutral-border);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-neutral-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.klaviyo-command-badge.tone-success { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.klaviyo-command-badge.tone-warning { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.klaviyo-command-badge.tone-danger  { border-color: var(--wp-danger-border);  background: var(--wp-danger-surface);  color: var(--wp-danger-text); }
+
+.klaviyo-command-scorecard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.klaviyo-command-score {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 0;
+  border-right: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.klaviyo-command-score:last-child { border-right: 0; }
+
+.klaviyo-command-score span,
+.klaviyo-command-panel span,
+.klaviyo-command-spotlight span {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.klaviyo-command-score strong {
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.klaviyo-command-score p {
+  margin: 0;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+/* The spotlight, the priority list and the decision cards are all the same thing: a
+   short titled note. They get one treatment, with the tone carried on a left rule so a
+   warning is visible without repainting the whole tile. */
+.klaviyo-command-spotlight,
+.klaviyo-command-priority,
+.klaviyo-command-panel {
+  position: relative;
+  display: grid;
+  gap: var(--wp-space-1);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-left-width: 3px;
+  border-left-color: var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  box-shadow: none;
+  color: var(--wp-text);
+}
+
+.klaviyo-command-spotlight strong,
+.klaviyo-command-priority strong,
+.klaviyo-command-panel strong {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  color: var(--wp-text);
+}
+
+.klaviyo-command-spotlight p,
+.klaviyo-command-priority p,
+.klaviyo-command-panel p {
+  margin: 0;
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.klaviyo-command-spotlight.tone-success,
+.klaviyo-command-priority.tone-success,
+.klaviyo-command-panel.tone-success { border-left-color: var(--wp-success); background: var(--wp-surface); }
+
+.klaviyo-command-spotlight.tone-warning,
+.klaviyo-command-priority.tone-warning,
+.klaviyo-command-panel.tone-warning { border-left-color: var(--wp-warning); background: var(--wp-surface); }
+
+.klaviyo-command-spotlight.tone-danger,
+.klaviyo-command-priority.tone-danger,
+.klaviyo-command-panel.tone-danger { border-left-color: var(--wp-danger); background: var(--wp-surface); }
+
+.klaviyo-command-hero-side,
+.klaviyo-command-hero-main,
+.klaviyo-command-hero-grid,
+.klaviyo-command-priority-list {
+  display: grid;
+  gap: var(--wp-space-3);
+  align-content: start;
+}
+
+.klaviyo-command-hero-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+
+/* ---------------------------------------------------------------------------
+   The Content Agent stage
+
+   This is the status of a background worker: which campaign it is on, which phase it is
+   in, and whether anything is waiting for a person. It was drawn as a launch page - a
+   102px headline, an animated halo, drifting orbit dots, a paper-stack illustration and
+   a minimum height of 70vh - so "Waiting for the next campaign" filled the screen.
+
+   It keeps every control and every piece of status. It is just sized like a status
+   panel rather than like a product announcement.
+--------------------------------------------------------------------------- */
+
+.content-agent-focus-stage {
+  position: relative;
+  min-height: 0;
+  grid-template-rows: auto auto auto;
+}
+
+/* The stage used to be a fixed 70vh canvas with its content positioned absolutely on
+   top of it, which is why it could not simply be made shorter. The status text goes back
+   into normal flow, so the panel is as tall as what it has to say. */
+.content-agent-focus-copy {
+  position: static;
+  top: auto;
+  left: auto;
+  width: 100%;
+  transform: none;
+}
+
+/* The three-sheet illustration and its scan line. Decoration with no state in it. */
+.content-agent-composition,
+.content-agent-composition-scan {
+  display: none;
+}
+
+/* The director slides in over the stage, so while it is open the stage has to be tall
+   enough to hold it. */
+.content-agent-focus-stage:has(.content-agent-director.is-open) {
+  min-height: 420px;
+}
+
+.content-agent-director {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: var(--wp-shadow-lg);
+  backdrop-filter: none;
+}
+
+.content-agent-focus-copy {
+  justify-items: start;
+  width: 100%;
+  padding: var(--wp-space-6) var(--wp-space-5);
+  text-align: left;
+}
+
+.content-agent-focus-copy h3,
+.content-agent-focus-copy.is-long-title h3,
+.content-agent-focus-copy.is-very-long-title h3 {
+  max-width: 60ch;
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-snug);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.content-agent-focus-copy p {
+  margin: var(--wp-space-1) 0 0;
+  max-width: 76ch;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.content-agent-focus-phase {
+  margin-bottom: var(--wp-space-2);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  color: var(--wp-text-subtle);
+}
+
+/* The animated halo, the orbit dots and the paper-stack illustration are decoration.
+   They are not carrying any part of the agent state, which is all in the text and the
+   phase track beneath it. */
+.content-agent-kinetic,
+.content-agent-sheet-stack,
+.content-agent-sheets,
+.content-agent-score-orb,
+.content-agent-orbit-dot,
+.content-agent-halo,
+.content-agent-core,
+.content-agent-beam {
+  display: none;
+}
+
+/* The stage controls take the button system: one primary action, two icon buttons. */
+.content-agent-direct-button,
+.content-agent-review-button {
+  min-height: var(--wp-control-height);
+  gap: var(--wp-space-2);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-brand);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-brand);
+  color: var(--wp-brand-contrast);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+}
+
+.content-agent-direct-button:hover,
+.content-agent-review-button:hover {
+  background: var(--wp-brand-hover);
+  border-color: var(--wp-brand-hover);
+  transform: none;
+  box-shadow: none;
+}
+
+.content-agent-review-button { margin-top: var(--wp-space-4); }
+
+.content-agent-icon-button {
+  width: var(--wp-control-height);
+  height: var(--wp-control-height);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text-secondary);
+  backdrop-filter: none;
+}
+
+.content-agent-icon-button:hover {
+  background: var(--wp-surface-hover);
+  transform: none;
+}
+
+.content-agent-phase-track {
+  gap: var(--wp-space-4);
+  font-size: var(--wp-text-2xs);
+  letter-spacing: var(--wp-tracking-caps);
+  color: var(--wp-text-subtle);
+}
+
+
+/* -- Content Agent operations panel ---------------------------------------
+   Same content, same structure, on the standard surface: a section header, a metric
+   strip, an alert and a run log. It was a cream panel with its own type scale and its
+   own status chip shape. */
+.content-agent-mission {
+  padding: var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  box-shadow: none;
+}
+
+.content-agent-mission-head {
+  margin-bottom: var(--wp-space-4);
+  gap: var(--wp-space-4);
+}
+
+.content-agent-mission-kicker {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.content-agent-mission-head h3 {
+  margin: 2px 0 0;
+  font-size: var(--wp-text-lg);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+.content-agent-mission-head p {
+  margin: var(--wp-space-1) 0 0;
+  font-size: var(--wp-text-sm);
+  color: var(--wp-text-muted);
+}
+
+/* Agent health is a status badge like every other status in the product. */
+.content-agent-heartbeat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  height: auto;
+  min-height: var(--wp-control-height);
+  padding: var(--wp-space-1) var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-xs);
+  box-shadow: none;
+}
+
+.content-agent-heartbeat > i {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-grey-400);
+  box-shadow: none;
+}
+
+.content-agent-heartbeat[data-health="healthy"] { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.content-agent-heartbeat[data-health="healthy"] > i { background: var(--wp-success); }
+.content-agent-heartbeat[data-health="degraded"] { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.content-agent-heartbeat[data-health="degraded"] > i { background: var(--wp-warning); }
+.content-agent-heartbeat[data-health="critical"] { border-color: var(--wp-danger-border); background: var(--wp-danger-surface); color: var(--wp-danger-text); }
+.content-agent-heartbeat[data-health="critical"] > i { background: var(--wp-danger); }
+
+.content-agent-heartbeat small {
+  display: block;
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+}
+
+/* The two figure grids are the metric strip. */
+.content-agent-health-grid,
+.content-agent-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0;
+  margin-bottom: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.content-agent-health-grid > article,
+.content-agent-metrics > article {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 0;
+  border-right: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.content-agent-health-grid > article:last-child,
+.content-agent-metrics > article:last-child { border-right: 0; }
+
+.content-agent-health-grid span,
+.content-agent-metrics span {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.content-agent-health-grid strong,
+.content-agent-metrics strong {
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.content-agent-health-grid small,
+.content-agent-metrics small {
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-muted);
+}
+
+/* Health alerts and the all-clear note are the alert banner. */
+.content-agent-alert-stack p,
+.content-agent-all-clear {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--wp-space-2);
+  margin: 0 0 var(--wp-space-2);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+}
+
+.content-agent-all-clear { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.content-agent-alert-stack p[data-severity="warning"] { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.content-agent-alert-stack p[data-severity="critical"],
+.content-agent-alert-stack p[data-severity="error"] { border-color: var(--wp-danger-border); background: var(--wp-danger-surface); color: var(--wp-danger-text); }
+
+.content-agent-alert-stack p > i,
+.content-agent-all-clear > i {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: var(--wp-radius-pill);
+  background: currentColor;
+}
+
+.content-agent-runs-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  margin-bottom: var(--wp-space-3);
+}
+
+.content-agent-runs-head span {
+  display: block;
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  color: var(--wp-text-subtle);
+}
+
+.content-agent-runs-head strong {
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.content-agent-runs-head small,
+.content-agent-empty p {
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.content-agent-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-5);
+  border: 1px dashed var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+}
+
+.content-agent-empty > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-pill);
+  color: var(--wp-text-subtle);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.content-agent-empty strong {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.content-agent-ripple-layer { display: none; }
+
+
+/* -- The ads studio -------------------------------------------------------- */
+
+/* The step summary was a peach gradient panel. It reports where the operator is in the
+   three-step flow, so it reads as a status strip on the standard surface. */
+.duplicate-flow-summary {
+  padding: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+}
+
+.duplicate-flow-summary-head { justify-content: space-between; }
+
+.duplicate-flow-status,
+.duplicate-flow-active-label {
+  height: 20px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-neutral-border);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+}
+
+.duplicate-flow-active-label {
+  border-color: transparent;
+  background: transparent;
+  color: var(--wp-text-muted);
+}
+
+.duplicate-flow-status.is-success { border-color: var(--wp-success-border); background: var(--wp-success-surface); color: var(--wp-success-text); }
+.duplicate-flow-status.is-warning { border-color: var(--wp-warning-border); background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+.duplicate-flow-status.is-danger  { border-color: var(--wp-danger-border);  background: var(--wp-danger-surface);  color: var(--wp-danger-text); }
+
+/* The step tabs through the duplicate and create flows. */
+.duplicate-step-nav,
+.create-step-nav,
+.studio-step-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-sunken);
+  box-shadow: none;
+}
+
+.duplicate-step-button,
+.create-step-button {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  border: 0;
+  border-radius: var(--wp-radius-sm);
+  background: transparent;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+.duplicate-step-button.active,
+.create-step-button.active {
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+  box-shadow: var(--wp-shadow-xs);
+}
+
+/* Field labels are sentence case everywhere. They were uppercase and letterspaced on
+   the ads screens and sentence case on the Klaviyo ones, which is the same control
+   looking like two different controls. */
+.field > span,
+.control-form label > span,
+.klaviyo-template-form label > span {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--wp-text-secondary);
+}
+
+.recommendation,
+.queue-item,
+.preview-card,
+.action-item,
+.integration-item,
+.audit-item,
+.match-item,
+.prompt-item,
+.variant-item {
+  padding: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  box-shadow: none;
+}
+
+
+/* -- Remaining details ----------------------------------------------------- */
+
+/* The product name is two words and a subtitle; it should never break across lines. */
+.wp-brand-name strong,
+.wp-brand-name small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Cards inside cards. The settings prompt was four bordered tiles inside a bordered
+   panel inside a drawer - three frames around one paragraph each. They are a list of
+   titled notes separated by rules. */
+.settings-card .prompt-item,
+.prompt-stack .prompt-item {
+  padding: var(--wp-space-3) 0;
+  border: 0;
+  border-top: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.prompt-stack .prompt-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prompt-item strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.prompt-item p,
+.settings-card p,
+.settings-list {
+  margin: 0;
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  color: var(--wp-text-muted);
+}
+
+.settings-list {
+  padding-left: var(--wp-space-4);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--wp-space-4);
+}
+
+.settings-card.span-two-settings { grid-column: 1 / -1; }
+
+/* The Klaviyo page header had a heading nearly twice the size of the Meta one, on its
+   own tinted surface. One page header, one size. */
+#klaviyo-product-panel .topbar {
+  margin-bottom: var(--wp-space-5);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#klaviyo-product-panel .topbar-copy h2 {
+  font-size: var(--wp-text-2xl);
+  letter-spacing: var(--wp-tracking-tight);
+}
+
+/* Klaviyo panels take the same surface as everything else. */
+.klaviyo-campaign-card,
+.klaviyo-flow-focus-card,
+.klaviyo-trend-card,
+.klaviyo-overview-card,
+.klaviyo-mini-card,
+.klaviyo-highlight-card,
+.klaviyo-subscriber-total-card,
+.klaviyo-market-detail-card,
+.klaviyo-campaign-toolbar,
+.klaviyo-subscriber-toolbar {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  box-shadow: none;
+}
+
+.klaviyo-trend-card::before,
+.klaviyo-trend-card::after,
+.klaviyo-overview-card::after,
+.klaviyo-mini-card::after {
+  content: none;
+}
+
+
+/* -- Sparklines -----------------------------------------------------------
+   Drawn inline as SVG by the Klaviyo renderers. The colour used to be written into the
+   markup, which meant the palette could not reach it. */
+.wp-spark-line {
+  fill: none;
+  stroke: var(--wp-brand);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wp-spark-fill-top { stop-color: rgba(52, 69, 63, 0.14); }
+.wp-spark-fill-bottom { stop-color: rgba(52, 69, 63, 0.01); }
+.wp-spark-empty { fill: var(--wp-text-subtle); }
+
+/* -- The last of the decorative rules -------------------------------------
+   Each Klaviyo section carried a 4px coloured bar across its top, in a different hue
+   per section. Six hues across six panels is a palette with nothing to say: the section
+   heading already names the section. */
+.klaviyo-section::before,
+.klaviyo-section-performance::before,
+.klaviyo-section-signals::before,
+.klaviyo-section-priorities::before,
+.klaviyo-section-audience::before,
+.klaviyo-section-flows::before,
+.klaviyo-command-spotlight::after,
+.klaviyo-command-panel::after {
+  content: none;
+}
+
+#klaviyo-product-panel .playbook-section {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+/* -- The briefing reads down, not across ----------------------------------
+   Two columns left a tall empty block under the metric strip whenever the notes on the
+   right ran longer than the figures on the left, which is most days. One column with the
+   notes in a grid underneath fills the panel and is easier to scan. */
+.klaviyo-command-hero {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+}
+
+.klaviyo-command-hero-side {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+}
+
+.klaviyo-command-priority-list {
+  display: contents;
+}
+
+
+/* -- Remaining Campaign Studio details ------------------------------------ */
+
+/* The run-detail chips beside the agent status. */
+.content-agent-focus-meta > span,
+.content-agent-focus-meta > * {
+  height: 20px;
+  padding: 0 var(--wp-space-2);
+  border: 1px solid var(--wp-neutral-border);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-neutral-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.content-agent-focus-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  margin-top: var(--wp-space-3);
+}
+
+/* The metric cells were 126px tall with the figure pushed to the bottom, which left a
+   band of empty surface under a single number. */
+.content-agent-metrics > article {
+  min-height: 0;
+  align-content: start;
+}
+
+.content-agent-metrics > article::before {
+  top: var(--wp-space-3);
+  right: var(--wp-space-3);
+  width: 6px;
+  height: 6px;
+  box-shadow: none;
+}
+
+.campaign-learning-studio {
+  margin: 0 0 var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+}
+
+.campaign-learning-studio-toggle {
+  min-height: 0;
+  padding: var(--wp-space-3) var(--wp-space-4);
+  color: var(--wp-text);
+}
+
+.campaign-learning-studio-toggle small {
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  color: var(--wp-text-subtle);
+}
+
+.campaign-learning-studio-toggle strong {
+  font-size: var(--wp-text-base);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-tight);
+  color: var(--wp-text);
+}
+
+/* The stage sections need their own padding now that the copy is in flow. */
+.content-agent-focus-copy { padding: var(--wp-space-5); }
+
+
+/* -- Phone corrections ---------------------------------------------------- */
+@media (max-width: 720px) {
+  /* The header columns carry a flex-basis so they share a row on desktop. Once the
+     header stacks, that basis is read as a height, which left a 320px hole between the
+     page description and its actions. */
+  .topbar-copy,
+  .wp-page-header-main {
+    flex: 0 0 auto;
+  }
+
+  .sync-status,
+  .wp-toolbar-group.is-end {
+    flex: 0 0 auto;
+    max-width: none;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  /* Lens tabs scroll sideways rather than wrapping onto a second row: two rows of tabs
+     reads as two separate sets of choices. */
+  .dashboard-subtabs,
+  .klaviyo-dashboard-subtabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: var(--wp-space-3);
+  }
+
+  .dashboard-subtabs::-webkit-scrollbar,
+  .klaviyo-dashboard-subtabs::-webkit-scrollbar { display: none; }
+
+  .dashboard-subtab,
+  .klaviyo-dashboard-subtab { white-space: nowrap; }
+}
+
+
+/* A Meta error message can contain a long documentation URL, which has no break
+   opportunity and so pushed the toolbar wider than the screen. */
+.sync-status,
+.inline-feedback,
+.wp-alert {
+  overflow-wrap: anywhere;
+}
+
+
+/* -- Final sweep ----------------------------------------------------------- */
+
+/* Native controls pick up the browser blue unless told otherwise, which on this palette
+   is the only saturated colour on the screen. */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+progress {
+  accent-color: var(--wp-brand);
+}
+
+/* A page title should get the room it needs before the actions start taking it. */
+.topbar-copy {
+  flex: 1 1 420px;
+}
+
+/* Cards inside cards. A summary panel was a bordered card holding ten bordered tiles,
+   each with one label and one value - three frames around a single line of text. They
+   are rows separated by rules, which is what they always were. */
+.klaviyo-operator-card .klaviyo-market-stat,
+.klaviyo-rollout-summary .klaviyo-market-stat,
+.campaign-studio-intake-grid .campaign-studio-intake-card,
+.campaign-brain-assembly-glance .campaign-brain-glance-card {
+  padding: var(--wp-space-2) 0;
+  border: 0;
+  border-top: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.klaviyo-operator-card .klaviyo-market-stat:first-child,
+.klaviyo-rollout-summary .klaviyo-market-stat:first-child,
+.campaign-studio-intake-grid .campaign-studio-intake-card:first-child,
+.campaign-brain-assembly-glance .campaign-brain-glance-card:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.klaviyo-market-stat span,
+.campaign-studio-intake-card span,
+.campaign-brain-glance-card span {
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.klaviyo-market-stat strong,
+.campaign-studio-intake-card strong,
+.campaign-brain-glance-card strong {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+/* The template preview frame. It was a warm beige stage from the old palette. */
+.klaviyo-variant-preview-shell,
+.klaviyo-variant-preview,
+.klaviyo-variant-preview-empty,
+.campaign-email-builder-device {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-sunken);
+  box-shadow: none;
+}
+
+.klaviyo-variant-preview-empty {
+  display: grid;
+  place-items: center;
+  padding: var(--wp-space-8);
+  border-style: dashed;
+  border-color: var(--wp-border-strong);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+  text-align: center;
+}
+
+/* Market selection tiles. They are a choice, so the selected one says so with the brand
+   surface rather than only with a ticked box in the corner. */
+.klaviyo-market-option,
+.klaviyo-country-option {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  box-shadow: none;
+  transition: border-color var(--wp-duration) var(--wp-ease), background var(--wp-duration) var(--wp-ease);
+}
+
+.klaviyo-market-option:hover,
+.klaviyo-country-option:hover { border-color: var(--wp-grey-400); }
+
+.klaviyo-market-option:has(input:checked),
+.klaviyo-country-option:has(input:checked) {
+  border-color: var(--wp-brand-border);
+  background: var(--wp-brand-surface);
+}

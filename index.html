@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mads' bibel</title>
+  <title>Westpack Marketing OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260723-email-editor1">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Order matters. styles.css is held in the wp-legacy cascade layer, so design-system.css
+       wins on anything it declares regardless of selector specificity. See the header of
+       either file for how the two fit together. -->
+  <link rel="stylesheet" href="styles.css?v=20260723-email-editor1">
+  <link rel="stylesheet" href="design-system.css?v=20260918-ds1">
 </head>
 <body>
   <div class="auth-wall" id="auth-wall" aria-hidden="true">
@@ -27,49 +31,90 @@
   </div>
 
   <div class="shell">
-    <aside class="sidebar">
-      <div class="sidebar-head">
-        <div class="brand-lockup">
-          <div class="brand-mark" aria-hidden="true">WP</div>
-          <div>
-            <p class="sidebar-label">Westpack marketing OS</p>
-            <h1>Mads' bibel</h1>
+    <!-- The rail lists both platforms at once. The old header hid one behind a workspace
+         toggle, so half the product was invisible unless you already knew it was there. -->
+    <aside class="wp-sidebar">
+      <div class="wp-sidebar-brand">
+        <span class="wp-brandmark" aria-hidden="true">W</span>
+        <span class="wp-brand-name">
+          <strong>Westpack</strong>
+          <small>Marketing OS</small>
+        </span>
+      </div>
+
+      <nav class="wp-nav" aria-label="Primary">
+        <div class="wp-nav-group">
+          <p class="wp-nav-group-label" id="wp-nav-label-meta">Meta ads</p>
+          <div class="tab-list" role="group" aria-labelledby="wp-nav-label-meta">
+            <button class="tab-button wp-nav-item active" data-tab="dashboard" data-nav-workspace="meta" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 9.5 6 5l3.5 3.5L14 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13.5h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Performance</span>
+            </button>
+            <button class="tab-button wp-nav-item" data-tab="studio" data-nav-workspace="meta" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="2.25" width="11.5" height="11.5" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 5.5v5M5.5 8h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Create &amp; manage ads</span>
+            </button>
           </div>
         </div>
 
-        <nav class="tab-list meta-nav-list" id="meta-nav-list" aria-label="Meta navigation">
-          <button class="tab-button active" data-tab="dashboard">Dashboard</button>
-          <button class="tab-button" data-tab="studio">Create / Manage Ads</button>
-        </nav>
-
-        <nav class="subnav-list" id="klaviyo-nav-list" aria-label="Klaviyo navigation" hidden>
-          <button class="subnav-button active" data-klaviyo-view="dashboard" type="button">Dashboard</button>
-          <button class="subnav-button" data-klaviyo-view="duplicate_translate" type="button">Duplicate / Translate</button>
-          <button class="subnav-button" data-klaviyo-view="campaign_brain" type="button">Campaign Studio</button>
-        </nav>
-      </div>
-
-      <div class="sidebar-meta">
-        <section class="sidebar-card compact workspace-switch-card">
-          <p class="sidebar-label">Workspace</p>
-          <div class="workspace-switch" aria-label="Workspace switch">
-            <button class="workspace-tab active" data-workspace="meta" type="button">Meta</button>
-            <button class="workspace-tab" data-workspace="klaviyo" type="button">Klaviyo</button>
+        <div class="wp-nav-group">
+          <p class="wp-nav-group-label" id="wp-nav-label-klaviyo">Klaviyo email</p>
+          <div class="subnav-list" role="group" aria-labelledby="wp-nav-label-klaviyo">
+            <button class="subnav-button wp-nav-item active" data-klaviyo-view="dashboard" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 12V6.5M6 12V3.5M10 12V8M14 12V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Overview</span>
+            </button>
+            <button class="subnav-button wp-nav-item" data-klaviyo-view="duplicate_translate" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="2.25" width="8" height="8" rx="1.75" stroke="currentColor" stroke-width="1.5"/><path d="M5.75 13.75h6a2 2 0 0 0 2-2v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Duplicate &amp; translate</span>
+            </button>
+            <button class="subnav-button wp-nav-item" data-klaviyo-view="campaign_ai" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="3.25" width="11.5" height="9.5" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 6h11" stroke="currentColor" stroke-width="1.5"/></svg>
+              <span>Template AI</span>
+            </button>
+            <button class="subnav-button wp-nav-item" data-klaviyo-view="campaign_brain" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.25 13.5 5.4v5.2L8 13.75 2.5 10.6V5.4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 8v5.75M8 8l5.5-2.6M8 8 2.5 5.4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              <span>Campaign Studio</span>
+            </button>
           </div>
-          <button class="ghost-button small auth-logout-button" id="auth-logout-button" type="button" hidden>Log out</button>
-        </section>
+        </div>
+      </nav>
+
+      <!-- Integration health belongs to the workspace, not to whichever screen is open,
+           so it sits in the rail rather than being repeated in every page header. -->
+      <div class="wp-sidebar-foot">
+        <div class="status-pill warning" id="meta-status-pill">Meta offline</div>
+        <div class="status-pill" id="openai-status-pill">OpenAI</div>
+        <button class="wp-nav-item" data-jump="settings" type="button">
+          <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.25" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75v1.5M8 12.75v1.5M14.25 8h-1.5M3.25 8h-1.5M12.42 3.58l-1.06 1.06M4.64 11.36l-1.06 1.06M12.42 12.42l-1.06-1.06M4.64 4.64 3.58 3.58" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Settings</span>
+        </button>
+        <button class="wp-nav-item auth-logout-button" id="auth-logout-button" type="button" hidden>
+          <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2.75H4a1.5 1.5 0 0 0-1.5 1.5v7.5A1.5 1.5 0 0 0 4 13.25h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M10 5.25 12.75 8 10 10.75M12.5 8h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Log out</span>
+        </button>
       </div>
     </aside>
 
     <main class="main-content">
-      <section class="product-panel active" id="meta-product-panel">
+      <section class="product-panel wp-page active" id="meta-product-panel">
+      <!-- Page header: what this page is, one line of context, nothing else. The controls
+           that decide what it shows live in the toolbar underneath. -->
       <section class="topbar">
         <div class="topbar-copy">
-          <p class="section-label">Mads' bibel / Meta</p>
-          <h2 id="view-title">Dashboard</h2>
-          <p class="topbar-sub">Decision-ready Meta operations with one sharp view per lens.</p>
+          <p class="section-label">Meta</p>
+          <h2 id="view-title">Performance</h2>
+          <p class="topbar-sub" id="view-description">How Meta advertising is performing, by objective. New customers first, then the budget behind them.</p>
         </div>
         <div class="topbar-actions">
+          <button class="ghost-button" id="refresh-data-button" type="button">Refresh data</button>
+          <button class="ghost-button" id="update-snapshot-button" type="button">Update snapshot</button>
+        </div>
+      </section>
+
+      <section class="wp-toolbar" aria-label="Dashboard controls">
+        <div class="topbar-actions wp-toolbar-group">
+          <span class="wp-toolbar-label">Period</span>
           <div class="dashboard-controls">
             <select id="dashboard-date-preset" class="dashboard-control-select" aria-label="Date scope">
               <option value="last_7d">Last 7 days</option>
@@ -96,14 +141,9 @@
               <option value="snapshot">Data mode: Snapshot</option>
             </select>
           </div>
-          <button class="ghost-button" id="refresh-data-button" type="button">Refresh data</button>
-          <button class="ghost-button" id="update-snapshot-button" type="button">Update snapshot</button>
-          <div class="sync-status" id="sync-status" aria-live="polite"></div>
         </div>
-        <div class="status-cluster">
-          <div class="status-pill online" id="openai-status-pill">OpenAI ready</div>
-          <div class="status-pill warning" id="meta-status-pill">Meta offline</div>
-          <button class="ghost-button small" data-jump="settings">Open Settings</button>
+        <div class="wp-toolbar-group is-end">
+          <div class="sync-status" id="sync-status" aria-live="polite"></div>
         </div>
       </section>
 
@@ -721,15 +761,22 @@
       </section>
       </section>
 
-      <section class="product-panel" id="klaviyo-product-panel">
+      <section class="product-panel wp-page" id="klaviyo-product-panel">
         <section class="klaviyo-view-panel active" id="klaviyo-dashboard-panel">
           <section class="topbar klaviyo-topbar">
             <div class="topbar-copy">
-              <p class="section-label">Mads' bibel / Klaviyo</p>
-              <h2 id="klaviyo-dashboard-title">Klaviyo Overview</h2>
-              <p class="topbar-sub" id="klaviyo-topbar-sub"></p>
+              <p class="section-label">Klaviyo</p>
+              <h2 id="klaviyo-dashboard-title">Overview</h2>
+              <p class="topbar-sub" id="klaviyo-topbar-sub">Email performance across every market account: campaigns, flows and list growth.</p>
             </div>
             <div class="topbar-actions">
+              <button class="ghost-button" id="klaviyo-refresh-button" type="button">Refresh data</button>
+            </div>
+          </section>
+
+          <section class="wp-toolbar" aria-label="Klaviyo controls">
+            <div class="wp-toolbar-group">
+              <span class="wp-toolbar-label">Period</span>
               <div class="dashboard-controls klaviyo-controls">
                 <select id="klaviyo-range" class="dashboard-control-select" aria-label="Klaviyo range">
                   <option value="7">Last 7 days</option>
@@ -737,7 +784,8 @@
                   <option value="90">Last 90 days</option>
                 </select>
               </div>
-              <button class="ghost-button" id="klaviyo-refresh-button" type="button">Refresh data</button>
+            </div>
+            <div class="wp-toolbar-group is-end">
               <div class="status-pill" id="klaviyo-refresh-status">Snapshot loaded</div>
             </div>
           </section>
@@ -908,7 +956,7 @@
         <section class="klaviyo-view-panel" id="klaviyo-duplicate-translate-panel">
           <section class="topbar klaviyo-topbar">
               <div class="topbar-copy">
-                <p class="section-label">Mads' bibel / Klaviyo</p>
+                <p class="section-label">Klaviyo</p>
                 <h2>Duplicate / Translate</h2>
               <p class="topbar-sub">Choose source country, choose template, choose target countries.</p>
               </div>
@@ -1004,7 +1052,7 @@
         <section class="klaviyo-view-panel" id="klaviyo-campaign-ai-panel">
           <section class="topbar klaviyo-topbar">
             <div class="topbar-copy">
-              <p class="section-label">Mads' bibel / Klaviyo</p>
+              <p class="section-label">Klaviyo</p>
               <h2>Template AI</h2>
               <p class="topbar-sub">Take one existing template, let AI rewrite the full mail, and create a new template draft from it.</p>
             </div>
@@ -1104,7 +1152,7 @@
         <section class="klaviyo-view-panel" id="klaviyo-campaign-brain-panel">
           <section class="topbar klaviyo-topbar">
             <div class="topbar-copy">
-              <p class="section-label">Mads' bibel / Klaviyo</p>
+              <p class="section-label">Klaviyo</p>
               <h2>Campaign Studio</h2>
               <p class="topbar-sub">From connected Asana sources to quality-gated campaign systems, ready for human direction.</p>
             </div>

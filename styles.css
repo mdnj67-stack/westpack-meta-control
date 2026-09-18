@@ -1,4 +1,17 @@
-﻿/* ---------------------------------------------------------------------------
+﻿/* ===========================================================================
+   LEGACY STYLESHEET
+
+   Everything below is held in the `wp-legacy` cascade layer. design-system.css is
+   unlayered, so any property the design system sets wins here regardless of how
+   specific the legacy selector is - which is what lets one set of tokens and one set
+   of primitives take over the look of the whole app without rewriting 18,000 lines of
+   working layout.
+
+   New styling belongs in design-system.css. This file is only edited to remove
+   something it duplicates, or to fix a layout rule that has no home in the system.
+   =========================================================================== */
+@layer wp-legacy {
+/* ---------------------------------------------------------------------------
    Legacy alias tokens.
 
    Every value here is an alias onto the design system in design-system.css, which is
@@ -13024,601 +13037,12 @@ textarea {
   background: linear-gradient(180deg, rgb(var(--tone-awareness-rgb) / 0.95) 0%, rgb(var(--tone-awareness-rgb) / 0.42) 100%);
 }
 
-/* Premium dashboard pass */
-#meta-product-panel {
-  position: relative;
-}
-
-#meta-product-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 420px;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at top left, rgba(203, 77, 59, 0.12) 0%, rgba(203, 77, 59, 0) 34%),
-    radial-gradient(circle at top right, rgba(108, 125, 178, 0.16) 0%, rgba(108, 125, 178, 0) 38%),
-    linear-gradient(180deg, rgba(250, 246, 241, 0.95) 0%, rgba(250, 246, 241, 0) 100%);
-}
-
-#meta-product-panel .topbar {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(320px, auto);
-  grid-template-areas:
-    "copy status"
-    "actions actions";
-  align-items: start;
-  gap: 16px 18px;
-  padding: 20px 22px;
-  border-radius: 12px;
-  border: 1px solid rgba(225, 214, 201, 0.92);
-  background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 244, 237, 0.9) 100%);
-  box-shadow: 0 22px 46px rgba(23, 18, 16, 0.06);
-  overflow: hidden;
-}
-
-#meta-product-panel .topbar::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 4px;
-  background: linear-gradient(90deg, rgba(204, 70, 54, 0.88) 0%, rgba(118, 134, 190, 0.8) 54%, rgba(78, 166, 138, 0.82) 100%);
-}
-
-#meta-product-panel .topbar-copy {
-  grid-area: copy;
-}
-
-#meta-product-panel .topbar-copy h2 {
-  font-size: clamp(2.05rem, 3vw, 2.7rem);
-  letter-spacing: -0.07em;
-  line-height: 0.92;
-}
-
-#meta-product-panel .topbar-sub {
-  display: block;
-  max-width: 52ch;
-  color: rgba(58, 50, 44, 0.74);
-  text-wrap: pretty;
-}
-
-#meta-product-panel .topbar-actions {
-  grid-area: actions;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 10px 12px;
-  align-items: start;
-}
-
-#meta-product-panel .status-cluster {
-  grid-area: status;
-  align-self: start;
-  justify-self: end;
-}
-
-#meta-product-panel .dashboard-controls {
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid rgba(227, 216, 203, 0.9);
-  background: rgba(255, 255, 255, 0.68);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  justify-content: flex-start;
-}
-
-#meta-product-panel .dashboard-control-select,
-#meta-product-panel .dashboard-date-custom input {
-  min-width: 188px;
-  border-radius: 8px;
-  border-color: rgba(217, 204, 189, 0.94);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 20px rgba(26, 26, 24, 0.035);
-}
-
-#meta-product-panel .topbar-actions > .ghost-button {
-  min-height: 56px;
-  align-self: stretch;
-}
-
-#meta-product-panel #refresh-data-button {
-  grid-column: 2;
-}
-
-#meta-product-panel #update-snapshot-button {
-  grid-column: 3;
-}
-
-#meta-product-panel .sync-status {
-  grid-column: 1 / -1;
-  min-height: 0;
-  padding: 11px 14px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(231, 223, 214, 0.9);
-  white-space: normal;
-  line-height: 1.45;
-  color: rgba(66, 57, 51, 0.82);
-}
-
-#meta-product-panel .status-cluster {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(229, 219, 209, 0.9);
-  background: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 10px 24px rgba(26, 26, 24, 0.04);
-  max-width: min(100%, 420px);
-}
-
-#meta-product-panel .status-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 9px 14px;
-  white-space: nowrap;
-  line-height: 1.1;
-}
-
-#meta-product-panel .status-cluster > .ghost-button {
-  min-height: 38px;
-}
-
-#meta-product-panel.is-studio-active .topbar {
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "copy status"
-    "actions actions";
-  gap: 10px 14px;
-  padding: 16px 18px;
-  border-radius: 10px;
-}
-
-#meta-product-panel.is-studio-active .topbar-copy .section-label,
-#meta-product-panel.is-studio-active .topbar-sub,
-#meta-product-panel.is-studio-active #dashboard-auto-refresh,
-#meta-product-panel.is-studio-active #update-snapshot-button,
-#meta-product-panel.is-studio-active .sync-status {
-  display: none;
-}
-
-#meta-product-panel.is-studio-active .topbar-copy h2 {
-  font-size: 1.8rem;
-  letter-spacing: -0.05em;
-}
-
-#meta-product-panel.is-studio-active .topbar-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-#meta-product-panel.is-studio-active .dashboard-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 6px;
-  border-radius: 8px;
-}
-
-#meta-product-panel.is-studio-active .dashboard-control-select,
-#meta-product-panel.is-studio-active .dashboard-date-custom input {
-  min-width: 0;
-  width: auto;
-  min-height: 40px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  box-shadow: none;
-}
-
-#meta-product-panel.is-studio-active #dashboard-date-preset {
-  min-width: 150px;
-}
-
-#meta-product-panel.is-studio-active #meta-data-mode {
-  min-width: 132px;
-}
-
-#meta-product-panel.is-studio-active .topbar-actions > .ghost-button,
-#meta-product-panel.is-studio-active .status-cluster > .ghost-button,
-#meta-product-panel.is-studio-active .status-pill {
-  min-height: 34px;
-  padding: 7px 11px;
-}
-
-#meta-product-panel.is-studio-active .status-cluster {
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  max-width: none;
-}
-
-#dashboard-panel {
-  position: relative;
-  z-index: 1;
-}
-
-#dashboard-panel .dashboard-subtabs {
-  position: sticky;
-  top: 12px;
-  z-index: 5;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(224, 212, 198, 0.86);
-  background: rgba(251, 251, 250, 0.84);
-  box-shadow: 0 18px 36px rgba(23, 18, 16, 0.06);
-  backdrop-filter: blur(18px);
-}
-
-#dashboard-panel .dashboard-subtab {
-  border-radius: 10px;
-  padding: 12px 15px;
-  font-family: "Space Grotesk", sans-serif;
-}
-
-#dashboard-panel .dashboard-subtab.active {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f3ed 100%);
-  border-color: rgba(204, 70, 54, 0.2);
-  box-shadow: 0 12px 22px rgba(26, 26, 24, 0.05);
-}
-
-#dashboard-panel .hero {
-  position: relative;
-  padding: 26px 28px;
-  border-radius: 12px;
-  border: 1px solid rgba(31, 28, 60, 0.08);
-  background:
-    radial-gradient(circle at top right, rgba(109, 128, 188, 0.22) 0%, rgba(109, 128, 188, 0) 32%),
-    radial-gradient(circle at bottom left, rgba(206, 88, 68, 0.2) 0%, rgba(206, 88, 68, 0) 30%),
-    linear-gradient(160deg, rgba(24, 22, 54, 0.98) 0%, rgba(32, 28, 70, 0.98) 48%, rgba(19, 18, 44, 0.99) 100%);
-  box-shadow: 0 26px 54px rgba(16, 13, 38, 0.16);
-  overflow: hidden;
-}
-
-#dashboard-panel .hero::after {
-  content: "";
-  position: absolute;
-  inset: auto -12% -44% auto;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%);
-  pointer-events: none;
-}
-
-#dashboard-panel .hero-copy,
-#dashboard-panel .hero-actions {
-  position: relative;
-  z-index: 1;
-}
-
-#dashboard-panel .hero-kicker,
-#dashboard-panel .hero-sub,
-#dashboard-panel .hero h3 {
-  color: #f6f2ff;
-}
-
-#dashboard-panel .hero-kicker {
-  color: rgba(202, 211, 255, 0.72);
-}
-
-#dashboard-panel .hero-sub {
-  max-width: 54ch;
-  color: rgba(227, 232, 255, 0.78);
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-copy {
-  display: grid;
-  gap: 10px;
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero h3 {
-  max-width: 9ch;
-  font-size: clamp(2.15rem, 4vw, 3.2rem);
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-sub {
-  max-width: 44ch;
-}
-
-#dashboard-panel .hero-panel {
-  gap: 14px;
-}
-
-#dashboard-panel .hero-glance {
-  padding: 14px 14px 13px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.04) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-#dashboard-panel .hero-glance::before {
-  width: 4px;
-  opacity: 0.95;
-}
-
-#dashboard-panel .hero-glance span {
-  color: rgba(205, 214, 255, 0.68);
-}
-
-#dashboard-panel .hero-glance strong {
-  color: #ffffff;
-  font-size: clamp(1.08rem, 1.5vw, 1.36rem);
-}
-
-#dashboard-panel .hero-glance p {
-  color: rgba(228, 233, 255, 0.7);
-}
-
-#dashboard-panel .hero-cta {
-  align-self: stretch;
-  border-color: rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%);
-  color: #ffffff;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-actions {
-  align-content: start;
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-panel.hero-panel-kpi {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-panel.hero-panel-kpi[data-count="5"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-glance {
-  min-height: 108px;
-}
-
-#dashboard-panel[data-dashboard-lens="general"] .hero-glance strong {
-  font-size: clamp(1.18rem, 2vw, 1.52rem);
-}
-
-#dashboard-panel .playbook {
-  gap: 22px;
-}
-
-#dashboard-panel .playbook-section {
-  position: relative;
-  padding: 18px 18px 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(228, 216, 202, 0.88);
-  background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(247, 247, 246,0.84) 100%);
-  box-shadow: 0 18px 38px rgba(23, 18, 16, 0.05);
-}
-
-#dashboard-panel .dashboard-section-head {
-  margin: 0 0 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(229, 218, 205, 0.72);
-}
-
-#dashboard-panel .dashboard-section-head h3 {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.5rem;
-}
-
-#dashboard-panel .stat-card,
-#dashboard-panel .trend-card,
-#dashboard-panel .overview-card,
-#dashboard-panel .dashboard-grid > .card,
-#dashboard-panel .dashboard-grid > details.card,
-#dashboard-panel #dashboard-quality-section {
-  border-radius: 10px;
-  border: 1px solid rgba(230, 219, 206, 0.92);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(247, 247, 246,0.92) 100%);
-  box-shadow: 0 16px 34px rgba(23, 18, 16, 0.045);
-}
-
-#dashboard-panel .card-header {
-  margin-bottom: 14px;
-}
-
-#dashboard-panel .card-header h3 {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.06rem;
-}
-
-#dashboard-panel .stat-card {
-  position: relative;
-  overflow: hidden;
-}
-
-#dashboard-panel .stat-card::before,
-#dashboard-panel .trend-card::after,
-#dashboard-panel .overview-card::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
-  pointer-events: none;
-}
-
-#dashboard-panel .trend-card {
-  min-height: 208px;
-}
-
-#dashboard-panel .decision-chip,
-#dashboard-panel .pulse-badge,
-#dashboard-panel .campaign-status {
-  border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
-#dashboard-panel .pressure-group {
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(247, 247, 246,0.9) 100%);
-}
-
-#dashboard-panel .pulse-row {
-  padding: 18px 18px 16px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,244,238,0.92) 100%);
-}
-
-#dashboard-panel .pulse-bar {
-  height: 9px;
-  background: rgba(226, 216, 204, 0.78);
-}
-
-#dashboard-panel .pulse-bar span {
-  background: linear-gradient(90deg, rgba(214, 79, 60, 0.82) 0%, rgba(104, 126, 194, 0.92) 100%);
-}
-
-#dashboard-panel .table-wrap {
-  padding: 8px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.58);
-  border: 1px solid rgba(233, 223, 211, 0.88);
-}
-
-#dashboard-panel .table-wrap table {
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-#dashboard-panel .table-wrap thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(247, 247, 246,0.98) 0%, rgba(247,240,232,0.98) 100%);
-  border-bottom: 1px solid rgba(228, 217, 203, 0.9);
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-#dashboard-panel .table-wrap tbody tr:nth-child(odd) {
-  background: rgba(255,255,255,0.7);
-}
-
-#dashboard-panel .table-wrap tbody tr:hover {
-  background: rgba(247, 240, 232, 0.92);
-}
-
-#dashboard-panel .accordion {
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(247, 247, 246,0.92) 100%);
-}
-
-#dashboard-panel .accordion > summary {
-  padding: 18px 20px;
-  background: transparent;
-}
-
-#dashboard-panel .agent-item {
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,244,238,0.94) 100%);
-}
-
-@media (max-width: 1180px) {
-  #dashboard-panel .hero,
-  #meta-product-panel .topbar {
-    padding: 22px;
-  }
-
-  #meta-product-panel .topbar {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "copy"
-      "status"
-      "actions";
-  }
-
-  #meta-product-panel .status-cluster {
-    justify-self: start;
-    max-width: none;
-  }
-
-  #meta-product-panel .topbar-actions {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-  }
-
-  #meta-product-panel.is-studio-active .topbar {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "copy"
-      "status"
-      "actions";
-  }
-}
-
-@media (max-width: 980px) {
-  #meta-product-panel .topbar-actions {
-    grid-template-columns: 1fr;
-  }
-
-  #meta-product-panel #refresh-data-button,
-  #meta-product-panel #update-snapshot-button,
-  #meta-product-panel .sync-status {
-    grid-column: auto;
-  }
-
-  #meta-product-panel.is-studio-active .topbar-actions,
-  #meta-product-panel.is-studio-active .dashboard-controls {
-    width: 100%;
-  }
-
-  #dashboard-panel .hero {
-    grid-template-columns: 1fr;
-  }
-
-  #dashboard-panel .hero h3 {
-    max-width: 12ch;
-  }
-
-  #dashboard-panel[data-dashboard-lens="general"] .hero-panel.hero-panel-kpi,
-  #dashboard-panel[data-dashboard-lens="general"] .hero-panel.hero-panel-kpi[data-count="5"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  #meta-product-panel .topbar,
-  #dashboard-panel .hero,
-  #dashboard-panel .playbook-section {
-    padding: 18px;
-    border-radius: 10px;
-  }
-
-  #dashboard-panel .dashboard-subtabs {
-    position: static;
-  }
-
-  #meta-product-panel .dashboard-controls {
-    width: 100%;
-  }
-
-  #meta-product-panel .dashboard-control-select,
-  #meta-product-panel .dashboard-date-custom input {
-    min-width: 0;
-    width: 100%;
-  }
-
-  #meta-product-panel .dashboard-date-custom {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-}
+/* The dashboard once carried a second design pass of its own here: a 420px radial wash
+   behind the panel, a rainbow rule across the top of the header, and about 600 lines of
+   id-scoped overrides that restyled the same tabs, cards, tables and controls the rest of
+   the sheet had already styled. It has been removed in favour of design-system.css, which
+   now owns all of it. Nothing in it was load-bearing: the one class it alone defined,
+   is-studio-active, is styled in the design system. */
 
 .trend-card.tone-leads::before {
   background: linear-gradient(180deg, rgb(var(--tone-leads-rgb) / 0.95) 0%, rgb(var(--tone-leads-rgb) / 0.42) 100%);
@@ -13706,43 +13130,43 @@ textarea {
 }
 
 .trend-spark.tone-awareness .area {
-  fill: rgba(52, 69, 63, 0.16);
+  fill: rgb(var(--tone-awareness-rgb) / 0.16);
 }
 
 .trend-spark.tone-awareness .line,
 .trend-spark.tone-awareness .dot {
-  stroke: #b90000;
-  fill: #b90000;
+  stroke: rgb(var(--tone-awareness-rgb));
+  fill: rgb(var(--tone-awareness-rgb));
 }
 
 .trend-spark.tone-leads .area {
-  fill: rgba(173, 113, 0, 0.18);
+  fill: rgb(var(--tone-leads-rgb) / 0.18);
 }
 
 .trend-spark.tone-leads .line,
 .trend-spark.tone-leads .dot {
-  stroke: #ad7100;
-  fill: #ad7100;
+  stroke: rgb(var(--tone-leads-rgb));
+  fill: rgb(var(--tone-leads-rgb));
 }
 
 .trend-spark.tone-conversion .area {
-  fill: rgba(17, 114, 74, 0.18);
+  fill: rgb(var(--tone-conversion-rgb) / 0.18);
 }
 
 .trend-spark.tone-conversion .line,
 .trend-spark.tone-conversion .dot {
-  stroke: #17724a;
-  fill: #17724a;
+  stroke: rgb(var(--tone-conversion-rgb));
+  fill: rgb(var(--tone-conversion-rgb));
 }
 
 .trend-spark.tone-incremental .area {
-  fill: rgba(24, 79, 160, 0.18);
+  fill: rgb(var(--tone-incremental-rgb) / 0.18);
 }
 
 .trend-spark.tone-incremental .line,
 .trend-spark.tone-incremental .dot {
-  stroke: #184fa0;
-  fill: #184fa0;
+  stroke: rgb(var(--tone-incremental-rgb));
+  fill: rgb(var(--tone-incremental-rgb));
 }
 
 .trend-compare-note {
@@ -17990,8 +17414,8 @@ body.campaign-studio-review-mode .main-content {
    changed.
 --------------------------------------------------------------------------- */
 :root {
-  --tone-reach-new-rgb: 42 120 214;
-  --tone-reach-repeat-rgb: 138 146 178;
+  --tone-reach-new-rgb: 122 168 214;
+  --tone-reach-repeat-rgb: 132 146 140;
 }
 
 /* The panel paints its own dark surface, the same way the budget panel beside it
@@ -18760,4 +18184,6 @@ body.campaign-studio-review-mode .main-content {
 .meta-expansion-table th {
   white-space: nowrap;
   max-width: none;
+}
+
 }

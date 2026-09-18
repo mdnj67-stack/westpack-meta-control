@@ -2726,7 +2726,7 @@ function renderKlaviyoOverviewMiniGrid(groups) {
         </div>
         <div class="klaviyo-mini-chart" aria-hidden="true">
           ${path
-            ? `<svg viewBox="0 0 160 42"><path d="${path}" fill="none" stroke="rgba(207, 31, 37, 0.88)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
+            ? `<svg viewBox="0 0 160 42"><path d="${path}" fill="none" class="wp-spark-line" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
             : `<span class="field-hint">No trend yet</span>`}
         </div>
       </article>
@@ -3211,15 +3211,15 @@ function renderKlaviyoSubscriberSection() {
           <svg viewBox="0 0 ${chartWidth} ${chartHeight}" role="img" aria-label="${escapeHtml(trend.label)} trend">
             <defs>
               <linearGradient id="klaviyoTrendFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="rgba(207, 31, 37, 0.18)"></stop>
-                <stop offset="100%" stop-color="rgba(207, 31, 37, 0.01)"></stop>
+                <stop offset="0%" class="wp-spark-fill-top"></stop>
+                <stop offset="100%" class="wp-spark-fill-bottom"></stop>
               </linearGradient>
             </defs>
             ${path ? `
             <path d="${path} L ${chartWidth - 24} ${chartHeight - 24} L 24 ${chartHeight - 24} Z" fill="url(#klaviyoTrendFill)"></path>
-            <path d="${path}" fill="none" stroke="rgba(207, 31, 37, 0.92)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="${path}" fill="none" class="wp-spark-line" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
             ` : `
-            <text x="${chartWidth / 2}" y="${chartHeight / 2}" text-anchor="middle" dominant-baseline="middle" fill="rgba(33, 28, 58, 0.45)" font-size="13">No points in this range</text>
+            <text x="${chartWidth / 2}" y="${chartHeight / 2}" text-anchor="middle" dominant-baseline="middle" class="wp-spark-empty" font-size="13">No points in this range</text>
             `}
           </svg>
           <div class="klaviyo-line-chart-scale">
@@ -10180,7 +10180,7 @@ function bindCampaignEmailBuilderCanvas() {
       if (!documentNode) return;
       if (documentNode.documentElement?.dataset?.westpackBuilderBound === "true") return;
       const style = documentNode.createElement("style");
-      style.textContent = `[data-email-module]{cursor:grab;outline:2px solid transparent;outline-offset:-2px;transition:outline-color .15s ease,opacity .15s ease,transform .15s ease}[data-email-module]:hover{outline-color:rgba(169,0,55,.45)!important}[data-builder-selected=true]{outline-color:#a90037!important}[data-builder-dragging=true]{opacity:.38;cursor:grabbing}[data-builder-drop-position=before]{box-shadow:inset 0 5px 0 #a90037!important}[data-builder-drop-position=after]{box-shadow:inset 0 -5px 0 #a90037!important}[data-builder-image-selected=true]{outline:4px solid #0b7b57!important;outline-offset:-4px!important;cursor:grab!important}[data-builder-edit-field]{cursor:text!important;outline:1px dashed rgba(169,0,55,.5)!important;outline-offset:5px;border-radius:2px;transition:background .15s ease,outline-color .15s ease}[data-builder-edit-field]:focus{outline:2px solid #a90037!important;background:rgba(255,244,247,.8)!important}`;
+      style.textContent = `[data-email-module]{cursor:grab;outline:2px solid transparent;outline-offset:-2px;transition:outline-color .15s ease,opacity .15s ease,transform .15s ease}[data-email-module]:hover{outline-color:rgba(52,69,63,.5)!important}[data-builder-selected=true]{outline-color:#34453f!important}[data-builder-dragging=true]{opacity:.38;cursor:grabbing}[data-builder-drop-position=before]{box-shadow:inset 0 5px 0 #34453f!important}[data-builder-drop-position=after]{box-shadow:inset 0 -5px 0 #34453f!important}[data-builder-image-selected=true]{outline:4px solid #2c5d99!important;outline-offset:-4px!important;cursor:grab!important}[data-builder-edit-field]{cursor:text!important;outline:1px dashed rgba(52,69,63,.5)!important;outline-offset:5px;border-radius:2px;transition:background .15s ease,outline-color .15s ease}[data-builder-edit-field]:focus{outline:2px solid #34453f!important;background:rgba(238,241,239,.85)!important}`;
       documentNode.head?.appendChild(style);
       let modules = [...documentNode.querySelectorAll("[data-email-module]")]
         .filter((node) => !node.querySelector("[data-email-module]"))
@@ -11007,6 +11007,15 @@ function setWorkspace(nextWorkspace = "meta") {
   const klaviyoNav = document.getElementById("klaviyo-nav-list");
   if (metaNav) metaNav.hidden = !isMeta;
   if (klaviyoNav) klaviyoNav.hidden = isMeta;
+
+  // Both platforms are listed in the rail at the same time, so exactly one item across
+  // both groups may read as current. Without this the group you just left keeps a
+  // highlighted row and the rail claims you are in two places at once.
+  document.querySelectorAll("[data-nav-workspace]").forEach((button) => {
+    if (button.dataset.navWorkspace !== appState.workspace) {
+      button.classList.remove("active");
+    }
+  });
 
   if (!isMeta) {
     renderKlaviyoWorkspace();
@@ -14553,6 +14562,19 @@ function attachEvents() {
       await pushToMeta("duplicate");
     }
   }, true);
+
+  // The rail lists Meta and Klaviyo together, so a nav item has to move the workspace as
+  // well as the view. This listener is registered before the per-button handlers below,
+  // so the workspace is in place by the time switchTab or setKlaviyoView runs; otherwise
+  // setWorkspace would re-apply the previously active Klaviyo view and undo the click.
+  document.querySelectorAll("[data-nav-workspace]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextWorkspace = button.dataset.navWorkspace;
+      if (nextWorkspace && nextWorkspace !== appState.workspace) {
+        setWorkspace(nextWorkspace);
+      }
+    });
+  });
 
   document.querySelectorAll(".workspace-tab").forEach((button) => {
     button.addEventListener("click", () => {

@@ -148,7 +148,11 @@ async function run() {
 
   const home = await request("/");
   assert(home.status === 200, `GET / returned ${home.status}`);
-  assert(home.text.includes("Mads' bibel"), "GET / did not render the expected app shell");
+  // The product was called "Mads' bibel" while it was one person's tool. It is being
+  // rolled out across the company, so the shell is checked by the rail that every screen
+  // hangs off rather than by a name that was always going to change.
+  assert(home.text.includes("Westpack Marketing OS"), "GET / did not render the expected app shell");
+  assert(home.text.includes('class="wp-sidebar"'), "GET / did not render the navigation rail");
   results.push(`PASS  GET / -> ${home.status} (${home.durationMs}ms)`);
 
   const authSession = await request("/api/auth/session");
