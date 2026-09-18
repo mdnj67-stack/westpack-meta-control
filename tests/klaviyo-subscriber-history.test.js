@@ -246,3 +246,29 @@ test("consent that has never been recorded reports unavailable rather than 0%", 
   assert.equal(consent.available, false);
   assert.deepEqual(consent.markets, []);
 });
+
+test("an overlapping histogram window corrects an earlier partial day instead of adding to it", () => {
+  // The nightly job re-reads the whole list, so 2026-09-16 arrives as 1 while the day is still
+  // running and as its true 17 the next night. Summing the two snapshots would report 18.
+  const series = buildDailyJoinSeries(history([
+    { date: "2026-09-16", markets: { DE: { total: 100, joined: 1, joinedDaily: { "2026-09-16": 1 } } } },
+    { date: "2026-09-17", markets: { DE: { total: 130, joined: 29, joinedDaily: { "2026-09-16": 17, "2026-09-17": 12 } } } }
+  ]));
+
+  assert.deepEqual(series.dates, ["2026-09-16", "2026-09-17"]);
+  assert.deepEqual(series.joined, [17, 12], "the later reading replaces the partial one");
+});
+
+test("overlapping windows still add across markets, because those are different people", () => {
+  const series = buildDailyJoinSeries(history([
+    { date: "2026-09-16", markets: { DE: { total: 100, joined: 1, joinedDaily: { "2026-09-16": 1 } } } },
+    {
+      date: "2026-09-17",
+      markets: {
+        DE: { total: 130, joined: 29, joinedDaily: { "2026-09-16": 17 } },
+        UK: { total: 200, joined: 10, joinedDaily: { "2026-09-16": 10 } }
+      }
+    }
+  ]));
+  assert.deepEqual(series.joined, [27]);
+});

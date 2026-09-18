@@ -425,6 +425,8 @@ export function createKlaviyoDashboardDomain({
   }
 
   return {
+    KLAVIYO_SMALL_LIST_EXEMPT_MARKETS,
+    KLAVIYO_SMALL_LIST_EXEMPT_REASON,
     buildKlaviyoCampaignGroups,
     buildKlaviyoFlowGroups,
     buildKlaviyoGroups,

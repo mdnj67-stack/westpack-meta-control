@@ -13,9 +13,8 @@ const { sendJson } = require("../../server/lib/http");
 const {
   buildHeaders,
   collectListJoinTallies,
-  countJoinsSince,
-  resolveNewsletterList,
-  sliceJoinsSince
+  recentJoinHistogram,
+  resolveNewsletterList
 } = require("../../server/klaviyo/newsletter-lists");
 const {
   buildConsentBreakdown,
@@ -28,6 +27,9 @@ const {
 } = require("../../server/klaviyo/subscriber-history");
 
 const RECORD_CONCURRENCY = 3;
+// Six weeks of join history is carried on every snapshot, complete rather than sliced to the
+// interval, so a day recorded while it was still running is corrected by the next night's reading.
+const JOIN_HISTOGRAM_DAYS = 45;
 
 function parseMarkets(raw) {
   if (!raw) return [];
@@ -85,12 +87,12 @@ async function measureMarket(market, { config, since }) {
   const list = await resolveNewsletterList(headers, { listId: market.listId, listName: market.listName });
   if (!list?.id) throw new Error(`${country}: no newsletter list could be identified.`);
 
-  const { total, joinedByDate, consent } = await collectListJoinTallies(headers, list.id);
+  const { total, joinedByDate, consent, joinedSince } = await collectListJoinTallies(headers, list.id, { since });
   return {
     country,
     total,
-    joined: countJoinsSince(joinedByDate, since),
-    joinedDaily: sliceJoinsSince(joinedByDate, since),
+    joined: joinedSince,
+    joinedDaily: recentJoinHistogram(joinedByDate, { days: JOIN_HISTOGRAM_DAYS, endDate: todayKey() }),
     consent,
     listId: list.id,
     listName: list.name,
@@ -149,7 +151,9 @@ module.exports = async (req, res) => {
   // twice in one day would otherwise measure joins "since today", write ~0, and overwrite the real
   // interval it had already captured. Re-running has to be safe, because a cron that retries will.
   const priorEntries = existing.entries.filter((entry) => entry.date < todayKey());
-  const since = priorEntries[priorEntries.length - 1]?.date || "";
+  const previous = priorEntries[priorEntries.length - 1] || null;
+  // The exact recording time, not the date. See collectListJoinTallies for what the date cutoff cost.
+  const since = previous?.recordedAt || (previous?.date ? `${previous.date}T00:00:00.000Z` : "");
 
   const results = await mapWithConcurrencySettled(
     markets.filter((market) => String(market.country || "").trim() && String(market.privateKey || "").trim()),

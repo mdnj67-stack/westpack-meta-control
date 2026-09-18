@@ -910,7 +910,15 @@ async function refreshSubscriberLevels(markets = [], config = {}) {
 // of the sum. A silently smaller total still looks like a valid number, which is worse than a stale
 // one that is labelled.
 async function composeSubscribers({ snapshot = null, levels = { markets: [], failed: [] }, marketCodes = [] } = {}) {
-  const previous = new Map((snapshot?.subscribers?.markets || []).map((item) => [String(item.country || "").trim(), item]));
+  const history = await readSubscriberHistory().catch(() => null);
+  // The last *recorded* figure means the newest nightly reading, not the bundled April file. Reading
+  // April here put UK back at 4,553 against a live 4,347 the one morning its count was throttled,
+  // and quietly added 206 to the headline total.
+  const recorded = history?.entries?.[history.entries.length - 1]?.markets || {};
+  const previous = new Map([
+    ...(snapshot?.subscribers?.markets || []).map((item) => [String(item.country || "").trim(), item]),
+    ...Object.entries(recorded).map(([country, value]) => [country, { ...value, country }])
+  ]);
   const live = new Map(levels.markets.map((item) => [item.country, item]));
   const countries = [...new Set([...previous.keys(), ...live.keys()])].filter(Boolean).sort();
 
@@ -923,12 +931,12 @@ async function composeSubscribers({ snapshot = null, levels = { markets: [], fai
       listId: previousRow.listId || "",
       listName: previousRow.listName || "",
       resolvedBy: "",
-      count: Number(previousRow.count || 0),
+      // A recorded snapshot names it `total`; the bundled April file names it `count`.
+      count: Number(previousRow.count ?? previousRow.total ?? 0),
       countSource: "last_recorded"
     };
   });
 
-  const history = await readSubscriberHistory().catch(() => null);
   const seriesMarkets = marketCodes.length ? marketCodes : countries;
   const flow = history
     ? buildSubscriberFlowSeries(history, { markets: seriesMarkets })
@@ -1203,6 +1211,8 @@ module.exports = async (req, res) => {
       ? "snapshot_history"
       : "unavailable";
 
+    const history = await readSubscriberHistory().catch(() => null);
+
     // A market whose fetch rejected never reached subscriberMarkets, so the total used to sum
     // seventeen markets and still report itself as a clean live read. Carry the last recorded figure
     // for it instead, labelled, so the number stays whole and the gap is visible.
@@ -1210,13 +1220,15 @@ module.exports = async (req, res) => {
     const missingSubscriberMarkets = marketCodes
       .filter((country) => country && !measuredCountries.has(country))
       .map((country) => {
-        const previous = (bundledSnapshot?.subscribers?.markets || [])
+        // Prefer the newest nightly reading over the bundled April file, which is months out of date.
+        const recorded = history?.entries?.[history.entries.length - 1]?.markets?.[country];
+        const previous = recorded || (bundledSnapshot?.subscribers?.markets || [])
           .find((item) => String(item.country || "").trim() === country) || {};
         return {
           country,
           listId: previous.listId || "",
           listName: previous.listName || "",
-          count: Number(previous.count || 0),
+          count: Number(previous.count ?? previous.total ?? 0),
           countSource: "last_recorded"
         };
       });
@@ -1224,7 +1236,6 @@ module.exports = async (req, res) => {
     const allSubscriberMarkets = [...subscriberMarkets, ...missingSubscriberMarkets]
       .sort((a, b) => String(a.country).localeCompare(String(b.country)));
 
-    const history = await readSubscriberHistory().catch(() => null);
     const subscribers = {
       total: allSubscriberMarkets.reduce((sum, item) => sum + (item.count || 0), 0),
       markets: allSubscriberMarkets,

@@ -193,7 +193,9 @@ function buildDailyJoinSeries(history, { markets = [], days = 180 } = {}) {
     .map((code) => String(code || "").trim().toUpperCase())
     .filter(Boolean));
 
-  const byDate = new Map();
+  // Snapshots carry overlapping windows on purpose, so a day first recorded while it was still
+  // running is corrected by later readings. Within a market the latest snapshot to mention a date
+  // therefore wins outright; summing them would count the same joins once per night.
   const byMarket = new Map();
   for (const entry of normalized.entries) {
     for (const [country, value] of Object.entries(entry.markets)) {
@@ -201,9 +203,16 @@ function buildDailyJoinSeries(history, { markets = [], days = 180 } = {}) {
       if (!byMarket.has(country)) byMarket.set(country, new Map());
       const marketDates = byMarket.get(country);
       for (const [day, count] of Object.entries(value.joinedDaily || {})) {
-        byDate.set(day, (byDate.get(day) || 0) + count);
-        marketDates.set(day, (marketDates.get(day) || 0) + count);
+        marketDates.set(day, count);
       }
+    }
+  }
+
+  // Across markets they do add: these are different people.
+  const byDate = new Map();
+  for (const marketDates of byMarket.values()) {
+    for (const [day, count] of marketDates.entries()) {
+      byDate.set(day, (byDate.get(day) || 0) + count);
     }
   }
 

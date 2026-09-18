@@ -138,9 +138,16 @@ async function fetchListProfileCount(headers, listId) {
 // they ever actually consented. Of the 25,808 members counted on 2026-09-15 only 19,118 had said
 // yes; 5,438 had never subscribed and 1,252 had opted out, and the share varies from 53% in DK to
 // 99% in CZ. Since the walk is already paying for every profile, the consent tally is free.
-async function collectListJoinTallies(headers, listId, { pageSize = 100 } = {}) {
+// `sinceIso` must be the previous snapshot's exact recording time, not its date. The job runs at
+// 04:30, so counting joins on dates strictly after the previous snapshot's *date* silently dropped
+// every join between 04:30 and midnight on that date - no later run counts them either, because by
+// then the date is no longer "after" the cutoff. Measured against production: the lists grew by 17
+// on 2026-09-16 while the job recorded 1 join.
+async function collectListJoinTallies(headers, listId, { pageSize = 100, since = "" } = {}) {
   const joinedByDate = new Map();
   const consent = { SUBSCRIBED: 0, UNSUBSCRIBED: 0, NEVER_SUBSCRIBED: 0, UNKNOWN: 0 };
+  const sinceMs = since ? Date.parse(since) : NaN;
+  let joinedSince = 0;
   let total = 0;
   let next = `https://a.klaviyo.com/api/lists/${listId}/profiles/?page%5Bsize%5D=${pageSize}&additional-fields%5Bprofile%5D=subscriptions`;
 
@@ -154,6 +161,10 @@ async function collectListJoinTallies(headers, listId, { pageSize = 100 } = {}) 
       if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
         joinedByDate.set(key, (joinedByDate.get(key) || 0) + 1);
       }
+      if (Number.isFinite(sinceMs)) {
+        const joinedMs = Date.parse(joinedAt || "");
+        if (Number.isFinite(joinedMs) && joinedMs > sinceMs) joinedSince += 1;
+      }
       const state = String(profile?.attributes?.subscriptions?.email?.marketing?.consent || "").toUpperCase();
       if (state === "SUBSCRIBED" || state === "UNSUBSCRIBED" || state === "NEVER_SUBSCRIBED") {
         consent[state] += 1;
@@ -164,18 +175,21 @@ async function collectListJoinTallies(headers, listId, { pageSize = 100 } = {}) 
     next = payload?.links?.next || "";
   }
 
-  return { total, joinedByDate, consent };
+  return { total, joinedByDate, consent, joinedSince };
 }
 
-// The joins that fall inside the interval this snapshot covers, at daily grain. Daily snapshots make
-// this one day at a time; the first run after the April baseline carries the whole 152-day back run,
-// which is what gives the chart a real curve from the very first night.
-function sliceJoinsSince(joinedByDate, sinceDate) {
-  const slice = {};
+// The last `days` days of the join histogram, complete rather than sliced to the interval. Every
+// night re-reads the whole list, so yesterday's count arrives complete on today's run and replaces
+// the partial figure recorded while the day was still running. Storing only the interval froze each
+// day at whatever it had reached by 04:30.
+function recentJoinHistogram(joinedByDate, { days = 45, endDate = "" } = {}) {
+  const end = endDate || new Date().toISOString().slice(0, 10);
+  const cutoff = new Date(Date.parse(end) - Math.max(1, days) * 86_400_000).toISOString().slice(0, 10);
+  const window = {};
   for (const [date, value] of joinedByDate.entries()) {
-    if (!sinceDate || date > sinceDate) slice[date] = value;
+    if (date > cutoff && date <= end) window[date] = value;
   }
-  return slice;
+  return window;
 }
 
 function countJoinsSince(joinedByDate, sinceDate) {
@@ -198,6 +212,6 @@ module.exports = {
   fetchListProfileCount,
   getAllPages,
   klaviyoRequest,
-  resolveNewsletterList,
-  sliceJoinsSince
+  recentJoinHistogram,
+  resolveNewsletterList
 };

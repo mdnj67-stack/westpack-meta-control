@@ -398,7 +398,10 @@ const appState = {
     countMeasuredAt: "",
     historySource: "",
     historyGeneratedAt: "",
-    flow: null
+    flow: null,
+    dailyJoins: null,
+    totalsSeries: null,
+    consent: null
   },
   klaviyoSubscriberMarket: "total",
   klaviyoSubscriberMode: "daily",
@@ -1157,6 +1160,8 @@ const {
 });
 const {
   buildKlaviyoCampaignGroups,
+  KLAVIYO_SMALL_LIST_EXEMPT_MARKETS,
+  KLAVIYO_SMALL_LIST_EXEMPT_REASON,
   buildKlaviyoFlowGroups,
   buildKlaviyoGroups,
   formatKlaviyoCurrency,
@@ -1201,22 +1206,34 @@ function renderKlaviyoDiagnosticsPanel(groups, flowGroups) {
   const sourceLabel = getKlaviyoSourceLabel();
   const warning = String(appState.klaviyoError || "").trim();
   const subscribers = appState.klaviyoSubscribers || {};
+  // Every source the API can report has a label here. An unlabelled one reads as "Unknown", which
+  // says the dashboard does not know where its own headline number came from - worse than the
+  // honest answer, which in these cases is simply "live".
   const subscriberCountState = subscribers.countSource === "live"
     ? "Live counts"
-    : subscribers.countSource === "mixed_live_snapshot_fallback"
-      ? "Mixed count fallback"
-      : subscribers.countSource === "partial_missing_list"
-        ? "Missing list mapping"
+    : subscribers.countSource === "live_walked"
+      ? "Live counts · walked"
+      : subscribers.countSource === "mixed_live_last_recorded"
+        ? "Live, one market on last reading"
+        : subscribers.countSource === "mixed_live_snapshot_fallback"
+          ? "Mixed count fallback"
+          : subscribers.countSource === "partial_missing_list"
+            ? "Missing list mapping"
+            : subscribers.countSource === "unavailable"
+              ? "No live count"
+              : appState.klaviyoDataSource === "snapshot"
+                ? "Snapshot counts"
+                : "Unknown";
+  const recordedDates = subscribers.totalsSeries?.dates || [];
+  const subscriberHistoryState = subscribers.historySource === "subscriber_history"
+    ? `Nightly readings${recordedDates.length ? ` · ${recordedDates.length} recorded, latest ${recordedDates[recordedDates.length - 1]}` : ""}`
+    : subscribers.historySource === "snapshot_history"
+      ? `Snapshot history${subscribers.historyGeneratedAt ? ` · ${formatKlaviyoDate(subscribers.historyGeneratedAt)}` : ""}`
+      : subscribers.historySource === "unavailable"
+        ? "No history source"
         : appState.klaviyoDataSource === "snapshot"
-          ? "Snapshot counts"
+          ? "Snapshot history"
           : "Unknown";
-  const subscriberHistoryState = subscribers.historySource === "snapshot_history"
-    ? `Snapshot history${subscribers.historyGeneratedAt ? ` · ${formatKlaviyoDate(subscribers.historyGeneratedAt)}` : ""}`
-    : subscribers.historySource === "unavailable"
-      ? "No history source"
-      : appState.klaviyoDataSource === "snapshot"
-        ? "Snapshot history"
-        : "Unknown";
   const aiState = appState.klaviyoAiLoading
     ? "Refreshing AI"
     : appState.klaviyoAiError
@@ -2976,8 +2993,10 @@ function renderKlaviyoSubscriberFlow() {
         </article>
         <article class="is-removed">
           <span>Removed</span>
-          <strong>−${escapeHtml(formatKlaviyoNumber(Math.abs(removed), 0))}</strong>
-          <p>${escapeHtml(perDay(Math.abs(removed)))}</p>
+          <strong>${removed < 0 ? "+" : "−"}${escapeHtml(formatKlaviyoNumber(Math.abs(removed), 0))}</strong>
+          <p>${removed < 0
+    ? "More members than joins explain"
+    : escapeHtml(perDay(Math.abs(removed)))}</p>
         </article>
         <article class="is-net ${net > 0 ? "is-up" : net < 0 ? "is-down" : ""}">
           <span>Net</span>
@@ -3002,7 +3021,7 @@ function renderKlaviyoSubscriberFlow() {
               <i class="klaviyo-flow-bar is-joined" style="width: ${((Math.max(0, row.joined) / scale) * 50).toFixed(2)}%"></i>
             </span>
             <span class="klaviyo-flow-num is-joined">+${escapeHtml(formatKlaviyoNumber(row.joined, 0))}</span>
-            <span class="klaviyo-flow-num is-removed">−${escapeHtml(formatKlaviyoNumber(Math.abs(row.removed), 0))}</span>
+            <span class="klaviyo-flow-num ${row.removed < 0 ? "is-joined" : "is-removed"}">${row.removed < 0 ? "+" : "−"}${escapeHtml(formatKlaviyoNumber(Math.abs(row.removed), 0))}</span>
             <span class="klaviyo-flow-num ${row.net > 0 ? "is-joined" : row.net < 0 ? "is-removed" : ""}">${row.net > 0 ? "+" : row.net < 0 ? "−" : ""}${escapeHtml(formatKlaviyoNumber(Math.abs(row.net), 0))}</span>
           </div>
         `).join("")}
@@ -4162,7 +4181,12 @@ function applyKlaviyoSnapshot(snapshot, source = "live") {
       countMeasuredAt: String(incomingSubscribers.countMeasuredAt || ""),
       historySource: nextHistorySource,
       historyGeneratedAt: nextHistoryGeneratedAt,
-      flow: incomingSubscribers.flow || null
+      flow: incomingSubscribers.flow || null,
+      // Carried explicitly. Leaving these out is what left the Audience chart reading an empty
+      // series and printing "No points in this range" over 154 days of recorded data.
+      dailyJoins: incomingSubscribers.dailyJoins || null,
+      totalsSeries: incomingSubscribers.totalsSeries || null,
+      consent: incomingSubscribers.consent || null
     };
   }
   appState.klaviyoDataSource = source;
