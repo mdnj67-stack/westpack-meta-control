@@ -2917,6 +2917,28 @@ function buildKlaviyoSubscriberModeNote(mode, snapshotDates) {
     : "List size as actually measured. The curve fills in from one nightly reading to the next.";
 }
 
+// The latest measured interval for one market, or null where there is nothing honest to show.
+function getKlaviyoSubscriberFlowForMarket(country) {
+  const flow = appState.klaviyoSubscribers?.flow;
+  if (!flow?.available || !flow.periods?.length) return null;
+  const row = (flow.markets || []).find((item) => item.country === country);
+  if (!row) return null;
+  const index = flow.periods.length - 1;
+  if (row.joined[index] == null) return null;
+  return {
+    joined: Number(row.joined[index] || 0),
+    removed: Number(row.removed[index] || 0),
+    net: Number(row.net[index] || 0),
+    period: flow.periods[index]
+  };
+}
+
+function getKlaviyoConsentForMarket(country) {
+  const consent = appState.klaviyoSubscribers?.consent;
+  if (!consent?.available) return null;
+  return (consent.markets || []).find((item) => item.country === country) || null;
+}
+
 // A subscriber total on its own cannot distinguish a list that is standing still from one taking in
 // 3,414 people and losing 3,661. This panel keeps the two flows apart, over the interval between the
 // two most recent recorded snapshots.
@@ -4011,7 +4033,12 @@ function renderKlaviyoMarketsPanel(groups) {
     }
 
     node.innerHTML = audienceMarkets.map((item, index) => {
+      // The card used to report "Net" and "Added / unsubs" from unsubscribes inferred off campaign
+      // unsub rates, which showed 0 / 0 and disagreed with the measured removals above it. Only the
+      // campaign unsub rate is still taken from there, because that one really is a campaign figure.
       const permission = buildPermissionMetrics(item.country, appState.klaviyoSubscriberRange || 30);
+      const flow = getKlaviyoSubscriberFlowForMarket(item.country);
+      const consent = getKlaviyoConsentForMarket(item.country);
       const share = ((Number(item.count || 0) / totalSubscribers) * 100) || 0;
       return `
         <article class="klaviyo-market-detail-card ${index === 0 ? "is-featured is-dominant" : ""}">
@@ -4030,15 +4057,25 @@ function renderKlaviyoMarketsPanel(groups) {
           <div class="klaviyo-market-detail-stats">
             <div class="klaviyo-market-stat">
               <span>Net</span>
-              <strong>${escapeHtml(permission.netGrowth >= 0 ? `+${formatKlaviyoNumber(permission.netGrowth, 0)}` : formatKlaviyoNumber(permission.netGrowth, 0))}</strong>
+              <strong>${flow
+    ? escapeHtml(flow.net > 0 ? `+${formatKlaviyoNumber(flow.net, 0)}` : flow.net < 0 ? `−${formatKlaviyoNumber(Math.abs(flow.net), 0)}` : "0")
+    : "--"}</strong>
             </div>
             <div class="klaviyo-market-stat klaviyo-market-stat-wide">
-              <span>Weighted unsub</span>
+              <span>Joined / removed</span>
+              <strong>${flow
+    ? escapeHtml(`${formatKlaviyoNumber(flow.joined, 0)} / ${formatKlaviyoNumber(Math.abs(flow.removed), 0)}`)
+    : "Not recorded yet"}</strong>
+            </div>
+            <div class="klaviyo-market-stat klaviyo-market-stat-wide">
+              <span>Opted in</span>
+              <strong>${consent
+    ? escapeHtml(`${formatKlaviyoNumber(consent.subscribed, 0)} · ${formatKlaviyoPercent(consent.subscribedShare, 1)}`)
+    : "Not recorded yet"}</strong>
+            </div>
+            <div class="klaviyo-market-stat klaviyo-market-stat-wide">
+              <span>Campaign unsub rate</span>
               <strong>${escapeHtml(formatKlaviyoPercent(permission.unsubRateWeighted, 2))}</strong>
-            </div>
-            <div class="klaviyo-market-stat klaviyo-market-stat-wide">
-              <span>Added / unsubs</span>
-              <strong>${escapeHtml(`${formatKlaviyoNumber(permission.subsAdded, 0)} / ${formatKlaviyoNumber(permission.unsubsTotal, 0)}`)}</strong>
             </div>
           </div>
         </article>
