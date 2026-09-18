@@ -2768,7 +2768,9 @@ function buildTrendBounds(values = [], mode = "cumulative") {
   const max = Math.max(rawMax, 0);
   const padding = Math.max((max - min) * 0.12, 1);
   return {
-    min: min - padding,
+    // A count of people who joined cannot be negative, so the axis must not claim it can. The scale
+    // read "-7" under a series whose lowest day was 11.
+    min: rawMin >= 0 ? 0 : min - padding,
     max: max + padding
   };
 }
@@ -2876,51 +2878,30 @@ function buildSubscriberSeriesForKey(key, mode = "cumulative") {
   };
 }
 
-function buildKlaviyoSubscriberMetricCards(mode, series, permissionMetrics) {
+// Only measured figures belong here. The cards used to carry "Est. unsubs" and a "Range net" built
+// from it - unsubscribes inferred from campaign unsub rates, which is not the same thing as removals
+// and came out about four times too low. They sat directly above a panel reporting the real removal
+// count, so the page stated two different answers to the same question at once.
+function buildKlaviyoSubscriberMetricCards(mode, series) {
   const values = Array.isArray(series) ? series : [];
   const currentValue = Number(values[values.length - 1] || 0);
   const firstValue = Number(values[0] || 0);
-  const rangeDelta = currentValue - firstValue;
   const rangeTotal = values.reduce((sum, value) => sum + Number(value || 0), 0);
   const averageValue = values.length ? rangeTotal / values.length : 0;
-  const averageNet = values.length ? permissionMetrics.netGrowth / values.length : 0;
 
   if (mode === "daily") {
     return [
       { label: "Latest day", value: formatKlaviyoNumber(currentValue, 0) },
-      { label: "Range added", value: formatKlaviyoNumber(permissionMetrics.subsAdded, 0) },
-      { label: "Average / day", value: formatKlaviyoNumber(averageValue, 0) },
-      { label: "Est. unsubs", value: formatKlaviyoNumber(permissionMetrics.unsubsTotal, 0) },
-      { label: "Range net", value: permissionMetrics.netGrowth >= 0 ? `+${formatKlaviyoNumber(permissionMetrics.netGrowth, 0)}` : formatKlaviyoNumber(permissionMetrics.netGrowth, 0) }
+      { label: "Joined in range", value: formatKlaviyoNumber(rangeTotal, 0) },
+      { label: "Average / day", value: formatKlaviyoNumber(averageValue, 0) }
     ];
   }
 
-  if (mode === "snapshot") {
-    return [
-      { label: "Latest snapshot", value: formatKlaviyoNumber(currentValue, 0) },
-      { label: "Snapshot delta", value: rangeDelta >= 0 ? `+${formatKlaviyoNumber(rangeDelta, 0)}` : formatKlaviyoNumber(rangeDelta, 0) },
-      { label: "Range added", value: formatKlaviyoNumber(permissionMetrics.subsAdded, 0) },
-      { label: "Est. unsubs", value: formatKlaviyoNumber(permissionMetrics.unsubsTotal, 0) },
-      { label: "Range net", value: permissionMetrics.netGrowth >= 0 ? `+${formatKlaviyoNumber(permissionMetrics.netGrowth, 0)}` : formatKlaviyoNumber(permissionMetrics.netGrowth, 0) }
-    ];
-  }
-
-  if (mode === "net") {
-    return [
-      { label: "Latest net day", value: currentValue >= 0 ? `+${formatKlaviyoNumber(currentValue, 0)}` : formatKlaviyoNumber(currentValue, 0) },
-      { label: "Range net", value: permissionMetrics.netGrowth >= 0 ? `+${formatKlaviyoNumber(permissionMetrics.netGrowth, 0)}` : formatKlaviyoNumber(permissionMetrics.netGrowth, 0) },
-      { label: "Average net / day", value: averageNet >= 0 ? `+${formatKlaviyoNumber(averageNet, 0)}` : formatKlaviyoNumber(averageNet, 0) },
-      { label: "Added", value: formatKlaviyoNumber(permissionMetrics.subsAdded, 0) },
-      { label: "Est. unsubs", value: formatKlaviyoNumber(permissionMetrics.unsubsTotal, 0) }
-    ];
-  }
-
+  const rangeDelta = currentValue - firstValue;
   return [
-    { label: "Current total", value: formatKlaviyoNumber(currentValue, 0) },
-    { label: "Join-based growth", value: rangeDelta >= 0 ? `+${formatKlaviyoNumber(rangeDelta, 0)}` : formatKlaviyoNumber(rangeDelta, 0) },
-    { label: "Average added / day", value: formatKlaviyoNumber(averageValue, 0) },
-    { label: "Est. unsubs", value: formatKlaviyoNumber(permissionMetrics.unsubsTotal, 0) },
-    { label: "Range net", value: permissionMetrics.netGrowth >= 0 ? `+${formatKlaviyoNumber(permissionMetrics.netGrowth, 0)}` : formatKlaviyoNumber(permissionMetrics.netGrowth, 0) }
+    { label: "Latest reading", value: formatKlaviyoNumber(currentValue, 0) },
+    { label: "Change over range", value: rangeDelta >= 0 ? `+${formatKlaviyoNumber(rangeDelta, 0)}` : formatKlaviyoNumber(rangeDelta, 0) },
+    { label: "Readings", value: formatKlaviyoNumber(values.length, 0) }
   ];
 }
 
@@ -3020,8 +3001,8 @@ function renderKlaviyoSubscriberFlow() {
               <i class="klaviyo-flow-bar is-removed" style="width: ${((Math.max(0, row.removed) / scale) * 50).toFixed(2)}%"></i>
               <i class="klaviyo-flow-bar is-joined" style="width: ${((Math.max(0, row.joined) / scale) * 50).toFixed(2)}%"></i>
             </span>
-            <span class="klaviyo-flow-num is-joined">+${escapeHtml(formatKlaviyoNumber(row.joined, 0))}</span>
-            <span class="klaviyo-flow-num ${row.removed < 0 ? "is-joined" : "is-removed"}">${row.removed < 0 ? "+" : "−"}${escapeHtml(formatKlaviyoNumber(Math.abs(row.removed), 0))}</span>
+            <span class="klaviyo-flow-num ${row.joined ? "is-joined" : ""}">${row.joined ? "+" : ""}${escapeHtml(formatKlaviyoNumber(row.joined, 0))}</span>
+            <span class="klaviyo-flow-num ${row.removed < 0 ? "is-joined" : row.removed ? "is-removed" : ""}">${row.removed < 0 ? "+" : row.removed ? "−" : ""}${escapeHtml(formatKlaviyoNumber(Math.abs(row.removed), 0))}</span>
             <span class="klaviyo-flow-num ${row.net > 0 ? "is-joined" : row.net < 0 ? "is-removed" : ""}">${row.net > 0 ? "+" : row.net < 0 ? "−" : ""}${escapeHtml(formatKlaviyoNumber(Math.abs(row.net), 0))}</span>
           </div>
         `).join("")}
@@ -3180,7 +3161,6 @@ function renderKlaviyoSubscriberSection() {
   const slicedPrimary = sliceSeriesByRange(trend.series || [], trend.dates || [], appState.klaviyoSubscriberRange || 30);
   const series = slicedPrimary.series || [];
   const dates = slicedPrimary.dates || [];
-  const permissionMetrics = buildPermissionMetrics(appState.klaviyoSubscriberMarket || "total", appState.klaviyoSubscriberRange || 30);
   const chartWidth = 720;
   const chartHeight = 188;
   const yBounds = buildTrendBounds(series, appState.klaviyoSubscriberMode || "cumulative");
@@ -3189,7 +3169,7 @@ function renderKlaviyoSubscriberSection() {
   const snapshotDates = subscribers.totalsSeries?.dates || [];
   const maxCount = Math.max(...markets.map((item) => item.count || 0), 1);
   const mode = appState.klaviyoSubscriberMode || "daily";
-  const metricCards = buildKlaviyoSubscriberMetricCards(mode, series, permissionMetrics);
+  const metricCards = buildKlaviyoSubscriberMetricCards(mode, series);
   const modeNote = buildKlaviyoSubscriberModeNote(mode, snapshotDates);
   chartNode.innerHTML = markets
     ? `
