@@ -3,18 +3,32 @@ const assert = require("node:assert/strict");
 
 // Volatile persistence and fake credentials, so this drives the real route end to end without
 // touching Canva, OpenAI, Redis or the local data directory.
+// Everything this test depends on comes from the environment it sets here. The developer
+// machine has .env.local, .vercel.live.env and klaviyo-config.json, and a fresh clone has none
+// of them - a test that read those would pass here and fail for the next person.
 const originalEnv = {
   VERCEL: process.env.VERCEL,
+  AUTH_PASSWORD: process.env.AUTH_PASSWORD,
+  AUTH_SESSION_SECRET: process.env.AUTH_SESSION_SECRET,
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   CANVA_CLIENT_ID: process.env.CANVA_CLIENT_ID,
   CANVA_CLIENT_SECRET: process.env.CANVA_CLIENT_SECRET,
+  KLAVIYO_MARKETS_JSON: process.env.KLAVIYO_MARKETS_JSON,
   KV_REST_API_URL: process.env.KV_REST_API_URL,
   KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN
 };
 process.env.VERCEL = "1";
+process.env.AUTH_PASSWORD = "canva-localizer-test-password";
+process.env.AUTH_SESSION_SECRET = "canva-localizer-test-secret";
+process.env.OPENAI_API_KEY = "sk-test";
 process.env.CANVA_CLIENT_ID = "OC-test";
 process.env.CANVA_CLIENT_SECRET = "secret-test";
+process.env.KLAVIYO_MARKETS_JSON = JSON.stringify(
+  ["CZ", "DE", "DK", "ES", "EU", "FI", "FR", "HU", "IT", "NL", "NO", "PL", "PT", "RO", "SE", "SK", "UK", "US"]
+    .map((country) => ({ country }))
+);
 delete process.env.KV_REST_API_URL;
 delete process.env.KV_REST_API_TOKEN;
 delete process.env.UPSTASH_REDIS_REST_URL;
