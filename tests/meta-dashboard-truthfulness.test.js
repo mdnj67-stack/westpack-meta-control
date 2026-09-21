@@ -367,17 +367,21 @@ test("an empty series draws no path at all, rather than an invalid one", () => {
   // Klaviyo trend dropped it straight into d="", producing d=" L 696 164 L 24
   // 164 Z" - rejected by the browser, three console errors on every page load.
   const app = readFileSync(join(root, "app.js"), "utf8");
+  const chart = readFileSync(join(root, "src", "chart.js"), "utf8");
 
-  // Every place the path is concatenated into a d attribute has to sit behind a
-  // check that there is a path at all.
-  const concatenations = app.split("\n").filter((line) => line.includes('d="${path} L '));
-  assert.equal(concatenations.length, 1, "a second unreviewed concatenation appeared");
+  // The concatenation is gone rather than guarded: this chart is drawn by the shared
+  // system now, which decides for itself whether there is anything to draw. Nothing may
+  // build a d attribute by pasting a path that can be empty into a string again.
+  const concatenations = app.split("\n").filter((line) => /d="\$\{[a-zA-Z]*[Pp]ath\} /.test(line));
+  assert.deepEqual(concatenations, [], "a raw path concatenation is back in app.js");
 
-  // The guard used to sit immediately above the path. The chart now renders a whole
-  // block behind that guard, so what is checked is that the concatenation is still
-  // inside a `path ?` branch rather than that it is the next line.
-  const guardAt = app.lastIndexOf("${path ? `", app.indexOf('d="${path} L '));
-  assert.notEqual(guardAt, -1, "the path concatenation is no longer behind a path check");
+  // The system returns an empty state instead of an svg when there is no geometry, so
+  // the invalid-path case cannot be reached at all.
+  assert.match(
+    chart,
+    /if \(!geometry \|\| !geometry\.current\.length\) \{\s*\n\s*return `<div class="wp-chart-empty"/,
+    "timeSeriesChart no longer bails out before drawing an empty series"
+  );
 
   // And there is still something on screen when there is nothing to draw.
   assert.match(app, /No readings in this range|No points in this range/);

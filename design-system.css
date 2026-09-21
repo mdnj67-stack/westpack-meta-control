@@ -4802,6 +4802,306 @@ input[type="file"] {
 }
 
 
+/* ===========================================================================
+   9. CHARTS
+
+   One chart language. Every time series in the product is the same object: the same
+   grid, the same axis, the same comparison treatment, the same hover.
+
+   The hierarchy is deliberate and it is enforced here rather than per chart:
+
+     current series   2px, full brand           the hero
+     area under it    8% of the same hue        gives the line a body, not a block
+     previous period  1px, dashed, grey 400     present, never competing
+     grid             1px, grey 150             visible only once you look for it
+     axis labels      11px, grey 500            quiet
+     hover marks      brand, appear on demand   nothing until it is wanted
+
+   Nothing in a chart is allowed to out-weigh the data.
+   =========================================================================== */
+
+.wp-chart {
+  display: grid;
+  gap: var(--wp-space-2);
+  margin: 0;
+  /* The chart reads the tone the card carries, so a Klaviyo line and a conversion line
+     are the same component wearing the right colour.
+
+     Held as a channel triple rather than a colour, because the line and the tint under it
+     are the same hue at two alphas. color-mix() was the obvious way to write that and it
+     silently resolved to nothing here, which fell back to the initial fill - a solid black
+     area under every line. */
+  --wp-chart-ink-rgb: 52 69 63;
+  --wp-chart-ink: rgb(var(--wp-chart-ink-rgb));
+}
+
+/* The objective tones are declared in styles.css, which is where the tone-coverage test
+   pins them. A chart reads them through a fallback so the system still draws correctly
+   on its own - design-system.html loads no legacy sheet, and without the fallback an
+   unresolved token made the fill invalid, which CSS renders as solid black.
+   tests/meta-chart-system.test.js checks the fallbacks still match the real tokens. */
+.wp-chart.tone-awareness { --wp-chart-ink-rgb: var(--tone-awareness-rgb, 176 86 60); }
+.wp-chart.tone-leads { --wp-chart-ink-rgb: var(--tone-leads-rgb, 154 116 32); }
+.wp-chart.tone-conversion { --wp-chart-ink-rgb: var(--tone-conversion-rgb, 47 107 79); }
+.wp-chart.tone-incremental { --wp-chart-ink-rgb: var(--tone-incremental-rgb, 61 90 138); }
+.wp-chart.tone-traffic { --wp-chart-ink-rgb: var(--tone-traffic-rgb, 47 111 143); }
+.wp-chart.tone-engagement { --wp-chart-ink-rgb: var(--tone-engagement-rgb, 111 92 150); }
+
+.wp-chart-plot {
+  position: relative;
+  /* Room down the right for the y labels, which sit inside the plot rather than in a
+     column of their own: an axis gutter costs the same width on every card whether the
+     labels are "5" or "1,2 mio." */
+  padding-right: 52px;
+  cursor: crosshair;
+}
+
+.wp-chart-plot > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.wp-chart-grid {
+  stroke: var(--wp-border-subtle);
+  stroke-width: 1;
+}
+
+/* The zero line, and the top of the scale, are the two the eye uses to read a value off.
+   Everything between them is scaffolding. */
+.wp-chart-grid:last-of-type {
+  stroke: var(--wp-border);
+}
+
+.wp-chart-area {
+  fill: rgb(var(--wp-chart-ink-rgb) / 0.1);
+  stroke: none;
+}
+
+.wp-chart-line {
+  fill: none;
+  stroke: var(--wp-chart-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Subdued, and dashed so it is distinguishable from the current line without a legend
+   and without colour - the two periods are the same metric, so giving the older one its
+   own hue would say they were different things. */
+.wp-chart-previous {
+  fill: none;
+  stroke: var(--wp-grey-400);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  stroke-linecap: round;
+}
+
+/* -- Axis ------------------------------------------------------------------ */
+
+.wp-chart-axis-y {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 52px;
+  pointer-events: none;
+}
+
+.wp-chart-axis-y span {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  padding-left: var(--wp-space-2);
+  font-size: var(--wp-text-2xs);
+  line-height: 1;
+  color: var(--wp-text-subtle);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.wp-chart-axis-x {
+  position: relative;
+  height: 14px;
+  margin: 0 52px 0 0;
+}
+
+.wp-chart-axis-x span {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: var(--wp-text-2xs);
+  line-height: 1;
+  color: var(--wp-text-subtle);
+  white-space: nowrap;
+}
+
+/* The first and last labels pull inside the plot so they do not hang off the card. */
+.wp-chart-axis-x span:first-child { transform: none; }
+.wp-chart-axis-x span:last-child { transform: translateX(-100%); }
+
+/* -- Hover ----------------------------------------------------------------- */
+
+.wp-chart-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--wp-border-strong);
+  pointer-events: none;
+}
+
+.wp-chart-marker {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-chart-ink);
+  box-shadow: 0 0 0 2px var(--wp-surface);
+  pointer-events: none;
+}
+
+.wp-chart-marker.is-previous {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  background: var(--wp-grey-400);
+}
+
+.wp-chart-tooltip {
+  position: fixed;
+  z-index: var(--wp-z-toast);
+  min-width: 148px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-grey-900);
+  color: var(--wp-grey-0);
+  box-shadow: var(--wp-shadow-md);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-chart-tooltip-date {
+  margin: 0 0 var(--wp-space-2);
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-grey-400);
+}
+
+.wp-chart-tooltip-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  font-size: var(--wp-text-xs);
+}
+
+.wp-chart-tooltip-row + .wp-chart-tooltip-row { margin-top: 3px; }
+.wp-chart-tooltip-row span { color: var(--wp-grey-400); }
+.wp-chart-tooltip-row strong { font-weight: var(--wp-weight-semibold); }
+.wp-chart-tooltip-row.is-previous strong { color: var(--wp-grey-300); font-weight: var(--wp-weight-regular); }
+
+.wp-chart-tooltip-delta {
+  margin-top: var(--wp-space-2);
+  padding-top: var(--wp-space-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.wp-chart-tooltip-delta.is-up { color: #7bc9a0; }
+.wp-chart-tooltip-delta.is-down { color: #e79a92; }
+.wp-chart-tooltip-delta.is-flat { color: var(--wp-grey-400); }
+
+.wp-chart-empty {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+  color: var(--wp-text-subtle);
+  font-size: var(--wp-text-xs);
+}
+
+/* -- The card a chart lives in ---------------------------------------------
+   Title, the figure itself, the comparison, then the chart. A line floating in a box
+   answers none of the questions the reader arrived with. */
+
+.wp-chart-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  margin-bottom: var(--wp-space-1);
+}
+
+.wp-chart-card-title {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-muted);
+}
+
+.wp-chart-card-value {
+  font-size: var(--wp-text-3xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-chart-card-compare {
+  display: flex;
+  align-items: baseline;
+  gap: var(--wp-space-2);
+  margin: var(--wp-space-1) 0 var(--wp-space-4);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+/* The legend is two words and a line sample. It only appears when there are two series
+   to tell apart. */
+.wp-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-3);
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+.wp-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wp-chart-legend i {
+  width: 12px;
+  height: 0;
+  border-top: 2px solid var(--wp-chart-ink);
+}
+
+.wp-chart-legend i.is-previous {
+  border-top: 1px dashed var(--wp-grey-400);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wp-chart-marker,
+  .wp-chart-cursor {
+    transition: left 60ms linear, top 60ms linear;
+  }
+}
+
+
+/* renderChangeBadge emits tone-* classes, the same ones the stat cards use. The delta
+   badge answers to both so one helper serves every place a change is shown. */
+.wp-delta.tone-positive { color: var(--wp-success-text); }
+.wp-delta.tone-negative { color: var(--wp-danger-text); }
+.wp-delta.tone-neutral,
+.wp-delta.tone-flat { color: var(--wp-text-muted); }
+
+.wp-delta-arrow { font-size: 0.9em; }
+
+
 /* ---------------------------------------------------------------------------
    Canva Localizer
 
@@ -5015,4 +5315,90 @@ input[type="file"] {
   .canva-design-form,
   .canva-plan-form { grid-template-columns: minmax(0, 1fr); }
   .canva-selected-design { flex-direction: column; }
+}
+
+/* A single reading. A line needs two points; this is what one looks like. */
+.wp-chart-point {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-chart-ink);
+  pointer-events: none;
+}
+
+
+/* -- Charts on the dark panel ----------------------------------------------
+   The new-customer panel is the one dark surface in the product, so the chart inside it
+   has to invert: the grid and the axis have to be visible against green rather than
+   against white, and the line takes a light tint of the same hue instead of the dark
+   one, which disappeared into the background. */
+.wp-chart-inverse .wp-chart {
+  --wp-chart-ink-rgb: 140 196 169;
+}
+
+.wp-chart-inverse .wp-chart-grid {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.wp-chart-inverse .wp-chart-grid:last-of-type {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.wp-chart-inverse .wp-chart-previous {
+  stroke: rgba(255, 255, 255, 0.4);
+}
+
+.wp-chart-inverse .wp-chart-axis-y span,
+.wp-chart-inverse .wp-chart-axis-x span,
+.wp-chart-inverse .wp-chart-legend {
+  color: var(--wp-text-inverse-muted);
+}
+
+.wp-chart-inverse .wp-chart-cursor {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.wp-chart-inverse .wp-chart-marker {
+  box-shadow: 0 0 0 2px var(--wp-surface-inverse);
+}
+
+.wp-chart-inverse .wp-chart-marker.is-previous {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.wp-chart-inverse .wp-chart-empty {
+  border-color: var(--wp-border-inverse);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--wp-text-inverse-muted);
+}
+
+.wp-chart-inverse .wp-chart-legend i {
+  border-top-color: rgb(var(--wp-chart-ink-rgb));
+}
+
+.wp-chart-inverse .wp-chart-legend i.is-previous {
+  border-top-color: rgba(255, 255, 255, 0.45);
+}
+
+/* The sparkline: a trend shape beside a figure, with nothing to read a value off. */
+.wp-spark {
+  display: block;
+  width: 100%;
+  height: 42px;
+  --wp-chart-ink-rgb: 52 69 63;
+}
+
+.wp-spark-line {
+  fill: none;
+  stroke: rgb(var(--wp-chart-ink-rgb));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wp-spark-empty-note {
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-subtle);
 }

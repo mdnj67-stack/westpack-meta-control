@@ -13250,15 +13250,15 @@ textarea {
 }
 
 .objective-bar-row.tone-awareness .objective-bar-fill {
-  background: linear-gradient(90deg, rgb(var(--tone-awareness-rgb)) 0%, rgb(var(--tone-awareness-soft-rgb)) 100%);
+  background: rgb(var(--tone-awareness-rgb));
 }
 
 .objective-bar-row.tone-conversion .objective-bar-fill {
-  background: linear-gradient(90deg, rgb(var(--tone-conversion-rgb)) 0%, rgb(var(--tone-conversion-soft-rgb)) 100%);
+  background: rgb(var(--tone-conversion-rgb));
 }
 
 .objective-bar-row.tone-leads .objective-bar-fill {
-  background: linear-gradient(90deg, rgb(var(--tone-leads-rgb)) 0%, rgb(var(--tone-leads-soft-rgb)) 100%);
+  background: rgb(var(--tone-leads-rgb));
 }
 
 @media (max-width: 980px) {

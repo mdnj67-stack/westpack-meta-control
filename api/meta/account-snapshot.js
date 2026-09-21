@@ -926,7 +926,10 @@ function buildComparisonSeriesTotals(campaigns = [], metricAccessor) {
       series: Array.isArray(campaign?.comparison_window?.previous) ? campaign.comparison_window.previous : []
     }));
   const previous = buildSeriesTotals(previousCampaigns, (point, campaign) => metricAccessor(point, campaign, "previous"));
-  return { current, previous };
+  // Additive metrics, so the period figure is the sum. Carried alongside the series so
+  // the card's comparison badge reads the same basis the headline figure does.
+  const sum = (series) => (series || []).reduce((total, point) => total + readNumber(point.value, 0), 0);
+  return { current, previous, currentTotal: sum(current), previousTotal: sum(previous) };
 }
 
 function buildDerivedSeriesTotals(campaigns = [], numeratorAccessor, denominatorAccessor) {
@@ -944,12 +947,21 @@ function buildDerivedSeriesTotals(campaigns = [], numeratorAccessor, denominator
       }
     }
 
-    return Array.from(totals.entries())
-      .sort((left, right) => left[0].localeCompare(right[0]))
-      .map(([date, value]) => ({
+    const rows = Array.from(totals.entries()).sort((left, right) => left[0].localeCompare(right[0]));
+    const numerator = rows.reduce((sum, [, value]) => sum + value.numerator, 0);
+    const denominator = rows.reduce((sum, [, value]) => sum + value.denominator, 0);
+
+    return {
+      series: rows.map(([date, value]) => ({
         date,
         value: value.denominator > 0 ? value.numerator / value.denominator : 0
-      }));
+      })),
+      // A rate over a period is the summed numerator over the summed denominator. The
+      // per-day values above are each a rate, so adding them would give the sum of the
+      // rates - the mistake this file already carries a rule about. The period figure is
+      // computed here so the comparison badge on the card cannot get it wrong.
+      aggregate: denominator > 0 ? numerator / denominator : null
+    };
   };
 
   const current = buildDerivedSeries(campaigns, "current");
@@ -960,7 +972,12 @@ function buildDerivedSeriesTotals(campaigns = [], numeratorAccessor, denominator
     }));
   const previous = buildDerivedSeries(previousCampaigns, "previous");
 
-  return { current, previous };
+  return {
+    current: current.series,
+    previous: previous.series,
+    currentTotal: current.aggregate,
+    previousTotal: previous.aggregate
+  };
 }
 
 function buildAggregateComparisonWindow(campaigns = []) {
@@ -1120,8 +1137,82 @@ function buildGeneralObjectivePerformanceRows(campaigns = [], currency = "DKK") 
   });
 }
 
+/**
+ * How each trend card's numbers are read.
+ *
+ * Keyed on the card title, because the titles in this file are fixed literals and an
+ * explicit table is auditable in a way that sniffing the title for "ROAS" is not. The
+ * axis and the tooltip both read this, so a chart cannot end up labelling kroner as a
+ * plain count. tests/meta-chart-system.test.js fails if a card is added without an entry.
+ *
+ *   format   currency | count | ratio | percent
+ *   baseline zero for a quantity of something, auto for a rate or a level. A zero
+ *            baseline on a ROAS of 5.4 against 5.6 draws one flat line.
+ *   goodWhen which direction is an improvement, for the comparison badge. Cost metrics
+ *            run the other way: cheaper is better.
+ */
+const TREND_CARD_READING = Object.freeze({
+  "Spend over time": { format: "currency", baseline: "zero", goodWhen: "neutral" },
+  "Spend trend": { format: "currency", baseline: "zero", goodWhen: "neutral" },
+  "Revenue over time": { format: "currency", baseline: "zero", goodWhen: "up" },
+  "Revenue trend": { format: "currency", baseline: "zero", goodWhen: "up" },
+  "ROAS over time": { format: "ratio", baseline: "auto", goodWhen: "up" },
+  "ROAS trend": { format: "ratio", baseline: "auto", goodWhen: "up" },
+  "Reach delivery": { format: "count", baseline: "zero", goodWhen: "up" },
+  "CPM trend": { format: "currency", baseline: "auto", goodWhen: "down" },
+  "Frequency trend": { format: "ratio", baseline: "auto", goodWhen: "neutral" },
+  "Leads trend": { format: "count", baseline: "zero", goodWhen: "up" },
+  "CPL trend": { format: "currency", baseline: "auto", goodWhen: "down" },
+  "CTR trend": { format: "percent", baseline: "auto", goodWhen: "up" },
+  "Purchase trend": { format: "count", baseline: "zero", goodWhen: "up" },
+  "CPA trend": { format: "currency", baseline: "auto", goodWhen: "down" },
+  "Objective performance": { format: "currency", baseline: "zero", goodWhen: "neutral" }
+});
+
+/**
+ * Adds the reading and the period-over-period change to each card.
+ *
+ * The change divides by the real baseline. A period that started from nothing has no
+ * percentage to report - "new" says that, where "+100%" would be arithmetic dressed up
+ * as a finding.
+ */
+function withTrendCardReading(cards = [], currency = "DKK", windowLabel = "previous period") {
+  return (cards || []).map((card) => {
+    const reading = TREND_CARD_READING[card.title] || { format: "count", baseline: "zero", goodWhen: "neutral" };
+    const current = readNumber(card.currentTotal, NaN);
+    const previous = readNumber(card.previousTotal, NaN);
+
+    let change = null;
+    if (Number.isFinite(current) && Number.isFinite(previous)) {
+      if (previous === 0 && current > 0) {
+        change = { direction: "new", value: "New", tone: "neutral", label: `vs ${windowLabel}` };
+      } else if (previous !== 0) {
+        const percent = ((current - previous) / Math.abs(previous)) * 100;
+        const rounded = Math.round(percent * 10) / 10;
+        const direction = rounded > 0 ? "up" : rounded < 0 ? "down" : "flat";
+        const good = reading.goodWhen;
+        const tone = good === "neutral" || direction === "flat"
+          ? "neutral"
+          : (direction === good ? "positive" : "negative");
+        change = {
+          direction,
+          value: `${rounded > 0 ? "+" : ""}${formatDashboardNumber(rounded, 1)}%`,
+          tone,
+          label: `vs ${windowLabel}`
+        };
+      }
+    }
+
+    const { currentTotal, previousTotal, ...rest } = card;
+    return { ...rest, format: reading.format, baseline: reading.baseline, currency, change };
+  });
+}
+
 function buildTrendCards(campaigns = [], lens = "general", dateScope = null, currency = "DKK", options = {}) {
   const deduplicatedReachTotal = readNumber(options.deduplicatedReach?.reach, 0);
+  // Named so the comparison badge says what it is measured against, rather than the
+  // bare "vs previous period" that could mean any window.
+  const comparisonWindowLabel = `previous ${formatComparisonWindowLabel(dateScope?.days)}`;
   const trendDates = (campaigns || [])
     .flatMap((campaign) => campaign.series || [])
     .map((point) => point.date)
@@ -1133,13 +1224,15 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
     : (dateScope?.label || "Selected range");
   const withComparison = (totals) => ({
     series: totals.current,
-    comparisonSeries: totals.previous
+    comparisonSeries: totals.previous,
+    currentTotal: totals.currentTotal,
+    previousTotal: totals.previousTotal
   });
 
   if (lens === "general") {
     const totalSpend = sumMetric(campaigns, "spend_value");
     const totalRevenue = sumMetric(campaigns, "revenue_value");
-    return [
+    return withTrendCardReading([
       {
         title: "Spend over time",
         meta,
@@ -1172,13 +1265,13 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         tone: "conversion",
         rows: buildGeneralObjectivePerformanceRows(campaigns, currency)
       }
-    ];
+    ], currency, comparisonWindowLabel);
   }
 
   if (lens === "awareness") {
     const impressions = sumMetric(campaigns, "impressions_value");
     const spend = sumMetric(campaigns, "spend_value");
-    return [
+    return withTrendCardReading([
       {
         title: "Spend trend",
         meta,
@@ -1222,7 +1315,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         )),
         tone: "awareness"
       }
-    ];
+    ], currency, comparisonWindowLabel);
   }
 
   if (lens === "leads") {
@@ -1230,7 +1323,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
     const totalSpend = sumMetric(campaigns, "spend_value");
     const totalImpressions = sumMetric(campaigns, "impressions_value");
     const totalClicks = sumMetric(campaigns, "clicks_value");
-    return [
+    return withTrendCardReading([
       {
         title: "Spend trend",
         meta,
@@ -1268,7 +1361,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         )),
         tone: "leads"
       }
-    ];
+    ], currency, comparisonWindowLabel);
   }
 
   const totalSpend = sumMetric(campaigns, "spend_value");
@@ -1276,7 +1369,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   const totalPurchases = sumMetric(campaigns, "purchases_value");
   const tone = lens === "conversion_incremental" ? "incremental" : "conversion";
 
-  return [
+  return withTrendCardReading([
     {
       title: "Spend trend",
       meta,
@@ -1321,7 +1414,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.purchases || 0)),
       tone
     }
-  ];
+  ], currency, comparisonWindowLabel);
 }
 
 function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {

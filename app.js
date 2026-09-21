@@ -8,6 +8,7 @@ import {
   initCanvaLocalizer,
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
+import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
   auditLog,
@@ -878,6 +879,9 @@ function syncAuthUi() {
 function startApp() {
   if (authState.bootstrapped) return;
   attachEvents();
+  // One delegated hover listener and one tooltip element for every chart in the product.
+  // Charts rendered later are picked up by delegation, so this runs once.
+  attachChartHover();
   try {
     initializeApp();
   } catch (error) {
@@ -2580,32 +2584,6 @@ function buildKlaviyoOverviewBuckets(groups) {
     }));
 }
 
-function buildSparklinePath(values = [], width = 160, height = 42, padding = 4) {
-  const points = (Array.isArray(values) ? values : []).map(Number).filter(Number.isFinite);
-  if (!points.length) return "";
-
-  const min = Math.min(...points);
-  const max = Math.max(...points);
-  const flat = max - min === 0;
-  const range = Math.max(max - min, 1);
-  // A flat series is drawn down the middle rather than pinned to the floor: a series of
-  // sevens and a series of zeros are not the same reading, and sitting both on the
-  // baseline said they were.
-  const mid = height / 2;
-
-  // One point has no shape. A short level mark says "one reading" without implying a
-  // trend between a point and nothing.
-  if (points.length === 1) {
-    return `M ${(width / 2 - 12).toFixed(2)} ${mid.toFixed(2)} L ${(width / 2 + 12).toFixed(2)} ${mid.toFixed(2)}`;
-  }
-
-  return points.map((value, index) => {
-    const x = padding + ((width - padding * 2) * index) / (points.length - 1);
-    const y = flat ? mid : height - padding - (((value - min) / range) * (height - padding * 2));
-    return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
-  }).join(" ");
-}
-
 function getKlaviyoSubscriberMarkets() {
   const subscribers = appState.klaviyoSubscribers || { total: 0, markets: [] };
   const markets = Array.isArray(subscribers.markets) ? subscribers.markets : [];
@@ -2735,7 +2713,6 @@ function renderKlaviyoOverviewMiniGrid(groups) {
   }
 
   node.innerHTML = cards.map((card, index) => {
-    const path = buildSparklinePath(card.series);
     return `
       <article class="klaviyo-mini-card tone-${escapeHtml(index === 0 ? "revenue" : index === 1 ? "engagement" : index === 2 ? "conversion" : index === 3 ? "audience" : "flow")}">
         <div class="klaviyo-mini-copy">
@@ -2743,10 +2720,8 @@ function renderKlaviyoOverviewMiniGrid(groups) {
           <strong>${escapeHtml(card.value)}</strong>
           <p>${escapeHtml(card.meta)}</p>
         </div>
-        <div class="klaviyo-mini-chart" aria-hidden="true">
-          ${path
-            ? `<svg viewBox="0 0 160 42" preserveAspectRatio="none"><path d="${path}" fill="none" class="wp-spark-line" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
-            : `<span class="field-hint">No trend yet</span>`}
+        <div class="klaviyo-mini-chart">
+          ${sparkline(card.series)}
         </div>
       </article>
     `;
@@ -3269,35 +3244,17 @@ function renderKlaviyoSubscriberSection() {
             `).join("")}
           </div>
         </div>
-        ${path ? `
-        <div class="klaviyo-line-chart">
-          <svg viewBox="0 0 ${chartWidth} ${chartHeight}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(trend.label)} trend">
-            <defs>
-              <linearGradient id="klaviyoTrendFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" class="wp-spark-fill-top"></stop>
-                <stop offset="100%" class="wp-spark-fill-bottom"></stop>
-              </linearGradient>
-            </defs>
-            <path d="${path} L ${chartWidth - 24} ${chartHeight - 24} L 24 ${chartHeight - 24} Z" fill="url(#klaviyoTrendFill)"></path>
-            <path d="${path}" fill="none" class="wp-spark-line" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path>
-            ${readingDots}
-          </svg>
-          <div class="klaviyo-line-chart-scale">
-            <strong>${escapeHtml(formatKlaviyoNumber(yBounds.max, 0))}</strong>
-            <strong>${escapeHtml(formatKlaviyoNumber(yBounds.min, 0))}</strong>
-          </div>
-          <div class="klaviyo-line-chart-axis">
-            <span>${escapeHtml(dates[0] || "--")}</span>
-            <span>${escapeHtml(dates[dates.length - 1] || "--")}</span>
-          </div>
-        </div>
+        ${timeSeriesChart({
+          series: series.map((value, index) => ({ date: dates[index], value })),
+          format: "count",
+          // A list size is a level, not a quantity accumulated over the window. A zero
+          // baseline on 25.800 subscribers draws every month as the same flat line.
+          baseline: mode === "daily" ? "zero" : "auto",
+          height: 168,
+          label: mode === "daily" ? "New subscribers" : "List size",
+          emptyMessage: "No readings in this range"
+        })}
         ${modeNote ? `<div class="klaviyo-snapshot-meta">${escapeHtml(modeNote)}</div>` : ""}
-        ` : `
-        <div class="wp-state">
-          <p class="wp-state-title">No readings in this range</p>
-          <p class="wp-state-body">Widen the range, or pick another market.</p>
-        </div>
-        `}
       </section>
       <section class="klaviyo-subscriber-bars">
         ${markets

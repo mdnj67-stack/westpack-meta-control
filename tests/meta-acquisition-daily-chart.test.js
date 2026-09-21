@@ -153,24 +153,34 @@ test("the panel draws the chart from the period it is showing", () => {
   assert.match(ui, /preset\.current\?\.dailyNewCustomers/);
   assert.match(ui, /preset\.previous\?\.dailyNewCustomers/);
   // The previous window goes in as the comparison series so the overlay is day-aligned.
-  assert.match(ui, /buildSparkline\(current, "acq-new", previous\)/);
+  // The chart is the shared one now, so this checks the wiring rather than the name of
+  // the builder it is wired into.
+  assert.match(
+    ui,
+    /timeSeriesChart\(\{[\s\S]*?series: current,[\s\S]*?comparisonSeries: previous,/,
+    "the comparison window is no longer passed in as the overlay"
+  );
 });
 
 test("the chart is legible on the panel's dark surface", () => {
   // The shared sparkline colours are drawn for a light card. The acquisition panel is
   // dark navy, and this is exactly the mistake that shipped once before on this panel:
   // light-surface ink copied onto a dark background, invisible and passing every test.
-  const css = readFileSync(join(root, "styles.css"), "utf8");
+  const css = readFileSync(join(root, "design-system.css"), "utf8");
+  const chartUi = readFileSync(join(root, "src", "ui.js"), "utf8");
 
+  assert.match(chartUi, /meta-acq-chart wp-chart-inverse/, "the chart is no longer marked as sitting on the dark surface");
+
+  // Every part the chart draws needs an inverted value, or it is drawn for white.
   for (const selector of [
-    ".meta-acq-chart .trend-spark .line",
-    ".meta-acq-chart .trend-spark .comparison-line",
-    ".meta-acq-chart .trend-spark .axis"
+    ".wp-chart-inverse .wp-chart {",
+    ".wp-chart-inverse .wp-chart-grid {",
+    ".wp-chart-inverse .wp-chart-previous {",
+    ".wp-chart-inverse .wp-chart-axis-y span",
+    ".wp-chart-inverse .wp-chart-empty {"
   ]) {
     assert.ok(css.includes(selector), `${selector} has no dark-surface override`);
   }
-  assert.match(css, /\.meta-acq-chart \{/);
-  assert.match(css, /\.meta-acq-chart-legend \{/);
 });
 
 test("the new-customer panel comes before the budget panel on General", () => {

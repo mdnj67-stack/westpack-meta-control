@@ -1,4 +1,5 @@
-﻿import {
+﻿import { timeSeriesChart, attachChartHover } from "./chart.js?v=20260921-chart1";
+import {
   NUMBER_LOCALE,
   formatMoney,
   formatCount,
@@ -1788,17 +1789,26 @@ function renderAcquisitionDailyChart(preset) {
   const previousLabel = preset.previous?.label || "the period before";
 
   return `
-    <div class="meta-acq-chart">
+    <div class="meta-acq-chart wp-chart-inverse">
       <div class="meta-budget-stack-head">
         <strong>New customers per day</strong>
-        <span>${escapeHtml(`${currentLabel} against ${previousLabel}`)}</span>
+        ${peak > 0 ? `<span>${escapeHtml(`Busiest day: ${peak}`)}</span>` : ""}
       </div>
-      ${buildSparkline(current, "acq-new", previous)}
-      <p class="meta-acq-chart-legend">
-        <span class="is-current">${escapeHtml(currentLabel)}</span>
-        ${previous.length ? `<span class="is-previous">${escapeHtml(previousLabel)}</span>` : ""}
-        ${peak > 0 ? `<span class="is-peak">${escapeHtml(`Busiest day: ${peak}`)}</span>` : ""}
-      </p>
+      ${timeSeriesChart({
+        series: current,
+        comparisonSeries: previous,
+        format: "count",
+        baseline: "zero",
+        tone: "acq",
+        height: 116,
+        label: "New customers",
+        comparisonLabel: previousLabel,
+        emptyMessage: "No days measured in this window"
+      })}
+      <div class="wp-chart-legend">
+        <span><i></i>${escapeHtml(currentLabel)}</span>
+        ${previous.length ? `<span><i class="is-previous"></i>${escapeHtml(previousLabel)}</span>` : ""}
+      </div>
     </div>
   `;
 }
@@ -2188,7 +2198,15 @@ function renderTrendCardBody(card = {}) {
               <span>${escapeHtml(panel.label || "")}</span>
               <strong>${escapeHtml(panel.value || "--")}</strong>
             </div>
-            ${buildSparkline(panel.series, panel.tone || card.tone || "default")}
+            ${timeSeriesChart({
+              series: panel.series,
+              format: panel.format || card.format || "count",
+              currency: card.currency || "DKK",
+              baseline: panel.baseline || "zero",
+              tone: panel.tone || card.tone || "default",
+              height: 84,
+              label: panel.label || card.title || "Value"
+            })}
           </section>
         `).join("")}
       </div>
@@ -2248,16 +2266,34 @@ function renderTrendCardBody(card = {}) {
     `;
   }
 
+  // Title, then the figure, then what it is being compared against, then the chart.
+  // Before this the card was a title, a number and a line with no axis, no comparison
+  // figure and nothing readable off it.
+  const hasComparison = Array.isArray(card.comparisonSeries) && card.comparisonSeries.length > 1;
   return `
-    <div class="trend-head">
-      <div>
-        <div class="trend-title">${escapeHtml(card.title || "")}</div>
-        <div class="trend-meta">${escapeHtml(card.meta || "")}</div>
-      </div>
-      <div class="trend-value">${escapeHtml(card.value || "--")}</div>
+    <div class="wp-chart-card-head">
+      <div class="wp-chart-card-title">${escapeHtml(card.title || "")}</div>
+      ${hasComparison ? `
+        <div class="wp-chart-legend">
+          <span><i></i>This period</span>
+          <span><i class="is-previous"></i>Previous</span>
+        </div>` : ""}
     </div>
-    ${buildSparkline(card.series, card.tone || "default", card.comparisonSeries)}
-    ${Array.isArray(card.comparisonSeries) && card.comparisonSeries.length ? `<div class="trend-compare-note">Previous period overlay</div>` : ""}
+    <div class="wp-chart-card-value">${escapeHtml(card.value || "--")}</div>
+    <div class="wp-chart-card-compare">
+      ${renderChangeBadge(card.change, "wp-delta")}
+      <span>${escapeHtml(card.change?.label || card.meta || "")}</span>
+    </div>
+    ${timeSeriesChart({
+      series: card.series,
+      comparisonSeries: card.comparisonSeries,
+      format: card.format || "count",
+      currency: card.currency || "DKK",
+      baseline: card.baseline || "zero",
+      tone: card.tone || "default",
+      label: card.title || "Value",
+      comparisonLabel: "Previous period"
+    })}
   `;
 }
 
@@ -2299,83 +2335,6 @@ function formatLensLabel(value = "") {
   if (value === "awareness") return "Awareness";
   if (OBJECTIVE_GROUP_LABELS[value]) return resolveObjectiveGroupLabel(value);
   return value || "General";
-}
-
-function buildSparkline(series = [], tone = "default", comparisonSeries = []) {
-  const hasPrimary = Array.isArray(series) && series.length;
-  const hasComparison = Array.isArray(comparisonSeries) && comparisonSeries.length;
-  if (!hasPrimary && !hasComparison) {
-    return `
-      <svg class="trend-spark" viewBox="0 0 220 60" role="img" aria-label="No trend data">
-        <line class="axis" x1="0" y1="54" x2="220" y2="54"></line>
-      </svg>
-    `;
-  }
-
-  const width = 220;
-  const height = 60;
-  const baseline = 54;
-  const values = [...(series || []), ...(comparisonSeries || [])].map((point) => Number(point.value) || 0);
-  const max = Math.max(...values, 1);
-
-  // Both lines are placed by how many days into their own window each point falls, not by
-  // its position in the array. Meta omits days with no delivery, so a previous window with
-  // five rows and a current window with twenty-nine used to be stretched across the same
-  // width, putting day 3 of one above day 17 of the other while the card invited the
-  // reader to compare them directly.
-  const dayOffset = (inputSeries = [], index = 0) => {
-    const first = Date.parse(`${inputSeries[0]?.date}T00:00:00Z`);
-    const at = Date.parse(`${inputSeries[index]?.date}T00:00:00Z`);
-    if (Number.isNaN(first) || Number.isNaN(at)) return index;
-    return Math.round((at - first) / 86400000);
-  };
-  const lastOffset = (inputSeries = []) => (
-    inputSeries.length ? dayOffset(inputSeries, inputSeries.length - 1) : 0
-  );
-  const span = Math.max(lastOffset(series || []), lastOffset(comparisonSeries || []), 1);
-
-  const buildPoints = (inputSeries = []) => inputSeries.map((point, index) => {
-    const x = inputSeries.length > 1 ? (dayOffset(inputSeries, index) / span) * width : width / 2;
-    const y = baseline - ((Math.max(0, Number(point.value) || 0) / max) * 42);
-    const gap = index > 0 ? dayOffset(inputSeries, index) - dayOffset(inputSeries, index - 1) : 0;
-    return { x, y, gap };
-  });
-  // The line breaks across days Meta returned no row for. The x positions were already
-  // date-accurate, so the slope drawn through a three-day hole was the last thing putting
-  // a value on days the account never reported. Splitting into runs of consecutive days
-  // first means the area under the curve breaks in the same places - filling from one
-  // path with gaps in it would close the shape across the hole again.
-  const toRuns = (inputPoints = []) => inputPoints.reduce((runs, point) => {
-    if (!runs.length || point.gap > 1) runs.push([point]);
-    else runs[runs.length - 1].push(point);
-    return runs;
-  }, []);
-  const buildPath = (inputPoints = []) => toRuns(inputPoints)
-    .map((run) => run.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" "))
-    .join(" ");
-  const buildArea = (inputPoints = []) => toRuns(inputPoints)
-    .filter((run) => run.length > 1)
-    .map((run) => {
-      const line = run.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
-      return `${line} L${run[run.length - 1].x.toFixed(2)},${baseline} L${run[0].x.toFixed(2)},${baseline} Z`;
-    })
-    .join(" ");
-  const points = buildPoints(series || []);
-  const comparisonPoints = buildPoints(comparisonSeries || []);
-  const path = buildPath(points);
-  const comparisonPath = buildPath(comparisonPoints);
-  const area = buildArea(points);
-  const lastPoint = points[points.length - 1];
-
-  return `
-    <svg class="trend-spark tone-${escapeHtml(tone)}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend over selected date range">
-      <line class="axis" x1="0" y1="${baseline}" x2="${width}" y2="${baseline}"></line>
-      ${comparisonPath ? `<path class="comparison-line" d="${comparisonPath}"></path>` : ""}
-      ${area ? `<path class="area" d="${area}"></path>` : ""}
-      ${path ? `<path class="line" d="${path}"></path>` : ""}
-      ${lastPoint ? `<circle class="dot" cx="${lastPoint.x.toFixed(2)}" cy="${lastPoint.y.toFixed(2)}" r="3"></circle>` : ""}
-    </svg>
-  `;
 }
 
 function escapeHtml(value = "") {

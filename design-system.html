@@ -67,6 +67,7 @@
         <a href="#tabs">Tabs</a>
         <a href="#states">States</a>
         <a href="#alerts">Alerts</a>
+        <a href="#charts">Charts</a>
       </nav>
     </header>
 
@@ -498,6 +499,112 @@
         <div class="wp-alert is-success"><div><strong>Draft created</strong>The Klaviyo template was created as a draft. Nothing has been sent.</div></div>
       </div>
     </section>
+
+    <section id="charts">
+      <h2>Charts</h2>
+      <p>
+        Every time series in the product is drawn by <code>timeSeriesChart</code> in
+        <code>src/chart.js</code>, so a line on the Meta dashboard and a line in the Klaviyo
+        overview are the same object. Hover any of these: the crosshair, the marker on both
+        series and the tooltip are one delegated listener for the whole application.
+      </p>
+      <p class="note">
+        The cases below are the ones that break charts: a single reading, a flat series, a
+        single outlier, days the source never reported, and nothing at all. They are here
+        because a chart that only works on a tidy month is a chart that will mislead
+        somebody in a fortnight.
+      </p>
+
+      <h3>The card</h3>
+      <p class="note">
+        Title, the figure, what it is measured against, then the chart. A line floating in a
+        box answers none of the questions the reader arrived with.
+      </p>
+      <div class="wp-grid is-3" id="chart-cards"></div>
+
+      <h3>Axis and baseline</h3>
+      <p class="note">
+        Quantities start at zero. Rates and levels get a fitted axis, because a zero baseline
+        draws a ROAS of 5,4 against 5,6 as one straight line - and the axis labels say which
+        of the two you are looking at.
+      </p>
+      <div class="wp-grid is-2" id="chart-baselines"></div>
+
+      <h3>Difficult data</h3>
+      <div class="wp-grid is-3" id="chart-edges"></div>
+    </section>
   </main>
+  <script type="module">
+    import { timeSeriesChart, attachChartHover } from "./src/chart.js?v=20260921-chart1";
+
+    attachChartHover();
+
+    // Synthetic, but shaped like the real thing: a daily series over a month with the
+    // wobble real spend has, and a previous period that is genuinely different.
+    const days = (n, from = "2026-08-20") => {
+      const start = Date.parse(from + "T00:00:00Z");
+      return Array.from({ length: n }, (_, i) => new Date(start + i * 86400000).toISOString().slice(0, 10));
+    };
+    const wobble = (dates, base, spread, seed = 1) => dates.map((date, i) => ({
+      date,
+      value: Math.max(0, base + Math.sin((i + seed) * 0.9) * spread + Math.cos((i + seed) * 0.35) * spread * 0.6)
+    }));
+
+    const current = wobble(days(30), 9000, 2600, 1);
+    const previous = wobble(days(30, "2026-07-21"), 7400, 2000, 4);
+
+    const card = (title, value, change, chart, legend = true) => `
+      <article class="wp-card">
+        <div class="wp-chart-card-head">
+          <div class="wp-chart-card-title">${title}</div>
+          ${legend ? `<div class="wp-chart-legend"><span><i></i>This period</span><span><i class="is-previous"></i>Previous</span></div>` : ""}
+        </div>
+        <div class="wp-chart-card-value">${value}</div>
+        <div class="wp-chart-card-compare">${change}<span>vs previous 30 days</span></div>
+        ${chart}
+      </article>`;
+
+    const up = (v) => `<span class="wp-delta tone-positive">&#8593; ${v}</span>`;
+    const down = (v) => `<span class="wp-delta tone-negative">&#8595; ${v}</span>`;
+    const flat = (v) => `<span class="wp-delta tone-neutral">&#8594; ${v}</span>`;
+
+    document.getElementById("chart-cards").innerHTML = [
+      card("Spend over time", "268.402 kr.", up("12,4%"),
+        timeSeriesChart({ series: current, comparisonSeries: previous, format: "currency", tone: "conversion", label: "Spend" })),
+      card("New customers", "1.284", up("8,1%"),
+        timeSeriesChart({ series: wobble(days(30), 42, 16, 3), comparisonSeries: wobble(days(30, "2026-07-21"), 36, 12, 7), format: "count", tone: "leads", label: "New customers" })),
+      card("Cost per new customer", "209 kr.", down("5,2%"),
+        timeSeriesChart({ series: wobble(days(30), 215, 40, 5), comparisonSeries: wobble(days(30, "2026-07-21"), 228, 34, 2), format: "currency", baseline: "auto", tone: "awareness", label: "Cost / new" }))
+    ].join("");
+
+    document.getElementById("chart-baselines").innerHTML = [
+      card("Spend &middot; zero baseline", "268.402 kr.", flat("0,4%"),
+        timeSeriesChart({ series: current, format: "currency", baseline: "zero", tone: "conversion", label: "Spend" }), false),
+      card("ROAS &middot; fitted baseline", "5,58", up("3,0%"),
+        timeSeriesChart({ series: days(30).map((date, i) => ({ date, value: 5.2 + Math.sin(i * 0.7) * 0.4 })), format: "ratio", baseline: "auto", tone: "conversion", label: "ROAS" }), false)
+    ].join("");
+
+    const edge = (title, note, chart) => `
+      <article class="wp-card">
+        <div class="wp-chart-card-title">${title}</div>
+        <p class="wp-metric-caption" style="margin: 2px 0 12px">${note}</p>
+        ${chart}
+      </article>`;
+
+    document.getElementById("chart-edges").innerHTML = [
+      edge("One reading", "Nothing to draw a trend from.",
+        timeSeriesChart({ series: [{ date: "2026-09-04", value: 8400 }], format: "currency", tone: "conversion", label: "Spend" })),
+      edge("Flat at zero", "A measured zero, sitting on the axis rather than hidden by it.",
+        timeSeriesChart({ series: days(14).map((date) => ({ date, value: 0 })), format: "count", tone: "leads", label: "Leads" })),
+      edge("One outlier", "The peak sets the scale; the rest stays readable.",
+        timeSeriesChart({ series: days(20).map((date, i) => ({ date, value: i === 12 ? 90000 : 4000 + i * 90 })), format: "currency", tone: "conversion", label: "Spend" })),
+      edge("Days the source skipped", "The line breaks rather than inventing a slope through them.",
+        timeSeriesChart({ series: [...wobble(days(6), 5200, 900, 1), ...wobble(days(7, "2026-09-02"), 6100, 900, 3)], format: "currency", tone: "conversion", label: "Spend" })),
+      edge("Two hundred points", "Labels thin out; the shape survives.",
+        timeSeriesChart({ series: wobble(days(200, "2026-02-01"), 6000, 2200, 2), format: "currency", tone: "awareness", label: "Spend" })),
+      edge("Nothing at all", "An empty state, not an empty box.",
+        timeSeriesChart({ series: [], format: "currency", tone: "conversion", emptyMessage: "No spend in this range" }))
+    ].join("");
+  </script>
 </body>
 </html>
