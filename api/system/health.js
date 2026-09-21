@@ -58,6 +58,16 @@ module.exports = async (req, res) => {
         configured: configuredMarketCodes.length > 0,
         marketCount: configuredMarketCodes.length,
         markets: configuredMarketCodes
+      },
+      // Only whether the app's own credentials exist. Whether an operator has actually connected
+      // a Canva account, and whether that account's plan allows autofill, are per-account facts
+      // that live behind the Canva Localizer's own status call - this endpoint has no token to
+      // ask with and must not imply it does.
+      canva: {
+        configured: Boolean(config.canvaClientId && config.canvaClientSecret),
+        hasClientId: Boolean(config.canvaClientId),
+        hasClientSecret: Boolean(config.canvaClientSecret),
+        redirectUri: config.canvaRedirectUri || ""
       }
     }
   });

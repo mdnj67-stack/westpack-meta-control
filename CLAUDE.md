@@ -683,6 +683,107 @@ load — reloading per screenshot spends the marketing department's Meta quota, 
 session hit the rate limit doing exactly that. Re-read the rate-limit warning in "What the
 dashboard is allowed to claim" before running anything against live.
 
+## Canva Localizer — what Canva actually exposes
+
+Added 2026-09-21. One campaign graphic becomes one Canva design per market, translated, named
+`campaign_DE` and exported for email. Before changing anything here, read this section: most of
+the design is forced by limits in Canva's API that are not obvious and are easy to "fix" by
+building something that cannot work.
+
+Verified against Canva's published OpenAPI spec (`https://www.canva.dev/sources/connect/api/latest/api.yml`,
+api version `2024-06-18`). Re-download it rather than trusting this summary if the answer matters.
+
+### The three limits that shape everything
+
+- **There is no element or layer API in Canva Connect.** The only text the REST API can see is
+  text a designer tagged as an *autofill data field*, using the **Data autofill** app inside the
+  Canva editor. `GET /v1/designs/{id}/dataset` lists those fields. Untagged text is invisible and
+  can never be overwritten — which is why brand names, logos and URLs are excluded by simply not
+  tagging them, and why the "exclude from translation" requirement needed no enforcement
+  mechanism. Tagging is a one-time job per master design.
+- **The dataset returns field names and types only — never the current text.** `{"headline":
+  {"type":"text"}}` is the whole answer. So the source text cannot be read from the design over
+  the API. The operator types it once, and `server/canva/design-vision.js` can pre-fill it by
+  running a vision model over a PNG export. That is OCR, it is labelled as OCR everywhere it
+  surfaces, and `tests/canva-localizer-ui.test.js` fails if the label is removed.
+- **Nothing exposes font size, text box geometry, line count or overflow.** "Reduce the headline
+  from 42px to 38px" cannot be built on the Connect API at all. Fit is therefore controlled in
+  the *translation* — every field carries a character budget derived from its source length, and
+  the model is asked for a compact alternative it can fall back to — and then *observed* on the
+  rendered result. The character flag is a prediction and says so; `inspect_fit` renders the
+  generated design and reports what is actually on the page.
+
+### Autofill is gated on Canva Enterprise
+
+`POST /v1/autofills` — the only way to write text into a design over REST — requires the
+connected user to be in a Canva Enterprise organisation. Paid plans get a limited development
+trial only. Everything else works on Pro: OAuth, listing and reading designs, reading the
+dataset, and exporting.
+
+This is read from the account itself rather than assumed: `GET /v1/users/me/capabilities`
+returns `autofill` when the plan allows it, it is stored with the tokens at connect time, and
+`handleGenerate` refuses up front with that specific message. Do not replace that with a generic
+error — the failure mode it prevents is an operator discovering the restriction as eighteen
+identical 403s after tagging a design.
+
+### Files
+
+- `server/canva/connect-client.js` — the REST client. Rate limits (429) are deliberately **not**
+  retried, same rule as the Meta snapshot path; 502/503/504 get two retries. Async jobs
+  (autofill, export) poll with exponential backoff.
+- `server/canva/token-store.js` — OAuth tokens on the usual three backends, reusing
+  `agent-store.js`'s plumbing. Canva's refresh tokens are **single use and rotating**, so the
+  refresh runs under a real lock and re-reads the store after acquiring it; a refresh Canva
+  rejects clears the connection rather than leaving a dead pair that fails forever. It also
+  holds the PKCE verifiers between the authorize redirect and the callback.
+- `server/canva/localization.js` — the pure domain: markets, language grouping, character
+  budgets, fit grading, job state. No I/O, and it carries most of the tests.
+- `server/canva/localization-store.js` — jobs, one Redis key each rather than one blob, so two
+  languages finishing at once cannot lose each other. Also the recurring-exclusion memory.
+- `server/canva/translate-fields.js` — reuses the existing glossary and Westpack knowledge prompt
+  blocks. One call per language covering all fields at once.
+- `api/canva/oauth.js` — both halves of the OAuth flow on one URL, because Canva matches the
+  registered redirect exactly. The callback does **not** require the dashboard session: the
+  session cookie is `SameSite=Strict` and is not sent on the cross-site navigation back from
+  canva.com, so the single-use server-side `state` is what protects it.
+- `api/canva/localizer.js` — `?action=` dispatch. Every batch action persists after each target,
+  catches per target, and stops at a 210s soft deadline reporting what is left; the client just
+  calls again, so continuing and starting are the same request and there is no separate resume
+  path to get wrong.
+- `src/canva-localizer.js` + the `klaviyo-canva-localizer-panel` section in `index.html`.
+
+### Rules that are load-bearing
+
+- **`create_from_design`, never `update_design`.** The autofill API can edit a design in place;
+  this feature must never do that, because the source is the operator's master. The route test
+  asserts `update_design` appears nowhere in the API layer.
+- **Markets that share a language are translated once.** UK, US and EU are all English: three
+  designs, one translation. Three separate translations would also drift from each other.
+- **A batch of eighteen is never one pass/fail.** `partial` is a real state, and a retry
+  regenerates only the failures — regenerating the successes would leave orphaned duplicate
+  designs in the shared Canva account.
+- **A translation that returns no fields is a failure.** Marking it translated would send the
+  Danish original into Canva under a German name and look like a success.
+- Export links from Canva die after **24 hours**, and the UI says so.
+
+### Setup this needs before it can do anything
+
+`CANVA_CLIENT_ID` and `CANVA_CLIENT_SECRET` from a Canva developer app
+(https://www.canva.com/developers/), with `https://project-4fcxa.vercel.app/api/canva/oauth`
+registered as an authentication redirect URL and the four scopes granted (`design:meta:read`,
+`design:content:read`, `design:content:write`, `profile:read`). `CANVA_REDIRECT_URI` is optional
+and only needed if the app is reached on a host other than the registered one. Until those are
+set the page says so plainly and every action is refused with the same message.
+
+### The Apps SDK is the Phase 2, not the architecture
+
+Canva's **Design Editing API** (Apps SDK) *does* expose full element read/write including font
+size, position and colour — but only to code running inside the Canva editor as a Canva app. It
+cannot be driven from this dashboard. It is the right way to add real font-fit correction later,
+as a small Canva-side companion app that talks to this backend. Browser automation against the
+Canva editor is not an option worth revisiting: the editor is a canvas application, so there is
+no stable DOM, and it would fail by producing wrong artwork rather than an error.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

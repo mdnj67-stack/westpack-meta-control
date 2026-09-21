@@ -124,6 +124,13 @@ function getConfig() {
     asanaAccessToken: process.env.ASANA_ACCESS_TOKEN || fileEnv.ASANA_ACCESS_TOKEN || localSecrets.asanaAccessToken || "",
     asanaCampaignProjectGid: process.env.ASANA_CAMPAIGN_PROJECT_GID || fileEnv.ASANA_CAMPAIGN_PROJECT_GID || localSecrets.asanaCampaignProjectGid || "",
     asanaContentProjectGid: process.env.ASANA_CONTENT_PROJECT_GID || fileEnv.ASANA_CONTENT_PROJECT_GID || localSecrets.asanaContentProjectGid || "",
+    // Canva Connect. The redirect URI is optional: when it is absent the OAuth route derives it
+    // from the request host, which is right for both localhost and the Vercel deployment. Set it
+    // explicitly only if the app is reached on a host that differs from the one registered in
+    // Canva's developer portal, because Canva matches the value exactly.
+    canvaClientId: normalizeExternalCredential(process.env.CANVA_CLIENT_ID || fileEnv.CANVA_CLIENT_ID || localSecrets.canvaClientId),
+    canvaClientSecret: normalizeExternalCredential(process.env.CANVA_CLIENT_SECRET || fileEnv.CANVA_CLIENT_SECRET || localSecrets.canvaClientSecret),
+    canvaRedirectUri: normalizeExternalCredential(process.env.CANVA_REDIRECT_URI || fileEnv.CANVA_REDIRECT_URI || localSecrets.canvaRedirectUri),
     cronSecret: process.env.CRON_SECRET || fileEnv.CRON_SECRET || localSecrets.cronSecret || "",
     authPassword: process.env.AUTH_PASSWORD || fileEnv.AUTH_PASSWORD || localSecrets.authPassword || "",
     authSessionSecret: process.env.AUTH_SESSION_SECRET || fileEnv.AUTH_SESSION_SECRET || localSecrets.authSessionSecret || "",

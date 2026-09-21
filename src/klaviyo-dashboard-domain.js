@@ -401,7 +401,7 @@ export function createKlaviyoDashboardDomain({
     // campaign_brain was missing here, so every render of the Klaviyo workspace reset the
     // state back to the overview while Campaign Studio was still the panel on screen. The
     // list has to match the views setKlaviyoView accepts, or the rail and the page disagree.
-    const isSupported = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain"].includes(appState.klaviyoView);
+    const isSupported = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer"].includes(appState.klaviyoView);
     if (!isSupported) {
       appState.klaviyoView = "dashboard";
     }

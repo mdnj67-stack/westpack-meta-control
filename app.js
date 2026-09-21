@@ -5,6 +5,10 @@
 // page load until the live read landed about a minute later.
 import { NUMBER_LOCALE, formatMoney } from "./src/format.js?v=20260921-format1";
 import {
+  initCanvaLocalizer,
+  loadCanvaLocalizer
+} from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
+import {
   adaptationGoals,
   auditLog,
   campaignMatches,
@@ -4294,7 +4298,7 @@ function getKlaviyoSourceLabel() {
 }
 
 function setKlaviyoView(nextView = "overview") {
-  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain"].includes(nextView) ? nextView : "dashboard";
+  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer"].includes(nextView) ? nextView : "dashboard";
   appState.klaviyoView = requestedView;
   document.querySelectorAll("[data-klaviyo-view]").forEach((button) => {
     button.classList.toggle("active", button.dataset.klaviyoView === appState.klaviyoView);
@@ -4303,6 +4307,7 @@ function setKlaviyoView(nextView = "overview") {
   document.getElementById("klaviyo-duplicate-translate-panel")?.classList.toggle("active", appState.klaviyoView === "duplicate_translate");
   document.getElementById("klaviyo-campaign-ai-panel")?.classList.toggle("active", appState.klaviyoView === "campaign_ai");
   document.getElementById("klaviyo-campaign-brain-panel")?.classList.toggle("active", appState.klaviyoView === "campaign_brain");
+  document.getElementById("klaviyo-canva-localizer-panel")?.classList.toggle("active", appState.klaviyoView === "canva_localizer");
   if (appState.klaviyoView === "duplicate_translate") {
     loadKlaviyoTemplateCatalog();
   }
@@ -4313,6 +4318,9 @@ function setKlaviyoView(nextView = "overview") {
     loadCampaignAsanaWorkspace();
     loadContentAgentStatus();
     if (appState.campaignStudioMode === "meta_master") loadCampaignMetaMasterTemplates();
+  }
+  if (appState.klaviyoView === "canva_localizer") {
+    loadCanvaLocalizer();
   }
 }
 
@@ -14642,6 +14650,15 @@ function attachEvents() {
       setKlaviyoView(button.dataset.klaviyoView);
     });
   });
+
+  // Wired at start-up rather than on first open, so the OAuth callback's "?canva=connected"
+  // notice is read and cleared even when the operator lands on another view first. The callback
+  // also carries #canva-localizer, so the operator comes back to the page they left.
+  initCanvaLocalizer();
+  if (window.location.hash === "#canva-localizer") {
+    setWorkspace("klaviyo");
+    setKlaviyoView("canva_localizer");
+  }
 
   document.querySelectorAll(".klaviyo-dashboard-subtab").forEach((button) => {
     button.addEventListener("click", () => {

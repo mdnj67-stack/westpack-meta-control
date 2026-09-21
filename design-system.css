@@ -4800,3 +4800,219 @@ input[type="file"] {
   font-weight: var(--wp-weight-regular);
   color: var(--wp-text-secondary);
 }
+
+
+/* ---------------------------------------------------------------------------
+   Canva Localizer
+
+   Built entirely from the system's tokens and primitives - no second design
+   pass scoped to one screen. The only shapes that did not already exist are
+   the three grids this page needs (design picker, market picker, version
+   review), and they are plain grids over .wp-card surfaces.
+   --------------------------------------------------------------------------- */
+
+.canva-connection-actions {
+  display: flex;
+  gap: var(--wp-space-2);
+  align-items: center;
+}
+
+.canva-design-form,
+.canva-plan-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  gap: var(--wp-space-3);
+  align-items: end;
+}
+
+.canva-plan-form {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 200px) auto auto;
+}
+
+.canva-design-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--wp-space-3);
+  margin-top: var(--wp-space-4);
+}
+
+.canva-design-card {
+  display: grid;
+  gap: var(--wp-space-1);
+  padding: var(--wp-space-2);
+  text-align: left;
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  cursor: pointer;
+}
+
+.canva-design-card:hover { background: var(--wp-surface-hover); }
+
+.canva-design-card.is-selected {
+  border-color: var(--wp-brand);
+  background: var(--wp-surface-selected);
+}
+
+.canva-design-card img,
+.canva-design-card-blank {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--wp-surface-sunken);
+  border-radius: var(--wp-radius-md);
+}
+
+.canva-design-card-title {
+  font-size: var(--wp-text-sm);
+  font-weight: 600;
+  color: var(--wp-text);
+  overflow-wrap: anywhere;
+}
+
+.canva-design-card-meta,
+.canva-market-language {
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.canva-selected-design {
+  display: flex;
+  gap: var(--wp-space-4);
+  align-items: flex-start;
+  margin-top: var(--wp-space-4);
+  padding-top: var(--wp-space-4);
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.canva-selected-design img {
+  width: 160px;
+  border-radius: var(--wp-radius-md);
+  border: 1px solid var(--wp-border-subtle);
+}
+
+.canva-selected-design-body h4 {
+  margin: 0 0 var(--wp-space-1);
+  font-size: var(--wp-text-lg);
+}
+
+.canva-field-table td { vertical-align: middle; }
+.canva-field-table .wp-input { width: 100%; }
+.canva-field-budget { font-variant-numeric: tabular-nums; text-align: right; }
+
+.canva-market-actions { margin-bottom: var(--wp-space-3); }
+
+.canva-market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--wp-space-2);
+}
+
+.canva-market-chip {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  cursor: pointer;
+}
+
+.canva-market-chip.is-selected {
+  border-color: var(--wp-brand-border);
+  background: var(--wp-brand-surface);
+}
+
+.canva-market-chip input { margin: 0; }
+.canva-market-code { font-size: var(--wp-text-sm); font-weight: 600; }
+
+.canva-version-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--wp-space-4);
+}
+
+.canva-version-card {
+  display: grid;
+  gap: var(--wp-space-3);
+  align-content: start;
+  padding: var(--wp-space-4);
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+}
+
+/* A failed language must be findable at a glance in a grid of eighteen. */
+.canva-version-card.is-failed { border-color: var(--wp-danger-border); }
+.canva-version-card.is-generated { border-color: var(--wp-border-strong); }
+
+.canva-version-head {
+  display: grid;
+  gap: var(--wp-space-2);
+  align-items: start;
+}
+
+.canva-version-head h4 { margin: 0; font-size: var(--wp-text-base); }
+.canva-version-head .wp-badge { justify-self: start; }
+
+.canva-version-thumb {
+  width: 100%;
+  border-radius: var(--wp-radius-md);
+  border: 1px solid var(--wp-border-subtle);
+}
+
+.canva-version-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 88px) minmax(0, 1fr);
+  gap: var(--wp-space-1) var(--wp-space-3);
+  margin: 0;
+  font-size: var(--wp-text-xs);
+}
+
+.canva-version-copy dt { color: var(--wp-text-muted); overflow-wrap: anywhere; }
+.canva-version-copy dd { margin: 0; color: var(--wp-text); overflow-wrap: anywhere; }
+
+.canva-version-problems {
+  margin: 0;
+  padding-left: var(--wp-space-4);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-danger-text);
+}
+
+.canva-version-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2);
+}
+
+.canva-summary-list {
+  display: grid;
+  gap: var(--wp-space-1);
+  margin: 0 0 var(--wp-space-3);
+  padding: 0;
+  list-style: none;
+  font-size: var(--wp-text-sm);
+}
+
+.canva-summary-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-1) 0;
+  border-bottom: 1px solid var(--wp-border-subtle);
+}
+
+.canva-summary-list li:last-child { border-bottom: 0; }
+.canva-summary-list strong { font-variant-numeric: tabular-nums; }
+
+.canva-note-field { margin-top: var(--wp-space-3); }
+
+.canva-busy { margin-top: var(--wp-space-2); color: var(--wp-text-muted); }
+
+@media (max-width: 900px) {
+  .canva-design-form,
+  .canva-plan-form { grid-template-columns: minmax(0, 1fr); }
+  .canva-selected-design { flex-direction: column; }
+}

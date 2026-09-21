@@ -14,6 +14,9 @@
     },
     "api/klaviyo/campaign-overview.js": {
       "maxDuration": 300
+    },
+    "api/canva/localizer.js": {
+      "maxDuration": 300
     }
   },
   "crons": [

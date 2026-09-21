@@ -76,6 +76,10 @@
               <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.25 13.5 5.4v5.2L8 13.75 2.5 10.6V5.4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 8v5.75M8 8l5.5-2.6M8 8 2.5 5.4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
               <span>Campaign Studio</span>
             </button>
+            <button class="subnav-button wp-nav-item" data-klaviyo-view="canva_localizer" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.75" stroke="currentColor" stroke-width="1.5"/><path d="M10.25 6.4a2.6 2.6 0 0 0-4.6 1.7c0 1.5 1 2.5 2.4 2.5.9 0 1.7-.4 2.2-1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Canva Localizer</span>
+            </button>
           </div>
         </div>
       </nav>
@@ -1404,6 +1408,164 @@ Vis tal og forretningscase</textarea>
                   </div>
                 </div>
                 <div class="agent-list" id="campaign-brain-workflow"></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Canva Localizer. One screen, four blocks, actions in the right column. Canva's REST
+             API can only see text a designer tagged as a data field, and exposes no font size or
+             box geometry, so this page never promises to re-typeset anything: it controls length
+             in the translation and then shows the rendered result. -->
+        <section class="klaviyo-view-panel" id="klaviyo-canva-localizer-panel">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Canva</p>
+              <h2>Canva Localizer</h2>
+              <p class="topbar-sub">One campaign graphic, every market. Translated into the language each list is sent in, generated as separate Canva designs, and exported for email.</p>
+            </div>
+            <div class="topbar-actions">
+              <div class="status-pill warning" id="canva-connection-pill">Canva not connected</div>
+              <div class="canva-connection-actions" id="canva-connection-actions"></div>
+            </div>
+          </section>
+
+          <div class="wp-alert is-warning" id="canva-capability-notice" hidden></div>
+
+          <div class="studio-shell klaviyo-studio-shell">
+            <div class="studio-main">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Step 1</p>
+                    <h3>Choose the design</h3>
+                  </div>
+                  <p>Search your Canva projects, or paste a design link.</p>
+                </div>
+                <div class="control-form canva-design-form">
+                  <label class="field">
+                    <span>Search</span>
+                    <input class="wp-input" id="canva-design-search" type="search" placeholder="Campaign name">
+                  </label>
+                  <button class="ghost-button" data-canva-action="search" type="button">Search</button>
+                  <label class="field">
+                    <span>Or paste a design link</span>
+                    <input class="wp-input" id="canva-design-id" type="text" placeholder="https://www.canva.com/design/DA.../edit">
+                  </label>
+                  <button class="ghost-button" data-canva-action="open-id" type="button">Open</button>
+                </div>
+                <div class="canva-design-results" id="canva-design-results"></div>
+                <div id="canva-selected-design"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Step 2</p>
+                    <h3>The text that will change</h3>
+                  </div>
+                  <p>Only tagged data fields are touched. Untagged text - brand names, logos, URLs - can never be overwritten.</p>
+                </div>
+                <div class="control-form canva-plan-form">
+                  <label class="field">
+                    <span>Name the versions after</span>
+                    <input class="wp-input" id="canva-base-title" type="text" placeholder="campaign-name">
+                  </label>
+                  <label class="field">
+                    <span>Source language</span>
+                    <select class="dashboard-control-select" id="canva-source-language">
+                      <option value="Danish">Danish</option>
+                      <option value="English">English</option>
+                    </select>
+                  </label>
+                  <button class="ghost-button" data-canva-action="read-text" type="button">Read text from design (OCR)</button>
+                  <button class="ghost-button" data-canva-action="save-plan" type="button">Save field plan</button>
+                </div>
+                <div id="canva-field-table"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Step 3</p>
+                    <h3>Markets</h3>
+                  </div>
+                  <p>Markets that share a language are translated once and reused, so UK, US and EU cost one translation between them.</p>
+                </div>
+                <div class="wp-button-group canva-market-actions">
+                  <button class="ghost-button is-sm" data-canva-action="select-all-markets" type="button">All</button>
+                  <button class="ghost-button is-sm" data-canva-action="clear-markets" type="button">None</button>
+                </div>
+                <div class="canva-market-grid" id="canva-market-grid"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Step 4</p>
+                    <h3>Review the versions</h3>
+                  </div>
+                  <p>Length flags are a prediction from the character budget. "Check fit" renders the design and reports what is actually on the page.</p>
+                </div>
+                <div class="canva-version-grid" id="canva-version-grid"></div>
+              </section>
+            </div>
+
+            <aside class="studio-side klaviyo-studio-side">
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Run</p>
+                    <h3>Actions</h3>
+                  </div>
+                </div>
+                <div class="action-stack">
+                  <button class="primary-button" data-canva-action="run-all" type="button">Localize all markets</button>
+                  <button class="ghost-button" data-canva-action="translate" type="button">Translate only</button>
+                  <button class="ghost-button" data-canva-action="generate" type="button">Generate in Canva</button>
+                  <button class="ghost-button" data-canva-action="inspect" type="button">Check rendered fit</button>
+                </div>
+                <label class="field canva-note-field">
+                  <span>Note for the translator</span>
+                  <input class="wp-input" id="canva-operator-note" type="text" placeholder="Optional">
+                </label>
+                <div class="canva-busy wp-help" id="canva-localizer-busy" hidden></div>
+                <div class="inline-feedback" id="canva-localizer-feedback" aria-live="polite"></div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Export</p>
+                    <h3>Download</h3>
+                  </div>
+                </div>
+                <div class="control-form">
+                  <label class="field">
+                    <span>Format</span>
+                    <select class="dashboard-control-select" id="canva-export-format">
+                      <option value="png">PNG</option>
+                      <option value="jpg">JPG</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span>Width in pixels</span>
+                    <input class="wp-input" id="canva-export-width" type="number" min="40" max="25000" placeholder="Design width">
+                  </label>
+                </div>
+                <div class="action-stack">
+                  <button class="ghost-button" data-canva-action="export" type="button">Export all generated</button>
+                </div>
+              </section>
+
+              <section class="card klaviyo-operator-card">
+                <div class="dashboard-section-head">
+                  <div>
+                    <p class="section-label">Summary</p>
+                    <h3>This job</h3>
+                  </div>
+                </div>
+                <div id="canva-localizer-summary"></div>
               </section>
             </aside>
           </div>

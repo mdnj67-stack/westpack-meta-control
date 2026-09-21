@@ -25,7 +25,11 @@ const AUDIT_EVENTS = Object.freeze([
   "meta_draft_created",
   "studio_draft_saved",
   "job_rejected_restarted",
-  "blog_exported"
+  "blog_exported",
+  // Canva Localizer creates real, permanent designs in the shared Canva account. Eighteen of
+  // them at a time, named after a campaign, is exactly the kind of thing someone later needs to
+  // trace back to a person and a moment.
+  "canva_versions_generated"
 ]);
 
 function resolveMode() {
