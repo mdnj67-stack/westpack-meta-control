@@ -3233,9 +3233,21 @@ body[data-workspace="meta"] .subnav-button.active .wp-nav-icon {
   color: var(--wp-text-muted);
 }
 
+/* The banner block sits on its own row under the title and fills the card, so the KPI
+   strip lines up with the right edge of every panel below it. .hero-actions sizes itself
+   to its content, so without this it stopped a couple of hundred pixels short and left a
+   dead column down the side of the card. */
+.hero-actions {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* The call to action keeps its own width at the end of that row. Stretching it to the
+   full width of the card turns one button into the widest element on the page. */
 .hero-cta {
   align-self: center;
-  justify-self: auto;
+  justify-self: end;
+  width: auto;
   min-width: 0;
 }
 
