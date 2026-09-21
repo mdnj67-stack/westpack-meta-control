@@ -3,6 +3,7 @@
 // carrying the hard-coded "Healthy" status this dashboard removed everywhere
 // else, and they seeded the dashboard and the Studio publish targets on every
 // page load until the live read landed about a minute later.
+import { NUMBER_LOCALE, formatMoney } from "./src/format.js?v=20260921-format1";
 import {
   adaptationGoals,
   auditLog,
@@ -2576,13 +2577,27 @@ function buildKlaviyoOverviewBuckets(groups) {
 }
 
 function buildSparklinePath(values = [], width = 160, height = 42, padding = 4) {
-  if (!values.length) return "";
-  const min = Math.min(...values);
-  const max = Math.max(...values);
+  const points = (Array.isArray(values) ? values : []).map(Number).filter(Number.isFinite);
+  if (!points.length) return "";
+
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const flat = max - min === 0;
   const range = Math.max(max - min, 1);
-  return values.map((value, index) => {
-    const x = padding + ((width - padding * 2) * index) / Math.max(values.length - 1, 1);
-    const y = height - padding - (((value - min) / range) * (height - padding * 2));
+  // A flat series is drawn down the middle rather than pinned to the floor: a series of
+  // sevens and a series of zeros are not the same reading, and sitting both on the
+  // baseline said they were.
+  const mid = height / 2;
+
+  // One point has no shape. A short level mark says "one reading" without implying a
+  // trend between a point and nothing.
+  if (points.length === 1) {
+    return `M ${(width / 2 - 12).toFixed(2)} ${mid.toFixed(2)} L ${(width / 2 + 12).toFixed(2)} ${mid.toFixed(2)}`;
+  }
+
+  return points.map((value, index) => {
+    const x = padding + ((width - padding * 2) * index) / (points.length - 1);
+    const y = flat ? mid : height - padding - (((value - min) / range) * (height - padding * 2));
     return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
   }).join(" ");
 }
@@ -2726,7 +2741,7 @@ function renderKlaviyoOverviewMiniGrid(groups) {
         </div>
         <div class="klaviyo-mini-chart" aria-hidden="true">
           ${path
-            ? `<svg viewBox="0 0 160 42"><path d="${path}" fill="none" class="wp-spark-line" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
+            ? `<svg viewBox="0 0 160 42" preserveAspectRatio="none"><path d="${path}" fill="none" class="wp-spark-line" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
             : `<span class="field-hint">No trend yet</span>`}
         </div>
       </article>
@@ -2734,17 +2749,45 @@ function renderKlaviyoOverviewMiniGrid(groups) {
   }).join("");
 }
 
-function buildLinePath(values = [], width = 640, height = 220, padding = 18, bounds = {}) {
-  if (!values.length) return "";
+/**
+ * Places each reading by its own date rather than by its position in the array.
+ *
+ * These are nightly readings and a night can be missed. Spacing them evenly meant a
+ * three-day gap was drawn the same width as a one-day step, so the line said the list
+ * grew smoothly when what actually happened is that nobody measured it for three days.
+ * The Meta sparkline was fixed for exactly this; this one had not been.
+ *
+ * Returns the path and the plotted points, so the caller can mark what was measured.
+ */
+function buildLineGeometry(values = [], dates = [], width = 640, height = 220, padding = 18, bounds = {}) {
+  if (!values.length) return { path: "", points: [] };
   const max = Number.isFinite(bounds.max) ? bounds.max : Math.max(...values, 0);
   const min = Number.isFinite(bounds.min) ? bounds.min : Math.min(...values, max);
   const range = Math.max(max - min, 1);
-  return values.map((value, index) => {
-    const x = padding + ((width - padding * 2) * index) / Math.max(values.length - 1, 1);
-    const normalized = (value - min) / range;
-    const y = height - padding - normalized * (height - padding * 2);
-    return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
-  }).join(" ");
+
+  const dayOf = (index) => {
+    const first = Date.parse(`${dates[0]}T00:00:00Z`);
+    const at = Date.parse(`${dates[index]}T00:00:00Z`);
+    if (!Number.isFinite(first) || !Number.isFinite(at)) return index;
+    return Math.round((at - first) / 86400000);
+  };
+  const span = Math.max(dayOf(values.length - 1), 1);
+
+  const points = values.map((value, index) => {
+    const offset = values.length > 1 ? dayOf(index) / span : 0.5;
+    const x = padding + (width - padding * 2) * offset;
+    const y = height - padding - ((value - min) / range) * (height - padding * 2);
+    return { x, y, value, date: dates[index] || "" };
+  });
+
+  return {
+    path: points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" "),
+    points
+  };
+}
+
+function buildLinePath(values = [], width = 640, height = 220, padding = 18, bounds = {}) {
+  return buildLineGeometry(values, [], width, height, padding, bounds).path;
 }
 
 function buildTrendBounds(values = [], mode = "cumulative") {
@@ -2884,6 +2927,13 @@ function buildSubscriberSeriesForKey(key, mode = "cumulative") {
 // count, so the page stated two different answers to the same question at once.
 function buildKlaviyoSubscriberMetricCards(mode, series) {
   const values = Array.isArray(series) ? series : [];
+  // With no readings these cards used to read 0 / 0 / 0 beside a chart saying there were
+  // no readings at all. A measured zero and an absent measurement are different claims.
+  if (!values.length) {
+    return mode === "daily"
+      ? [{ label: "Latest day", value: "--" }, { label: "Joined in range", value: "--" }, { label: "Average / day", value: "--" }]
+      : [{ label: "Latest reading", value: "--" }, { label: "Change over range", value: "--" }];
+  }
   const currentValue = Number(values[values.length - 1] || 0);
   const firstValue = Number(values[0] || 0);
   const rangeTotal = values.reduce((sum, value) => sum + Number(value || 0), 0);
@@ -2897,11 +2947,13 @@ function buildKlaviyoSubscriberMetricCards(mode, series) {
     ];
   }
 
+  // "Readings" used to be the third card here. How many data points a chart is drawn from
+  // is a property of the chart, not a figure about the list, and the dots on the curve
+  // now show it where it belongs.
   const rangeDelta = currentValue - firstValue;
   return [
     { label: "Latest reading", value: formatKlaviyoNumber(currentValue, 0) },
-    { label: "Change over range", value: rangeDelta >= 0 ? `+${formatKlaviyoNumber(rangeDelta, 0)}` : formatKlaviyoNumber(rangeDelta, 0) },
-    { label: "Readings", value: formatKlaviyoNumber(values.length, 0) }
+    { label: "Change over range", value: rangeDelta >= 0 ? `+${formatKlaviyoNumber(rangeDelta, 0)}` : formatKlaviyoNumber(rangeDelta, 0) }
   ];
 }
 
@@ -2909,12 +2961,10 @@ function buildKlaviyoSubscriberModeNote(mode, snapshotDates) {
   const recorded = Array.isArray(snapshotDates) ? snapshotDates : [];
 
   if (mode === "daily") {
-    return "New members per day, counted from each current member's joined_group_at. Someone who joined and was removed again before the last nightly reading is not in this curve.";
+    return "";
   }
 
-  return recorded.length > 1
-    ? `List size as actually measured on ${recorded[0]} through ${recorded[recorded.length - 1]}. One point per nightly reading - the line between two points is drawn, not observed.`
-    : "List size as actually measured. The curve fills in from one nightly reading to the next.";
+  return recorded.length > 1 ? `Measured ${recorded[0]} to ${recorded[recorded.length - 1]}` : "";
 }
 
 // The latest measured interval for one market, or null where there is nothing honest to show.
@@ -2948,12 +2998,13 @@ function renderKlaviyoSubscriberFlow() {
 
   const flow = appState.klaviyoSubscribers?.flow || null;
   if (!flow || !flow.available) {
-    const reason = String(flow?.reason || "Subscriber joins and removals have not been recorded yet.");
+    // This was a paragraph explaining how the series gets built. The reader cannot act on
+    // that; they only need to know the panel is waiting rather than broken.
     node.innerHTML = `
-      <section class="klaviyo-flow-card is-empty">
-        <span class="section-label">Joined vs removed</span>
-        <p>${escapeHtml(reason)} The daily snapshot builds this series; the first comparison appears once two have been recorded.</p>
-      </section>
+      <div class="wp-state">
+        <p class="wp-state-title">Joined vs removed needs two snapshots</p>
+        <p class="wp-state-body">The first comparison appears after tonight's reading.</p>
+      </div>
     `;
     return;
   }
@@ -3186,7 +3237,14 @@ function renderKlaviyoSubscriberSection() {
   const chartWidth = 720;
   const chartHeight = 188;
   const yBounds = buildTrendBounds(series, appState.klaviyoSubscriberMode || "cumulative");
-  const path = buildLinePath(series, chartWidth, chartHeight, 24, yBounds);
+  const geometry = buildLineGeometry(series, dates, chartWidth, chartHeight, 24, yBounds);
+  const path = geometry.path;
+  // A dot per reading. The curve between two of them is drawn rather than observed, and
+  // showing where the readings actually fall says that better than a sentence under the
+  // chart did. Above a few dozen points they would crowd into a band, so they stop.
+  const readingDots = geometry.points.length && geometry.points.length <= 45
+    ? geometry.points.map((point) => `<circle class="klaviyo-line-point" cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="2.5"><title>${escapeHtml(`${point.date}: ${formatKlaviyoNumber(point.value, 0)}`)}</title></circle>`).join("")
+    : "";
   const currentValue = series[series.length - 1] || 0;
   const snapshotDates = subscribers.totalsSeries?.dates || [];
   const maxCount = Math.max(...markets.map((item) => item.count || 0), 1);
@@ -3207,37 +3265,35 @@ function renderKlaviyoSubscriberSection() {
             `).join("")}
           </div>
         </div>
+        ${path ? `
         <div class="klaviyo-line-chart">
-          <svg viewBox="0 0 ${chartWidth} ${chartHeight}" role="img" aria-label="${escapeHtml(trend.label)} trend">
+          <svg viewBox="0 0 ${chartWidth} ${chartHeight}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(trend.label)} trend">
             <defs>
               <linearGradient id="klaviyoTrendFill" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" class="wp-spark-fill-top"></stop>
                 <stop offset="100%" class="wp-spark-fill-bottom"></stop>
               </linearGradient>
             </defs>
-            ${path ? `
             <path d="${path} L ${chartWidth - 24} ${chartHeight - 24} L 24 ${chartHeight - 24} Z" fill="url(#klaviyoTrendFill)"></path>
-            <path d="${path}" fill="none" class="wp-spark-line" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-            ` : `
-            <text x="${chartWidth / 2}" y="${chartHeight / 2}" text-anchor="middle" dominant-baseline="middle" class="wp-spark-empty" font-size="13">No points in this range</text>
-            `}
+            <path d="${path}" fill="none" class="wp-spark-line" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path>
+            ${readingDots}
           </svg>
           <div class="klaviyo-line-chart-scale">
-            <span>Scale</span>
-            <strong>${escapeHtml(formatKlaviyoNumber(yBounds.min, 0))}</strong>
             <strong>${escapeHtml(formatKlaviyoNumber(yBounds.max, 0))}</strong>
+            <strong>${escapeHtml(formatKlaviyoNumber(yBounds.min, 0))}</strong>
           </div>
           <div class="klaviyo-line-chart-axis">
             <span>${escapeHtml(dates[0] || "--")}</span>
             <span>${escapeHtml(dates[dates.length - 1] || "--")}</span>
           </div>
-          <div class="klaviyo-line-chart-legend">
-            <span><i class="is-primary"></i>${escapeHtml(appState.klaviyoSubscriberMarket === "total" ? "Total" : appState.klaviyoSubscriberMarket)}</span>
-          </div>
         </div>
-        <div class="klaviyo-snapshot-meta">
-          ${escapeHtml(modeNote)}
+        ${modeNote ? `<div class="klaviyo-snapshot-meta">${escapeHtml(modeNote)}</div>` : ""}
+        ` : `
+        <div class="wp-state">
+          <p class="wp-state-title">No readings in this range</p>
+          <p class="wp-state-body">Widen the range, or pick another market.</p>
         </div>
+        `}
       </section>
       <section class="klaviyo-subscriber-bars">
         ${markets
@@ -13225,22 +13281,21 @@ function inverseRatio(value, maxValue) {
   return clampNumber(1 - value / maxValue, 0, 1);
 }
 
+// These were pinned to en-GB with two decimals while the rest of the product followed the
+// reader's locale with none, so the dashboard printed "DKK 248,388.13" a few centimetres
+// from "93.175,00 kr." for the same currency. src/format.js decides the format now.
 function formatDashboardCurrency(value) {
   if (!Number.isFinite(value)) {
     return "--";
   }
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: appState.metaCurrency || "DKK",
-    maximumFractionDigits: 2
-  }).format(value);
+  return formatMoney(value, appState.metaCurrency || "DKK");
 }
 
 function formatDashboardNumber(value, digits = 0) {
   if (!Number.isFinite(value)) {
     return "--";
   }
-  return value.toLocaleString("en-GB", {
+  return value.toLocaleString(NUMBER_LOCALE, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits
   });
@@ -13725,14 +13780,14 @@ function renderDashboard() {
       : !dashboardFiguresSynced && appState.metaSnapshotLoading
       ? {
         headline: "Reading the figures from Meta",
-        body: "Spend, reach, trends and the objective split are computed once on the server, over every campaign in the selected range. On this account that read takes around a minute, and nothing is shown until it lands - a half-filled dashboard is worse than a waiting one.",
-        nextStep: "Nothing to do. The page fills itself in when the read returns."
+        body: "This account takes about a minute to answer.",
+        nextStep: ""
       }
       : !dashboardFiguresSynced
       ? {
         headline: "Dashboard figures are not synced",
-        body: "The computed figures did not come back, so spend, reach, trends and the objective split cannot be shown for this range. Every figure on this page is computed once on the server, and the browser deliberately does not produce a second opinion.",
-        nextStep: "Press Refresh data. If it keeps failing, the data quality panel below says what the last sync managed to fetch."
+        body: "The figures for this range did not come back.",
+        nextStep: "Press Refresh data. If it keeps failing, Data quality below shows what the last sync fetched."
       }
       : isEmptyLensState
         ? getLensEmptyStateCopy(lens)
@@ -13788,7 +13843,7 @@ function renderDashboard() {
 
   const setPlaybookCopy = (copy = {}) => {
     if (playbookStatusTitle) playbookStatusTitle.textContent = copy.statusTitle || "Current position";
-    if (playbookStatusSub) playbookStatusSub.textContent = copy.statusSub || "Where the lens stands right now.";
+    if (playbookStatusSub) playbookStatusSub.textContent = copy.statusSub || "";
     if (playbookNextTitle) playbookNextTitle.textContent = copy.nextTitle || "Priority queue";
     if (playbookNextSub) playbookNextSub.textContent = copy.nextSub || "Fast reads for the next budget, creative and hygiene moves.";
   };
@@ -13796,7 +13851,7 @@ function renderDashboard() {
   const copyMap = {
     general: {
       statusTitle: "General performance overview",
-      statusSub: "Key KPIs first, then diagnostics, trends, spend mix and lens detail.",
+      statusSub: "",
       nextTitle: "Next actions",
       nextSub: "Highest leverage moves across the account."
     },
@@ -14234,10 +14289,10 @@ async function refreshMetaData(options = {}) {
         renderLensEmptyState({
           headline: rateLimited ? "Meta is rate limited right now" : "Meta data could not be loaded",
           body: rateLimited
-            ? "The ad account has no request quota left for the moment, so this range could not be fetched and there is no earlier snapshot cached in this browser to show instead."
-            : `${error.message} No earlier snapshot is cached in this browser, so there are no figures to show in the meantime.`,
+            ? "The ad account is out of request quota, and nothing is cached in this browser to show instead."
+            : `${error.message}`,
           nextStep: rateLimited
-            ? "Wait a few minutes and press Refresh data. Nothing is wrong with the figures; they simply could not be read."
+            ? "Wait a few minutes, then press Refresh data."
             : "Press Refresh data to try again."
         }, appState.dashboardDateLabel || "");
       });

@@ -90,7 +90,15 @@ test("the strip reads campaign totals, never the daily series", () => {
   const hero = buildHeroPanelItems([campaign()], "general", "DKK", scope, {});
   const spend = hero.find((item) => item.label === "Spend");
   assert.ok(spend, "the strip has no Spend tile");
-  assert.match(spend.value, /56,428\.94/, "Spend is being summed from the partial series again");
+  // The formatted string is only the probe here; what is being tested is that Spend comes
+  // from the campaign totals (56,428.94) and not from the shorter daily series. Money is
+  // rendered in whole units in the reader's format, so the assertion reads the digits
+  // rather than pinning one locale's punctuation.
+  assert.equal(
+    spend.value.replace(/[^0-9]/g, ""),
+    "56429",
+    "Spend is being summed from the partial series again"
+  );
 
   const roas = hero.find((item) => item.label === "ROAS");
   assert.equal(roas.value, (232000 / 56428.94).toFixed(2), "ROAS must be summed revenue over summed spend");

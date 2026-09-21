@@ -372,6 +372,13 @@ test("an empty series draws no path at all, rather than an invalid one", () => {
   // check that there is a path at all.
   const concatenations = app.split("\n").filter((line) => line.includes('d="${path} L '));
   assert.equal(concatenations.length, 1, "a second unreviewed concatenation appeared");
-  assert.match(app, /\$\{path \? `\s*\n\s*<path d="\$\{path\} L /);
-  assert.match(app, /No points in this range/);
+
+  // The guard used to sit immediately above the path. The chart now renders a whole
+  // block behind that guard, so what is checked is that the concatenation is still
+  // inside a `path ?` branch rather than that it is the next line.
+  const guardAt = app.lastIndexOf("${path ? `", app.indexOf('d="${path} L '));
+  assert.notEqual(guardAt, -1, "the path concatenation is no longer behind a path check");
+
+  // And there is still something on screen when there is nothing to draw.
+  assert.match(app, /No readings in this range|No points in this range/);
 });

@@ -50,9 +50,9 @@ test("the snapshot age is shown, and a stale snapshot is called out", () => {
 });
 
 test("the market breakdown never replaces the deduplicated account figure", () => {
-  assert.match(ui, /must not be added together/i);
+  assert.match(ui, /must not be summed|must not be added together/i, "the per-country reach caveat is gone");
+  assert.match(ui, /Do not add this column up/i, "the column tooltip no longer warns against summing reach");
   assert.match(ui, /reached in more than one country/i);
-  assert.match(ui, /The account figure is the one that speaks for the whole set/);
 });
 
 test("a market with no baseline is labelled new rather than given a percentage", () => {
@@ -144,7 +144,7 @@ test("the tab carries no method or provenance panel", () => {
   // what it qualifies.
   assert.match(ui, /not a measured uplift/);
   assert.match(ui, /not a cohort of the people newly reached/i);
-  assert.match(ui, /must not be added together/i);
+  assert.match(ui, /must not be summed|must not be added together/i);
 });
 
 test("the restatement log renders only when something was restated", () => {
@@ -250,7 +250,7 @@ test("ad-level reach is named as a figure that cannot be added up", () => {
   // column counts a person once per ad they saw.
   assert.match(ui, /key: "deliveredReach", label: "Reach"/);
   assert.match(ui, /Do not add the column up: one person who saw three of these ads counts in all three rows/);
-  assert.match(ui, /is never added across the rows/);
+  assert.match(ui, /must not be summed across rows/, "the ad table no longer says its reach cannot be summed");
 
   // And the attribution caveat sits with the revenue it qualifies.
   assert.match(ui, /not what the ad caused/);
@@ -290,7 +290,7 @@ test("the market table ranks on new customers, not on the price of reach", () =>
 test("reach is named on screen as a diagnostic rather than a goal", () => {
   // The whole premise correction: a rising reach bar is not progress when
   // almost everyone counted was never a possible customer.
-  assert.match(ui, /A diagnostic, not a goal/);
-  assert.match(ui, /never a possible customer/);
+  assert.match(ui, /diagnostic, not a goal/i, "reach is no longer named as a diagnostic");
+  assert.match(ui, /ever possible customers|never a possible customer/, "the broad-targeting caveat is gone from the reach figure");
   assert.match(ui, /function renderExpansionCustomerCurve/);
 });

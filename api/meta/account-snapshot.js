@@ -273,16 +273,24 @@ function resolveAttributionOverride(campaign) {
   return null;
 }
 
+// The browser formats every other figure through src/format.js. These few are formatted
+// here because they are computed here, so they have to agree with it: same locale, same
+// decimals. There is no bundler in this repo, so the two constants are duplicated and
+// tests/number-format-parity.test.js fails if they drift apart.
+const NUMBER_LOCALE = "da-DK";
+const MONEY_FRACTION_DIGITS = 0;
+
 function formatCurrency(value, currency = "DKK", fallback = "--") {
   const number = Number(value);
   if (!Number.isFinite(number)) {
     return fallback;
   }
 
-  return new Intl.NumberFormat("en-GB", {
+  return new Intl.NumberFormat(NUMBER_LOCALE, {
     style: "currency",
     currency: normalizeCurrencyCode(currency),
-    maximumFractionDigits: 2
+    minimumFractionDigits: MONEY_FRACTION_DIGITS,
+    maximumFractionDigits: MONEY_FRACTION_DIGITS
   }).format(number);
 }
 

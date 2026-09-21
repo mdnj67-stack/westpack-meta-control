@@ -201,7 +201,7 @@
   color: #fff;
   background: #191411;
   font-size: 0.74rem;
-  font-weight: 650;
+  font-weight: 600;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
@@ -349,7 +349,7 @@
   margin-bottom: 22px;
   color: #34453f;
   font-size: 0.67rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: 0.19em;
 }
 
@@ -364,7 +364,7 @@
 .content-agent-focus-copy h3 {
   max-width: 760px;
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(2.6rem, 6vw, 6.4rem);
   font-weight: 570;
   line-height: 0.91;
@@ -399,7 +399,7 @@
   gap: 7px;
   color: rgba(39, 31, 26, 0.35);
   font-size: 0.64rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -473,14 +473,14 @@
 .content-agent-director-head span {
   color: #34453f;
   font-size: 0.64rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .content-agent-director-head strong {
   max-width: 320px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.75rem;
   line-height: 1.02;
   letter-spacing: -0.045em;
@@ -513,7 +513,7 @@
 .content-agent-director .content-agent-fields label > span {
   color: rgba(39, 31, 26, 0.56);
   font-size: 0.65rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -686,7 +686,7 @@ h2,
 h3,
 h4,
 th {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 h1,
@@ -884,7 +884,7 @@ h1 {
   border: 1px solid var(--line-strong);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
   color: #fff3ed;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: -0.06em;
@@ -999,7 +999,7 @@ h1 {
   border: 1px solid rgba(207, 207, 203, 0.9);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 92% 8%, rgba(242, 103, 85, 0.08), transparent 24%),
+    radial-gradient(circle at 92% 8%, rgba(52, 69, 63, 0.08), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 247, 246, 0.94) 100%);
 }
 
@@ -1012,7 +1012,7 @@ h1 {
 
 .campaign-asana-source-head h4 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.08rem;
   letter-spacing: -0.025em;
 }
@@ -1034,13 +1034,13 @@ h1 {
 }
 
 .campaign-asana-message.is-error {
-  border-color: rgba(198, 61, 52, 0.28);
-  background: rgba(198, 61, 52, 0.04);
+  border-color: rgba(52, 69, 63, 0.28);
+  background: rgba(52, 69, 63, 0.04);
 }
 
 .campaign-asana-message strong {
   color: var(--text);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .campaign-asana-connection-line {
@@ -1097,7 +1097,7 @@ h1 {
 .campaign-asana-link-mark span {
   width: 22px;
   height: 1px;
-  background: rgba(198, 61, 52, 0.44);
+  background: rgba(52, 69, 63, 0.44);
 }
 
 .campaign-asana-link-mark span::after {
@@ -1125,7 +1125,7 @@ h1 {
 }
 
 .campaign-asana-match-line strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.84rem;
 }
 
@@ -1168,7 +1168,7 @@ h1 {
 }
 
 .campaign-creation-progress strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.88rem;
 }
 
@@ -1293,7 +1293,7 @@ h1 {
   position: absolute;
   inset: 0 auto 0 0;
   width: 4px;
-  background: linear-gradient(180deg, rgba(52, 69, 63, 0.85) 0%, rgba(154, 106, 45, 0.45) 100%);
+  background: linear-gradient(180deg, rgba(52, 69, 63, 0.85) 0%, rgba(138, 96, 21, 0.45) 100%);
 }
 
 .campaign-brain-glance-card.tone-high::before {
@@ -1301,11 +1301,11 @@ h1 {
 }
 
 .campaign-brain-glance-card.tone-medium::before {
-  background: linear-gradient(180deg, rgba(157, 106, 39, 0.9) 0%, rgba(190, 144, 71, 0.45) 100%);
+  background: linear-gradient(180deg, rgba(138, 96, 21, 0.9) 0%, rgba(190, 144, 71, 0.45) 100%);
 }
 
 .campaign-brain-glance-card.tone-low::before {
-  background: linear-gradient(180deg, rgba(154, 63, 49, 0.9) 0%, rgba(193, 99, 83, 0.45) 100%);
+  background: linear-gradient(180deg, rgba(52, 69, 63, 0.9) 0%, rgba(52, 69, 63, 0.45) 100%);
 }
 
 .campaign-brain-glance-card span {
@@ -1320,7 +1320,7 @@ h1 {
 .campaign-brain-glance-card strong {
   display: block;
   margin-bottom: 6px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.06rem;
   line-height: 1.1;
 }
@@ -1403,7 +1403,7 @@ h1 {
 }
 
 .content-agent-identity h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.35rem, 2vw, 1.8rem);
   letter-spacing: -0.045em;
 }
@@ -1657,7 +1657,7 @@ h1 {
 }
 
 .content-agent-job[data-state="failed"] {
-  border-color: rgba(179, 70, 63, 0.28);
+  border-color: rgba(52, 69, 63, 0.28);
 }
 
 .content-agent-job[data-state="quality_blocked"] {
@@ -1882,7 +1882,7 @@ h1 {
 }
 
 .campaign-studio-target-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
 }
 
@@ -2212,7 +2212,7 @@ h1 {
   border-radius: 10px;
   border: 1px dashed rgba(52, 69, 63, 0.26);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 30%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 30%),
     linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(248, 242, 234, 0.94) 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
@@ -2230,7 +2230,7 @@ h1 {
 }
 
 .campaign-studio-upload-card strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
 }
 
@@ -2277,7 +2277,7 @@ h1 {
   border-radius: 10px;
   border: 1px solid rgba(207, 207, 203, 0.92);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.05), transparent 28%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.05), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 242, 234, 0.94) 100%);
 }
 
@@ -2381,7 +2381,7 @@ h1 {
   padding: 10px 12px;
   border-radius: 8px;
   background: rgba(255, 244, 232, 0.92);
-  border: 1px solid rgba(157, 106, 39, 0.22);
+  border: 1px solid rgba(138, 96, 21, 0.22);
 }
 
 .campaign-studio-meta-warnings p {
@@ -2469,7 +2469,7 @@ h1 {
   border-radius: 12px;
   border: 1px solid rgba(207, 207, 203, 0.92);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.06), transparent 30%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.06), transparent 30%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(247, 241, 233, 0.95) 100%);
 }
 
@@ -2489,7 +2489,7 @@ h1 {
 
 .campaign-studio-environment-stage-copy strong,
 .campaign-studio-environment-stage-empty strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.12rem;
   line-height: 1.08;
 }
@@ -2582,8 +2582,8 @@ h1 {
 }
 
 .campaign-studio-environment-format-pills .ghost-button.is-selected {
-  border-color: rgba(198, 61, 52, 0.3);
-  background: rgba(198, 61, 52, 0.12);
+  border-color: rgba(52, 69, 63, 0.3);
+  background: rgba(52, 69, 63, 0.12);
   color: var(--accent);
 }
 
@@ -2608,16 +2608,16 @@ h1 {
   gap: 10px;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid rgba(198, 61, 52, 0.2);
+  border: 1px solid rgba(52, 69, 63, 0.2);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 34%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 34%),
     rgba(255, 255, 255, 0.98);
 }
 
 .campaign-studio-environment-source-item strong,
 .campaign-studio-environment-result-copy strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.92rem;
 }
 
@@ -2654,7 +2654,7 @@ h1 {
   border-radius: 10px;
   border: 1px solid rgba(207, 207, 203, 0.92);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 34%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 247, 246, 0.94) 100%);
 }
 
@@ -2697,7 +2697,7 @@ h1 {
 }
 
 .campaign-studio-environment-group-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.96rem;
 }
 
@@ -2729,8 +2729,8 @@ h1 {
 }
 
 .campaign-studio-environment-source-item .ghost-button.is-selected {
-  border-color: rgba(198, 61, 52, 0.3);
-  background: rgba(198, 61, 52, 0.12);
+  border-color: rgba(52, 69, 63, 0.3);
+  background: rgba(52, 69, 63, 0.12);
   color: var(--accent);
 }
 
@@ -2798,8 +2798,8 @@ h1 {
 }
 
 .campaign-studio-asset-tag-row .ghost-button.is-selected {
-  border-color: rgba(198, 61, 52, 0.3);
-  background: rgba(198, 61, 52, 0.12);
+  border-color: rgba(52, 69, 63, 0.3);
+  background: rgba(52, 69, 63, 0.12);
   color: var(--accent);
 }
 
@@ -2832,7 +2832,7 @@ h1 {
 
 .campaign-studio-library-drawer > summary strong {
   color: var(--text);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
   letter-spacing: -0.02em;
 }
@@ -2890,7 +2890,7 @@ h1 {
 }
 
 .campaign-studio-library-picker-banner strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.9rem;
 }
 
@@ -2942,7 +2942,7 @@ h1 {
 }
 
 .campaign-studio-library-empty strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
 }
 
@@ -2954,7 +2954,7 @@ h1 {
 }
 
 .campaign-studio-library-empty.is-error {
-  border-color: rgba(198, 61, 52, 0.3);
+  border-color: rgba(52, 69, 63, 0.3);
 }
 
 .campaign-studio-library-group-head {
@@ -2972,7 +2972,7 @@ h1 {
 }
 
 .campaign-studio-library-group-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.94rem;
 }
 
@@ -3052,7 +3052,7 @@ h1 {
 
 .campaign-studio-library-card-copy > strong {
   overflow: hidden;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.9rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3106,7 +3106,7 @@ h1 {
 
 .campaign-studio-priority-card {
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 32%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 32%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(241, 241, 239, 0.96) 100%);
 }
 
@@ -3133,7 +3133,7 @@ h1 {
 
 .campaign-brain-brief-card.is-wide {
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 242, 235, 0.95) 100%);
 }
 
@@ -3149,7 +3149,7 @@ h1 {
 .campaign-brain-brief-card strong,
 .campaign-brain-plan-card strong,
 .campaign-studio-master-copy h4 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .campaign-brain-brief-card strong,
@@ -3173,7 +3173,7 @@ h1 {
 
 .campaign-brain-plan-card.is-primary {
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.09), transparent 26%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.09), transparent 26%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 242, 234, 0.95) 100%);
 }
 
@@ -3198,8 +3198,8 @@ h1 {
 }
 
 .campaign-brain-pill.is-warning {
-  border-color: rgba(198, 61, 52, 0.18);
-  background: rgba(198, 61, 52, 0.08);
+  border-color: rgba(52, 69, 63, 0.18);
+  background: rgba(52, 69, 63, 0.08);
   color: rgba(136, 51, 45, 0.88);
 }
 
@@ -3252,7 +3252,7 @@ h1 {
   gap: 14px;
   padding: 20px 22px;
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.09), transparent 24%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.09), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.995) 0%, rgba(246, 239, 232, 0.96) 100%);
   box-shadow: 0 20px 44px rgba(39, 27, 20, 0.05);
 }
@@ -3285,7 +3285,7 @@ h1 {
 .campaign-studio-hero-card {
   order: 2;
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(247, 241, 233, 0.96) 100%);
   box-shadow: 0 18px 40px rgba(39, 27, 20, 0.05);
 }
@@ -3296,7 +3296,7 @@ h1 {
   border-radius: 12px;
   border: 1px solid rgba(207, 207, 203, 0.92);
   background:
-    radial-gradient(circle at top left, rgba(198, 61, 52, 0.06), transparent 24%),
+    radial-gradient(circle at top left, rgba(52, 69, 63, 0.06), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 247, 246, 0.96) 100%);
 }
 
@@ -3445,7 +3445,7 @@ h1 {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.78);
-  font: 600 11px/1 "Space Grotesk", sans-serif;
+  font: 600 11px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -3505,7 +3505,7 @@ h1 {
 
 .campaign-email-builder-pane-head strong {
   color: #2e2e2b;
-  font: 700 13px/1.2 "Space Grotesk", sans-serif;
+  font: 700 13px/1.2 var(--wp-font);
 }
 
 .campaign-email-builder-library-list {
@@ -3581,7 +3581,7 @@ h1 {
 .campaign-email-builder-library-list i,
 .campaign-email-builder-outline i {
   color: #34453f;
-  font: 700 9px/1 "Space Grotesk", sans-serif;
+  font: 700 9px/1 var(--wp-font);
   font-style: normal;
   letter-spacing: .08em;
 }
@@ -3596,7 +3596,7 @@ h1 {
 .campaign-email-builder-library-list strong,
 .campaign-email-builder-outline strong {
   overflow: hidden;
-  font: 600 11px/1.2 "Space Grotesk", sans-serif;
+  font: 600 11px/1.2 var(--wp-font);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -3770,7 +3770,7 @@ h1 {
 .campaign-email-builder-canvas-actions span {
   padding: 0 5px;
   color: #fff;
-  font: 700 9px/1 "Space Grotesk", sans-serif;
+  font: 700 9px/1 var(--wp-font);
 }
 
 .campaign-email-builder-canvas-actions button {
@@ -3781,7 +3781,7 @@ h1 {
   border-radius: 6px;
   background: rgba(255, 255, 255, .11);
   color: #fff;
-  font: 700 9px/1 "Space Grotesk", sans-serif;
+  font: 700 9px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -3854,7 +3854,7 @@ h1 {
 }
 
 .campaign-email-builder-canvas-drop > header { display: grid; justify-items: center; gap: 5px; }
-.campaign-email-builder-canvas-drop > header strong { font: 700 18px/1.2 "Space Grotesk", sans-serif; }
+.campaign-email-builder-canvas-drop > header strong { font: 700 18px/1.2 var(--wp-font); }
 .campaign-email-builder-canvas-drop > header span { max-width: 420px; color: rgba(70, 48, 42, .68); font-size: 11px; line-height: 1.5; }
 .campaign-email-builder-canvas-drop-slots { display: grid; gap: 8px; width: min(100%, 500px); margin: 0 auto; }
 .campaign-email-builder-canvas-drop-slots > div {
@@ -3869,8 +3869,8 @@ h1 {
   text-align: left;
   transition: border-color .14s ease, background .14s ease, transform .14s ease, box-shadow .14s ease;
 }
-.campaign-email-builder-canvas-drop-slots i { grid-row: 1 / 3; align-self: center; color: #34453f; font: 800 10px/1 "Space Grotesk", sans-serif; font-style: normal; letter-spacing: .08em; }
-.campaign-email-builder-canvas-drop-slots strong { overflow: hidden; font: 700 12px/1.2 "Space Grotesk", sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+.campaign-email-builder-canvas-drop-slots i { grid-row: 1 / 3; align-self: center; color: #34453f; font: 700 10px/1 var(--wp-font); font-style: normal; letter-spacing: .08em; }
+.campaign-email-builder-canvas-drop-slots strong { overflow: hidden; font: 700 12px/1.2 var(--wp-font); text-overflow: ellipsis; white-space: nowrap; }
 .campaign-email-builder-canvas-drop-slots small { overflow: hidden; color: rgba(70, 48, 42, .6); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 .campaign-email-builder-canvas-drop-slots > div.is-selected { border-color: rgba(52, 69, 63, .48); box-shadow: 0 7px 20px rgba(52, 69, 63, .08); }
 .campaign-email-builder-canvas-drop-slots > div.is-drop-target { border-color: #34453f; background: #fff0f4; transform: translateX(5px); box-shadow: 0 10px 25px rgba(52, 69, 63, .16); }
@@ -3935,7 +3935,7 @@ h1 {
   border-radius: 6px;
   background: transparent;
   color: rgba(70, 56, 48, .62);
-  font: 600 10px/1 "Space Grotesk", sans-serif;
+  font: 600 10px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -4005,7 +4005,7 @@ h1 {
 .campaign-email-builder-media-head span {
   color: #185d44;
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: .09em;
   text-transform: uppercase;
 }
@@ -4060,7 +4060,7 @@ h1 {
   border-radius: 6px;
   background: #f7f7f6;
   color: #34453f;
-  font: 700 8px/1 "Space Grotesk", sans-serif;
+  font: 700 8px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -4075,7 +4075,7 @@ h1 {
 
 .campaign-email-builder-media-empty b {
   color: #2a493d;
-  font: 700 10px/1.2 "Space Grotesk", sans-serif;
+  font: 700 10px/1.2 var(--wp-font);
 }
 
 .campaign-email-builder-composition {
@@ -4150,7 +4150,7 @@ h1 {
   border: 0;
   background: transparent;
   color: #185d44;
-  font: 700 8px/1.2 "Space Grotesk", sans-serif;
+  font: 700 8px/1.2 var(--wp-font);
   cursor: pointer;
 }
 
@@ -4292,7 +4292,7 @@ h1 {
 .campaign-email-builder-ai-suggestion p { margin: 4px 0 0; color: #51433b; font-size: 9px; line-height: 1.5; }
 .campaign-email-builder-ai-suggestion .campaign-email-builder-ai-rationale { color: rgba(75,61,53,.62); font-style: italic; }
 .campaign-email-builder-ai-suggestion footer { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.campaign-email-builder-ai-suggestion footer button { min-height: 34px; border: 1px solid rgba(45,34,28,.13); border-radius: 6px; background: #fff; color: #392b25; font: 600 9px/1 "Space Grotesk",sans-serif; cursor: pointer; }
+.campaign-email-builder-ai-suggestion footer button { min-height: 34px; border: 1px solid rgba(45,34,28,.13); border-radius: 6px; background: #fff; color: #392b25; font: 600 9px/1 var(--wp-font); cursor: pointer; }
 .campaign-email-builder-ai-suggestion footer button:last-child { border-color: #34453f; background: #34453f; color: #fff; }
 
 .campaign-email-builder-inspector > label,
@@ -4319,7 +4319,7 @@ h1 {
 }
 
 .campaign-email-builder-treatment header { display: grid; gap: 3px; }
-.campaign-email-builder-treatment header span { color: #34453f; font-size: 8px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+.campaign-email-builder-treatment header span { color: #34453f; font-size: 8px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
 .campaign-email-builder-treatment header strong { color: #2d221c; font-size: 12px; }
 .campaign-email-builder-treatment > div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
@@ -4328,8 +4328,8 @@ h1 {
 .campaign-email-crop-studio > section { width:min(1080px,96vw); max-height:92vh; overflow:auto; border-radius:10px; background:#f7f3ee; box-shadow:0 32px 90px rgba(0,0,0,.3); }
 .campaign-email-crop-studio > section > header { display:flex; justify-content:space-between; gap:20px; padding:22px 24px; border-bottom:1px solid rgba(45,34,28,.12); }
 .campaign-email-crop-studio header div { display:grid; gap:4px; }
-.campaign-email-crop-studio header span { color:#34453f; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-.campaign-email-crop-studio header strong { font:700 24px/1.1 "Space Grotesk",sans-serif; }
+.campaign-email-crop-studio header span { color:#34453f; font-size:9px; font-weight: 700; letter-spacing:.12em; text-transform:uppercase; }
+.campaign-email-crop-studio header strong { font: 700 24px/1.1 var(--wp-font); }
 .campaign-email-crop-studio header p { margin:0; color:#75665e; font-size:11px; }
 .campaign-email-crop-studio header > button { width:38px; height:38px; border:1px solid rgba(45,34,28,.14); border-radius:50%; background:#fff; font-size:22px; cursor:pointer; }
 .campaign-email-crop-grid { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:20px; padding:24px; }
@@ -4339,7 +4339,7 @@ h1 {
 .campaign-email-crop-stage[data-aspect="portrait"] { aspect-ratio:4/5; width:min(100%,480px); min-height:0; margin:auto; }
 .campaign-email-crop-stage img { width:100%; height:100%; object-fit:cover; transition:transform .18s ease,object-position .18s ease; }
 .campaign-email-crop-grid aside { display:grid; align-content:start; gap:18px; padding:18px; border-radius:8px; background:#fff; }
-.campaign-email-crop-grid aside label,.campaign-email-crop-grid aside > div { display:grid; gap:8px; color:#796b62; font-size:9px; font-weight:750; letter-spacing:.08em; text-transform:uppercase; }
+.campaign-email-crop-grid aside label,.campaign-email-crop-grid aside > div { display:grid; gap:8px; color:#796b62; font-size:9px; font-weight: 700; letter-spacing:.08em; text-transform:uppercase; }
 .campaign-email-crop-grid aside output { justify-self:end; margin-top:-18px; color:#34453f; }
 .campaign-email-crop-grid aside select { padding:10px; border:1px solid #ddd3ca; border-radius:6px; background:#fff; }
 .campaign-email-crop-grid aside footer { display:grid; grid-template-columns:1fr 1.4fr; gap:8px; margin-top:8px; }
@@ -4360,7 +4360,7 @@ h1 {
   border-radius: 6px;
   background: #fff;
   color: #4d3e35;
-  font: 600 10px/1 "Space Grotesk", sans-serif;
+  font: 600 10px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -4391,7 +4391,7 @@ h1 {
 }
 
 .campaign-email-builder-qa.is-warning {
-  border-color: rgba(166, 109, 27, .2);
+  border-color: rgba(138, 96, 21, .2);
   background: #f8efe0;
   color: #7b521b;
 }
@@ -4541,7 +4541,7 @@ h1 {
 }
 
 .campaign-studio-environment-status strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -4652,7 +4652,7 @@ h1 {
 .campaign-studio-intelligence-stats span {
   color: #487364;
   font-size: 10px;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: .11em;
   text-transform: uppercase;
 }
@@ -4725,7 +4725,7 @@ h1 {
 .campaign-studio-design-decisions span {
   color: #d7c8bc;
   font-size: 10px;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: .11em;
   text-transform: uppercase;
 }
@@ -4786,7 +4786,7 @@ h1 {
 .campaign-studio-meta-director-brief span {
   color: #9d2749;
   font-size: 10px;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: .11em;
   text-transform: uppercase;
 }
@@ -4805,19 +4805,19 @@ h1 {
 }
 .campaign-studio-route.is-active { border-color: #9d2749; box-shadow: inset 0 0 0 1px #9d2749; background: #fff8f8; }
 .campaign-studio-route-kicker { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.campaign-studio-route-kicker span { color: #8b796d; font-size: 9px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+.campaign-studio-route-kicker span { color: #8b796d; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .campaign-studio-route-kicker b { padding: 4px 7px; border-radius: 999px; background: #e8f4ed; color: #247054; font-size: 9px; }
 .campaign-studio-route > strong { font-size: 16px; }
 .campaign-studio-route p { margin: 0; color: #675a51; font-size: 12px; line-height: 1.55; }
 .campaign-studio-route > small { color: #8a7b70; line-height: 1.45; }
-.campaign-studio-route button { align-self: end; min-height: 36px; margin-top: auto; border: 1px solid #ded3c8; border-radius: 999px; background: #fff; color: #302720; font-weight: 650; cursor: pointer; }
+.campaign-studio-route button { align-self: end; min-height: 36px; margin-top: auto; border: 1px solid #ded3c8; border-radius: 999px; background: #fff; color: #302720; font-weight: 600; cursor: pointer; }
 .campaign-studio-route button:disabled { cursor: default; opacity: .65; }
 
 .campaign-studio-meta-director { grid-template-columns: 190px 1fr; background: linear-gradient(135deg, #f7f2eb, #fff); }
 .campaign-studio-meta-director[data-state="passed"] { border-color: rgba(35, 119, 83, .35); background: linear-gradient(135deg, #edf7f1, #fff); }
 .campaign-studio-meta-director[data-state="revise"] { border-color: rgba(52, 69, 63, .25); }
 .campaign-studio-meta-director-score { display: grid; align-content: start; gap: 6px; }
-.campaign-studio-meta-director-score > strong { font-family: "Space Grotesk", sans-serif; font-size: 42px; line-height: 1; letter-spacing: -.06em; }
+.campaign-studio-meta-director-score > strong { font-family: var(--wp-font); font-size: 42px; line-height: 1; letter-spacing: -.06em; }
 .campaign-studio-meta-director-score > strong small { margin-left: 4px; color: #8a7b70; font-size: 13px; letter-spacing: 0; }
 .campaign-studio-meta-director-score p { margin: 0; color: #675a51; font-size: 11px; line-height: 1.5; }
 .campaign-studio-meta-director-dimensions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -4847,7 +4847,7 @@ h1 {
 }
 
 .campaign-studio-meta-gallery-copy strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.18rem;
   line-height: 1.08;
   letter-spacing: -0.03em;
@@ -4911,7 +4911,7 @@ h1 {
 .campaign-studio-blog-artboard {
   min-height: 320px;
   background:
-    radial-gradient(circle at 88% 15%, rgba(198, 61, 52, 0.08), transparent 24%),
+    radial-gradient(circle at 88% 15%, rgba(52, 69, 63, 0.08), transparent 24%),
     #f7f1e9;
 }
 
@@ -4931,7 +4931,7 @@ h1 {
 .campaign-studio-blog-artboard-copy h5 {
   margin: 0;
   max-width: 15ch;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.65rem, 2.5vw, 2.45rem);
   line-height: 0.98;
   letter-spacing: -0.055em;
@@ -4948,7 +4948,7 @@ h1 {
 .campaign-studio-blog-rule {
   width: 54px;
   height: 1px;
-  background: rgba(198, 61, 52, 0.72);
+  background: rgba(52, 69, 63, 0.72);
 }
 
 .campaign-studio-blog-artboard-copy small {
@@ -4973,7 +4973,7 @@ h1 {
 }
 
 .campaign-studio-module-glance-copy strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
   line-height: 1.15;
 }
@@ -5062,7 +5062,7 @@ h1 {
 }
 
 .campaign-studio-priority-chip strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.98rem;
   line-height: 1.2;
 }
@@ -5096,7 +5096,7 @@ h1 {
 #klaviyo-campaign-brain-panel.is-studio-focus .campaign-studio-library-card,
 #klaviyo-campaign-brain-panel.is-studio-focus .campaign-studio-advanced-block .campaign-studio-fold {
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.04), transparent 28%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.04), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 247, 246, 0.94) 100%);
 }
 
@@ -5622,7 +5622,7 @@ h1 {
 
 .hero-glance strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.08rem;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -5691,7 +5691,7 @@ h1 {
 
 .hero-change.tone-negative {
   color: #b63c32;
-  background: rgba(182, 60, 50, 0.12);
+  background: rgba(52, 69, 63, 0.12);
 }
 
 .hero-change.tone-neutral {
@@ -5709,21 +5709,21 @@ h1 {
 }
 
 .hero-glance.tone-warning {
-  border-color: rgba(157, 106, 39, 0.2);
+  border-color: rgba(138, 96, 21, 0.2);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.92) 100%);
 }
 
 .hero-glance.tone-warning::before {
-  background: linear-gradient(180deg, rgba(157, 106, 39, 0.95) 0%, rgba(191, 137, 59, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(138, 96, 21, 0.95) 0%, rgba(191, 137, 59, 0.5) 100%);
 }
 
 .hero-glance.tone-danger {
-  border-color: rgba(154, 63, 49, 0.2);
+  border-color: rgba(52, 69, 63, 0.2);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 242, 239, 0.92) 100%);
 }
 
 .hero-glance.tone-danger::before {
-  background: linear-gradient(180deg, rgba(154, 63, 49, 0.95) 0%, rgba(198, 93, 75, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(52, 69, 63, 0.95) 0%, rgba(52, 69, 63, 0.5) 100%);
 }
 
 .dashboard-section-head {
@@ -5826,7 +5826,7 @@ h1 {
 .klaviyo-diagnostic-card strong {
   display: block;
   margin: 8px 0 6px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
   line-height: 1.05;
 }
@@ -5863,8 +5863,8 @@ h1 {
 }
 
 .subtab-metric {
-  font-weight: 800;
-  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-family: var(--wp-font);
 }
 
 .agent-status {
@@ -5904,17 +5904,17 @@ h1 {
 }
 
 .agent-item.tone-warning::before {
-  background: linear-gradient(180deg, rgba(157, 106, 39, 0.85) 0%, rgba(157, 106, 39, 0.45) 100%);
+  background: linear-gradient(180deg, rgba(138, 96, 21, 0.85) 0%, rgba(138, 96, 21, 0.45) 100%);
 }
 
 .agent-item.tone-danger::before {
-  background: linear-gradient(180deg, rgba(154, 63, 49, 0.9) 0%, rgba(154, 63, 49, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(52, 69, 63, 0.9) 0%, rgba(52, 69, 63, 0.55) 100%);
 }
 
 .agent-item strong {
   display: block;
   margin-bottom: 4px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   line-height: 1.25;
 }
 
@@ -6046,7 +6046,7 @@ h1 {
   border-radius: 999px;
   border: 1px solid rgba(225, 225, 222, 0.92);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -6070,17 +6070,17 @@ h1 {
 
 .klaviyo-command-badge.tone-warning {
   background: linear-gradient(180deg, #ffffff 0%, #fbfbfa 100%);
-  border-color: rgba(157, 106, 39, 0.2);
+  border-color: rgba(138, 96, 21, 0.2);
 }
 
 .klaviyo-command-badge.tone-danger {
   background: linear-gradient(180deg, #ffffff 0%, #fff1ee 100%);
-  border-color: rgba(154, 63, 49, 0.2);
+  border-color: rgba(52, 69, 63, 0.2);
 }
 
 .klaviyo-command-hero h3 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.16rem, 1.35vw, 1.38rem);
   line-height: 1.08;
   letter-spacing: -0.03em;
@@ -6117,17 +6117,17 @@ h1 {
 
 .klaviyo-command-panel.tone-warning {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 248, 244, 0.82) 100%);
-  border-color: rgba(157, 106, 39, 0.16);
+  border-color: rgba(138, 96, 21, 0.16);
 }
 
 .klaviyo-command-panel.tone-danger {
   background: linear-gradient(180deg, rgba(255, 241, 238, 0.96) 0%, rgba(250, 248, 244, 0.82) 100%);
-  border-color: rgba(154, 63, 49, 0.16);
+  border-color: rgba(52, 69, 63, 0.16);
 }
 
 .klaviyo-command-panel strong,
 .klaviyo-flow-action-rail strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.9rem;
   line-height: 1.22;
 }
@@ -6208,7 +6208,7 @@ h1 {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
 }
 
@@ -6548,7 +6548,7 @@ h1 {
 
 .campaign-studio-memory summary strong {
   color: var(--text);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -6623,7 +6623,7 @@ h1 {
 }
 
 .campaign-studio-view-nav button strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.88rem;
 }
 
@@ -7004,7 +7004,7 @@ h1 {
 }
 
 .campaign-email-visual-copy strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.82rem;
 }
 
@@ -7241,7 +7241,7 @@ h1 {
 .klaviyo-hero-card strong,
 .klaviyo-summary-note strong,
 .klaviyo-variant-copy strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .klaviyo-target-card span,
@@ -7387,7 +7387,7 @@ h1 {
 }
 
 .klaviyo-variant-preview-empty strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   color: var(--text);
 }
 
@@ -7398,7 +7398,7 @@ h1 {
 }
 
 .klaviyo-inline-change-summary strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   color: var(--text);
 }
 
@@ -7528,7 +7528,7 @@ h1 {
 
 .klaviyo-flow-focus-title h4 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.5rem;
   line-height: 1.05;
   letter-spacing: -0.04em;
@@ -7575,7 +7575,7 @@ h1 {
 .klaviyo-flow-focus-grid strong,
 .klaviyo-flow-focus-footer strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
   line-height: 1.25;
 }
@@ -7617,7 +7617,7 @@ h1 {
 
 .klaviyo-campaign-main strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.08rem;
   margin-bottom: 6px;
 }
@@ -7654,13 +7654,13 @@ h1 {
 
 .klaviyo-flow-pill.tone-warning {
   color: #8d6833;
-  border-color: rgba(157, 106, 39, 0.22);
+  border-color: rgba(138, 96, 21, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #fbfbfa 100%);
 }
 
 .klaviyo-flow-pill.tone-danger {
   color: #b0322b;
-  border-color: rgba(154, 63, 49, 0.22);
+  border-color: rgba(52, 69, 63, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #f7f7f6 100%);
 }
 
@@ -7691,7 +7691,7 @@ h1 {
 }
 
 .klaviyo-campaign-metrics strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
 }
 
@@ -7728,7 +7728,7 @@ h1 {
 }
 
 .klaviyo-operator-strip strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.96rem;
   line-height: 1.3;
 }
@@ -7819,7 +7819,7 @@ h1 {
 .klaviyo-mini-copy strong {
   display: block;
   margin: 6px 0 6px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.7rem;
 }
 
@@ -7850,7 +7850,7 @@ h1 {
 .klaviyo-subscriber-total-card strong,
 .klaviyo-highlight-card strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.8rem;
   margin-bottom: 8px;
 }
@@ -7904,7 +7904,7 @@ h1 {
 
 .klaviyo-trend-head strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.5rem;
   margin: 6px 0 8px;
 }
@@ -7962,7 +7962,7 @@ h1 {
 }
 
 .klaviyo-line-chart-scale strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.86rem;
   color: var(--text);
 }
@@ -8039,18 +8039,21 @@ h1 {
   overflow: hidden;
 }
 
+/* This ran a green-to-tan gradient. It encoded nothing, and because the gradient was
+   fixed to the bar rather than to the scale, a short bar and a long bar came out
+   different colours for no reason - eighteen rows of a rainbow saying nothing. */
 .klaviyo-subscriber-bar-fill {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(52, 69, 63, 0.85) 0%, rgba(154, 106, 45, 0.62) 100%);
+  background: var(--wp-brand);
 }
 
 .klaviyo-subscriber-bar-value {
   display: grid;
   justify-items: end;
   gap: 2px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .klaviyo-subscriber-bar-value span {
@@ -8112,7 +8115,7 @@ h1 {
 .klaviyo-market-detail-metric strong,
 .klaviyo-market-detail-stats strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .klaviyo-market-detail-stats {
@@ -8465,7 +8468,7 @@ h1 {
 }
 
 .klaviyo-section-campaigns::before {
-  background: linear-gradient(90deg, rgba(171, 108, 35, 0.9) 0%, rgba(171, 108, 35, 0.16) 100%);
+  background: linear-gradient(90deg, rgba(138, 96, 21, 0.9) 0%, rgba(138, 96, 21, 0.16) 100%);
 }
 
 .klaviyo-section-markets::before {
@@ -9092,7 +9095,7 @@ h1 {
 }
 
 .overview-metric {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(2rem, 2.6vw, 2.7rem);
   line-height: 0.92;
   letter-spacing: -0.06em;
@@ -9419,7 +9422,7 @@ h1 {
 }
 
 .decision-value {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(2.1rem, 2.4vw, 2.8rem);
   line-height: 0.94;
   letter-spacing: -0.05em;
@@ -9506,12 +9509,12 @@ h1 {
 }
 
 .pressure-group.tone-warning {
-  border-color: rgba(157, 106, 39, 0.22);
+  border-color: rgba(138, 96, 21, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #fbfbfa 100%);
 }
 
 .pressure-group.tone-danger {
-  border-color: rgba(154, 63, 49, 0.22);
+  border-color: rgba(52, 69, 63, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #f7f7f6 100%);
 }
 
@@ -9521,12 +9524,12 @@ h1 {
 }
 
 .pulse-row.tone-warning {
-  border-color: rgba(157, 106, 39, 0.22);
+  border-color: rgba(138, 96, 21, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #fbfbfa 100%);
 }
 
 .pulse-row.tone-danger {
-  border-color: rgba(154, 63, 49, 0.22);
+  border-color: rgba(52, 69, 63, 0.22);
   background: linear-gradient(180deg, #ffffff 0%, #f7f7f6 100%);
 }
 
@@ -9562,14 +9565,14 @@ h1 {
 .pulse-row[data-action="trim"]::before,
 .pulse-row[data-action="stop bleed"]::before,
 .pulse-row[data-action="question"]::before {
-  background: linear-gradient(180deg, rgba(154, 63, 49, 0.92) 0%, rgba(198, 93, 75, 0.62) 100%);
+  background: linear-gradient(180deg, rgba(52, 69, 63, 0.92) 0%, rgba(52, 69, 63, 0.62) 100%);
 }
 
 .pulse-row[data-action="test"]::before,
 .pulse-row[data-action="refresh"]::before,
 .pulse-row[data-action="prove"]::before,
 .pulse-row[data-action="watch"]::before {
-  background: linear-gradient(180deg, rgba(157, 106, 39, 0.9) 0%, rgba(191, 137, 59, 0.58) 100%);
+  background: linear-gradient(180deg, rgba(138, 96, 21, 0.9) 0%, rgba(191, 137, 59, 0.58) 100%);
 }
 
 .pulse-main {
@@ -9606,7 +9609,7 @@ h1 {
 }
 
 .pulse-metrics strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.05rem;
   letter-spacing: -0.03em;
 }
@@ -9876,7 +9879,7 @@ h1 {
 }
 
 .meta-budget-kpi-card strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.7rem, 2.7vw, 2.5rem);
   line-height: 0.96;
   letter-spacing: -0.05em;
@@ -9946,7 +9949,7 @@ h1 {
 }
 
 .meta-budget-summary strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.45rem, 2.6vw, 2rem);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -10060,7 +10063,7 @@ h1 {
 }
 
 .meta-budget-row-value strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.05rem;
   color: #ffffff;
 }
@@ -10222,7 +10225,7 @@ h1 {
 
 .stat-change.tone-negative {
   color: #b63c32;
-  background: rgba(182, 60, 50, 0.12);
+  background: rgba(52, 69, 63, 0.12);
 }
 
 .stat-change.tone-neutral {
@@ -10677,7 +10680,7 @@ tbody tr:last-child td {
 .variant-item strong {
   display: block;
   margin-bottom: 6px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .control-form {
@@ -10791,7 +10794,7 @@ tbody tr:last-child td {
 }
 
 .duplicate-step.is-current {
-  border-color: rgba(198, 61, 52, 0.22);
+  border-color: rgba(52, 69, 63, 0.22);
   box-shadow: 0 18px 42px rgba(22, 17, 12, 0.08);
 }
 
@@ -10805,7 +10808,7 @@ tbody tr:last-child td {
 
 .duplicate-section-head h4 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.92rem;
 }
 
@@ -10817,7 +10820,7 @@ tbody tr:last-child td {
   border-radius: 10px;
   border: 1px solid rgba(207, 207, 203, 0.92);
   background:
-    radial-gradient(circle at top right, rgba(198, 61, 52, 0.08), transparent 34%),
+    radial-gradient(circle at top right, rgba(52, 69, 63, 0.08), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 241, 232, 0.96) 100%);
 }
 
@@ -10940,17 +10943,17 @@ tbody tr:last-child td {
 }
 
 .duplicate-bulk-item:hover {
-  border-color: rgba(198, 61, 52, 0.18);
+  border-color: rgba(52, 69, 63, 0.18);
   background: rgba(255, 255, 255, 0.96);
 }
 
 .duplicate-bulk-item.is-editing-creative {
-  border-color: rgba(198, 61, 52, 0.28);
-  box-shadow: 0 12px 28px rgba(198, 61, 52, 0.1);
+  border-color: rgba(52, 69, 63, 0.28);
+  box-shadow: 0 12px 28px rgba(52, 69, 63, 0.1);
 }
 
 .duplicate-bulk-item strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.82rem;
 }
 
@@ -11052,8 +11055,8 @@ tbody tr:last-child td {
 }
 
 .duplicate-bulk-mode-row .ghost-button.small.is-selected {
-  border-color: rgba(198, 61, 52, 0.35);
-  background: rgba(198, 61, 52, 0.1);
+  border-color: rgba(52, 69, 63, 0.35);
+  background: rgba(52, 69, 63, 0.1);
   color: var(--accent-strong);
 }
 
@@ -11077,7 +11080,7 @@ tbody tr:last-child td {
 
 .duplicate-creative-head h4 {
   margin: 4px 0 4px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.96rem;
 }
 
@@ -11093,8 +11096,8 @@ tbody tr:last-child td {
 }
 
 .duplicate-creative-badge.is-video {
-  border-color: rgba(198, 61, 52, 0.22);
-  background: rgba(198, 61, 52, 0.08);
+  border-color: rgba(52, 69, 63, 0.22);
+  background: rgba(52, 69, 63, 0.08);
   color: var(--accent);
 }
 
@@ -11112,8 +11115,8 @@ tbody tr:last-child td {
 }
 
 .duplicate-creative-toggle .ghost-button.is-selected {
-  border-color: rgba(198, 61, 52, 0.3);
-  background: rgba(198, 61, 52, 0.12);
+  border-color: rgba(52, 69, 63, 0.3);
+  background: rgba(52, 69, 63, 0.12);
   color: var(--accent);
 }
 
@@ -11173,7 +11176,7 @@ tbody tr:last-child td {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   border-bottom: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(252, 248, 241, 0.9) 0%, rgba(241, 241, 239, 0.86) 100%);
 }
@@ -11272,10 +11275,10 @@ tbody tr:last-child td {
   min-height: 46px;
   padding: 0 16px;
   border-radius: 8px;
-  border: 1px solid rgba(198, 61, 52, 0.18);
-  background: rgba(198, 61, 52, 0.08);
+  border: 1px solid rgba(52, 69, 63, 0.18);
+  background: rgba(52, 69, 63, 0.08);
   color: var(--accent);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-weight: 700;
   font-size: 0.96rem;
   transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
@@ -11284,9 +11287,9 @@ tbody tr:last-child td {
 .video-upload-field:hover .video-upload-button,
 .video-upload-field:focus-within .video-upload-button {
   transform: translateY(-1px);
-  border-color: rgba(198, 61, 52, 0.3);
-  background: rgba(198, 61, 52, 0.12);
-  box-shadow: 0 12px 22px rgba(198, 61, 52, 0.12);
+  border-color: rgba(52, 69, 63, 0.3);
+  background: rgba(52, 69, 63, 0.12);
+  box-shadow: 0 12px 22px rgba(52, 69, 63, 0.12);
 }
 
 .video-upload-filename {
@@ -11401,7 +11404,7 @@ tbody tr:last-child td {
 }
 
 .carousel-format-editor-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .carousel-format-editor-note {
@@ -11471,7 +11474,7 @@ tbody tr:last-child td {
 }
 
 .carousel-order-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
 }
 
 .carousel-order-note {
@@ -11740,7 +11743,7 @@ textarea {
 .inline-feedback.error {
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(154, 63, 49, 0.22);
+  border: 1px solid rgba(52, 69, 63, 0.22);
   background: rgba(248, 232, 229, 0.88);
   color: var(--danger);
 }
@@ -11868,7 +11871,7 @@ textarea {
 .mode-card strong {
   display: block;
   margin-bottom: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.05rem;
 }
 
@@ -12074,7 +12077,7 @@ textarea {
   border: 1px solid #ececec;
   color: var(--accent);
   font-weight: 700;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.9rem;
 }
 
@@ -13065,7 +13068,7 @@ textarea {
 }
 
 .trend-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.02rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -13078,7 +13081,7 @@ textarea {
 }
 
 .trend-value {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.85rem;
   line-height: 0.92;
   font-weight: 700;
@@ -13210,7 +13213,7 @@ textarea {
 .trend-dual-head strong,
 .trend-funnel-head strong,
 .objective-bar-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1rem;
   font-weight: 700;
 }
@@ -13329,7 +13332,7 @@ textarea {
 }
 
 .klaviyo-section-campaigns::before {
-  background: linear-gradient(90deg, rgba(171, 108, 35, 0.9) 0%, rgba(171, 108, 35, 0.16) 100%);
+  background: linear-gradient(90deg, rgba(138, 96, 21, 0.9) 0%, rgba(138, 96, 21, 0.16) 100%);
 }
 
 .klaviyo-section-markets::before {
@@ -13411,7 +13414,7 @@ textarea {
   border: 1px solid rgba(233, 225, 214, 0.88);
   color: rgba(90, 74, 58, 0.78);
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -13459,7 +13462,7 @@ textarea {
 .klaviyo-overview-card.tone-coverage::after,
 .klaviyo-highlight-card.tone-warning::after,
 .klaviyo-market-detail-card.is-missing::after {
-  background: radial-gradient(circle, rgba(171, 108, 35, 0.2) 0%, rgba(171, 108, 35, 0) 72%);
+  background: radial-gradient(circle, rgba(138, 96, 21, 0.2) 0%, rgba(138, 96, 21, 0) 72%);
 }
 
 .toggle-chip {
@@ -13664,7 +13667,7 @@ textarea {
 
 .klaviyo-command-score strong {
   color: #ffffff;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.15rem, 1.55vw, 1.5rem);
   line-height: 1.02;
   letter-spacing: -0.05em;
@@ -13719,7 +13722,7 @@ textarea {
 }
 
 .klaviyo-command-spotlight.tone-warning::after {
-  background: radial-gradient(circle, rgba(171, 108, 35, 0.14) 0%, rgba(171, 108, 35, 0) 72%);
+  background: radial-gradient(circle, rgba(138, 96, 21, 0.14) 0%, rgba(138, 96, 21, 0) 72%);
 }
 
 .klaviyo-command-spotlight.tone-danger::after {
@@ -13727,7 +13730,7 @@ textarea {
 }
 
 .klaviyo-command-spotlight strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1rem, 1.3vw, 1.22rem);
   line-height: 1.18;
   max-width: 40ch;
@@ -13749,13 +13752,13 @@ textarea {
 
 .klaviyo-command-priority strong {
   color: #ffffff;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.95rem;
   line-height: 1.25;
 }
 
 .klaviyo-command-priority.tone-warning {
-  border-color: rgba(171, 108, 35, 0.24);
+  border-color: rgba(138, 96, 21, 0.24);
 }
 
 .klaviyo-command-priority.tone-danger {
@@ -13808,7 +13811,7 @@ textarea {
 }
 
 .klaviyo-side-stat strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.08rem;
   line-height: 1.15;
 }
@@ -13942,7 +13945,7 @@ textarea {
 
 .klaviyo-flow-focus-card.tone-warning {
   background:
-    radial-gradient(circle at top right, rgba(171, 108, 35, 0.11), transparent 28%),
+    radial-gradient(circle at top right, rgba(138, 96, 21, 0.11), transparent 28%),
     linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(252, 247, 240, 0.95) 100%);
 }
 
@@ -14009,7 +14012,7 @@ textarea {
   border: 1px solid rgba(225, 225, 222, 0.88);
   color: rgba(92, 76, 61, 0.82);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -14040,7 +14043,7 @@ textarea {
 }
 
 .klaviyo-campaign-card.tone-warning::before {
-  background: linear-gradient(180deg, rgba(171, 108, 35, 0.88) 0%, rgba(171, 108, 35, 0.14) 100%);
+  background: linear-gradient(180deg, rgba(138, 96, 21, 0.88) 0%, rgba(138, 96, 21, 0.14) 100%);
 }
 
 .klaviyo-campaign-card.tone-danger::before {
@@ -14062,7 +14065,7 @@ textarea {
   border: 1px solid rgba(225, 225, 222, 0.88);
   color: rgba(92, 76, 61, 0.8);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -14137,7 +14140,7 @@ textarea {
 }
 
 .klaviyo-market-share strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.92rem;
   line-height: 1.1;
 }
@@ -14321,7 +14324,7 @@ textarea {
 }
 
 .agent-item.tone-warning::after {
-  background: radial-gradient(circle, rgba(171, 108, 35, 0.16) 0%, rgba(171, 108, 35, 0) 72%);
+  background: radial-gradient(circle, rgba(138, 96, 21, 0.16) 0%, rgba(138, 96, 21, 0) 72%);
 }
 
 .agent-item.tone-danger::after {
@@ -14746,7 +14749,7 @@ textarea {
   border-radius: 50%;
   color: #34453f;
   background: rgba(247, 241, 233, 0.88);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.05rem;
   font-weight: 700;
   transform: rotate(9deg);
@@ -14931,7 +14934,7 @@ textarea {
   color: rgba(39, 31, 26, 0.62);
   background: rgba(255, 255, 255, 0.38);
   font-size: 0.62rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: 0.04em;
   backdrop-filter: blur(10px);
 }
@@ -14972,7 +14975,7 @@ textarea {
   margin-bottom: 6px;
   color: #34453f;
   font-size: 0.62rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -15047,13 +15050,13 @@ textarea {
   background: rgba(255, 255, 255, 0.48);
 }
 
-.content-agent-health-grid span { color:rgba(52,42,35,.5); font-size:.58rem; font-weight:750; letter-spacing:.1em; text-transform:uppercase; }
-.content-agent-health-grid strong { font-family:"Space Grotesk",sans-serif; font-size:1.12rem; letter-spacing:-.03em; }
+.content-agent-health-grid span { color:rgba(52,42,35,.5); font-size:.58rem; font-weight: 700; letter-spacing:.1em; text-transform:uppercase; }
+.content-agent-health-grid strong { font-family: var(--wp-font); font-size:1.12rem; letter-spacing:-.03em; }
 .content-agent-health-grid small { color:rgba(52,42,35,.5); font-size:.62rem; }
 
 .content-agent-alert-stack { display:grid; gap:7px; }
 .content-agent-alert-stack p,
-.content-agent-all-clear { display:flex; align-items:center; gap:9px; margin:0; padding:10px 12px; border-radius:8px; font-size:.68rem; font-weight:650; }
+.content-agent-all-clear { display:flex; align-items:center; gap:9px; margin:0; padding:10px 12px; border-radius:8px; font-size:.68rem; font-weight: 600; }
 .content-agent-alert-stack p { color:#7d5424; background:rgba(251,242,225,.82); }
 .content-agent-alert-stack p[data-severity="critical"] { color:#8c1630; background:rgba(253,235,239,.86); }
 .content-agent-alert-stack i,
@@ -15105,7 +15108,7 @@ textarea {
 }
 
 .content-agent-metrics strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 2.35rem;
   font-weight: 560;
   line-height: 1;
@@ -15131,7 +15134,7 @@ textarea {
 }
 
 .content-agent-runs-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.05rem;
   letter-spacing: -0.025em;
 }
@@ -15178,7 +15181,7 @@ textarea {
 }
 
 .content-agent-job-main strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 0.98rem;
 }
 
@@ -15293,7 +15296,7 @@ textarea {
 }
 
 .campaign-learning-studio-toggle > span:first-child { display: grid; gap: 3px; }
-.campaign-learning-studio-toggle small { color: #34453f; font-size: .6rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+.campaign-learning-studio-toggle small { color: #34453f; font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .campaign-learning-studio-toggle strong { font-size: 1.08rem; letter-spacing: -.025em; }
 .campaign-learning-studio-summary { display: flex; align-items: center; gap: 5px; color: #746a65; font-size: .7rem; }
 .campaign-learning-studio-summary b { color: #2f6b4f; }
@@ -15303,7 +15306,7 @@ textarea {
 .campaign-learning-impact-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin: 18px 0; border: 1px solid rgba(35,24,20,.08); border-radius: 8px; background: #ffffff; }
 .campaign-learning-impact-grid article { display: grid; min-height: 92px; align-content: center; gap: 3px; padding: 14px; border-right: 1px solid rgba(35,24,20,.08); }
 .campaign-learning-impact-grid article:last-child { border-right: 0; }
-.campaign-learning-impact-grid span, .campaign-learning-columns header span { color: #8a807a; font-size: .58rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+.campaign-learning-impact-grid span, .campaign-learning-columns header span { color: #8a807a; font-size: .58rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .campaign-learning-impact-grid strong { font-size: 1.6rem; line-height: 1; letter-spacing: -.05em; }
 .campaign-learning-impact-grid small { color: #8a807a; font-size: .62rem; }
 
@@ -15314,7 +15317,7 @@ textarea {
 .campaign-learning-patterns > article, .campaign-learning-events > article { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(35,24,20,.07); }
 .campaign-learning-patterns > article:first-of-type, .campaign-learning-events > article:first-of-type { border-top: 0; }
 .campaign-learning-patterns article > div { min-width: 0; }
-.campaign-learning-patterns article span, .campaign-learning-event-head span { color: #34453f; font-size: .56rem; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+.campaign-learning-patterns article span, .campaign-learning-event-head span { color: #34453f; font-size: .56rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
 .campaign-learning-patterns article strong, .campaign-learning-events article > strong { display: block; margin-top: 3px; color: #2b211d; font-size: .76rem; }
 .campaign-learning-patterns article p, .campaign-learning-events article p { margin: 3px 0 0; color: #746a65; font-size: .66rem; line-height: 1.45; }
 .campaign-learning-patterns article aside { display: grid; min-width: 58px; justify-items: end; gap: 2px; }
@@ -15328,7 +15331,7 @@ textarea {
 .campaign-learning-event-head, .campaign-learning-event-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .campaign-learning-event-head small { color: #a19994; font-size: .57rem; }
 .campaign-learning-event-foot { margin-top: 9px; }
-.campaign-learning-event-foot > span { padding: 3px 7px; border-radius: 999px; color: #2f6b4f; background: #e5f2e8; font-size: .54rem; font-weight: 750; text-transform: uppercase; }
+.campaign-learning-event-foot > span { padding: 3px 7px; border-radius: 999px; color: #2f6b4f; background: #e5f2e8; font-size: .54rem; font-weight: 700; text-transform: uppercase; }
 .campaign-learning-event-foot > span[data-status="disabled"] { color: #756b66; background: #eeeae6; }
 .campaign-learning-event-foot > span[data-status="approved"] { color: #fff; background: #2f6b4f; }
 .campaign-learning-event-foot > div { display: flex; gap: 5px; }
@@ -15338,11 +15341,11 @@ textarea {
 .campaign-learning-event-foot button:disabled { cursor: wait; opacity: .5; }
 .campaign-learning-attribution { margin-top: 14px; padding: 15px; border: 1px solid rgba(35,24,20,.08); border-radius: 8px; background: #ffffff; }
 .campaign-learning-attribution header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.campaign-learning-attribution header span { color: #8a807a; font-size: .58rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+.campaign-learning-attribution header span { color: #8a807a; font-size: .58rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .campaign-learning-attribution header small { color: #9b918b; font-size: .58rem; }
 .campaign-learning-attribution > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .campaign-learning-attribution article { padding: 11px; border-radius: 8px; background: #f1f1ef; }
-.campaign-learning-attribution article span { color: #34453f; font-size: .54rem; font-weight: 750; text-transform: uppercase; }
+.campaign-learning-attribution article span { color: #34453f; font-size: .54rem; font-weight: 700; text-transform: uppercase; }
 .campaign-learning-attribution article strong { display: block; margin-top: 3px; font-size: .7rem; }
 .campaign-learning-attribution article p { margin: 4px 0 0; color: #786e68; font-size: .59rem; line-height: 1.4; }
 .campaign-learning-empty { padding: 24px 10px; color: #827772; text-align: center; }
@@ -15418,7 +15421,7 @@ textarea {
   color: #fff;
   background: #34453f;
   font-size: .75rem;
-  font-weight: 750;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -15433,7 +15436,7 @@ textarea {
   background: rgba(52, 69, 63, .045);
 }
 
-.content-agent-takeover-note span { color: #34453f; font-size: .58rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+.content-agent-takeover-note span { color: #34453f; font-size: .58rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
 .content-agent-takeover-note strong { overflow: hidden; font-size: .75rem; text-overflow: ellipsis; white-space: nowrap; }
 .content-agent-takeover-note small { color: rgba(52, 42, 35, .58); font-size: .62rem; }
 .content-agent-notice { margin: 10px 28px 0; color: #26543d; font-size: .72rem; line-height: 1.45; }
@@ -15696,7 +15699,7 @@ body.campaign-studio-review-mode .main-content {
   color: rgba(255,250,245,.82);
   background: rgba(255,255,255,.07);
   font-size: 0.68rem;
-  font-weight: 650;
+  font-weight: 600;
   cursor: pointer;
   backdrop-filter: blur(14px);
 }
@@ -15795,7 +15798,7 @@ body.campaign-studio-review-mode .main-content {
 .campaign-studio-review-score > strong {
   margin: 7px 0 5px;
   color: #fff;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 3rem;
   font-weight: 560;
   line-height: 1;
@@ -15860,13 +15863,13 @@ body.campaign-studio-review-mode .main-content {
 .campaign-studio-source-deck > header span {
   color: #34453f;
   font-size: .61rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: .15em;
   text-transform: uppercase;
 }
 
 .campaign-studio-source-deck > header strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.45rem, 2vw, 2rem);
   letter-spacing: -.045em;
 }
@@ -16377,7 +16380,7 @@ body.campaign-studio-review-mode .main-content {
   border-radius: 6px;
   background: transparent;
   color: rgba(61, 49, 43, .64);
-  font: 650 10px/1 "Space Grotesk", sans-serif;
+  font: 600 10px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -16399,13 +16402,13 @@ body.campaign-studio-review-mode .main-content {
 .campaign-email-builder-image-workflow > header span {
   color: #ef9bb4;
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: .11em;
   text-transform: uppercase;
 }
 
 .campaign-email-builder-image-workflow > header strong {
-  font: 700 15px/1.25 "Space Grotesk", sans-serif;
+  font: 700 15px/1.25 var(--wp-font);
 }
 
 .campaign-email-builder-image-workflow > header p {
@@ -16442,7 +16445,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .campaign-email-builder-upload b {
-  font: 700 12px/1.2 "Space Grotesk", sans-serif;
+  font: 700 12px/1.2 var(--wp-font);
   text-transform: none;
 }
 
@@ -16488,7 +16491,7 @@ body.campaign-studio-review-mode .main-content {
   border-radius: 6px;
   background: #f7f7f6;
   color: #34453f;
-  font: 700 9px/1 "Space Grotesk", sans-serif;
+  font: 700 9px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -16547,7 +16550,7 @@ body.campaign-studio-review-mode .main-content {
 .campaign-email-builder-layout-choice > span {
   color: rgba(76, 62, 54, .66);
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -16562,7 +16565,7 @@ body.campaign-studio-review-mode .main-content {
   border-radius: 8px;
   background: #fff;
   color: #2c231f;
-  font: 650 11px/1 "Space Grotesk", sans-serif;
+  font: 600 11px/1 var(--wp-font);
   cursor: pointer;
 }
 
@@ -16593,7 +16596,7 @@ body.campaign-studio-review-mode .main-content {
   grid-column: 1;
   color: #34453f;
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
 }
@@ -16620,7 +16623,7 @@ body.campaign-studio-review-mode .main-content {
   background: #fae8e5;
   color: #8d2b20;
   font-size: 10px;
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.45;
   text-transform: none;
 }
@@ -16732,7 +16735,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-acq-kpi strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: clamp(1.6rem, 2.4vw, 2.2rem);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -17130,7 +17133,7 @@ body.campaign-studio-review-mode .main-content {
 
 .klaviyo-flow-head strong {
   display: block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.15rem;
   margin-top: 6px;
 }
@@ -17168,7 +17171,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .klaviyo-flow-figures article strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--wp-font);
   font-size: 1.7rem;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
@@ -17246,7 +17249,7 @@ body.campaign-studio-review-mode .main-content {
 .klaviyo-flow-bar.is-removed {
   right: 50%;
   border-radius: 4px 0 0 4px;
-  background: rgba(154, 63, 49, 0.9);
+  background: rgba(52, 69, 63, 0.9);
 }
 
 .klaviyo-flow-bar.is-joined {
@@ -17319,9 +17322,9 @@ body.campaign-studio-review-mode .main-content {
 .klaviyo-consent-bar .is-subscribed,
 .klaviyo-consent-legend .is-subscribed { background: rgba(47, 125, 50, 0.92); }
 .klaviyo-consent-bar .is-never,
-.klaviyo-consent-legend .is-never { background: rgba(154, 106, 45, 0.55); }
+.klaviyo-consent-legend .is-never { background: rgba(138, 96, 21, 0.55); }
 .klaviyo-consent-bar .is-unsub,
-.klaviyo-consent-legend .is-unsub { background: rgba(154, 63, 49, 0.9); }
+.klaviyo-consent-legend .is-unsub { background: rgba(52, 69, 63, 0.9); }
 
 .klaviyo-consent-legend {
   display: flex;
@@ -17386,7 +17389,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .klaviyo-consent-row.is-weak .klaviyo-consent-track i {
-  background: rgba(154, 106, 45, 0.85);
+  background: rgba(138, 96, 21, 0.85);
 }
 
 .klaviyo-consent-row.is-weak .klaviyo-flow-market {
@@ -17707,11 +17710,11 @@ body.campaign-studio-review-mode .main-content {
   display: block;
   width: 5px;
   border-radius: 4px;
-  background: rgba(79, 124, 255, 0.72);
+  background: rgb(var(--tone-reach-new-rgb));
 }
 
 .meta-expansion-spark em.is-partial {
-  background: rgba(79, 124, 255, 0.38);
+  background: rgb(var(--tone-reach-new-rgb) / 0.45);
 }
 
 .meta-expansion-table {
@@ -17751,7 +17754,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-expansion-table tr.is-partial td {
-  background: rgba(79, 124, 255, 0.05);
+  background: rgba(52, 69, 63, 0.05);
 }
 
 .meta-expansion-table .meta-expansion-badge {
@@ -17767,7 +17770,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-expansion-table .meta-expansion-badge.is-down {
-  background: rgba(198, 60, 60, 0.1);
+  background: rgba(52, 69, 63, 0.1);
   color: rgba(52, 69, 63, 0.98);
 }
 
@@ -17859,7 +17862,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-expansion-table th.has-tip:focus-visible {
-  outline: 2px solid rgba(79, 124, 255, 0.55);
+  outline: 2px solid rgba(52, 69, 63, 0.55);
   outline-offset: -2px;
 }
 
@@ -17892,7 +17895,7 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .expansion-window-picker button:hover {
-  border-color: rgba(79, 124, 255, 0.4);
+  border-color: rgba(52, 69, 63, 0.4);
   color: rgba(36, 38, 36, 0.9);
 }
 
@@ -17927,11 +17930,11 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-expansion-table th.is-sorted.is-desc {
-  box-shadow: inset 0 -2px 0 rgba(79, 124, 255, 0.85);
+  box-shadow: inset 0 -2px 0 rgba(52, 69, 63, 0.85);
 }
 
 .meta-expansion-table th.is-sorted.is-asc {
-  box-shadow: inset 0 2px 0 rgba(79, 124, 255, 0.85);
+  box-shadow: inset 0 2px 0 rgba(52, 69, 63, 0.85);
 }
 
 /* A market returning less than it costs is the single fact most likely to be
@@ -17968,16 +17971,16 @@ body.campaign-studio-review-mode .main-content {
 }
 
 .meta-expansion-table tr.is-expandable:hover td {
-  background: rgba(79, 124, 255, 0.05);
+  background: rgba(52, 69, 63, 0.05);
 }
 
 .meta-expansion-table tr.is-expandable:focus-visible {
-  outline: 2px solid rgba(79, 124, 255, 0.55);
+  outline: 2px solid rgba(52, 69, 63, 0.55);
   outline-offset: -2px;
 }
 
 .meta-expansion-table tr.is-open td {
-  background: rgba(79, 124, 255, 0.08);
+  background: rgba(52, 69, 63, 0.08);
 }
 
 .meta-expansion-table tr.is-open td:first-child strong::after {

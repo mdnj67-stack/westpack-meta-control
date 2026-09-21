@@ -1,3 +1,5 @@
+import { NUMBER_LOCALE, formatMoney } from "./format.js?v=20260921-format1";
+
 export function createKlaviyoDashboardDomain({
   appState,
   klaviyoMarkets = [],
@@ -27,10 +29,13 @@ export function createKlaviyoDashboardDomain({
     USD: 6.4264
   });
 
+  // Klaviyo revenue is converted to DKK above before it is formatted, so the currency is
+  // genuinely fixed here. The locale is not: it came from the reader's browser, which is
+  // how the Klaviyo and Meta halves of the product printed the same currency differently.
   function formatKlaviyoNumber(value, digits = 0) {
     const number = Number(value);
     if (!Number.isFinite(number)) return "--";
-    return number.toLocaleString(undefined, {
+    return number.toLocaleString(NUMBER_LOCALE, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits
     });
@@ -45,17 +50,13 @@ export function createKlaviyoDashboardDomain({
   function formatKlaviyoCurrency(value) {
     const number = Number(value);
     if (!Number.isFinite(number)) return "--";
-    return new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: "DKK",
-      maximumFractionDigits: 0
-    }).format(number);
+    return formatMoney(number, "DKK");
   }
 
   function formatKlaviyoDate(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "--";
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(NUMBER_LOCALE, {
       day: "numeric",
       month: "short",
       year: "numeric"

@@ -4327,9 +4327,13 @@ body[data-workspace="meta"] .subnav-button.active .wp-nav-icon {
     flex: 0 0 auto;
   }
 
+  /* flex: 0 0 auto stopped these shrinking, so a rate-limit message - which is a
+     paragraph with a URL in it - pushed the toolbar to 1070px inside a 396px screen.
+     They take the full row and wrap inside it. */
   .sync-status,
   .wp-toolbar-group.is-end {
-    flex: 0 0 auto;
+    flex: 1 1 100%;
+    min-width: 0;
     max-width: none;
     text-align: left;
     justify-content: flex-start;
@@ -4457,4 +4461,342 @@ progress {
 .klaviyo-country-option:has(input:checked) {
   border-color: var(--wp-brand-border);
   background: var(--wp-brand-surface);
+}
+
+
+/* ===========================================================================
+   8. QA PASS
+
+   Found by measuring the running app rather than by reading the CSS: edges, control
+   heights, padding and type that were each defensible on their own screen and wrong
+   next to the screen beside it.
+   =========================================================================== */
+
+/* -- One tooltip -----------------------------------------------------------
+   The expansion tables had grown a second tooltip: its own radius, its own dark, its
+   own shadow, its own type size. It is the same component as .wp-tip now. */
+.meta-expansion-table th.has-tip::after {
+  padding: 6px var(--wp-space-2);
+  max-width: 260px;
+  border: 0;
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-grey-900);
+  color: var(--wp-grey-0);
+  box-shadow: var(--wp-shadow-md);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-regular);
+  line-height: var(--wp-leading-snug);
+}
+
+.meta-expansion-table th.has-tip::before {
+  border-bottom-color: var(--wp-border-strong);
+}
+
+/* Focus is the brand ring everywhere, including inside a table header. */
+.meta-expansion-table th.has-tip:focus-visible,
+.meta-expansion-table .meta-expansion-badge:focus-visible {
+  outline: 2px solid var(--wp-brand);
+  outline-offset: -2px;
+}
+
+/* -- Card padding ----------------------------------------------------------
+   Panels were 20px, the dashboard banner 16/20 and the toolbars 10/12. A reader
+   comparing the banner with the panel under it sees the 4px. */
+.hero {
+  padding: var(--wp-space-5);
+}
+
+/* -- Control heights -------------------------------------------------------
+   The ads studio forms predate the system and were sizing their own controls: 46px
+   selects next to 34px buttons, and a 45px mode switch. Every control that sits on a
+   row with another control is one height. */
+.control-form input[type="text"],
+.control-form input[type="url"],
+.control-form input[type="number"],
+.control-form input[type="date"],
+.control-form select,
+.control-form textarea,
+.klaviyo-template-form input,
+.klaviyo-template-form select,
+.field > input,
+.field > select {
+  min-height: var(--wp-control-height);
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-family: var(--wp-font);
+  font-size: var(--wp-text-sm);
+  box-shadow: none;
+}
+
+.control-form textarea,
+.field > textarea,
+.klaviyo-template-form textarea {
+  height: auto;
+  min-height: 76px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  line-height: var(--wp-leading-normal);
+}
+
+/* A native select needs room for its own chevron before the label starts eliding.
+   "Translate and keep structure" was rendering as "Translate and keep stru". */
+.control-form select,
+.klaviyo-template-form select,
+.field > select {
+  width: 100%;
+  padding-right: var(--wp-space-7);
+  text-overflow: ellipsis;
+}
+
+/* The studio mode switch and the step tabs are segmented controls, one height. */
+.studio-tab-button,
+.duplicate-step-button,
+.create-step-button {
+  height: var(--wp-control-height-sm);
+  min-height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  font-size: var(--wp-text-sm);
+}
+
+/* A file input is a control like any other. It was 52px next to 34px neighbours. */
+input[type="file"] {
+  min-height: var(--wp-control-height);
+  padding: 5px var(--wp-space-2);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  font-size: var(--wp-text-sm);
+}
+
+
+/* -- Chart marks -----------------------------------------------------------
+   A dot per measured reading on the Klaviyo subscriber curve. The line between two of
+   them is drawn rather than observed, and showing where the readings fall says that
+   where a sentence under the chart used to. */
+.klaviyo-line-point {
+  fill: var(--wp-brand);
+  stroke: var(--wp-surface);
+  stroke-width: 1.5;
+}
+
+/* The y-axis labels sit against the top and bottom of the plot, so it is visible that
+   this axis does not start at zero - a cumulative list size flattened to nothing when it
+   did, but the reader has to be able to see which one they are looking at. */
+.klaviyo-line-chart-scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: var(--wp-text-2xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--wp-text-subtle);
+}
+
+.klaviyo-line-chart-scale strong {
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text-muted);
+}
+
+.klaviyo-line-chart-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+/* -- Panels that render with only a heading --------------------------------
+   Several cards are filled entirely from JavaScript, and before the data lands they were
+   a bordered box with a title and nothing under it, which reads as broken rather than as
+   waiting. An empty body collapses the space instead of holding it open. */
+.card > div:empty,
+.expansion-card > div:empty,
+.overview-card > div:empty {
+  display: none;
+}
+
+.card-header:has(> div > p:empty) > div > p:empty {
+  display: none;
+}
+
+
+/* -- Klaviyo campaign and flow cards ---------------------------------------
+   Six metrics in a four-column grid wrapped 5 + 1, so every campaign card ended with a
+   row holding one tile and a stretch of empty surface. They are the same joined metric
+   strip the rest of the product uses now, which also drops the gradient each tile was
+   carrying and the second border inside the card. */
+.klaviyo-campaign-metrics,
+.klaviyo-flow-metrics,
+.klaviyo-trend-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.klaviyo-campaign-metrics > div,
+#klaviyo-product-panel .klaviyo-campaign-metrics > div,
+#klaviyo-product-panel .klaviyo-campaign-metrics > div:nth-child(4),
+.klaviyo-flow-metrics > div,
+.klaviyo-trend-metrics > div {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 0;
+  border-right: 1px solid var(--wp-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.klaviyo-campaign-metrics > div:last-child,
+.klaviyo-flow-metrics > div:last-child,
+.klaviyo-trend-metrics > div:last-child { border-right: 0; }
+
+.klaviyo-campaign-metrics span,
+.klaviyo-flow-metrics span,
+.klaviyo-trend-metrics span {
+  margin: 0;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.klaviyo-campaign-metrics strong,
+.klaviyo-flow-metrics strong,
+.klaviyo-trend-metrics strong {
+  font-size: var(--wp-text-lg);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: -0.02em;
+  color: var(--wp-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Klaviyo filter bars ---------------------------------------------------
+   The search box, the sort select and the checkbox each took a full row, so a three
+   control filter stack was 140px tall. They are one toolbar row, like the Meta one. */
+.klaviyo-campaign-toolbar,
+.klaviyo-subscriber-toolbar,
+.klaviyo-flow-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--wp-space-4);
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.klaviyo-campaign-toolbar > *,
+.klaviyo-subscriber-toolbar > *,
+.klaviyo-flow-toolbar > * {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.klaviyo-campaign-toolbar input[type="search"],
+.klaviyo-campaign-toolbar input[type="text"],
+.klaviyo-campaign-toolbar .klaviyo-search {
+  flex: 1 1 200px;
+  max-width: 280px;
+}
+
+.klaviyo-campaign-toolbar select,
+.klaviyo-subscriber-toolbar select,
+.klaviyo-flow-toolbar select {
+  width: auto;
+  min-width: 140px;
+  max-width: 220px;
+}
+
+/* A field in a filter bar is a label beside its control, not above it. */
+.klaviyo-subscriber-toolbar label,
+.klaviyo-flow-toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+
+/* -- The last controls that sized themselves -------------------------------
+   The upload buttons in the ad builder were 46px on a row of 34px controls, and still
+   tinted with the retired brand crimson (rgba(198, 61, 52, ...) survived the palette
+   remap because it was a shade nothing else used). */
+.video-upload-button {
+  min-height: var(--wp-control-height);
+  height: var(--wp-control-height);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+}
+
+.video-upload-field:hover .video-upload-button,
+.video-upload-field:focus-within .video-upload-button {
+  border-color: var(--wp-grey-400);
+  background: var(--wp-surface-hover);
+  color: var(--wp-text);
+}
+
+/* The expansion window picker is a segmented control, like every other choose-one-of-a-few. */
+.expansion-window-picker button,
+.expansion-window-button {
+  height: var(--wp-control-height-sm);
+  min-height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  font-size: var(--wp-text-sm);
+}
+
+
+@media (max-width: 560px) {
+  /* Nine monthly bars with an 8px gap needed 343px inside a 322px card, so the last
+     month was clipped. The gap closes up before the bars do. */
+  .meta-expansion-bars {
+    gap: 3px;
+  }
+
+  .meta-expansion-bar {
+    min-width: 0;
+  }
+
+  .meta-expansion-column {
+    max-width: none;
+  }
+
+  /* The month label under the partial bar ("1-15 sep") is wider than the bar itself, so
+     it, not the bar, was what overflowed the card. */
+  .meta-expansion-bar > span,
+  .meta-expansion-bar small,
+  .meta-expansion-bar figcaption {
+    font-size: 9px;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+
+
+/* A checkbox label in a filter bar is a control label, not a heading. It was rendering
+   semibold beside regular-weight selects on the same row. */
+.klaviyo-campaign-toolbar .toggle-chip,
+.klaviyo-subscriber-toolbar .toggle-chip,
+.wp-toolbar .toggle-chip {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-regular);
+  color: var(--wp-text-secondary);
 }

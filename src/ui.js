@@ -1,4 +1,11 @@
-﻿import { OBJECTIVE_GROUP_LABELS, resolveObjectiveGroupLabel } from "./meta-objectives.js?v=20260904-metaobjectives1";
+﻿import {
+  NUMBER_LOCALE,
+  formatMoney,
+  formatCount,
+  formatDecimal as formatDecimalShared,
+  formatPercent as formatPercentShared
+} from "./format.js?v=20260921-format1";
+import { OBJECTIVE_GROUP_LABELS, resolveObjectiveGroupLabel } from "./meta-objectives.js?v=20260904-metaobjectives1";
 
 export function renderStats(stats) {
   const grid = document.getElementById("stats-grid");
@@ -39,28 +46,23 @@ function renderChangeBadge(change, className) {
   `;
 }
 
+// These delegate to src/format.js, so a number looks the same everywhere in the product.
+// They used to follow the reader's browser locale and, for money, two decimals, which is
+// how "DKK 248,388.13" and "93.175,00 kr." came to sit on the same screen.
 function formatCompactNumber(value, options = {}) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return options.fallback ?? "--";
-  return number.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  return formatCount(value, options.fallback ?? "--");
 }
 
 function formatDecimal(value, fractionDigits = 2, fallback = "--") {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return fallback;
-  return number.toLocaleString(undefined, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits });
+  return formatDecimalShared(value, fractionDigits, fallback);
 }
 
 function formatPercent(value, fallback = "--") {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return fallback;
-  return `${formatDecimal(number, 2)}%`;
+  return formatPercentShared(value, 2, fallback);
 }
 
 function formatCurrency(value, currency = "DKK", fallback = "--") {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return fallback;
-  return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(number);
+  return formatMoney(value, currency, fallback);
 }
 
 export function renderCampaignTable(campaigns, lens = 'awareness', options = {}) {
@@ -474,7 +476,9 @@ function expansionMonthName(monthKey) {
   const [year, index] = String(monthKey).split("-");
   const date = new Date(Date.UTC(Number(year), Number(index) - 1, 1));
   if (Number.isNaN(date.getTime())) return String(monthKey);
-  return date.toLocaleString(undefined, { month: "short", timeZone: "UTC" });
+  // Pinned like every other formatted value: a chart axis that changes language with the
+  // machine it is opened on is not a shared dashboard.
+  return date.toLocaleString(NUMBER_LOCALE, { month: "short", timeZone: "UTC" });
 }
 
 // Danish abbreviates months with a trailing point ("sep."), which reads as a
@@ -674,12 +678,6 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
         })}
       </div>
 
-      <p class="meta-expansion-foot">
-        Reach is read at account level and never summed across campaigns. First-time reach is
-        the rise in cumulative unique reach, so it counts people reached for the first time
-        since ${escapeHtml(anchorLabel)}. Open the Expansion tab for the market split, the
-        cost curve and the measurement record.
-      </p>
     </section>
   `;
 }
@@ -796,11 +794,9 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
         <div>
           <h3>Expansion</h3>
           <p class="field-hint">
-            New customers by market since ${escapeHtml(anchorLabel)}, and what they cost. Whole calendar
-            months - this view does not follow the date range above. It currently covers the
-            ${Number(model.campaignCount) || 0} campaigns Meta reports on incrementality attribution, which is
-            a grouping and not a measured uplift; reach figures here are a diagnostic, because these ad sets
-            target a country and nothing else.
+            Whole calendar months since ${escapeHtml(anchorLabel)} &middot; does not follow the date range above
+            &middot; ${Number(model.campaignCount) || 0} campaigns on incrementality attribution, which is a
+            grouping and not a measured uplift
           </p>
         </div>
       </div>
@@ -865,11 +861,7 @@ function renderExpansionCustomerCurve(months, latest, currency) {
       <div class="card-header">
         <div>
           <h3>New customers per month</h3>
-          <p class="field-hint">
-            Purchases matching the New_customer conversion, across the whole account. About a fifth of
-            purchases match neither customer conversion, so each month is a floor rather than a total.
-            The month in progress is hatched and covers fewer days than the ones beside it.
-          </p>
+          <p class="field-hint">A floor, not a total &middot; the month in progress is hatched</p>
         </div>
       </div>
       <section class="meta-expansion">
@@ -909,12 +901,7 @@ function renderExpansionCurve(months, latest) {
       <div class="card-header">
         <div>
           <h3>Reach per month</h3>
-          <p class="field-hint">
-            A diagnostic, not a goal. These ad sets target a country and nothing else, so almost everyone
-            counted here was never a possible customer - a rising bar is not progress on its own. What it
-            does say is whether the budget bought new impressions or repetition. First-time against repeat;
-            the month in progress is hatched.
-          </p>
+          <p class="field-hint">A delivery diagnostic, not a goal &middot; the month in progress is hatched</p>
         </div>
       </div>
       <section class="meta-expansion">
@@ -1258,9 +1245,8 @@ function renderExpansionMarketsCard() {
         <div>
           <h3>Markets</h3>
           <p class="field-hint">
-            From Meta's country breakdown, for ${escapeHtml(windowLabel)}${sample.partial && sample.from !== sample.to ? " - the last of them still in progress" : ""}. Amounts in ${escapeHtml(currency)}.
-            Each country's reach is deduplicated inside that country. They must not be added together -
-            someone reached in two countries counts in both.
+            ${escapeHtml(windowLabel)}${sample.partial && sample.from !== sample.to ? ", the last still in progress" : ""}
+            &middot; amounts in ${escapeHtml(currency)} &middot; reach is deduplicated per country and must not be summed
           </p>
         </div>
       </div>
@@ -1335,7 +1321,7 @@ function renderExpansionMarketsCard() {
       <p class="expansion-note">
         ${windowKey === "current" && overlap && expansionMeasured(overlap.share)
           ? escapeHtml(`The markets add to ${formatCompactNumber(overlap.marketReachSum)} against the deduplicated account figure of ${formatCompactNumber(overlap.accountReach)} - ${(Number(overlap.share) * 100).toFixed(1)}% of people were reached in more than one country. The account figure is the one that speaks for the whole set.`)
-          : "The account figure is the one that speaks for the whole set; the markets are a breakdown of it, not a sum."}
+          : ""}
         ${sorted.length > visible.length
           ? `<button type="button" class="expansion-link" data-expansion-show-all="1">Show all ${sorted.length} markets</button>`
           : (showAll && sorted.length > 12 ? `<button type="button" class="expansion-link" data-expansion-show-all="0">Show the top 12 only</button>` : "")}
@@ -1486,10 +1472,7 @@ function renderExpansionAdPanel(model, code, label, currency) {
         </table>
       </div>
       <p class="expansion-note">
-        Reach is each ad's own deduplicated count inside this country and is never added across the rows -
-        one person who saw three of these ads appears in all three. Purchases and revenue are Meta's
-        standard attribution over ${escapeHtml(`${breakdown.since} to ${breakdown.until}`)}, so they say what
-        happened while an ad was running, not what it caused.
+        Standard attribution, ${escapeHtml(`${breakdown.since} to ${breakdown.until}`)} &middot; reach must not be summed across rows
       </p>
     </div>
   `;
@@ -1512,10 +1495,7 @@ function renderExpansionMonths(months, model, currency, perDay) {
       <div class="card-header">
         <div>
           <h3>Month by month</h3>
-          <p class="field-hint">
-            Per day is first-time reach divided by the days the row actually covers, so the month in
-            progress can be read against the complete ones.
-          </p>
+
         </div>
       </div>
       <div class="table-wrap">
@@ -2067,8 +2047,7 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
       <div class="meta-acq-rows">
         ${usingPreset ? `
         <p class="meta-acq-scope-note">
-          The per-campaign breakdown below still covers ${escapeHtml(model.rangeLabel || "the dashboard's range")},
-          not ${escapeHtml(active.label)} - Meta only returns the customer split per campaign for the dashboard's own date range.
+          Per campaign: ${escapeHtml(model.rangeLabel || "the dashboard's range")}, not ${escapeHtml(active.label)}
         </p>
         ` : ""}
         <div class="meta-acq-row is-head">
@@ -2174,11 +2153,7 @@ function renderAcquisitionTrend(trend = null) {
 function formatAcqNumber(value, currency = "DKK") {
   const number = Number(value);
   if (!Number.isFinite(number) || number <= 0) return "--";
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: String(currency || "DKK").toUpperCase(),
-    maximumFractionDigits: 0
-  }).format(number);
+  return formatMoney(number, currency);
 }
 
 export function renderTrendDeck(cards = []) {
@@ -2362,16 +2337,34 @@ function buildSparkline(series = [], tone = "default", comparisonSeries = []) {
   const buildPoints = (inputSeries = []) => inputSeries.map((point, index) => {
     const x = inputSeries.length > 1 ? (dayOffset(inputSeries, index) / span) * width : width / 2;
     const y = baseline - ((Math.max(0, Number(point.value) || 0) / max) * 42);
-    return { x, y };
+    const gap = index > 0 ? dayOffset(inputSeries, index) - dayOffset(inputSeries, index - 1) : 0;
+    return { x, y, gap };
   });
-  const buildPath = (inputPoints = []) => inputPoints.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+  // The line breaks across days Meta returned no row for. The x positions were already
+  // date-accurate, so the slope drawn through a three-day hole was the last thing putting
+  // a value on days the account never reported. Splitting into runs of consecutive days
+  // first means the area under the curve breaks in the same places - filling from one
+  // path with gaps in it would close the shape across the hole again.
+  const toRuns = (inputPoints = []) => inputPoints.reduce((runs, point) => {
+    if (!runs.length || point.gap > 1) runs.push([point]);
+    else runs[runs.length - 1].push(point);
+    return runs;
+  }, []);
+  const buildPath = (inputPoints = []) => toRuns(inputPoints)
+    .map((run) => run.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" "))
+    .join(" ");
+  const buildArea = (inputPoints = []) => toRuns(inputPoints)
+    .filter((run) => run.length > 1)
+    .map((run) => {
+      const line = run.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+      return `${line} L${run[run.length - 1].x.toFixed(2)},${baseline} L${run[0].x.toFixed(2)},${baseline} Z`;
+    })
+    .join(" ");
   const points = buildPoints(series || []);
   const comparisonPoints = buildPoints(comparisonSeries || []);
   const path = buildPath(points);
   const comparisonPath = buildPath(comparisonPoints);
-  const area = points.length
-    ? `${path} L ${points[points.length - 1].x.toFixed(2)},${baseline} L ${points[0].x.toFixed(2)},${baseline} Z`
-    : "";
+  const area = buildArea(points);
   const lastPoint = points[points.length - 1];
 
   return `
