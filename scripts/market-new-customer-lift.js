@@ -246,6 +246,32 @@ async function main() {
   const change = baseline ? measured / baseline - 1 : 0;
   const se = ratioChangeStandardError(preT, preC, postT, postC);
 
+  // Per market as well as pooled. The three markets carry very different volumes - IT is about a
+  // fifth of DE - so a pooled figure hides which market is actually moving, and each market is
+  // scaled separately anyway. The intervals are correspondingly wide and are printed rather than
+  // left to be inferred.
+  log("Pr. marked, mod den fælles kontrolgruppe");
+  log("  marked   baseline   målt   ændring   95 %-interval");
+  for (const market of treatment) {
+    const mPre = countNewBuyers(history[market], preSince, preUntil);
+    const mPost = countNewBuyers(history[market], postSince, postUntil);
+    if (!mPre || !preC || !postC) continue;
+    const mBase = mPre / preC;
+    const mNow = mPost / postC;
+    const mChange = mNow / mBase - 1;
+    const mSe = ratioChangeStandardError(mPre, preC, mPost, postC);
+    log(
+      `  ${market.padEnd(8)} ${mBase.toFixed(3).padStart(8)} ${mNow.toFixed(3).padStart(6)} ` +
+        `${(mChange * 100).toFixed(1).padStart(8)} %   ` +
+        `${((mChange - 1.96 * mSe) * 100).toFixed(1)} % .. ${((mChange + 1.96 * mSe) * 100).toFixed(1)} %`
+    );
+  }
+  log("");
+  log("Bemærk at tre markeder testes på én gang. Med tre uafhængige test er der cirka 14 %");
+  log("chance for at mindst ét ser signifikant ud ved ren tilfældighed, så et enkelt marked");
+  log("der lige klarer tærsklen er et spor, ikke et bevis.");
+  log("");
+
   log("Difference-in-differences på nye kunder");
   log(`  baseline forhold T/K : ${baseline.toFixed(3)}  (${preT} / ${preC})`);
   log(`  målt forhold T/K     : ${measured.toFixed(3)}  (${postT} / ${postC})`);
