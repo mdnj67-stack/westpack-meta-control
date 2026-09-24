@@ -57,12 +57,20 @@ const DEFAULTS = {
 // rationalised afterwards. `baselineRatio` is recomputed from the actual pre window; these are
 // the relative moves against it.
 const THRESHOLDS = {
-  // Roughly break-even for the extra spend at ~40% contribution margin. Confirm the margin before
-  // trusting this number - at 25% it rises to about +15%, at 55% it falls to about +6%.
-  payingForItself: 0.096,
+  // Break-even for the extra spend at the ~50% contribution margin the marketing department
+  // reports, against a blended treatment-market AOV of roughly 2,700 DKK. Recompute this if
+  // either number moves: at 40% it rises to about +13%, at 60% it falls to about +9%.
+  payingForItself: 0.105,
   // Anything below this is inside the noise band of a window this size.
   noDetectableEffect: 0.03
 };
+
+// The department's own target is ROAS 2-3. At a 50% contribution margin, ROAS 2.0 is exactly
+// break-even on a first order - one krone spent returns two kroner of revenue, of which one is
+// gross profit. So the bottom of that target is not a profit target, it is the point where the
+// campaign stops losing money before any repeat purchase. Worth stating wherever the target is
+// used, because it is easy to read "ROAS 2" as a modest but positive return.
+const FIRST_ORDER_BREAK_EVEN_ROAS = 2.0;
 
 function parseArgs(argv) {
   return argv.slice(2).reduce((acc, arg) => {
@@ -323,6 +331,34 @@ async function main() {
     return;
   }
 
+  // Per market as well as pooled. The three markets are run as separate campaigns and are scaled
+  // separately, so a pooled verdict cannot tell you which one to act on. The interval is much
+  // wider per market - a single market needs roughly twice the window to reach the same
+  // confidence as the three together, which is worth seeing rather than inferring.
+  console.log("Pr. marked (bredere interval - ét marked bærer en fjerdedel af volumen)");
+  console.log("  marked  baseline   målt   ændring   95 %-interval");
+  for (const market of treatment) {
+    const mPreT = sumWindow(daily[market], preSince, preUntil);
+    const mPostT = sumWindow(daily[market], postSince, postUntil);
+    if (!mPreT || !preC || !postC) continue;
+    const mBase = mPreT / preC;
+    const mNow = mPostT / postC;
+    const mChange = mNow / mBase - 1;
+    const mSe = ratioChangeStandardError(mPreT, preC, mPostT, postC);
+    console.log(
+      `  ${market.padEnd(7)} ${mBase.toFixed(3).padStart(8)} ${mNow.toFixed(3).padStart(6)} ` +
+        `${(mChange * 100).toFixed(1).padStart(8)} %   ` +
+        `${((mChange - 1.96 * mSe) * 100).toFixed(1)} % .. ${((mChange + 1.96 * mSe) * 100).toFixed(1)} %`
+    );
+  }
+  console.log("");
+
+  console.log(
+    `Til reference: afdelingens mål er ROAS 2-3. Ved 50 % dækningsgrad er ROAS ` +
+      `${FIRST_ORDER_BREAK_EVEN_ROAS.toFixed(1)} præcis nulpunktet på førstegangsordren.`
+  );
+  console.log("");
+
   console.log("DOM mod de forhåndsbesluttede tærskler");
   if (ciLow > THRESHOLDS.payingForItself) {
     console.log("  BETALER SIG. Løftet er større end break-even, også i intervallets underkant.");
@@ -344,7 +380,8 @@ async function main() {
   console.log("");
   console.log("Forbehold: kontrolgruppen fik selv skåret budget, så den er ikke uberørt.");
   console.log("Sæson, e-mailkalender og andre kanaler er ikke kontrolleret for.");
-  console.log("Tærsklen for break-even antager ~40 % dækningsgrad - bekræft den.");
+  console.log("Break-even antager ~50 % dækningsgrad og AOV omkring 2.700 kr. - og kun");
+  console.log("førstegangsordren. Gentagne køb er ikke med, så tærsklen er konservativ.");
 }
 
 main().catch((error) => {
