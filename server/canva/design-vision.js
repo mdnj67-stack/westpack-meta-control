@@ -12,6 +12,7 @@
 
 const { exportDesign } = require("./connect-client");
 const { normalizeText } = require("./localization");
+const { repairModelJsonText } = require("../lib/model-json");
 
 // Small enough to be cheap and fast, large enough for a vision model to read a headline. Canva
 // rejects exports under 40px on a side, and these are throwaway renders, not deliverables.
@@ -25,7 +26,7 @@ function extractJsonText(payload) {
     }
   }
   if (!parts.length && typeof payload?.output_text === "string") parts.push(payload.output_text);
-  return parts.join("\n").trim();
+  return repairModelJsonText(parts.join("\n").trim());
 }
 
 async function requestVision({ config, prompt, schemaName, schema }) {

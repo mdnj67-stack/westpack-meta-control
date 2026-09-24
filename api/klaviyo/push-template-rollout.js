@@ -5,6 +5,7 @@ const { fetchWithTimeout, readJsonBody, sendJson } = require("../../server/lib/h
 const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-product-feed");
 const { collectWestpackProductFeedUrlMismatches, collectWestpackSnippetUrlMismatches, rewriteWestpackProductFeedUrls, rewriteWestpackSnippetUrls } = require("../../server/lib/westpack-url-locales");
 const { createTemplateVariant } = require("../../server/lib/klaviyo-template-create");
+const { stripNullCharactersDeep } = require("../../server/lib/model-json");
 const TEMPLATE_API_REVISION = "2026-04-15";
 const KLAVIYO_REQUEST_TIMEOUT_MS = 15000;
 
@@ -33,7 +34,9 @@ async function klaviyoRequest(url, headers, method = "GET", body) {
     {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined
+      // Last guard before Klaviyo: a NUL anywhere in the payload fails the whole request with
+      // "null characters not allowed", so losing the character beats losing the language.
+      body: body ? JSON.stringify(stripNullCharactersDeep(body)) : undefined
     },
     KLAVIYO_REQUEST_TIMEOUT_MS
   );

@@ -784,6 +784,37 @@ as a small Canva-side companion app that talks to this backend. Browser automati
 Canva editor is not an option worth revisiting: the editor is a canvas application, so there is
 no stable DOM, and it would fail by producing wrong artwork rather than an error.
 
+## Model JSON output can carry NUL characters
+
+Added 2026-09-24, from an operator report that duplicating and translating a Klaviyo campaign
+sometimes failed for some languages with **"null characters not allowed"**.
+
+That message is Klaviyo's, passed through verbatim by `klaviyoRequest` (which surfaces
+`errors[0].detail`). Klaviyo's API is Django/DRF, whose `ProhibitNullCharactersValidator`
+rejects any string field containing U+0000, so one stray NUL fails the whole template create for
+that market while the other languages go through.
+
+The NUL comes from the model, not from Klaviyo and not from the source template. GPT-4.1 — the
+default `OPENAI_MODEL` here — corrupts non-ASCII characters in structured JSON output on long
+inputs: it emits `\u0000dc` where it meant `\u00dc`, so `JSON.parse` yields a NUL followed by
+the two hex digits (openai/openai-go#664). Email templates are comfortably past the ~10KB where
+this starts, and the languages that carry accented characters — DE, FR, ES, and Danish æ/ø/å —
+are the ones exposed. English almost never trips it, which is why it looks intermittent.
+
+- The repair runs on the **raw JSON text before parsing**, in `server/lib/model-json.js`
+  (`repairModelJsonText` / `parseModelJson`). Stripping the NUL after parsing is not equivalent
+  and is worse than the error: it leaves the hex digits as literal copy, so "Überraschung" ships
+  as "dcberraschung" and nothing raises.
+- It is wired into every place that parses model JSON: `api/openai/klaviyo-translate-template.js`
+  (both the translate and the variant path), `api/openai/klaviyo-agent.js`,
+  `api/openai/generate-ad-copy.js`, `server/campaign/brain.js` (which covers
+  `api/campaign/brain.js` and `content-agent-worker.js`), and both Canva callers.
+- `stripNullCharactersDeep` is the last guard inside `klaviyoRequest`
+  (`api/klaviyo/push-template-rollout.js`), so a NUL from any other origin costs one character
+  rather than the market's whole template.
+- `tests/model-json-null-characters.test.js` pins the repair, the escaped-backslash edge case and
+  the fact that every parse path and the Klaviyo write path are wired to it.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

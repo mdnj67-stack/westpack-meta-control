@@ -21,6 +21,7 @@
 const { buildGlossaryPromptBlock } = require("../lib/glossary");
 const { buildWestpackKnowledgePromptBlock } = require("../lib/westpack-knowledge");
 const { assessFieldFit, normalizeText } = require("./localization");
+const { repairModelJsonText } = require("../lib/model-json");
 
 function buildFieldBrief(fields = []) {
   return fields.map((field, index) => [
@@ -116,7 +117,7 @@ function extractJsonText(payload) {
     }
   }
   if (!parts.length && typeof payload?.output_text === "string") parts.push(payload.output_text);
-  return parts.join("\n").trim();
+  return repairModelJsonText(parts.join("\n").trim());
 }
 
 async function requestTranslation({ config, prompt, schema }) {

@@ -1,6 +1,7 @@
 const { getConfig } = require("../../server/lib/config");
 const { requireAuth } = require("../../server/lib/auth");
 const { readJsonBody, sendJson } = require("../../server/lib/http");
+const { repairModelJsonText } = require("../../server/lib/model-json");
 const { buildGlossaryPromptBlock } = require("../../server/lib/glossary");
 
 const KLAVIYO_SMALL_LIST_EXEMPT_MARKETS = ["CZ", "SK", "HU"];
@@ -66,7 +67,7 @@ function buildPrompt(input) {
 
 function extractJsonText(payload) {
   if (typeof payload.output_text === "string" && payload.output_text.trim()) {
-    return payload.output_text;
+    return repairModelJsonText(payload.output_text);
   }
 
   const textParts = [];
@@ -80,7 +81,7 @@ function extractJsonText(payload) {
     }
   }
 
-  return textParts.join("\n").trim();
+  return repairModelJsonText(textParts.join("\n").trim());
 }
 
 module.exports = async (req, res) => {

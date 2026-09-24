@@ -6,6 +6,7 @@ const { buildWestpackKnowledgePromptBlock } = require("../../server/lib/westpack
 const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-product-feed");
 const { rewriteWestpackProductFeedUrls, rewriteWestpackSnippetUrls } = require("../../server/lib/westpack-url-locales");
 const { generateTemplateVariant } = require("../../server/lib/klaviyo-template-variant");
+const { parseModelJson } = require("../../server/lib/model-json");
 
 function containsHtml(value = "") {
   return /<[^>]+>/.test(String(value || ""));
@@ -227,7 +228,7 @@ async function requestStructuredResponse(config, prompt, schemaName, schema) {
   }
 
   return {
-    parsed: JSON.parse(extractJsonText(payload)),
+    parsed: parseModelJson(extractJsonText(payload)),
     model: payload.model || config.openAiModel
   };
 }

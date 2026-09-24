@@ -1,5 +1,6 @@
 const { buildGlossaryPromptBlock } = require("../lib/glossary");
 const { buildWestpackKnowledgeContext } = require("../lib/westpack-knowledge");
+const { repairModelJsonText } = require("../lib/model-json");
 const {
   buildCampaignMemoryPromptBlock,
   selectCampaignMemoryReferences
@@ -902,7 +903,7 @@ function buildCampaignEnvironmentSeries(input, environmentConfig = {}, plan = nu
 
 function extractJsonText(payload) {
   if (typeof payload?.output_text === "string" && payload.output_text.trim()) {
-    return payload.output_text;
+    return repairModelJsonText(payload.output_text);
   }
 
   const textParts = [];
@@ -916,7 +917,7 @@ function extractJsonText(payload) {
     }
   }
 
-  return textParts.join("\n").trim();
+  return repairModelJsonText(textParts.join("\n").trim());
 }
 
 function normalizeCampaignBrainResult(input, parsed, model, memoryReferences = []) {
