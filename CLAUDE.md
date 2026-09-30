@@ -815,6 +815,16 @@ are the ones exposed. English almost never trips it, which is why it looks inter
 - `tests/model-json-null-characters.test.js` pins the repair, the escaped-backslash edge case and
   the fact that every parse path and the Klaviyo write path are wired to it.
 
+## What Westpack's own website says — `knowledge/westpack-site/`
+
+Added 2026-09-30. A crawl of the whole UK English store (2,491 products, 322 content and category
+pages) lives in `knowledge/westpack-site/`, with a distilled `README.md` on top: company facts,
+the offer (clichés, MOQs, samples, delivery, reviews), the carrier-bag range with sizes and logo
+areas, and which claims are safe to put in an ad. Read that README before writing ad or email
+copy about Westpack, rather than inventing USPs. Two claims that sound right and are not:
+samples are **not** free (freight, plus a small charge per logo sample), and logo print is
+included only on jewellery boxes. Refresh with the two scripts in `tools/`.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →
