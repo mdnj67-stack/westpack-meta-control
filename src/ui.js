@@ -85,14 +85,21 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
         { key: 'status', label: 'Status' }
       ];
     }
-    if (lens === 'conversion_incremental' || lens === 'conversion_standard') {
+    if (lens === 'conversion') {
+      // The first columns are on the dashboard's single basis, Meta's incremental
+      // attribution, and are the ones to compare. The last two say what Meta reports under
+      // the campaign's own setting, so a figure in Ads Manager can be found here; they are
+      // never added up, because campaigns on different settings count different things.
       return [
         { key: 'name', label: 'Campaign' },
         { key: 'spend', label: 'Spend' },
         { key: 'newCustomers', label: 'New customers' },
         { key: 'costPerNewCustomer', label: 'Cost / new' },
+        { key: 'purchases', label: 'Purchases' },
         { key: 'cpa', label: 'CPA' },
         { key: 'roas', label: 'ROAS' },
+        { key: 'reportedRoas', label: 'ROAS as reported' },
+        { key: 'attribution', label: 'Attribution setting' },
         { key: 'status', label: 'Status' }
       ];
     }
@@ -183,6 +190,12 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
       }
       if (col.key === 'cpa') {
         return `<td>${formatCurrency(cpaValue, currency)}</td>`;
+      }
+      if (col.key === 'reportedRoas') {
+        return `<td>${formatDecimal(campaign.reported_roas_value, 2)}</td>`;
+      }
+      if (col.key === 'attribution') {
+        return `<td>${escapeHtml(formatAttributionSetting(campaign.attribution_setting))}</td>`;
       }
       if (col.key === 'roas') {
         return `<td>${formatDecimal(roasValue, 2)}</td>`;
@@ -2326,12 +2339,28 @@ function itemsHaveLength(items) {
   return Array.isArray(items) && items.length > 0;
 }
 
+// Meta's machine values for the attribution setting, in the words Ads Manager uses.
+// "multiple" means the campaign's ad sets ran on different settings in the range, which
+// is what DE, FR and IT report after switching from incremental to standard on 2026-09-29.
+const ATTRIBUTION_SETTING_LABELS = {
+  incrementality: "Incremental",
+  "7d_click": "7-day click",
+  "1d_click": "1-day click",
+  "1d_view_7d_click": "7-day click, 1-day view",
+  "1d_view_7d_click_1d_ev": "7-day click, 1-day view, 1-day engaged view",
+  "1d_view_28d_click": "28-day click, 1-day view",
+  multiple: "Mixed"
+};
+
+function formatAttributionSetting(value = "") {
+  const key = String(value || "").trim();
+  if (!key || key === "na") return "--";
+  return ATTRIBUTION_SETTING_LABELS[key] || key;
+}
+
 function formatLensLabel(value = "") {
-  // The two attribution splits are lenses, not Meta objective families, so they keep
-  // their own labels. Everything else reads from the shared objective table, which means
-  // a campaign on a newly supported objective shows a real name instead of a raw key.
-  if (value === "conversion_standard") return "Conversion (standard)";
-  if (value === "conversion_incremental") return "Conversion (incremental)";
+  // Read from the shared objective table, so a campaign on a newly supported objective
+  // shows a real name instead of a raw key.
   if (value === "awareness") return "Awareness";
   if (OBJECTIVE_GROUP_LABELS[value]) return resolveObjectiveGroupLabel(value);
   return value || "General";

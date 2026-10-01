@@ -1,6 +1,8 @@
 // Meta's effective_status is the delivery state Ads Manager shows. It is reported here
 // verbatim in readable form rather than being replaced by a fixed label, so a campaign
 // that is paused, in review or rejected cannot read as healthy.
+const { reportedEntries } = require("./measurement-basis.js");
+
 const DELIVERY_STATUS_LABELS = {
   ACTIVE: "Active",
   PAUSED: "Paused",
@@ -29,7 +31,6 @@ function createMetaSnapshotTransformers({
   sortSeries,
   splitSeriesByDateRange,
   classifyCampaign,
-  resolveConversionAttribution,
   normalizeBudgetValue,
   formatCurrency,
   resolveBudgetNormalization,
@@ -246,9 +247,6 @@ function createMetaSnapshotTransformers({
     adSetsByCampaignId,
     insightMap = {},
     seriesMap = {},
-    incrementalInsightMap = {},
-    incrementalSeriesMap = {},
-    incrementalInsightsAvailable = false,
     dateScope,
     accountCurrency,
     budgetNormalization,
@@ -277,14 +275,14 @@ function createMetaSnapshotTransformers({
       // Kept before any override so the reconciliation has a real other side to compare
       // against, and so the payload can report what Meta actually said this campaign spent.
       const campaignLevelSpend = spend;
-      const incrementalInsight = incrementalInsightMap[campaign.id] || {};
-      const incrementalPurchases = getPreferredActionValue(incrementalInsight.actions || [], purchaseActionTypes);
-      const incrementalRevenue = getPreferredActionValue(incrementalInsight.action_values || [], purchaseActionTypes);
-      const incrementalRoas = getRoasFromInsight(incrementalInsight || {});
-      const incrementalSeries = sortSeries(incrementalSeriesMap[campaign.id] || []);
-      const incrementalMetricsAvailable = incrementalInsightsAvailable && (
-        Boolean(incrementalInsightMap[campaign.id])
-        || incrementalSeries.length > 0
+      // What Meta reports under the campaign's own attribution setting, before the
+      // dashboard's single basis is applied. Shown beside each campaign so a figure in Ads
+      // Manager can be found here, and never added into a total.
+      const reportedPurchases = getPreferredActionValue(reportedEntries(insight.actions), purchaseActionTypes);
+      const reportedRevenue = getPreferredActionValue(reportedEntries(insight.action_values), purchaseActionTypes);
+      const reportedCustomers = extractCustomerAcquisition(
+        { actions: reportedEntries(insight.actions), action_values: reportedEntries(insight.action_values) },
+        customerConversionActionTypes
       );
 
       if (baseCategory === "awareness") {
@@ -309,12 +307,13 @@ function createMetaSnapshotTransformers({
           spend = adSetSpendTotal;
           clicks = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.clicks_value, 0), 0);
           impressions = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.impressions_value, 0), 0);
-          reach = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.reach_value, 0), 0);
+          // Reach and frequency stay at campaign level. A campaign's insight already
+          // deduplicates people across its own ad sets; adding the ad sets' reach counted
+          // anyone in two of them twice and pulled frequency down with it.
           addToCart = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.add_to_cart_value, 0), 0);
           purchases = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.purchases_value, 0), 0);
           revenue = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.revenue_value, 0), 0);
           leads = adSetsWithInsights.reduce((sum, adSet) => sum + readNumber(adSet.leads_value, 0), 0);
-          frequency = reach > 0 ? impressions / reach : 0;
           cpm = impressions > 0 ? (spend / impressions) * 1000 : 0;
           ctr = impressions > 0 ? (clicks / impressions) * 100 : 0;
 
@@ -363,17 +362,7 @@ function createMetaSnapshotTransformers({
       const roas = spend > 0 ? revenue / spend : 0;
       const cpa = purchases > 0 ? spend / purchases : 0;
       const cpl = leads > 0 ? spend / leads : 0;
-      const incrementalCpa = incrementalPurchases > 0 ? spend / incrementalPurchases : 0;
-
-      // Meta returns the incrementality attribution window for every campaign on this
-      // account, and on inspection it returns exactly the standard figures. When that is
-      // the case the incremental lens is a set of campaigns, not a separate measurement,
-      // and the dashboard has to say so rather than implying an uplift study exists.
-      const incrementalMatchesStandard = incrementalMetricsAvailable
-        && incrementalPurchases === purchases
-        && Math.abs(incrementalRevenue - revenue) < 0.01;
       const comparisonWindow = splitSeriesByDateRange(series, dateScope.since, dateScope.until);
-      const incrementalComparisonWindow = splitSeriesByDateRange(incrementalSeries, dateScope.since, dateScope.until);
 
       return {
         id: campaign.id,
@@ -411,19 +400,14 @@ function createMetaSnapshotTransformers({
         ...extractCustomerAcquisition(insight, customerConversionActionTypes),
         series: comparisonWindow.current,
         comparison_window: comparisonWindow,
-        incremental_purchases_value: incrementalPurchases,
-        incremental_revenue_value: incrementalRevenue,
-        incremental_roas_value: incrementalRoas,
-        incremental_cpa_value: incrementalCpa,
-        incremental_series: incrementalComparisonWindow.current,
-        incremental_comparison_window: incrementalComparisonWindow,
-        incremental_metrics_available: incrementalMetricsAvailable,
-        incremental_matches_standard: incrementalMatchesStandard,
-        // Meta's own answer to the question the campaign name has been standing in for.
-        // Ads Manager prints this in its "Attribution setting" column, where the three
-        // Inkremental campaigns read "Incremental attribution" and Conv - 04 - EU -
-        // Standard reads "7-day click". Classifying from a field the account actually
-        // reports beats classifying from a hand-typed name.
+        reported_purchases_value: reportedPurchases,
+        reported_revenue_value: reportedRevenue,
+        reported_roas_value: spend > 0 ? reportedRevenue / spend : null,
+        reported_new_customers_value: reportedCustomers.new_customers_value,
+        // What Ads Manager prints in its "Attribution setting" column. It no longer decides
+        // anything - every result is measured on incremental attribution - but it says what
+        // the "Reported by Meta" figures beside it were counted under. "multiple" means the
+        // campaign's ad sets ran on different settings in the range.
         attribution_setting: String(insight.attribution_setting || "")
       };
     });
@@ -441,18 +425,10 @@ function createMetaSnapshotTransformers({
   }) {
     return campaigns.map((campaign) => {
       const linkedAdSets = adSetsByCampaignId.get(String(campaign.id || "")) || [];
-      const adSetNames = linkedAdSets.map((adSet) => String(adSet?.name || ""));
-      const adSetAttributionSpecs = linkedAdSets.map((adSet) => Array.isArray(adSet?.attribution_spec) ? adSet.attribution_spec : []);
-      const attribution = resolveConversionAttribution(campaign, adSetNames, adSetAttributionSpecs);
-
       return {
         ...campaign,
-        adset_names: adSetNames,
-        adset_attribution_specs: adSetAttributionSpecs,
-        category: classifyCampaign(campaign),
-        attribution_mode: attribution.mode,
-        attribution_source: attribution.source,
-        attribution_explicit: attribution.explicit
+        adset_names: linkedAdSets.map((adSet) => String(adSet?.name || "")),
+        category: classifyCampaign(campaign)
       };
     });
   }

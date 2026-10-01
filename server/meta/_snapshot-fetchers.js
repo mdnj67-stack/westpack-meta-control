@@ -1,3 +1,8 @@
+const {
+  INCREMENTAL_ATTRIBUTION_WINDOWS,
+  applyMeasurementBasisToCollection
+} = require("./measurement-basis.js");
+
 function createMetaSnapshotFetchers({
   buildMetaResourceCacheKey,
   getCachedMetaCollection,
@@ -115,13 +120,12 @@ function createMetaSnapshotFetchers({
     dateScope,
     comparisonDateScope,
     insightsCacheMaxAgeMs,
-    incrementalInsightsCacheMaxAgeMs = insightsCacheMaxAgeMs,
     timings,
     bypassCache = false
   }) {
-    const [aggregatedInsightsResponse, dailyInsightsResponse, aggregatedIncrementalInsightsResponse, dailyIncrementalInsightsResponse] = await Promise.all([
+    const [aggregatedInsightsResponse, dailyInsightsResponse] = await Promise.all([
       getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_campaign_agg", [accountId, dateScope.since, dateScope.until]),
+        cacheKey: buildMetaResourceCacheKey("insights_campaign_agg_inc", [accountId, dateScope.since, dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
@@ -129,6 +133,7 @@ function createMetaSnapshotFetchers({
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
           time_range: JSON.stringify({ since: dateScope.since, until: dateScope.until }),
+          action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
           limit: "500",
           fields: [
             "campaign_id",
@@ -153,7 +158,7 @@ function createMetaSnapshotFetchers({
         })
       }),
       getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_campaign_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
+        cacheKey: buildMetaResourceCacheKey("insights_campaign_daily_cmp_inc", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
@@ -161,6 +166,7 @@ function createMetaSnapshotFetchers({
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "campaign",
           time_range: JSON.stringify({ since: comparisonDateScope?.since || dateScope.since, until: comparisonDateScope?.until || dateScope.until }),
+          action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
           time_increment: "1",
           limit: "5000",
           fields: [
@@ -179,66 +185,12 @@ function createMetaSnapshotFetchers({
         // It is also one of the most CPU-expensive queries Meta bills us for, so on a
         // throttled account it is the first thing to fail - and it used to take every
         // panel down with it.
-      }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
-      getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_incremental_agg", [accountId, dateScope.since, dateScope.until]),
-        maxAgeMs: incrementalInsightsCacheMaxAgeMs,
-        timingStore: timings,
-        bypassCache,
-        timingLabel: "incremental_insights_aggregated",
-        fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
-          level: "campaign",
-          time_range: JSON.stringify({ since: dateScope.since, until: dateScope.until }),
-          action_attribution_windows: JSON.stringify(["incrementality"]),
-          limit: "500",
-          fields: [
-            "campaign_id",
-            "campaign_name",
-            "spend",
-            "impressions",
-            "reach",
-            "frequency",
-            "cpm",
-            "inline_link_clicks",
-            "inline_link_click_ctr",
-            "cpc",
-            "actions",
-            "action_values",
-            "purchase_roas",
-            "website_purchase_roas"
-          ].join(",")
-        })
-      }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
-      getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_incremental_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
-        maxAgeMs: incrementalInsightsCacheMaxAgeMs,
-        timingStore: timings,
-        bypassCache,
-        timingLabel: "incremental_insights_daily",
-        fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
-          level: "campaign",
-          time_range: JSON.stringify({ since: comparisonDateScope?.since || dateScope.since, until: comparisonDateScope?.until || dateScope.until }),
-          time_increment: "1",
-          action_attribution_windows: JSON.stringify(["incrementality"]),
-          limit: "5000",
-          fields: [
-            "campaign_id",
-            "date_start",
-            "spend",
-            "impressions",
-            "inline_link_clicks",
-            "actions",
-            "action_values"
-          ].join(",")
-        })
       }).catch(() => ({ data: [], pageCount: 0, unavailable: true }))
     ]);
 
     return {
-      aggregatedInsightsResponse,
-      dailyInsightsResponse,
-      aggregatedIncrementalInsightsResponse,
-      dailyIncrementalInsightsResponse
+      aggregatedInsightsResponse: applyMeasurementBasisToCollection(aggregatedInsightsResponse),
+      dailyInsightsResponse: applyMeasurementBasisToCollection(dailyInsightsResponse)
     };
   }
 
@@ -253,7 +205,7 @@ function createMetaSnapshotFetchers({
   }) {
     const [aggregatedAdSetInsightsResponse, dailyAdSetInsightsResponse] = await Promise.all([
       getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_adset_agg", [accountId, dateScope.since, dateScope.until]),
+        cacheKey: buildMetaResourceCacheKey("insights_adset_agg_inc", [accountId, dateScope.since, dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
@@ -261,6 +213,7 @@ function createMetaSnapshotFetchers({
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "adset",
           time_range: JSON.stringify({ since: dateScope.since, until: dateScope.until }),
+          action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
           limit: "500",
           fields: [
             "campaign_id",
@@ -284,7 +237,7 @@ function createMetaSnapshotFetchers({
         // handles and reports through awarenessUsingAdSetInsights.
       }).catch(() => ({ data: [], pageCount: 0, unavailable: true })),
       getCachedMetaCollection({
-        cacheKey: buildMetaResourceCacheKey("insights_adset_daily_cmp", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
+        cacheKey: buildMetaResourceCacheKey("insights_adset_daily_cmp_inc", [accountId, comparisonDateScope?.since || dateScope.since, comparisonDateScope?.until || dateScope.until]),
         maxAgeMs: insightsCacheMaxAgeMs,
         timingStore: timings,
         bypassCache,
@@ -292,6 +245,7 @@ function createMetaSnapshotFetchers({
         fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
           level: "adset",
           time_range: JSON.stringify({ since: comparisonDateScope?.since || dateScope.since, until: comparisonDateScope?.until || dateScope.until }),
+          action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
           time_increment: "1",
           limit: "5000",
           fields: [
@@ -311,8 +265,8 @@ function createMetaSnapshotFetchers({
     ]);
 
     return {
-      aggregatedAdSetInsightsResponse,
-      dailyAdSetInsightsResponse
+      aggregatedAdSetInsightsResponse: applyMeasurementBasisToCollection(aggregatedAdSetInsightsResponse),
+      dailyAdSetInsightsResponse: applyMeasurementBasisToCollection(dailyAdSetInsightsResponse)
     };
   }
 
@@ -349,22 +303,23 @@ function createMetaSnapshotFetchers({
         level: "account",
         time_range: JSON.stringify({ since, until }),
         time_increment: "1",
+        action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
         limit: "200",
         fields: "date_start,spend,actions,action_values"
       })
-    });
+    }).then(applyMeasurementBasisToCollection);
 
     const splitsOffToday = Boolean(today) && trendWindow.until === today && trendWindow.since < today;
     if (!splitsOffToday) {
-      return fetchDays(trendWindow.since, trendWindow.until, insightsCacheMaxAgeMs, "insights_acquisition_trend", "acquisition_trend_insights");
+      return fetchDays(trendWindow.since, trendWindow.until, insightsCacheMaxAgeMs, "insights_acquisition_trend_inc", "acquisition_trend_insights");
     }
 
     const yesterday = new Date(`${today}T00:00:00Z`);
     yesterday.setUTCDate(yesterday.getUTCDate() - 1);
     const completedUntil = yesterday.toISOString().slice(0, 10);
     const [completed, todayRows] = await Promise.all([
-      fetchDays(trendWindow.since, completedUntil, insightsCacheMaxAgeMs, "insights_acquisition_completed", "acquisition_trend_insights"),
-      fetchDays(today, today, todayCacheMaxAgeMs, "insights_acquisition_today", "acquisition_today_insights")
+      fetchDays(trendWindow.since, completedUntil, insightsCacheMaxAgeMs, "insights_acquisition_completed_inc", "acquisition_trend_insights"),
+      fetchDays(today, today, todayCacheMaxAgeMs, "insights_acquisition_today_inc", "acquisition_today_insights")
     ]);
     return {
       ...completed,

@@ -223,7 +223,6 @@ import {
   renderSettings,
   renderStats,
   renderVariants,
-  renderCampaignPulse,
   renderLensEmptyState,
   renderMetaQualityPanel,
   renderOverviewGrid,
@@ -12042,35 +12041,11 @@ function buildMetaQualityCards() {
     return [];
   }
 
-  const pagination = quality.pagination || {};
-  const pagesUsed = [
-    pagination.campaignsPages,
-    pagination.campaignInsightsPages,
-    pagination.campaignDailyInsightsPages,
-    pagination.adSetsPages,
-    pagination.adSetInsightsPages,
-    pagination.adSetDailyInsightsPages,
-    pagination.adsPages
-  ]
-    .map((value) => Number(value))
-    .filter((value) => Number.isFinite(value) && value > 0);
-
   const warnings = Array.isArray(quality.warnings) ? quality.warnings : [];
   const validation = quality.validation || null;
-  const reconciliation = quality.reconciliation || {};
-  const attributionValidation = quality.attributionValidation || {};
-  const timings = quality.timings || {};
   const snapshotMeta = appState.metaSnapshotMeta || null;
   const trust = buildMetaTrustState();
-  const schedule = quality.schedule || null;
-  const awarenessDelta = (() => {
-    const campaignValue = Number(reconciliation.awarenessCampaignSpendTotal || 0);
-    const adSetValue = Number(reconciliation.awarenessAdSetSpendTotal || 0);
-    if (!(campaignValue > 0) && !(adSetValue > 0)) {
-      return "--";
-    }
-    return formatDashboardCurrency(Math.abs(campaignValue - adSetValue));
-  })();
+  const spendCheck = (validation?.checks || []).find((check) => check.id === "account-spend") || null;
 
   return [
     {
@@ -12085,72 +12060,14 @@ function buildMetaQualityCards() {
       body: formatMetaSnapshotMetaLine(snapshotMeta),
       tone: "neutral"
     },
+    // Pagination, budget model, schedule, sync timings and the attribution split used to
+    // sit here. They prove the figures were computed carefully; they never change how one
+    // is read, so they belong in CLAUDE.md and the payload, not on the operator's screen.
     {
-      title: "Snapshot coverage",
-      meta: `${quality.includedCampaignCount || 0} campaigns`,
-      body: `${quality.campaignsWithPeriodDataCount || 0} campaigns had spend in scope. ${quality.activeCampaignCount || 0} are active now.`,
-      tone: "neutral"
-    },
-    {
-      title: "Pagination",
-      meta: pagesUsed.length ? `${Math.max(...pagesUsed)} pages` : "Single page",
-      body: pagesUsed.some((value) => value > 1)
-        ? "Meta pagination expanded beyond the first page during this snapshot."
-        : "Snapshot was resolved from first-page Meta responses only.",
-      tone: "neutral"
-    },
-    {
-      title: "Budget model",
-      meta: quality.budgetNormalization?.confidence || "unknown",
-      body: quality.budgetNormalization?.reason || "No budget normalization metadata returned.",
-      tone: "neutral"
-    },
-    {
-      title: "Schedule",
-      meta: schedule?.timezone || "Not configured",
-      body: schedule
-        ? `${schedule.serverCronSummary} UTC cron: ${(schedule.serverCronSchedulesUtc || []).join(", ") || "none"}. Target slots: ${(schedule.targetSlots || []).map((slot) => slot.label).join(" + ")}. ${schedule.browserDailySummary}`
-        : "No schedule diagnostics returned.",
-      tone: "neutral"
-    },
-    {
-      title: "Awareness reconciliation",
-      meta: `${quality.awarenessUsingAdSetInsights || 0} campaigns`,
-      body: `Awareness used ad set data where available. Campaign vs ad set spend delta: ${awarenessDelta}.`,
-      tone: "neutral"
-    },
-    {
-      title: "Attribution split",
-      meta: attributionValidation.overlapCount > 0 ? `${attributionValidation.overlapCount} overlaps` : "No overlap",
-      body: `${attributionValidation.standardCount || 0} standard and ${attributionValidation.incrementalCount || 0} incremental conversion campaigns are segmented into separate lenses.`,
-      tone: attributionValidation.overlapCount > 0 ? "warning" : "neutral"
-    },
-    {
-      title: "Validation",
-      meta: validation
-        ? `${validation.passCount || 0} pass · ${validation.warnCount || 0} warn · ${validation.failCount || 0} fail`
-        : "Not run",
-      body: validation?.checks?.length
-        ? validation.checks.map((check) => `${check.label}: ${check.status}. ${check.detail}`).join(" ")
-        : "No dashboard validation checks were returned.",
-      tone: Number(validation?.failCount || 0) > 0
-        ? "warning"
-        : Number(validation?.warnCount || 0) > 0
-          ? "warning"
-          : "neutral"
-    },
-    {
-      title: "Sync timings",
-      meta: Number.isFinite(Number(timings.total_snapshot_ms)) ? `${formatDashboardNumber(Number(timings.total_snapshot_ms), 0)} ms` : "Not captured",
-      body: (() => {
-        const slowSteps = Object.entries(timings)
-          .filter(([key, value]) => key.endsWith("_ms") && Number(value) > 0 && key !== "total_snapshot_ms")
-          .sort((left, right) => Number(right[1]) - Number(left[1]))
-          .slice(0, 3)
-          .map(([key, value]) => `${key.replace(/_ms$/, "").replaceAll("_", " ")} ${formatDashboardNumber(Number(value), 0)} ms`);
-        return slowSteps.length ? `Slowest steps: ${slowSteps.join(" · ")}.` : "No timing breakdown returned.";
-      })(),
-      tone: "neutral"
+      title: "Spend reconciles to the account",
+      meta: spendCheck ? (spendCheck.status === "pass" ? "Matches" : spendCheck.status === "fail" ? "Does not match" : "Not checked") : "Not checked",
+      body: spendCheck?.detail || "No reconciliation was returned with this snapshot.",
+      tone: spendCheck?.status === "pass" ? "neutral" : "warning"
     },
     {
       title: warnings.length ? "Warnings" : "Warnings",
@@ -12159,10 +12076,6 @@ function buildMetaQualityCards() {
       tone: warnings.length ? "warning" : "neutral"
     }
   ];
-}
-
-function hasIncrementalCampaigns(campaigns = []) {
-  return buildIncrementalLensCampaigns(campaigns).length > 0;
 }
 
 function syncDashboardSubtabs() {
@@ -12822,7 +12735,6 @@ function renderCoreData(campaignData, adData, statData, adSetData, dashboardData
     adData,
     adSetData,
     appState,
-    applyCampaignAttribution,
     auditLog,
     campaignData,
     campaignMatches,
@@ -12853,7 +12765,6 @@ function applyMetaStudioCatalog(catalog = {}) {
   return applyMetaStudioCatalogAction({
     adaptationGoals,
     appState,
-    applyCampaignAttribution,
     catalog,
     getAdSetOptions,
     getInputValue,
@@ -12876,167 +12787,11 @@ function sumMetric(list, key) {
   }, 0);
 }
 
-const META_ATTRIBUTION_OVERRIDES = {
-  campaignIds: {},
-  campaignNames: {}
-};
-
-function hasIncrementalNameTag(value) {
-  const name = String(value || "").trim().toLowerCase();
-  if (!name) {
-    return false;
-  }
-
-  // Kept in step with the server copy in api/meta/account-snapshot.js. The stem covers
-  // inkrementel, inkremental, inkrementelle, incremental and incrementality; the account
-  // rebuild on 2026-09-09 used a spelling the old fixed list did not match.
-  return /\bin[kc]rement\w*\b/.test(name)
-    || /\[inc\]|\(inc\)/.test(name);
-}
-
-function hasStandardNameTag(value) {
-  const name = String(value || "").trim().toLowerCase();
-  if (!name) {
-    return false;
-  }
-
-  return /\bstandard\b/.test(name)
-    || /\[std\]|\(std\)/.test(name);
-}
-
-function resolveAttributionNameTag(campaign) {
-  const rawName = String(campaign?.name || "").trim();
-  if (!rawName) {
-    return null;
-  }
-
-  if (hasIncrementalNameTag(rawName)) {
-    return { mode: "incremental", source: "campaign naming tag", explicit: true };
-  }
-  if (hasStandardNameTag(rawName)) {
-    return { mode: "standard", source: "campaign naming tag", explicit: true };
-  }
-
-  return null;
-}
-
-function resolveAttributionOverride(campaign) {
-  const campaignId = String(campaign?.id || "").trim();
-  const campaignName = String(campaign?.name || "").trim().toLowerCase();
-
-  const byId = META_ATTRIBUTION_OVERRIDES.campaignIds?.[campaignId];
-  if (byId === "standard" || byId === "incremental") {
-    return { mode: byId, source: "manual override", explicit: true };
-  }
-
-  const byName = META_ATTRIBUTION_OVERRIDES.campaignNames?.[campaignName];
-  if (byName === "standard" || byName === "incremental") {
-    return { mode: byName, source: "manual override", explicit: true };
-  }
-
-  return null;
-}
-
-function applyCampaignAttribution(campaigns, adSets) {
-  const adSetsByCampaignId = new Map();
-
-  (adSets || []).forEach((adSet) => {
-    const campaignId = String(adSet?.campaignId || "");
-    if (!campaignId) return;
-    if (!adSetsByCampaignId.has(campaignId)) {
-      adSetsByCampaignId.set(campaignId, []);
-    }
-    adSetsByCampaignId.get(campaignId).push(adSet);
-  });
-
-  return (campaigns || []).map((campaign) => {
-    const campaignId = String(campaign?.id || "");
-    const linkedAdSets = adSetsByCampaignId.get(campaignId) || [];
-    const adSetNames = linkedAdSets.map((adSet) => String(adSet?.name || ""));
-    const adSetAttributionSpecs = linkedAdSets.map((adSet) => Array.isArray(adSet?.attribution_spec) ? adSet.attribution_spec : []);
-    const attribution = resolveConversionAttribution(campaign, adSetNames, adSetAttributionSpecs);
-
-    return {
-      ...campaign,
-      attribution_mode: attribution.mode,
-      attribution_source: attribution.source,
-      attribution_explicit: attribution.explicit,
-      adset_names: adSetNames,
-      adset_attribution_specs: adSetAttributionSpecs
-    };
-  });
-}
-
-function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributionSpecs = []) {
-  if (!campaign) {
-    return { mode: "standard", source: "baseline default", explicit: false };
-  }
-
-  const override = resolveAttributionOverride(campaign);
-  if (override) {
-    return override;
-  }
-
-  const nameTag = resolveAttributionNameTag(campaign);
-  if (nameTag) {
-    return nameTag;
-  }
-
-  const explicitMode = String(campaign.attribution_mode || campaign.attributionMode || campaign.measurement_mode || "")
-    .trim()
-    .toLowerCase();
-  if (explicitMode === "standard") {
-    return { mode: "standard", source: "campaign field", explicit: true };
-  }
-
-  return { mode: "standard", source: "no attribution tag in the campaign name", explicit: false };
-}
-
-function classifyConversionAttribution(campaign) {
-  return resolveConversionAttribution(campaign, campaign?.adset_names || [], campaign?.adset_attribution_specs || []).mode;
-}
-
-function splitConversionByAttribution(campaigns) {
-  const buckets = { standard: [], incremental: [] };
-  (campaigns || []).forEach((campaign) => {
-    const mode = classifyConversionAttribution(campaign);
-    buckets[mode].push(campaign);
-  });
-  return buckets;
-}
-
-function buildIncrementalLensCampaigns(campaigns = []) {
-  const conversionCampaigns = splitByCategory(campaigns).conversion;
-  return splitConversionByAttribution(conversionCampaigns).incremental
-    .map((campaign) => ({
-      ...campaign,
-      attribution_mode: "incremental",
-      attribution_source: campaign?.attribution_source || "campaign naming tag",
-      purchases_value: campaign?.incremental_metrics_available
-        ? toFiniteNumber(campaign?.incremental_purchases_value)
-        : toFiniteNumber(campaign?.purchases_value),
-      revenue_value: campaign?.incremental_metrics_available
-        ? toFiniteNumber(campaign?.incremental_revenue_value)
-        : toFiniteNumber(campaign?.revenue_value),
-      roas_value: campaign?.incremental_metrics_available
-        ? toFiniteNumber(campaign?.incremental_roas_value)
-        : toFiniteNumber(campaign?.roas_value),
-      cpa_value: campaign?.incremental_metrics_available
-        ? toFiniteNumber(campaign?.incremental_cpa_value)
-        : toFiniteNumber(campaign?.cpa_value),
-      series: Array.isArray(campaign?.incremental_series) && campaign.incremental_series.length
-        ? campaign.incremental_series
-        : campaign.series
-    }));
-}
-
-
 function getLensCampaigns(campaigns, lens) {
   const buckets = splitByCategory(campaigns);
   if (lens === "awareness") return buckets.awareness;
   if (lens === "leads") return buckets.leads;
-  if (lens === "conversion_standard") return splitConversionByAttribution(buckets.conversion).standard;
-  if (lens === "conversion_incremental") return buildIncrementalLensCampaigns(campaigns);
+  if (lens === "conversion") return buckets.conversion;
   return campaigns || [];
 }
 
@@ -13101,7 +12856,6 @@ function buildGeneralTableCampaigns(campaigns) {
   return (campaigns || [])
     .map((campaign) => {
       const category = classifyCampaign(campaign);
-      const conversionAttribution = category === "conversion" ? classifyConversionAttribution(campaign) : null;
       const spend = toFiniteNumber(campaign.spend_value);
       const reach = toFiniteNumber(campaign.reach_value);
       const leads = toFiniteNumber(campaign.leads_value);
@@ -13120,7 +12874,6 @@ function buildGeneralTableCampaigns(campaigns) {
       } else if (category === "conversion") {
         primaryMetric = `${formatDashboardNumber(purchases, 0)} purchases`;
         efficiencyMetric = `ROAS ${formatDashboardNumber(roas, 2)}`;
-        displayCategory = conversionAttribution === "incremental" ? "conversion_incremental" : "conversion_standard";
       }
 
       return {
@@ -13165,27 +12918,20 @@ function buildHeroPanelItems(lens) {
 }
 
 
-function getGeneralHeroCopy(analysis, campaigns = []) {
+function getGeneralHeroCopy() {
   return {
-    kicker: "Daily operator view",
+    kicker: "All campaigns",
     title: "General",
-    subtitle: "",
-    tableTitle: "Cross-lens campaign snapshot"
+    subtitle: "Purchases, revenue and new customers use Meta's incremental attribution for every campaign.",
+    tableTitle: "All campaigns"
   };
 }
 
 function getLensEmptyStateCopy(lens) {
-  if (lens === "conversion_incremental") {
+  if (lens === "conversion") {
     return {
-      headline: "No incremental campaigns in scope.",
-      body: "This date range does not include any campaigns assigned to the incremental track, so metrics, trends and rankings are hidden for now.",
-      nextStep: "Check General or Conversion (standard), or widen the date range."
-    };
-  }
-  if (lens === "conversion_standard") {
-    return {
-      headline: "No standard conversion campaigns in scope.",
-      body: "This date range does not include any standard conversion campaigns, so performance cards and rankings are hidden for now.",
+      headline: "No conversion campaigns in scope.",
+      body: "This date range does not include any campaigns with a conversion objective.",
       nextStep: "Check General or widen the date range."
     };
   }
@@ -13228,24 +12974,6 @@ function parsePercentValue(rawValue) {
   return toFiniteNumber(String(rawValue || "").replace("%", "").replace(",", "."), 0);
 }
 
-function clampNumber(value, min = 0, max = 1) {
-  return Math.min(max, Math.max(min, value));
-}
-
-function ratio(value, maxValue) {
-  if (!Number.isFinite(value) || !Number.isFinite(maxValue) || maxValue <= 0) {
-    return 0;
-  }
-  return clampNumber(value / maxValue, 0, 1);
-}
-
-function inverseRatio(value, maxValue) {
-  if (!Number.isFinite(value) || !Number.isFinite(maxValue) || maxValue <= 0) {
-    return 0;
-  }
-  return clampNumber(1 - value / maxValue, 0, 1);
-}
-
 // These were pinned to en-GB with two decimals while the rest of the product followed the
 // reader's locale with none, so the dashboard printed "DKK 248,388.13" a few centimetres
 // from "93.175,00 kr." for the same currency. src/format.js decides the format now.
@@ -13278,224 +13006,17 @@ function parseCurrencyValue(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function buildDashboardAnalysis(campaigns, lens) {
-  const prepared = (campaigns || []).map((campaign) => {
-    const spend = toFiniteNumber(campaign.spend_value);
-    const reach = toFiniteNumber(campaign.reach_value);
-    const frequency = toFiniteNumber(campaign.frequency_value);
-    const cpm = toFiniteNumber(campaign.cpm_value);
-    const purchases = toFiniteNumber(campaign.purchases_value);
-    const revenue = toFiniteNumber(campaign.revenue_value);
-    const roas = toFiniteNumber(campaign.roas_value);
-    const cpa = toFiniteNumber(campaign.cpa_value);
-    const leads = toFiniteNumber(campaign.leads_value);
-    const cpl = leads > 0 ? spend / leads : 0;
-    const ctr = Number.isFinite(Number(campaign.ctr_value))
-      ? toFiniteNumber(campaign.ctr_value)
-      : parsePercentValue(campaign.ctr);
-
-    return {
-      campaign,
-      spend,
-      reach,
-      frequency,
-      cpm,
-      purchases,
-      revenue,
-      roas,
-      cpa,
-      leads,
-      cpl,
-      ctr
-    };
-  });
-
-  if (!prepared.length) {
-    return {
-      pulseRows: [],
-      tableCampaigns: []
-    };
-  }
-
-  const maxSpend = Math.max(...prepared.map((item) => item.spend), 1);
-  const maxReach = Math.max(...prepared.map((item) => item.reach), 1);
-  const maxCpm = Math.max(...prepared.map((item) => item.cpm), 1);
-  const maxFreq = Math.max(...prepared.map((item) => item.frequency), 1);
-  const maxCtr = Math.max(...prepared.map((item) => item.ctr), 1);
-  const maxPurchases = Math.max(...prepared.map((item) => item.purchases), 1);
-  const maxRoas = Math.max(...prepared.map((item) => item.roas), 1);
-  const maxCpa = Math.max(...prepared.map((item) => item.cpa), 1);
-  const maxLeads = Math.max(...prepared.map((item) => item.leads), 1);
-  const maxCpl = Math.max(...prepared.map((item) => item.cpl), 1);
-
-  const avgSpend = sumMetric(prepared, "spend") / prepared.length;
-  const avgFreq = sumMetric(prepared, "frequency") / prepared.length;
-  const avgRoas = sumMetric(prepared, "roas") / prepared.length;
-  const avgCpa = sumMetric(prepared, "cpa") / prepared.length;
-  const avgCpl = sumMetric(prepared, "cpl") / prepared.length;
-
-  const scored = prepared.map((item) => {
-    let score = 0;
-    let tone = "neutral";
-    let action = "Review";
-    let primaryLabel = "Spend";
-    let primaryValue = formatDashboardCurrency(item.spend);
-    let secondaryLabel = "Status";
-    let secondaryValue = item.campaign.status || "Healthy";
-    let note = "Review this campaign in the current lens.";
-
-    if (lens === "conversion_standard") {
-      score = (
-        ratio(item.roas, maxRoas) * 0.42 +
-        ratio(item.purchases, maxPurchases) * 0.28 +
-        inverseRatio(item.cpa, maxCpa) * 0.20 +
-        inverseRatio(item.spend, maxSpend) * 0.10
-      ) * 100;
-
-      primaryLabel = "ROAS";
-      primaryValue = formatDashboardNumber(item.roas, 2);
-      secondaryLabel = "CPA";
-      secondaryValue = formatDashboardCurrency(item.cpa);
-      note = `${formatDashboardNumber(item.purchases, 0)} purchases from ${formatDashboardCurrency(item.spend)} spend.`;
-
-      if (item.spend > avgSpend && item.roas < avgRoas) {
-        tone = "danger";
-        action = "Cut waste";
-      } else if (item.purchases >= maxPurchases * 0.65) {
-        tone = "success";
-        action = "Protect";
-      } else if (score >= 70) {
-        tone = "success";
-        action = "Scale";
-      } else if (item.cpa > avgCpa && item.roas < avgRoas) {
-        tone = "warning";
-        action = "Fix";
-      } else {
-        tone = "warning";
-        action = "Test";
-      }
-    } else if (lens === "conversion_incremental") {
-      score = (
-        ratio(item.roas, maxRoas) * 0.42 +
-        ratio(item.purchases, maxPurchases) * 0.28 +
-        inverseRatio(item.cpa, maxCpa) * 0.20 +
-        inverseRatio(item.spend, maxSpend) * 0.12
-      ) * 100;
-
-      primaryLabel = "ROAS";
-      primaryValue = formatDashboardNumber(item.roas, 2);
-      secondaryLabel = "CPA";
-      secondaryValue = formatDashboardCurrency(item.cpa);
-      note = `${formatDashboardNumber(item.purchases, 0)} purchases from ${formatDashboardCurrency(item.spend)} spend in the incremental campaign set.`;
-
-      if (item.spend > avgSpend && item.roas < avgRoas) {
-        tone = "danger";
-        action = "Question";
-      } else if (score >= 72) {
-        tone = "success";
-        action = "Scale";
-      } else if (item.purchases >= maxPurchases * 0.65) {
-        tone = "success";
-        action = "Protect";
-      } else {
-        tone = "warning";
-        action = "Prove";
-      }
-    } else if (lens === "leads") {
-      score = (
-        ratio(item.leads, maxLeads) * 0.46 +
-        inverseRatio(item.cpl, maxCpl) * 0.34 +
-        ratio(item.ctr, maxCtr) * 0.12 +
-        inverseRatio(item.spend, maxSpend) * 0.08
-      ) * 100;
-
-      primaryLabel = "Leads";
-      primaryValue = formatDashboardNumber(item.leads, 0);
-      secondaryLabel = "CPL";
-      secondaryValue = item.leads > 0 ? formatDashboardCurrency(item.cpl) : "--";
-      note = item.leads > 0
-        ? `${formatDashboardNumber(item.leads, 0)} leads at ${formatDashboardCurrency(item.cpl)} CPL from ${formatDashboardCurrency(item.spend)} spend.`
-        : `No leads recorded from ${formatDashboardCurrency(item.spend)} spend yet.`;
-
-      if (item.spend > avgSpend && item.leads === 0) {
-        tone = "danger";
-        action = "Stop bleed";
-      } else if (item.leads >= maxLeads * 0.65 && item.cpl > 0 && item.cpl <= avgCpl) {
-        tone = "success";
-        action = "Scale";
-      } else if (item.leads >= maxLeads * 0.6) {
-        tone = "success";
-        action = "Protect";
-      } else if (item.cpl > avgCpl && item.leads > 0) {
-        tone = "warning";
-        action = "Fix";
-      } else {
-        tone = "warning";
-        action = "Test";
-      }
-    } else {
-      const freqHealth = item.frequency <= 2.3
-        ? 1
-        : clampNumber(1 - ((item.frequency - 2.3) / Math.max(1.2, maxFreq - 2.3)), 0, 1);
-
-      score = (
-        ratio(item.reach, maxReach) * 0.40 +
-        inverseRatio(item.cpm, maxCpm) * 0.26 +
-        freqHealth * 0.20 +
-        ratio(item.ctr, maxCtr) * 0.14
-      ) * 100;
-
-      primaryLabel = "Reach";
-      primaryValue = formatDashboardNumber(item.reach, 0);
-      secondaryLabel = "CPM";
-      secondaryValue = formatDashboardCurrency(item.cpm);
-      note = `${formatDashboardPercent(item.ctr)} CTR with ${formatDashboardNumber(item.frequency, 2)} frequency.`;
-
-      if (item.frequency > Math.max(3.2, avgFreq * 1.15)) {
-        tone = "warning";
-        action = "Refresh";
-      } else if (item.spend > avgSpend && item.cpm > maxCpm * 0.82) {
-        tone = "danger";
-        action = "Trim";
-      } else if (score >= 70) {
-        tone = "success";
-        action = "Scale";
-      } else {
-        tone = "warning";
-        action = "Watch";
-      }
-    }
-
-    return {
-      ...item,
-      score,
-      scorePercent: clampNumber(score / 100, 0, 1) * 100,
-      tone,
-      action,
-      primaryLabel,
-      primaryValue,
-      secondaryLabel,
-      secondaryValue,
-      note
-    };
-  });
-
-  const sorted = [...scored].sort((left, right) => right.score - left.score);
-  const pulseRows = sorted.slice(0, 6).map((item) => ({
-    name: item.campaign.name,
-    action: item.action,
-    tone: item.tone,
-    note: item.note,
-    primaryLabel: item.primaryLabel,
-    primaryValue: item.primaryValue,
-    secondaryLabel: item.secondaryLabel,
-    secondaryValue: item.secondaryValue,
-    scorePercent: item.scorePercent
-  }));
-
+// The table under each lens lists its campaigns by spend, largest first.
+//
+// A "Campaign pulse" used to sit above it: every campaign scored with hand-tuned weights
+// over unweighted averages of per-campaign ratios, then labelled "Scale", "Cut waste" or
+// "Stop bleed". A campaign with no purchases scored the best possible CPA. It was
+// generated advice over invented priorities, the same kind of panel already removed from
+// General, and it is gone.
+function buildDashboardAnalysis(campaigns) {
   return {
-    pulseRows,
-    tableCampaigns: sorted.map((item) => item.campaign)
+    pulseRows: [],
+    tableCampaigns: [...(campaigns || [])].sort((left, right) => toFiniteNumber(right.spend_value) - toFiniteNumber(left.spend_value))
   };
 }
 
@@ -13609,7 +13130,7 @@ function renderDashboard() {
     if (lens === "expansion") return;
     analysis = lens === "general"
       ? buildGeneralDashboardAnalysis(allCampaigns)
-      : buildDashboardAnalysis(lensCampaigns, lens);
+      : buildDashboardAnalysis(lensCampaigns);
   });
   appState.dashboardAnalysis = analysis;
 
@@ -13618,10 +13139,10 @@ function renderDashboard() {
       // Reads the analysis, so it can fail for the same reasons the analysis can. A
       // generic heading is a better outcome than an unrendered page.
       let copy = {
-        kicker: "Daily operator view",
+        kicker: "All campaigns",
         title: "General",
         subtitle: "",
-        tableTitle: "Campaign snapshot"
+        tableTitle: "All campaigns"
       };
       renderPanelSafely("Hero copy", () => {
         copy = getGeneralHeroCopy(analysis, allCampaigns);
@@ -13636,35 +13157,27 @@ function renderDashboard() {
         tableTitle: "Expansion"
       };
     }
-    if (lens === "conversion_incremental") {
+    if (lens === "conversion") {
       return {
-        kicker: "Incremental campaigns",
-        title: "Campaigns on incremental attribution.",
-        subtitle: "Meta reports these separately from the rest of conversion. The figures inside are still standard attribution - the split is the grouping, not a measured uplift.",
-        tableTitle: "Incremental conversion snapshot"
-      };
-    }
-    if (lens === "conversion_standard") {
-      return {
-        kicker: "Standard operator view",
-        title: "Standard conversion. Clean view.",
-        subtitle: "Decide from the numbers Meta reports right now.",
-        tableTitle: "Conversion snapshot (standard)"
+        kicker: "Conversion",
+        title: "Purchases, revenue and new customers",
+        subtitle: "Every campaign with a conversion objective. Results use Meta's incremental attribution for every campaign, so periods and campaigns compare like for like.",
+        tableTitle: "Conversion campaigns"
       };
     }
     if (lens === "leads") {
       return {
-        kicker: "Lead generation cockpit",
-        title: "Leads. Volume with discipline.",
-        subtitle: "Strict on lead yield and CPL.",
-        tableTitle: "Lead generation snapshot"
+        kicker: "Leads",
+        title: "Lead volume and cost",
+        subtitle: "Every campaign with a leads objective. Leads are counted as Meta reports them: they happen on Meta, so there is nothing to attribute.",
+        tableTitle: "Lead campaigns"
       };
     }
     return {
-      kicker: "Awareness command view",
-      title: "Brand awareness. Reach without waste.",
-      subtitle: "Stay ruthless on reach, repetition and cost.",
-      tableTitle: "Awareness snapshot"
+      kicker: "Brand awareness",
+      title: "Reach, frequency and cost",
+      subtitle: "Every campaign with an awareness objective. Reach is deduplicated by Meta across the whole set.",
+      tableTitle: "Awareness campaigns"
     };
   })();
 
@@ -13677,12 +13190,10 @@ function renderDashboard() {
   const isEmptyLensState = !overviewVisible && !expansionVisible && !lensHasCampaigns;
   const expansionViewNode = document.getElementById("expansion-view");
   const dashboardPanel = document.getElementById("dashboard-panel");
-  const pulseNode = document.getElementById("campaign-pulse-list")?.closest("section.card");
   const statsGridNode = document.getElementById("stats-grid");
   const trendDeckNode = document.getElementById("trend-deck");
   const overviewGridNode = document.getElementById("overview-grid");
   const operatorFeedHeadNode = document.getElementById("operator-feed-head");
-  const decisionRailNode = document.getElementById("decision-rail");
   const dashboardGridNode = document.getElementById("dashboard-grid");
   const playbookNode = document.getElementById("playbook");
   const playbookStatusNode = document.getElementById("playbook-status");
@@ -13767,10 +13278,6 @@ function renderDashboard() {
     // outside the playbook, so hiding the playbook does not reach it.
     renderMetaQualityPanel(expansionVisible ? [] : buildMetaQualityCards());
   });
-  const pulseLimit = lens === "awareness" || lens === "leads" ? 2 : 3;
-  renderPanelSafely("Campaign Pulse", () => {
-    renderCampaignPulse(isEmptyLensState ? [] : (analysis.pulseRows || []).slice(0, pulseLimit));
-  });
   renderPanelSafely("Campaign Table", () => {
     renderCampaignTable(isEmptyLensState ? [] : analysis.tableCampaigns, lens, {
       currency: appState.metaCurrency || "DKK"
@@ -13793,14 +13300,8 @@ function renderDashboard() {
   if (statsGridNode) {
     statsGridNode.hidden = isEmptyLensState || !renderedStats.length;
   }
-  if (pulseNode) {
-    pulseNode.hidden = overviewVisible || isEmptyLensState;
-  }
   if (operatorFeedHeadNode) {
     operatorFeedHeadNode.hidden = overviewVisible || isEmptyLensState;
-  }
-  if (decisionRailNode) {
-    decisionRailNode.hidden = overviewVisible || isEmptyLensState;
   }
   if (dashboardGridNode) {
     dashboardGridNode.hidden = overviewVisible || isEmptyLensState;
@@ -13814,36 +13315,10 @@ function renderDashboard() {
   };
 
   const copyMap = {
-    general: {
-      statusTitle: "General performance overview",
-      statusSub: "",
-      nextTitle: "Next actions",
-      nextSub: "Highest leverage moves across the account."
-    },
-    awareness: {
-      statusTitle: "Reach status",
-      statusSub: "Reach, CPM and repetition health.",
-      nextTitle: "Next awareness moves",
-      nextSub: "Scale, protect or trim awareness delivery."
-    },
-    leads: {
-      statusTitle: "Lead flow",
-      statusSub: "Lead volume and CPL health.",
-      nextTitle: "Next lead moves",
-      nextSub: "Scale, fix or test lead acquisition."
-    },
-    conversion_standard: {
-      statusTitle: "Revenue health",
-      statusSub: "ROAS and CPA clarity for standard attribution.",
-      nextTitle: "Next conversion moves",
-      nextSub: "Scale, protect or fix standard conversion."
-    },
-    conversion_incremental: {
-      statusTitle: "Incremental campaigns",
-      statusSub: "How the campaigns Meta reports on incremental attribution are performing.",
-      nextTitle: "Next incremental moves",
-      nextSub: "Priority actions inside incremental campaigns."
-    }
+    general: { statusTitle: "General performance overview", statusSub: "", nextTitle: "Campaigns", nextSub: "" },
+    awareness: { statusTitle: "Reach status", statusSub: "", nextTitle: "Campaigns", nextSub: "Every awareness campaign in the range, by spend." },
+    leads: { statusTitle: "Lead flow", statusSub: "", nextTitle: "Campaigns", nextSub: "Every lead campaign in the range, by spend." },
+    conversion: { statusTitle: "Conversion performance", statusSub: "", nextTitle: "Campaigns", nextSub: "Every conversion campaign in the range, by spend. The last columns show what Meta reports under each campaign's own attribution setting, for finding a figure in Ads Manager." }
   };
   setPlaybookCopy(copyMap[lens] || copyMap.general);
 
@@ -13870,22 +13345,8 @@ function renderDashboard() {
 
   moveToStack(
     playbookNextStack,
-    isEmptyLensState ? [] : [operatorFeedHeadNode, decisionRailNode, dashboardGridNode]
+    isEmptyLensState ? [] : [operatorFeedHeadNode, dashboardGridNode]
   );
-
-  const pulseTitle = document.getElementById("dashboard-pulse-title");
-  if (pulseTitle) {
-    pulseTitle.textContent = lens === "general"
-      ? "Campaign pulse"
-      : lens === "awareness"
-      ? "Campaign pulse"
-      : lens === "leads"
-        ? "Lead ranking"
-      : lens === "conversion_incremental"
-        ? "Incremental ranking"
-        : "Conversion ranking";
-  }
-
 
   // Reported once, after every panel has had its turn, so a single failure is visible
   // without hiding the panels that rendered fine.

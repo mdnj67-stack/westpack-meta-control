@@ -65,11 +65,6 @@ const META_INSIGHTS_CACHE_MAX_AGE_MS = 15 * 60 * 1000;
 // finished, so the series barely changes; a long TTL keeps the widest query off the
 // per-refresh path, which matters while the app is on the development access tier.
 const META_ACQUISITION_TREND_CACHE_MAX_AGE_MS = 3 * 60 * 60 * 1000;
-// Meta returns the standard figures for the incrementality attribution window on this
-// account, so these two queries change nothing on screen. They stay only to notice if
-// that ever changes, which is a property of the account's measurement setup rather than
-// of its spend, so they do not need refetching every quarter hour.
-const META_INCREMENTAL_INSIGHTS_CACHE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const META_SERVER_CRON_SCHEDULES = ["45 5 * * *"];
 // Fifteen seconds was tighter than this account's heaviest query: the ad-set daily
 // insights call was measured at 15,009ms, so it failed by nine milliseconds and took the
@@ -116,10 +111,6 @@ const LEAD_ACTION_TYPES = [
   "submit_application"
 ];
 
-const META_ATTRIBUTION_OVERRIDES = {
-  campaignIds: {},
-  campaignNames: {}
-};
 const {
   buildMetaResourceCacheKey,
   buildSnapshotCacheKey,
@@ -165,7 +156,6 @@ const {
   sortSeries,
   splitSeriesByDateRange,
   classifyCampaign,
-  resolveConversionAttribution,
   normalizeBudgetValue,
   formatCurrency,
   resolveBudgetNormalization,
@@ -179,14 +169,8 @@ const {
   buildSnapshotDashboardAssembly
 } = createMetaSnapshotDashboardBuilder({
   splitByCategory,
-  splitConversionByAttribution,
-  buildIncrementalLensCampaigns,
-  findCampaignIdOverlap,
   classifyCampaign,
-  hasIncrementalNameTag,
   buildQualityWarnings,
-  resolveConversionAttribution,
-  classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildCustomerAcquisition,
@@ -256,23 +240,6 @@ function normalizeCurrencyCode(value, fallback = "DKK") {
   return normalized || fallback;
 }
 
-function resolveAttributionOverride(campaign) {
-  const campaignId = String(campaign?.id || "").trim();
-  const campaignName = String(campaign?.name || "").trim().toLowerCase();
-
-  const byId = META_ATTRIBUTION_OVERRIDES.campaignIds?.[campaignId];
-  if (byId === "standard" || byId === "incremental") {
-    return { mode: byId, source: "manual override", explicit: true };
-  }
-
-  const byName = META_ATTRIBUTION_OVERRIDES.campaignNames?.[campaignName];
-  if (byName === "standard" || byName === "incremental") {
-    return { mode: byName, source: "manual override", explicit: true };
-  }
-
-  return null;
-}
-
 // The browser formats every other figure through src/format.js. These few are formatted
 // here because they are computed here, so they have to agree with it: same locale, same
 // decimals. There is no bundler in this repo, so the two constants are duplicated and
@@ -325,162 +292,6 @@ function getRoasFromInsight(insight) {
 
 function normalizeObjective(value) {
   return String(value || "").trim().toUpperCase();
-}
-
-function hasIncrementalNameTag(value) {
-  const name = String(value || "").trim().toLowerCase();
-  if (!name) {
-    return false;
-  }
-
-  // The team tags its incremental campaigns in the campaign name and maintains that
-  // register deliberately, so the name is the right source. It is also typed by hand: the
-  // account rebuild on 2026-09-09 spelled the three new ones "Inkremental" where the
-  // previous set said "Inkrementel", and that one vowel put all three in the standard
-  // lens along with 216,000 DKK of monthly budget.
-  //
-  // Matching the stem covers inkrementel, inkremental, inkrementelle, incremental and
-  // incrementality without needing another edit the next time someone types it
-  // differently. "in[kc]rement" is specific enough that no ordinary campaign name hits it
-  // by accident.
-  return /\bin[kc]rement\w*\b/.test(name)
-    || /\[inc\]|\(inc\)/.test(name);
-}
-
-function hasStandardNameTag(value) {
-  const name = String(value || "").trim().toLowerCase();
-  if (!name) {
-    return false;
-  }
-
-  return /\bstandard\b/.test(name)
-    || /\[std\]|\(std\)/.test(name);
-}
-
-function resolveAttributionNameTag(campaign) {
-  const rawName = String(campaign?.name || "").trim();
-  if (!rawName) {
-    return null;
-  }
-
-  if (hasIncrementalNameTag(rawName)) {
-    return { mode: "incremental", source: "campaign naming tag", explicit: true };
-  }
-  if (hasStandardNameTag(rawName)) {
-    return { mode: "standard", source: "campaign naming tag", explicit: true };
-  }
-
-  return null;
-}
-
-// Meta's `attribution_setting`, as returned on the campaign's insights row. Only a value
-// that actually names incremental attribution is treated as a reading; anything else -
-// "7-day click", an empty string on an account that does not report it, an unfamiliar
-// phrasing - falls through to the name tag rather than being read as a denial. An absent
-// field must not silently reclassify a campaign the team has tagged.
-function resolveReportedAttribution(campaign) {
-  const setting = String(campaign?.attribution_setting || "").trim().toLowerCase();
-  if (!setting) {
-    return null;
-  }
-
-  // Meta answers with machine values, not the wording Ads Manager prints: the account
-  // returns "incrementality", "1d_view_7d_click_1d_ev", "1d_view_28d_click", "7d_click"
-  // and "multiple". Underscores count as word characters, so a word-boundary pattern
-  // around "click" matches nothing inside 7d_click_1d_ev - the first version of this did
-  // exactly that and sent every standard campaign down to the name tag instead.
-  if (/in[kc]rement/.test(setting)) {
-    return { mode: "incremental", source: "Meta attribution setting", explicit: true };
-  }
-
-  // "multiple" means this campaign's ad sets disagree with each other. That is a real
-  // answer to a different question and must not be read as standard; it falls through so
-  // the name tag can speak, and is reported if nothing else can.
-  if (setting === "multiple") {
-    return null;
-  }
-
-  // A named conversion window - any combination of Nd_click, Nd_view, Nd_ev - is a
-  // positive statement that the campaign is on standard attribution.
-  if (/\d+d_(view|click|ev)/.test(setting)) {
-    return { mode: "standard", source: "Meta attribution setting", explicit: true };
-  }
-
-  return null;
-}
-
-function resolveConversionAttribution(campaign, adSetNames = [], adSetAttributionSpecs = []) {
-  const override = resolveAttributionOverride(campaign);
-  if (override) {
-    return override;
-  }
-
-  // Meta's own reading comes before the campaign name. The name tag was only ever a
-  // stand-in for a field the account did not report, and this dashboard's standing rule
-  // is that a category comes from the source system wherever the source system has one.
-  //
-  // Ads Manager shows this as the "Attribution setting" column: the three Inkremental
-  // campaigns read "Incremental attribution" there while Conv - 04 - EU - Standard reads
-  // "7-day click". A hand-typed name already misfiled all three once, on a single vowel.
-  const reported = resolveReportedAttribution(campaign);
-  if (reported) {
-    return reported;
-  }
-
-  const nameTag = resolveAttributionNameTag(campaign);
-  if (nameTag) {
-    return nameTag;
-  }
-
-  const explicitMode = String(campaign?.attribution_mode || campaign?.attributionMode || campaign?.measurement_mode || "")
-    .trim()
-    .toLowerCase();
-  if (explicitMode === "standard") {
-    return { mode: "standard", source: "campaign field", explicit: true };
-  }
-
-  return { mode: "standard", source: "no attribution tag in the campaign name", explicit: false };
-}
-
-function classifyConversionAttribution(campaign) {
-  return resolveConversionAttribution(campaign, campaign?.adset_names || [], campaign?.adset_attribution_specs || []).mode;
-}
-
-function splitConversionByAttribution(campaigns) {
-  const buckets = { standard: [], incremental: [] };
-  for (const campaign of campaigns || []) {
-    const mode = classifyConversionAttribution(campaign);
-    buckets[mode].push(campaign);
-  }
-  return buckets;
-}
-
-function buildIncrementalLensCampaigns(campaigns = []) {
-  const conversionCampaigns = splitByCategory(campaigns).conversion;
-  return splitConversionByAttribution(conversionCampaigns).incremental
-    .map((campaign) => ({
-      ...campaign,
-      attribution_mode: "incremental",
-      attribution_source: campaign?.attribution_source || "campaign naming tag",
-      purchases_value: campaign?.incremental_metrics_available
-        ? readNumber(campaign?.incremental_purchases_value, 0)
-        : readNumber(campaign?.purchases_value, 0),
-      revenue_value: campaign?.incremental_metrics_available
-        ? readNumber(campaign?.incremental_revenue_value, 0)
-        : readNumber(campaign?.revenue_value, 0),
-      roas_value: campaign?.incremental_metrics_available
-        ? readNumber(campaign?.incremental_roas_value, 0)
-        : readNumber(campaign?.roas_value, 0),
-      cpa_value: campaign?.incremental_metrics_available
-        ? readNumber(campaign?.incremental_cpa_value, 0)
-        : readNumber(campaign?.cpa_value, 0),
-      series: Array.isArray(campaign?.incremental_series) && campaign.incremental_series.length
-        ? campaign.incremental_series
-        : campaign.series,
-      comparison_window: campaign?.incremental_metrics_available
-        ? (campaign?.incremental_comparison_window || campaign?.comparison_window || null)
-        : (campaign?.comparison_window || null)
-    }));
 }
 
 function sumMetric(campaigns, key) {
@@ -572,36 +383,23 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
     rangeLabel: dateScope?.label || "Selected range",
     summaryMeta: `Actual spend covers ${dateScope?.label || "the selected range"}. Planned budget is always stated per 30-day month, and pacing compares a 30-day spend pace against it.`,
     title: "Spend and planned budget",
-    subtitle: `Actual spend for ${dateScope?.label || "the selected range"} against the 30-day planned budget, grouped by the objective Meta reports on each campaign. Conversion combines standard and incremental campaigns here.`,
+    subtitle: `Actual spend for ${dateScope?.label || "the selected range"} against the 30-day planned budget, grouped by the objective Meta reports on each campaign.`,
     unclassifiedAmount: readNumber(unclassifiedItem?.amount, 0),
     unclassifiedCampaignCount: readNumber(unclassifiedItem?.campaignCount, 0),
     items
   };
 }
 
-function findCampaignIdOverlap(leftCampaigns = [], rightCampaigns = []) {
-  const leftIds = new Set((leftCampaigns || []).map((campaign) => String(campaign?.id || "")).filter(Boolean));
-  return (rightCampaigns || [])
-    .map((campaign) => String(campaign?.id || ""))
-    .filter((id) => id && leftIds.has(id));
-}
-
 function buildQualityWarnings({
   budgetNormalization,
-  includedCampaignCount = 0,
-  campaignsWithPeriodDataCount = 0,
+  activeCampaignsWithoutSpend = [],
+  dateScope = null,
   awarenessCampaignCount = 0,
   awarenessUsingAdSetInsights = 0,
   awarenessAdSetBreakdownRejected = 0,
-  conversionCampaignCount = 0,
-  explicitIncrementalCount = 0,
-  incrementalNamedCount = 0,
-  attributionOverlapCount = 0,
-  nonNamedIncrementalMetricsCount = 0,
-  untaggedConversionCampaigns = [],
-  incrementalMatchingStandardCount = 0,
-  incrementalLensCampaignCount = 0,
+  acquisitionTrendUnavailable = false,
   campaignSpendTotal = 0,
+  accountSpend = NaN,
   awarenessCampaignSpendTotal = 0,
   awarenessAdSetSpendTotal = 0,
   budgetAllocation = null,
@@ -654,8 +452,13 @@ function buildQualityWarnings({
     warnings.push(`${budgetAllocation.campaignsWithoutBudgetCount} active campaign(s) reported no daily or lifetime budget and contribute nothing to the planned budget split.`);
   }
 
-  if (includedCampaignCount > campaignsWithPeriodDataCount) {
-    warnings.push("Some included campaigns are active now but have no spend data in the selected period.");
+  // Named, and only once the range holds a finished day: on "Today" every campaign has
+  // spent nothing yet at 01:00 in the account's timezone, which is not a finding.
+  const rangeHasFinishedDay = resolveCompletedDayComparison(dateScope)?.comparable !== false;
+  if (activeCampaignsWithoutSpend.length > 0 && rangeHasFinishedDay) {
+    const names = activeCampaignsWithoutSpend.slice(0, 4).map((campaign) => `"${String(campaign?.name || "unnamed")}"`).join(", ");
+    const remainder = activeCampaignsWithoutSpend.length > 4 ? ` and ${activeCampaignsWithoutSpend.length - 4} more` : "";
+    warnings.push(`${activeCampaignsWithoutSpend.length} active campaign${activeCampaignsWithoutSpend.length === 1 ? " has" : "s have"} spent nothing in the selected period: ${names}${remainder}.`);
   }
 
   if (awarenessAdSetBreakdownRejected > 0) {
@@ -675,47 +478,18 @@ function buildQualityWarnings({
     warnings.push("No campaign spend was returned for the selected period.");
   }
 
-  if (conversionCampaignCount > 0 && incrementalNamedCount === 0) {
-    warnings.push("No conversion campaign carries an incremental tag in its name, so the incremental lens is empty.");
+  // The campaign rows must add up to what the account itself reports. Meta rounds per
+  // entity, so a few kroner either way is expected; more than 1% means rows are missing,
+  // for instance a campaign archived after it spent.
+  if (Number.isFinite(accountSpend) && accountSpend > 0) {
+    const gap = Math.abs(accountSpend - campaignSpendTotal);
+    if (gap / accountSpend > 0.01) {
+      warnings.push(`Campaign spend adds up to ${formatCurrency(campaignSpendTotal, accountCurrency)}, but the account reports ${formatCurrency(accountSpend, accountCurrency)} for the same period. Some spend is not in the campaign figures.`);
+    }
   }
 
-  if (attributionOverlapCount > 0) {
-    warnings.push("Standard and incremental conversion lenses overlap. Review attribution classification immediately.");
-  }
-
-  // "Incremental insight rows existed for N conversion campaigns with no incremental tag"
-  // used to live here. It was written when the name tag decided the split, and it counted
-  // standard campaigns that Meta returned incrementality rows for. Meta returns those rows
-  // for every campaign on this account, so the line fired on every standard campaign,
-  // every time, and its wording pointed at a tag that no longer decides anything.
-  //
-  // The substantive point - that those rows come back identical to standard attribution -
-  // is the warning immediately below, which says it once and says it properly.
-
-  // Named, because knowing which campaign lost its tag is the difference between a
-  // warning you can act on and one you scroll past.
-  if (untaggedConversionCampaigns.length > 0) {
-    const names = untaggedConversionCampaigns
-      .slice(0, 4)
-      .map((campaign) => `"${String(campaign?.name || "unnamed")}"`)
-      .join(", ");
-    const remainder = untaggedConversionCampaigns.length > 4
-      ? ` and ${untaggedConversionCampaigns.length - 4} more`
-      : "";
-    warnings.push(
-      `${untaggedConversionCampaigns.length} conversion campaign${untaggedConversionCampaigns.length === 1 ? "" : "s"} have no attribution setting reported by Meta and no tag in the name (${names}${remainder}), so ${untaggedConversionCampaigns.length === 1 ? "it is" : "they are"} being counted as standard. Set the attribution in Ads Manager, or tag the name, if that is wrong.`
-    );
-  }
-
-  // The incremental lens is the three campaigns the marketing team tags 'Inkrementel'.
-  // That grouping is deliberate and correct. What is not guaranteed is that Meta returns
-  // a different measurement for them: when the incrementality attribution window gives
-  // back the standard figures, the lens is a view of those campaigns and nothing more,
-  // and saying otherwise would present an uplift study that does not exist.
-  if (incrementalLensCampaignCount > 0 && incrementalMatchingStandardCount >= incrementalLensCampaignCount) {
-    warnings.push(
-      `Meta returned the same purchases and revenue for the incrementality attribution window as for standard attribution on all ${incrementalLensCampaignCount} incremental campaigns, so the incremental lens shows those campaigns under standard attribution, not a measured uplift.`
-    );
+  if (acquisitionTrendUnavailable) {
+    warnings.push("The day-by-day new-customer figures could not be read from Meta, so the new-customer comparison is missing from this snapshot.");
   }
 
   return warnings;
@@ -792,7 +566,7 @@ function buildLensStats(campaigns, lens, dateScope, options = {}) {
   }
 
   return [
-    { label: spendLabel, value: formatCurrency(spend, currency), meta: lens === "conversion_incremental" ? "Incremental campaigns" : "Conversion campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
+    { label: spendLabel, value: formatCurrency(spend, currency), meta: "Conversion campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
     { label: "Purchases", value: String(Math.round(purchases)), meta: "From actions", change: buildWindowChange(comparisonWindow, "purchases", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
     { label: "CPA", value: purchases > 0 ? formatCurrency(cpa, currency) : "--", meta: "Spend / purchases", change: buildWindowChange(comparisonWindow, "cpa", { positiveDirection: "down", windowLabel: changeWindowLabel }) },
     { label: "ROAS", value: roas ? roas.toFixed(2) : "--", meta: "Revenue / spend", change: buildWindowChange(comparisonWindow, "roas", { positiveDirection: "up", windowLabel: changeWindowLabel }) }
@@ -1435,7 +1209,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   const totalSpend = sumMetric(campaigns, "spend_value");
   const totalRevenue = sumMetric(campaigns, "revenue_value");
   const totalPurchases = sumMetric(campaigns, "purchases_value");
-  const tone = lens === "conversion_incremental" ? "incremental" : "conversion";
+  const tone = "conversion";
 
   return withTrendCardReading([
     {
@@ -1486,8 +1260,6 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
 function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {
   const deduplicatedAwarenessReach = readNumber(options.deduplicatedReach?.reach, 0);
   const buckets = splitByCategory(campaigns);
-  const conversionBuckets = splitConversionByAttribution(buckets.conversion);
-  const incrementalCampaigns = buildIncrementalLensCampaigns(campaigns);
   const totalSpend = sumMetric(campaigns, "spend_value");
   const spendShare = (value) => totalSpend > 0
     ? `${((readNumber(value, 0) / totalSpend) * 100).toFixed(1)}% of spend`
@@ -1517,16 +1289,10 @@ function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {
       items: buildTopItems(buckets.leads, "leads_value", (value) => `${formatDashboardNumber(value, 0)} leads`)
     },
     {
-      key: "convstd",
-      meta: [`${conversionBuckets.standard.length} campaigns in lens`, spendShare(sumMetric(conversionBuckets.standard, "spend_value"))].filter(Boolean).join(" · "),
-      metric: formatCurrency(sumMetric(conversionBuckets.standard, "revenue_value"), currency),
-      items: buildTopItems(conversionBuckets.standard, "revenue_value", (value) => formatCurrency(value, currency))
-    },
-    {
-      key: "convinc",
-      meta: [`${incrementalCampaigns.length} campaigns in lens`, spendShare(sumMetric(incrementalCampaigns, "spend_value"))].filter(Boolean).join(" · "),
-      metric: formatCurrency(sumMetric(incrementalCampaigns, "revenue_value"), currency),
-      items: buildTopItems(incrementalCampaigns, "revenue_value", (value) => formatCurrency(value, currency))
+      key: "conversion",
+      meta: [`${buckets.conversion.length} campaigns in lens`, spendShare(sumMetric(buckets.conversion, "spend_value"))].filter(Boolean).join(" · "),
+      metric: formatCurrency(sumMetric(buckets.conversion, "revenue_value"), currency),
+      items: buildTopItems(buckets.conversion, "revenue_value", (value) => formatCurrency(value, currency))
     }
   ];
 }
@@ -1673,70 +1439,42 @@ function buildValidationCheck(id, label, status, detail, extra = {}) {
   };
 }
 
-function isCloseEnough(left, right, tolerance = 0.05) {
-  return Math.abs(readNumber(left, 0) - readNumber(right, 0)) <= tolerance;
-}
-
-function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllocation = null }) {
+function buildDashboardValidation({ campaigns = [], dashboard = null }) {
   const quality = dashboard?.quality || {};
-  const visuals = dashboard?.visuals || {};
-  const split = quality.generalSpendDistribution || {};
-  const splitItems = Array.isArray(split.items) ? split.items : [];
-  const splitSpendSum = splitItems.reduce((sum, item) => sum + readNumber(item?.amount, 0), 0);
-  const splitBudgetSum = splitItems.reduce((sum, item) => sum + readNumber(item?.budgetAmount, 0), 0);
-  // The split states budget per 30-day month, so the reconciliation target is the monthly
-  // total, not the period-scaled one.
-  const expectedBudgetTotal = readNumber(split.totalBudgetAmount, readNumber(budgetAllocation?.totalMonthlyBudget, 0));
-  const expectedSpendTotal = readNumber(split.totalAmount, 0);
-  const requiredLenses = [
-    "general",
-    "awareness",
-    "leads",
-    "conversion_standard",
-    "conversion_incremental"
-  ];
-
-  const checks = [];
-  checks.push(buildValidationCheck(
-    "general-spend-sum",
-    "General spend split",
-    isCloseEnough(expectedSpendTotal, splitSpendSum) ? "pass" : "fail",
-    isCloseEnough(expectedSpendTotal, splitSpendSum)
-      ? "General objective spend split reconciles to the total spend."
-      : `Expected ${formatCurrency(expectedSpendTotal, dashboard?.currency || "DKK")} but summed ${formatCurrency(splitSpendSum, dashboard?.currency || "DKK")}.`,
-    {
-      expected: expectedSpendTotal,
-      actual: splitSpendSum,
-      delta: Number((expectedSpendTotal - splitSpendSum).toFixed(4))
-    }
-  ));
-
-  checks.push(buildValidationCheck(
-    "general-budget-sum",
-    "Planned budget split",
-    isCloseEnough(expectedBudgetTotal, splitBudgetSum) ? "pass" : "fail",
-    isCloseEnough(expectedBudgetTotal, splitBudgetSum)
-      ? "Objective planned budget split reconciles to the planned total."
-      : `Expected ${formatCurrency(expectedBudgetTotal, dashboard?.currency || "DKK")} but summed ${formatCurrency(splitBudgetSum, dashboard?.currency || "DKK")}.`,
-    {
-      expected: expectedBudgetTotal,
-      actual: splitBudgetSum,
-      delta: Number((expectedBudgetTotal - splitBudgetSum).toFixed(4))
-    }
-  ));
-
+  const currency = dashboard?.currency || "DKK";
   const statsByLens = dashboard?.statsByLens || {};
-  const heroByLens = visuals.heroPanelByLens || {};
-  const trendByLens = visuals.trendCardsByLens || {};
-  // General has no stat row by design: its totals and objective shares are the budget
-  // panel's, and repeating them was one fact in two places. Requiring one here would make
-  // a correct dashboard report itself invalid.
-  const statLenses = requiredLenses.filter((lens) => lens !== "general");
-  const missingStatsLenses = statLenses.filter((lens) => !Array.isArray(statsByLens[lens]) || !statsByLens[lens].length);
-  const missingHeroLenses = requiredLenses.filter((lens) => !Array.isArray(heroByLens[lens]) || !heroByLens[lens].length);
-  const missingTrendLenses = requiredLenses.filter((lens) => !Array.isArray(trendByLens[lens]) || !trendByLens[lens].length);
-  const overviewCards = Array.isArray(visuals.overviewCards) ? visuals.overviewCards : [];
+  const checks = [];
 
+  // The one reconciliation with a genuinely independent other side: what the campaign
+  // rows add up to against what Meta reports for the account as a whole. The split and
+  // budget checks that used to sit here compared a sum with itself and could not fail.
+  const campaignSpend = readNumber(quality.reconciliation?.campaignSpendTotal, sumMetric(campaigns, "spend_value"));
+  const accountSpend = readNumber(quality.reconciliation?.accountSpend, NaN);
+  if (Number.isFinite(accountSpend) && accountSpend > 0) {
+    const gap = Math.abs(accountSpend - campaignSpend);
+    const within = gap / accountSpend <= 0.01;
+    checks.push(buildValidationCheck(
+      "account-spend",
+      "Spend reconciles to the account",
+      within ? "pass" : "fail",
+      within
+        ? `Campaign spend ${formatCurrency(campaignSpend, currency)} matches the account's ${formatCurrency(accountSpend, currency)}.`
+        : `Campaign spend ${formatCurrency(campaignSpend, currency)} against the account's ${formatCurrency(accountSpend, currency)}.`,
+      { expected: accountSpend, actual: campaignSpend, delta: Number((accountSpend - campaignSpend).toFixed(2)) }
+    ));
+  } else {
+    checks.push(buildValidationCheck(
+      "account-spend",
+      "Spend reconciles to the account",
+      "warn",
+      "The account total did not come back, so campaign spend could not be checked against it."
+    ));
+  }
+
+  // General has no stat row by design: its totals and objective shares are the budget
+  // panel's, and repeating them was one fact in two places.
+  const statLenses = ["awareness", "leads", "conversion"];
+  const missingStatsLenses = statLenses.filter((lens) => !Array.isArray(statsByLens[lens]) || !statsByLens[lens].length);
   checks.push(buildValidationCheck(
     "lens-coverage",
     "Lens coverage",
@@ -1744,15 +1482,6 @@ function buildDashboardValidation({ campaigns = [], dashboard = null, budgetAllo
     !missingStatsLenses.length
       ? "Every lens that has a stat row has one."
       : `Missing stats for: ${missingStatsLenses.join(", ")}.`
-  ));
-
-  checks.push(buildValidationCheck(
-    "visual-coverage",
-    "Visual coverage",
-    (!missingHeroLenses.length && !missingTrendLenses.length && overviewCards.length === 4) ? "pass" : "warn",
-    (!missingHeroLenses.length && !missingTrendLenses.length && overviewCards.length === 4)
-      ? "Hero, trend and overview visuals are present for the dashboard payload."
-      : `Missing hero lenses: ${missingHeroLenses.join(", ") || "none"}. Missing trend lenses: ${missingTrendLenses.join(", ") || "none"}. Overview cards: ${overviewCards.length}/4.`
   ));
 
   checks.push(buildValidationCheck(
@@ -2185,16 +1914,13 @@ module.exports = async (req, res) => {
 
     const {
       aggregatedInsightsResponse: rawAggregatedInsightsResponse,
-      dailyInsightsResponse,
-      aggregatedIncrementalInsightsResponse,
-      dailyIncrementalInsightsResponse
+      dailyInsightsResponse
     } = await fetchCampaignInsightsCollections({
       accountId,
       accessToken: config.metaAccessToken,
       dateScope,
       comparisonDateScope,
       insightsCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
-      incrementalInsightsCacheMaxAgeMs: META_INCREMENTAL_INSIGHTS_CACHE_MAX_AGE_MS,
       timings,
       bypassCache: forceRefresh
     });
@@ -2216,8 +1942,6 @@ module.exports = async (req, res) => {
           || (Array.isArray(row?.actions) && row.actions.length > 0);
       })
     };
-
-    const incrementalInsightsAvailable = !aggregatedIncrementalInsightsResponse?.unavailable && !dailyIncrementalInsightsResponse?.unavailable;
 
     // New customers is the KPI the marketing team is measured on, so it needs a trend
     // beside the level: month to date against the same elapsed point last month.
@@ -2299,8 +2023,6 @@ module.exports = async (req, res) => {
 
     const insightMap = buildInsightMap(aggregatedInsightsResponse.data || [], "campaign_id");
     const seriesMap = buildSeriesMap(dailyInsightsResponse.data || [], "campaign_id");
-    const incrementalInsightMap = buildInsightMap(aggregatedIncrementalInsightsResponse.data || [], "campaign_id");
-    const incrementalSeriesMap = buildSeriesMap(dailyIncrementalInsightsResponse.data || [], "campaign_id");
     const adSetInsightMap = buildInsightMap(aggregatedAdSetInsightsResponse.data || [], "adset_id");
     const adSetSeriesMap = buildSeriesMap(dailyAdSetInsightsResponse.data || [], "adset_id");
 
@@ -2349,9 +2071,6 @@ module.exports = async (req, res) => {
       adSetsByCampaignId,
       insightMap,
       seriesMap,
-      incrementalInsightMap,
-      incrementalSeriesMap,
-      incrementalInsightsAvailable,
       dateScope,
       accountCurrency,
       budgetNormalization,
@@ -2378,6 +2097,7 @@ module.exports = async (req, res) => {
       budgetNormalization,
       customerConversionActionTypes,
       acquisitionTrendRows: acquisitionTrendResponse?.data || [],
+      acquisitionTrendUnavailable: Boolean(acquisitionTrendResponse?.unavailable),
       accountTimezone: account.timezone_name || "",
       deduplicatedReach: { account: accountReach, awareness: awarenessReach },
       awarenessUsingAdSetInsights,
@@ -2393,7 +2113,6 @@ module.exports = async (req, res) => {
       aggregatedAdSetInsightsResponse,
       dailyAdSetInsightsResponse,
       adsResponse,
-      incrementalInsightsAvailable,
       timings,
       buildScheduleDiagnostics
     });
@@ -2485,9 +2204,6 @@ module.exports = async (req, res) => {
 // without standing up an HTTP request or calling the Meta Graph API.
 module.exports.__internals = {
   buildHeroPanelItems,
-  resolveReportedAttribution,
-  resolveConversionAttribution,
-  classifyConversionAttribution,
   buildDashboardValidation,
   buildGeneralSpendDistribution,
   buildLensStats,

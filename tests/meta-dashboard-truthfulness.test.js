@@ -125,39 +125,6 @@ test("a preset range means today in the ad account timezone, not on the server",
   assert.doesNotThrow(() => buildPresetRange("today", "Not/AZone"));
 });
 
-test("an incremental lens that Meta does not measure separately says so", () => {
-  // The three campaigns tagged Inkrementel are a deliberate grouping the marketing team
-  // maintains, and it stays. What must not stand is presenting them as a measured uplift
-  // when Meta returns the standard figures for the incrementality attribution window.
-  const identical = buildQualityWarnings({
-    budgetNormalization: { divisor: 100, currency: "DKK" },
-    includedCampaignCount: 11,
-    campaignsWithPeriodDataCount: 11,
-    incrementalLensCampaignCount: 3,
-    incrementalMatchingStandardCount: 3,
-    campaignSpendTotal: 249862,
-    budgetAllocation: null
-  });
-  assert.ok(
-    identical.some((warning) => /same purchases and revenue/.test(warning)),
-    "the dashboard must disclose that the incremental lens is not a separate measurement"
-  );
-
-  const measured = buildQualityWarnings({
-    budgetNormalization: { divisor: 100, currency: "DKK" },
-    includedCampaignCount: 11,
-    campaignsWithPeriodDataCount: 11,
-    incrementalLensCampaignCount: 3,
-    incrementalMatchingStandardCount: 1,
-    campaignSpendTotal: 249862,
-    budgetAllocation: null
-  });
-  assert.ok(
-    !measured.some((warning) => /same purchases and revenue/.test(warning)),
-    "and it must stay quiet once Meta really does return different figures"
-  );
-});
-
 test("campaign status is Meta's delivery state, never a fixed label", () => {
   const transformers = readFileSync(join(root, "server", "meta", "_snapshot-transformers.js"), "utf8");
   assert.ok(!/status: "Healthy"/.test(transformers), "the hard-coded status is back");

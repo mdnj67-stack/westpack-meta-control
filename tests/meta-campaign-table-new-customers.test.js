@@ -33,18 +33,13 @@ function keys(lens) {
   return columnsForLens(lens).map((column) => column.key);
 }
 
-test("both conversion views show new customers and what each one costs", () => {
-  for (const lens of ["conversion_standard", "conversion_incremental"]) {
-    assert.deepEqual(
-      labels(lens),
-      ["Campaign", "Spend", "New customers", "Cost / new", "CPA", "ROAS", "Status"],
-      `${lens} is not showing the acquisition columns`
-    );
-  }
-
-  // The two views must stay identical: they are the same campaigns split by a naming tag,
-  // so a column present in one and missing from the other would be an accident.
-  assert.deepEqual(keys("conversion_standard"), keys("conversion_incremental"));
+test("the conversion view shows new customers, what each one costs, and what Meta reports", () => {
+  // One conversion view since 2026-10-01. The comparable columns come first; the last two
+  // are Meta's own figure under each campaign's setting, for finding it in Ads Manager.
+  assert.deepEqual(
+    labels("conversion"),
+    ["Campaign", "Spend", "New customers", "Cost / new", "Purchases", "CPA", "ROAS", "ROAS as reported", "Attribution setting", "Status"]
+  );
 });
 
 test("the lenses that do not measure customers are left alone", () => {

@@ -184,17 +184,6 @@ test("General ships no stat row and still passes its own validation", () => {
   assert.equal(dashboard.quality.validation.failCount, 0, JSON.stringify(dashboard.quality.validation.checks.filter((c) => c.status !== "pass")));
 });
 
-test("an incremental lens Meta does not measure separately is disclosed in the warnings", () => {
-  const { dashboard } = assemble({ account: null, awareness: null });
-
-  assert.equal(dashboard.quality.attributionValidation.incrementalCount, 3);
-  assert.equal(dashboard.quality.attributionValidation.incrementalMatchingStandardCount, 3);
-  assert.ok(
-    dashboard.quality.warnings.some((warning) => /same purchases and revenue/.test(warning)),
-    `no disclosure among: ${JSON.stringify(dashboard.quality.warnings)}`
-  );
-});
-
 test("the payload no longer carries the lens summaries nothing read", () => {
   const { dashboard } = assemble({ account: null, awareness: null });
   assert.equal(dashboard.summaryByLens, undefined);

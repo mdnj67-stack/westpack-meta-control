@@ -162,11 +162,8 @@
           <button type="button" class="dashboard-subtab" data-dashboard-lens="leads" aria-selected="false">
             Leads
           </button>
-          <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion_standard" aria-selected="false">
+          <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion" aria-selected="false">
             Conversion
-          </button>
-          <button type="button" class="dashboard-subtab" data-dashboard-lens="conversion_incremental" aria-selected="false">
-            Inkrementel
           </button>
           <button type="button" class="dashboard-subtab" data-dashboard-lens="expansion" aria-selected="false">
             Expansion
@@ -175,9 +172,9 @@
 
         <div class="hero">
           <div class="hero-copy">
-            <p class="hero-kicker" id="dashboard-hero-kicker">Operator cockpit</p>
-            <h3 id="dashboard-hero-title">Active campaigns. Clear next moves.</h3>
-            <p class="hero-sub" id="dashboard-hero-subtitle">One clean view per decision type. No Meta UI mud.</p>
+            <p class="hero-kicker" id="dashboard-hero-kicker">All campaigns</p>
+            <h3 id="dashboard-hero-title">General</h3>
+            <p class="hero-sub" id="dashboard-hero-subtitle"></p>
           </div>
           <div class="hero-actions">
             <div class="hero-panel" id="hero-panel"></div>
@@ -241,24 +238,14 @@
           <article class="card overview-card tone-conversion">
             <div class="card-header">
               <div>
-                <h3>Conversion (standard)</h3>
-                <p class="field-hint" id="overview-convstd-meta"></p>
+                <h3>Conversion</h3>
+                <p class="field-hint" id="overview-conversion-meta"></p>
               </div>
             </div>
-            <div class="overview-metric" id="overview-convstd-metric"></div>
-            <div class="overview-list" id="overview-convstd-list"></div>
+            <div class="overview-metric" id="overview-conversion-metric"></div>
+            <div class="overview-list" id="overview-conversion-list"></div>
           </article>
 
-          <article class="card overview-card tone-incremental">
-            <div class="card-header">
-              <div>
-                <h3>Conversion (incremental)</h3>
-                <p class="field-hint" id="overview-convinc-meta"></p>
-              </div>
-            </div>
-            <div class="overview-metric" id="overview-convinc-metric"></div>
-            <div class="overview-list" id="overview-convinc-list"></div>
-          </article>
         </section>
 
         <!-- The expansion view stands outside the playbook because it answers a
@@ -290,24 +277,12 @@
           <section class="playbook-section" id="playbook-next">
             <div class="dashboard-section-head" id="operator-feed-head">
               <div>
-                <p class="section-label">Next decision</p>
-                <h3 id="playbook-next-title">Priority queue</h3>
+                <p class="section-label">Campaigns</p>
+                <h3 id="playbook-next-title">Campaigns</h3>
               </div>
-              <p id="playbook-next-sub">Fast reads for the next budget, creative and hygiene moves.</p>
+              <p id="playbook-next-sub"></p>
             </div>
             <div class="playbook-stack" id="playbook-next-stack">
-              <div class="decision-rail" id="decision-rail">
-                <section class="card span-two">
-                  <div class="card-header">
-                    <div>
-                      <h3 id="dashboard-pulse-title">Campaign pulse</h3>
-                      
-                    </div>
-                  </div>
-                  <div class="campaign-pulse-list" id="campaign-pulse-list"></div>
-                </section>
-              </div>
-
               <div class="dashboard-grid" id="dashboard-grid">
                 <section class="card span-two">
                   <div class="card-header">

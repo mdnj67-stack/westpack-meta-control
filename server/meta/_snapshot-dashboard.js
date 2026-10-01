@@ -1,13 +1,7 @@
 function createMetaSnapshotDashboardBuilder({
   splitByCategory,
-  splitConversionByAttribution,
-  buildIncrementalLensCampaigns,
-  findCampaignIdOverlap,
   classifyCampaign,
-  hasIncrementalNameTag,
   buildQualityWarnings,
-  resolveConversionAttribution,
-  classifyConversionAttribution,
   normalizeBudgetValue,
   calculateBudgetAllocation,
   buildCustomerAcquisition,
@@ -25,22 +19,10 @@ function createMetaSnapshotDashboardBuilder({
   function buildBudgetCampaigns({
     budgetCampaignsRaw = [],
     enrichedCampaignById,
-    adSetsByCampaignId,
     budgetNormalization
   }) {
     return budgetCampaignsRaw.map((campaign) => {
       const enrichedCampaign = enrichedCampaignById.get(String(campaign.id || "")) || null;
-      const linkedAdSets = adSetsByCampaignId.get(String(campaign.id || "")) || [];
-      const adSetNames = linkedAdSets.map((adSet) => String(adSet?.name || ""));
-      const adSetAttributionSpecs = linkedAdSets.map((adSet) => Array.isArray(adSet?.attribution_spec) ? adSet.attribution_spec : []);
-      const attribution = enrichedCampaign
-        ? {
-            mode: String(enrichedCampaign.attribution_mode || "standard"),
-            source: String(enrichedCampaign.attribution_source || "snapshot"),
-            explicit: Boolean(enrichedCampaign.attribution_explicit)
-          }
-        : resolveConversionAttribution(campaign, adSetNames, adSetAttributionSpecs);
-
       return {
         id: campaign.id,
         name: campaign.name,
@@ -52,10 +34,7 @@ function createMetaSnapshotDashboardBuilder({
         // across the reporting window.
         start_time: campaign.start_time || "",
         stop_time: campaign.stop_time || "",
-        category: enrichedCampaign?.category || classifyCampaign(campaign),
-        attribution_mode: attribution.mode,
-        attribution_source: attribution.source,
-        attribution_explicit: attribution.explicit
+        category: enrichedCampaign?.category || classifyCampaign(campaign)
       };
     });
   }
@@ -79,10 +58,10 @@ function createMetaSnapshotDashboardBuilder({
     activeAds = [],
     budgetCampaignsRaw = [],
     budgetAdSets = [],
-    adSetsByCampaignId,
     budgetNormalization,
     customerConversionActionTypes = {},
     acquisitionTrendRows = [],
+    acquisitionTrendUnavailable = false,
     accountTimezone = "",
     deduplicatedReach = null,
     awarenessUsingAdSetInsights = 0,
@@ -98,19 +77,20 @@ function createMetaSnapshotDashboardBuilder({
     aggregatedAdSetInsightsResponse,
     dailyAdSetInsightsResponse,
     adsResponse,
-    incrementalInsightsAvailable = false,
     timings,
     buildScheduleDiagnostics
   }) {
     const buckets = splitByCategory(enrichedCampaigns);
-    const conversionBuckets = splitConversionByAttribution(buckets.conversion);
-    const incrementalLensCampaigns = buildIncrementalLensCampaigns(enrichedCampaigns);
-    const attributionOverlapIds = findCampaignIdOverlap(conversionBuckets.standard, incrementalLensCampaigns);
     const enrichedCampaignById = new Map(enrichedCampaigns.map((campaign) => [String(campaign.id || ""), campaign]));
     const campaignCategoryById = new Map(enrichedCampaigns.map((campaign) => [String(campaign.id || ""), classifyCampaign(campaign)]));
-    const campaignsWithPeriodDataCount = includedCampaigns.filter((campaign) => {
-      return readNumber(campaign?.spend_value, 0) > 0;
-    }).length;
+    // Counted on the campaigns that carry insight figures. `includedCampaigns` is the raw
+    // metadata list, which has no spend field, so counting it returned 0 on every snapshot
+    // and the "no spend data" warning fired every time.
+    const campaignsWithPeriodData = enrichedCampaigns.filter((campaign) => readNumber(campaign?.spend_value, 0) > 0);
+    const activeCampaignIds = new Set((activeCampaigns || []).map((campaign) => String(campaign?.id || "")));
+    const activeCampaignsWithoutSpend = enrichedCampaigns.filter((campaign) => {
+      return activeCampaignIds.has(String(campaign?.id || "")) && !(readNumber(campaign?.spend_value, 0) > 0);
+    });
     // spend_value may already be the ad-set sum, so comparing it against the ad-set total
     // was the same number on both sides and the warning could never fire. The campaign
     // level figure is what Meta reported before any override.
@@ -125,32 +105,12 @@ function createMetaSnapshotDashboardBuilder({
       }
       return sum + readNumber(adSet?.spend_value, 0);
     }, 0);
-    const explicitIncrementalCount = conversionBuckets.incremental.filter((campaign) => campaign.attribution_explicit).length;
-    const incrementalNamedCount = conversionBuckets.incremental.filter((campaign) => hasIncrementalNameTag(campaign?.name)).length;
-    const nonNamedIncrementalMetricsCount = conversionBuckets.standard.filter((campaign) => {
-      return campaign?.incremental_metrics_available;
-    }).length;
-    const incrementalMatchingStandardCount = incrementalLensCampaigns.filter((campaign) => {
-      return campaign?.incremental_matches_standard;
-    }).length;
-    // Conversion campaigns whose name carried no tag the classifier recognised. They are
-    // counted as standard, which is a guess, so the dashboard names them rather than
-    // letting the guess pass as a reading.
-    const untaggedConversionCampaigns = buckets.conversion.filter((campaign) => {
-      return campaign?.attribution_explicit === false;
-    });
     const budgetCampaigns = buildBudgetCampaigns({
       budgetCampaignsRaw,
       enrichedCampaignById,
-      adSetsByCampaignId,
       budgetNormalization
     });
-    const budgetAllocation = calculateBudgetAllocation(budgetCampaigns, budgetAdSets, dateScope.days, {
-      // budgetCampaigns already carry the resolved attribution mode; fall back to a fresh
-      // resolve only if a row somehow arrives without one.
-      classifyConversionAttribution: (campaign) => String(campaign?.attribution_mode || "")
-        || classifyConversionAttribution(campaign)
-    });
+    const budgetAllocation = calculateBudgetAllocation(budgetCampaigns, budgetAdSets, dateScope.days);
     const generalSpendDistribution = buildGeneralSpendDistribution(enrichedCampaigns, dateScope, accountCurrency, budgetAllocation);
 
     // New vs existing customers, from the account's own custom conversions. Purchases
@@ -164,34 +124,38 @@ function createMetaSnapshotDashboardBuilder({
     });
 
     // Month to date against the same elapsed point last month, from the wider daily
-    // window fetched for exactly this purpose.
-    customerAcquisition.trend = buildCustomerAcquisitionTrend({
-      dailyRows: acquisitionTrendRows,
-      actionTypes: customerConversionActionTypes,
-      now: new Date(),
-      timeZone: accountTimezone,
-      currency: accountCurrency,
-      formatCurrency
-    });
+    // window fetched for exactly this purpose. A read that failed is not a month with no
+    // customers: empty rows would sum to zero and the panel would print "No new customers
+    // in either period" over an outage.
+    customerAcquisition.trend = acquisitionTrendUnavailable
+      ? {
+          available: false,
+          comparable: false,
+          unavailableReason: "The day-by-day new-customer figures could not be read from Meta. Press Refresh data to try again."
+        }
+      : buildCustomerAcquisitionTrend({
+          dailyRows: acquisitionTrendRows,
+          actionTypes: customerConversionActionTypes,
+          now: new Date(),
+          timeZone: accountTimezone,
+          currency: accountCurrency,
+          formatCurrency
+        });
+
+    const accountSpend = readNumber(deduplicatedReach?.account?.spend, NaN);
 
     // Built after the allocation so the warnings can report on budget coverage: unmapped
     // objectives, lifetime budgets without a flight, and active campaigns with no budget.
     const qualityWarnings = buildQualityWarnings({
       budgetNormalization,
-      includedCampaignCount: includedCampaigns.length,
-      campaignsWithPeriodDataCount,
+      activeCampaignsWithoutSpend,
+      dateScope,
       awarenessCampaignCount: buckets.awareness.length,
       awarenessUsingAdSetInsights,
       awarenessAdSetBreakdownRejected,
-      conversionCampaignCount: buckets.conversion.length,
-      explicitIncrementalCount,
-      incrementalNamedCount,
-      attributionOverlapCount: attributionOverlapIds.length,
-      nonNamedIncrementalMetricsCount,
-      untaggedConversionCampaigns,
-      incrementalMatchingStandardCount,
-      incrementalLensCampaignCount: incrementalLensCampaigns.length,
+      acquisitionTrendUnavailable,
       campaignSpendTotal: totalSpend,
+      accountSpend,
       awarenessCampaignSpendTotal,
       awarenessAdSetSpendTotal,
       budgetAllocation,
@@ -213,20 +177,14 @@ function createMetaSnapshotDashboardBuilder({
           deduplicatedReach: deduplicatedReach?.awareness || null
         }),
         leads: buildLensStats(buckets.leads, "leads", dateScope, { currency: accountCurrency }),
-        conversion_standard: buildLensStats(conversionBuckets.standard, "conversion_standard", dateScope, { currency: accountCurrency }),
-        conversion_incremental: buildLensStats(incrementalLensCampaigns, "conversion_incremental", dateScope, { currency: accountCurrency })
+        conversion: buildLensStats(buckets.conversion, "conversion", dateScope, { currency: accountCurrency })
       },
       visuals: {
+        // Only General has a strip; every other lens has a stat row instead.
         heroPanelByLens: {
           general: buildHeroPanelItems(enrichedCampaigns, "general", accountCurrency, dateScope, {
             customerAcquisition
-          }),
-          awareness: buildHeroPanelItems(buckets.awareness, "awareness", accountCurrency, dateScope, {
-            deduplicatedReach: deduplicatedReach?.awareness || null
-          }),
-          leads: buildHeroPanelItems(buckets.leads, "leads", accountCurrency, dateScope),
-          conversion_standard: buildHeroPanelItems(conversionBuckets.standard, "conversion_standard", accountCurrency, dateScope),
-          conversion_incremental: buildHeroPanelItems(incrementalLensCampaigns, "conversion_incremental", accountCurrency, dateScope)
+          })
         },
         trendCardsByLens: {
           general: buildTrendCards(enrichedCampaigns, "general", dateScope, accountCurrency),
@@ -234,8 +192,7 @@ function createMetaSnapshotDashboardBuilder({
             deduplicatedReach: deduplicatedReach?.awareness || null
           }),
           leads: buildTrendCards(buckets.leads, "leads", dateScope, accountCurrency),
-          conversion_standard: buildTrendCards(conversionBuckets.standard, "conversion_standard", dateScope, accountCurrency),
-          conversion_incremental: buildTrendCards(incrementalLensCampaigns, "conversion_incremental", dateScope, accountCurrency)
+          conversion: buildTrendCards(buckets.conversion, "conversion", dateScope, accountCurrency)
         },
         overviewCards: buildOverviewCards(enrichedCampaigns, accountCurrency, {
           deduplicatedReach: deduplicatedReach?.awareness || null
@@ -244,16 +201,16 @@ function createMetaSnapshotDashboardBuilder({
       currency: accountCurrency,
       quality: {
         source: "meta-live-api",
+        // Every purchase, revenue and customer figure is Meta's incremental attribution
+        // estimate, for every campaign. See server/meta/measurement-basis.js.
+        measurementBasis: "incrementality",
         budgetNormalization,
         budgetAllocation,
         schedule: buildScheduleDiagnostics(),
         generalSpendDistribution,
         customerAcquisition,
-        explicitIncrementalCount,
-        incrementalNamedCount,
-        incrementalInsightsAvailable,
         includedCampaignCount: includedCampaigns.length,
-        campaignsWithPeriodDataCount,
+        campaignsWithPeriodDataCount: campaignsWithPeriodData.length,
         activeCampaignCount: activeCampaigns.length,
         budgetCampaignCount: budgetCampaigns.length,
         activeAdCount: activeAds.length,
@@ -265,18 +222,9 @@ function createMetaSnapshotDashboardBuilder({
         deduplicatedReach,
         reconciliation: {
           campaignSpendTotal: totalSpend,
+          accountSpend: Number.isFinite(accountSpend) ? accountSpend : null,
           awarenessCampaignSpendTotal,
           awarenessAdSetSpendTotal
-        },
-        attributionValidation: {
-          standardCount: conversionBuckets.standard.length,
-          incrementalCount: incrementalLensCampaigns.length,
-          overlapCount: attributionOverlapIds.length,
-          overlapCampaignIds: attributionOverlapIds,
-          nonNamedIncrementalMetricsCount,
-          incrementalMatchingStandardCount,
-          untaggedConversionCount: untaggedConversionCampaigns.length,
-          untaggedConversionNames: untaggedConversionCampaigns.map((campaign) => String(campaign?.name || ""))
         },
         pagination: {
           campaignsPages: campaignResponse.pageCount,
@@ -303,8 +251,6 @@ function createMetaSnapshotDashboardBuilder({
       ads: buildAdsPayload(activeAds),
       budgetAllocation,
       budgetCampaigns,
-      conversionBuckets,
-      incrementalLensCampaigns,
       qualityWarnings
     };
   }

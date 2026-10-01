@@ -41,9 +41,11 @@ export function isUsableMetaSnapshotBundle(snapshot = null, options = {}) {
 
   const hasModernStats = Array.isArray(snapshot.stats)
     && snapshot.stats.some((item) => String(item?.label || "").includes("Spend ("));
-  const incrementalStats = snapshot.dashboard?.statsByLens?.conversion_incremental || [];
-  const hasChangeMetrics = Array.isArray(incrementalStats)
-    && incrementalStats.some((item) => item && typeof item === "object" && Object.prototype.hasOwnProperty.call(item, "change"));
+  // A snapshot from before the single conversion lens (2026-10-01) has no
+  // statsByLens.conversion and is treated as stale rather than half-rendered.
+  const conversionStats = snapshot.dashboard?.statsByLens?.conversion || [];
+  const hasChangeMetrics = Array.isArray(conversionStats)
+    && conversionStats.some((item) => item && typeof item === "object" && Object.prototype.hasOwnProperty.call(item, "change"));
   const hasCurrency = Boolean(
     snapshot.account?.currency
     || snapshot.dashboard?.currency

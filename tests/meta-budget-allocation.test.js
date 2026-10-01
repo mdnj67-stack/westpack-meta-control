@@ -155,26 +155,6 @@ test("group budgets always reconcile to the reported total", () => {
   assert.equal(allocation.trafficDailyBudget, 75);
 });
 
-test("conversion budget splits across standard and incremental attribution", () => {
-  const allocation = calculateBudgetAllocation(
-    [
-      { id: "c1", objective: "OUTCOME_SALES", daily_budget: 300, attribution_mode: "standard" },
-      { id: "c2", objective: "OUTCOME_SALES", daily_budget: 200, attribution_mode: "incremental" }
-    ],
-    [],
-    30,
-    { classifyConversionAttribution: (campaign) => campaign.attribution_mode }
-  );
-
-  assert.equal(allocation.conversionDailyBudget, 500);
-  assert.equal(allocation.conversionStandardDailyBudget, 300);
-  assert.equal(allocation.conversionIncrementalDailyBudget, 200);
-  assert.equal(
-    allocation.conversionStandardDailyBudget + allocation.conversionIncrementalDailyBudget,
-    allocation.conversionDailyBudget
-  );
-});
-
 test("campaigns with no budget are counted, not silently dropped", () => {
   const allocation = calculateBudgetAllocation(
     [

@@ -57,7 +57,6 @@ export function renderCoreDataAction({
   adData,
   adSetData,
   appState,
-  applyCampaignAttribution,
   auditLog,
   campaignData,
   campaignMatches,
@@ -90,7 +89,10 @@ export function renderCoreDataAction({
   const previousCreateCampaignId = getInputValue("create-target-campaign");
   const previousCreateAdSetId = getInputValue("create-target-adset");
 
-  appState.campaigns = applyCampaignAttribution(campaignData, adSetData);
+  // Campaigns arrive already grouped by the server. The browser used to re-classify them
+  // by name and overwrite the server's verdict, so a lens's stat cards and its table could
+  // describe different campaigns.
+  appState.campaigns = campaignData;
   appState.ads = adData;
   appState.stats = statData;
   appState.adSets = adSetData;
@@ -138,7 +140,6 @@ export function renderCoreDataAction({
 export function applyMetaStudioCatalogAction({
   adaptationGoals,
   appState,
-  applyCampaignAttribution,
   catalog = {},
   getAdSetOptions,
   getInputValue,
@@ -168,7 +169,7 @@ export function applyMetaStudioCatalogAction({
   const previousCreateCampaignId = getInputValue("create-target-campaign");
   const previousCreateAdSetId = getInputValue("create-target-adset");
 
-  appState.campaigns = applyCampaignAttribution(campaignData, adSetData);
+  appState.campaigns = campaignData;
   appState.ads = adData;
   appState.adSets = adSetData;
   appState.metaStudioCatalogGeneratedAt = String(catalog?.generatedAt || new Date().toISOString());

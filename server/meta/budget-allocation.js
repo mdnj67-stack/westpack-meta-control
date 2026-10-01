@@ -243,11 +243,8 @@ function createEmptyGroupTotals() {
   return totals;
 }
 
-function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30, options = {}) {
+function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30) {
   const normalizedPeriodDays = Math.max(1, Math.round(readNumber(periodDays, 30) || 30));
-  const classifyAttribution = typeof options.classifyConversionAttribution === "function"
-    ? options.classifyConversionAttribution
-    : () => "standard";
 
   const campaignMap = new Map();
   for (const campaign of campaigns || []) {
@@ -260,7 +257,6 @@ function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30,
     campaignMap.set(campaignId, {
       id: campaignId,
       group: resolveObjectiveGroup(campaign),
-      attributionMode: classifyAttribution(campaign),
       campaignDailyBudget: campaignBudget.dailyBudget,
       campaignBudgetSource: campaignBudget.source,
       adSetDailyBudget: 0,
@@ -284,8 +280,6 @@ function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30,
 
   const dailyByGroup = createEmptyGroupTotals();
   let totalDailyBudget = 0;
-  let conversionStandardDailyBudget = 0;
-  let conversionIncrementalDailyBudget = 0;
   let lifetimeBudgetCampaignCount = 0;
   let unscheduledLifetimeBudgetCampaignCount = 0;
   const campaignsWithoutBudget = [];
@@ -313,14 +307,6 @@ function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30,
 
     totalDailyBudget += dailyBudget;
     dailyByGroup[entry.group] += dailyBudget;
-
-    if (entry.group === "conversion") {
-      if (entry.attributionMode === "incremental") {
-        conversionIncrementalDailyBudget += dailyBudget;
-      } else {
-        conversionStandardDailyBudget += dailyBudget;
-      }
-    }
   }
 
   const allocation = {
@@ -331,12 +317,6 @@ function calculateBudgetAllocation(campaigns = [], adSets = [], periodDays = 30,
     dailyBudgetByGroup: dailyByGroup,
     monthlyBudgetByGroup: {},
     periodBudgetByGroup: {},
-    conversionStandardDailyBudget,
-    conversionStandardMonthlyBudget: conversionStandardDailyBudget * 30,
-    conversionStandardPeriodBudget: conversionStandardDailyBudget * normalizedPeriodDays,
-    conversionIncrementalDailyBudget,
-    conversionIncrementalMonthlyBudget: conversionIncrementalDailyBudget * 30,
-    conversionIncrementalPeriodBudget: conversionIncrementalDailyBudget * normalizedPeriodDays,
     lifetimeBudgetCampaignCount,
     unscheduledLifetimeBudgetCampaignCount,
     campaignsWithoutBudgetCount: campaignsWithoutBudget.length
