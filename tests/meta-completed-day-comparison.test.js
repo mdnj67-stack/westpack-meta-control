@@ -69,7 +69,7 @@ test("later in the month, only completed days are compared, over equal windows",
   const campaigns = [campaign(current, previous)];
 
   const spend = buildHeroPanelItems(campaigns, "general", "DKK", scope, {}).find((item) => item.label === "Spend");
-  assert.equal(spend.change.value, "0.0%");
+  assert.equal(spend.change.value, "0,0%");
   assert.match(spend.change.label, /2 days, today excluded/);
   // The headline is still the whole range, today included.
   assert.equal(spend.value.replace(/\D/g, ""), "2150");
@@ -84,7 +84,7 @@ test("a range that ended before today is compared whole", () => {
   const campaigns = [campaign([point("2026-09-30", 1200, 6000)], [point("2026-09-29", 1000, 5000)])];
 
   const spend = buildHeroPanelItems(campaigns, "general", "DKK", scope, {}).find((item) => item.label === "Spend");
-  assert.equal(spend.change.value, "+20.0%");
+  assert.equal(spend.change.value, "+20,0%");
   assert.doesNotMatch(spend.change.label, /today excluded/);
 });
 

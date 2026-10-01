@@ -51,7 +51,7 @@ test("reach comes from Meta's deduplicated figure, not from adding campaigns tog
 
   const summed = buildLensStats(campaigns, "awareness", scope, { currency: "DKK" });
   const summedReach = summed.find((stat) => stat.label === "Reach");
-  assert.equal(summedReach.value, "12235207", "with no deduplicated figure the sum is all there is");
+  assert.equal(summedReach.value, "12.235.207", "with no deduplicated figure the sum is all there is");
   assert.match(summedReach.meta, /counted twice/, "and it must say so rather than passing as a real count");
 
   const deduplicated = buildLensStats(campaigns, "awareness", scope, {
@@ -59,12 +59,12 @@ test("reach comes from Meta's deduplicated figure, not from adding campaigns tog
     deduplicatedReach: { reach: 6100000, impressions: 28013721 }
   });
   const realReach = deduplicated.find((stat) => stat.label === "Reach");
-  assert.equal(realReach.value, "6100000");
+  assert.equal(realReach.value, "6.100.000");
   assert.match(realReach.meta, /deduplicated/);
 
   // Frequency has to use the same denominator, or it contradicts the reach beside it.
   const frequency = deduplicated.find((stat) => stat.label === "Frequency");
-  assert.equal(frequency.value, (28013721 / 6100000).toFixed(2));
+  assert.equal(frequency.value, (28013721 / 6100000).toFixed(2).replace(".", ","));
   assert.match(frequency.meta, /deduplicated/);
 });
 
@@ -86,7 +86,7 @@ test("a rate sparkline divides summed totals instead of adding up per-campaign r
 
   const point = roasCard.series.find((entry) => entry.date === "2026-09-01");
   assert.equal(point.value, 2, "the chart must agree with the ratio, not multiply it by the campaign count");
-  assert.equal(roasCard.value, "2.00", "and the headline must agree with the chart");
+  assert.equal(roasCard.value, "2,00", "and the headline must agree with the chart");
 });
 
 test("a change badge divides by the real baseline, however small it is", () => {
@@ -98,10 +98,10 @@ test("a change badge divides by the real baseline, however small it is", () => {
   };
 
   const roas = buildWindowChange(window, "roas", { positiveDirection: "up" });
-  assert.equal(roas.value, "+100.0%", "0.50 to 1.00 is a doubling");
+  assert.equal(roas.value, "+100,0%", "0.50 to 1.00 is a doubling");
 
   const ctr = buildWindowChange(window, "ctr", { positiveDirection: "up" });
-  assert.equal(ctr.value, "+50.0%", "0.80% to 1.20% is a half again");
+  assert.equal(ctr.value, "+50,0%", "0.80% to 1.20% is a half again");
   assert.notEqual(ctr.direction, "flat", "and it is certainly not flat");
 });
 
@@ -247,14 +247,14 @@ test("a change inside the neutral band prints as flat, not as a rounded minus", 
   const change = buildWindowChange(window, "roas", { positiveDirection: "up" });
   assert.equal(change.direction, "flat");
   assert.equal(change.tone, "neutral");
-  assert.equal(change.value, "0.0%", "a flat badge must not carry a sign");
+  assert.equal(change.value, "0,0%", "a flat badge must not carry a sign");
 
   // A real move still keeps its sign in both directions.
   const realWindow = {
     previous: [{ date: "2026-08-01", spend: 1000, revenue: 1000, impressions: 0, clicks: 0, purchases: 0, leads: 0, reach: 0, add_to_cart: 0 }],
     current: [{ date: "2026-09-01", spend: 1000, revenue: 1500, impressions: 0, clicks: 0, purchases: 0, leads: 0, reach: 0, add_to_cart: 0 }]
   };
-  assert.equal(buildWindowChange(realWindow, "roas", { positiveDirection: "up" }).value, "+50.0%");
+  assert.equal(buildWindowChange(realWindow, "roas", { positiveDirection: "up" }).value, "+50,0%");
 });
 
 test("the awareness series carries reach through its ad-set rebuild", () => {

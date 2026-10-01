@@ -10,6 +10,7 @@ const {
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
+  compareAcquisitionWindow,
   extractCustomerAcquisition,
   resolveAcquisitionWindowPresets,
   resolveCustomerConversionActionTypes
@@ -146,6 +147,7 @@ const {
   buildCampaignMetricCollections,
   buildIncludedCampaignContext,
   buildInsightMap,
+  buildPreviousOnlyCampaigns,
   buildSeriesMap,
   buildSnapshotStats,
   enrichCampaignsWithAttribution
@@ -176,6 +178,9 @@ const {
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
+  compareAcquisitionWindow,
+  resolveAcquisitionWindowPresets,
+  resolveCompletedDayComparison,
   formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
@@ -330,8 +335,22 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
   // sides cover different windows on purpose and are compared via a 30-day pace below.
   const monthlyBudgetByGroup = safeBudgetAllocation.monthlyBudgetByGroup || {};
   const totalBudgetAmount = readNumber(safeBudgetAllocation.totalMonthlyBudget, 0);
-  const spendToMonthlyPace = 30 / periodDays;
-  const totalMonthlySpendPace = totalSpend * spendToMonthlyPace;
+  // Pace is measured on finished days only. "Today" and "This month" include the day in
+  // progress, and counting a few hours of spend as a whole day made every pace on those
+  // ranges read low - on the first of the month, absurdly so. Where the range has no
+  // finished day yet there is no pace, which the panel says rather than printing 0%.
+  const paceWindow = resolveCompletedDayComparison(dateScope);
+  const paceExcludesToday = Boolean(paceWindow?.excludesToday);
+  const paceDays = paceExcludesToday ? (paceWindow.comparable ? paceWindow.days : 0) : periodDays;
+  const paceSpendOf = (list = []) => {
+    if (!paceExcludesToday) return sumMetric(list, "spend_value");
+    if (!paceWindow.comparable) return 0;
+    return (list || []).reduce((sum, campaign) => sum + (campaign?.series || [])
+      .filter((point) => point.date >= paceWindow.current.since && point.date <= paceWindow.current.until)
+      .reduce((total, point) => total + readNumber(point.spend, 0), 0), 0);
+  };
+  const spendToMonthlyPace = paceDays > 0 ? 30 / paceDays : NaN;
+  const totalMonthlySpendPace = paceDays > 0 ? paceSpendOf(campaigns) * spendToMonthlyPace : null;
 
   const items = OBJECTIVE_GROUP_DISPLAY_ORDER
     .map((group) => ({
@@ -343,7 +362,7 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
     }))
     .filter((item) => item.campaignCount > 0 || item.amount > 0 || item.budgetAmount > 0)
     .map((item) => {
-      const monthlySpendPace = item.amount * spendToMonthlyPace;
+      const monthlySpendPace = paceDays > 0 ? paceSpendOf(buckets[item.key] || []) * spendToMonthlyPace : null;
       return {
         ...item,
         percentage: totalSpend > 0 ? Number(((item.amount / totalSpend) * 100).toFixed(1)) : 0,
@@ -351,9 +370,11 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
         formattedBudgetAmount: item.budgetAmount > 0 ? formatCurrency(item.budgetAmount, normalizedCurrency) : "--",
         budgetPercentage: totalBudgetAmount > 0 ? Number(((item.budgetAmount / totalBudgetAmount) * 100).toFixed(1)) : 0,
         monthlySpendPace,
-        formattedMonthlySpendPace: formatCurrency(monthlySpendPace, normalizedCurrency),
+        formattedMonthlySpendPace: monthlySpendPace === null ? "--" : formatCurrency(monthlySpendPace, normalizedCurrency),
         // Pacing compares like with like: a 30-day spend pace against the 30-day budget.
-        pacePercentage: item.budgetAmount > 0 ? Number(((monthlySpendPace / item.budgetAmount) * 100).toFixed(1)) : 0
+        pacePercentage: item.budgetAmount > 0 && monthlySpendPace !== null
+          ? Number(((monthlySpendPace / item.budgetAmount) * 100).toFixed(1))
+          : null
       };
     });
 
@@ -365,11 +386,13 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
     formattedTotalAmount: formatCurrency(totalSpend, normalizedCurrency),
     totalLabel: spendLabel,
     periodDays,
+    paceDays,
+    paceExcludesToday,
     totalMonthlySpendPace,
-    formattedTotalMonthlySpendPace: formatCurrency(totalMonthlySpendPace, normalizedCurrency),
-    totalPacePercentage: totalBudgetAmount > 0
+    formattedTotalMonthlySpendPace: totalMonthlySpendPace === null ? "--" : formatCurrency(totalMonthlySpendPace, normalizedCurrency),
+    totalPacePercentage: totalBudgetAmount > 0 && totalMonthlySpendPace !== null
       ? Number(((totalMonthlySpendPace / totalBudgetAmount) * 100).toFixed(1))
-      : 0,
+      : null,
     totalBudgetAmount,
     formattedTotalBudgetAmount: totalBudgetAmount > 0 ? formatCurrency(totalBudgetAmount, normalizedCurrency) : "--",
     kpiBudgetAmount: totalBudgetAmount,
@@ -379,7 +402,7 @@ function buildGeneralSpendDistribution(campaigns = [], dateScope = null, currenc
     totalBudgetLabel: "Planned budget (30 days)",
     budgetMixLabel: "Planned budget mix (30 days)",
     spendMixLabel: `Actual spend mix (${dateScope?.shortLabel || "selected range"})`,
-    paceLabel: periodDays === 30 ? "Spend vs monthly budget" : "30-day spend pace vs monthly budget",
+    paceLabel: paceDays === 30 ? "Spend vs monthly budget" : "30-day spend pace vs monthly budget",
     rangeLabel: dateScope?.label || "Selected range",
     summaryMeta: `Actual spend covers ${dateScope?.label || "the selected range"}. Planned budget is always stated per 30-day month, and pacing compares a 30-day spend pace against it.`,
     title: "Spend and planned budget",
@@ -505,7 +528,7 @@ function buildSpendShare(value, totalSpend) {
 function buildLensStats(campaigns, lens, dateScope, options = {}) {
   const currency = normalizeCurrencyCode(options.currency, "DKK");
   const comparison = resolveCompletedDayComparison(dateScope);
-  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison(campaigns, comparison));
+  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison([...campaigns, ...(options.previousOnlyCampaigns || [])], comparison));
   const changeWindowLabel = describeComparisonWindow(comparison, dateScope);
   const spend = sumMetric(campaigns, "spend_value");
   const impressions = sumMetric(campaigns, "impressions_value");
@@ -537,20 +560,23 @@ function buildLensStats(campaigns, lens, dateScope, options = {}) {
 
   if (lens === "awareness") {
     return [
-      { label: spendLabel, value: formatCurrency(spend, currency), meta: "Awareness campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
+      { label: spendLabel, value: formatCurrency(spend, currency), meta: "Awareness campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "neutral", windowLabel: changeWindowLabel }) },
       {
         label: "Reach",
-        value: String(Math.round(reach)),
+        value: formatDashboardNumber(reach, 0),
         meta: reachIsDeduplicated
           ? `People reached, deduplicated ${dateScope?.label ? "- " + dateScope.label : ""}`.trim()
           : "Sum of campaign reach - people in more than one campaign are counted twice",
-        change: buildWindowChange(comparisonWindow, "reach", { positiveDirection: "up", windowLabel: changeWindowLabel })
+        // No badge: the only reach available per day is each campaign's daily reach, and
+        // adding that up counts a person once for every day they were reached. The
+        // headline is deduplicated; a badge from person-days would not describe it.
+        change: null
       },
       {
         label: "Frequency",
-        value: frequency ? frequency.toFixed(2) : "--",
+        value: frequency ? formatDashboardNumber(frequency, 2) : "--",
         meta: reachIsDeduplicated ? "Impressions / deduplicated reach" : "Impressions / summed reach",
-        change: buildWindowChange(comparisonWindow, "frequency", { positiveDirection: "down", windowLabel: changeWindowLabel })
+        change: null
       },
       { label: "CPM", value: cpm ? formatCurrency(cpm, currency) : "--", meta: "Spend / 1,000 impressions", change: buildWindowChange(comparisonWindow, "cpm", { positiveDirection: "down", windowLabel: changeWindowLabel }) }
     ];
@@ -558,18 +584,18 @@ function buildLensStats(campaigns, lens, dateScope, options = {}) {
 
   if (lens === "leads") {
     return [
-      { label: spendLabel, value: formatCurrency(spend, currency), meta: "Lead campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
-      { label: "Leads", value: String(Math.round(leads)), meta: "From actions", change: buildWindowChange(comparisonWindow, "leads", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
+      { label: spendLabel, value: formatCurrency(spend, currency), meta: "Lead campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "neutral", windowLabel: changeWindowLabel }) },
+      { label: "Leads", value: formatDashboardNumber(leads, 0), meta: "Counted as Meta reports them", change: buildWindowChange(comparisonWindow, "leads", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
       { label: "CPL", value: leads > 0 ? formatCurrency(cpl, currency) : "--", meta: "Spend / leads", change: buildWindowChange(comparisonWindow, "cpl", { positiveDirection: "down", windowLabel: changeWindowLabel }) },
-      { label: "CTR", value: ctr ? `${ctr.toFixed(2)}%` : "--", meta: "Clicks / impressions", change: buildWindowChange(comparisonWindow, "ctr", { positiveDirection: "up", windowLabel: changeWindowLabel }) }
+      { label: "CTR", value: impressions > 0 ? `${formatDashboardNumber(ctr, 2)}%` : "--", meta: "Clicks / impressions", change: buildWindowChange(comparisonWindow, "ctr", { positiveDirection: "up", windowLabel: changeWindowLabel }) }
     ];
   }
 
   return [
-    { label: spendLabel, value: formatCurrency(spend, currency), meta: "Conversion campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
-    { label: "Purchases", value: String(Math.round(purchases)), meta: "From actions", change: buildWindowChange(comparisonWindow, "purchases", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
+    { label: spendLabel, value: formatCurrency(spend, currency), meta: "Conversion campaigns", change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "neutral", windowLabel: changeWindowLabel }) },
+    { label: "Purchases", value: formatDashboardNumber(purchases, 0), meta: "Incremental attribution", change: buildWindowChange(comparisonWindow, "purchases", { positiveDirection: "up", windowLabel: changeWindowLabel }) },
     { label: "CPA", value: purchases > 0 ? formatCurrency(cpa, currency) : "--", meta: "Spend / purchases", change: buildWindowChange(comparisonWindow, "cpa", { positiveDirection: "down", windowLabel: changeWindowLabel }) },
-    { label: "ROAS", value: roas ? roas.toFixed(2) : "--", meta: "Revenue / spend", change: buildWindowChange(comparisonWindow, "roas", { positiveDirection: "up", windowLabel: changeWindowLabel }) }
+    { label: "ROAS", value: spend > 0 ? formatDashboardNumber(roas, 2) : "--", meta: "Revenue / spend", change: buildWindowChange(comparisonWindow, "roas", { positiveDirection: "up", windowLabel: changeWindowLabel }) }
   ];
 }
 
@@ -637,17 +663,19 @@ function computeAggregateMetric(series = [], metric) {
   if (metric === "spend") return spend;
   if (metric === "reach") return reach;
   if (metric === "impressions") return impressions;
-  if (metric === "frequency") return reach > 0 ? impressions / reach : 0;
+  // A rate with nothing underneath it is undefined, not zero. Returning 0 made a CPA with
+  // no purchases read as a -100% "improvement" on the badge.
+  if (metric === "frequency") return reach > 0 ? impressions / reach : NaN;
   if (metric === "clicks") return clicks;
   if (metric === "add_to_cart") return addToCart;
   if (metric === "revenue") return revenue;
-  if (metric === "ctr") return impressions > 0 ? (clicks / impressions) * 100 : 0;
-  if (metric === "cpm") return impressions > 0 ? (spend / impressions) * 1000 : 0;
+  if (metric === "ctr") return impressions > 0 ? (clicks / impressions) * 100 : NaN;
+  if (metric === "cpm") return impressions > 0 ? (spend / impressions) * 1000 : NaN;
   if (metric === "leads") return leads;
-  if (metric === "cpl") return leads > 0 ? spend / leads : 0;
+  if (metric === "cpl") return leads > 0 ? spend / leads : NaN;
   if (metric === "purchases") return purchases;
-  if (metric === "cpa") return purchases > 0 ? spend / purchases : 0;
-  if (metric === "roas") return spend > 0 ? revenue / spend : 0;
+  if (metric === "cpa") return purchases > 0 ? spend / purchases : NaN;
+  if (metric === "roas") return spend > 0 ? revenue / spend : NaN;
   return 0;
 }
 
@@ -656,7 +684,9 @@ function formatDashboardNumber(value, digits = 0, fallback = "--") {
   if (!Number.isFinite(number)) {
     return fallback;
   }
-  return number.toLocaleString("en-GB", {
+  // Same locale as src/format.js. This was pinned to en-GB, so "45.3%" sat beside
+  // "2.013 kr." on one screen.
+  return number.toLocaleString(NUMBER_LOCALE, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits
   });
@@ -858,123 +888,107 @@ function describeComparisonWindow(comparison = null, dateScope = null) {
   return comparison.excludesToday ? `${label}, today excluded` : label;
 }
 
-function buildChangeLabel(direction = "flat", windowLabel = "selected period") {
-  if (direction === "new") return `new vs previous ${windowLabel}`;
-  return `vs previous ${windowLabel}`;
-}
-
-function buildWindowChange(series = [], metric, options = {}) {
-  const comparisonWindow = series && !Array.isArray(series) && Array.isArray(series.previous) && Array.isArray(series.current)
-    ? series
-    : splitAggregateSeries(series);
-  const { previous, current } = comparisonWindow;
+// The one rule for every change badge on the dashboard.
+//
+// - No badge when either side is undefined: a CPA with no purchases has no value to
+//   compare, and treating it as 0 printed a green -100%.
+// - No badge when both sides are zero: "0.0% flat" asserts that nothing changed, where
+//   the truth is that there was nothing to measure.
+// - "New" when the previous period had nothing, in a neutral tone: growth from zero is a
+//   fact about the baseline, not a verdict.
+// - Otherwise the change over the real baseline, coloured by whether up is good for this
+//   metric. Spend is neutral: more spend is neither good nor bad by itself.
+//
+// The stat cards, the trend cards and the General strip used to run three versions of
+// this with three different answers to the zero cases.
+function buildValueChange(currentValue, previousValue, options = {}) {
   const windowLabel = options.windowLabel || "selected period";
-  if (!previous.length && !current.length) {
-    return null;
-  }
-
-  const previousValue = computeAggregateMetric(previous, metric);
-  const currentValue = computeAggregateMetric(current, metric);
+  const label = `vs previous ${windowLabel}`;
+  const goodWhen = options.positiveDirection || "up";
   if (!Number.isFinite(previousValue) || !Number.isFinite(currentValue)) {
     return null;
   }
-
   if (previousValue <= 0 && currentValue <= 0) {
-    return {
-      value: "0.0%",
-      percentChange: 0,
-      tone: "neutral",
-      label: buildChangeLabel("flat", windowLabel),
-      direction: "flat",
-      currentValue,
-      previousValue
-    };
+    return null;
   }
-
-  if (previousValue <= 0 && currentValue > 0) {
-    return {
-      value: "New",
-      percentChange: null,
-      tone: options.positiveDirection === "down" ? "negative" : "positive",
-      label: buildChangeLabel("new", windowLabel),
-      direction: "new",
-      currentValue,
-      previousValue
-    };
+  if (previousValue <= 0) {
+    return { value: "New", percentChange: null, tone: "neutral", label, direction: "new", currentValue, previousValue };
   }
 
   const change = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
-  const isPositive = options.positiveDirection === "down" ? change < 0 : change > 0;
-  const isNeutral = Math.abs(change) < 0.1;
+  const rounded = Math.round(change * 10) / 10;
+  const direction = rounded > 0 ? "up" : rounded < 0 ? "down" : "flat";
+  const tone = goodWhen === "neutral" || direction === "flat"
+    ? "neutral"
+    : ((goodWhen === "down") === (direction === "down") ? "positive" : "negative");
 
   return {
-    value: isNeutral ? "0.0%" : `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
+    value: direction === "flat" ? "0,0%" : `${rounded > 0 ? "+" : ""}${formatDashboardNumber(rounded, 1)}%`,
     percentChange: change,
-    tone: isNeutral ? "neutral" : (isPositive ? "positive" : "negative"),
-    label: buildChangeLabel(isNeutral ? "flat" : (change > 0 ? "up" : "down"), windowLabel),
-    direction: isNeutral ? "flat" : (change > 0 ? "up" : "down"),
+    tone,
+    label,
+    direction,
     currentValue,
     previousValue
   };
 }
 
+function buildWindowChange(series = [], metric, options = {}) {
+  const comparisonWindow = series && !Array.isArray(series) && Array.isArray(series.previous) && Array.isArray(series.current)
+    ? series
+    : null;
+  if (!comparisonWindow || (!comparisonWindow.previous.length && !comparisonWindow.current.length)) {
+    return null;
+  }
+  return buildValueChange(
+    computeAggregateMetric(comparisonWindow.current, metric),
+    computeAggregateMetric(comparisonWindow.previous, metric),
+    options
+  );
+}
+
+// Spend share and efficiency per objective, on General.
+//
+// Shares are of the account's whole spend and every figure comes from campaign totals, so
+// this card agrees with the budget split beside it. It used to take shares of only three
+// objectives, read efficiency off the daily series, and draw every objective with spend at
+// least 12% wide - a 1% objective looked like an eighth of the account.
 function buildGeneralObjectivePerformanceRows(campaigns = [], currency = "DKK") {
   const buckets = splitByCategory(campaigns);
-  const objectiveGroups = [
-    {
-      key: "awareness",
-      label: "Brand Awareness",
-      campaigns: buckets.awareness,
-      tone: "awareness",
-      metricLabel: "CPM",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.awareness);
-        const cpm = computeAggregateMetric(series, "cpm");
-        return cpm > 0 ? formatCurrency(cpm, currency) : "--";
-      })()
+  const totalSpend = sumMetric(campaigns, "spend_value");
+  const efficiency = {
+    awareness: (list) => {
+      const impressions = sumMetric(list, "impressions_value");
+      return { label: "CPM", value: impressions > 0 ? formatCurrency((sumMetric(list, "spend_value") / impressions) * 1000, currency) : "--" };
     },
-    {
-      key: "conversion",
-      label: "Conversion",
-      campaigns: buckets.conversion,
-      tone: "conversion",
-      metricLabel: "ROAS",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.conversion);
-        const roas = computeAggregateMetric(series, "roas");
-        return roas > 0 ? formatDashboardNumber(roas, 2) : "--";
-      })()
+    conversion: (list) => {
+      const spend = sumMetric(list, "spend_value");
+      return { label: "ROAS", value: spend > 0 ? formatDashboardNumber(sumMetric(list, "revenue_value") / spend, 2) : "--" };
     },
-    {
-      key: "leads",
-      label: "Leads",
-      campaigns: buckets.leads,
-      tone: "leads",
-      metricLabel: "CPL",
-      metricValue: (() => {
-        const series = buildAggregateSeries(buckets.leads);
-        const cpl = computeAggregateMetric(series, "cpl");
-        return cpl > 0 ? formatCurrency(cpl, currency) : "--";
-      })()
+    leads: (list) => {
+      const leads = sumMetric(list, "leads_value");
+      return { label: "CPL", value: leads > 0 ? formatCurrency(sumMetric(list, "spend_value") / leads, currency) : "--" };
     }
-  ];
+  };
 
-  const maxSpend = Math.max(...objectiveGroups.map((group) => sumMetric(group.campaigns, "spend_value")), 1);
-  const totalSpend = objectiveGroups.reduce((sum, group) => sum + sumMetric(group.campaigns, "spend_value"), 0);
-
-  return objectiveGroups.map((group) => {
-    const spend = sumMetric(group.campaigns, "spend_value");
-    return {
-      key: group.key,
-      label: group.label,
-      tone: group.tone,
-      spend: formatCurrency(spend, currency),
-      share: totalSpend > 0 ? formatDashboardPercent((spend / totalSpend) * 100, 1) : "0.0%",
-      width: Math.max(spend > 0 ? 12 : 0, (spend / maxSpend) * 100),
-      metricLabel: group.metricLabel,
-      metricValue: group.metricValue
-    };
-  });
+  return OBJECTIVE_GROUP_DISPLAY_ORDER
+    .map((key) => ({ key, list: buckets[key] || [] }))
+    .filter(({ list }) => sumMetric(list, "spend_value") > 0)
+    .map(({ key, list }) => {
+      const spend = sumMetric(list, "spend_value");
+      const share = totalSpend > 0 ? (spend / totalSpend) * 100 : 0;
+      const metric = efficiency[key] ? efficiency[key](list) : { label: "", value: "" };
+      return {
+        key,
+        label: resolveObjectiveGroupLabel(key),
+        tone: key,
+        spend: formatCurrency(spend, currency),
+        share: formatDashboardPercent(share, 1),
+        width: share,
+        metricLabel: metric.label,
+        metricValue: metric.value
+      };
+    });
 }
 
 /**
@@ -1016,33 +1030,21 @@ const TREND_CARD_READING = Object.freeze({
  * percentage to report - "new" says that, where "+100%" would be arithmetic dressed up
  * as a finding.
  */
-function withTrendCardReading(cards = [], currency = "DKK", windowLabel = "previous period") {
+function withTrendCardReading(cards = [], currency = "DKK", windowLabel = "period") {
   return (cards || []).map((card) => {
     const reading = TREND_CARD_READING[card.title] || { format: "count", baseline: "zero", goodWhen: "neutral" };
-    const current = readNumber(card.currentTotal, NaN);
-    const previous = readNumber(card.previousTotal, NaN);
+    // null means the rate was undefined in that window. readNumber(null) is 0, which is
+    // exactly the trap: it turned an undefined rate into a baseline of zero.
+    const asNumber = (value) => (value === null || value === undefined ? NaN : Number(value));
+    const current = asNumber(card.currentTotal);
+    const previous = asNumber(card.previousTotal);
 
-    let change = null;
-    if (Number.isFinite(current) && Number.isFinite(previous)) {
-      if (previous === 0 && current > 0) {
-        change = { direction: "new", value: "New", tone: "neutral", label: `vs ${windowLabel}` };
-      } else if (previous !== 0) {
-        const percent = ((current - previous) / Math.abs(previous)) * 100;
-        const rounded = Math.round(percent * 10) / 10;
-        const direction = rounded > 0 ? "up" : rounded < 0 ? "down" : "flat";
-        const good = reading.goodWhen;
-        const tone = good === "neutral" || direction === "flat"
-          ? "neutral"
-          : (direction === good ? "positive" : "negative");
-        change = {
-          direction,
-          value: `${rounded > 0 ? "+" : ""}${formatDashboardNumber(rounded, 1)}%`,
-          tone,
-          label: `vs ${windowLabel}`
-        };
-      }
-    }
-
+    // Reach and frequency cards draw summed daily reach, which counts a person once per
+    // day they were reached. That is a fine shape to draw and a wrong number to compare,
+    // so those cards carry no badge; the deduplicated figure is the card's headline.
+    const change = card.noComparison
+      ? null
+      : buildValueChange(current, previous, { positiveDirection: reading.goodWhen, windowLabel });
     const { currentTotal, previousTotal, ...rest } = card;
     return { ...rest, format: reading.format, baseline: reading.baseline, currency, change };
   });
@@ -1053,8 +1055,9 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   // Named so the comparison badge says what it is measured against, rather than the
   // bare "vs previous period" that could mean any window.
   const comparison = resolveCompletedDayComparison(dateScope);
-  const comparisonCampaigns = clipCampaignsToComparison(campaigns, comparison);
-  const comparisonWindowLabel = `previous ${describeComparisonWindow(comparison, dateScope)}`;
+  const withPreviousOnly = [...campaigns, ...(options.previousOnlyCampaigns || [])];
+  const comparisonCampaigns = clipCampaignsToComparison(withPreviousOnly, comparison);
+  const comparisonWindowLabel = describeComparisonWindow(comparison, dateScope);
   const trendDates = (campaigns || [])
     .flatMap((campaign) => campaign.series || [])
     .map((point) => point.date)
@@ -1066,7 +1069,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
     : (dateScope?.label || "Selected range");
   // The drawn series cover the whole range; the badge totals cover completed days only.
   const withComparison = (buildTotals) => {
-    const totals = buildTotals(campaigns);
+    const totals = buildTotals(withPreviousOnly);
     const compared = buildTotals(comparisonCampaigns);
     return {
       series: totals.current,
@@ -1130,6 +1133,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         meta,
         value: formatDashboardNumber(deduplicatedReachTotal > 0 ? deduplicatedReachTotal : sumMetric(campaigns, "reach_value"), 0),
         ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.reach || 0)),
+        noComparison: true,
         tone: "awareness",
         hero: true
       },
@@ -1157,6 +1161,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
           (point) => readNumber(point.impressions, 0),
           (point) => readNumber(point.reach, 0)
         )),
+        noComparison: true,
         tone: "awareness"
       }
     ], currency, comparisonWindowLabel);
@@ -1297,58 +1302,32 @@ function buildOverviewCards(campaigns = [], currency = "DKK", options = {}) {
   ];
 }
 
-// Month to date against the same elapsed days of last month, taken from the acquisition
-// panel's own comparison rather than recomputed, so the badge in the KPI strip and the
-// badge inside the panel can never disagree.
+// The change badges on the two new-customer tiles in the General strip.
 //
-// The window is deliberately not the dashboard's selected range: the department reports on
-// calendar months, and comparing a part-month against a whole one would make every month
-// look worse than the last. Because the neighbouring badges do use the selected range, the
-// label names this one explicitly.
-function buildAcquisitionChange(acquisition = null, field = "newCustomers", positiveDirection = "up") {
-  const trend = acquisition?.trend || null;
-  if (!acquisition?.available || !trend?.available || !trend.comparable) {
+// They compare the same completed days as the Spend and ROAS tiles beside them, from the
+// account-level daily rows the new-customer panel is built on. The tiles used to print the
+// selected range's count beside a month-to-date badge: on "Last 7 days" a 7-day number sat
+// next to a change measured over a different month. Month to date lives in the panel
+// directly below, which names its own window.
+function buildAcquisitionRangeChange(rangeComparison = null, field = "newCustomers", options = {}) {
+  if (!rangeComparison) {
     return null;
   }
-
-  const currentValue = readNumber(trend.current?.[field], 0);
-  const previousValue = readNumber(trend.previous?.[field], 0);
-  const label = trend.previous?.label ? `vs ${trend.previous.label}` : "vs the same days last month";
-
-  if (previousValue <= 0 && currentValue <= 0) {
-    return { value: "0.0%", percentChange: 0, tone: "neutral", direction: "flat", label, currentValue, previousValue };
-  }
-  if (previousValue <= 0) {
-    return {
-      value: "New",
-      percentChange: null,
-      tone: positiveDirection === "down" ? "negative" : "positive",
-      direction: "new",
-      label,
-      currentValue,
-      previousValue
-    };
-  }
-
-  const change = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
-  const isNeutral = Math.abs(change) < 0.1;
-  const isPositive = positiveDirection === "down" ? change < 0 : change > 0;
-
-  return {
-    value: isNeutral ? "0.0%" : `${change > 0 ? "+" : ""}${change.toFixed(1)}%`,
-    percentChange: change,
-    tone: isNeutral ? "neutral" : (isPositive ? "positive" : "negative"),
-    direction: isNeutral ? "flat" : (change > 0 ? "up" : "down"),
-    label,
-    currentValue,
-    previousValue
+  const read = (side) => {
+    const totals = rangeComparison[side] || {};
+    if (field === "costPerNewCustomer") {
+      const customers = readNumber(totals.newCustomers, 0);
+      return customers > 0 ? readNumber(totals.spend, 0) / customers : NaN;
+    }
+    return readNumber(totals[field], NaN);
   };
+  return buildValueChange(read("current"), read("previous"), options);
 }
 
 function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK", dateScope = null, options = {}) {
   const deduplicatedHeroReach = readNumber(options.deduplicatedReach?.reach, 0);
   const comparison = resolveCompletedDayComparison(dateScope);
-  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison(campaigns, comparison));
+  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison([...campaigns, ...(options.previousOnlyCampaigns || [])], comparison));
   const changeWindowLabel = describeComparisonWindow(comparison, dateScope);
 
   // Every figure here comes from the campaign totals Meta reported for the range, which
@@ -1374,18 +1353,24 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
 
   if (lens === "general") {
     const acquisition = options.customerAcquisition || null;
-    const newCustomers = readNumber(acquisition?.newCustomers, 0);
-    const costPerNewCustomer = readNumber(acquisition?.costPerNewCustomer, 0);
+    // Account-level figures for the range where they exist (see rangeTotals), so the
+    // strip and the new-customer panel print one number for one fact.
+    const rangeTotals = acquisition?.rangeTotals || null;
+    const newCustomers = rangeTotals ? readNumber(rangeTotals.newCustomers, 0) : readNumber(acquisition?.newCustomers, 0);
+    const costPerNewCustomer = rangeTotals
+      ? (readNumber(rangeTotals.newCustomers, 0) > 0 ? readNumber(rangeTotals.spend, 0) / readNumber(rangeTotals.newCustomers, 0) : 0)
+      : readNumber(acquisition?.costPerNewCustomer, 0);
     const acquisitionAvailable = Boolean(acquisition?.available);
-    const newCustomerChange = buildAcquisitionChange(acquisition, "newCustomers", "up");
-    const costPerNewCustomerChange = buildAcquisitionChange(acquisition, "costPerNewCustomer", "down");
+    const rangeComparison = acquisition?.rangeComparison || null;
+    const newCustomerChange = buildAcquisitionRangeChange(rangeComparison, "newCustomers", { positiveDirection: "up", windowLabel: changeWindowLabel });
+    const costPerNewCustomerChange = buildAcquisitionRangeChange(rangeComparison, "costPerNewCustomer", { positiveDirection: "down", windowLabel: changeWindowLabel });
 
     return [
       {
         label: "New customers",
         value: acquisitionAvailable ? formatDashboardNumber(newCustomers, 0) : "--",
         meta: acquisitionAvailable
-          ? "From the New_customer conversion"
+          ? `${dateScope?.label || "Selected range"} · New_customer conversion`
           : "No New_customer conversion on this account",
         change: newCustomerChange,
         tone: "success"
@@ -1401,7 +1386,7 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
         label: "Spend",
         value: formatCurrency(spend, currency),
         meta: dateScope?.label || "Selected range",
-        change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "up", windowLabel: changeWindowLabel }),
+        change: buildWindowChange(comparisonWindow, "spend", { positiveDirection: "neutral", windowLabel: changeWindowLabel }),
         tone: "neutral"
       },
       {
@@ -1566,17 +1551,22 @@ function buildPresetRange(preset, timeZone = "") {
     const yesterday = shiftDays(todayUtc, -1);
     return { since: formatIsoDate(yesterday), until: formatIsoDate(yesterday), label: "Yesterday" };
   }
+  // The rolling presets are whole days ending yesterday, which is what Ads Manager means
+  // by "Last 7 days", so a figure here can be found there. They used to end today: a few
+  // hours of the current day were counted as a day, pacing ran low, and "Last 30 days"
+  // here was a different window from "Last 30 days" in the new-customer panel below.
+  const yesterdayUtc = shiftDays(todayUtc, -1);
   if (preset === "last_14d") {
-    return { since: formatIsoDate(shiftDays(todayUtc, -13)), until: formatIsoDate(todayUtc), label: "Last 14 days" };
+    return { since: formatIsoDate(shiftDays(todayUtc, -14)), until: formatIsoDate(yesterdayUtc), label: "Last 14 days" };
   }
   if (preset === "last_30d") {
-    return { since: formatIsoDate(shiftDays(todayUtc, -29)), until: formatIsoDate(todayUtc), label: "Last 30 days" };
+    return { since: formatIsoDate(shiftDays(todayUtc, -30)), until: formatIsoDate(yesterdayUtc), label: "Last 30 days" };
   }
   if (preset === "this_month") {
     return { since: formatIsoDate(startOfMonth(todayUtc)), until: formatIsoDate(todayUtc), label: "This month" };
   }
 
-  return { since: formatIsoDate(shiftDays(todayUtc, -6)), until: formatIsoDate(todayUtc), label: "Last 7 days" };
+  return { since: formatIsoDate(shiftDays(todayUtc, -7)), until: formatIsoDate(yesterdayUtc), label: "Last 7 days" };
 }
 
 function formatScopeLabel(since, until, fallback) {
@@ -1672,6 +1662,11 @@ function splitSeriesByDateRange(series = [], since = "", until = "") {
 
   return { previous, current };
 }
+
+// Remembered from the last successful read, so a request whose very first call fails can
+// still find the cached snapshot for its range. The range is resolved in the account's
+// timezone, and without it the cache key could not be built at all.
+let lastKnownAccountTimeZone = "";
 
 module.exports = async (req, res) => {
   if (req.method !== "GET") {
@@ -1777,6 +1772,7 @@ module.exports = async (req, res) => {
     );
     const accountCurrency = normalizeCurrencyCode(account.currency, "DKK");
     const accountTimeZone = String(account.timezone_name || "").trim();
+    lastKnownAccountTimeZone = accountTimeZone || lastKnownAccountTimeZone;
 
     dateScope = buildDateScope(req.query || {}, accountTimeZone);
     comparisonDateScope = buildComparisonDateScope(dateScope);
@@ -2081,6 +2077,12 @@ module.exports = async (req, res) => {
       campaigns,
       adSetsByCampaignId
     });
+    const previousOnlyCampaigns = buildPreviousOnlyCampaigns({
+      campaignRows: campaignResponse.data || [],
+      includedCampaignIds,
+      seriesMap,
+      dateScope
+    });
 
     const {
       dashboard,
@@ -2088,6 +2090,7 @@ module.exports = async (req, res) => {
       qualityWarnings
     } = buildSnapshotDashboardAssembly({
       enrichedCampaigns,
+      previousOnlyCampaigns,
       includedCampaigns,
       adSets,
       activeAds,
@@ -2181,14 +2184,24 @@ module.exports = async (req, res) => {
         return;
       }
     }
-    if (!healthOnly && snapshotCacheKey && isRateLimitError(error.message || "")) {
-      const cachedSnapshot = getCachedSnapshot(snapshotCacheKey);
+    // Any failure to reach Meta serves the last snapshot for this range, labelled with its
+    // age and the reason. It used to be rate limits only, so a timeout returned a bare 500,
+    // and when the account call itself failed there was no cache key to look up.
+    const fallbackCacheKey = snapshotCacheKey || (() => {
+      try {
+        return buildSnapshotCacheKey(buildDateScope(req.query || {}, lastKnownAccountTimeZone));
+      } catch {
+        return "";
+      }
+    })();
+    if (!healthOnly && !catalogOnly && fallbackCacheKey) {
+      const cachedSnapshot = getCachedSnapshot(fallbackCacheKey);
       if (cachedSnapshot?.payload) {
         sendMetaSnapshotFallback({
           res,
           sendJson,
           cachedSnapshot,
-          reason: error.message || "Meta rate limit"
+          reason: error.message || "Meta could not be reached"
         });
         return;
       }
@@ -2208,10 +2221,11 @@ module.exports.__internals = {
   buildGeneralSpendDistribution,
   buildLensStats,
   buildQualityWarnings,
-  buildAcquisitionChange,
+  buildAcquisitionRangeChange,
   buildPresetRange,
   buildSnapshotDashboardAssembly,
   buildTrendCards,
   buildWindowChange,
+  buildValueChange,
   resolveTodayInTimeZone
 };

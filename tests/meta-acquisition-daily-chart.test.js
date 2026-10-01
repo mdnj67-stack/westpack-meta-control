@@ -194,59 +194,44 @@ test("the new-customer panel comes before the budget panel on General", () => {
   assert.ok(acquisitionAt < budgetAt, "the budget panel is being shown first again");
 });
 
-const { buildAcquisitionChange } = require(join(root, "api", "meta", "account-snapshot.js")).__internals;
+const { buildAcquisitionRangeChange } = require(join(root, "api", "meta", "account-snapshot.js")).__internals;
 
-function acquisition(current, previous) {
-  return {
-    available: true,
-    trend: {
-      available: true,
-      comparable: true,
-      current: { ...current, label: "the first 7 days of this month" },
-      previous: { ...previous, label: "the first 7 days of last month" }
-    }
-  };
+function rangeComparison(current, previous) {
+  return { current, previous };
 }
 
-test("the new-customer count carries the month-to-date change beside it", () => {
+test("the new-customer count carries the change over the same days as its neighbours", () => {
   // A count on its own says where acquisition stands and nothing about where it is going,
   // which is the question the department is actually held to.
-  const up = buildAcquisitionChange(acquisition({ newCustomers: 58 }, { newCustomers: 47 }), "newCustomers", "up");
-  assert.equal(up.value, "+23.4%");
+  const up = buildAcquisitionRangeChange(rangeComparison({ newCustomers: 58 }, { newCustomers: 47 }), "newCustomers", { positiveDirection: "up", windowLabel: "6 days, today excluded" });
+  assert.equal(up.value, "+23,4%");
   assert.equal(up.tone, "positive", "more new customers is good news");
-  assert.equal(up.direction, "up");
+  assert.equal(up.label, "vs previous 6 days, today excluded");
 
-  const down = buildAcquisitionChange(acquisition({ newCustomers: 47 }, { newCustomers: 58 }), "newCustomers", "up");
+  const down = buildAcquisitionRangeChange(rangeComparison({ newCustomers: 47 }, { newCustomers: 58 }), "newCustomers", { positiveDirection: "up" });
   assert.equal(down.tone, "negative");
 });
 
-test("cost per new customer runs the other way, because cheaper is better", () => {
-  // Without this, a period can show more new customers in green while quietly costing far
-  // more for each one.
-  const dearer = buildAcquisitionChange(
-    acquisition({ costPerNewCustomer: 1509 }, { costPerNewCustomer: 1200 }),
+test("cost per new customer runs the other way, and has no badge without customers", () => {
+  const dearer = buildAcquisitionRangeChange(
+    rangeComparison({ newCustomers: 10, spend: 15090 }, { newCustomers: 10, spend: 12000 }),
     "costPerNewCustomer",
-    "down"
+    { positiveDirection: "down" }
   );
   assert.equal(dearer.direction, "up", "the figure did rise");
   assert.equal(dearer.tone, "negative", "and a rising cost per customer is bad news");
 
-  const cheaper = buildAcquisitionChange(
-    acquisition({ costPerNewCustomer: 1200 }, { costPerNewCustomer: 1509 }),
+  // No new customers means no cost per customer, not a cost of zero - which used to read
+  // as a -100% improvement.
+  const none = buildAcquisitionRangeChange(
+    rangeComparison({ newCustomers: 0, spend: 5000 }, { newCustomers: 4, spend: 5000 }),
     "costPerNewCustomer",
-    "down"
+    { positiveDirection: "down" }
   );
-  assert.equal(cheaper.direction, "down");
-  assert.equal(cheaper.tone, "positive");
+  assert.equal(none, null);
 });
 
-test("the badge names its own window, because its neighbours use a different one", () => {
-  // Spend and ROAS in the same strip compare against the selected dashboard range. This
-  // one compares calendar month to date. Two windows in one row is only honest if each
-  // says which it is.
-  const change = buildAcquisitionChange(acquisition({ newCustomers: 58 }, { newCustomers: 47 }), "newCustomers", "up");
-  assert.match(change.label, /vs the first 7 days of last month/);
-
+test("the badge names its own window", () => {
   // And the tile has to render that label, or the distinction never reaches the reader.
   const ui = readFileSync(join(root, "src", "ui.js"), "utf8");
   const hero = ui.slice(ui.indexOf("export function renderHeroPanel"));
@@ -254,23 +239,15 @@ test("the badge names its own window, because its neighbours use a different one
 });
 
 test("no badge at all when there is nothing honest to compare", () => {
-  // A fabricated "0.0% flat" is worse than a missing badge: it asserts that nothing
-  // changed. On the first of the month there is no elapsed period to compare against.
-  assert.equal(
-    buildAcquisitionChange({ available: true, trend: { available: true, comparable: false } }, "newCustomers", "up"),
-    null,
-    "an incomparable window must produce no badge"
-  );
-  assert.equal(buildAcquisitionChange({ available: false }, "newCustomers", "up"), null);
-  assert.equal(buildAcquisitionChange(null, "newCustomers", "up"), null);
+  // A fabricated "0,0% flat" is worse than a missing badge: it asserts that nothing
+  // changed. With no completed day in the range there is nothing to compare against.
+  assert.equal(buildAcquisitionRangeChange(null, "newCustomers", {}), null, "an incomparable window must produce no badge");
 
-  // Both windows genuinely empty is a real, reportable flat.
-  const flat = buildAcquisitionChange(acquisition({ newCustomers: 0 }, { newCustomers: 0 }), "newCustomers", "up");
-  assert.equal(flat.direction, "flat");
-  assert.equal(flat.tone, "neutral");
+  // Both windows empty is nothing to measure, not a measured flat.
+  assert.equal(buildAcquisitionRangeChange(rangeComparison({ newCustomers: 0 }, { newCustomers: 0 }), "newCustomers", {}), null);
 
-  // A first-ever customer is "New", not an infinite percentage.
-  const fresh = buildAcquisitionChange(acquisition({ newCustomers: 12 }, { newCustomers: 0 }), "newCustomers", "up");
+  // A first-ever customer is "New", not an infinite percentage, and not a verdict.
+  const fresh = buildAcquisitionRangeChange(rangeComparison({ newCustomers: 12 }, { newCustomers: 0 }), "newCustomers", { positiveDirection: "up" });
   assert.equal(fresh.value, "New");
-  assert.equal(fresh.tone, "positive");
+  assert.equal(fresh.tone, "neutral");
 });

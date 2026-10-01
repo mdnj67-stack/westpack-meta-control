@@ -76,7 +76,9 @@ test("stale data always names the range it actually covers", () => {
   assert.notEqual(start, -1, "the stale range is no longer labelled");
   const block = app.slice(start, start + 1000);
 
-  assert.match(block, /snapshot\.scope\?\.label/);
+  // With the dates: a preset name alone cannot tell this month's snapshot from last month's.
+  assert.match(block, /describeSnapshotScope\(snapshot\.scope\)/);
+  assert.match(app, /function describeSnapshotScope\(scope = null\) \{[\s\S]{0,400}scope\?\.since[\s\S]{0,200}scope\?\.until/);
   assert.match(block, /not the selected range/);
   // The cause is named through failureReason now, so the line reads "Meta did not respond
   // in time. Showing …" as readily as it reads "Meta is rate limited. Showing …".

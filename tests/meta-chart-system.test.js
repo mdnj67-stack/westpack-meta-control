@@ -161,15 +161,22 @@ test("a rate's change is summed numerator over summed denominator", () => {
 });
 
 test("a change against nothing is reported as new, not as a percentage", () => {
-  assert.match(handler, /if \(previous === 0 && current > 0\)/);
-  assert.match(handler, /direction: "new", value: "New"/);
+  const { buildValueChange } = require(join(root, "api", "meta", "account-snapshot.js")).__internals;
+  assert.equal(buildValueChange(5, 0, {}).value, "New");
+  assert.equal(buildValueChange(5, 0, {}).tone, "neutral");
+  // Nothing on either side, or a rate with nothing under it, is no badge at all.
+  assert.equal(buildValueChange(0, 0, {}), null);
+  assert.equal(buildValueChange(Number.NaN, 120, {}), null);
 });
 
 test("a cost metric reads the right way round", () => {
   // Cheaper is better. Without this a rising cost per lead would show green.
   assert.match(handler, /"CPL trend": \{ format: "currency", baseline: "auto", goodWhen: "down" \}/);
   assert.match(handler, /"CPA trend": \{ format: "currency", baseline: "auto", goodWhen: "down" \}/);
-  assert.match(handler, /direction === good \? "positive" : "negative"/);
+  const { buildValueChange } = require(join(root, "api", "meta", "account-snapshot.js")).__internals;
+  assert.equal(buildValueChange(120, 100, { positiveDirection: "down" }).tone, "negative");
+  assert.equal(buildValueChange(80, 100, { positiveDirection: "down" }).tone, "positive");
+  assert.equal(buildValueChange(120, 100, { positiveDirection: "neutral" }).tone, "neutral");
 });
 
 test("the chart card leads with the figure, then the comparison, then the chart", () => {

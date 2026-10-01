@@ -359,9 +359,11 @@ function createMetaSnapshotTransformers({
         }
       }
 
-      const roas = spend > 0 ? revenue / spend : 0;
-      const cpa = purchases > 0 ? spend / purchases : 0;
-      const cpl = leads > 0 ? spend / leads : 0;
+      // A rate with nothing underneath it is undefined, and is sent as null so the table
+      // prints "--". As a 0 it printed "0 kr." CPA for a campaign that bought nothing.
+      const roas = spend > 0 ? revenue / spend : null;
+      const cpa = purchases > 0 ? spend / purchases : null;
+      const cpl = leads > 0 ? spend / leads : null;
       const comparisonWindow = splitSeriesByDateRange(series, dateScope.since, dateScope.until);
 
       return {
@@ -419,6 +421,38 @@ function createMetaSnapshotTransformers({
     };
   }
 
+  // Campaigns that spent in the comparison window but not in the selected range: paused
+  // before it started, or replaced. They carry only their previous-window series.
+  //
+  // Without them every "vs previous" badge compared the campaigns that exist now against
+  // only those of them that also existed before - a set that can only shrink going
+  // backwards. After a restructure, as on 2026-09-09, that read as growth that was really
+  // money moving from old campaigns to new ones. They never appear in a table or a total:
+  // their current spend is zero and they have no current series.
+  function buildPreviousOnlyCampaigns({
+    campaignRows = [],
+    includedCampaignIds,
+    seriesMap = {},
+    dateScope
+  }) {
+    return (campaignRows || [])
+      .filter((campaign) => !includedCampaignIds.has(String(campaign.id)) && (seriesMap[campaign.id] || []).length > 0)
+      .map((campaign) => {
+        const window = splitSeriesByDateRange(sortSeries(seriesMap[campaign.id] || []), dateScope.since, dateScope.until);
+        return {
+          id: campaign.id,
+          name: campaign.name,
+          objective: campaign.objective || "",
+          category: classifyCampaign(campaign),
+          spend_value: 0,
+          series: [],
+          comparison_window: { previous: window.previous, current: [] },
+          previous_only: true
+        };
+      })
+      .filter((campaign) => campaign.comparison_window.previous.length > 0);
+  }
+
   function enrichCampaignsWithAttribution({
     campaigns = [],
     adSetsByCampaignId
@@ -439,6 +473,7 @@ function createMetaSnapshotTransformers({
     buildCampaignMetricCollections,
     buildIncludedCampaignContext,
     buildInsightMap,
+    buildPreviousOnlyCampaigns,
     buildSeriesMap,
     buildSnapshotStats,
     enrichCampaignsWithAttribution

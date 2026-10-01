@@ -7,6 +7,9 @@ function createMetaSnapshotDashboardBuilder({
   buildCustomerAcquisition,
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
+  compareAcquisitionWindow,
+  resolveAcquisitionWindowPresets,
+  resolveCompletedDayComparison,
   formatCurrency,
   buildGeneralSpendDistribution,
   buildLensStats,
@@ -53,6 +56,7 @@ function createMetaSnapshotDashboardBuilder({
 
   function buildSnapshotDashboardAssembly({
     enrichedCampaigns = [],
+    previousOnlyCampaigns = [],
     includedCampaigns = [],
     adSets = [],
     activeAds = [],
@@ -81,6 +85,8 @@ function createMetaSnapshotDashboardBuilder({
     buildScheduleDiagnostics
   }) {
     const buckets = splitByCategory(enrichedCampaigns);
+    // Only ever read by the "vs previous" comparisons. See buildPreviousOnlyCampaigns.
+    const previousOnly = splitByCategory(previousOnlyCampaigns);
     const enrichedCampaignById = new Map(enrichedCampaigns.map((campaign) => [String(campaign.id || ""), campaign]));
     const campaignCategoryById = new Map(enrichedCampaigns.map((campaign) => [String(campaign.id || ""), classifyCampaign(campaign)]));
     // Counted on the campaigns that carry insight figures. `includedCampaigns` is the raw
@@ -142,6 +148,57 @@ function createMetaSnapshotDashboardBuilder({
           formatCurrency
         });
 
+    // The strip's new-customer badges compare the same completed days as its Spend and
+    // ROAS badges, read from the account-level daily rows. Only where those rows reach back
+    // far enough: a custom range from last spring would otherwise compare against days
+    // that were never fetched and read as a collapse.
+    const rangeWindows = resolveCompletedDayComparison(dateScope);
+    const fetchedSince = resolveAcquisitionWindowPresets(new Date(), accountTimezone)?.fetch?.since || "";
+    // The strip's new-customer count for the whole selected range, from the same
+    // account-level rows as the panel below it, so "Last 7 days" reads the same number in
+    // both places. Summed campaign rows can differ from the account by a customer or two,
+    // and two numbers for one fact on one screen is the defect this dashboard keeps
+    // removing. The campaign figure is the fallback for a range older than the rows.
+    customerAcquisition.rangeTotals = !acquisitionTrendUnavailable
+      && customerAcquisition.available
+      && fetchedSince
+      && dateScope?.since >= fetchedSince
+      ? compareAcquisitionWindow({
+          dailyRows: acquisitionTrendRows,
+          preset: {
+            key: "selected_range_total",
+            label: dateScope?.label || "Selected range",
+            comparable: false,
+            current: { since: dateScope.since, until: dateScope.until, days: dateScope.days, label: "the selected range" },
+            previous: { since: dateScope.since, until: dateScope.until, days: dateScope.days, label: "the selected range" }
+          },
+          actionTypes: customerConversionActionTypes,
+          available: true,
+          currency: accountCurrency,
+          formatCurrency
+        }).current
+      : null;
+    customerAcquisition.rangeComparison = !acquisitionTrendUnavailable
+      && customerAcquisition.available
+      && rangeWindows?.comparable
+      && fetchedSince
+      && rangeWindows.previous.since >= fetchedSince
+      ? compareAcquisitionWindow({
+          dailyRows: acquisitionTrendRows,
+          preset: {
+            key: "selected_range",
+            label: dateScope?.label || "Selected range",
+            comparable: true,
+            current: { ...rangeWindows.current, days: rangeWindows.days, label: "the selected range" },
+            previous: { ...rangeWindows.previous, days: rangeWindows.days, label: "the period before" }
+          },
+          actionTypes: customerConversionActionTypes,
+          available: true,
+          currency: accountCurrency,
+          formatCurrency
+        })
+      : null;
+
     const accountSpend = readNumber(deduplicatedReach?.account?.spend, NaN);
 
     // Built after the allocation so the warnings can report on budget coverage: unmapped
@@ -174,25 +231,28 @@ function createMetaSnapshotDashboardBuilder({
         }),
         awareness: buildLensStats(buckets.awareness, "awareness", dateScope, {
           currency: accountCurrency,
-          deduplicatedReach: deduplicatedReach?.awareness || null
+          deduplicatedReach: deduplicatedReach?.awareness || null,
+          previousOnlyCampaigns: previousOnly.awareness
         }),
-        leads: buildLensStats(buckets.leads, "leads", dateScope, { currency: accountCurrency }),
-        conversion: buildLensStats(buckets.conversion, "conversion", dateScope, { currency: accountCurrency })
+        leads: buildLensStats(buckets.leads, "leads", dateScope, { currency: accountCurrency, previousOnlyCampaigns: previousOnly.leads }),
+        conversion: buildLensStats(buckets.conversion, "conversion", dateScope, { currency: accountCurrency, previousOnlyCampaigns: previousOnly.conversion })
       },
       visuals: {
         // Only General has a strip; every other lens has a stat row instead.
         heroPanelByLens: {
           general: buildHeroPanelItems(enrichedCampaigns, "general", accountCurrency, dateScope, {
-            customerAcquisition
+            customerAcquisition,
+            previousOnlyCampaigns
           })
         },
         trendCardsByLens: {
-          general: buildTrendCards(enrichedCampaigns, "general", dateScope, accountCurrency),
+          general: buildTrendCards(enrichedCampaigns, "general", dateScope, accountCurrency, { previousOnlyCampaigns }),
           awareness: buildTrendCards(buckets.awareness, "awareness", dateScope, accountCurrency, {
-            deduplicatedReach: deduplicatedReach?.awareness || null
+            deduplicatedReach: deduplicatedReach?.awareness || null,
+            previousOnlyCampaigns: previousOnly.awareness
           }),
-          leads: buildTrendCards(buckets.leads, "leads", dateScope, accountCurrency),
-          conversion: buildTrendCards(buckets.conversion, "conversion", dateScope, accountCurrency)
+          leads: buildTrendCards(buckets.leads, "leads", dateScope, accountCurrency, { previousOnlyCampaigns: previousOnly.leads }),
+          conversion: buildTrendCards(buckets.conversion, "conversion", dateScope, accountCurrency, { previousOnlyCampaigns: previousOnly.conversion })
         },
         overviewCards: buildOverviewCards(enrichedCampaigns, accountCurrency, {
           deduplicatedReach: deduplicatedReach?.awareness || null

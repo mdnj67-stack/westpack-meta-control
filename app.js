@@ -11900,6 +11900,16 @@ function toTitleCaseWord(value = "") {
   return text ? `${text.charAt(0).toUpperCase()}${text.slice(1)}` : "";
 }
 
+// "This month (1 Sep – 30 Sep)": the preset's name with the days it actually covered.
+function describeSnapshotScope(scope = null) {
+  const label = String(scope?.label || scope?.shortLabel || "").trim();
+  const since = String(scope?.since || "");
+  const until = String(scope?.until || "");
+  if (!since || !until) return label;
+  const dates = since === until ? formatShortDate(since) : `${formatShortDate(since)} – ${formatShortDate(until)}`;
+  return label && !label.includes(dates) ? `${label} (${dates})` : dates;
+}
+
 function buildMetaTrustState() {
   const meta = appState.metaSnapshotMeta || null;
   if (!meta) {
@@ -12246,7 +12256,9 @@ function getDashboardSnapshotOptions() {
 }
 
 function applySnapshotScope(scope = {}) {
-  appState.dashboardDateLabel = scope.label || "Last 7 days";
+  // With its dates: presets resolve in the ad account's timezone (Los Angeles), so at
+  // 08:00 in Copenhagen "Today" is still yesterday there, and only the dates show it.
+  appState.dashboardDateLabel = describeSnapshotScope(scope) || scope.label || "Last 7 days";
   appState.dashboardDateShortLabel = scope.shortLabel || scope.label || "Last 7 days";
   appState.dashboardDateDays = Number.isFinite(Number(scope?.days)) && Number(scope.days) > 0 ? Number(scope.days) : 7;
 }
@@ -13536,7 +13548,13 @@ async function refreshMetaData(options = {}) {
     }
   }
 
-  if (!forceRefresh && cooldownActive && cachedEntry?.snapshot) {
+  // The browser cache is keyed on the preset alone ("this_month||"), so an entry can be
+  // any age and from a different month. During the short cooldown after a refresh it is
+  // only reused when it was written in the last quarter of an hour; anything older is
+  // read fresh rather than shown as "Recent cache".
+  const cachedEntryAgeMs = cachedEntry?.cachedAt ? Date.now() - new Date(cachedEntry.cachedAt).getTime() : Number.POSITIVE_INFINITY;
+  const cachedEntryRecent = Number.isFinite(cachedEntryAgeMs) && cachedEntryAgeMs >= 0 && cachedEntryAgeMs < 15 * 60 * 1000;
+  if (!forceRefresh && cooldownActive && cachedEntryRecent && cachedEntry?.snapshot) {
     const snapshot = cachedEntry.snapshot;
     setMetaSnapshotMeta({
       mode: "live",
@@ -13585,7 +13603,11 @@ async function refreshMetaData(options = {}) {
         mode: appState.metaDataMode === "snapshot" && !forceLive ? "snapshot" : "live",
         modeLabel: appState.metaDataMode === "snapshot" && !forceLive ? "Snapshot mode" : "Live mode",
         source: snapshot?.cache?.status === "fallback" ? "fallback" : "meta-live-api",
-        sourceLabel: snapshot?.cache?.status === "fallback" ? "Fallback snapshot" : "Meta live API",
+        sourceLabel: snapshot?.cache?.status === "fallback"
+          ? "Fallback snapshot"
+          : snapshot?.cache?.status === "hit"
+            ? "Meta, read in the last 15 minutes"
+            : "Meta live API",
         generatedAt: snapshot.generatedAt || "",
         cachedAt: snapshot?.cache?.cachedAt || ""
       });
@@ -13676,7 +13698,8 @@ async function refreshMetaData(options = {}) {
         );
         // Naming the range the data actually covers is the whole safeguard here. The
         // figures are real, they are just from an earlier window than the one selected.
-        const staleRangeLabel = String(snapshot.scope?.label || snapshot.scope?.shortLabel || "an earlier range");
+        // With the dates, because a preset name alone cannot tell this month from last.
+        const staleRangeLabel = describeSnapshotScope(snapshot.scope) || "an earlier range";
         const cachedAge = fallbackEntry.cachedAt
           ? formatRelativeAgeFromNow(fallbackEntry.cachedAt)
           : "";
@@ -13693,7 +13716,7 @@ async function refreshMetaData(options = {}) {
         setSyncStatus(
           isStaleRange
             ? `${failureReason} · showing ${staleRangeLabel}${cachedAge ? ` cached ${cachedAge}` : ""}, not the selected range · ${buildMetaQualityLabel()}`
-            : `${failureReason} · showing a snapshot${cachedAge ? ` from ${cachedAge}` : ""} · ${appState.dashboardDateLabel} · ${buildMetaQualityLabel()}`,
+            : `${failureReason} · showing a snapshot${cachedAge ? ` from ${cachedAge}` : ""} · ${describeSnapshotScope(snapshot.scope) || appState.dashboardDateLabel} · ${buildMetaQualityLabel()}`,
           "warning"
         );
         return snapshot;

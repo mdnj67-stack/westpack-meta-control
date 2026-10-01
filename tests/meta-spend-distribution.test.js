@@ -140,7 +140,7 @@ test("over a 30-day range the pace is the actual spend, so pacing reads directly
   assert.equal(byKey.conversion.pacePercentage, 31.3);
 });
 
-test("pacing is zero rather than infinite when an objective has no budget", () => {
+test("pacing is absent rather than zero or infinite when an objective has no budget", () => {
   const split = buildGeneralSpendDistribution(
     [{ id: "c1", objective: "OUTCOME_SALES", spend_value: 5000 }],
     DATE_SCOPE,
@@ -150,9 +150,9 @@ test("pacing is zero rather than infinite when an objective has no budget", () =
 
   const conversion = split.items.find((item) => item.key === "conversion");
   assert.equal(conversion.budgetAmount, 0);
-  assert.equal(conversion.pacePercentage, 0);
-  assert.equal(split.totalPacePercentage, 0);
-  assert.equal(Number.isFinite(conversion.pacePercentage), true);
+  // No budget means no pace: 0% would read as "nothing spent against the plan".
+  assert.equal(conversion.pacePercentage, null);
+  assert.equal(split.totalPacePercentage, null);
 });
 
 test("a lifetime-budget campaign shows real money instead of a zero row", () => {

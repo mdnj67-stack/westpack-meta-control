@@ -101,7 +101,7 @@ test("the strip reads campaign totals, never the daily series", () => {
   );
 
   const roas = hero.find((item) => item.label === "ROAS");
-  assert.equal(roas.value, (232000 / 56428.94).toFixed(2), "ROAS must be summed revenue over summed spend");
+  assert.equal(roas.value, (232000 / 56428.94).toFixed(2).replace(".", ","), "ROAS must be summed revenue over summed spend");
 
   const handler = readFileSync(join(root, "api", "meta", "account-snapshot.js"), "utf8");
   const start = handler.indexOf("function buildHeroPanelItems");

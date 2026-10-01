@@ -157,8 +157,8 @@ test("the deduplicated reach reaches the awareness stat row, not just the fetche
 
   const reachStat = dashboard.statsByLens.awareness.find((stat) => stat.label === "Reach");
   assert.ok(reachStat, "the awareness lens has no reach stat");
-  assert.equal(Number(reachStat.value), DEDUPLICATED_AWARENESS_REACH);
-  assert.notEqual(Number(reachStat.value), SUMMED_AWARENESS_REACH, "the summed figure is back");
+  assert.equal(Number(reachStat.value.replace(/[^0-9]/g, "")), DEDUPLICATED_AWARENESS_REACH);
+  assert.notEqual(Number(reachStat.value.replace(/[^0-9]/g, "")), SUMMED_AWARENESS_REACH, "the summed figure is back");
   assert.match(reachStat.meta, /deduplicated/);
 
   // And it must be reported in the payload so the data quality panel can show its source.
@@ -169,7 +169,7 @@ test("without a deduplicated figure the summed one is shown and labelled as a su
   const { dashboard } = assemble({ account: null, awareness: null });
 
   const reachStat = dashboard.statsByLens.awareness.find((stat) => stat.label === "Reach");
-  assert.equal(Number(reachStat.value), SUMMED_AWARENESS_REACH);
+  assert.equal(Number(reachStat.value.replace(/[^0-9]/g, "")), SUMMED_AWARENESS_REACH);
   assert.match(reachStat.meta, /counted twice/, "a sum has to say it is a sum");
 });
 

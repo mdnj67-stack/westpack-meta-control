@@ -136,10 +136,13 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
     const cpmValue = campaign.cpmValue ?? campaign.cpm_value;
     const purchasesValue = campaign.purchasesValue ?? campaign.purchases_value;
     const revenueValue = campaign.revenueValue ?? campaign.revenue_value;
-    const roasValue = campaign.roasValue ?? campaign.roas_value;
-    const cpaValue = campaign.cpaValue ?? campaign.cpa_value;
+    // null is an undefined rate. Number(null) is 0, so it is turned into NaN here or the
+    // shared formatters would print it as a measured zero.
+    const rate = (value) => (value === null || value === undefined ? Number.NaN : value);
+    const roasValue = rate(campaign.roasValue ?? campaign.roas_value);
+    const cpaValue = rate(campaign.cpaValue ?? campaign.cpa_value);
     const leadsValue = campaign.leadsValue ?? campaign.leads_value;
-    const cplValue = campaign.cplValue ?? campaign.cpl_value;
+    const cplValue = rate(campaign.cplValue ?? campaign.cpl_value);
     const ctrValue = campaign.ctrValue ?? campaign.ctr_value;
     const newCustomersValue = campaign.newCustomersValue ?? campaign.new_customers_value;
     // Spend per new customer for this campaign. Left blank rather than shown as zero when
@@ -192,7 +195,7 @@ export function renderCampaignTable(campaigns, lens = 'awareness', options = {})
         return `<td>${formatCurrency(cpaValue, currency)}</td>`;
       }
       if (col.key === 'reportedRoas') {
-        return `<td>${formatDecimal(campaign.reported_roas_value, 2)}</td>`;
+        return `<td>${formatDecimal(rate(campaign.reported_roas_value), 2)}</td>`;
       }
       if (col.key === 'attribution') {
         return `<td>${escapeHtml(formatAttributionSetting(campaign.attribution_setting))}</td>`;
@@ -1658,11 +1661,13 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
         ${budgetAvailable ? `
         <article class="meta-budget-kpi-card is-pace">
           <span>${escapeHtml(model?.paceLabel || "30-day spend pace vs monthly budget")}</span>
-          <strong>${escapeHtml(`${Number(model?.totalPacePercentage || 0).toFixed(0)}%`)}</strong>
+          <strong>${escapeHtml(model?.totalPacePercentage === null || model?.totalPacePercentage === undefined ? "--" : `${Number(model.totalPacePercentage).toFixed(0)}%`)}</strong>
           <p>${escapeHtml(
-            Number(model?.periodDays) === 30
-              ? "Spend in this range measured against the monthly budget."
-              : `Spend scaled to a 30-day pace (${model?.formattedTotalMonthlySpendPace || "--"}) so it is comparable with the monthly budget.`
+            model?.totalPacePercentage === null || model?.totalPacePercentage === undefined
+              ? "No full day in this range yet, so there is no pace to show."
+              : Number(model?.paceDays) === 30
+                ? "Spend in this range measured against the monthly budget."
+                : `Spend on ${model?.paceDays === 1 ? "the one finished day" : `the ${model?.paceDays} finished days`}${model?.paceExcludesToday ? ", today excluded," : ""} scaled to a 30-day pace (${model?.formattedTotalMonthlySpendPace || "--"}) so it is comparable with the monthly budget.`
           )}</p>
         </article>
         ` : ""}
@@ -1706,19 +1711,21 @@ export function renderOverviewSpendSplit(model = null, visible = false) {
         ${items.map((item) => {
           const spendAmount = Number(item?.amount) || 0;
           const budgetAmount = Number(item?.budgetAmount) || 0;
-          const spendWidth = Math.max(5, (spendAmount / maxAmount) * 100);
-          const budgetWidth = budgetAmount > 0 ? Math.max(5, (budgetAmount / maxBudgetAmount) * 100) : 0;
+          // A floor keeps a small objective visible; an objective with nothing gets nothing.
+          const spendWidth = spendAmount > 0 ? Math.max(2, (spendAmount / maxAmount) * 100) : 0;
+          const budgetWidth = budgetAmount > 0 ? Math.max(2, (budgetAmount / maxBudgetAmount) * 100) : 0;
           // Pacing compares a 30-day spend pace against the 30-day budget, so the two
           // sides cover the same length of time even when a shorter range is selected.
-          const variance = Number(item?.pacePercentage) || 0;
+          const paceKnown = item?.pacePercentage !== null && item?.pacePercentage !== undefined;
+          const variance = paceKnown ? Number(item.pacePercentage) : 0;
           // A missing budget figure and a genuinely unbudgeted objective are different
           // facts, so they get different labels instead of a shared "No active budget".
           const varianceLabel = budgetAmount > 0
-            ? `${variance.toFixed(0)}% of monthly budget`
+            ? (paceKnown ? `${variance.toFixed(0)}% of monthly budget` : "No full day yet")
             : budgetAvailable
               ? "No active budget"
               : "Budget not synced";
-          const pacingTone = !(budgetAmount > 0)
+          const pacingTone = !(budgetAmount > 0) || !paceKnown
             ? "is-unknown"
             : variance > 105
               ? "is-over"
@@ -1798,7 +1805,9 @@ function renderAcquisitionDailyChart(preset) {
   const previous = Array.isArray(preset.previous?.dailyNewCustomers) ? preset.previous.dailyNewCustomers : [];
   if (!current.length && !previous.length) return "";
 
-  const peak = Math.max(...[...current, ...previous].map((point) => Number(point.value) || 0), 0);
+  // The busiest day of the period on screen. It used to take the peak across both
+  // periods, so it could name a day from last month.
+  const peak = Math.max(...current.map((point) => Number(point.value) || 0), 0);
   const currentLabel = preset.current?.label || "this period";
   const previousLabel = preset.previous?.label || "the period before";
 
@@ -1821,7 +1830,7 @@ function renderAcquisitionDailyChart(preset) {
       })}
       <div class="wp-chart-legend">
         <span><i></i>${escapeHtml(currentLabel)}</span>
-        ${previous.length ? `<span><i class="is-previous"></i>${escapeHtml(previousLabel)}</span>` : ""}
+        ${previous.length > 1 ? `<span><i class="is-previous"></i>${escapeHtml(previousLabel)}</span>` : ""}
       </div>
     </div>
   `;
@@ -1832,7 +1841,9 @@ function renderAcquisitionDailyChart(preset) {
 // while quietly costing far more each - which is exactly what the last 90 days did, at
 // +11% customers and +30% cost per customer.
 function renderAcquisitionCostTrend(preset) {
-  if (!preset) return "";
+  // On the first of the month the "current" window is a few hours of today against a
+  // whole day last month, which is no comparison at all.
+  if (!preset || preset.comparable === false) return "";
   const now = Number(preset.current?.costPerNewCustomer) || 0;
   const before = Number(preset.previous?.costPerNewCustomer) || 0;
   if (!(now > 0) || !(before > 0)) return "";
@@ -1966,7 +1977,6 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
   // inside one figure is worse than showing the wrong period, because nothing on screen
   // reveals it.
   const active = resolveAcquisitionPreset(model);
-  const usingPreset = Boolean(active) && active.key !== (model.trend?.windows?.defaultPreset || "month_to_date");
 
   const scope = active
     ? {
@@ -2069,9 +2079,9 @@ export function renderOverviewCustomerAcquisition(model = null, visible = false)
 
       ${rows.length ? `
       <div class="meta-acq-rows">
-        ${usingPreset ? `
+        ${active && model.rangeLabel && model.rangeLabel !== active.label ? `
         <p class="meta-acq-scope-note">
-          Per campaign: ${escapeHtml(model.rangeLabel || "the dashboard's range")}, not ${escapeHtml(active.label)}
+          Per campaign: ${escapeHtml(model.rangeLabel)}, the range selected above, not ${escapeHtml(active.label)}
         </p>
         ` : ""}
         <div class="meta-acq-row is-head">
