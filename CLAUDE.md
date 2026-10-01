@@ -354,7 +354,7 @@ The marketing department budgets monthly and treats a month as 30 days — "the 
 ## Expansion reach — its own tab, its own rules
 
 `server/meta/expansion-reach.js` + `renderExpansionView`/`renderOverviewExpansionReach`
-(`src/ui.js`). The question is how many people the incremental campaigns reached for the
+(`src/ui.js`). The question is how many people the conversion campaigns reached for the
 **first time**, which Meta has no field for. The only route is the cumulative curve: unique
 reach from a fixed anchor to each month end, differenced. Every point costs a Graph call, so
 this is a nightly snapshot (`?expansion=sync`, cron 03:10 UTC) and the browser only ever
@@ -382,10 +382,27 @@ reads it (`?expansion=status`, zero quota).
 - **`Number(null)` is 0 and 0 is finite.** Every optional figure goes through
   `expansionMeasured`, because rendering a null as a measured zero says something the
   account never reported.
-- **The campaign set is Meta's current `attribution_setting` over a rolling window**, so it
-  changes under the series and rewrites completed months. `collectRestatements` records both
-  figures and the reason; the anchor also moves once the first delivering month rolls out of
-  the window, which re-bases every figure.
+- **The campaign set is every campaign whose Meta `objective` resolves to the `conversion`
+  group and that delivered in the rolling window** (`readConversionCampaigns`, via
+  `resolveObjectiveGroup` in `budget-allocation.js`) — never names, never
+  `attribution_setting`. It used to be "campaigns reporting `incrementality`"; on 2026-09-29
+  Westpack moved Conv - 01/02/03 to standard attribution *inside the same campaigns*, Meta
+  then reported them as `multiple`, and they silently dropped out of the set. An objective
+  does not change when attribution does. `attribution_setting` is still carried per campaign
+  as description only.
+- **Results are read on Meta's incremental attribution for every campaign.** Every insights
+  call that carries `actions`/`action_values` sends
+  `action_attribution_windows=["incrementality"]`, and `actionEntryValue` reads each entry's
+  `incrementality` key, falling back to `value` only when the key is absent (on-platform
+  actions such as leads). `value` is the ad set's own setting and is wrong here. Reach,
+  impressions and spend are unaffected. It is still Meta's model, not a lift test — the UI
+  says "not a measured uplift".
+- **The set still changes under the series** as campaigns enter and leave the window, which
+  rewrites completed months. `collectRestatements` records both figures and the reason; the
+  anchor also moves once the first delivering month rolls out of the window, which re-bases
+  every figure. Snapshots carry `setDefinition: "conversion-objective"`; one without it (the
+  old incrementality set) is never reused from cache, and the first sync after the switch
+  logs a restatement whose reason names the definition change.
 - Cold sync ≈ 24 Graph calls, warm ≈ 7. Rate limits are never retried here.
 
 What the live data showed on 2026-09-16, worth knowing before re-deriving it:

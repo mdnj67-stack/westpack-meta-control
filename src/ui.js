@@ -448,7 +448,7 @@ function buildStackSegments(items = [], valueKey = "amount", minimumPercent = 4)
   return items.map((item, index) => ({ item, width: rounded[index] }));
 }
 
-// Nyt reach: the people the incremental campaigns reached for the first time
+// Nyt reach: the people the conversion campaigns reached for the first time
 // each month, against the people they had already reached. The split is the
 // expansion signal - when the repeat share climbs while net-new falls, the
 // audience is saturating and more budget buys the same faces again.
@@ -612,7 +612,7 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
   if (!visible || !model?.available || months.length < 2) {
     node.innerHTML = "";
     if (subNode && visible && model && !model.available) {
-      subNode.textContent = model.unavailableReason || "No campaign on this account reports incrementality attribution.";
+      subNode.textContent = model.unavailableReason || "No conversion campaign on this account delivered in the window.";
     }
     return;
   }
@@ -624,7 +624,7 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
     : null;
 
   if (subNode) {
-    subNode.textContent = `Unique people the ${Number(model.campaignCount) || 0} incrementality campaigns have reached since ${anchorLabel}, split into first-time and repeat. Always whole calendar months - this panel does not follow the date picker above.`;
+    subNode.textContent = `Unique people the ${Number(model.campaignCount) || 0} conversion campaigns have reached since ${anchorLabel}, split into first-time and repeat. Results use Meta's incremental attribution. Always whole calendar months - this panel does not follow the date picker above.`;
   }
 
   // The headline comparison is like-for-like or it is absent. Setting a part
@@ -655,7 +655,7 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
         <article class="meta-expansion-kpi">
           <span>Unique people in total</span>
           <strong>${escapeHtml(formatCompactNumber(latest.cumulativeReach))}</strong>
-          <p>Deduplicated across every incremental campaign since ${escapeHtml(anchorLabel)}.</p>
+          <p>Deduplicated across every conversion campaign since ${escapeHtml(anchorLabel)}.</p>
         </article>
         <article class="meta-expansion-kpi">
           <span>Cost per 1,000 new</span>
@@ -712,8 +712,8 @@ export function renderExpansionView(model = null, visible = false, currency = "D
     node.innerHTML = `
       <article class="card">
         <div class="lens-empty">
-          <h4>No incrementality campaigns to measure</h4>
-          <p>${escapeHtml(model.unavailableReason || "No campaign on this account reports incrementality attribution.")}</p>
+          <h4>No conversion campaigns to measure</h4>
+          <p>${escapeHtml(model.unavailableReason || "No conversion campaign on this account delivered in the window.")}</p>
         </div>
       </article>
     `;
@@ -724,7 +724,7 @@ export function renderExpansionView(model = null, visible = false, currency = "D
   if (months.length < 1) {
     node.innerHTML = `
       <article class="card"><div class="lens-empty"><h4>Nothing delivered yet</h4>
-      <p>The incremental set exists but has not reached anyone inside the window.</p></div></article>
+      <p>The conversion campaigns have not reached anyone inside the window yet.</p></div></article>
     `;
     return;
   }
@@ -796,8 +796,9 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
           <h3>Expansion</h3>
           <p class="field-hint">
             Whole calendar months since ${escapeHtml(anchorLabel)} &middot; does not follow the date range above
-            &middot; ${Number(model.campaignCount) || 0} campaigns on incrementality attribution, which is a
-            grouping and not a measured uplift
+            &middot; ${Number(model.campaignCount) || 0} conversion campaigns
+            &middot; results use Meta's incremental attribution, which is Meta's estimate and
+            not a measured uplift
           </p>
         </div>
       </div>
@@ -1339,8 +1340,8 @@ function renderExpansionMarketsCard() {
 // Two things about these figures that the columns cannot say on their own:
 // reach is each ad's own deduplicated count inside that country and is never
 // added up across the rows, because the same person sees several ads; and
-// purchases and revenue are Meta's standard attribution, so they are what the
-// country returned while the ad was running, not what the ad caused.
+// purchases and revenue are Meta's incremental attribution: Meta's own estimate
+// of what the ad caused, not a lift test run here.
 const EXPANSION_AD_COLUMNS = [
   {
     key: "adName", label: "Ad", type: "text",
@@ -1348,7 +1349,7 @@ const EXPANSION_AD_COLUMNS = [
   },
   {
     key: "revenue", label: "Revenue", numeric: true, money: true, high: "up",
-    tip: "Purchase value Meta attributes to this ad in this country, on standard attribution. It is what happened while the ad was running, not what the ad caused."
+    tip: "Purchase value Meta credits to this ad in this country, on Meta's incremental attribution - Meta's estimate of the sales the ad caused, not a measured uplift."
   },
   {
     key: "purchases", label: "Purch.", numeric: true, high: "up",
@@ -1473,7 +1474,7 @@ function renderExpansionAdPanel(model, code, label, currency) {
         </table>
       </div>
       <p class="expansion-note">
-        Standard attribution, ${escapeHtml(`${breakdown.since} to ${breakdown.until}`)} &middot; reach must not be summed across rows
+        Meta's incremental attribution, ${escapeHtml(`${breakdown.since} to ${breakdown.until}`)} &middot; reach must not be summed across rows
       </p>
     </div>
   `;
@@ -1506,12 +1507,12 @@ function renderExpansionMonths(months, model, currency, perDay) {
               ${expansionHeadRow([
                 ["Month", "Calendar month in the ad account's own timezone, America/Los_Angeles. Meta draws this account's days about nine hours behind Copenhagen."],
                 ["Days", "How many days the row actually covers. The month in progress is shorter than the others, which is the whole reason Per day is here.", true],
-                ["Reached", "Distinct people reached in the month, deduplicated by Meta across the incremental campaigns. It is read at account level, never added up from the campaigns.", true],
+                ["Reached", "Distinct people reached in the month, deduplicated by Meta across the conversion campaigns. It is read at account level, never added up from the campaigns.", true],
                 ["First-time", "Of those people, the ones never reached by this set before. Measured as the rise in cumulative unique reach since the anchor month.", true],
                 ["Per day", "First-time reach divided by the days the row covers. The only column that compares the month in progress with a complete month honestly.", true],
                 ["Repeat", "Of the people reached this month, the share already reached before - Reached minus First-time, over Reached. It rises as the audience is used up.", true],
                 ["Freq.", "Average impressions per person reached this month. High frequency with low first-time reach means the budget is buying repetition.", true],
-                ["Spend", "What the incremental campaigns spent in the month, in the account currency.", true],
+                ["Spend", "What the conversion campaigns spent in the month, in the account currency.", true],
                 ["Cost/1k", "Spend divided by first-time reach. The price of reaching a thousand more people who had never seen you.", true],
                 ["New cust.", "Purchases matching the New_customer conversion in the month. About a fifth of purchases on this account match neither customer conversion, so treat this as a floor rather than a total.", true],
                 ["Cost/cust.", "The month's whole spend divided by its new customers - all of it, not only the spend that happened to reach them.", true]
@@ -1550,8 +1551,8 @@ function renderExpansionMonths(months, model, currency, perDay) {
 }
 
 // A restatement log that permanently announces that nothing was restated is
-// furniture. The campaign set behind this series comes from Meta's current
-// attribution_setting over a rolling window, so it can change under the history
+// furniture. The campaign set behind this series is the conversion campaigns
+// that delivered inside a rolling window, so it can change under the history
 // and rewrite completed months - when that happens it has to be said, and when
 // it has not happened there is nothing to say. Everything else about how this is
 // measured - the anchor, the call budget, the timezone, the standing caveats -

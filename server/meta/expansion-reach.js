@@ -1,12 +1,11 @@
 const { ensureAccountId, graphRequest, isRateLimitMessage } = require("../lib/meta");
 const {
   PURCHASE_ACTION_TYPES,
-  firstActionValue,
-  resolveCustomerConversionActionTypes,
-  sumActionTypes
+  resolveCustomerConversionActionTypes
 } = require("./customer-acquisition");
+const { resolveObjectiveGroup } = require("./budget-allocation");
 
-// The expansion reach series: how many people the incremental campaigns reached
+// The expansion reach series: how many people the conversion campaigns reached
 // for the FIRST time each month, which is the number an expansion strategy is
 // actually buying and the one Meta has no field for.
 //
@@ -18,7 +17,7 @@ const {
 // stored snapshot rather than on a dashboard request.
 //
 // The anchor is deliberately NOT the rolling window start. Anchoring to the
-// first month the incremental set delivered keeps every completed month's
+// first month the conversion set delivered keeps every completed month's
 // cumulative figure fixed, so a nightly run only has to refresh the month in
 // progress: a handful of calls instead of the whole curve. A rolling anchor
 // would move every month and force a full recompute each time.
@@ -38,10 +37,21 @@ const {
 //    department is measured on. It is a ratio of two monthly figures, not a
 //    cohort: the customers counted in a month are not necessarily the people
 //    first reached in it.
-//  - A restatement log. The campaign set comes from Meta's current
-//    attribution_setting over a rolling window, so the set can change under the
+//  - A restatement log. The campaign set is every conversion-objective campaign
+//    that delivered inside a rolling window, so the set can change under the
 //    series and rewrite every completed month. A silently rewritten past is
 //    worse than a rewritten one that says so.
+//
+// The set is defined by Meta's `objective` field, never by attribution_setting.
+// It used to be "campaigns on incrementality attribution", and on 2026-09-29 the
+// account moved its conversion campaigns to standard attribution inside the same
+// campaigns - Meta then reported them as "multiple" and they silently fell out
+// of the set. An objective does not change when attribution does.
+//
+// Results (purchases, revenue, New_customer) are read on Meta's incremental
+// attribution model for every campaign: each insights call that carries actions
+// asks for action_attribution_windows=["incrementality"], and every action
+// entry then reports an `incrementality` figure beside its `value`.
 
 const DEFAULT_MONTHS = 12;
 const MAX_MONTHS = 24;
@@ -60,12 +70,15 @@ const MARKET_OVERLAP_NOTICE_SHARE = 0.05;
 // below it the ratio is reported as unmeasurable rather than as a triumph.
 const MINIMUM_ROAS_SPEND = 1;
 
-// What belongs in this panel is decided by Meta attribution_setting alone. That
-// is deliberate and stays that way, but it means an awareness or traffic
-// campaign switched to incrementality attribution would join the set and inflate
-// reach while purchases stayed flat. Objectives outside sales are therefore
-// reported rather than filtered out: a set that has quietly stopped being what
-// it was should be visible, not silently corrected.
+// Which definition built the stored campaign set. A snapshot built under any
+// other definition (or none - the incrementality-attribution set predates this
+// field) is never reused, and the change is named in the restatement log.
+const SET_DEFINITION = "conversion-objective";
+const SET_DEFINITION_CHANGE_REASON = "The campaign set changed definition: it used to be campaigns on incrementality attribution and is now every conversion campaign, so the whole curve was measured again.";
+
+// The objective mix is still reported. The set is filtered on the conversion
+// objective group, which spans more raw objectives than sales alone (catalogue
+// sales, store visits), so the mix says which ones are actually in it.
 const SALES_OBJECTIVES = new Set(["OUTCOME_SALES", "CONVERSIONS", "PRODUCT_CATALOG_SALES"]);
 
 function describeObjectiveMix(campaigns) {
@@ -250,29 +263,30 @@ async function readCustomerConversionTypes(reader) {
   }
 }
 
-// Which campaigns are on incrementality attribution comes from Meta's own
-// attribution_setting, never from the campaign name. Asking for the field
-// returns a row for every campaign that ever existed, because it is
-// configuration rather than a result, so rows with no delivery are dropped.
-async function readIncrementalCampaigns(reader, window) {
+// The set is every campaign whose Meta `objective` resolves to the conversion
+// objective group and that delivered in the window - the same objective table
+// the budget split uses, never the campaign name and never attribution_setting.
+// Attribution can change inside a campaign (it reports "multiple" while its ad
+// sets disagree); the objective cannot, so the set stays put across the switch.
+// attribution_setting is still carried, as a description, never as a filter.
+async function readConversionCampaigns(reader, window) {
   const rows = await reader.getAll(`/${reader.accountId}/insights`, {
     level: "campaign",
     time_range: JSON.stringify(window),
     limit: "500",
     fields: "campaign_id,campaign_name,attribution_setting,objective,spend,impressions,reach"
-  }, "campaign attribution", 4);
+  }, "campaign objectives", 4);
 
   return rows
-    .filter((row) => row.attribution_setting === "incrementality")
+    // Only Meta's objective field is passed, so nothing else on the row can
+    // decide the group.
+    .filter((row) => resolveObjectiveGroup({ objective: row.objective }) === "conversion")
     .filter((row) => number(row.spend) > 0 || number(row.impressions) > 0)
     .map((row) => ({
       id: String(row.campaign_id),
       name: String(row.campaign_name || ""),
-      // Carried so the set can be checked, never to filter on. What belongs
-      // here is decided by Meta attribution_setting and nothing else - the same
-      // rule the rest of this dashboard follows - so an objective that does not
-      // belong is reported rather than quietly dropped.
       objective: String(row.objective || ""),
+      attributionSetting: String(row.attribution_setting || ""),
       spend: number(row.spend),
       // Named "delivered" as a warning: this is one campaign's own deduplicated
       // reach and must never be added to its siblings'.
@@ -285,10 +299,44 @@ function campaignFilter(campaignIds) {
   return JSON.stringify([{ field: "campaign.id", operator: "IN", value: campaignIds }]);
 }
 
+// Every insights call that reads actions or action_values asks for this. It
+// adds an `incrementality` figure to each action entry; `value` stays the ad
+// set's own attribution setting. Reach, impressions and spend are unaffected.
+const INCREMENTAL_ATTRIBUTION_WINDOWS = JSON.stringify(["incrementality"]);
+
+// The one place an action entry is read. Results are measured on Meta's
+// incremental model for every campaign, so the `incrementality` key wins.
+// On-platform actions such as leads carry no such key, and only then does the
+// entry's own `value` stand.
+function actionEntryValue(entry) {
+  if (!entry) return null;
+  const raw = Object.prototype.hasOwnProperty.call(entry, "incrementality") ? entry.incrementality : entry.value;
+  if (raw == null) return null;
+  return number(raw);
+}
+
+function firstIncrementalAction(entries, actionTypes) {
+  const list = Array.isArray(entries) ? entries : [];
+  for (const type of actionTypes) {
+    const value = actionEntryValue(list.find((entry) => entry.action_type === type));
+    if (value != null) return value;
+  }
+  return 0;
+}
+
+function sumIncrementalActions(entries, actionTypes) {
+  const list = Array.isArray(entries) ? entries : [];
+  let total = 0;
+  for (const type of actionTypes) {
+    total += actionEntryValue(list.find((entry) => entry.action_type === type)) || 0;
+  }
+  return total;
+}
+
 function newCustomersFrom(row, actionTypes) {
   const types = actionTypes?.newCustomerActionTypes || [];
   if (!types.length) return null;
-  return sumActionTypes(row?.actions || [], types);
+  return sumIncrementalActions(row?.actions || [], types);
 }
 
 // Meta reports the same purchase money under several action types at once - on
@@ -296,19 +344,19 @@ function newCustomersFrom(row, actionTypes) {
 // omni_purchase all carried the identical value. The first match is the money;
 // the sum would be three times it.
 function revenueFrom(row) {
-  return firstActionValue(row?.action_values || [], PURCHASE_ACTION_TYPES);
+  return firstIncrementalAction(row?.action_values || [], PURCHASE_ACTION_TYPES);
 }
 
 // The same aliasing applies to the count as to the value: purchase,
 // fb_pixel_purchase and omni_purchase are one number reported three times.
 function purchasesFrom(row) {
-  return firstActionValue(row?.actions || [], PURCHASE_ACTION_TYPES);
+  return firstIncrementalAction(row?.actions || [], PURCHASE_ACTION_TYPES);
 }
 
 function newCustomerRevenueFrom(row, actionTypes) {
   const types = actionTypes?.newCustomerActionTypes || [];
   if (!types.length) return null;
-  return sumActionTypes(row?.action_values || [], types);
+  return sumIncrementalActions(row?.action_values || [], types);
 }
 
 async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
@@ -318,6 +366,7 @@ async function readMonthlyRows(reader, window, campaignIds, actionTypes) {
     time_increment: "monthly",
     filtering: campaignFilter(campaignIds),
     limit: "50",
+    action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
     fields: "date_start,date_stop,reach,impressions,frequency,spend,actions,action_values"
   }, "monthly reach", 2);
 
@@ -348,6 +397,7 @@ async function readMonthlyCountryRows(reader, window, campaignIds, actionTypes) 
     // The breakdown key comes back on its own. Asking for `country` in fields
     // is rejected outright by Graph v25 - the field list describes metrics, and
     // the breakdown describes how they are cut.
+    action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
     fields: "date_start,date_stop,reach,impressions,frequency,spend,actions,action_values"
   }, "monthly reach by country", 4);
 
@@ -396,6 +446,7 @@ async function readWindowTotals(reader, since, until, campaignIds, actionTypes, 
     time_range: JSON.stringify({ since, until }),
     filtering: campaignFilter(campaignIds),
     limit: "1",
+    action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
     fields: "spend,impressions,actions"
   }, label || `window ${since} to ${until}`);
   const row = (payload.data || [])[0] || {};
@@ -423,6 +474,7 @@ async function readAdBreakdown(reader, since, until, campaignIds, actionTypes) {
     breakdowns: "country",
     filtering: campaignFilter(campaignIds),
     limit: "500",
+    action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
     fields: "ad_id,ad_name,adset_name,campaign_name,spend,impressions,reach,frequency,actions,action_values"
   }, "ads by country", 8);
 
@@ -431,7 +483,7 @@ async function readAdBreakdown(reader, since, until, campaignIds, actionTypes) {
       const spend = number(row.spend);
       const impressions = number(row.impressions);
       const revenue = revenueFrom(row);
-      const purchases = firstActionValue(row.actions || [], PURCHASE_ACTION_TYPES);
+      const purchases = purchasesFrom(row);
       const newCustomers = newCustomersFrom(row, actionTypes);
       return {
         adId: String(row.ad_id || ""),
@@ -571,13 +623,20 @@ async function readCumulativeCountries(reader, anchor, until, campaignIds, label
   return byCountry;
 }
 
+// A snapshot built under another set definition describes a different question
+// (and, before this field existed, results on a different attribution model),
+// so none of it is reused.
+function sameDefinition(previous) {
+  return Boolean(previous) && previous.setDefinition === SET_DEFINITION;
+}
+
 // A stored month can be reused only when it was measured from the same anchor
 // and over the same campaign set. Adding a campaign changes every cumulative
 // figure on the curve, so the whole series has to be re-measured. A month
 // missing its country map is not reusable either: a half-cached month would
 // draw its total from one measurement and its markets from another.
 function reusableCumulative(previous, anchor, campaignKey) {
-  if (!previous || previous.anchor !== anchor || previous.campaignKey !== campaignKey) {
+  if (!sameDefinition(previous) || previous.anchor !== anchor || previous.campaignKey !== campaignKey) {
     return new Map();
   }
   const entries = (previous.months || [])
@@ -595,7 +654,7 @@ function reusableCumulative(previous, anchor, campaignKey) {
 // measured it never moves. It is cached against the same anchor and campaign
 // set as the curve itself.
 function reusableLikeForLike(previous, anchor, campaignKey, until) {
-  if (!previous || previous.anchor !== anchor || previous.campaignKey !== campaignKey) return null;
+  if (!sameDefinition(previous) || previous.anchor !== anchor || previous.campaignKey !== campaignKey) return null;
   const stored = previous.likeForLike;
   if (!stored || stored.until !== until) return null;
   if (!(number(stored.cumulativeReach) > 0) || !stored.cumulativeByCountry) return null;
@@ -611,35 +670,48 @@ function reusableLikeForLike(previous, anchor, campaignKey, until) {
   };
 }
 
+function describeMembershipChange(previous, campaignKey, campaigns) {
+  const before = new Set(String(previous.campaignKey || "").split(",").filter(Boolean));
+  const after = new Set(campaignKey.split(",").filter(Boolean));
+  const nameById = new Map(campaigns.map((campaign) => [campaign.id, campaign.name]));
+  const added = [...after].filter((id) => !before.has(id)).map((id) => nameById.get(id) || id);
+  const removed = [...before].filter((id) => !after.has(id));
+  const parts = [];
+  if (added.length) {
+    const names = added.slice(0, 3).join(", ");
+    parts.push(`${added.length} campaign${added.length === 1 ? "" : "s"} joined the set (${names}${added.length > 3 ? ", ..." : ""})`);
+  }
+  if (removed.length) parts.push(`${removed.length} left it`);
+  return parts;
+}
+
 function describeSetChange(previous, anchor, campaignKey, campaigns) {
   if (!previous) return "";
+  // A change of definition outranks everything else: the anchor and the members
+  // may both have moved, but only because the question itself changed.
+  if (!sameDefinition(previous)) {
+    const parts = describeMembershipChange(previous, campaignKey, campaigns);
+    return parts.length
+      ? `${SET_DEFINITION_CHANGE_REASON} ${parts.join(" and ")}.`
+      : SET_DEFINITION_CHANGE_REASON;
+  }
   if (previous.anchor !== anchor) {
     const before = String(previous.anchor || "none").slice(0, 7);
     return `The anchor month moved from ${before} to ${String(anchor).slice(0, 7)}, so first-time reach is now counted from a different starting point.`;
   }
   if (previous.campaignKey !== campaignKey) {
-    const before = new Set(String(previous.campaignKey || "").split(",").filter(Boolean));
-    const after = new Set(campaignKey.split(",").filter(Boolean));
-    const nameById = new Map(campaigns.map((campaign) => [campaign.id, campaign.name]));
-    const added = [...after].filter((id) => !before.has(id)).map((id) => nameById.get(id) || id);
-    const removed = [...before].filter((id) => !after.has(id));
-    const parts = [];
-    if (added.length) {
-      const names = added.slice(0, 3).join(", ");
-      parts.push(`${added.length} campaign${added.length === 1 ? "" : "s"} joined the incremental set (${names}${added.length > 3 ? ", ..." : ""})`);
-    }
-    if (removed.length) parts.push(`${removed.length} left it`);
+    const parts = describeMembershipChange(previous, campaignKey, campaigns);
     return parts.length
       ? `${parts.join(" and ")}, so the whole curve was measured again.`
-      : "The incremental campaign set changed, so the whole curve was measured again.";
+      : "The conversion campaign set changed, so the whole curve was measured again.";
   }
   return "";
 }
 
 // Every completed month whose figure moved between two runs is recorded with
-// both values. The set behind this series comes from Meta's current
-// attribution_setting, so it can change under the history without anyone asking
-// for it.
+// both values. The set behind this series is whichever conversion campaigns
+// delivered inside a rolling window, so it can change under the history without
+// anyone asking for it.
 function collectRestatements(previous, rows, reason) {
   const carried = Array.isArray(previous?.restatements) ? previous.restatements : [];
   if (!previous || !Array.isArray(previous.months) || !previous.months.length) return carried;
@@ -694,9 +766,9 @@ function buildMarketRow({ code, monthly, cumulative, previousCumulative }) {
     frequency: number(monthly?.frequency),
     newCustomers,
     purchases: number(monthly?.purchases),
-    // Revenue is Meta's reported purchase value on standard attribution. It is
-    // what this market returned, not what it returned because of this campaign
-    // set - the set is a grouping, not a measured uplift.
+    // Revenue is Meta's reported purchase value on its incremental attribution
+    // model - Meta's estimate, not a lift test this dashboard ran - and the
+    // campaign set is a grouping by objective.
     revenue,
     newCustomerRevenue,
     roas: roasFrom(revenue, spend),
@@ -949,7 +1021,7 @@ async function syncExpansionReach({
   const monthList = buildMonths(today, monthCount);
   const window = { since: monthList[0].since, until: monthList[monthList.length - 1].until };
 
-  const campaigns = await readIncrementalCampaigns(reader, window);
+  const campaigns = await readConversionCampaigns(reader, window);
   if (!campaigns.length) {
     return {
       generatedAt: new Date().toISOString(),
@@ -959,7 +1031,8 @@ async function syncExpansionReach({
       window,
       anchor: null,
       available: false,
-      unavailableReason: "No campaign on this account reported incrementality attribution in the window.",
+      setDefinition: SET_DEFINITION,
+      unavailableReason: "No conversion campaign on this account delivered in the window.",
       months: [],
       marketSeries: [],
       marketCount: 0,
@@ -1146,6 +1219,8 @@ async function syncExpansionReach({
     window,
     anchor,
     campaignKey,
+    setDefinition: SET_DEFINITION,
+    resultAttribution: "incrementality",
     available: rows.some((row) => row.monthlyReach > 0),
     months: rows,
     marketSeries,
@@ -1175,11 +1250,12 @@ async function syncExpansionReach({
     objectiveMix: describeObjectiveMix(campaigns),
     graphCalls: reader.state.calls,
     notes: [
-      "Reach is read at account level, filtered to the incremental campaigns. It is never summed across campaigns.",
+      "Reach is read at account level, filtered to the conversion campaigns. It is never summed across campaigns.",
       "Net-new reach is the rise in cumulative unique reach since the anchor month, so it counts people reached for the first time since the programme began.",
       "Markets come from Meta's country breakdown. Each country's reach is deduplicated inside that country, so countries must not be added together - a person reached in two of them counts in both.",
       "New customers are a monthly count set beside a monthly reach figure, not a cohort: the customers in a month are not necessarily the people first reached in it.",
-      "The incrementality set is a segment of the account, not a measured uplift."
+      "The set is every conversion campaign that delivered in the window, chosen by Meta's objective, so it does not change when a campaign's attribution setting does.",
+      "Purchases, revenue and new customers use Meta's incremental attribution for every campaign, whatever attribution the ad set itself runs on."
     ]
   };
 }
@@ -1198,6 +1274,8 @@ module.exports = {
   collectRestatements,
   describeSetChange,
   countryLabel,
+  actionEntryValue,
+  SET_DEFINITION,
   DEFAULT_MONTHS,
   MAX_MONTHS,
   MARKET_OVERLAP_NOTICE_SHARE

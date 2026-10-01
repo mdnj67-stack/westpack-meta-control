@@ -22,7 +22,10 @@ const {
   reusableCumulative,
   previousMonthElapsedWindow,
   collectRestatements,
-  countryLabel
+  describeSetChange,
+  countryLabel,
+  actionEntryValue,
+  SET_DEFINITION
 } = require("../server/meta/expansion-reach");
 
 const ACCOUNT = "act_123";
@@ -69,6 +72,19 @@ function isCumulativeCall(params) {
   return params.level === "account" && !params.time_increment && params.filtering;
 }
 
+// Attribution settings the set must be blind to. Since 2026-09-29 the account's
+// conversion campaigns report "multiple" (a paused incremental ad set beside an
+// active standard one), and a campaign that was never incremental reports a
+// click window. All of them belong; only the objective decides.
+const ATTRIBUTION_SETTINGS = ["incrementality", "multiple", "7d_click"];
+
+// Every action entry carries Meta's incremental figure beside the ad set's own
+// `value`. The stub makes `value` deliberately different, so any figure read
+// from the wrong key fails every assertion below rather than one test.
+function incremental(actionType, incrementalValue, ownValue) {
+  return { action_type: actionType, value: String(ownValue), incrementality: String(incrementalValue) };
+}
+
 function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true } = {}) {
   return (params, pathname = "") => {
     if (String(pathname).includes("customconversions")) {
@@ -81,14 +97,28 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
 
     if (params.level === "campaign") {
       return {
-        data: campaignIds.map((id, index) => ({
-          campaign_id: id,
-          campaign_name: `Conv ${id}`,
-          attribution_setting: "incrementality",
-          spend: String(1000 * (index + 1)),
-          impressions: "50000",
-          reach: "20000"
-        }))
+        data: [
+          ...campaignIds.map((id, index) => ({
+            campaign_id: id,
+            campaign_name: `Conv ${id}`,
+            objective: "OUTCOME_SALES",
+            attribution_setting: ATTRIBUTION_SETTINGS[index % ATTRIBUTION_SETTINGS.length],
+            spend: String(1000 * (index + 1)),
+            impressions: "50000",
+            reach: "20000"
+          })),
+          // Delivering, and on incrementality attribution - but an awareness
+          // campaign, so it is not part of the set.
+          {
+            campaign_id: "900",
+            campaign_name: "BA - LAL",
+            objective: "OUTCOME_AWARENESS",
+            attribution_setting: "incrementality",
+            spend: "38888",
+            impressions: "900000",
+            reach: "500000"
+          }
+        ]
       };
     }
 
@@ -105,12 +135,12 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
               impressions: String(COUNTRY_MONTHLY[code][index] * 4),
               frequency: "4",
               spend: String(1000 * (index + 1)),
-              actions: [{ action_type: NEW_CUSTOMER_ACTION, value: "5" }],
+              actions: [incremental(NEW_CUSTOMER_ACTION, 5, 11)],
               action_values: [
-                { action_type: "purchase", value: "4000" },
-                { action_type: "offsite_conversion.fb_pixel_purchase", value: "4000" },
-                { action_type: "omni_purchase", value: "4000" },
-                { action_type: NEW_CUSTOMER_ACTION, value: "900" }
+                incremental("purchase", 4000, 9100),
+                incremental("offsite_conversion.fb_pixel_purchase", 4000, 9100),
+                incremental("omni_purchase", 4000, 9100),
+                incremental(NEW_CUSTOMER_ACTION, 900, 1900)
               ]
             });
           }
@@ -125,11 +155,11 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
           impressions: String(MONTHLY[index] * 4),
           frequency: "4",
           spend: String(12000 * (index + 1)),
-          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(MONTHLY_NEW_CUSTOMERS[index]) }],
+          actions: [incremental(NEW_CUSTOMER_ACTION, MONTHLY_NEW_CUSTOMERS[index], MONTHLY_NEW_CUSTOMERS[index] * 3)],
           action_values: [
-            { action_type: "purchase", value: "30000" },
-            { action_type: "omni_purchase", value: "30000" },
-            { action_type: NEW_CUSTOMER_ACTION, value: "5000" }
+            incremental("purchase", 30000, 71000),
+            incremental("omni_purchase", 30000, 71000),
+            incremental(NEW_CUSTOMER_ACTION, 5000, 12000)
           ]
         }))
       };
@@ -144,7 +174,7 @@ function buildResponder({ campaignIds = ["1", "2"], withCustomConversion = true 
         data: [{
           spend: String(LIKE_FOR_LIKE_WINDOW_SPEND),
           impressions: "40000",
-          actions: [{ action_type: NEW_CUSTOMER_ACTION, value: String(LIKE_FOR_LIKE_WINDOW_CUSTOMERS) }]
+          actions: [incremental(NEW_CUSTOMER_ACTION, LIKE_FOR_LIKE_WINDOW_CUSTOMERS, LIKE_FOR_LIKE_WINDOW_CUSTOMERS * 2)]
         }]
       };
     }
@@ -291,7 +321,7 @@ test("the like-for-like point is measured once and then reused", async () => {
   assert.equal(likeForLikeCalls.length, 0, "a closed like-for-like window must never be measured twice");
 });
 
-test("adding an incremental campaign re-measures the whole curve", async () => {
+test("adding a conversion campaign re-measures the whole curve", async () => {
   reset();
   const first = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
 
@@ -311,15 +341,16 @@ test("force re-measures even when the cache is valid", async () => {
   assert.equal(monthCurveCallCount(), delivering.length);
 });
 
-test("an account with no incrementality campaign reports why instead of throwing", async () => {
+test("an account with no conversion campaign reports why instead of throwing", async () => {
   calls.length = 0;
   responder = (params) => {
     if (params.level === "campaign") {
       return {
         data: [{
           campaign_id: "9",
-          campaign_name: "Standard",
-          attribution_setting: "1d_view_7d_click",
+          campaign_name: "Awareness",
+          objective: "OUTCOME_AWARENESS",
+          attribution_setting: "incrementality",
           spend: "500",
           impressions: "1000"
         }]
@@ -330,13 +361,15 @@ test("an account with no incrementality campaign reports why instead of throwing
 
   const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
   assert.equal(snapshot.available, false);
-  assert.match(snapshot.unavailableReason, /incrementality/i);
+  assert.match(snapshot.unavailableReason, /conversion campaign/i);
+  assert.doesNotMatch(snapshot.unavailableReason, /attribution/i);
   assert.deepEqual(snapshot.months, []);
   assert.equal(cumulativeCallCount(), 0);
 });
 
 test("reusableCumulative refuses a cache from a different anchor or campaign set", () => {
   const previous = {
+    setDefinition: SET_DEFINITION,
     anchor: "2026-01-01",
     campaignKey: "1,2",
     months: [
@@ -349,10 +382,15 @@ test("reusableCumulative refuses a cache from a different anchor or campaign set
   assert.equal(reusableCumulative(previous, "2026-02-01", "1,2").size, 0);
   assert.equal(reusableCumulative(previous, "2026-01-01", "1,2,3").size, 0);
   assert.equal(reusableCumulative(null, "2026-01-01", "1,2").size, 0);
+  // A snapshot from the incrementality-attribution definition, which predates
+  // the field, is never reused even where anchor and members happen to match.
+  const { setDefinition, ...legacy } = previous;
+  assert.equal(reusableCumulative(legacy, "2026-01-01", "1,2").size, 0);
 });
 
 test("a month cached without its country map is measured again rather than half-drawn", () => {
   const previous = {
+    setDefinition: SET_DEFINITION,
     anchor: "2026-01-01",
     campaignKey: "1,2",
     months: [{ month: "2026-01", partial: false, cumulativeReach: 100 }]
@@ -486,7 +524,7 @@ test("a completed month that changes between runs is recorded with both figures"
     { month: "2026-08", partial: false, netNewReach: 401000 }
   ];
 
-  const log = collectRestatements(previous, rows, "Three campaigns joined the incremental set.");
+  const log = collectRestatements(previous, rows, "Three campaigns joined the set.");
   assert.equal(log.length, 1);
   assert.equal(log[0].month, "2026-08");
   assert.equal(log[0].from, 309186);
@@ -777,7 +815,7 @@ test("a market in the learning phase is recorded, and only where an ad set speak
   assert.equal(snapshot.marketDelivery.ES, undefined);
   assert.equal(snapshot.marketDelivery.FR, undefined);
 
-  // And an ad set belonging to a campaign outside the incremental set is not
+  // And an ad set belonging to a campaign outside the conversion set is not
   // read at all.
   assert.equal(snapshot.marketDelivery.DE, undefined);
 });
@@ -794,4 +832,104 @@ test("losing the delivery state costs the caveat, never the snapshot", async () 
   assert.deepEqual(snapshot.marketDelivery, {});
   assert.equal(snapshot.available, true, "the series itself still came back");
   assert.ok(snapshot.marketSeries.length > 0);
+});
+
+// --- The campaign set and the attribution model ---------------------------
+
+test("the set is every conversion-objective campaign, whatever its attribution setting", async () => {
+  reset({ campaignIds: ["1", "2", "3"] });
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const ids = snapshot.campaigns.map((campaign) => campaign.id).sort();
+  assert.deepEqual(ids, ["1", "2", "3"], "multiple and 7d_click must stay in, awareness must stay out");
+  const settings = snapshot.campaigns.map((campaign) => campaign.attributionSetting).sort();
+  assert.deepEqual(settings, ["7d_click", "incrementality", "multiple"]);
+  assert.ok(!snapshot.campaigns.some((campaign) => campaign.objective === "OUTCOME_AWARENESS"));
+  assert.equal(snapshot.setDefinition, SET_DEFINITION);
+
+  // The filter sent to every account-level read names only the conversion set.
+  const filtered = calls.filter((call) => call.params.filtering);
+  assert.ok(filtered.length > 0);
+  for (const call of filtered) {
+    assert.deepEqual(JSON.parse(call.params.filtering)[0].value.slice().sort(), ["1", "2", "3"]);
+  }
+});
+
+test("a campaign switching attribution does not change the set", async () => {
+  reset();
+  const first = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  // The same campaigns, all now reporting "multiple".
+  calls.length = 0;
+  const base = buildResponder();
+  responder = (params, pathname) => {
+    const payload = base(params, pathname);
+    if (params.level === "campaign") {
+      payload.data.forEach((row) => { row.attribution_setting = "multiple"; });
+    }
+    return payload;
+  };
+  const second = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: first });
+  assert.equal(second.campaignKey, first.campaignKey);
+  assert.equal(monthCurveCallCount(), first.months.filter((month) => month.partial).length);
+  assert.deepEqual(second.restatements, []);
+});
+
+test("every read of actions asks for Meta's incremental attribution, and nothing else does", async () => {
+  reset();
+  await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  const insightCalls = calls.filter((call) => String(call.pathname).includes("/insights"));
+  const actionCalls = insightCalls.filter((call) => /\baction(s|_values)\b/.test(String(call.params.fields || "")));
+  assert.ok(actionCalls.length >= 3, "monthly, country and ad reads all carry actions");
+  for (const call of actionCalls) {
+    assert.deepEqual(JSON.parse(call.params.action_attribution_windows), ["incrementality"]);
+  }
+  for (const call of insightCalls.filter((item) => !actionCalls.includes(item))) {
+    assert.equal(call.params.action_attribution_windows, undefined, "reach and spend reads are unaffected");
+  }
+});
+
+test("results are read from the incrementality key, and value only where there is none", async () => {
+  assert.equal(actionEntryValue({ action_type: "omni_purchase", value: "471", "1d_view": "401", "7d_click": "70", incrementality: "136" }), 136);
+  // On-platform actions such as leads carry no incremental figure.
+  assert.equal(actionEntryValue({ action_type: "onsite_conversion.lead_grouped", value: "12" }), 12);
+  // An incremental zero is a measured zero, not a reason to fall back.
+  assert.equal(actionEntryValue({ action_type: "omni_purchase", value: "9", incrementality: "0" }), 0);
+  assert.equal(actionEntryValue(undefined), null);
+
+  reset();
+  const snapshot = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+  assert.deepEqual(snapshot.months.map((month) => month.newCustomers), MONTHLY_NEW_CUSTOMERS);
+  assert.equal(snapshot.months[0].newCustomerRevenue, 5000);
+  assert.equal(snapshot.resultAttribution, "incrementality");
+});
+
+test("the switch from the incrementality set is logged as a change of definition", async () => {
+  reset();
+  const current = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN });
+
+  // A snapshot as the old definition stored it: no setDefinition, a smaller
+  // set, and completed months that read differently.
+  const legacy = {
+    ...current,
+    campaignKey: "1",
+    months: current.months.map((month) => ({ ...month, netNewReach: month.netNewReach - 1000 })),
+    restatements: []
+  };
+  delete legacy.setDefinition;
+
+  reset();
+  const next = await syncExpansionReach({ accountId: ACCOUNT, accessToken: TOKEN, previous: legacy });
+  assert.equal(monthCurveCallCount(), delivering.length, "nothing from the old definition is reused");
+  const completed = current.months.filter((month) => !month.partial).length;
+  assert.equal(next.restatements.length, completed);
+  for (const entry of next.restatements) {
+    assert.match(entry.reason, /incrementality attribution/);
+    assert.match(entry.reason, /conversion campaign/);
+  }
+
+  const reason = describeSetChange(legacy, current.anchor, current.campaignKey, current.campaigns);
+  assert.match(reason, /changed definition/);
+  assert.match(reason, /1 campaign joined the set \(Conv 2\)/);
 });
