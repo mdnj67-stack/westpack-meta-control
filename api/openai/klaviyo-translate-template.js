@@ -5,7 +5,7 @@ const { buildGlossaryPromptBlock } = require("../../server/lib/glossary");
 const { buildWestpackKnowledgePromptBlock } = require("../../server/lib/westpack-knowledge");
 const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-product-feed");
 const { rewriteWestpackProductFeedUrls, rewriteWestpackSnippetUrls } = require("../../server/lib/westpack-url-locales");
-const { generateTemplateVariant } = require("../../server/lib/klaviyo-template-variant");
+const { extractHtmlSegments, generateTemplateVariant, rebuildHtml } = require("../../server/lib/klaviyo-template-variant");
 const { parseModelJson } = require("../../server/lib/model-json");
 
 function containsHtml(value = "") {
@@ -52,6 +52,7 @@ function buildPlainPrompt(input, glossaryBlock, westpackKnowledgeBlock) {
             "Do not add, remove or invent content. Do not improve, shorten or rewrite strategically.",
             "Only make the wording natural and correct for the target language and country.",
             "Preserve merge tags, unsubscribe tags, tracked URLs, dynamic placeholders and any technical Klaviyo syntax exactly as written.",
+            "Keep every amount, price and currency exactly as written, including the symbol and its position (250€ stays 250€). Never convert currency.",
             "If a glossary term matches, you must use the glossary translation.",
             glossaryBlock,
             westpackKnowledgeBlock,
@@ -86,51 +87,6 @@ function buildPlainPrompt(input, glossaryBlock, westpackKnowledgeBlock) {
   ];
 }
 
-function isProtectedTextSegment(value = "") {
-  const text = String(value || "");
-  const trimmed = text.trim();
-  if (!trimmed) return true;
-  if (!/[A-Za-zÀ-ÿ]/.test(trimmed)) return true;
-  if (/({{|}}|{%-?|-%}|{%|%})/.test(trimmed)) return true;
-  if (/(https?:\/\/|mailto:|tel:|%20)/i.test(trimmed)) return true;
-  return false;
-}
-
-function extractHtmlSegments(html = "") {
-  const source = String(html || "");
-  const parts = source.split(/(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)/gi);
-  const tokens = [];
-  const segments = [];
-
-  for (const part of parts) {
-    if (!part) continue;
-    if (/^(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)$/i.test(part)) {
-      tokens.push({ type: "markup", value: part });
-      continue;
-    }
-
-    if (isProtectedTextSegment(part)) {
-      tokens.push({ type: "text", value: part, translatable: false });
-      continue;
-    }
-
-    const index = segments.length;
-    segments.push(part);
-    tokens.push({ type: "text", value: part, translatable: true, index });
-  }
-
-  return { tokens, segments };
-}
-
-function rebuildHtml(tokens, translatedSegments) {
-  return tokens.map((token) => {
-    if (token.type !== "text" || !token.translatable) {
-      return token.value;
-    }
-    return translatedSegments[token.index] ?? token.value;
-  }).join("");
-}
-
 function buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock) {
   return [
     {
@@ -148,6 +104,7 @@ function buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock)
             "Translate human-readable header and footer copy too, including browser-view links, navigation labels, slogans, disclaimers and unsubscribe text.",
             "Do not leave layout copy in the source language unless it is a company name, physical address, phone number, email address, legal identifier or raw URL.",
             "Preserve placeholders, merge tags, unsubscribe tags, tracked URLs and technical syntax exactly if any appear inside a fragment.",
+            "Keep every amount, price and currency exactly as written, including the symbol and its position (250€ stays 250€). Never convert currency.",
             "If a glossary term matches, you must use the glossary translation.",
             glossaryBlock,
             westpackKnowledgeBlock,

@@ -3,8 +3,11 @@ function removeStandalonePriceBlocks(html = "") {
 
   const priceOnlyPattern = /^\s*(?:from\s+)?(?:[A-Z]{3}\s*)?(?:[\d]{1,3}(?:[.\s][\d]{3})*|[\d]+)(?:[.,][\d]{1,2})?\s*(?:kr|dkk|sek|nok|pln|eur|usd|gbp|€|\$|£)\s*$/i;
 
-  // Remove common block-level elements that only contain a price line.
-  const blockTags = ["p", "div", "td", "th", "span", "strong", "em"];
+  // Remove common block-level elements that only contain a price line. Inline tags (strong, em,
+  // span) are deliberately not checked: "a gift card worth <strong>250€</strong>" is a price
+  // inside a sentence, and removing the tag deletes the amount from the copy. A price that
+  // stands alone still goes, because the block wrapping it is price-only too.
+  const blockTags = ["p", "div", "td", "th"];
   for (const tag of blockTags) {
     const pattern = new RegExp(
       `<${tag}\\b([^>]*)>([\\s\\S]*?)<\\/${tag}>`,

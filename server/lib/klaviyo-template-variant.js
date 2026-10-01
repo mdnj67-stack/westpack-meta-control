@@ -45,10 +45,21 @@ function extractHtmlSegments(html = "") {
   return { tokens, segments };
 }
 
+// A fragment is the text between two tags, so its edge whitespace is what separates it from the
+// neighbouring <strong> or <a>. Models trim fragments, which turned "on <strong>7 October</strong>
+// and" into "on7 October2026and". The edges are layout, not copy, so they come from the source.
+function restoreEdgeWhitespace(source = "", rewritten = "") {
+  const leading = String(source).match(/^\s*/)[0];
+  const trailing = String(source).match(/\s*$/)[0];
+  return `${leading}${String(rewritten).trim()}${trailing}`;
+}
+
 function rebuildHtml(tokens, rewrittenSegments) {
   return tokens.map((token) => {
     if (token.type !== "text" || !token.translatable) return token.value;
-    return rewrittenSegments[token.index] ?? token.value;
+    const rewritten = rewrittenSegments[token.index];
+    if (typeof rewritten !== "string") return token.value;
+    return restoreEdgeWhitespace(token.value, rewritten);
   }).join("");
 }
 
@@ -448,5 +459,7 @@ async function generateTemplateVariant({ config, input, requestStructuredRespons
 }
 
 module.exports = {
-  generateTemplateVariant
+  extractHtmlSegments,
+  generateTemplateVariant,
+  rebuildHtml
 };
