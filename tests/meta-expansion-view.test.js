@@ -252,8 +252,12 @@ test("ad-level reach is named as a figure that cannot be added up", () => {
   assert.match(ui, /Do not add the column up: one person who saw three of these ads counts in all three rows/);
   assert.match(ui, /must not be summed across rows/, "the ad table no longer says its reach cannot be summed");
 
-  // And the attribution caveat sits with the revenue it qualifies.
-  assert.match(ui, /not what the ad caused/);
+  // And the attribution caveat sits with the revenue it qualifies. Results are
+  // Meta's incremental attribution for every campaign since 2026-09-29: Meta's
+  // estimate of what the ad caused, never presented as a measured uplift.
+  assert.match(ui, /on Meta's incremental attribution - Meta's estimate of the sales the ad caused, not a measured uplift/);
+  assert.match(ui, /Meta's incremental attribution, \$\{escapeHtml\(`\$\{breakdown\.since\} to/);
+  assert.doesNotMatch(ui, /Standard attribution, \$\{escapeHtml\(`\$\{breakdown/);
 });
 
 test("the market table ranks on new customers, not on the price of reach", () => {
