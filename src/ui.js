@@ -2357,9 +2357,9 @@ const ATTRIBUTION_SETTING_LABELS = {
   incrementality: "Incremental",
   "7d_click": "7-day click",
   "1d_click": "1-day click",
-  "1d_view_7d_click": "7-day click, 1-day view",
-  "1d_view_7d_click_1d_ev": "7-day click, 1-day view, 1-day engaged view",
-  "1d_view_28d_click": "28-day click, 1-day view",
+  "1d_view_7d_click": "7d click, 1d view",
+  "1d_view_7d_click_1d_ev": "7d click, 1d view, 1d engaged",
+  "1d_view_28d_click": "28d click, 1d view",
   multiple: "Mixed"
 };
 

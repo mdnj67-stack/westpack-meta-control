@@ -440,9 +440,10 @@ Nine figures were wrong before this pass. Do not reintroduce any of them:
 - **Percent change divides by the real baseline.** The zero and negative cases return
   before the division, so flooring the divisor at 1 guards nothing and silently flattens
   every metric whose baseline is below 1.
-- **The client uses `comparison_window`, never a half-split.** `splitAggregateSeries` cuts
-  one range in half and calls the first half "previous"; `getComparisonWindowChange`
-  (`src/meta-dashboard-metrics.js`) takes the two real windows instead.
+- **Change badges are computed once, on the server, from the two real windows.**
+  `buildValueChange` (`api/meta/account-snapshot.js`) is the one rule for every badge;
+  the browser renders them and computes none. `src/meta-dashboard-metrics.js` is imported
+  by nothing.
 - **Date ranges resolve in the ad account timezone** (`America/Los_Angeles`), via
   `resolveTodayInTimeZone`. The account is fetched before `buildDateScope` for this reason;
   do not move that call back.
@@ -451,51 +452,64 @@ Nine figures were wrong before this pass. Do not reintroduce any of them:
 - **Currency falls back to DKK everywhere**, matching the account and
   `budget-allocation.js`. A EUR fallback in the display path once meant kroner could print
   with a euro sign.
-- **The incremental split comes from Meta's `attribution_setting`, not from the campaign
-  name.** The account does report it, on the campaign's insights row, and Ads Manager
-  prints it in its "Attribution setting" column. Values seen here: `incrementality`,
-  `1d_view_7d_click_1d_ev`, `1d_view_7d_click`, `1d_view_28d_click`, `7d_click` and
-  `multiple` - machine values, not the wording the UI shows, so a word-boundary pattern
-  around "click" matches nothing inside `7d_click_1d_ev`. `resolveReportedAttribution`
-  reads it and outranks the name tag. The name tag stays as the fallback for when Meta
-  reports nothing, because the team maintains that register deliberately and a silent
-  field must never reclassify a campaign they have tagged. `multiple` means the
-  campaign's ad sets disagree and is **not** read as standard.
-  Asking for the field returns a row for every campaign that ever existed, because it is
-  configuration rather than a result - that took the snapshot from 15 campaigns to 358,
-  of which 343 had no spend, impressions, clicks or actions. The handler drops rows with
-  none of those four before anything reads them.
-  Meta still returns the standard figures for the incrementality attribution window on
-  this account, verified field by field. `incremental_matches_standard` detects that and
-  `buildQualityWarnings` discloses it. **Never present the lens as a measured uplift** -
-  the split is now sourced correctly, but the numbers inside it are still standard
-  attribution.
+- **Every result is on one measurement basis** - see "One measurement basis" below. The
+  incremental/standard lens split, the campaign-name tag and the "Meta returns the same
+  figures for the incrementality window" warning are gone, and must not come back.
+  Asking insights for `attribution_setting` still returns a row for every campaign that
+  ever existed (configuration, not a result: 358 rows, 343 empty), so the handler drops
+  rows with no spend, impressions, clicks or actions before anything reads them.
 - **The data quality panel is visible on every lens**, including General. It used to sit
   inside the section the render hides there, so the first view people open was the one
   that never showed whether its own numbers could be trusted.
+
+### One measurement basis: Meta's incremental attribution (2026-10-01)
+
+Meta attributes a purchase under the attribution setting of the ad set that earned it.
+This account has run incremental attribution, 7-day click + 1-day view, and 7-day click +
+1-day view + 1-day engaged view side by side, and the mix changed on 2026-09-09 (rebuild
+by market) and on 2026-09-29, when DE, FR and IT switched from incremental to standard
+**inside the same campaigns** (each now has a paused incremental ad set and an active
+standard one, Meta reports the campaign as `multiple`, and the "Inkremental" tag was
+taken out of the names). Summing `value` across campaigns therefore added different
+measurements together: new customers read +37% August to September where one method in
+both months reads +9% (incrementality) or +20% (7-day click), on +72% spend.
+
+- **Every insights query that reads results asks for
+  `action_attribution_windows=["incrementality"]`**, and `server/meta/measurement-basis.js`
+  normalises each row as it arrives: `value` becomes Meta's incremental figure and the ad
+  set's own figure moves to `reported_value`. Every total, lens, comparison and the
+  new-customer panel then read one method with no second code path. The team runs Meta on
+  incremental attribution by choice, as the conservative reading.
+- **Meta does return a separate incremental figure**:
+  `{"value":"471","1d_view":"401","7d_click":"70","incrementality":"136"}` for
+  Conv - 04 - EU - Standard in September. An earlier version ran two extra queries and read
+  `value` from both, so it "verified" that the two were identical and printed that as a
+  warning. That conclusion was wrong; do not re-derive it.
+- **On-platform actions (`lead`, `onsite_conversion.lead_grouped`, link clicks) carry no
+  incrementality key** - they happen on Meta - and keep their reported value. Purchases,
+  revenue, add to cart and the New_customer/Existing_customer custom conversions all have
+  it, daily and aggregated, back to at least October 2025.
+- **One Conversion lens**: every campaign with a conversion objective. Its table shows each
+  campaign's `attribution_setting` and "ROAS as reported" (`reported_roas_value`) so a
+  figure in Ads Manager can be found here; reported figures are never added into a total.
+- **The browser does not classify campaigns.** It used to re-classify by name and overwrite
+  the server, so a lens's stat cards and its table could describe different campaigns.
+- Expect Conv - 04 - EU's reported ROAS (~37) to sit far above its incremental ROAS (~9):
+  85% of its reported purchases are 1-day view-through.
 
 ### The account was rebuilt on 2026-09-09
 
 The Meta setup was restructured from product themes to markets. What the dashboard now
 sees, and the two defects that surfaced with it:
 
-- **Active conversion:** `Conv - 01 - DE - Inkremental`, `Conv - 02 - FR - Inkremental`,
-  `Conv - 03 - IT - Inkremental` and `Conv - 04 - EU - Standard`. The old themed
+- **Active conversion:** `Conv - 01 - DE`, `Conv - 02 - FR`, `Conv - 03 - IT` (named
+  "... - Inkremental" until they switched to standard attribution on 2026-09-29) and
+  `Conv - 04 - EU - Standard`. The old themed
   campaigns (Smykkekunde, Giftpackaging, Forsendelse) are paused but still carry spend in
   a 30-day window, so they stay in the lens.
-- **The attribution setting supersedes all of this** (see above). Found on 2026-09-10
-  from a screenshot of Ads Manager, whose "Attribution setting" column read "Incremental
-  attribution" against the three Inkremental campaigns and "7-day click" against
-  Conv - 04 - EU - Standard. It also settles three of the four untagged campaigns, and
-  reveals that `Kick-off Placeholder` is on incremental attribution despite carrying no
-  tag. The name-tag history below is kept because the tag is still the fallback.
-- **The new campaigns spell it "Inkremental" with an a**, where the previous set said
-  "Inkrementel". The matcher looked for those exact words and put all three in the
-  standard lens with 216,000 DKK of monthly budget, while validation reported five passes
-  and no failures. `hasIncrementalNameTag` now matches the stem `in[kc]rement`, and a
-  conversion campaign carrying neither tag is **named** in a data-quality warning rather
-  than silently counted as standard. The team tags both sides today, so an untagged
-  conversion campaign is a real signal.
+- The incremental/standard classification that this section used to describe (name tags,
+  their spelling, Meta's attribution setting deciding a lens) was removed on 2026-10-01 in
+  favour of one measurement basis. See above.
 - **`BA - LAL`** is the new active awareness campaign and carries its budget on four ad
   sets (`LAL - DE/FR/IT/EU`, 925 DKK each) rather than on the campaign. Ad-set budgets
   are picked up correctly; nothing needed changing there.
@@ -530,11 +544,20 @@ totals - and the series only carries days Meta returned a row for.
 - **Headline figures come from campaign totals, never the daily series.** The series is
   for drawing shapes. `tests/meta-hero-stats-agreement.test.js` fails if either rule is
   broken.
-- **Change badges compare completed days only, over equal windows.** Every preset but
-  "yesterday" ends today, and today is still running, so on 2026-10-01 "This month" read
-  spend as -84% "vs previous day". `resolveCompletedDayComparison` drops today from the
-  current window and sizes the previous one to match; a range that is only today gets no
-  badge. Headline figures and drawn series still include today.
+- **Change badges compare completed days only, over equal windows.** On 2026-10-01 "This
+  month" read spend as -84% "vs previous day": a few hours of today against all of
+  yesterday. `resolveCompletedDayComparison` drops today from the current window and sizes
+  the previous one to match; a range that is only today gets no badge.
+- **Rolling presets end yesterday**, as Ads Manager's do (`buildPresetRange`). Only
+  "Today" and "This month" include the day in progress, and pace on those uses finished
+  days only - with none yet, there is no pace, rather than 0%.
+- **One rule for badges** (`buildValueChange`): no badge for an undefined rate
+  (`computeAggregateMetric` returns NaN, not 0, when the denominator is empty) or for
+  zero against zero; "New" is neutral; spend is neutral. Reach and frequency carry no
+  badge, because the only per-day reach is summed daily reach.
+- **The previous window includes campaigns that have since been paused**
+  (`buildPreviousOnlyCampaigns`). Without them a restructure read as growth. They feed
+  comparisons only - never a table or a current total.
 - **Today's new customers ride the strip's cache, not the finished days'.** The panel's
   daily series is cached for 3 hours because finished days barely change; today used to
   ride along in it, so the panel read 0 new customers under a strip reading 4.
@@ -565,11 +588,11 @@ is arranged around it rather than treating it as one panel among many:
 
 - The **new-customer panel comes first** in the General overview, above the budget split.
   Budget is the lever you pull once you know what acquisition is doing.
-- The **KPI strip leads with new customers and cost per new customer**, each carrying the
-  panel's own month-to-date comparison via `buildAcquisitionChange`. Cost runs the
-  opposite way, since cheaper is better. That window is month to date against the same
-  elapsed days of last month, which is **not** the dashboard's selected range that the
-  spend and ROAS badges use, so every badge names its own period in the tile caption.
+- The **KPI strip leads with new customers and cost per new customer**, for the selected
+  range, read from the same account-level daily rows as the panel (`rangeTotals`), so
+  "Last 7 days" is one number in both places. Their badges compare the same finished days
+  as Spend and ROAS beside them (`rangeComparison`, `buildAcquisitionRangeChange`). Month
+  to date against the same days last month lives in the panel, which names its window.
 - The panel draws **new customers per day** with the previous period underneath, on a
   shared day-of-window scale. A count with a change badge cannot distinguish a month
   building steadily from one that died after the first week. The series comes from
@@ -590,7 +613,10 @@ Panels deleted in this pass, with the user's agreement: Executive brief, Decisio
 Decision board and Signals (all four were computed every render and then hidden by the
 render itself, and all four were generated advice prose over invented priority scores),
 and the Recommended moves panel with its `api/openai/dashboard-agent.js` route. General
-also lost its stat row, which restated the budget panel's totals and shares.
+also lost its stat row, which restated the budget panel's totals and shares. On
+2026-10-01 the Campaign pulse ("Scale", "Cut waste", "Stop bleed" over hand-weighted
+scores) went the same way, and the Data quality panel was cut to trust state, data source,
+spend reconciliation against the account total and warnings.
 
 Verification here means checking against the live account, not against fixtures. Start the
 server with `serve-local.ps1`, log in the way `smoke-local.js` does, and read

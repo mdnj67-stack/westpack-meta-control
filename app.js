@@ -11985,51 +11985,20 @@ function getMetaTrustStatusTone() {
   return trustTone === "warning" ? "warning" : trustTone === "success" ? "success" : "neutral";
 }
 
+// The status line says whether the figures can be trusted right now: where they came
+// from, how old they are, and whether anything needs reading in Data quality. Budget
+// normalisation, pagination, ad-set sourcing and the cron count used to be strung onto it
+// as well; they prove the snapshot was built carefully and never change how a figure is
+// read, so they live in the payload and in CLAUDE.md.
 function buildMetaQualityLabel() {
-  const currency = appState.metaCurrency || "DKK";
-  const normalization = appState.metaQuality?.budgetNormalization;
-  const pagination = appState.metaQuality?.pagination || null;
-  const awarenessUsingAdSetInsights = Number(appState.metaQuality?.awarenessUsingAdSetInsights || 0);
   const trust = buildMetaTrustState();
-  const parts = [trust.label, `Currency: ${currency}`];
-
-  if (normalization && Number.isFinite(Number(normalization.divisor))) {
-    const divisor = Number(normalization.divisor);
-    const confidence = String(normalization.confidence || "").trim();
-    const normalizationLabel = divisor > 1 ? `budgets normalized /${divisor}` : "budgets kept raw";
-    parts.push(confidence ? `${normalizationLabel} (${confidence})` : normalizationLabel);
-  }
-
-  if (pagination) {
-    const pages = [
-      pagination.campaignsPages,
-      pagination.campaignInsightsPages,
-      pagination.adSetsPages,
-      pagination.adSetInsightsPages,
-      pagination.adsPages
-    ].filter((value) => Number.isFinite(Number(value)) && Number(value) > 1);
-
-    if (pages.length) {
-      parts.push("pagination expanded");
-    }
-  }
-
-  if (awarenessUsingAdSetInsights > 0) {
-    parts.push(`awareness via ad sets (${awarenessUsingAdSetInsights})`);
-  }
-
+  const parts = [trust.label];
   const warningCount = Array.isArray(appState.metaQuality?.warnings)
     ? appState.metaQuality.warnings.length
     : 0;
   if (warningCount > 0) {
-    parts.push(`${warningCount} quality warning${warningCount === 1 ? "" : "s"}`);
+    parts.push(`${warningCount} note${warningCount === 1 ? "" : "s"} in Data quality`);
   }
-
-  const schedule = appState.metaQuality?.schedule || null;
-  if (schedule?.serverCronSchedulesUtc?.length) {
-    parts.push(`${schedule.serverCronSchedulesUtc.length} server cron`);
-  }
-
   return parts.join(" · ");
 }
 
@@ -13313,7 +13282,7 @@ function renderDashboard() {
     statsGridNode.hidden = isEmptyLensState || !renderedStats.length;
   }
   if (operatorFeedHeadNode) {
-    operatorFeedHeadNode.hidden = overviewVisible || isEmptyLensState;
+    operatorFeedHeadNode.hidden = true;
   }
   if (dashboardGridNode) {
     dashboardGridNode.hidden = overviewVisible || isEmptyLensState;
@@ -13357,7 +13326,9 @@ function renderDashboard() {
 
   moveToStack(
     playbookNextStack,
-    isEmptyLensState ? [] : [operatorFeedHeadNode, dashboardGridNode]
+    // The table carries its own title, so the old "Next decision" heading above it is not
+    // moved into the stack; appending it put it underneath the table.
+    isEmptyLensState ? [] : [dashboardGridNode]
   );
 
   // Reported once, after every panel has had its turn, so a single failure is visible
