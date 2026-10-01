@@ -513,6 +513,16 @@ totals - and the series only carries days Meta returned a row for.
 - **Headline figures come from campaign totals, never the daily series.** The series is
   for drawing shapes. `tests/meta-hero-stats-agreement.test.js` fails if either rule is
   broken.
+- **Change badges compare completed days only, over equal windows.** Every preset but
+  "yesterday" ends today, and today is still running, so on 2026-10-01 "This month" read
+  spend as -84% "vs previous day". `resolveCompletedDayComparison` drops today from the
+  current window and sizes the previous one to match; a range that is only today gets no
+  badge. Headline figures and drawn series still include today.
+- **Today's new customers ride the strip's cache, not the finished days'.** The panel's
+  daily series is cached for 3 hours because finished days barely change; today used to
+  ride along in it, so the panel read 0 new customers under a strip reading 4.
+  `fetchCustomerAcquisitionTrend` fetches today separately on the 15-minute insights
+  cache. `tests/meta-completed-day-comparison.test.js` pins both.
 
 ### Reaching Meta, and saying so when it fails
 

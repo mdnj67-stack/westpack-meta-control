@@ -730,8 +730,9 @@ function buildSpendShare(value, totalSpend) {
 
 function buildLensStats(campaigns, lens, dateScope, options = {}) {
   const currency = normalizeCurrencyCode(options.currency, "DKK");
-  const comparisonWindow = buildAggregateComparisonWindow(campaigns);
-  const changeWindowLabel = formatComparisonWindowLabel(dateScope?.days);
+  const comparison = resolveCompletedDayComparison(dateScope);
+  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison(campaigns, comparison));
+  const changeWindowLabel = describeComparisonWindow(comparison, dateScope);
   const spend = sumMetric(campaigns, "spend_value");
   const impressions = sumMetric(campaigns, "impressions_value");
   // Reach counts people, so adding it up across campaigns counts anyone who saw two of
@@ -1018,6 +1019,71 @@ function formatComparisonWindowLabel(days = 0) {
   return `${safeDays} days`;
 }
 
+// Period-over-period badges compare completed days only, over two windows of the same
+// length. Every preset except "yesterday" ends today, and today is still running while
+// the matching day of the previous window is finished - so on the first of the month
+// "This month" read spend as -84% against yesterday, an artefact of the clock rather
+// than anything the account did. Same rule as the new-customer month-to-date comparison.
+// With no completed day in range there is nothing honest to compare, so no badge.
+//
+// A scope without `today` (older callers, fixtures) keeps the whole range, which is
+// what the badges always compared.
+function resolveCompletedDayComparison(dateScope = null) {
+  const since = String(dateScope?.since || "");
+  const until = String(dateScope?.until || "");
+  const today = String(dateScope?.today || "");
+  const sinceDate = parseIsoDate(since);
+  if (!sinceDate || !parseIsoDate(until)) {
+    return null;
+  }
+
+  const excludesToday = Boolean(parseIsoDate(today)) && until >= today;
+  const currentUntil = excludesToday ? formatIsoDate(shiftDays(parseIsoDate(today), -1)) : until;
+  const currentUntilDate = parseIsoDate(currentUntil);
+  const days = Math.round((currentUntilDate.getTime() - sinceDate.getTime()) / 86400000) + 1;
+  if (days < 1) {
+    return { comparable: false, days: 0, excludesToday };
+  }
+
+  const previousUntilDate = shiftDays(sinceDate, -1);
+  return {
+    comparable: true,
+    days,
+    excludesToday,
+    current: { since, until: currentUntil },
+    previous: { since: formatIsoDate(shiftDays(previousUntilDate, -(days - 1))), until: formatIsoDate(previousUntilDate) }
+  };
+}
+
+// The campaigns as the badges should see them: both series cut to the compared windows.
+// The drawn series are left whole - this is only for the totals behind a change badge.
+function clipCampaignsToComparison(campaigns = [], comparison = null) {
+  if (!comparison) {
+    return campaigns || [];
+  }
+  if (!comparison.comparable) {
+    return [];
+  }
+  const within = (window) => (point) => {
+    const date = String(point?.date || "");
+    return date >= window.since && date <= window.until;
+  };
+  return (campaigns || []).map((campaign) => {
+    const current = (Array.isArray(campaign?.series) ? campaign.series : []).filter(within(comparison.current));
+    const previous = (Array.isArray(campaign?.comparison_window?.previous) ? campaign.comparison_window.previous : [])
+      .filter(within(comparison.previous));
+    return { ...campaign, series: current, comparison_window: { previous, current } };
+  });
+}
+
+function describeComparisonWindow(comparison = null, dateScope = null) {
+  if (!comparison?.comparable) {
+    return formatComparisonWindowLabel(dateScope?.days);
+  }
+  const label = formatComparisonWindowLabel(comparison.days);
+  return comparison.excludesToday ? `${label}, today excluded` : label;
+}
+
 function buildChangeLabel(direction = "flat", windowLabel = "selected period") {
   if (direction === "new") return `new vs previous ${windowLabel}`;
   return `vs previous ${windowLabel}`;
@@ -1212,7 +1278,9 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   const deduplicatedReachTotal = readNumber(options.deduplicatedReach?.reach, 0);
   // Named so the comparison badge says what it is measured against, rather than the
   // bare "vs previous period" that could mean any window.
-  const comparisonWindowLabel = `previous ${formatComparisonWindowLabel(dateScope?.days)}`;
+  const comparison = resolveCompletedDayComparison(dateScope);
+  const comparisonCampaigns = clipCampaignsToComparison(campaigns, comparison);
+  const comparisonWindowLabel = `previous ${describeComparisonWindow(comparison, dateScope)}`;
   const trendDates = (campaigns || [])
     .flatMap((campaign) => campaign.series || [])
     .map((point) => point.date)
@@ -1222,12 +1290,17 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
   const meta = lastDate
     ? `${dateScope?.label || "Selected range"} ending ${formatShortDate(lastDate)}`
     : (dateScope?.label || "Selected range");
-  const withComparison = (totals) => ({
-    series: totals.current,
-    comparisonSeries: totals.previous,
-    currentTotal: totals.currentTotal,
-    previousTotal: totals.previousTotal
-  });
+  // The drawn series cover the whole range; the badge totals cover completed days only.
+  const withComparison = (buildTotals) => {
+    const totals = buildTotals(campaigns);
+    const compared = buildTotals(comparisonCampaigns);
+    return {
+      series: totals.current,
+      comparisonSeries: totals.previous,
+      currentTotal: compared.currentTotal,
+      previousTotal: compared.previousTotal
+    };
+  };
 
   if (lens === "general") {
     const totalSpend = sumMetric(campaigns, "spend_value");
@@ -1237,7 +1310,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "Spend over time",
         meta,
         value: formatCurrency(totalSpend, currency),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.spend || 0)),
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.spend || 0)),
         tone: "conversion"
       },
       {
@@ -1245,15 +1318,14 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         meta,
         value: formatCurrency(totalRevenue, currency),
         tone: "conversion",
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.revenue || 0))
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.revenue || 0))
       },
       {
         title: "ROAS over time",
         meta,
         value: totalSpend > 0 ? formatDashboardNumber(totalRevenue / totalSpend, 2) : "--",
         tone: "conversion",
-        ...withComparison(buildDerivedSeriesTotals(
-          campaigns,
+        ...withComparison((input) => buildDerivedSeriesTotals(input,
           (point) => readNumber(point.revenue, 0),
           (point) => readNumber(point.spend, 0)
         ))
@@ -1276,14 +1348,14 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "Spend trend",
         meta,
         value: formatCurrency(spend, currency),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.spend || 0)),
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.spend || 0)),
         tone: "awareness"
       },
       {
         title: "Reach delivery",
         meta,
         value: formatDashboardNumber(deduplicatedReachTotal > 0 ? deduplicatedReachTotal : sumMetric(campaigns, "reach_value"), 0),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.reach || 0)),
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.reach || 0)),
         tone: "awareness",
         hero: true
       },
@@ -1291,8 +1363,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "CPM trend",
         meta,
         value: impressions > 0 ? formatCurrency((spend / impressions) * 1000, currency) : "--",
-        ...withComparison(buildDerivedSeriesTotals(
-          campaigns,
+        ...withComparison((input) => buildDerivedSeriesTotals(input,
           (point) => readNumber(point.spend, 0) * 1000,
           (point) => readNumber(point.impressions, 0)
         )),
@@ -1308,8 +1379,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
           const totalReach = deduplicatedReachTotal > 0 ? deduplicatedReachTotal : sumMetric(campaigns, "reach_value");
           return totalReach > 0 ? formatDashboardNumber(totalImpressions / totalReach, 2) : "--";
         })(),
-        ...withComparison(buildDerivedSeriesTotals(
-          campaigns,
+        ...withComparison((input) => buildDerivedSeriesTotals(input,
           (point) => readNumber(point.impressions, 0),
           (point) => readNumber(point.reach, 0)
         )),
@@ -1328,14 +1398,14 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "Spend trend",
         meta,
         value: formatCurrency(totalSpend, currency),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.spend || 0)),
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.spend || 0)),
         tone: "leads"
       },
       {
         title: "Leads trend",
         meta,
         value: formatDashboardNumber(totalLeads, 0),
-        ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.leads || 0)),
+        ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.leads || 0)),
         tone: "leads",
         hero: true
       },
@@ -1343,8 +1413,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "CPL trend",
         meta,
         value: totalLeads > 0 ? formatCurrency(totalSpend / totalLeads, currency) : "--",
-        ...withComparison(buildDerivedSeriesTotals(
-          campaigns,
+        ...withComparison((input) => buildDerivedSeriesTotals(input,
           (point) => readNumber(point.spend, 0),
           (point) => readNumber(point.leads, 0)
         )),
@@ -1354,8 +1423,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
         title: "CTR trend",
         meta,
         value: totalImpressions > 0 ? `${((totalClicks / totalImpressions) * 100).toFixed(2)}%` : "--",
-        ...withComparison(buildDerivedSeriesTotals(
-          campaigns,
+        ...withComparison((input) => buildDerivedSeriesTotals(input,
           (point) => readNumber(point.clicks, 0) * 100,
           (point) => readNumber(point.impressions, 0)
         )),
@@ -1374,14 +1442,14 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       title: "Spend trend",
       meta,
       value: formatCurrency(totalSpend, currency),
-      ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.spend || 0)),
+      ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.spend || 0)),
       tone
     },
     {
       title: "Revenue trend",
       meta,
       value: formatCurrency(totalRevenue, currency),
-      ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.revenue || 0)),
+      ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.revenue || 0)),
       tone,
       hero: true
     },
@@ -1389,8 +1457,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       title: "ROAS trend",
       meta,
       value: totalSpend > 0 ? formatDashboardNumber(totalRevenue / totalSpend, 2) : "--",
-      ...withComparison(buildDerivedSeriesTotals(
-        campaigns,
+      ...withComparison((input) => buildDerivedSeriesTotals(input,
         (point) => point.revenue || 0,
         (point) => point.spend || 0
       )),
@@ -1400,8 +1467,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       title: "CPA trend",
       meta,
       value: totalPurchases > 0 ? formatCurrency(totalSpend / totalPurchases, currency) : "--",
-      ...withComparison(buildDerivedSeriesTotals(
-        campaigns,
+      ...withComparison((input) => buildDerivedSeriesTotals(input,
         (point) => point.spend || 0,
         (point) => point.purchases || 0
       )),
@@ -1411,7 +1477,7 @@ function buildTrendCards(campaigns = [], lens = "general", dateScope = null, cur
       title: "Purchase trend",
       meta,
       value: formatDashboardNumber(totalPurchases, 0),
-      ...withComparison(buildComparisonSeriesTotals(campaigns, (point) => point.purchases || 0)),
+      ...withComparison((input) => buildComparisonSeriesTotals(input, (point) => point.purchases || 0)),
       tone
     }
   ], currency, comparisonWindowLabel);
@@ -1515,8 +1581,9 @@ function buildAcquisitionChange(acquisition = null, field = "newCustomers", posi
 
 function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK", dateScope = null, options = {}) {
   const deduplicatedHeroReach = readNumber(options.deduplicatedReach?.reach, 0);
-  const comparisonWindow = buildAggregateComparisonWindow(campaigns);
-  const changeWindowLabel = formatComparisonWindowLabel(dateScope?.days);
+  const comparison = resolveCompletedDayComparison(dateScope);
+  const comparisonWindow = buildAggregateComparisonWindow(clipCampaignsToComparison(campaigns, comparison));
+  const changeWindowLabel = describeComparisonWindow(comparison, dateScope);
 
   // Every figure here comes from the campaign totals Meta reported for the range, which
   // is the same basis `buildLensStats` uses for the cards directly below this strip.
@@ -1797,6 +1864,8 @@ function formatScopeLabel(since, until, fallback) {
 
 function buildDateScope(query = {}, timeZone = "") {
   const preset = String(query.preset || "last_7d");
+  // Carried so the change badges can leave out the day still in progress.
+  const today = formatIsoDate(resolveTodayInTimeZone(timeZone));
   const from = String(query.from || "");
   const to = String(query.to || "");
 
@@ -1821,7 +1890,8 @@ function buildDateScope(query = {}, timeZone = "") {
       label: formatScopeLabel(from, to, "Custom range"),
       shortLabel: formatScopeLabel(from, to, "Custom"),
       days: diffDays,
-      preset: "custom"
+      preset: "custom",
+      today
     };
   }
 
@@ -1835,7 +1905,8 @@ function buildDateScope(query = {}, timeZone = "") {
     ...range,
     shortLabel: range.label,
     days: diffDays,
-    preset
+    preset,
+    today
   };
 }
 
@@ -2158,7 +2229,9 @@ module.exports = async (req, res) => {
       accountId,
       accessToken: config.metaAccessToken,
       trendWindow: acquisitionTrendWindows.fetch,
+      today: acquisitionTrendWindows.today?.date || "",
       insightsCacheMaxAgeMs: META_ACQUISITION_TREND_CACHE_MAX_AGE_MS,
+      todayCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
       timings,
       bypassCache: forceRefresh
     }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));

@@ -316,14 +316,22 @@ function createMetaSnapshotFetchers({
     };
   }
 
-  // Account-level daily rows spanning the first of the previous month to today, so the
-  // month-to-date new-customer comparison can be computed without a second round trip per
-  // window. One request, ~62 rows, and it also yields a daily series for a sparkline.
+  // Account-level daily rows spanning every panel preset, so each window can be computed
+  // without a round trip of its own, and they also yield the daily series for the chart.
+  //
+  // Two requests, because the two halves age differently. The finished days barely change
+  // and sit behind a long cache. Today does not: it is the same day the KPI strip counts
+  // from the campaign insights on a 15-minute cache, and when today rode along in the
+  // long-cached query the panel showed 0 new customers for "this month so far" directly
+  // below a strip reading 4 - the panel's copy of today was hours older. Today therefore
+  // follows the strip's cache, so the two can only disagree by what Meta itself reports.
   async function fetchCustomerAcquisitionTrend({
     accountId,
     accessToken,
     trendWindow,
+    today = "",
     insightsCacheMaxAgeMs,
+    todayCacheMaxAgeMs = insightsCacheMaxAgeMs,
     timings,
     bypassCache = false
   }) {
@@ -331,20 +339,38 @@ function createMetaSnapshotFetchers({
       return { data: [], pageCount: 0 };
     }
 
-    return getCachedMetaCollection({
-      cacheKey: buildMetaResourceCacheKey("insights_acquisition_trend", [accountId, trendWindow.since, trendWindow.until]),
-      maxAgeMs: insightsCacheMaxAgeMs,
+    const fetchDays = (since, until, maxAgeMs, cacheName, timingLabel) => getCachedMetaCollection({
+      cacheKey: buildMetaResourceCacheKey(cacheName, [accountId, since, until]),
+      maxAgeMs,
       timingStore: timings,
       bypassCache,
-      timingLabel: "acquisition_trend_insights",
+      timingLabel,
       fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
         level: "account",
-        time_range: JSON.stringify({ since: trendWindow.since, until: trendWindow.until }),
+        time_range: JSON.stringify({ since, until }),
         time_increment: "1",
         limit: "200",
         fields: "date_start,spend,actions,action_values"
       })
     });
+
+    const splitsOffToday = Boolean(today) && trendWindow.until === today && trendWindow.since < today;
+    if (!splitsOffToday) {
+      return fetchDays(trendWindow.since, trendWindow.until, insightsCacheMaxAgeMs, "insights_acquisition_trend", "acquisition_trend_insights");
+    }
+
+    const yesterday = new Date(`${today}T00:00:00Z`);
+    yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+    const completedUntil = yesterday.toISOString().slice(0, 10);
+    const [completed, todayRows] = await Promise.all([
+      fetchDays(trendWindow.since, completedUntil, insightsCacheMaxAgeMs, "insights_acquisition_completed", "acquisition_trend_insights"),
+      fetchDays(today, today, todayCacheMaxAgeMs, "insights_acquisition_today", "acquisition_today_insights")
+    ]);
+    return {
+      ...completed,
+      data: [...(completed?.data || []), ...(todayRows?.data || [])],
+      pageCount: (Number(completed?.pageCount) || 0) + (Number(todayRows?.pageCount) || 0)
+    };
   }
 
   // Reach is a count of distinct people, so it cannot be added up. Summing the reach of
