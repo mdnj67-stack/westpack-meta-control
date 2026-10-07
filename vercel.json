@@ -17,6 +17,9 @@
     },
     "api/canva/localizer.js": {
       "maxDuration": 300
+    },
+    "api/openai/klaviyo-translate-template.js": {
+      "maxDuration": 300
     }
   },
   "crons": [

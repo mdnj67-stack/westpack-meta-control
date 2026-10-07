@@ -5,7 +5,13 @@ const { buildGlossaryPromptBlock } = require("../../server/lib/glossary");
 const { buildWestpackKnowledgePromptBlock } = require("../../server/lib/westpack-knowledge");
 const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-product-feed");
 const { rewriteWestpackProductFeedUrls, rewriteWestpackSnippetUrls } = require("../../server/lib/westpack-url-locales");
-const { extractHtmlSegments, generateTemplateVariant, rebuildHtml } = require("../../server/lib/klaviyo-template-variant");
+const {
+  FRAGMENT_ARRAY_SCHEMA,
+  extractHtmlSegments,
+  generateTemplateVariant,
+  rebuildHtml,
+  requestFragmentsById
+} = require("../../server/lib/klaviyo-template-variant");
 const { parseModelJson } = require("../../server/lib/model-json");
 
 function containsHtml(value = "") {
@@ -87,7 +93,7 @@ function buildPlainPrompt(input, glossaryBlock, westpackKnowledgeBlock) {
   ];
 }
 
-function buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock) {
+function buildHtmlPrompt(input, fragmentLines, glossaryBlock, westpackKnowledgeBlock) {
   return [
     {
       role: "system",
@@ -109,7 +115,8 @@ function buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock)
             glossaryBlock,
             westpackKnowledgeBlock,
             "Return strict JSON with keys: subject, previewText, fragments, rationale.",
-            "The fragments array must have exactly the same number of items and the same order as the source fragments."
+            "Each source fragment is numbered [n]. Return fragments as objects { id, text } where id is that number - exactly one object for every source fragment you were given, and never an empty text.",
+            "You may be given only part of the email's fragments; translate the ones you were given and always translate the subject and preview text in full."
           ].join(" ")
         }
       ]
@@ -132,7 +139,7 @@ function buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock)
             input?.sourcePreviewText || "",
             "",
             "Source HTML text fragments in order:",
-            ...segments.map((segment, index) => `[${index + 1}] ${segment}`)
+            ...fragmentLines
           ].join("\n")
         }
       ]
@@ -225,26 +232,21 @@ module.exports = async (req, res) => {
         properties: {
           subject: { type: "string" },
           previewText: { type: "string" },
-          fragments: {
-            type: "array",
-            items: { type: "string" }
-          },
+          fragments: FRAGMENT_ARRAY_SCHEMA,
           rationale: { type: "string" }
         },
         required: ["subject", "previewText", "fragments", "rationale"]
       };
 
-      const { parsed, model } = await requestStructuredResponse(
-        config,
-        buildHtmlPrompt(input, segments, glossaryBlock, westpackKnowledgeBlock),
-        "westpack_klaviyo_html_translation",
-        schema
-      );
-
-      const translatedSegments = Array.isArray(parsed.fragments) ? parsed.fragments : [];
-      if (translatedSegments.length !== segments.length) {
-        throw new Error("Translated HTML fragment count did not match the source template.");
-      }
+      const { fragments: translatedSegments, header: parsed, model } = await requestFragmentsById({
+        segments,
+        requestBatch: ({ lines }) => requestStructuredResponse(
+          config,
+          buildHtmlPrompt(input, lines, glossaryBlock, westpackKnowledgeBlock),
+          "westpack_klaviyo_html_translation",
+          schema
+        )
+      });
 
       sendJson(res, 200, {
         subject: parsed.subject || "",

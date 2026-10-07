@@ -63,6 +63,83 @@ function rebuildHtml(tokens, rewrittenSegments) {
   }).join("");
 }
 
+// A long email runs to a hundred-odd fragments, and a model asked to return "the same number in
+// the same order" as a bare string array drops, merges or splits one often enough to fail whole
+// markets ("Translated HTML fragment count did not match the source template"). One slip
+// anywhere also made it impossible to tell which fragment went where. So every fragment travels
+// with its id, long lists go out in batches, and a fragment that comes back missing is asked for
+// again on its own rather than failing the language.
+const FRAGMENT_BATCH_SIZE = 40;
+const FRAGMENT_MAX_ATTEMPTS = 3;
+
+const FRAGMENT_ARRAY_SCHEMA = {
+  type: "array",
+  items: {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      id: { type: "integer" },
+      text: { type: "string" }
+    },
+    required: ["id", "text"]
+  }
+};
+
+function formatFragmentLines(segments, ids) {
+  return ids.map((index) => `[${index + 1}] ${segments[index]}`);
+}
+
+// requestBatch({ ids, lines, first }) must resolve to { parsed, model } where parsed.fragments is
+// an array of { id, text } using the 1-based ids shown in `lines`. The first response's other
+// keys (subject, previewText, ...) are returned as `header`.
+async function requestFragmentsById({
+  segments,
+  requestBatch,
+  batchSize = FRAGMENT_BATCH_SIZE,
+  maxAttempts = FRAGMENT_MAX_ATTEMPTS
+}) {
+  const results = new Array(segments.length);
+  let pending = segments.map((_, index) => index);
+  let header = null;
+  let model = "";
+
+  for (let attempt = 0; attempt < maxAttempts && pending.length; attempt += 1) {
+    const batches = [];
+    for (let start = 0; start < pending.length; start += batchSize) {
+      batches.push(pending.slice(start, start + batchSize));
+    }
+
+    const responses = await Promise.all(batches.map((ids, batchIndex) => requestBatch({
+      ids,
+      lines: formatFragmentLines(segments, ids),
+      first: header === null && batchIndex === 0
+    })));
+
+    responses.forEach(({ parsed, model: responseModel }, batchIndex) => {
+      if (header === null && batchIndex === 0) header = parsed || {};
+      model = model || responseModel || "";
+      const allowed = new Set(batches[batchIndex]);
+      const fragments = Array.isArray(parsed?.fragments) ? parsed.fragments : [];
+      for (const fragment of fragments) {
+        const index = Number(fragment?.id) - 1;
+        if (!allowed.has(index) || results[index] !== undefined) continue;
+        if (typeof fragment.text !== "string" || !fragment.text.trim()) continue;
+        results[index] = fragment.text;
+      }
+    });
+
+    pending = pending.filter((index) => results[index] === undefined);
+  }
+
+  if (pending.length) {
+    throw new Error(
+      `${pending.length} of ${segments.length} HTML text fragments came back missing after ${maxAttempts} attempts (first missing: #${pending[0] + 1}). Nothing was generated for this language - try again.`
+    );
+  }
+
+  return { fragments: results, header: header || {}, model };
+}
+
 function createGlossaryBlock(input) {
   return buildGlossaryPromptBlock({
     targetLanguage: input?.sourceLanguage || "Source language",
@@ -131,7 +208,7 @@ function buildVariantPlainPrompt(input, glossaryBlock, knowledgeBlock) {
   ];
 }
 
-function buildVariantHtmlPrompt(input, fragments, glossaryBlock, knowledgeBlock) {
+function buildVariantHtmlPrompt(input, fragmentLines, glossaryBlock, knowledgeBlock) {
   return [
     {
       role: "system",
@@ -148,7 +225,7 @@ function buildVariantHtmlPrompt(input, fragments, glossaryBlock, knowledgeBlock)
             "Preserve URLs, placeholders, merge tags, unsubscribe tags, product references, and technical syntax exactly where they appear.",
             "Do not invent discounts, deadlines, gifts, stock levels, or claims unless they are already present in the source or explicitly requested.",
             "Return strict JSON with keys: templateName, subject, previewText, fragments, rationale, sendStrategyNote.",
-            "The fragments array must have exactly the same number of items and the same order as the source fragments.",
+            "Each source fragment is numbered [n]. Return fragments as objects { id, text } where id is that number - one object for every source fragment, and never an empty text.",
             glossaryBlock,
             knowledgeBlock
           ].join(" ")
@@ -167,7 +244,7 @@ function buildVariantHtmlPrompt(input, fragments, glossaryBlock, knowledgeBlock)
             `Operator brief: ${input?.operatorBrief || "Create a clear alternative version of the full email."}`,
             "",
             "Source HTML text fragments in order:",
-            ...fragments.map((segment, index) => `[${index + 1}] ${segment}`)
+            ...fragmentLines
           ].join("\n")
         }
       ]
@@ -384,24 +461,25 @@ async function generateTemplateVariant({ config, input, requestStructuredRespons
         templateName: { type: "string" },
         subject: { type: "string" },
         previewText: { type: "string" },
-        fragments: { type: "array", items: { type: "string" } },
+        fragments: FRAGMENT_ARRAY_SCHEMA,
         rationale: { type: "string" },
         sendStrategyNote: { type: "string" }
       },
       required: ["templateName", "subject", "previewText", "fragments", "rationale", "sendStrategyNote"]
     };
 
-    const { parsed, model } = await requestStructuredResponse(
-      config,
-      buildVariantHtmlPrompt(input, segments, glossaryBlock, knowledgeBlock),
-      "westpack_klaviyo_template_variant_html",
-      schema
-    );
-
-    const rewrittenSegments = Array.isArray(parsed.fragments) ? parsed.fragments : [];
-    if (rewrittenSegments.length !== segments.length) {
-      throw new Error("AI fragment count did not match the source template.");
-    }
+    // A variant rewrites the email as a whole, so the first pass sends every fragment at once;
+    // only fragments that come back missing are asked for again.
+    const { fragments: rewrittenSegments, header: parsed, model } = await requestFragmentsById({
+      segments,
+      batchSize: Math.max(segments.length, 1),
+      requestBatch: ({ lines }) => requestStructuredResponse(
+        config,
+        buildVariantHtmlPrompt(input, lines, glossaryBlock, knowledgeBlock),
+        "westpack_klaviyo_template_variant_html",
+        schema
+      )
+    });
     const fragmentChanges = segments.map((segment, index) => ({
       path: [index + 1],
       before: segment,
@@ -459,7 +537,9 @@ async function generateTemplateVariant({ config, input, requestStructuredRespons
 }
 
 module.exports = {
+  FRAGMENT_ARRAY_SCHEMA,
   extractHtmlSegments,
   generateTemplateVariant,
-  rebuildHtml
+  rebuildHtml,
+  requestFragmentsById
 };
