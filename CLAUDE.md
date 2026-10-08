@@ -428,7 +428,9 @@ series (which stays conversion-only and says so).
   says Meta is delivering beyond the audience. `LAL - EU` (expansion off) at 85% is.
 - **A launch period is everyone-new by definition**, so the period after it always reads
   as a fall. On the first run that alone marked ten ad sets "saturating" after the
-  2026-09-09 rebuild. Against a launch (`reachBefore === 0`) only the level is judged.
+  2026-09-09 rebuild. A previous period counts as a launch when the ad set's reach before
+  it was under half the period's own reach (`launchReachShare`) - zero alone failed once
+  the windows moved a day past the rebuild. Against a launch only the level is judged.
 - **"Reaches, does not convert"** needs 3x the account's own cost per new customer spent
   with none (about a 5% chance by Poisson if the ad set performed like the account), not a
   fixed amount. Awareness rows are judged on their 5-a-week frequency target instead.

@@ -744,7 +744,8 @@ function saturationAudienceCell(row) {
 function saturationPrevious(row, field, format) {
   const previous = row.previous || {};
   if (!(Number(previous.reach) > 0)) return "";
-  if (Number(previous.reachBefore) === 0) return `<small>launch before</small>`;
+  // Same rule as the server's launch test (THRESHOLDS.launchReachShare).
+  if (Number(previous.reachBefore) < Number(previous.reach) * 0.5) return `<small>launch before</small>`;
   const value = previous[field];
   return value == null ? "" : `<small>was ${escapeHtml(format(value))}</small>`;
 }
@@ -875,7 +876,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
       ${marketSections}
       ${thin.length ? `
         <details class="saturation-thin">
-          <summary>${escapeHtml(`${thin.length} ad sets with too little delivery to judge (${formatCurrency(thinSpend, currency)} in ${days} days)`)}</summary>
+          <summary>${escapeHtml(`${thin.length} ad set${thin.length === 1 ? "" : "s"} with too little delivery to judge (${formatCurrency(thinSpend, currency)} in ${days} days)`)}</summary>
           ${renderSaturationTable(thin, currency, "Too little delivery")}
         </details>
       ` : ""}

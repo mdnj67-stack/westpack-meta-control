@@ -111,18 +111,32 @@ test("the period after a launch is not read as saturation", () => {
   // The same movement against an established period is saturation.
   const established = classifySaturation({
     current: { reach: 122397, spend: 15339, newShare: 0.38, costPerThousandNew: 208.56, newCustomers: 1 },
-    previous: { reach: 200000, spend: 13000, newShare: 0.6, costPerThousandNew: 76.35, reachBefore: 50000 },
+    previous: { reach: 200000, spend: 13000, newShare: 0.6, costPerThousandNew: 76.35, reachBefore: 150000 },
     objectiveGroup: "conversion",
     accountCostPerNewCustomer: 2233.58
   });
   assert.equal(established.status, "saturated");
 });
 
+test("a previous period with barely any delivery before it still counts as a launch", () => {
+  // Conv - 04 on 2026-10-08: the rebuild day fell one day before the previous
+  // period, so its "before" reach was small but not zero, and 85% -> 69% read as
+  // saturation.
+  const result = classifySaturation({
+    current: { reach: 128877, spend: 34132, newShare: 0.69, costPerThousandNew: 385, newCustomers: 43 },
+    previous: { reach: 150000, spend: 30000, newShare: 0.85, costPerThousandNew: 322, reachBefore: 22000 },
+    objectiveGroup: "conversion",
+    accountCostPerNewCustomer: 2148.71
+  });
+  assert.equal(result.status, "room");
+  assert.ok(result.reasons.some((reason) => /launch/.test(reason)));
+});
+
 test("a falling new share or a rising cost of new people against an established period is saturating", () => {
   // EU - Lead - 1: 68% new before, 48% now.
   const result = classifySaturation({
     current: { reach: 15216, spend: 2220, newShare: 0.4845, costPerThousandNew: 301.18 },
-    previous: { reach: 20000, spend: 2400, newShare: 0.6784, costPerThousandNew: 277.91, reachBefore: 9000 },
+    previous: { reach: 20000, spend: 2400, newShare: 0.6784, costPerThousandNew: 277.91, reachBefore: 15000 },
     objectiveGroup: "leads"
   });
   assert.equal(result.status, "saturating");
@@ -184,7 +198,7 @@ test("a broad ad set gets no audience share, because its estimate is a populatio
 test("'does not convert' is measured against the account's own cost per new customer", () => {
   const base = {
     current: { reach: 186433, spend: 6000, newShare: 0.7, costPerThousandNew: 50, newCustomers: 0 },
-    previous: { reach: 150000, spend: 6000, newShare: 0.75, costPerThousandNew: 48, reachBefore: 40000 },
+    previous: { reach: 150000, spend: 6000, newShare: 0.75, costPerThousandNew: 48, reachBefore: 120000 },
     objectiveGroup: "conversion"
   };
   // Under three times the account's cost per new customer, a zero is noise.

@@ -61,6 +61,12 @@ const THRESHOLDS = {
   // Movement against the previous period that marks an audience running out.
   newShareDrop: 0.1,
   costPerThousandNewRise: 0.25,
+  // The previous period counts as a launch when the ad set's reach in the whole
+  // lookback before it was under this share of the period's own reach: it had
+  // barely delivered yet. Zero alone was too strict - once the windows moved a
+  // day, the single rebuild day (2026-09-09) fell before the period and
+  // Conv - 04 read 85% -> 69% as saturation.
+  launchReachShare: 0.5,
   // A defined audience reached this far inside one period is used up.
   saturatedAudienceShare: 0.8,
   // A conversion ad set that has spent this many times the account's cost per new
@@ -239,7 +245,7 @@ function classifySaturation({
   // reads as a fall. Measured on the 2026-09-09 rebuild, that alone marked ten ad
   // sets as saturating in their second fortnight. Against a launch, only the
   // current level is read.
-  const previousWasLaunch = Boolean(previous && previous.reach > 0 && previous.reachBefore === 0);
+  const previousWasLaunch = Boolean(previous && previous.reach > 0 && previous.reachBefore < previous.reach * t.launchReachShare);
   const comparable = previous && !previousWasLaunch && previous.reach >= t.minimumReach && previous.newShare != null;
   const shareDrop = comparable && current.newShare != null ? previous.newShare - current.newShare : null;
   const costRise = comparable && current.costPerThousandNew != null && previous.costPerThousandNew > 0
