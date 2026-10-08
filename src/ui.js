@@ -966,7 +966,19 @@ function saturationWhy(row) {
   const costReason = (row.causes || []).includes("costTrend")
     ? reasons.find((reason) => /cost .* more per thousand/i.test(reason))
     : "";
-  const lead = row.status === "room" ? "" : reasons[0];
+  // Lead with the reason behind the coloured measure, not whichever was written first.
+  const causePatterns = {
+    audience: /of the audience/,
+    newShareTrend: /fell/,
+    costTrend: /more per thousand/,
+    frequency: /a week/,
+    customers: /no new customer/,
+    newShare: /were new to it/
+  };
+  const byCause = (row.causes || [])
+    .map((cause) => reasons.find((reason) => causePatterns[cause]?.test(reason)))
+    .find(Boolean);
+  const lead = row.status === "room" ? "" : (byCause || reasons[0]);
   const rest = reasons.filter((reason) => reason !== lead);
   return `
     <div class="sat-why">
