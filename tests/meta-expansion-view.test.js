@@ -220,7 +220,10 @@ test("new customers is shown as the count, compared over the same elapsed days",
   // September's 0,04 against August's 0,23 looked like a collapse and was mostly
   // the part month.
   assert.doesNotMatch(ui, /New customers per 1,000 new/);
-  assert.match(ui, /<span>New customers<\/span>/);
+  // Named as the conversion campaigns' figure: the Performance tab counts every campaign,
+  // so an unlabelled "New customers" here read as the same number and was always lower.
+  assert.match(ui, /<span>New customers · conversion campaigns<\/span>/);
+  assert.match(ui, /Conversion campaigns only, so below the account total on Performance/);
   assert.match(ui, /latest\.newCustomers == null \? "--" : formatCompactNumber\(latest\.newCustomers\)/);
 
   // The comparison is the same elapsed days, and it is absent when there is no

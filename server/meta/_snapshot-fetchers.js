@@ -328,6 +328,57 @@ function createMetaSnapshotFetchers({
     };
   }
 
+  // The figures behind every new-customer number: each campaign's own Meta figure for each
+  // window the dashboard reads, in one call per cache class via `time_ranges`. Incremental
+  // attribution is a model evaluated per query, so a period's figure has to be asked for
+  // as a period - summing days gives a different number (see customer-acquisition.js).
+  //
+  // Windows that ended before today barely change and ride the long cache; windows that
+  // include today follow the 15-minute insights cache, like the campaign totals beside them.
+  async function fetchCustomerAcquisitionWindowTotals({
+    accountId,
+    accessToken,
+    windows = [],
+    today = "",
+    insightsCacheMaxAgeMs,
+    todayCacheMaxAgeMs = insightsCacheMaxAgeMs,
+    timings,
+    bypassCache = false
+  }) {
+    const valid = (windows || []).filter((window) => window?.since && window?.until);
+    const fetchWindows = (subset, maxAgeMs, cacheName, timingLabel) => {
+      if (!subset.length) {
+        return Promise.resolve({ data: [], pageCount: 0 });
+      }
+      const keys = subset.map((window) => `${window.since}..${window.until}`).sort();
+      return getCachedMetaCollection({
+        cacheKey: buildMetaResourceCacheKey(cacheName, [accountId, ...keys]),
+        maxAgeMs,
+        timingStore: timings,
+        bypassCache,
+        timingLabel,
+        fetcher: () => metaGetAll(`/${accountId}/insights`, accessToken, {
+          level: "campaign",
+          time_ranges: JSON.stringify(subset.map(({ since, until }) => ({ since, until }))),
+          action_attribution_windows: INCREMENTAL_ATTRIBUTION_WINDOWS,
+          limit: "500",
+          fields: "campaign_id,date_start,date_stop,spend,actions,action_values"
+        })
+      }).then(applyMeasurementBasisToCollection);
+    };
+
+    const completed = valid.filter((window) => !today || window.until < today);
+    const live = valid.filter((window) => today && window.until >= today);
+    const [completedRows, liveRows] = await Promise.all([
+      fetchWindows(completed, insightsCacheMaxAgeMs, "insights_acquisition_windows_inc", "acquisition_window_insights"),
+      fetchWindows(live, todayCacheMaxAgeMs, "insights_acquisition_windows_live_inc", "acquisition_window_live_insights")
+    ]);
+    return {
+      data: [...(completedRows?.data || []), ...(liveRows?.data || [])],
+      pageCount: (Number(completedRows?.pageCount) || 0) + (Number(liveRows?.pageCount) || 0)
+    };
+  }
+
   // Reach is a count of distinct people, so it cannot be added up. Summing the reach of
   // several campaigns counts everyone who saw more than one of them once per campaign,
   // which on this account inflated the headline figure by millions. Meta deduplicates
@@ -398,6 +449,7 @@ function createMetaSnapshotFetchers({
     fetchAwarenessAdSetInsightsCollections,
     fetchCampaignInsightsCollections,
     fetchCustomerAcquisitionTrend,
+    fetchCustomerAcquisitionWindowTotals,
     fetchDeduplicatedReach,
     fetchCatalogCollections,
     fetchDashboardMetadataCollections

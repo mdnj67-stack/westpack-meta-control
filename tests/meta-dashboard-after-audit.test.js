@@ -102,16 +102,27 @@ function assemble(overrides = {}) {
     series: [point(range.since, 1000)], comparison_window: { current: [point(range.since, 1000)], previous: [point(shiftIso(range.since, -7), 1000)] }
   };
   const newCustomerType = "offsite_conversion.custom.775766277988531";
+  // Daily rows that deliberately do NOT add up to the window figures, as Meta's incremental
+  // figure does not: 7 x 2 = 14 by day against 16 for the week as one period.
   const rows = [];
   for (let offset = -7; offset < 7; offset += 1) {
     rows.push({ date_start: shiftIso(range.since, offset), spend: "1000", actions: [{ action_type: newCustomerType, value: offset >= 0 ? "2" : "3" }], action_values: [] });
   }
+  const windowRow = (since, until, newCustomers) => ({
+    campaign_id: "c1", date_start: since, date_stop: until, spend: "7000",
+    actions: [{ action_type: newCustomerType, value: String(newCustomers) }], action_values: []
+  });
+  const windowRows = [
+    windowRow(range.since, range.until, 16),
+    windowRow(shiftIso(range.since, -7), shiftIso(range.since, -1), 20)
+  ];
   return buildSnapshotDashboardAssembly({
     enrichedCampaigns: [campaign],
     includedCampaigns: [campaign],
     budgetNormalization: { divisor: 100, currency: "DKK", confidence: "exact" },
     customerConversionActionTypes: { newCustomerActionTypes: [newCustomerType], existingCustomerActionTypes: [], available: true, resolved: { new: [], existing: [] } },
     acquisitionTrendRows: rows,
+    acquisitionWindowRows: windowRows,
     accountTimezone: "America/Los_Angeles",
     deduplicatedReach: { account: { spend: 7000 } },
     totalSpend: 7000,
@@ -130,18 +141,19 @@ function assemble(overrides = {}) {
   });
 }
 
-test("the strip's new-customer count is the panel's number for the same days", () => {
-  // The strip summed campaign rows (16), the panel summed account rows (14 here); once
-  // both read "Last 7 days" they had to agree.
+test("the strip's new-customer count is the campaigns' figure for the period, never a sum of days", () => {
+  // Meta's incremental figure does not add up across days. The strip used to sum the
+  // account's daily rows (14 here) while every campaign table read the campaigns' own
+  // figure for the period (16), so the tables never added up to the strip.
   const { dashboard } = assemble();
   const tile = dashboard.visuals.heroPanelByLens.general.find((item) => item.label === "New customers");
-  assert.equal(tile.value, "14");
+  assert.equal(tile.value, "16");
   assert.equal(tile.change.label, "vs previous 7 days");
-  assert.equal(tile.change.value, "-33,3%", "14 against 21 over the seven days before");
+  assert.equal(tile.change.value, "-20,0%", "16 against 20 for the seven days before, each read as one period");
 });
 
 test("a failed new-customer read is reported, not shown as zeros", () => {
-  const { dashboard } = assemble({ acquisitionTrendRows: [], acquisitionTrendUnavailable: true });
+  const { dashboard } = assemble({ acquisitionTrendRows: [], acquisitionWindowRows: [], acquisitionTrendUnavailable: true });
   assert.equal(dashboard.quality.customerAcquisition.trend.available, false);
   assert.ok(dashboard.quality.warnings.some((warning) => /could not be read from Meta/.test(warning)));
   const tile = dashboard.visuals.heroPanelByLens.general.find((item) => item.label === "New customers");

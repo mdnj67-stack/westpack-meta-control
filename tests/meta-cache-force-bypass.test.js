@@ -78,13 +78,14 @@ test("an explicit force reaches every cached layer, not just the response cache"
   assert.match(handler, /if \(!forceRefresh && isCacheFresh\(cachedSnapshot, META_SNAPSHOT_CACHE_MAX_AGE_MS\)\)/);
 
   const passes = handler.match(/bypassCache: forceRefresh/g) || [];
-  // Four dashboard fetchers plus the two deduplicated-reach queries (account-wide and
-  // awareness-only) that replaced the summed reach figure.
-  assert.equal(passes.length, 6, `expected the flag on all six cached fetches, found ${passes.length}`);
+  // Five dashboard fetchers (the new-customer window totals sit beside the daily trend)
+  // plus the two deduplicated-reach queries (account-wide and awareness-only) that
+  // replaced the summed reach figure.
+  assert.equal(passes.length, 7, `expected the flag on all seven cached fetches, found ${passes.length}`);
 
   // Each dashboard fetcher must accept it. The awareness ad-set fetcher was missed on the
   // first pass and shipped a ReferenceError, so it is named explicitly here.
-  for (const signature of ["fetchDashboardMetadataCollections", "fetchCampaignInsightsCollections", "fetchAwarenessAdSetInsightsCollections", "fetchCustomerAcquisitionTrend", "fetchDeduplicatedReach"]) {
+  for (const signature of ["fetchDashboardMetadataCollections", "fetchCampaignInsightsCollections", "fetchAwarenessAdSetInsightsCollections", "fetchCustomerAcquisitionTrend", "fetchCustomerAcquisitionWindowTotals", "fetchDeduplicatedReach"]) {
     const start = fetchers.indexOf(`async function ${signature}(`);
     assert.notEqual(start, -1, `${signature} is gone`);
     const params = fetchers.slice(start, fetchers.indexOf(") {", start));

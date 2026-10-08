@@ -8,7 +8,7 @@ function createMetaSnapshotDashboardBuilder({
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
   compareAcquisitionWindow,
-  resolveAcquisitionWindowPresets,
+  indexWindowTotals,
   resolveCompletedDayComparison,
   formatCurrency,
   buildGeneralSpendDistribution,
@@ -65,6 +65,7 @@ function createMetaSnapshotDashboardBuilder({
     budgetNormalization,
     customerConversionActionTypes = {},
     acquisitionTrendRows = [],
+    acquisitionWindowRows = [],
     acquisitionTrendUnavailable = false,
     accountTimezone = "",
     deduplicatedReach = null,
@@ -129,18 +130,20 @@ function createMetaSnapshotDashboardBuilder({
       dateScope
     });
 
-    // Month to date against the same elapsed point last month, from the wider daily
-    // window fetched for exactly this purpose. A read that failed is not a month with no
-    // customers: empty rows would sum to zero and the panel would print "No new customers
-    // in either period" over an outage.
+    // Every panel period and its comparison, from each campaign's Meta figure for that
+    // period (`acquisitionWindowRows`). The daily rows only draw the chart: Meta's
+    // incremental figure is a model evaluated per query and does not add up across days.
+    // A read that failed is not a month with no customers - empty rows would sum to zero
+    // and the panel would print "No new customers in either period" over an outage.
     customerAcquisition.trend = acquisitionTrendUnavailable
       ? {
           available: false,
           comparable: false,
-          unavailableReason: "The day-by-day new-customer figures could not be read from Meta. Press Refresh data to try again."
+          unavailableReason: "The new-customer figures could not be read from Meta. Press Refresh data to try again."
         }
       : buildCustomerAcquisitionTrend({
           dailyRows: acquisitionTrendRows,
+          windowRows: acquisitionWindowRows,
           actionTypes: customerConversionActionTypes,
           now: new Date(),
           timeZone: accountTimezone,
@@ -148,43 +151,17 @@ function createMetaSnapshotDashboardBuilder({
           formatCurrency
         });
 
-    // The strip's new-customer badges compare the same completed days as its Spend and
-    // ROAS badges, read from the account-level daily rows. Only where those rows reach back
-    // far enough: a custom range from last spring would otherwise compare against days
-    // that were never fetched and read as a collapse.
+    // The strip's count for the selected range is `customerAcquisition.newCustomers`: the
+    // campaigns' own figures for the range, the same rows as the per-campaign tables, so
+    // the tables add up to the strip. Its badges compare the same completed days as the
+    // Spend and ROAS badges beside it, read from window rows fetched for exactly those
+    // two windows.
     const rangeWindows = resolveCompletedDayComparison(dateScope);
-    const fetchedSince = resolveAcquisitionWindowPresets(new Date(), accountTimezone)?.fetch?.since || "";
-    // The strip's new-customer count for the whole selected range, from the same
-    // account-level rows as the panel below it, so "Last 7 days" reads the same number in
-    // both places. Summed campaign rows can differ from the account by a customer or two,
-    // and two numbers for one fact on one screen is the defect this dashboard keeps
-    // removing. The campaign figure is the fallback for a range older than the rows.
-    customerAcquisition.rangeTotals = !acquisitionTrendUnavailable
-      && customerAcquisition.available
-      && fetchedSince
-      && dateScope?.since >= fetchedSince
-      ? compareAcquisitionWindow({
-          dailyRows: acquisitionTrendRows,
-          preset: {
-            key: "selected_range_total",
-            label: dateScope?.label || "Selected range",
-            comparable: false,
-            current: { since: dateScope.since, until: dateScope.until, days: dateScope.days, label: "the selected range" },
-            previous: { since: dateScope.since, until: dateScope.until, days: dateScope.days, label: "the selected range" }
-          },
-          actionTypes: customerConversionActionTypes,
-          available: true,
-          currency: accountCurrency,
-          formatCurrency
-        }).current
-      : null;
     customerAcquisition.rangeComparison = !acquisitionTrendUnavailable
       && customerAcquisition.available
       && rangeWindows?.comparable
-      && fetchedSince
-      && rangeWindows.previous.since >= fetchedSince
       ? compareAcquisitionWindow({
-          dailyRows: acquisitionTrendRows,
+          windowTotals: indexWindowTotals(acquisitionWindowRows, customerConversionActionTypes),
           preset: {
             key: "selected_range",
             label: dateScope?.label || "Selected range",

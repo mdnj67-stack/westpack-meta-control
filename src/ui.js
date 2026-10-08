@@ -782,9 +782,9 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
       return model.customerConversion.unavailableReason || "New customers cannot be counted on this account.";
     }
     if (likeForLike && likeForLike.newCustomers != null) {
-      return `Against ${formatCompactNumber(likeForLike.newCustomers)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}. Attributed to these campaigns, not only to the people newly reached.`;
+      return `Against ${formatCompactNumber(likeForLike.newCustomers)} over the same ${likeForLike.elapsedDays} days of ${expansionMonthProse(likeForLike.month)}. Conversion campaigns only, so below the account total on Performance, and not only the people newly reached.`;
     }
-    return "Attributed to these campaigns in this window. Not a cohort of the people newly reached in it.";
+    return "Conversion campaigns only, so below the account total on Performance. Not a cohort of the people newly reached in this window.";
   })();
 
   // The like-for-like cost per new customer is the honest read on whether a
@@ -823,7 +823,7 @@ function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency
       <p class="meta-expansion-window">${escapeHtml(windowLine)}</p>
       <div class="meta-expansion-kpis is-wide">
         <article class="meta-expansion-kpi">
-          <span>New customers</span>
+          <span>New customers · conversion campaigns</span>
           <strong>${escapeHtml(latest.newCustomers == null ? "--" : formatCompactNumber(latest.newCustomers))}</strong>
           <p>${escapeHtml(customerCaption)}</p>
           ${likeForLike && likeForLike.comparison.customersComparable
@@ -1832,6 +1832,7 @@ function renderAcquisitionDailyChart(preset) {
         <span><i></i>${escapeHtml(currentLabel)}</span>
         ${previous.length > 1 ? `<span><i class="is-previous"></i>${escapeHtml(previousLabel)}</span>` : ""}
       </div>
+      <p class="wp-chart-note">Each day is Meta's incremental figure for that day. Meta models a period as a whole, so the days do not add up exactly to the period's total above.</p>
     </div>
   `;
 }

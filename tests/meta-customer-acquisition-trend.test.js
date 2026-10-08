@@ -2,10 +2,13 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
-  buildCustomerAcquisitionTrend,
+  buildCustomerAcquisitionTrend: buildCustomerAcquisitionTrendFromRows,
   resolveCustomerConversionActionTypes,
   resolveMonthToDateWindows
 } = require("../server/meta/customer-acquisition");
+// Each period's figure comes from window rows, as in production; see the helper.
+const { withWindowRows } = require("./helpers/acquisition-window-rows");
+const buildCustomerAcquisitionTrend = withWindowRows(buildCustomerAcquisitionTrendFromRows);
 
 const NEW_TYPE = "offsite_conversion.custom.775766277988531";
 const EXISTING_TYPE = "offsite_conversion.custom.573537871687880";

@@ -4,11 +4,15 @@ const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
 const {
-  buildCustomerAcquisitionTrend,
-  buildCustomerAcquisitionWindows,
+  buildCustomerAcquisitionTrend: buildCustomerAcquisitionTrendFromRows,
+  buildCustomerAcquisitionWindows: buildCustomerAcquisitionWindowsFromRows,
   resolveAcquisitionWindowPresets,
   resolveCustomerConversionActionTypes
 } = require("../server/meta/customer-acquisition");
+// Each period's figure comes from window rows, as in production; see the helper.
+const { withWindowRows } = require("./helpers/acquisition-window-rows");
+const buildCustomerAcquisitionTrend = withWindowRows(buildCustomerAcquisitionTrendFromRows);
+const buildCustomerAcquisitionWindows = withWindowRows(buildCustomerAcquisitionWindowsFromRows);
 
 const NEW_TYPE = "offsite_conversion.custom.775766277988531";
 const EXISTING_TYPE = "offsite_conversion.custom.573537871687880";

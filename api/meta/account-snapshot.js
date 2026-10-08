@@ -12,6 +12,8 @@ const {
   buildCustomerAcquisitionWarnings,
   compareAcquisitionWindow,
   extractCustomerAcquisition,
+  indexWindowTotals,
+  listAcquisitionWindows,
   resolveAcquisitionWindowPresets,
   resolveCustomerConversionActionTypes
 } = require("../../server/meta/customer-acquisition");
@@ -133,6 +135,7 @@ const {
   fetchAwarenessAdSetInsightsCollections,
   fetchCampaignInsightsCollections,
   fetchCustomerAcquisitionTrend,
+  fetchCustomerAcquisitionWindowTotals,
   fetchDeduplicatedReach,
   fetchCatalogCollections,
   fetchDashboardMetadataCollections
@@ -179,7 +182,7 @@ const {
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWarnings,
   compareAcquisitionWindow,
-  resolveAcquisitionWindowPresets,
+  indexWindowTotals,
   resolveCompletedDayComparison,
   formatCurrency,
   buildGeneralSpendDistribution,
@@ -512,7 +515,7 @@ function buildQualityWarnings({
   }
 
   if (acquisitionTrendUnavailable) {
-    warnings.push("The day-by-day new-customer figures could not be read from Meta, so the new-customer comparison is missing from this snapshot.");
+    warnings.push("The new-customer figures for the panel's periods could not be read from Meta, so the new-customer comparison is missing from this snapshot.");
   }
 
   return warnings;
@@ -1353,13 +1356,12 @@ function buildHeroPanelItems(campaigns = [], lens = "general", currency = "DKK",
 
   if (lens === "general") {
     const acquisition = options.customerAcquisition || null;
-    // Account-level figures for the range where they exist (see rangeTotals), so the
-    // strip and the new-customer panel print one number for one fact.
-    const rangeTotals = acquisition?.rangeTotals || null;
-    const newCustomers = rangeTotals ? readNumber(rangeTotals.newCustomers, 0) : readNumber(acquisition?.newCustomers, 0);
-    const costPerNewCustomer = rangeTotals
-      ? (readNumber(rangeTotals.newCustomers, 0) > 0 ? readNumber(rangeTotals.spend, 0) / readNumber(rangeTotals.newCustomers, 0) : 0)
-      : readNumber(acquisition?.costPerNewCustomer, 0);
+    // The campaigns' own figures for the range, the same rows every campaign table reads,
+    // so the tables add up to this strip. It used to sum the account's daily rows, and
+    // Meta's incremental figure does not add up across days: 1-6 October read 37 here
+    // against 40 from the campaigns for the same six days.
+    const newCustomers = readNumber(acquisition?.newCustomers, 0);
+    const costPerNewCustomer = readNumber(acquisition?.costPerNewCustomer, 0);
     const acquisitionAvailable = Boolean(acquisition?.available);
     const rangeComparison = acquisition?.rangeComparison || null;
     const newCustomerChange = buildAcquisitionRangeChange(rangeComparison, "newCustomers", { positiveDirection: "up", windowLabel: changeWindowLabel });
@@ -1956,6 +1958,26 @@ module.exports = async (req, res) => {
       bypassCache: forceRefresh
     }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
 
+    // The figures themselves: every campaign's Meta figure for every window the panel and
+    // the strip's badges read, asked for as periods. The daily rows above only draw the
+    // chart - Meta's incremental figure does not add up across days.
+    const acquisitionRangeWindows = resolveCompletedDayComparison(dateScope);
+    const acquisitionWindowResponse = await fetchCustomerAcquisitionWindowTotals({
+      accountId,
+      accessToken: config.metaAccessToken,
+      windows: listAcquisitionWindows(
+        acquisitionTrendWindows,
+        acquisitionRangeWindows?.comparable
+          ? [acquisitionRangeWindows.current, acquisitionRangeWindows.previous]
+          : []
+      ),
+      today: acquisitionTrendWindows.today?.date || "",
+      insightsCacheMaxAgeMs: META_ACQUISITION_TREND_CACHE_MAX_AGE_MS,
+      todayCacheMaxAgeMs: META_INSIGHTS_CACHE_MAX_AGE_MS,
+      timings,
+      bypassCache: forceRefresh
+    }).catch(() => ({ data: [], pageCount: 0, unavailable: true }));
+
     // Matches the lens: active now, or spent in the selected period. Deriving it from
     // the active list alone made the reach figure cover a different set of campaigns from
     // the spend printed next to it.
@@ -2100,7 +2122,9 @@ module.exports = async (req, res) => {
       budgetNormalization,
       customerConversionActionTypes,
       acquisitionTrendRows: acquisitionTrendResponse?.data || [],
-      acquisitionTrendUnavailable: Boolean(acquisitionTrendResponse?.unavailable),
+      acquisitionWindowRows: acquisitionWindowResponse?.data || [],
+      // The figures come from the window rows; losing the daily rows costs only the chart.
+      acquisitionTrendUnavailable: Boolean(acquisitionWindowResponse?.unavailable),
       accountTimezone: account.timezone_name || "",
       deduplicatedReach: { account: accountReach, awareness: awarenessReach },
       awarenessUsingAdSetInsights,

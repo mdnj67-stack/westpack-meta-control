@@ -13,10 +13,13 @@ const { join } = require("node:path");
 
 const root = join(__dirname, "..");
 const {
-  buildCustomerAcquisitionWindows,
+  buildCustomerAcquisitionWindows: buildCustomerAcquisitionWindowsFromRows,
   resolveCustomerConversionActionTypes,
   windowDailySeries
 } = require(join(root, "server", "meta", "customer-acquisition.js"));
+// Each period's figure comes from window rows, as in production; see the helper.
+const { withWindowRows } = require("./helpers/acquisition-window-rows");
+const buildCustomerAcquisitionWindows = withWindowRows(buildCustomerAcquisitionWindowsFromRows);
 
 const NEW_CONVERSION_ID = "111";
 const EXISTING_CONVERSION_ID = "222";

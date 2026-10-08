@@ -558,11 +558,12 @@ totals - and the series only carries days Meta returned a row for.
 - **The previous window includes campaigns that have since been paused**
   (`buildPreviousOnlyCampaigns`). Without them a restructure read as growth. They feed
   comparisons only - never a table or a current total.
-- **Today's new customers ride the strip's cache, not the finished days'.** The panel's
-  daily series is cached for 3 hours because finished days barely change; today used to
-  ride along in it, so the panel read 0 new customers under a strip reading 4.
-  `fetchCustomerAcquisitionTrend` fetches today separately on the 15-minute insights
-  cache. `tests/meta-completed-day-comparison.test.js` pins both.
+- **Today's new customers ride the strip's cache, not the finished days'.** Finished
+  windows are cached for 3 hours because they barely change; today used to ride along in
+  that cache, so the panel read 0 new customers under a strip reading 4. Both the window
+  totals and the daily chart rows fetch anything that includes today separately, on the
+  15-minute insights cache. `tests/meta-completed-day-comparison.test.js` and
+  `tests/meta-acquisition-window-totals.test.js` pin it.
 
 ### Reaching Meta, and saying so when it fails
 
@@ -588,17 +589,34 @@ is arranged around it rather than treating it as one panel among many:
 
 - The **new-customer panel comes first** in the General overview, above the budget split.
   Budget is the lever you pull once you know what acquisition is doing.
-- The **KPI strip leads with new customers and cost per new customer**, for the selected
-  range, read from the same account-level daily rows as the panel (`rangeTotals`), so
-  "Last 7 days" is one number in both places. Their badges compare the same finished days
-  as Spend and ROAS beside them (`rangeComparison`, `buildAcquisitionRangeChange`). Month
-  to date against the same days last month lives in the panel, which names its window.
+- **A period's new-customer figure is never a sum of days.** Meta's incremental figure is
+  a model evaluated per query, so it does not add up: measured 2026-10-07, 1-6 October
+  read 37 from the six daily account rows, 39 for the account asked as one period and 40
+  from the campaigns asked as one period (September: 103 / 101 / 100). The panel and strip
+  used to print the daily sum while the campaign tables printed the period figures, so
+  the tables never added up to the headline. The rule now: **every period figure is the
+  campaigns' own Meta figures for that period, summed** - the same basis as every table
+  and every other total. `fetchCustomerAcquisitionWindowTotals` reads every window the
+  panel, today and the strip's badges need in one `level=campaign` call with
+  `time_ranges` (`listAcquisitionWindows` builds the list), split into a 3-hour cache for
+  finished windows and the 15-minute cache for windows that include today.
+  `indexWindowTotals` sums them per window. Without window rows the panel reports the
+  figures as unavailable; there is no fallback to summing days.
+  `tests/meta-acquisition-window-totals.test.js` pins this with the real October figures.
+- The **KPI strip leads with new customers and cost per new customer** for the selected
+  range: `customerAcquisition.newCustomers`, the campaign rows for the range, so the
+  per-campaign tables add up to it exactly. Their badges compare the same finished days
+  as Spend and ROAS beside them (`rangeComparison`, `buildAcquisitionRangeChange`), each
+  side read as a window. Month to date against the same days last month lives in the
+  panel, which names its window.
 - The panel draws **new customers per day** with the previous period underneath, on a
   shared day-of-window scale. A count with a change badge cannot distinguish a month
-  building steadily from one that died after the first week. The series comes from
-  `windowDailySeries`, attached to each preset's `current`/`previous` as
-  `dailyNewCustomers`, so switching the panel's period needs no browser date maths and
-  no extra Meta request - the daily rows were already fetched for the comparison.
+  building steadily from one that died after the first week. The series comes from the
+  account's daily rows (`fetchCustomerAcquisitionTrend`, `windowDailySeries`) and is
+  **only** for drawing; the chart says under it that the days do not add up exactly to
+  the period total.
+- The Expansion tab's new customers cover **conversion campaigns only** and say so on the
+  tile, because the Performance tab's figure counts every campaign and is always higher.
 - Both **conversion tables carry New customers and Cost / new** per campaign, read from
   `new_customers_value` on the snapshot row rather than recomputed. Awareness and leads
   keep their own columns: those campaigns are not run against a customer count.

@@ -5084,6 +5084,14 @@ input[type="file"] {
   border-top: 1px dashed var(--wp-grey-400);
 }
 
+/* A sentence under a chart that says how to read it - for instance that daily points of a
+   modelled figure do not add up to the period total printed beside it. */
+.wp-chart-note {
+  margin: var(--wp-space-1) 0 0;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .wp-chart-marker,
   .wp-chart-cursor {
@@ -5352,7 +5360,8 @@ input[type="file"] {
 
 .wp-chart-inverse .wp-chart-axis-y span,
 .wp-chart-inverse .wp-chart-axis-x span,
-.wp-chart-inverse .wp-chart-legend {
+.wp-chart-inverse .wp-chart-legend,
+.wp-chart-inverse .wp-chart-note {
   color: var(--wp-text-inverse-muted);
 }
 

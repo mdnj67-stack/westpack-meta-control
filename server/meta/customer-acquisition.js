@@ -466,36 +466,83 @@ function withinWindow(date, window) {
   return Boolean(value) && value >= window.since && value <= window.until;
 }
 
-function sumWindow(dailyRows = [], window, actionTypes = {}) {
-  let newCustomers = 0;
-  let existingCustomers = 0;
-  let newCustomerRevenue = 0;
-  let existingCustomerRevenue = 0;
-  let purchases = 0;
-  let spend = 0;
-  let days = 0;
+// --- Window totals: one number per period, never a sum of days -----------------------
+//
+// Meta's incremental figure is a model evaluated per query, not a counter, so it does not
+// add up. Measured on this account for 1-6 October 2026: the six daily account figures
+// sum to 37 new customers, Meta's figure for the six days as one period is 39, and the
+// campaigns' own figures for the period sum to 40. September: 103 from days, 101 for the
+// account, 100 from campaigns. The panel used to print the daily sum while the campaign
+// table beneath it printed the campaign figures, so the same month read differently on
+// one screen - on the same measurement basis.
+//
+// The rule now: a figure for a period is the campaigns' own Meta figures FOR THAT PERIOD,
+// summed across campaigns. That is the same basis as every campaign table and every other
+// total on the dashboard (spend, purchases, revenue are campaign totals too), so the
+// per-campaign rows always add up to the headline. All the panel's windows come from one
+// insights call with `time_ranges`, one row per campaign per window. The daily series is
+// kept for drawing the chart, and only for that.
+function windowKey(window = {}) {
+  return `${window.since || ""}..${window.until || ""}`;
+}
 
-  for (const row of dailyRows || []) {
-    if (!withinWindow(row?.date_start, window)) continue;
-    days += 1;
-    spend += readNumber(row?.spend, 0);
-    const extracted = extractCustomerAcquisition(row, actionTypes);
-    newCustomers += extracted.new_customers_value;
-    existingCustomers += extracted.existing_customers_value;
-    newCustomerRevenue += extracted.new_customer_revenue_value;
-    existingCustomerRevenue += extracted.existing_customer_revenue_value;
-    purchases += firstActionValue(row?.actions, PURCHASE_ACTION_TYPES);
-  }
-
+function emptyWindowTotals() {
   return {
-    newCustomers,
-    existingCustomers,
-    newCustomerRevenue,
-    existingCustomerRevenue,
-    purchases,
-    spend,
-    daysWithData: days
+    newCustomers: 0,
+    existingCustomers: 0,
+    newCustomerRevenue: 0,
+    existingCustomerRevenue: 0,
+    purchases: 0,
+    spend: 0
   };
+}
+
+// Campaign rows from a `time_ranges` query, summed per window. A window Meta returned no
+// rows for had no delivery, which is a real zero: the call itself either succeeded for
+// every window or failed as a whole.
+function indexWindowTotals(windowRows = [], actionTypes = {}) {
+  const index = new Map();
+  for (const row of windowRows || []) {
+    const key = windowKey({ since: row?.date_start, until: row?.date_stop });
+    const totals = index.get(key) || emptyWindowTotals();
+    const extracted = extractCustomerAcquisition(row, actionTypes);
+    totals.newCustomers += extracted.new_customers_value;
+    totals.existingCustomers += extracted.existing_customers_value;
+    totals.newCustomerRevenue += extracted.new_customer_revenue_value;
+    totals.existingCustomerRevenue += extracted.existing_customer_revenue_value;
+    totals.purchases += firstActionValue(row?.actions, PURCHASE_ACTION_TYPES);
+    totals.spend += readNumber(row?.spend, 0);
+    index.set(key, totals);
+  }
+  return index;
+}
+
+function countDaysWithData(dailyRows = [], window) {
+  return (dailyRows || []).filter((row) => withinWindow(row?.date_start, window)).length;
+}
+
+function sumWindow(windowTotals, dailyRows = [], window) {
+  const totals = windowTotals?.get(windowKey(window)) || emptyWindowTotals();
+  return { ...totals, daysWithData: countDaysWithData(dailyRows, window) };
+}
+
+// Every window the panel, its comparisons and the strip's badges will read, so the fetch
+// asks Meta for exactly those and nothing is left to be summed from days.
+function listAcquisitionWindows(resolvedPresets = null, extraWindows = []) {
+  const seen = new Map();
+  const add = (window) => {
+    if (!window?.since || !window?.until || window.since > window.until) return;
+    seen.set(windowKey(window), { since: window.since, until: window.until });
+  };
+  for (const preset of resolvedPresets?.presets || []) {
+    add(preset.current);
+    add(preset.previous);
+  }
+  if (resolvedPresets?.today?.date) {
+    add({ since: resolvedPresets.today.date, until: resolvedPresets.today.date });
+  }
+  for (const window of extraWindows || []) add(window);
+  return Array.from(seen.values()).sort((left, right) => windowKey(left).localeCompare(windowKey(right)));
 }
 
 // One point per day inside a window, so a chart can be drawn from the same rows the
@@ -515,6 +562,7 @@ function windowDailySeries(dailyRows = [], window, actionTypes = {}) {
 // direction or the summary reads can never apply to some periods and not others.
 function compareAcquisitionWindow({
   dailyRows = [],
+  windowTotals = null,
   preset,
   actionTypes = {},
   available = false,
@@ -522,8 +570,8 @@ function compareAcquisitionWindow({
   currency = "DKK",
   formatCurrency = (value) => String(value)
 }) {
-  const current = sumWindow(dailyRows, preset.current, actionTypes);
-  const previous = sumWindow(dailyRows, preset.previous, actionTypes);
+  const current = sumWindow(windowTotals, dailyRows, preset.current);
+  const previous = sumWindow(windowTotals, dailyRows, preset.previous);
 
   const delta = current.newCustomers - previous.newCustomers;
   const percentChange = previous.newCustomers > 0
@@ -624,10 +672,14 @@ function compareAcquisitionWindow({
   };
 }
 
-// All panel presets, computed server side from one daily series so switching period in the
-// UI costs no extra Meta request.
+// All panel presets, computed server side from one `time_ranges` read of the campaigns, so
+// switching period in the UI costs no extra Meta request. `windowRows` carries the
+// figures; `dailyRows` only draws the per-day chart. Without window rows there is nothing
+// honest to print, so the panel reports the figures as unavailable rather than falling
+// back to a sum of days.
 function buildCustomerAcquisitionWindows({
   dailyRows = [],
+  windowRows = null,
   actionTypes = {},
   now = new Date(),
   timeZone = "",
@@ -635,11 +687,12 @@ function buildCustomerAcquisitionWindows({
   formatCurrency = (value) => String(value)
 } = {}) {
   const resolved = resolveAcquisitionWindowPresets(now, timeZone);
-  const available = Boolean(actionTypes.available);
+  const available = Boolean(actionTypes.available) && Array.isArray(windowRows);
+  const windowTotals = indexWindowTotals(windowRows || [], actionTypes);
   const todayTotals = sumWindow(
+    windowTotals,
     dailyRows,
-    { since: resolved.today.date, until: resolved.today.date },
-    actionTypes
+    { since: resolved.today.date, until: resolved.today.date }
   );
 
   return {
@@ -648,7 +701,7 @@ function buildCustomerAcquisitionWindows({
     timeZone: resolved.timeZone,
     today: { ...resolved.today, newCustomers: todayTotals.newCustomers, existingCustomers: todayTotals.existingCustomers },
     presets: resolved.presets.map((preset) => compareAcquisitionWindow({
-      dailyRows, preset, actionTypes, available, todayTotals, currency, formatCurrency
+      dailyRows, windowTotals, preset, actionTypes, available, todayTotals, currency, formatCurrency
     }))
   };
 }
@@ -661,6 +714,7 @@ function buildCustomerAcquisitionWindows({
 // built against them.
 function buildCustomerAcquisitionTrend({
   dailyRows = [],
+  windowRows = null,
   actionTypes = {},
   now = new Date(),
   timeZone = "",
@@ -668,7 +722,7 @@ function buildCustomerAcquisitionTrend({
   formatCurrency = (value) => String(value)
 } = {}) {
   const windows = buildCustomerAcquisitionWindows({
-    dailyRows, actionTypes, now, timeZone, currency, formatCurrency
+    dailyRows, windowRows, actionTypes, now, timeZone, currency, formatCurrency
   });
   const monthToDate = windows.presets.find((preset) => preset.key === windows.defaultPreset)
     || windows.presets[0];
@@ -754,6 +808,8 @@ module.exports = {
   buildCustomerAcquisitionTrend,
   buildCustomerAcquisitionWindows,
   compareAcquisitionWindow,
+  indexWindowTotals,
+  listAcquisitionWindows,
   resolveAcquisitionWindowPresets,
   resolveMonthToDateWindows,
   windowDailySeries,
