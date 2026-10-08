@@ -5755,3 +5755,59 @@ input[type="file"] {
   .sat-results { grid-template-columns: 1fr 1fr; }
   .sat-why { grid-column: 1; }
 }
+
+/* Saturation: the uncertain tag, the signal note and the rules editor. */
+.sat-uncertain {
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-pill, 999px);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-regular);
+  color: var(--wp-text-muted);
+}
+
+.sat-signal-note { margin-top: var(--wp-space-1); }
+
+.sat-rules-editor {
+  margin-top: var(--wp-space-5);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-subtle, var(--wp-grey-50));
+}
+
+.sat-rules-editor > summary {
+  cursor: pointer;
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+}
+
+.sat-rules-editor > p {
+  margin: var(--wp-space-2) 0 var(--wp-space-3);
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.sat-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--wp-space-3) var(--wp-space-4);
+  margin-bottom: var(--wp-space-3);
+}
+
+.sat-rules-grid .wp-field > span:first-child {
+  display: block;
+  margin-bottom: 4px;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.sat-rules-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sat-rules-input .wp-input { max-width: 96px; }
+.sat-rules-input small { font-size: var(--wp-text-2xs); color: var(--wp-text-subtle); }

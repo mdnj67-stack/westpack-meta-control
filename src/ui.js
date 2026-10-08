@@ -844,7 +844,120 @@ function saturationIcon(status) {
 }
 
 function saturationStatusBadge(row) {
-  return `<span class="sat-status is-${escapeHtml(row.status)}">${saturationIcon(row.status)}${escapeHtml(row.statusLabel || row.status)}</span>`;
+  const uncertain = row.uncertain
+    ? `<span class="sat-uncertain" title="Meta's audience estimate is a range that straddles the line">uncertain</span>`
+    : "";
+  return `<span class="sat-status is-${escapeHtml(row.status)}">${saturationIcon(row.status)}${escapeHtml(row.statusLabel || row.status)}${uncertain}</span>`;
+}
+
+// --- Adjustable rules ---------------------------------------------------------
+//
+// The thresholds are rules of thumb, so whoever reads the table can move them.
+// The browser then runs the same classifier the nightly job ran
+// (src/saturation-rules.js, loaded as a classic script), so a moved line can
+// never disagree with the server's. Overrides live in this browser only; they
+// change what this screen shows, never the stored snapshot.
+const SATURATION_OVERRIDES_KEY = "westpack:saturation-thresholds:v1";
+const saturationViewState = { model: null, currency: "DKK", editorOpen: false };
+
+function saturationRules() {
+  return globalThis.WestpackSaturationRules || null;
+}
+
+function readSaturationOverrides() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SATURATION_OVERRIDES_KEY) || "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function writeSaturationOverrides(overrides) {
+  try {
+    if (overrides && Object.keys(overrides).length) {
+      localStorage.setItem(SATURATION_OVERRIDES_KEY, JSON.stringify(overrides));
+    } else {
+      localStorage.removeItem(SATURATION_OVERRIDES_KEY);
+    }
+  } catch (error) {
+    // A private window can refuse storage; the change still applies to this view.
+  }
+}
+
+// The table with whatever lines this viewer has set, reclassified by the shared rules.
+function applySaturationRules(model) {
+  const rules = saturationRules();
+  const overrides = readSaturationOverrides();
+  const thresholds = { ...(rules?.DEFAULT_THRESHOLDS || {}), ...(model.thresholds || {}), ...overrides };
+  const rows = Array.isArray(model.adSets) ? model.adSets : [];
+  if (!rules) {
+    return { rows, thresholds, counts: model.statusCounts || {}, overridden: false };
+  }
+  const reclassified = rows.map((row) => ({ ...row, ...rules.classifyRow(row, model.context || {}, thresholds) }));
+  return {
+    rows: rules.sortRows(reclassified),
+    thresholds,
+    counts: rules.countStatuses(reclassified),
+    overridden: Object.keys(overrides).length > 0
+  };
+}
+
+function renderSaturationEditor(adjustable, thresholds, overridden) {
+  if (!saturationRules() || !Array.isArray(adjustable) || !adjustable.length) return "";
+  const display = (item, value) => (item.unit === "%" || item.unit === "pts") ? Math.round(Number(value) * 100) : Number(value);
+  return `
+    <details class="sat-rules-editor"${saturationViewState.editorOpen ? " open" : ""}>
+      <summary>Adjust the rules${overridden ? " · your own lines are applied" : ""}</summary>
+      <p>These are rules of thumb. Moving a line reclassifies the table on this screen only; the stored figures do not change.</p>
+      <div class="sat-rules-grid">
+        ${adjustable.map((item) => `
+          <label class="wp-field">
+            <span>${escapeHtml(item.label)}</span>
+            <span class="sat-rules-input">
+              <input class="wp-input" type="number" data-sat-threshold="${escapeHtml(item.key)}" data-sat-unit="${escapeHtml(item.unit)}" min="${item.min}" max="${item.max}" step="${item.step}" value="${escapeHtml(String(display(item, thresholds[item.key])))}">
+              <small>${escapeHtml(item.unit)}</small>
+            </span>
+          </label>
+        `).join("")}
+      </div>
+      ${overridden ? `<button type="button" class="wp-button" data-sat-reset>Back to the default lines</button>` : ""}
+    </details>
+  `;
+}
+
+function rerenderSaturationCard(host) {
+  const card = host.querySelector(".saturation-card");
+  if (!card || !saturationViewState.model) return;
+  card.outerHTML = renderAudienceSaturation(saturationViewState.model, saturationViewState.currency);
+}
+
+function bindSaturationEditor(host) {
+  if (host.dataset.saturationBound) return;
+  host.dataset.saturationBound = "1";
+  host.addEventListener("toggle", (event) => {
+    if (event.target?.classList?.contains("sat-rules-editor")) {
+      saturationViewState.editorOpen = event.target.open;
+    }
+  }, true);
+  host.addEventListener("change", (event) => {
+    const input = event.target?.closest?.("[data-sat-threshold]");
+    if (!input) return;
+    const raw = Number(input.value);
+    if (!Number.isFinite(raw)) return;
+    const unit = input.dataset.satUnit;
+    const value = unit === "%" || unit === "pts" ? raw / 100 : raw;
+    const overrides = { ...readSaturationOverrides(), [input.dataset.satThreshold]: value };
+    writeSaturationOverrides(overrides);
+    saturationViewState.editorOpen = true;
+    rerenderSaturationCard(host);
+  });
+  host.addEventListener("click", (event) => {
+    if (!event.target?.closest?.("[data-sat-reset]")) return;
+    writeSaturationOverrides({});
+    saturationViewState.editorOpen = true;
+    rerenderSaturationCard(host);
+  });
 }
 
 function clampPercent(value) {
@@ -917,12 +1030,15 @@ function saturationAudienceMeterCell(row, thresholds) {
       note: `${audience.advantageAudience ? "Advantage+ audience" : "Lookalike expansion"} is on`
     });
   }
+  const range = expansionMeasured(audience.shareLow) && expansionMeasured(audience.shareHigh)
+    ? ` (${saturationShare(audience.shareLow)}–${saturationShare(audience.shareHigh)})`
+    : "";
   return saturationMeter({
     value: audience.share,
     lines: [{ at: thresholds.saturatedAudienceShare ?? 0.8, strong: true }],
     tone: causeTone(row, "audience"),
     label: "Audience used",
-    valueText: saturationShare(audience.share),
+    valueText: `${saturationShare(audience.share)}${range}`,
     note: `of ${formatCompactNumber(audience.size)}${audience.shareApproximate ? " (approx.)" : ""} · ${audienceName}`
   });
 }
@@ -950,12 +1066,29 @@ function saturationFrequencyCell(row, thresholds) {
 function saturationResultsCell(row, currency) {
   const current = row.current || {};
   const spend = `<span class="sat-figure"><strong>${escapeHtml(formatCurrency(row.spendPerDay, currency))}</strong><small>per day</small></span>`;
-  if (row.status === "covered" && row.frequencyBudgetPerDay) {
-    return `${spend}<span class="sat-figure"><strong>${escapeHtml(`≈ ${formatCurrency(row.frequencyBudgetPerDay, currency)}`)}</strong><small>per day for 5 a week, an estimate</small></span>`;
+  const delivery = row.delivery || {};
+  const budget = delivery.dailyBudget
+    ? `<small>${escapeHtml(`of ${formatCurrency(delivery.dailyBudget, currency)} budget${expansionMeasured(delivery.budgetUtilization) ? ` · ${saturationShare(delivery.budgetUtilization)} used last week` : ""}`)}</small>`
+    : "";
+  const spendWithBudget = `<span class="sat-figure"><strong>${escapeHtml(formatCurrency(row.spendPerDay, currency))}</strong><small>per day</small>${budget}</span>`;
+  if (row.status === "covered") {
+    const limit = row.frequencyBudgetPerDay
+      ? `<span class="sat-figure"><strong>${escapeHtml(`≥ ${formatCurrency(row.frequencyBudgetPerDay, currency)}`)}</strong><small>a day for the frequency target, an estimate</small></span>`
+      : `<span class="sat-figure"><strong>${escapeHtml(row.limitedBy === "cap" ? "Cap first" : "Not budget")}</strong><small>${escapeHtml(row.limitedBy === "cap" ? "the frequency cap is below the target" : "it does not spend the budget it has")}</small></span>`;
+    return `${spendWithBudget}${limit}`;
   }
-  if (row.objectiveGroup !== "conversion" || current.newCustomers == null) return spend;
+  if (row.objectiveGroup !== "conversion" || current.newCustomers == null) return spendWithBudget;
   const flagged = (row.causes || []).includes("customers");
-  return `${spend}<span class="sat-figure${flagged ? " is-flagged" : ""}">${flagged ? saturationIcon("not_converting") : ""}<strong>${escapeHtml(formatCompactNumber(current.newCustomers))}</strong><small>${escapeHtml(current.costPerNewCustomer != null ? `new customers · ${formatCurrency(current.costPerNewCustomer, currency)} each` : "new customers")}</small></span>`;
+  const count = Number(current.newCustomers) || 0;
+  // A single-digit count is a range: five new customers is consistent with
+  // anything from about 2 to 12.
+  const range = Array.isArray(current.newCustomersRange) && count < 20
+    ? ` (${formatDecimal(current.newCustomersRange[0], 0)}–${formatDecimal(current.newCustomersRange[1], 0)})`
+    : "";
+  const costNote = current.costPerNewCustomer != null
+    ? `${formatCurrency(current.costPerNewCustomer, currency)} each${count < 5 ? ", too few to price" : ""}`
+    : "";
+  return `${spendWithBudget}<span class="sat-figure${flagged ? " is-flagged" : ""}">${flagged ? saturationIcon("not_converting") : ""}<strong>${escapeHtml(`${formatCompactNumber(current.newCustomers)}${range}`)}</strong><small>${escapeHtml(costNote ? `new customers · ${costNote}` : "new customers")}</small></span>`;
 }
 
 // The one sentence that says why, written from the measure that tripped. The full
@@ -1034,11 +1167,12 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
     return renderSaturationEmpty(model.unavailableReason || "No ad set delivered in the period.");
   }
 
-  const rows = Array.isArray(model.adSets) ? model.adSets : [];
+  saturationViewState.model = model;
+  saturationViewState.currency = currency;
+  const { rows, thresholds, counts, overridden } = applySaturationRules(model);
   const byId = new Map(rows.map((row) => [row.id, row]));
+  const order = new Map(rows.map((row, index) => [row.id, index]));
   const labels = model.statusLabels || {};
-  const counts = model.statusCounts || {};
-  const thresholds = model.thresholds || {};
   const days = Number(model.periodDays) || 14;
   const summary = ["saturated", "not_converting", "saturating", "covered", "room"]
     .filter((status) => counts[status] > 0)
@@ -1049,7 +1183,9 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
   // Inside a market the rows keep the server's order: worst status first.
   const judged = [];
   const marketSections = (model.markets || []).map((market) => {
-    const marketRows = market.adSetIds.map((id) => byId.get(id)).filter((row) => row && row.status !== "insufficient");
+    const marketRows = market.adSetIds.map((id) => byId.get(id))
+      .filter((row) => row && row.status !== "insufficient")
+      .sort((left, right) => order.get(left.id) - order.get(right.id));
     if (!marketRows.length) return "";
     judged.push(...marketRows);
     return `
@@ -1079,6 +1215,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
         <div>
           <h3>How much of each audience is used up</h3>
           <p class="field-hint">${escapeHtml(`Per ad set, ${saturationDateRange(model.current)} against ${saturationDateRange(model.previous)}. "New" means not reached by that ad set in the ${model.lookbackDays} days before. Results on Meta's incremental attribution. Built nightly; reading it costs no Meta quota.`)}</p>
+          <p class="field-hint sat-signal-note">${escapeHtml(`The figures are Meta's. The statuses are signals from rules of thumb that have not been validated against an outcome: read them as where to look, not as verdicts.${expansionMeasured(model.accountCpmChange) ? ` The account's CPM moved ${model.accountCpmChange >= 0 ? "+" : ""}${Math.round(model.accountCpmChange * 100)}% between the two periods, and cost changes below are read net of it.` : ""}`)}</p>
         </div>
       </div>
       ${summary ? `<div class="saturation-summary">${summary}</div>` : ""}
@@ -1094,6 +1231,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
           ${renderSaturationTable(thin, currency, "Too little delivery")}
         </details>
       ` : ""}
+      ${renderSaturationEditor(model.adjustable || saturationRules()?.ADJUSTABLE, thresholds, overridden)}
       <div class="wp-card-footer saturation-rules">
         <p><strong>How a status is set.</strong> ${escapeHtml(rules)}</p>
         ${(model.notes || []).length ? `<ul>${model.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
@@ -1118,6 +1256,7 @@ export function renderExpansionView(model = null, visible = false, currency = "D
   // The saturation table leads the tab and stands on its own snapshot, so every
   // state of the series below it (missing, empty, failed) still shows it.
   const saturationHtml = renderAudienceSaturation(saturation, currency);
+  bindSaturationEditor(host);
   const node = {
     set innerHTML(html) {
       host.innerHTML = `${saturationHtml}${html}`;

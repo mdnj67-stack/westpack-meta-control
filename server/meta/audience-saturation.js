@@ -1,5 +1,8 @@
 const { ensureAccountId } = require("../lib/meta");
-const { resolveObjectiveGroup } = require("./budget-allocation");
+const { resolveCurrencyMinorUnitDivisor, resolveObjectiveGroup } = require("./budget-allocation");
+// The classification rules live in one file shared with the browser, so a line
+// moved on screen is the same line the nightly job applied.
+const rules = require("../../src/saturation-rules.js");
 const { PURCHASE_ACTION_TYPES } = require("./customer-acquisition");
 const {
   actionEntryValue,
@@ -49,45 +52,8 @@ const PERIOD_DAYS = 14;
 const LOOKBACK_DAYS = 90;
 const INCREMENTAL_ATTRIBUTION_WINDOWS = JSON.stringify(["incrementality"]);
 
-// The rules behind each status. They are stated on screen beside every row, so a
-// status is never a verdict without its reason.
-const THRESHOLDS = {
-  // Below this a period's figures are too thin to read a trend from.
-  minimumReach: 1000,
-  minimumSpend: 500,
-  // Share of the period's reach that is new to the ad set.
-  saturatedNewShare: 0.25,
-  saturatingNewShare: 0.4,
-  // Movement against the previous period that marks an audience running out.
-  newShareDrop: 0.1,
-  costPerThousandNewRise: 0.25,
-  // The previous period counts as a launch when the ad set's reach in the whole
-  // lookback before it was under this share of the period's own reach: it had
-  // barely delivered yet. Zero alone was too strict - once the windows moved a
-  // day, the single rebuild day (2026-09-09) fell before the period and
-  // Conv - 04 read 85% -> 69% as saturation.
-  launchReachShare: 0.5,
-  // A defined audience reached this far inside one period is used up.
-  saturatedAudienceShare: 0.8,
-  // A conversion ad set that has spent this many times the account's cost per new
-  // customer without one. At three, a zero is about a 5% chance if the ad set
-  // performed like the account (Poisson), so it is evidence rather than noise.
-  notConvertingCostMultiple: 3,
-  // Brand awareness is built at around five impressions per person per week.
-  awarenessWeeklyFrequencyTarget: 5,
-  awarenessWeeklyFrequencyLow: 3,
-  awarenessWeeklyFrequencyHigh: 8
-};
-
-const STATUS_ORDER = ["saturated", "not_converting", "saturating", "covered", "room", "insufficient"];
-const STATUS_LABELS = {
-  room: "Room to grow",
-  covered: "Covered, room for frequency",
-  saturating: "Saturating",
-  saturated: "Saturated",
-  not_converting: "Reaches, does not convert",
-  insufficient: "Too little delivery"
-};
+const THRESHOLDS = rules.DEFAULT_THRESHOLDS;
+const STATUS_LABELS = rules.STATUS_LABELS;
 
 function number(value) {
   const parsed = Number(value);
@@ -121,12 +87,19 @@ function resolveSaturationWindows(today) {
       days: PERIOD_DAYS,
       period: { since, until: end },
       through: { since: lookbackSince, until: end },
-      before: { since: lookbackSince, until: shiftIsoDays(since, -1) }
+      before: { since: lookbackSince, until: shiftIsoDays(since, -1) },
+      // Frequency per week is read off real weeks. Dividing the period's
+      // frequency by two understates it whenever different people see the ads in
+      // each week - by up to half - and always in the same direction.
+      weeks: [
+        { since, until: shiftIsoDays(since, 6) },
+        { since: shiftIsoDays(since, 7), until: end }
+      ]
     };
   };
   const current = build(until);
   const previous = build(shiftIsoDays(current.since, -1));
-  const ranges = [current, previous].flatMap((window) => [window.period, window.through, window.before]);
+  const ranges = [current, previous].flatMap((window) => [window.period, window.through, window.before, ...window.weeks]);
   return { today, current, previous, lookbackDays: LOOKBACK_DAYS, ranges };
 }
 
@@ -146,6 +119,15 @@ function firstAction(entries, actionTypes) {
     if (value != null) return value;
   }
   return 0;
+}
+
+// The mean of each week's impressions per person, over the weeks that delivered.
+function weeklyFrequency(rowsByRange, window) {
+  const values = (window.weeks || [])
+    .map((week) => rowsByRange.get(rangeKey(week)))
+    .filter((row) => number(row?.reach) > 0)
+    .map((row) => number(row.impressions) / number(row.reach));
+  return values.length ? round(values.reduce((sum, value) => sum + value, 0) / values.length, 2) : null;
 }
 
 // One period's figures for one ad set, from its rows keyed by range. A range
@@ -178,9 +160,12 @@ function buildPeriodMetrics(rowsByRange, window, actionTypes) {
     repeatReach: Math.max(0, reach - newReach),
     newShare: reach > 0 ? round(newReach / reach, 4) : null,
     costPerThousandNew: newReach > 0 ? round((spend / newReach) * 1000, 2) : null,
-    weeklyFrequency: reach > 0 ? round(impressions / reach / (window.days / 7), 2) : null,
+    weeklyFrequency: weeklyFrequency(rowsByRange, window),
+    lastWeekSpend: round(number(rowsByRange.get(rangeKey(window.weeks[window.weeks.length - 1]))?.spend), 2),
     purchases: firstAction(period?.actions, PURCHASE_ACTION_TYPES),
     newCustomers,
+    // A single-digit count is a range, not a figure (95%, Garwood).
+    newCustomersRange: newCustomers == null ? null : rules.poissonInterval(newCustomers),
     costPerNewCustomer: newCustomers > 0 ? round(spend / newCustomers, 2) : null
   };
 }
@@ -223,161 +208,51 @@ function describeMarket(targeting = {}) {
   return { key: "other", label: "Other targeting", countries };
 }
 
-// The status and every reason behind it. Order matters: too little delivery
-// first, because nothing else can be read from it; then a used-up audience,
-// because that is the lesson even when the ad set also does not convert.
+// The rules themselves are in src/saturation-rules.js. This keeps the shape the
+// tests and callers were written against: a flat argument list for one ad set.
 function classifySaturation({
   current,
   previous,
   audienceShare = null,
+  audienceShareLow = null,
+  audienceShareHigh = null,
   audienceShareApproximate = false,
+  advantageAudience = false,
   objectiveGroup = "",
-  accountCostPerNewCustomer = null
+  accountCostPerNewCustomer = null,
+  accountCpmChange = null,
+  delivery = {},
+  thresholds = null
 }) {
-  const t = THRESHOLDS;
-  const reasons = [];
-
-  if (current.reach < t.minimumReach || current.spend < t.minimumSpend) {
-    reasons.push(`Under ${t.minimumReach.toLocaleString("en")} people or ${t.minimumSpend} kr. in the last ${PERIOD_DAYS} days.`);
-    return { status: "insufficient", reasons, causes: [], comparable: false };
-  }
-
-  // A launch period is everyone-new by construction, so the next period always
-  // reads as a fall. Measured on the 2026-09-09 rebuild, that alone marked ten ad
-  // sets as saturating in their second fortnight. Against a launch, only the
-  // current level is read.
-  const previousWasLaunch = Boolean(previous && previous.reach > 0 && previous.reachBefore < previous.reach * t.launchReachShare);
-  const comparable = previous && !previousWasLaunch && previous.reach >= t.minimumReach && previous.newShare != null;
-  const shareDrop = comparable && current.newShare != null ? previous.newShare - current.newShare : null;
-  const costRise = comparable && current.costPerThousandNew != null && previous.costPerThousandNew > 0
-    ? current.costPerThousandNew / previous.costPerThousandNew - 1
-    : null;
-
-  const shareText = current.newShare == null ? "" : `${Math.round(current.newShare * 100)}% of those reached were new to it`;
-  const dropText = shareDrop != null && shareDrop >= t.newShareDrop
-    ? `New share fell ${Math.round(shareDrop * 100)} points on the ${PERIOD_DAYS} days before`
-    : "";
-  const costText = costRise != null && costRise >= t.costPerThousandNewRise
-    ? `New people cost ${Math.round(costRise * 100)}% more per thousand than the ${PERIOD_DAYS} days before`
-    : "";
-  // Only a bounded audience can be used up. Where Meta may go beyond it, a share
-  // above 100% means delivery is spilling past the audience, not exhausting it.
-  const audienceText = audienceShare != null && !audienceShareApproximate && audienceShare >= t.saturatedAudienceShare
-    ? `Reached ${Math.round(audienceShare * 100)}% of the audience in ${PERIOD_DAYS} days`
-    : "";
-  const startedInPeriod = !previous || (previous.reach === 0 && current.newShare === 1);
-  const movingWrong = Boolean(dropText || costText);
-  // Which rule tripped, so the view can colour the measure that caused the status
-  // and leave the others grey. Order is the order the reasons are written in.
-  const lowShare = current.newShare != null && current.newShare < t.saturatingNewShare;
-  const trendCauses = [dropText ? "newShareTrend" : "", costText ? "costTrend" : ""].filter(Boolean);
-  const shared = { comparable: Boolean(comparable), previousWasLaunch };
-
-  // Awareness is the opposite job. Its goal is the same people seeing Westpack
-  // again and again - about five times a week - so a covered audience and a low
-  // share of new people are the plan, not exhaustion. LAL - EU on 2026-10-08 read
-  // "saturated" at 84% of its audience while each person saw the ads 1.6 times a
-  // week: more budget there buys exactly the repetition the team wants. An
-  // awareness ad set is only saturated once it is covered AND at the frequency
-  // target, because only then does another krone buy repetition past the target.
-  const frequency = current.weeklyFrequency;
-  if (objectiveGroup === "awareness" && frequency != null) {
-    const target = t.awarenessWeeklyFrequencyTarget;
-    const covered = Boolean(audienceText) || (current.newShare != null && current.newShare < t.saturatingNewShare);
-    const coverText = audienceText || shareText;
-    const coverCause = audienceText ? "audience" : "newShare";
-    if (covered && frequency >= target) {
-      reasons.push(coverText, `${frequency.toFixed(1)} impressions per person a week, at or past the ${target}-a-week target: more budget only adds repetition beyond it`);
-      return { status: "saturated", reasons, causes: [coverCause, "frequency"], ...shared };
-    }
-    if (covered) {
-      const neededPerDay = current.spend > 0 ? (current.spend / PERIOD_DAYS) * (target / frequency) : null;
-      reasons.push(
-        `${coverText}, at ${frequency.toFixed(1)} a week against the ${target}-a-week target`,
-        neededPerDay
-          ? `Reaching ${target} a week across the same people would take about ${Math.round(neededPerDay).toLocaleString("en")} kr. a day at today's cost per impression, an estimate`
-          : ""
-      );
-      return {
-        status: "covered",
-        reasons: reasons.filter(Boolean),
-        causes: ["frequency"],
-        frequencyBudgetPerDay: neededPerDay ? round(neededPerDay, 0) : null,
-        ...shared
-      };
-    }
-    // Below the target, a falling share of new people is repetition building up,
-    // which is what awareness is for. It is not read as saturating.
-    if (frequency < target) {
-      reasons.push(
-        startedInPeriod ? `Started in this period, so everyone is new` : shareText,
-        `${frequency.toFixed(1)} a week against the ${target}-a-week target, so there is room for reach and repetition`
-      );
-      return { status: "room", reasons: reasons.filter(Boolean), causes: [], startedInPeriod, ...shared };
-    }
-  }
-
-  const saturated = Boolean(audienceText)
-    || (current.newShare != null && current.newShare < t.saturatedNewShare)
-    || (current.newShare != null && current.newShare < t.saturatingNewShare && movingWrong);
-  if (saturated) {
-    reasons.push(...[audienceText, shareText, dropText, costText].filter(Boolean));
-    const causes = [
-      audienceText ? "audience" : "",
-      (current.newShare != null && current.newShare < t.saturatedNewShare) || (lowShare && movingWrong) ? "newShare" : "",
-      ...trendCauses
-    ].filter(Boolean);
-    return { status: "saturated", reasons, causes, ...shared };
-  }
-
-  const notConvertingSpend = accountCostPerNewCustomer > 0
-    ? accountCostPerNewCustomer * t.notConvertingCostMultiple
-    : null;
-  if (objectiveGroup === "conversion"
-    && notConvertingSpend != null
-    && current.newCustomers != null
-    && current.newCustomers < 1
-    && current.spend >= notConvertingSpend) {
-    reasons.push(`${Math.round(current.spend).toLocaleString("en")} kr. spent and no new customer in the last ${PERIOD_DAYS} days, over ${t.notConvertingCostMultiple}x the account's cost per new customer`);
-    if (shareText) reasons.push(`${shareText}, so reach is not the limit`);
-    return { status: "not_converting", reasons, causes: ["customers"], ...shared };
-  }
-
-  if (movingWrong || (current.newShare != null && current.newShare < t.saturatingNewShare)) {
-    reasons.push(...[shareText, dropText, costText].filter(Boolean));
-    if (previousWasLaunch) reasons.push(`The ${PERIOD_DAYS} days before were its launch, so it is judged on level only`);
-    return { status: "saturating", reasons, causes: [lowShare ? "newShare" : "", ...trendCauses].filter(Boolean), ...shared };
-  }
-
-  if (startedInPeriod) {
-    reasons.push(`Started in this period, so everyone is new. A trend shows after the next ${PERIOD_DAYS} days`);
-    return { status: "room", reasons, causes: [], startedInPeriod: true, ...shared };
-  }
-  if (shareText) reasons.push(shareText);
-  if (previousWasLaunch) {
-    reasons.push(`The ${PERIOD_DAYS} days before were its launch (everyone new), so it is judged on level only`);
-  } else if (!comparable) {
-    reasons.push(`Too little delivery in the previous ${PERIOD_DAYS} days to compare against`);
-  }
-  return { status: "room", reasons, causes: [], ...shared };
+  return rules.classifyRow({
+    current,
+    previous,
+    objectiveGroup,
+    audience: {
+      share: audienceShare,
+      shareLow: audienceShareLow,
+      shareHigh: audienceShareHigh,
+      shareApproximate: audienceShareApproximate,
+      advantageAudience
+    },
+    delivery
+  }, { accountCostPerNewCustomer, accountCpmChange, periodDays: PERIOD_DAYS }, thresholds);
 }
 
-// Awareness is judged against its own frequency target as well: high frequency
-// is the plan there, not a sign of waste.
 function describeFrequency(current, objectiveGroup) {
-  if (objectiveGroup !== "awareness" || current.weeklyFrequency == null) return null;
-  const t = THRESHOLDS;
-  const value = current.weeklyFrequency;
-  if (value < t.awarenessWeeklyFrequencyLow) {
-    return { tone: "low", text: `${value.toFixed(1)} a week, below the ${t.awarenessWeeklyFrequencyTarget}-a-week awareness target` };
-  }
-  if (value > t.awarenessWeeklyFrequencyHigh) {
-    return { tone: "high", text: `${value.toFixed(1)} a week, well above the ${t.awarenessWeeklyFrequencyTarget}-a-week target` };
-  }
-  return { tone: "on", text: `${value.toFixed(1)} a week, around the ${t.awarenessWeeklyFrequencyTarget}-a-week target` };
+  return rules.describeFrequency(current, objectiveGroup, THRESHOLDS);
 }
 
-function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = null, accountCostPerNewCustomer = null }) {
+// Frequency cap as impressions per person per week, from the ad set's own
+// frequency_control_specs.
+function weeklyFrequencyCap(specs) {
+  const cap = (Array.isArray(specs) ? specs : []).find((spec) => spec?.event === "IMPRESSIONS" && number(spec?.max_frequency) > 0);
+  if (!cap) return null;
+  const days = number(cap.interval_days) || 7;
+  return round((number(cap.max_frequency) * 7) / days, 2);
+}
+
+function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = null, context = {}, budgetDivisor = 100 }) {
   const targeting = meta?.targeting || {};
   const objectiveGroup = resolveObjectiveGroup({ objective: meta?.campaign?.objective });
   const audience = describeAudience(targeting);
@@ -394,19 +269,35 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
   const audienceShareSinceLookback = audience.kind === "defined" && size ? round(throughReach / size, 4) : null;
 
   const shareApproximate = audience.kind === "defined" && audience.expansionAllowed;
-  const { status, reasons, causes = [], comparable = false, previousWasLaunch = false, startedInPeriod = false, frequencyBudgetPerDay = null } = classifySaturation({
+  // Meta's size is a range, so the share is too: reach over the upper bound to
+  // reach over the lower.
+  const shareLow = audience.kind === "defined" && upper > 0 ? round(current.reach / upper, 4) : null;
+  const shareHigh = audience.kind === "defined" && lower > 0 ? round(current.reach / lower, 4) : null;
+
+  // Whether budget is what limits delivery: last week's spend against the ad set's
+  // own daily budget. A campaign budget is shared, so it is not attributed here.
+  const dailyBudget = number(meta?.daily_budget) > 0 ? round(number(meta.daily_budget) / budgetDivisor, 2) : null;
+  const lastWeekPerDay = current.lastWeekSpend / 7;
+  const delivery = {
+    optimizationGoal: String(meta?.optimization_goal || ""),
+    frequencyCapPerWeek: weeklyFrequencyCap(meta?.frequency_control_specs),
+    dailyBudget,
+    budgetUtilization: dailyBudget ? round(lastWeekPerDay / dailyBudget, 3) : null
+  };
+
+  const classification = rules.classifyRow({
     current,
     previous,
-    audienceShare,
-    audienceShareApproximate: shareApproximate,
     objectiveGroup,
-    accountCostPerNewCustomer
-  });
-  // Delivery past a lookalike's own size is worth saying in plain words: the
-  // budget is buying people outside the audience the ad set was built on.
-  if (shareApproximate && audienceShare != null && audienceShare > 1) {
-    reasons.push(`Reached ${round(audienceShare, 1)}x the audience estimate: ${audience.advantageAudience ? "Advantage+ audience" : "lookalike expansion"} lets Meta go beyond it`);
-  }
+    delivery,
+    audience: {
+      share: audienceShare,
+      shareLow,
+      shareHigh,
+      shareApproximate,
+      advantageAudience: audience.advantageAudience
+    }
+  }, context, THRESHOLDS);
 
   return {
     id: String(meta?.id || ""),
@@ -423,30 +314,18 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
       size: audience.kind === "defined" ? size : null,
       population: audience.kind === "broad" ? size : null,
       share: audienceShare,
+      shareLow,
+      shareHigh,
       shareSinceLookback: audienceShareSinceLookback,
       shareApproximate,
       beyondAudience: shareApproximate && audienceShare != null && audienceShare > 1
     },
+    delivery,
     current,
     previous,
     spendPerDay: round(current.spend / PERIOD_DAYS, 2),
-    status,
-    statusLabel: STATUS_LABELS[status],
-    reasons,
-    causes,
-    frequencyBudgetPerDay,
-    comparable,
-    previousWasLaunch,
-    startedInPeriod,
-    frequency: describeFrequency(current, objectiveGroup)
+    ...classification
   };
-}
-
-function sortRows(rows) {
-  return rows.slice().sort((left, right) => {
-    const byStatus = STATUS_ORDER.indexOf(left.status) - STATUS_ORDER.indexOf(right.status);
-    return byStatus || right.current.spend - left.current.spend;
-  });
 }
 
 // Markets are a grouping, not a figure: spend adds up, reach does not, so a
@@ -476,7 +355,7 @@ function indexRows(insightRows) {
 
 // Assembles the snapshot from already-fetched data, so it can be tested without
 // Meta.
-function buildAudienceSaturation({ today, insightRows = [], adSetMeta = [], estimates = {}, actionTypes = {}, graphCalls = 0, accountId = "" }) {
+function buildAudienceSaturation({ today, insightRows = [], accountRows = [], adSetMeta = [], estimates = {}, actionTypes = {}, graphCalls = 0, accountId = "", currency = "DKK" }) {
   const windows = resolveSaturationWindows(today);
   const rowsByAdSet = indexRows(insightRows);
   const metaById = new Map((adSetMeta || []).map((meta) => [String(meta.id), meta]));
@@ -508,13 +387,24 @@ function buildAudienceSaturation({ today, insightRows = [], adSetMeta = [], esti
   }
   const accountCostPerNewCustomer = conversionCustomers > 0 ? round(conversionSpend / conversionCustomers, 2) : null;
 
+  // The account's own CPM in each period, so a cost rise can be read net of the
+  // market getting dearer for everyone.
+  const cpmFor = (window) => {
+    const row = (accountRows || []).find((entry) => entry?.date_start === window.since && entry?.date_stop === window.until);
+    return number(row?.impressions) > 0 ? (number(row.spend) / number(row.impressions)) * 1000 : null;
+  };
+  const currentCpm = cpmFor(windows.current);
+  const previousCpm = cpmFor(windows.previous);
+  const accountCpmChange = currentCpm && previousCpm ? round(currentCpm / previousCpm - 1, 4) : null;
+
+  const context = { accountCostPerNewCustomer, accountCpmChange, periodDays: PERIOD_DAYS };
+  const budgetDivisor = resolveCurrencyMinorUnitDivisor(currency);
   const rows = delivering.map(({ id, meta, rowsByRange }) => buildAdSetRow({
-    meta, rowsByRange, windows, actionTypes, estimate: estimates[id] || null, accountCostPerNewCustomer
+    meta, rowsByRange, windows, actionTypes, estimate: estimates[id] || null, context, budgetDivisor
   }));
 
-  const sorted = sortRows(rows);
-  const statusCounts = {};
-  for (const row of sorted) statusCounts[row.status] = (statusCounts[row.status] || 0) + 1;
+  const sorted = rules.sortRows(rows);
+  const statusCounts = rules.countStatuses(sorted);
 
   return {
     generatedAt: new Date().toISOString(),
@@ -531,6 +421,10 @@ function buildAudienceSaturation({ today, insightRows = [], adSetMeta = [], esti
     statusLabels: STATUS_LABELS,
     statusCounts,
     accountCostPerNewCustomer,
+    accountCpm: { current: currentCpm ? round(currentCpm, 2) : null, previous: previousCpm ? round(previousCpm, 2) : null },
+    accountCpmChange,
+    context,
+    adjustable: rules.ADJUSTABLE,
     resultAttribution: "incrementality",
     customerConversionAvailable: Boolean(actionTypes?.available),
     markets: groupByMarket(sorted),
@@ -541,7 +435,10 @@ function buildAudienceSaturation({ today, insightRows = [], adSetMeta = [], esti
       "Reach is read deduplicated from Meta for each ad set and range, never added up.",
       "A broad ad set's audience estimate is a country's population, not Westpack's market, so no share is shown for it.",
       "A defined audience's size is Meta's delivery estimate for the ad set's own targeting. Where lookalike expansion or Advantage+ audience is on, Meta may reach beyond it and the share is approximate.",
-      "New customers use Meta's incremental attribution, as everywhere else on the dashboard."
+      "New customers use Meta's incremental attribution, as everywhere else on the dashboard.",
+      "Frequency per week is the mean of each week's impressions per person, read from Meta week by week.",
+      "A change in the cost of new people is measured after taking out the account's own CPM change between the same two periods.",
+      "The statuses are rules of thumb on top of Meta's figures. None of the thresholds has been validated against an outcome."
     ]
   };
 }
@@ -569,7 +466,7 @@ async function syncAudienceSaturation({ accountId, accessToken, today = todayInA
   for (let index = 0; index < deliveringIds.length; index += 50) {
     const payload = await reader.get("/", {
       ids: deliveringIds.slice(index, index + 50).join(","),
-      fields: "id,name,effective_status,optimization_goal,targeting,campaign{id,name,objective,effective_status}"
+      fields: "id,name,effective_status,optimization_goal,daily_budget,frequency_control_specs,targeting,campaign{id,name,objective,effective_status}"
     }, "ad set targeting");
     adSetMeta.push(...Object.values(payload || {}));
   }
@@ -596,9 +493,19 @@ async function syncAudienceSaturation({ accountId, accessToken, today = todayInA
 
   const actionTypes = await readCustomerConversionTypes(reader);
 
+  // The account's own spend and impressions for both periods, for the CPM change.
+  const accountRows = await reader.getAll(`/${normalizedAccountId}/insights`, {
+    level: "account",
+    time_ranges: JSON.stringify([windows.current.period, windows.previous.period]),
+    fields: "date_start,date_stop,spend,impressions,account_currency",
+    limit: "10"
+  }, "account CPM by period", 1);
+
   return buildAudienceSaturation({
     today,
     insightRows,
+    accountRows,
+    currency: String(accountRows[0]?.account_currency || "DKK"),
     adSetMeta,
     estimates,
     actionTypes,

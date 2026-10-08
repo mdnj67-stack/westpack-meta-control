@@ -24,8 +24,20 @@ const actionTypes = { newCustomerActionTypes: [NEW_TYPE], existingCustomerAction
 const TODAY = "2026-10-07";
 const windows = resolveSaturationWindows(TODAY);
 
-// Six rows per ad set, one per range, as `time_ranges` returns them.
+// Ten rows per ad set, one per range, as `time_ranges` returns them: for each
+// period the period itself, the two cumulative ranges and its two weeks. Unless a
+// fixture gives its weeks, each week has the period's reach and half its
+// impressions - the same people both weeks.
 function rowsFor(id, { current, previous, campaign = "Conv - 02 - FR" }) {
+  const weeksOf = (figures) => {
+    if (!figures?.period) return [null, null];
+    if (figures.weeks) return figures.weeks;
+    const impressions = figures.period.impressions ?? figures.period.reach * 2;
+    return [
+      { reach: figures.period.reach, impressions: impressions / 2, spend: (figures.period.spend ?? 0) / 2 },
+      { reach: figures.period.reach, impressions: impressions / 2, spend: (figures.period.spend ?? 0) / 2 }
+    ];
+  };
   const make = (range, figures) => figures ? {
     adset_id: id,
     adset_name: id,
@@ -43,7 +55,11 @@ function rowsFor(id, { current, previous, campaign = "Conv - 02 - FR" }) {
     make(windows.current.before, current.before),
     make(windows.previous.period, previous?.period),
     make(windows.previous.through, previous?.through),
-    make(windows.previous.before, previous?.before)
+    make(windows.previous.before, previous?.before),
+    make(windows.current.weeks[0], weeksOf(current)[0]),
+    make(windows.current.weeks[1], weeksOf(current)[1]),
+    make(windows.previous.weeks[0], weeksOf(previous)[0]),
+    make(windows.previous.weeks[1], weeksOf(previous)[1])
   ].filter(Boolean);
 }
 
@@ -75,7 +91,8 @@ test("two equal periods end yesterday, each with the two cumulative ranges behin
   assert.deepEqual(windows.previous.period, { since: "2026-09-09", until: "2026-09-22" });
   assert.deepEqual(windows.current.through, { since: "2026-06-25", until: "2026-10-06" });
   assert.deepEqual(windows.current.before, { since: "2026-06-25", until: "2026-09-22" });
-  assert.equal(windows.ranges.length, 6, "one insights call carries all six");
+  assert.deepEqual(windows.current.weeks, [{ since: "2026-09-23", until: "2026-09-29" }, { since: "2026-09-30", until: "2026-10-06" }]);
+  assert.equal(windows.ranges.length, 10, "one insights call carries all ten");
 });
 
 test("new reach is the rise in deduplicated reach, never a sum", () => {
@@ -92,7 +109,7 @@ test("new reach is the rise in deduplicated reach, never a sum", () => {
   assert.equal(row.current.newReach, 73150);
   assert.equal(row.current.newShare, 0.5976);
   assert.equal(row.current.repeatReach, 122397 - 73150);
-  assert.equal(row.current.weeklyFrequency, 1, "impressions per person over two weeks, halved");
+  assert.equal(row.current.weeklyFrequency, 1, "each week's impressions per person, averaged");
 });
 
 test("the period after a launch is not read as saturation", () => {
@@ -323,6 +340,12 @@ test("the sync is one insights call for every range, and estimates only defined,
   delete require.cache[require.resolve(join(root, "server", "meta", "audience-saturation.js"))];
   meta.graphRequest = async (path, token, { params }) => {
     calls.push({ path, params });
+    if (path.endsWith("/insights") && params.level === "account") {
+      return { data: [
+        { date_start: windows.current.since, date_stop: windows.current.until, spend: "130", impressions: "10000", account_currency: "DKK" },
+        { date_start: windows.previous.since, date_stop: windows.previous.until, spend: "100", impressions: "10000", account_currency: "DKK" }
+      ] };
+    }
     if (path.endsWith("/insights")) {
       return { data: [
         ...rowsFor("broad", { current: { period: { reach: 50000, spend: 9000 }, through: { reach: 50000 }, before: { reach: 0 } } }),
@@ -337,10 +360,10 @@ test("the sync is one insights call for every range, and estimates only defined,
   try {
     const { syncAudienceSaturation: sync } = require(join(root, "server", "meta", "audience-saturation.js"));
     const snapshot = await sync({ accountId: "act_1", accessToken: "t", today: TODAY });
-    const insights = calls.filter((call) => call.path.endsWith("/insights"));
+    const insights = calls.filter((call) => call.path.endsWith("/insights") && call.params.level === "adset");
     assert.equal(insights.length, 1);
-    assert.equal(insights[0].params.level, "adset");
-    assert.equal(JSON.parse(insights[0].params.time_ranges).length, 6);
+    assert.equal(JSON.parse(insights[0].params.time_ranges).length, 10);
+    assert.equal(snapshot.accountCpmChange, 0.3, "the account's CPM change between the periods");
     assert.equal(insights[0].params.action_attribution_windows, JSON.stringify(["incrementality"]));
     const estimates = calls.filter((call) => call.path.endsWith("/delivery_estimate"));
     assert.deepEqual(estimates.map((call) => call.path), ["/lal/delivery_estimate"], "no estimate for a broad ad set");
@@ -351,6 +374,99 @@ test("the sync is one insights call for every range, and estimates only defined,
     delete require.cache[require.resolve(join(root, "server", "meta", "audience-saturation.js"))];
   }
   assert.equal(typeof syncAudienceSaturation, "function");
+});
+
+test("frequency per week is read off real weeks, not the period halved", () => {
+  // 100,000 different people each week, 2 impressions each: 2 a week. The old
+  // formula (period impressions / period reach / 2) read 1 - half the truth -
+  // because the period's reach counts both weeks' people.
+  const snapshot = buildAudienceSaturation({
+    today: TODAY,
+    insightRows: rowsFor("rotating", {
+      campaign: "BA - Reach",
+      current: {
+        period: { reach: 200000, impressions: 400000, spend: 8000 },
+        through: { reach: 200000 },
+        before: { reach: 0 },
+        weeks: [{ reach: 100000, impressions: 200000, spend: 4000 }, { reach: 100000, impressions: 200000, spend: 4000 }]
+      }
+    }),
+    adSetMeta: [lookalike("rotating")],
+    actionTypes
+  });
+  assert.equal(snapshot.adSets[0].current.weeklyFrequency, 2);
+});
+
+test("the budget estimate is only given where budget is what limits frequency", () => {
+  const base = {
+    current: { reach: 172945, spend: 4662, newShare: 0.54, costPerThousandNew: 50, weeklyFrequency: 1.6 },
+    previous: { reach: 150000, spend: 4000, newShare: 1, reachBefore: 0 },
+    audienceShare: 0.84,
+    objectiveGroup: "awareness"
+  };
+  // A cap below the target: the cap has to go up before budget can help.
+  const capped = classifySaturation({ ...base, delivery: { frequencyCapPerWeek: 2 } });
+  assert.equal(capped.status, "covered");
+  assert.equal(capped.limitedBy, "cap");
+  assert.equal(capped.frequencyBudgetPerDay, null);
+  // Not spending its own budget: more budget is not the lever. LAL - EU on
+  // 2026-10-08 spent 333 kr. a day of a 400 kr. budget, optimised for reach.
+  const underspending = classifySaturation({ ...base, delivery: { frequencyCapPerWeek: 5, budgetUtilization: 0.83, optimizationGoal: "REACH" } });
+  assert.equal(underspending.limitedBy, "delivery");
+  assert.equal(underspending.frequencyBudgetPerDay, null);
+  assert.ok(underspending.reasons.some((reason) => /optimised for reach/.test(reason)));
+  assert.ok(underspending.reasons.some((reason) => /Spent 83% of its daily budget/.test(reason)));
+  // Spending its budget under a cap at the target: budget is the limit.
+  const budgetBound = classifySaturation({ ...base, delivery: { frequencyCapPerWeek: 5, budgetUtilization: 0.98 } });
+  assert.equal(budgetBound.limitedBy, "budget");
+  assert.ok(budgetBound.frequencyBudgetPerDay > 0);
+  assert.ok(budgetBound.reasons.some((reason) => /at least .* usually rises/.test(reason)));
+});
+
+test("a rise in the cost of new people is read net of the account's own CPM change", () => {
+  const input = {
+    current: { reach: 50000, spend: 7000, newShare: 0.6, costPerThousandNew: 140, weeklyFrequency: 1.5 },
+    previous: { reach: 50000, spend: 5000, newShare: 0.62, costPerThousandNew: 100, reachBefore: 60000 },
+    objectiveGroup: "conversion"
+  };
+  // +40% raw: saturating if the market stood still...
+  assert.equal(classifySaturation({ ...input, accountCpmChange: 0 }).status, "saturating");
+  // ...but not if the whole account got 30% dearer (1.40 / 1.30 = +8%).
+  assert.equal(classifySaturation({ ...input, accountCpmChange: 0.3 }).status, "room");
+});
+
+test("an audience share whose estimate range straddles the line is marked uncertain", () => {
+  const result = classifySaturation({
+    current: { reach: 172945, spend: 4662, newShare: 0.54, costPerThousandNew: 50, weeklyFrequency: 5.2 },
+    previous: { reach: 150000, spend: 4000, newShare: 0.6, reachBefore: 140000 },
+    audienceShare: 0.83,
+    audienceShareLow: 0.76,
+    audienceShareHigh: 0.91,
+    objectiveGroup: "awareness"
+  });
+  assert.equal(result.status, "saturated");
+  assert.equal(result.uncertain, true);
+  assert.match(result.reasons[0], /between 76% and 91%/);
+});
+
+test("a count of new customers carries its 95% range", () => {
+  const rules = require(join(root, "src", "saturation-rules.js"));
+  assert.deepEqual(rules.poissonInterval(0), [0, 3.7]);
+  const [low, high] = rules.poissonInterval(5);
+  assert.ok(Math.abs(low - 1.6) <= 0.1 && Math.abs(high - 11.7) <= 0.2, `5 -> ${low}-${high}`);
+});
+
+test("server and browser classify with the same file", () => {
+  const rules = require(join(root, "src", "saturation-rules.js"));
+  const server = require(join(root, "server", "meta", "audience-saturation.js"));
+  assert.equal(server.THRESHOLDS, rules.DEFAULT_THRESHOLDS);
+  const html = readFileSync(join(root, "index.html"), "utf8");
+  const scriptAt = html.indexOf('src="src/saturation-rules.js');
+  const appAt = html.indexOf('src="app.js');
+  assert.ok(scriptAt > 0 && scriptAt < appAt, "loaded as a classic script before the app");
+  const ui = readFileSync(join(root, "src", "ui.js"), "utf8");
+  assert.match(ui, /globalThis\.WestpackSaturationRules/);
+  assert.match(ui, /rules\.classifyRow\(/, "the browser reclassifies with the shared rules when a line moves");
 });
 
 test("the table is read on the free status call and built by the nightly sync, on its own try", () => {

@@ -442,6 +442,32 @@ series (which stays conversion-only and says so).
   the frequency target; covered below it is `covered` ("Covered, room for frequency",
   with an estimate of the daily spend that would reach the target at today's cost per
   impression); and below the target a falling new share is never "saturating".
+- **An objective review (2026-10-08) found the figures sound and the judgement weak**,
+  and everything below was fixed in response. Keep it that way:
+  - **The rules live in `src/saturation-rules.js`, one copy for server and browser.** It
+    is a plain script (`module.exports` in Node, `globalThis.WestpackSaturationRules`
+    from a classic `<script>` in index.html, loaded before app.js), so the browser can
+    reclassify with exactly the server's rules when a viewer moves a threshold in "Adjust
+    the rules". Overrides are per browser (localStorage) and never touch the snapshot.
+  - **Frequency per week comes from real weeks** (two 7-day ranges per period in the
+    same `time_ranges` call). The old "period frequency / 2" understated it whenever
+    audiences rotate: on 2026-10-08 LAL - EU read 1.6 against a true 2.3, and Conv - 04
+    3.1 against 4.9.
+  - **The budget estimate is only shown where budget is the limit.** The ad set's
+    `frequency_control_specs` cap is read (LAL ad sets: 5 per 7 days), and so is last
+    week's spend against its own daily budget. LAL - EU spent 81% of its 400 kr., so
+    more budget is not the lever there; the row says "Not budget" instead of a number.
+  - **Cost rises are read net of the account's CPM change** between the same periods
+    (one extra account-level call), so Q4 getting dearer is not read as saturation.
+  - **Uncertainty is shown, not hidden**: Meta's audience size is a range and so is the
+    share (reach / upper to reach / lower); a status that rests on a range straddling
+    its line is tagged "uncertain"; new-customer counts carry a 95% Poisson interval and
+    a cost per customer under five customers says "too few to price".
+  - **The statuses are signals, not verdicts**, and the card says so. None of the
+    thresholds has been validated against an outcome.
+  - Meta's `delivery_estimate.daily_outcomes_curve` (spend -> reach) was probed as a
+    marginal-return measure and came back as a single zero point on both ad sets tried.
+    It is not used. Re-probe before building on it.
 - **It is drawn as meters, not a table** (2026-10-08, at the user's request: "mere graf
   baseret ... hvad er det der gør at man fx er saturated"). Each rule that can set a status
   - new share, audience used, weekly frequency - is a meter with its threshold line drawn
