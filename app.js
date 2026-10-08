@@ -633,6 +633,7 @@ const appState = {
   // to answer, so the difference is on screen for a long time.
   metaSnapshotLoading: false,
   metaExpansionReach: null,
+  metaAudienceSaturation: null,
   metaCurrency: "DKK",
   metaQuality: null,
   metaUploadedImageHashes: {},
@@ -13068,7 +13069,8 @@ function renderExpansionSurfaces() {
       appState.metaExpansionReach || null,
       metaExpansionViewVisible,
       currency,
-      metaExpansionReachError
+      metaExpansionReachError,
+      appState.metaAudienceSaturation || null
     );
   });
 }
@@ -13078,6 +13080,7 @@ function ensureMetaExpansionReachLoaded() {
   metaExpansionReachRequest = requestMetaExpansionReach()
     .then((payload) => {
       appState.metaExpansionReach = payload?.expansion || null;
+      appState.metaAudienceSaturation = payload?.saturation || null;
       metaExpansionReachError = "";
       renderExpansionSurfaces();
     })
@@ -13133,8 +13136,8 @@ function renderDashboard() {
     if (lens === "expansion") {
       return {
         kicker: "Expansion",
-        title: "People reached for the first time.",
-        subtitle: "Whole calendar months from a nightly snapshot. This view does not follow the date range above, and it costs no Meta quota to open.",
+        title: "Where the next krone still buys new people.",
+        subtitle: "How much of each audience is used up, per ad set, then the conversion campaigns' first-time reach by month. Both come from a nightly snapshot: this view does not follow the date range above, and it costs no Meta quota to open.",
         tableTitle: "Expansion"
       };
     }

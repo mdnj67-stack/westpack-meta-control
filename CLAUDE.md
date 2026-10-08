@@ -405,6 +405,40 @@ reads it (`?expansion=status`, zero quota).
   logs a restatement whose reason names the definition change.
 - Cold sync ≈ 24 Graph calls, warm ≈ 7. Rate limits are never retried here.
 
+### Audience saturation leads the Expansion tab (2026-10-08)
+
+The user wants Expansion to answer "how much of my audiences am I using up, and where does
+the next krone still buy new people", across **every** campaign, as a hand on budget and
+audience decisions. `server/meta/audience-saturation.js` builds one row per ad set,
+grouped by the market in its targeting, and the tab renders it above the first-time-reach
+series (which stays conversion-only and says so).
+
+- **One insights call** at `level=adset` with `time_ranges` returns six ranges per ad set:
+  for each of two 14-day periods ending yesterday, the period itself, lookback-start to
+  period end, and lookback-start to the day before. New reach is the difference of the
+  two cumulative figures (90-day lookback), so it is deduplicated by Meta, never summed.
+  The whole sync is about nine Graph calls; it runs inside `?expansion=sync` (nightly, on
+  its own try) and alone as `?saturation=sync`. `?expansion=status` returns it for free.
+- **A broad ad set has no audience to use up.** Its delivery estimate is a country's
+  population, not Westpack's market, so no share is computed and no estimate is fetched.
+  Only ad sets with custom/lookalike audiences get `delivery_estimate` and a share.
+- **Lookalike expansion and Advantage+ audience make the share approximate.** On
+  2026-10-07 `LAL - FR/IT/DE` reached 2.3-3.3x their audience estimate in 14 days because
+  `targeting_relaxation_types.lookalike = 1`. That is never read as "saturated"; the row
+  says Meta is delivering beyond the audience. `LAL - EU` (expansion off) at 85% is.
+- **A launch period is everyone-new by definition**, so the period after it always reads
+  as a fall. On the first run that alone marked ten ad sets "saturating" after the
+  2026-09-09 rebuild. Against a launch (`reachBefore === 0`) only the level is judged.
+- **"Reaches, does not convert"** needs 3x the account's own cost per new customer spent
+  with none (about a 5% chance by Poisson if the ad set performed like the account), not a
+  fixed amount. Awareness rows are judged on their 5-a-week frequency target instead.
+- Every status ships with its reasons, and the thresholds are printed under the table.
+  Ad sets under 1,000 people or 500 kr. in the period are folded away; most are paused
+  ad sets still spending a few kroner.
+- `tests/browser-files-parse.test.js` runs `node --check` on app.js and src/*.js. The
+  pattern-matching tests pass on a file that does not parse, and a parse error in the
+  browser stops the app before even the login form shows.
+
 What the live data showed on 2026-09-16, worth knowing before re-deriving it:
 
 - IT, FR and DE delivered from January, ran **nothing from May to August**, and returned on

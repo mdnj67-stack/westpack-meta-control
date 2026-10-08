@@ -210,7 +210,9 @@ test("the explanation opens inwards, and is nudged back when it still falls out"
   // a phone is narrower than the bubble, so the rest is measured at runtime.
   assert.match(ui, /const overflowRight = left \+ width - \(bounds\.right - 8\);/);
   assert.match(ui, /th\.style\.setProperty\("--tip-shift"/);
-  assert.match(ui, /bindExpansionTips\(node\);/);
+  // Bound to the real element: `node` in the view is a wrapper that puts the
+  // saturation table above whatever the series renders.
+  assert.match(ui, /bindExpansionTips\(host\);/);
 });
 
 test("new customers is shown as the count, compared over the same elapsed days", () => {

@@ -29,12 +29,15 @@ const {
 } = require("../../server/meta/budget-allocation");
 const { syncHistoricalIntelligence } = require("../../server/meta/historical-intelligence");
 const { syncExpansionReach } = require("../../server/meta/expansion-reach");
+const { syncAudienceSaturation } = require("../../server/meta/audience-saturation");
 const {
   getHistoricalStoreProfile,
   readHistoricalIntelligence,
   writeHistoricalIntelligence,
   readExpansionReach,
-  writeExpansionReach
+  writeExpansionReach,
+  readAudienceSaturation,
+  writeAudienceSaturation
 } = require("../../server/meta/historical-store");
 const {
   sendMetaCatalogCacheHit,
@@ -1718,6 +1721,30 @@ module.exports = async (req, res) => {
   // is the nightly cron, and is the only path that spends calls. Keep it that
   // way: the cumulative curve behind this series costs one call per month on a
   // cold run, which is more than the whole dashboard snapshot.
+  // The audience saturation table rides the same nightly request and the same
+  // free "status" read. It runs after the expansion series and on its own try, so
+  // a failure in one never costs the other. "saturation=sync" runs it alone
+  // (about ten Graph calls), for a refresh without the cumulative curve.
+  const runSaturationSync = async () => {
+    try {
+      const saturation = await syncAudienceSaturation({
+        accountId: config.metaAdAccountId,
+        accessToken: config.metaAccessToken
+      });
+      await writeAudienceSaturation(saturation);
+      return { saturation, saturationError: "" };
+    } catch (error) {
+      return { saturation: null, saturationError: error.message || "Audience saturation sync failed." };
+    }
+  };
+  if (String(req.query?.saturation || "").toLowerCase() === "sync") {
+    const { saturation, saturationError } = await runSaturationSync();
+    sendJson(res, saturationError ? 500 : 200, saturationError
+      ? { ok: false, error: saturationError }
+      : { ok: true, ready: true, store: getHistoricalStoreProfile(), saturation });
+    return;
+  }
+
   const expansionAction = String(req.query?.expansion || "").toLowerCase();
   if (["status", "sync"].includes(expansionAction)) {
     try {
@@ -1731,15 +1758,20 @@ module.exports = async (req, res) => {
           force: String(req.query?.force || "") === "1"
         });
         await writeExpansionReach(snapshot);
-        sendJson(res, 200, { ok: true, ready: true, store: getHistoricalStoreProfile(), expansion: snapshot });
+        const { saturation, saturationError } = await runSaturationSync();
+        sendJson(res, 200, { ok: true, ready: true, store: getHistoricalStoreProfile(), expansion: snapshot, saturation, saturationError });
         return;
       }
-      const snapshot = await readExpansionReach();
+      const [snapshot, saturation] = await Promise.all([
+        readExpansionReach(),
+        readAudienceSaturation().catch(() => null)
+      ]);
       sendJson(res, 200, {
         ok: true,
         ready: Boolean(snapshot),
         store: getHistoricalStoreProfile(),
-        expansion: snapshot || null
+        expansion: snapshot || null,
+        saturation: saturation || null
       });
     } catch (error) {
       sendJson(res, 500, { ok: false, error: error.message || "Meta expansion reach sync failed." });

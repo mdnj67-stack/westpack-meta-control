@@ -699,17 +699,215 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
   `;
 }
 
-// The Expansion tab. Everything the summary card leaves out: the market split,
-// the cost of reaching one more person, whether new reach becomes customers, and
-// the record of what the measurement itself has done.
-export function renderExpansionView(model = null, visible = false, currency = "DKK", errorMessage = "") {
-  const node = document.getElementById("expansion-content");
-  if (!node) return;
+// How much of each audience is used up, one row per ad set, read from the nightly
+// snapshot (server/meta/audience-saturation.js). Every status carries the reasons
+// behind it, because a verdict without its arithmetic cannot be acted on. Ad sets
+// with too little delivery are folded away: most are paused ad sets still spending
+// a few kroner, and they would bury the ones that matter.
+const SATURATION_TONES = {
+  room: "is-success",
+  saturating: "is-warning",
+  saturated: "is-danger",
+  not_converting: "is-danger",
+  insufficient: ""
+};
+
+function saturationDateRange(range) {
+  if (!range?.since || !range?.until) return "";
+  const format = (iso) => new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })
+    .format(new Date(`${iso}T00:00:00Z`));
+  return `${format(range.since)} – ${format(range.until)}`;
+}
+
+function saturationShare(value) {
+  return expansionMeasured(value) ? `${Math.round(Number(value) * 100)}%` : "--";
+}
+
+function saturationAudienceCell(row) {
+  const audience = row.audience || {};
+  if (audience.kind !== "defined") {
+    return `<span>Broad</span><small>A whole population, not a market, so there is no share to use up.</small>`;
+  }
+  // An ad set can stack a dozen audiences; the list goes in the tooltip so one row
+  // cannot grow taller than the rest of the table.
+  const list = audience.customAudiences || [];
+  const names = list.length > 1 ? `${list.length} audiences` : (list[0] || "");
+  if (audience.share == null) {
+    return `<span>${escapeHtml(names || "Defined audience")}</span><small>No size estimate from Meta for this ad set.</small>`;
+  }
+  if (audience.beyondAudience) {
+    return `<span>${escapeHtml(`${formatDecimal(audience.share, 1)}x the audience`)}</span><small>${escapeHtml(`${names}. Expansion is on, so Meta delivers beyond it.`)}</small>`;
+  }
+  return `<span>${escapeHtml(`${saturationShare(audience.share)} of ${formatCompactNumber(audience.size)}${audience.shareApproximate ? " (approx.)" : ""}`)}</span><small>${escapeHtml(names)}</small>`;
+}
+
+function saturationPrevious(row, field, format) {
+  const previous = row.previous || {};
+  if (!(Number(previous.reach) > 0)) return "";
+  if (Number(previous.reachBefore) === 0) return `<small>launch before</small>`;
+  const value = previous[field];
+  return value == null ? "" : `<small>was ${escapeHtml(format(value))}</small>`;
+}
+
+function saturationFrequencyNote(row) {
+  if (!row.frequency) return "";
+  const text = row.frequency.tone === "on"
+    ? "on target"
+    : row.frequency.tone === "low" ? "below 5/wk target" : "above target";
+  return `<small class="is-${escapeHtml(row.frequency.tone)}">${escapeHtml(text)}</small>`;
+}
+
+function renderSaturationRow(row, currency) {
+  const current = row.current || {};
+  const conversion = row.objectiveGroup === "conversion";
+  const tone = SATURATION_TONES[row.status] ?? "";
+  const status = row.effectiveStatus && row.effectiveStatus !== "ACTIVE"
+    ? ` · ${row.effectiveStatus.toLowerCase().replace(/_/g, " ")}`
+    : "";
+  const customers = conversion && current.newCustomers != null
+    ? `${escapeHtml(formatCompactNumber(current.newCustomers))}${current.costPerNewCustomer != null ? `<small>${escapeHtml(formatCurrency(current.costPerNewCustomer, currency))} each</small>` : ""}`
+    : `<span class="saturation-muted">${conversion ? "--" : "not its job"}</span>`;
+  return `
+    <tr>
+      <td class="saturation-name">
+        <strong title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</strong>
+        <small>${escapeHtml(`${row.campaignName} · ${resolveObjectiveGroupLabel(row.objectiveGroup)}${status}`)}</small>
+      </td>
+      <td class="saturation-status">
+        <span class="wp-status ${tone}">${escapeHtml(row.statusLabel || row.status)}</span>
+        <ul>${(row.reasons || []).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>
+      </td>
+      <td class="is-numeric">${escapeHtml(formatCurrency(row.spendPerDay, currency))}</td>
+      <td class="is-numeric">${escapeHtml(formatCompactNumber(current.reach))}</td>
+      <td class="is-numeric">${escapeHtml(saturationShare(current.newShare))}${saturationPrevious(row, "newShare", saturationShare)}</td>
+      <td class="is-numeric">${escapeHtml(current.costPerThousandNew == null ? "--" : formatCurrency(current.costPerThousandNew, currency))}${saturationPrevious(row, "costPerThousandNew", (value) => formatCurrency(value, currency))}</td>
+      <td class="is-numeric">${escapeHtml(current.weeklyFrequency == null ? "--" : formatDecimal(current.weeklyFrequency, 1))}${saturationFrequencyNote(row)}</td>
+      <td class="is-numeric">${customers}</td>
+      <td class="saturation-audience" title="${escapeHtml((row.audience?.customAudiences || []).join(" + "))}">${saturationAudienceCell(row)}</td>
+    </tr>
+  `;
+}
+
+function renderSaturationTable(rows, currency, label = "") {
+  return `
+    <div class="wp-table-wrap saturation-table-wrap">
+      <table class="wp-table is-compact saturation-table"${label ? ` aria-label="${escapeHtml(label)}"` : ""}>
+        <thead>
+          <tr>
+            <th>Ad set</th>
+            <th>Status and why</th>
+            <th class="is-numeric">Spend / day</th>
+            <th class="is-numeric">Reached</th>
+            <th class="is-numeric" title="Share of the people reached that this ad set had not reached in the lookback before the period">New to ad set</th>
+            <th class="is-numeric">Cost / 1,000 new</th>
+            <th class="is-numeric" title="Impressions per person per week">Freq. / week</th>
+            <th class="is-numeric">New customers</th>
+            <th>Audience used</th>
+          </tr>
+        </thead>
+        <tbody>${rows.map((row) => renderSaturationRow(row, currency)).join("")}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderSaturationEmpty(message) {
+  return `
+    <article class="card expansion-card saturation-card">
+      <div class="card-header"><div><h3>How much of each audience is used up</h3>
+      <p class="field-hint">${escapeHtml(message)}</p></div></div>
+    </article>
+  `;
+}
+
+function renderAudienceSaturation(model = null, currency = "DKK") {
+  if (!model) {
+    return renderSaturationEmpty("Nothing stored yet. The nightly job builds this table at 03:10 UTC, and reading it costs no Meta quota.");
+  }
+  if (!model.available) {
+    return renderSaturationEmpty(model.unavailableReason || "No ad set delivered in the period.");
+  }
+
+  const rows = Array.isArray(model.adSets) ? model.adSets : [];
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  const labels = model.statusLabels || {};
+  const counts = model.statusCounts || {};
+  const thresholds = model.thresholds || {};
+  const days = Number(model.periodDays) || 14;
+  const summary = ["saturated", "not_converting", "saturating", "room"]
+    .filter((status) => counts[status] > 0)
+    .map((status) => `<span class="wp-status ${SATURATION_TONES[status]}">${escapeHtml(`${counts[status]} ${String(labels[status] || status).toLowerCase()}`)}</span>`)
+    .join("");
+
+  // Markets group the rows; they carry spend only, because reach does not add up.
+  const marketSections = (model.markets || []).map((market) => {
+    const marketRows = market.adSetIds.map((id) => byId.get(id)).filter((row) => row && row.status !== "insufficient");
+    if (!marketRows.length) return "";
+    return `
+      <section class="saturation-market">
+        <header>
+          <h4>${escapeHtml(market.label)}</h4>
+          <span>${escapeHtml(`${formatCurrency(market.spend, currency)} over ${days} days`)}</span>
+        </header>
+        ${renderSaturationTable(marketRows, currency, market.label)}
+      </section>
+    `;
+  }).join("");
+
+  const thin = rows.filter((row) => row.status === "insufficient");
+  const thinSpend = thin.reduce((sum, row) => sum + (Number(row.current?.spend) || 0), 0);
+  const rules = [
+    `Saturated: under ${saturationShare(thresholds.saturatedNewShare)} of the people reached are new, or under ${saturationShare(thresholds.saturatingNewShare)} and getting worse, or a fixed audience ${saturationShare(thresholds.saturatedAudienceShare)} reached in ${days} days.`,
+    `Saturating: under ${saturationShare(thresholds.saturatingNewShare)} new, or the new share fell ${Math.round((Number(thresholds.newShareDrop) || 0) * 100)} points or more, or each thousand new people cost ${saturationShare(thresholds.costPerThousandNewRise)} more than the ${days} days before.`,
+    `Reaches, does not convert: a conversion ad set that spent ${thresholds.notConvertingCostMultiple || 3}x the account's cost per new customer${model.accountCostPerNewCustomer ? ` (${formatCurrency(model.accountCostPerNewCustomer, currency)})` : ""} without one.`,
+    "The period after a launch is judged on its level only, because a launch is everyone-new by definition."
+  ].join(" ");
+
+  return `
+    <article class="card expansion-card saturation-card">
+      <div class="card-header">
+        <div>
+          <h3>How much of each audience is used up</h3>
+          <p class="field-hint">${escapeHtml(`Per ad set, ${saturationDateRange(model.current)} against ${saturationDateRange(model.previous)}. "New" means not reached by that ad set in the ${model.lookbackDays} days before. Results on Meta's incremental attribution. Built nightly; reading it costs no Meta quota.`)}</p>
+        </div>
+      </div>
+      ${summary ? `<div class="saturation-summary">${summary}</div>` : ""}
+      ${marketSections}
+      ${thin.length ? `
+        <details class="saturation-thin">
+          <summary>${escapeHtml(`${thin.length} ad sets with too little delivery to judge (${formatCurrency(thinSpend, currency)} in ${days} days)`)}</summary>
+          ${renderSaturationTable(thin, currency, "Too little delivery")}
+        </details>
+      ` : ""}
+      <div class="wp-card-footer saturation-rules">
+        <p><strong>How a status is set.</strong> ${escapeHtml(rules)}</p>
+        ${(model.notes || []).length ? `<ul>${model.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
+      </div>
+    </article>
+  `;
+}
+
+// The Expansion tab: how much of each audience is used up, then the conversion
+// campaigns' first-time reach series - the market split, the cost of reaching one
+// more person, whether new reach becomes customers, and the record of what the
+// measurement itself has done.
+export function renderExpansionView(model = null, visible = false, currency = "DKK", errorMessage = "", saturation = null) {
+  const host = document.getElementById("expansion-content");
+  if (!host) return;
 
   if (!visible) {
-    node.innerHTML = "";
+    host.innerHTML = "";
     return;
   }
+
+  // The saturation table leads the tab and stands on its own snapshot, so every
+  // state of the series below it (missing, empty, failed) still shows it.
+  const saturationHtml = renderAudienceSaturation(saturation, currency);
+  const node = {
+    set innerHTML(html) {
+      host.innerHTML = `${saturationHtml}${html}`;
+    }
+  };
 
   if (!model) {
     node.innerHTML = `
@@ -764,7 +962,7 @@ export function renderExpansionView(model = null, visible = false, currency = "D
     ${renderExpansionRestatements(model)}
   `;
 
-  bindExpansionTips(node);
+  bindExpansionTips(host);
 }
 
 function renderExpansionHeader(model, latest, likeForLike, anchorLabel, currency) {

@@ -5411,3 +5411,119 @@ input[type="file"] {
   font-size: var(--wp-text-xs);
   color: var(--wp-text-subtle);
 }
+
+/* ------------------------------------------------------------------------------
+   Audience saturation (Expansion tab): one row per ad set, grouped by market.
+   The status sits beside its reasons, because a verdict without its arithmetic
+   cannot be acted on. Secondary figures (previous period, audience names) are
+   stacked under the value in the subtle text colour rather than given columns.
+   ------------------------------------------------------------------------------ */
+.saturation-card {
+  margin-bottom: var(--wp-space-6);
+}
+
+.saturation-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2) var(--wp-space-4);
+  margin: 0 0 var(--wp-space-4);
+}
+
+.saturation-market + .saturation-market,
+.saturation-thin {
+  margin-top: var(--wp-space-6);
+}
+
+.saturation-market > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  margin-bottom: var(--wp-space-2);
+}
+
+.saturation-market > header h4 {
+  margin: 0;
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.saturation-market > header span {
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.saturation-table td {
+  vertical-align: top;
+}
+
+.saturation-table td small {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+  white-space: normal;
+}
+
+.saturation-table td small.is-low,
+.saturation-table td small.is-high {
+  color: var(--wp-warning-text);
+}
+
+.saturation-name {
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.saturation-name strong {
+  display: block;
+  overflow: hidden;
+  font-weight: var(--wp-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saturation-status {
+  min-width: 220px;
+  max-width: 340px;
+}
+
+.saturation-status ul {
+  margin: var(--wp-space-1) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--wp-text-2xs);
+  line-height: 1.45;
+  color: var(--wp-text-muted);
+}
+
+.saturation-audience {
+  min-width: 150px;
+  max-width: 240px;
+}
+
+.saturation-muted {
+  color: var(--wp-text-subtle);
+}
+
+.saturation-thin > summary {
+  cursor: pointer;
+  font-size: var(--wp-text-xs);
+  color: var(--wp-text-muted);
+}
+
+.saturation-thin[open] > summary {
+  margin-bottom: var(--wp-space-2);
+}
+
+.saturation-rules p,
+.saturation-rules ul {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.saturation-rules ul {
+  margin-top: var(--wp-space-2);
+  padding-left: 1.1em;
+}

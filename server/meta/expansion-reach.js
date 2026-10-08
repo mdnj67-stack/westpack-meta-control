@@ -1262,6 +1262,9 @@ async function syncExpansionReach({
 
 module.exports = {
   syncExpansionReach,
+  // Shared with the audience saturation job, which runs in the same nightly request.
+  createGraphReader,
+  readCustomerConversionTypes,
   readAdBreakdown,
   describeObjectiveMix,
   buildMonths,

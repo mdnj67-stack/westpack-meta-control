@@ -1,17 +1,19 @@
 const fs = require("fs");
 const path = require("path");
 
-// Two snapshots share this module's storage plumbing: the historical creative
-// intelligence the Content Agent reads, and the expansion reach series the Meta
-// dashboard renders. They are kept under separate keys rather than in one blob,
+// Three snapshots share this module's storage plumbing: the historical creative
+// intelligence the Content Agent reads, and the expansion reach series and the
+// audience saturation table the Meta dashboard renders. They are kept under separate keys rather than in one blob,
 // because each is written by its own nightly job and a shared value would make
 // one job's write clobber the other's.
 const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
 const EXPANSION_STORE_KEY = "westpack:meta-expansion-reach:v1";
+const SATURATION_STORE_KEY = "westpack:meta-audience-saturation:v1";
 
 const LOCAL_PATHS = {
   [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
-  [EXPANSION_STORE_KEY]: path.join(process.cwd(), "data", "meta-expansion-reach.json")
+  [EXPANSION_STORE_KEY]: path.join(process.cwd(), "data", "meta-expansion-reach.json"),
+  [SATURATION_STORE_KEY]: path.join(process.cwd(), "data", "meta-audience-saturation.json")
 };
 
 const volatileSnapshots = new Map();
@@ -76,11 +78,15 @@ const readHistoricalIntelligence = () => readSnapshot(HISTORICAL_STORE_KEY);
 const writeHistoricalIntelligence = (snapshot) => writeSnapshot(HISTORICAL_STORE_KEY, snapshot);
 const readExpansionReach = () => readSnapshot(EXPANSION_STORE_KEY);
 const writeExpansionReach = (snapshot) => writeSnapshot(EXPANSION_STORE_KEY, snapshot);
+const readAudienceSaturation = () => readSnapshot(SATURATION_STORE_KEY);
+const writeAudienceSaturation = (snapshot) => writeSnapshot(SATURATION_STORE_KEY, snapshot);
 
 module.exports = {
   getHistoricalStoreProfile,
   readHistoricalIntelligence,
   writeHistoricalIntelligence,
   readExpansionReach,
-  writeExpansionReach
+  writeExpansionReach,
+  readAudienceSaturation,
+  writeAudienceSaturation
 };

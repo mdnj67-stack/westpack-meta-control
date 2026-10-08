@@ -51,6 +51,7 @@ data/campaign-audit-log.json
 data/campaign-asset-library/
 data/klaviyo-subscriber-history.json
 data/meta-expansion-reach.json
+data/meta-audience-saturation.json
 data/meta-historical-intelligence.json
 data/campaign-learning-events.json
 .claude/worktrees/
