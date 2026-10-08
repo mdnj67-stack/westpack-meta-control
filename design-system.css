@@ -110,6 +110,13 @@
   --wp-danger-border: #eec9c5;
   --wp-danger-hover: #96291f;
 
+  /* Warning as a chart fill. --wp-warning is dark enough for text but sits ΔE 1.4
+     from --wp-danger under deuteranopia, so a red and an amber bar side by side
+     were one colour to a colourblind reader. This amber passes the dataviz palette
+     checks against danger and success; at 2.87:1 on white it must always sit
+     beside a printed value. */
+  --wp-chart-warning: #c98a1b;
+
   --wp-info: #2c5d99;
   --wp-info-text: #27527f;
   --wp-info-surface: #eaf0f8;
@@ -5526,4 +5533,221 @@ input[type="file"] {
 .saturation-rules ul {
   margin-top: var(--wp-space-2);
   padding-left: 1.1em;
+}
+
+/* Saturation meters. Each rule that can set a status is a meter with its line
+   drawn on it, so the cause of a status is where the bar sits. Only the measure
+   that tripped is coloured; the rest stay grey. Colour is never the only carrier:
+   each status has its own shape (circle, triangle, square, diamond) and label,
+   and every meter prints its value.
+   The amber fill was validated with the dataviz palette script against red and
+   green (CVD and normal-vision separation pass); at 2.87:1 on white it is below
+   3:1, so the printed values are the required relief. */
+.saturation-card {
+  --sat-danger: var(--wp-danger);
+  --sat-warning: var(--wp-chart-warning);
+  --sat-good: var(--wp-success);
+  --sat-neutral: var(--wp-grey-400);
+  --sat-track: var(--wp-grey-150);
+  --sat-line: var(--wp-grey-600);
+}
+
+.sat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+  color: var(--wp-text);
+}
+
+/* Status shapes in CSS: inline SVG is reserved for the shared chart builder. */
+.sat-icon {
+  display: inline-block;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  background: currentColor;
+}
+.sat-icon.is-room { border-radius: 50%; }
+.sat-icon.is-saturating { clip-path: polygon(50% 0, 100% 100%, 0 100%); width: 10px; }
+.sat-icon.is-saturated { border-radius: 1px; }
+.sat-icon.is-not_converting { transform: rotate(45deg) scale(0.85); }
+.sat-icon.is-insufficient { border: 1.5px solid currentColor; border-radius: 50%; background: transparent; }
+.sat-icon.is-room { color: var(--sat-good); }
+.sat-icon.is-saturating { color: var(--sat-warning); }
+.sat-icon.is-saturated,
+.sat-icon.is-not_converting { color: var(--sat-danger); }
+.sat-icon.is-insufficient { color: var(--wp-grey-500); }
+
+.sat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2) var(--wp-space-5);
+  margin: 0 0 var(--wp-space-4);
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-muted);
+}
+
+.sat-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sat-legend i { display: inline-block; flex: none; }
+.sat-legend-fill { width: 16px; height: 6px; border-radius: 0 3px 3px 0; background: var(--sat-neutral); }
+.sat-legend-fill.is-danger { background: var(--sat-danger); }
+.sat-legend-fill.is-warning { background: var(--sat-warning); margin-left: -2px; }
+.sat-legend-previous { width: 8px; height: 8px; border: 2px solid var(--wp-text); border-radius: 50%; background: var(--wp-surface); }
+.sat-legend-line { width: 0; height: 12px; border-left: 2px dashed var(--sat-line); }
+
+.sat-head,
+.sat-row {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.15fr) repeat(3, minmax(130px, 1fr)) minmax(120px, 0.8fr);
+  column-gap: var(--wp-space-5);
+}
+
+.sat-head {
+  padding: 0 0 var(--wp-space-2);
+  border-bottom: 1px solid var(--wp-border);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-semibold);
+  color: var(--wp-text);
+}
+
+.sat-head small {
+  display: block;
+  font-weight: var(--wp-weight-regular, 400);
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+.saturation-market + .saturation-market { margin-top: var(--wp-space-5); }
+
+.sat-rows { margin: 0; padding: 0; list-style: none; }
+
+.sat-row {
+  row-gap: var(--wp-space-2);
+  align-items: start;
+  padding: var(--wp-space-3) 0;
+  border-bottom: 1px solid var(--wp-border-subtle, var(--wp-grey-150));
+}
+
+.sat-name { min-width: 0; }
+.sat-name strong {
+  display: block;
+  overflow: hidden;
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sat-name small {
+  display: block;
+  margin: 1px 0 6px;
+  font-size: var(--wp-text-2xs);
+  color: var(--wp-text-subtle);
+}
+
+.sat-cell-label { display: none; }
+
+.sat-meter-track {
+  position: relative;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 4px;
+  background: var(--sat-track);
+}
+
+/* Square at the baseline, rounded at the data end. */
+.sat-meter-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0 4px 4px 0;
+  background: var(--sat-neutral);
+}
+
+.sat-meter.is-danger .sat-meter-fill { background: var(--sat-danger); }
+.sat-meter.is-warning .sat-meter-fill { background: var(--sat-warning); }
+
+/* Past the audience: the bar runs off the end rather than stopping at 100%. */
+.sat-meter-fill.is-overflow {
+  border-radius: 0;
+  -webkit-mask-image: linear-gradient(90deg, black 85%, transparent);
+  mask-image: linear-gradient(90deg, black 85%, transparent);
+}
+
+/* A rule's line. Dashed, because it is a threshold rather than a gridline. */
+.sat-meter-line {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 0;
+  border-left: 2px dashed var(--sat-line);
+  opacity: 0.55;
+}
+.sat-meter-line.is-strong { opacity: 1; }
+
+.sat-meter-previous {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border: 2px solid var(--wp-text);
+  border-radius: 50%;
+  background: var(--wp-surface);
+  transform: translateY(-50%);
+}
+
+.sat-meter-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  margin-top: 6px;
+  font-size: var(--wp-text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.sat-meter-value strong { font-weight: var(--wp-weight-semibold); color: var(--wp-text); }
+.sat-meter-value small,
+.sat-meter-overflow { font-size: var(--wp-text-2xs); color: var(--wp-text-muted); }
+.sat-meter-value small { flex-basis: 100%; }
+
+.sat-meter-empty {
+  margin: 4px 0 0;
+  font-size: var(--wp-text-2xs);
+  line-height: 1.4;
+  color: var(--wp-text-subtle);
+}
+
+.sat-results { display: grid; gap: 6px; }
+.sat-figure { display: block; font-size: var(--wp-text-xs); font-variant-numeric: tabular-nums; }
+.sat-figure strong { font-weight: var(--wp-weight-semibold); }
+.sat-figure small { display: block; font-size: var(--wp-text-2xs); color: var(--wp-text-subtle); }
+.sat-figure.is-flagged .sat-icon { margin-right: 4px; }
+
+.sat-why {
+  grid-column: 2 / -1;
+  font-size: var(--wp-text-2xs);
+  line-height: 1.45;
+  color: var(--wp-text-muted);
+}
+.sat-why p { margin: 0; }
+.sat-why strong { color: var(--wp-text); font-weight: var(--wp-weight-semibold); }
+.sat-why details summary { cursor: pointer; width: fit-content; color: var(--wp-text-subtle); }
+.sat-why ul { margin: 4px 0 0; padding-left: 1.1em; }
+
+.saturation-table-view { margin-top: var(--wp-space-5); }
+
+@media (max-width: 760px) {
+  .sat-head { display: none; }
+  .sat-row { grid-template-columns: 1fr; row-gap: var(--wp-space-3); }
+  .sat-cell-label {
+    display: block;
+    font-size: var(--wp-text-2xs);
+    font-weight: var(--wp-weight-medium);
+    color: var(--wp-text-muted);
+  }
+  .sat-results { grid-template-columns: 1fr 1fr; }
+  .sat-why { grid-column: 1; }
 }

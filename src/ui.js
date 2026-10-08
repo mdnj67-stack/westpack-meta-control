@@ -821,6 +821,190 @@ function renderSaturationEmpty(message) {
   `;
 }
 
+// --- The graphic view ---------------------------------------------------------
+//
+// Each rule that can set a status is drawn as a meter with its own line on it,
+// so the reason an ad set is saturated is where its bar sits, not a sentence.
+// Only the measure that tripped the status is coloured (status colour); the
+// others stay grey. Colour never carries the status alone: every status has its
+// own shape and its label, and every meter prints its value.
+// The shapes are drawn in CSS (.sat-icon): circle, triangle, square, diamond, ring.
+const SATURATION_SHAPES = {
+  room: "circle",
+  saturating: "triangle",
+  saturated: "square",
+  not_converting: "diamond",
+  insufficient: "ring"
+};
+
+function saturationIcon(status) {
+  return `<span class="sat-icon is-${escapeHtml(status)}" aria-hidden="true"></span>`;
+}
+
+function saturationStatusBadge(row) {
+  return `<span class="sat-status is-${escapeHtml(row.status)}">${saturationIcon(row.status)}${escapeHtml(row.statusLabel || row.status)}</span>`;
+}
+
+function clampPercent(value) {
+  return Math.max(0, Math.min(100, Number(value) || 0));
+}
+
+// tone: "" (grey), "danger" or "warning" - the measure that set the status.
+function saturationMeter({ value, max = 1, lines = [], previous = null, tone = "", label, valueText, note = "", overflow = "" }) {
+  const width = clampPercent((Number(value) / max) * 100);
+  const previousLeft = previous == null ? null : clampPercent((Number(previous) / max) * 100);
+  return `
+    <div class="sat-meter${tone ? ` is-${tone}` : ""}" role="img" aria-label="${escapeHtml(`${label}: ${valueText}${note ? `, ${note}` : ""}`)}" title="${escapeHtml(`${label}: ${valueText}${note ? ` · ${note}` : ""}`)}">
+      <div class="sat-meter-track">
+        <span class="sat-meter-fill${overflow ? " is-overflow" : ""}" style="width:${width}%"></span>
+        ${lines.map((line) => `<span class="sat-meter-line${line.strong ? " is-strong" : ""}" style="left:${clampPercent((line.at / max) * 100)}%"></span>`).join("")}
+        ${previousLeft == null ? "" : `<span class="sat-meter-previous" style="left:${previousLeft}%"></span>`}
+      </div>
+      <div class="sat-meter-value"><strong>${escapeHtml(valueText)}</strong>${overflow ? `<span class="sat-meter-overflow">${escapeHtml(overflow)}</span>` : ""}${note ? `<small>${escapeHtml(note)}</small>` : ""}</div>
+    </div>
+  `;
+}
+
+function causeTone(row, cause) {
+  if (!(row.causes || []).includes(cause)) return "";
+  return row.status === "saturating" ? "warning" : "danger";
+}
+
+function saturationNewShareCell(row, thresholds) {
+  const current = row.current || {};
+  const previous = row.previous || {};
+  const tone = causeTone(row, "newShare") || causeTone(row, "newShareTrend");
+  let note = "";
+  if (row.startedInPeriod) note = "started this period";
+  else if (row.previousWasLaunch) note = "launch before";
+  else if (row.comparable && previous.newShare != null) {
+    const points = Math.round((Number(current.newShare) - Number(previous.newShare)) * 100);
+    note = `was ${saturationShare(previous.newShare)} (${points >= 0 ? "+" : ""}${points} pts)`;
+  }
+  return saturationMeter({
+    value: current.newShare,
+    lines: [{ at: thresholds.saturatedNewShare ?? 0.25, strong: true }, { at: thresholds.saturatingNewShare ?? 0.4 }],
+    previous: row.comparable ? previous.newShare : null,
+    tone,
+    label: "New to ad set",
+    valueText: saturationShare(current.newShare),
+    note
+  });
+}
+
+function saturationAudienceMeterCell(row, thresholds) {
+  const audience = row.audience || {};
+  if (audience.kind !== "defined") {
+    return `<p class="sat-meter-empty">Broad: a whole population, nothing to use up</p>`;
+  }
+  if (audience.share == null) {
+    return `<p class="sat-meter-empty">No size estimate from Meta</p>`;
+  }
+  const names = audience.customAudiences || [];
+  const audienceName = names.length > 1 ? `${names.length} audiences` : (names[0] || "audience");
+  if (audience.beyondAudience) {
+    return saturationMeter({
+      value: 1,
+      lines: [{ at: thresholds.saturatedAudienceShare ?? 0.8, strong: true }],
+      label: "Audience used",
+      valueText: `${formatDecimal(audience.share, 1)}x`,
+      overflow: "beyond it",
+      note: `${audience.advantageAudience ? "Advantage+ audience" : "Lookalike expansion"} is on`
+    });
+  }
+  return saturationMeter({
+    value: audience.share,
+    lines: [{ at: thresholds.saturatedAudienceShare ?? 0.8, strong: true }],
+    tone: causeTone(row, "audience"),
+    label: "Audience used",
+    valueText: saturationShare(audience.share),
+    note: `of ${formatCompactNumber(audience.size)}${audience.shareApproximate ? " (approx.)" : ""} · ${audienceName}`
+  });
+}
+
+function saturationFrequencyCell(row, thresholds) {
+  const value = Number(row.current?.weeklyFrequency);
+  if (!Number.isFinite(value) || row.current?.weeklyFrequency == null) {
+    return `<p class="sat-meter-empty">--</p>`;
+  }
+  const awareness = row.objectiveGroup === "awareness";
+  const target = thresholds.awarenessWeeklyFrequencyTarget ?? 5;
+  return saturationMeter({
+    value,
+    max: 10,
+    lines: awareness ? [{ at: target, strong: true }] : [],
+    label: "Impressions per person per week",
+    valueText: formatDecimal(value, 1),
+    note: awareness
+      ? (row.frequency?.tone === "low" ? `below the ${target}/wk target` : row.frequency?.tone === "high" ? `above the ${target}/wk target` : `around the ${target}/wk target`)
+      : ""
+  });
+}
+
+function saturationResultsCell(row, currency) {
+  const current = row.current || {};
+  const spend = `<span class="sat-figure"><strong>${escapeHtml(formatCurrency(row.spendPerDay, currency))}</strong><small>per day</small></span>`;
+  if (row.objectiveGroup !== "conversion" || current.newCustomers == null) return spend;
+  const flagged = (row.causes || []).includes("customers");
+  return `${spend}<span class="sat-figure${flagged ? " is-flagged" : ""}">${flagged ? saturationIcon("not_converting") : ""}<strong>${escapeHtml(formatCompactNumber(current.newCustomers))}</strong><small>${escapeHtml(current.costPerNewCustomer != null ? `new customers · ${formatCurrency(current.costPerNewCustomer, currency)} each` : "new customers")}</small></span>`;
+}
+
+// The one sentence that says why, written from the measure that tripped. The full
+// list stays one click away.
+function saturationWhy(row) {
+  const reasons = row.reasons || [];
+  if (!reasons.length) return "";
+  const costReason = (row.causes || []).includes("costTrend")
+    ? reasons.find((reason) => /cost .* more per thousand/i.test(reason))
+    : "";
+  const lead = row.status === "room" ? "" : reasons[0];
+  const rest = reasons.filter((reason) => reason !== lead);
+  return `
+    <div class="sat-why">
+      ${lead ? `<p><strong>Why:</strong> ${escapeHtml(lead)}${costReason && costReason !== lead ? `. ${escapeHtml(costReason)}` : ""}</p>` : ""}
+      ${rest.length ? `<details><summary>${lead ? "More" : "Notes"}</summary><ul>${rest.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul></details>` : ""}
+    </div>
+  `;
+}
+
+function renderSaturationGraphicRow(row, thresholds, currency) {
+  const status = row.effectiveStatus && row.effectiveStatus !== "ACTIVE"
+    ? ` · ${row.effectiveStatus.toLowerCase().replace(/_/g, " ")}`
+    : "";
+  return `
+    <li class="sat-row is-${escapeHtml(row.status)}">
+      <div class="sat-name">
+        <strong title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</strong>
+        <small>${escapeHtml(`${row.campaignName} · ${resolveObjectiveGroupLabel(row.objectiveGroup)}${status}`)}</small>
+        ${saturationStatusBadge(row)}
+      </div>
+      <div class="sat-cell"><span class="sat-cell-label">New to ad set</span>${saturationNewShareCell(row, thresholds)}</div>
+      <div class="sat-cell"><span class="sat-cell-label">Audience used</span>${saturationAudienceMeterCell(row, thresholds)}</div>
+      <div class="sat-cell"><span class="sat-cell-label">Frequency / week</span>${saturationFrequencyCell(row, thresholds)}</div>
+      <div class="sat-cell sat-results">${saturationResultsCell(row, currency)}</div>
+      ${saturationWhy(row)}
+    </li>
+  `;
+}
+
+function renderSaturationLegend(thresholds) {
+  return `
+    <div class="sat-legend" aria-label="How to read the meters">
+      <span><i class="sat-legend-fill"></i>Last 14 days</span>
+      <span><i class="sat-legend-previous"></i>14 days before</span>
+      <span><i class="sat-legend-line"></i>Where the rule trips</span>
+      <span><i class="sat-legend-fill is-danger"></i><i class="sat-legend-fill is-warning"></i>The measure that set the status</span>
+    </div>
+    <div class="sat-head" aria-hidden="true">
+      <span>Ad set</span>
+      <span>New to ad set <small>${escapeHtml(`saturated under ${saturationShare(thresholds.saturatedNewShare)}, saturating under ${saturationShare(thresholds.saturatingNewShare)}`)}</small></span>
+      <span>Audience used <small>${escapeHtml(`saturated at ${saturationShare(thresholds.saturatedAudienceShare)} in 14 days`)}</small></span>
+      <span>Frequency / week <small>${escapeHtml(`awareness target ${thresholds.awarenessWeeklyFrequencyTarget ?? 5}`)}</small></span>
+      <span>Spend and result</span>
+    </div>
+  `;
+}
+
 function renderAudienceSaturation(model = null, currency = "DKK") {
   if (!model) {
     return renderSaturationEmpty("Nothing stored yet. The nightly job builds this table at 03:10 UTC, and reading it costs no Meta quota.");
@@ -837,20 +1021,23 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
   const days = Number(model.periodDays) || 14;
   const summary = ["saturated", "not_converting", "saturating", "room"]
     .filter((status) => counts[status] > 0)
-    .map((status) => `<span class="wp-status ${SATURATION_TONES[status]}">${escapeHtml(`${counts[status]} ${String(labels[status] || status).toLowerCase()}`)}</span>`)
+    .map((status) => `<span class="sat-status is-${status}">${saturationIcon(status)}${escapeHtml(`${counts[status]} ${String(labels[status] || status).toLowerCase()}`)}</span>`)
     .join("");
 
   // Markets group the rows; they carry spend only, because reach does not add up.
+  // Inside a market the rows keep the server's order: worst status first.
+  const judged = [];
   const marketSections = (model.markets || []).map((market) => {
     const marketRows = market.adSetIds.map((id) => byId.get(id)).filter((row) => row && row.status !== "insufficient");
     if (!marketRows.length) return "";
+    judged.push(...marketRows);
     return `
       <section class="saturation-market">
         <header>
           <h4>${escapeHtml(market.label)}</h4>
           <span>${escapeHtml(`${formatCurrency(market.spend, currency)} over ${days} days`)}</span>
         </header>
-        ${renderSaturationTable(marketRows, currency, market.label)}
+        <ul class="sat-rows">${marketRows.map((row) => renderSaturationGraphicRow(row, thresholds, currency)).join("")}</ul>
       </section>
     `;
   }).join("");
@@ -873,7 +1060,12 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
         </div>
       </div>
       ${summary ? `<div class="saturation-summary">${summary}</div>` : ""}
+      ${renderSaturationLegend(thresholds)}
       ${marketSections}
+      <details class="saturation-thin saturation-table-view">
+        <summary>Show every figure as a table</summary>
+        ${renderSaturationTable(judged, currency, "Every ad set's figures")}
+      </details>
       ${thin.length ? `
         <details class="saturation-thin">
           <summary>${escapeHtml(`${thin.length} ad set${thin.length === 1 ? "" : "s"} with too little delivery to judge (${formatCurrency(thinSpend, currency)} in ${days} days)`)}</summary>

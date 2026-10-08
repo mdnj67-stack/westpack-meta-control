@@ -434,6 +434,14 @@ series (which stays conversion-only and says so).
 - **"Reaches, does not convert"** needs 3x the account's own cost per new customer spent
   with none (about a 5% chance by Poisson if the ad set performed like the account), not a
   fixed amount. Awareness rows are judged on their 5-a-week frequency target instead.
+- **It is drawn as meters, not a table** (2026-10-08, at the user's request: "mere graf
+  baseret ... hvad er det der gør at man fx er saturated"). Each rule that can set a status
+  - new share, audience used, weekly frequency - is a meter with its threshold line drawn
+  on it, and only the measure that tripped is coloured; the classifier returns that as
+  `causes`. Status is never colour alone: each has a CSS shape (circle, triangle, square,
+  diamond) and its label. The table stays behind "Show every figure as a table".
+  `--wp-warning` is ΔE 1.4 from `--wp-danger` under deuteranopia, so chart fills use
+  `--wp-chart-warning` (#c98a1b), validated with the dataviz palette script.
 - Every status ships with its reasons, and the thresholds are printed under the table.
   Ad sets under 1,000 people or 500 kr. in the period are folded away; most are paused
   ad sets still spending a few kroner.

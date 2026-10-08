@@ -211,6 +211,34 @@ test("'does not convert' is measured against the account's own cost per new cust
   assert.equal(classifySaturation({ ...base, current: { ...base.current, spend: 7000 }, objectiveGroup: "awareness", accountCostPerNewCustomer: 2233.58 }).status, "room");
 });
 
+test("every status names the measures that set it, so the view can colour only those", () => {
+  const audience = classifySaturation({
+    current: { reach: 175881, spend: 4699, newShare: 0.5675, costPerThousandNew: 47.08 },
+    previous: { reach: 150000, spend: 4000, newShare: 1, reachBefore: 0 },
+    audienceShare: 0.8499,
+    objectiveGroup: "awareness"
+  });
+  assert.deepEqual(audience.causes, ["audience"]);
+
+  const trend = classifySaturation({
+    current: { reach: 15216, spend: 2220, newShare: 0.4845, costPerThousandNew: 301.18 },
+    previous: { reach: 20000, spend: 2400, newShare: 0.6784, costPerThousandNew: 277.91, reachBefore: 15000 },
+    objectiveGroup: "leads"
+  });
+  assert.equal(trend.status, "saturating");
+  assert.deepEqual(trend.causes, ["newShareTrend"]);
+  assert.equal(trend.comparable, true);
+
+  const room = classifySaturation({
+    current: { reach: 122397, spend: 15339, newShare: 0.6, costPerThousandNew: 208, newCustomers: 1 },
+    previous: { reach: 200000, spend: 13000, newShare: 1, reachBefore: 0 },
+    objectiveGroup: "conversion",
+    accountCostPerNewCustomer: 2233.58
+  });
+  assert.deepEqual(room.causes, []);
+  assert.equal(room.previousWasLaunch, true);
+});
+
 test("too little delivery is set aside rather than judged", () => {
   const result = classifySaturation({
     current: { reach: 3729, spend: 259, newShare: 0.1368 },
@@ -294,7 +322,13 @@ test("the table is read on the free status call and built by the nightly sync, o
   assert.match(handler, /String\(req\.query\?\.saturation \|\| ""\)\.toLowerCase\(\) === "sync"/);
 });
 
-test("the Expansion tab leads with the table, whatever state the series below it is in", () => {
+test("the Expansion tab leads with the meters, whatever state the series below it is in", () => {
+  // Each rule is a meter with its line on it; only the measure that tripped is
+  // coloured, and colour is never alone: each status has its own shape and label.
+  const uiSource = readFileSync(join(root, "src", "ui.js"), "utf8");
+  assert.match(uiSource, /function causeTone\(row, cause\)/);
+  assert.match(uiSource, /const SATURATION_SHAPES = \{/);
+  assert.match(uiSource, /<summary>Show every figure as a table<\/summary>/, "the table view stays as the accessible twin");
   const ui = readFileSync(join(root, "src", "ui.js"), "utf8");
   const app = readFileSync(join(root, "app.js"), "utf8");
   assert.match(ui, /export function renderExpansionView\(model = null, visible = false, currency = "DKK", errorMessage = "", saturation = null\)/);

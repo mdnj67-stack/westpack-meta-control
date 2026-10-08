@@ -238,7 +238,7 @@ function classifySaturation({
 
   if (current.reach < t.minimumReach || current.spend < t.minimumSpend) {
     reasons.push(`Under ${t.minimumReach.toLocaleString("en")} people or ${t.minimumSpend} kr. in the last ${PERIOD_DAYS} days.`);
-    return { status: "insufficient", reasons };
+    return { status: "insufficient", reasons, causes: [], comparable: false };
   }
 
   // A launch period is everyone-new by construction, so the next period always
@@ -266,13 +266,23 @@ function classifySaturation({
     : "";
   const startedInPeriod = !previous || (previous.reach === 0 && current.newShare === 1);
   const movingWrong = Boolean(dropText || costText);
+  // Which rule tripped, so the view can colour the measure that caused the status
+  // and leave the others grey. Order is the order the reasons are written in.
+  const lowShare = current.newShare != null && current.newShare < t.saturatingNewShare;
+  const trendCauses = [dropText ? "newShareTrend" : "", costText ? "costTrend" : ""].filter(Boolean);
+  const shared = { comparable: Boolean(comparable), previousWasLaunch };
 
   const saturated = Boolean(audienceText)
     || (current.newShare != null && current.newShare < t.saturatedNewShare)
     || (current.newShare != null && current.newShare < t.saturatingNewShare && movingWrong);
   if (saturated) {
     reasons.push(...[audienceText, shareText, dropText, costText].filter(Boolean));
-    return { status: "saturated", reasons };
+    const causes = [
+      audienceText ? "audience" : "",
+      (current.newShare != null && current.newShare < t.saturatedNewShare) || (lowShare && movingWrong) ? "newShare" : "",
+      ...trendCauses
+    ].filter(Boolean);
+    return { status: "saturated", reasons, causes, ...shared };
   }
 
   const notConvertingSpend = accountCostPerNewCustomer > 0
@@ -285,18 +295,18 @@ function classifySaturation({
     && current.spend >= notConvertingSpend) {
     reasons.push(`${Math.round(current.spend).toLocaleString("en")} kr. spent and no new customer in the last ${PERIOD_DAYS} days, over ${t.notConvertingCostMultiple}x the account's cost per new customer`);
     if (shareText) reasons.push(`${shareText}, so reach is not the limit`);
-    return { status: "not_converting", reasons };
+    return { status: "not_converting", reasons, causes: ["customers"], ...shared };
   }
 
   if (movingWrong || (current.newShare != null && current.newShare < t.saturatingNewShare)) {
     reasons.push(...[shareText, dropText, costText].filter(Boolean));
     if (previousWasLaunch) reasons.push(`The ${PERIOD_DAYS} days before were its launch, so it is judged on level only`);
-    return { status: "saturating", reasons };
+    return { status: "saturating", reasons, causes: [lowShare ? "newShare" : "", ...trendCauses].filter(Boolean), ...shared };
   }
 
   if (startedInPeriod) {
     reasons.push(`Started in this period, so everyone is new. A trend shows after the next ${PERIOD_DAYS} days`);
-    return { status: "room", reasons, startedInPeriod: true };
+    return { status: "room", reasons, causes: [], startedInPeriod: true, ...shared };
   }
   if (shareText) reasons.push(shareText);
   if (previousWasLaunch) {
@@ -304,7 +314,7 @@ function classifySaturation({
   } else if (!comparable) {
     reasons.push(`Too little delivery in the previous ${PERIOD_DAYS} days to compare against`);
   }
-  return { status: "room", reasons };
+  return { status: "room", reasons, causes: [], ...shared };
 }
 
 // Awareness is judged against its own frequency target as well: high frequency
@@ -339,7 +349,7 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
   const audienceShareSinceLookback = audience.kind === "defined" && size ? round(throughReach / size, 4) : null;
 
   const shareApproximate = audience.kind === "defined" && audience.expansionAllowed;
-  const { status, reasons } = classifySaturation({
+  const { status, reasons, causes = [], comparable = false, previousWasLaunch = false, startedInPeriod = false } = classifySaturation({
     current,
     previous,
     audienceShare,
@@ -378,6 +388,10 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
     status,
     statusLabel: STATUS_LABELS[status],
     reasons,
+    causes,
+    comparable,
+    previousWasLaunch,
+    startedInPeriod,
     frequency: describeFrequency(current, objectiveGroup)
   };
 }
