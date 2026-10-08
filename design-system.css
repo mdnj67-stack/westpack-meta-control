@@ -5570,11 +5570,13 @@ input[type="file"] {
   background: currentColor;
 }
 .sat-icon.is-room { border-radius: 50%; }
+.sat-icon.is-covered { clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); width: 10px; }
 .sat-icon.is-saturating { clip-path: polygon(50% 0, 100% 100%, 0 100%); width: 10px; }
 .sat-icon.is-saturated { border-radius: 1px; }
 .sat-icon.is-not_converting { transform: rotate(45deg) scale(0.85); }
 .sat-icon.is-insufficient { border: 1.5px solid currentColor; border-radius: 50%; background: transparent; }
-.sat-icon.is-room { color: var(--sat-good); }
+.sat-icon.is-room,
+.sat-icon.is-covered { color: var(--sat-good); }
 .sat-icon.is-saturating { color: var(--sat-warning); }
 .sat-icon.is-saturated,
 .sat-icon.is-not_converting { color: var(--sat-danger); }
@@ -5594,6 +5596,7 @@ input[type="file"] {
 .sat-legend-fill { width: 16px; height: 6px; border-radius: 0 3px 3px 0; background: var(--sat-neutral); }
 .sat-legend-fill.is-danger { background: var(--sat-danger); }
 .sat-legend-fill.is-warning { background: var(--sat-warning); margin-left: -2px; }
+.sat-legend-fill.is-good { background: var(--sat-good); margin-left: -2px; }
 .sat-legend-previous { width: 8px; height: 8px; border: 2px solid var(--wp-text); border-radius: 50%; background: var(--wp-surface); }
 .sat-legend-line { width: 0; height: 12px; border-left: 2px dashed var(--sat-line); }
 
@@ -5668,6 +5671,7 @@ input[type="file"] {
 
 .sat-meter.is-danger .sat-meter-fill { background: var(--sat-danger); }
 .sat-meter.is-warning .sat-meter-fill { background: var(--sat-warning); }
+.sat-meter.is-good .sat-meter-fill { background: var(--sat-good); }
 
 /* Past the audience: the bar runs off the end rather than stopping at 100%. */
 .sat-meter-fill.is-overflow {

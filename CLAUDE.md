@@ -434,6 +434,14 @@ series (which stays conversion-only and says so).
 - **"Reaches, does not convert"** needs 3x the account's own cost per new customer spent
   with none (about a 5% chance by Poisson if the ad set performed like the account), not a
   fixed amount. Awareness rows are judged on their 5-a-week frequency target instead.
+- **Awareness is judged on repetition, not on new people.** The user's correction
+  (2026-10-08): LAL - EU read "saturated" at 84% of its audience while each person saw
+  the ads 1.6 times a week, against the 5-a-week target in
+  `brand-awareness-needs-real-frequency`. Coverage plus a low new share is the plan for
+  awareness. So an awareness ad set is `saturated` only when covered **and** at or past
+  the frequency target; covered below it is `covered` ("Covered, room for frequency",
+  with an estimate of the daily spend that would reach the target at today's cost per
+  impression); and below the target a falling new share is never "saturating".
 - **It is drawn as meters, not a table** (2026-10-08, at the user's request: "mere graf
   baseret ... hvad er det der gør at man fx er saturated"). Each rule that can set a status
   - new share, audience used, weekly frequency - is a meter with its threshold line drawn

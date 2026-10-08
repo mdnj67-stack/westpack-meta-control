@@ -143,17 +143,56 @@ test("a falling new share or a rising cost of new people against an established 
   assert.ok(result.reasons.some((reason) => /fell 19 points on the 14 days before/.test(reason)));
 });
 
-test("a fixed audience reached 80% in one period is used up", () => {
-  // LAL - EU, lookalike expansion off: 175,881 of an estimated ~207,000.
+test("a fixed audience reached 80% in one period is used up, for an ad set whose job is new people", () => {
   const result = classifySaturation({
-    current: { reach: 175881, spend: 4699, newShare: 0.5675, costPerThousandNew: 47.08 },
+    current: { reach: 175881, spend: 4699, newShare: 0.5675, costPerThousandNew: 47.08, weeklyFrequency: 1.6 },
     previous: { reach: 150000, spend: 4000, newShare: 1, reachBefore: 0 },
     audienceShare: 0.8499,
     audienceShareApproximate: false,
-    objectiveGroup: "awareness"
+    objectiveGroup: "leads"
   });
   assert.equal(result.status, "saturated");
   assert.match(result.reasons[0], /Reached 85% of the audience/);
+});
+
+test("a covered awareness audience below the frequency target has room for repetition, not saturation", () => {
+  // LAL - EU on 2026-10-08: 84% of its lookalike reached in 14 days, but each person
+  // saw the ads 1.6 times a week against the 5-a-week target. The user's question:
+  // "why is this saturated when they do not see the ads five times a week?" It was
+  // not - more budget there buys exactly the repetition awareness is for.
+  const result = classifySaturation({
+    current: { reach: 172945, spend: 4662, newShare: 0.54, costPerThousandNew: 50, weeklyFrequency: 1.6 },
+    previous: { reach: 150000, spend: 4000, newShare: 1, reachBefore: 0 },
+    audienceShare: 0.84,
+    audienceShareApproximate: false,
+    objectiveGroup: "awareness"
+  });
+  assert.equal(result.status, "covered");
+  assert.deepEqual(result.causes, ["frequency"]);
+  assert.match(result.reasons[0], /Reached 84% of the audience.*1\.6 a week against the 5-a-week target/);
+  // 333 kr. a day at 1.6 a week -> about 1,040 kr. a day for 5 at the same cost.
+  assert.equal(result.frequencyBudgetPerDay, Math.round((4662 / 14) * (5 / 1.6)));
+});
+
+test("a covered awareness audience at the frequency target is saturated", () => {
+  const result = classifySaturation({
+    current: { reach: 172945, spend: 15000, newShare: 0.3, costPerThousandNew: 90, weeklyFrequency: 5.4 },
+    previous: { reach: 170000, spend: 14000, newShare: 0.35, reachBefore: 160000 },
+    audienceShare: 0.84,
+    objectiveGroup: "awareness"
+  });
+  assert.equal(result.status, "saturated");
+  assert.deepEqual(result.causes, ["audience", "frequency"]);
+});
+
+test("below the frequency target, an awareness ad set's falling new share is repetition building, not saturation", () => {
+  const result = classifySaturation({
+    current: { reach: 400000, spend: 9000, newShare: 0.45, costPerThousandNew: 40, weeklyFrequency: 2.1 },
+    previous: { reach: 380000, spend: 9000, newShare: 0.7, costPerThousandNew: 30, reachBefore: 300000 },
+    objectiveGroup: "awareness"
+  });
+  assert.equal(result.status, "room");
+  assert.ok(result.reasons.some((reason) => /room for reach and repetition/.test(reason)));
 });
 
 test("an audience Meta may go beyond is never read as used up, and spilling past it is said plainly", () => {

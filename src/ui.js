@@ -706,6 +706,7 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
 // a few kroner, and they would bury the ones that matter.
 const SATURATION_TONES = {
   room: "is-success",
+  covered: "is-success",
   saturating: "is-warning",
   saturated: "is-danger",
   not_converting: "is-danger",
@@ -828,9 +829,10 @@ function renderSaturationEmpty(message) {
 // Only the measure that tripped the status is coloured (status colour); the
 // others stay grey. Colour never carries the status alone: every status has its
 // own shape and its label, and every meter prints its value.
-// The shapes are drawn in CSS (.sat-icon): circle, triangle, square, diamond, ring.
+// The shapes are drawn in CSS (.sat-icon): circle, hexagon, triangle, square, diamond, ring.
 const SATURATION_SHAPES = {
   room: "circle",
+  covered: "hexagon",
   saturating: "triangle",
   saturated: "square",
   not_converting: "diamond",
@@ -867,6 +869,9 @@ function saturationMeter({ value, max = 1, lines = [], previous = null, tone = "
 
 function causeTone(row, cause) {
   if (!(row.causes || []).includes(cause)) return "";
+  // A covered awareness audience below its frequency target is an opening, not a
+  // problem: the measure that says so is drawn in the good colour.
+  if (row.status === "covered") return "good";
   return row.status === "saturating" ? "warning" : "danger";
 }
 
@@ -933,6 +938,7 @@ function saturationFrequencyCell(row, thresholds) {
     value,
     max: 10,
     lines: awareness ? [{ at: target, strong: true }] : [],
+    tone: causeTone(row, "frequency"),
     label: "Impressions per person per week",
     valueText: formatDecimal(value, 1),
     note: awareness
@@ -944,6 +950,9 @@ function saturationFrequencyCell(row, thresholds) {
 function saturationResultsCell(row, currency) {
   const current = row.current || {};
   const spend = `<span class="sat-figure"><strong>${escapeHtml(formatCurrency(row.spendPerDay, currency))}</strong><small>per day</small></span>`;
+  if (row.status === "covered" && row.frequencyBudgetPerDay) {
+    return `${spend}<span class="sat-figure"><strong>${escapeHtml(`≈ ${formatCurrency(row.frequencyBudgetPerDay, currency)}`)}</strong><small>per day for 5 a week, an estimate</small></span>`;
+  }
   if (row.objectiveGroup !== "conversion" || current.newCustomers == null) return spend;
   const flagged = (row.causes || []).includes("customers");
   return `${spend}<span class="sat-figure${flagged ? " is-flagged" : ""}">${flagged ? saturationIcon("not_converting") : ""}<strong>${escapeHtml(formatCompactNumber(current.newCustomers))}</strong><small>${escapeHtml(current.costPerNewCustomer != null ? `new customers · ${formatCurrency(current.costPerNewCustomer, currency)} each` : "new customers")}</small></span>`;
@@ -993,13 +1002,13 @@ function renderSaturationLegend(thresholds) {
       <span><i class="sat-legend-fill"></i>Last 14 days</span>
       <span><i class="sat-legend-previous"></i>14 days before</span>
       <span><i class="sat-legend-line"></i>Where the rule trips</span>
-      <span><i class="sat-legend-fill is-danger"></i><i class="sat-legend-fill is-warning"></i>The measure that set the status</span>
+      <span><i class="sat-legend-fill is-danger"></i><i class="sat-legend-fill is-warning"></i><i class="sat-legend-fill is-good"></i>The measure that set the status</span>
     </div>
     <div class="sat-head" aria-hidden="true">
       <span>Ad set</span>
       <span>New to ad set <small>${escapeHtml(`saturated under ${saturationShare(thresholds.saturatedNewShare)}, saturating under ${saturationShare(thresholds.saturatingNewShare)}`)}</small></span>
       <span>Audience used <small>${escapeHtml(`saturated at ${saturationShare(thresholds.saturatedAudienceShare)} in 14 days`)}</small></span>
-      <span>Frequency / week <small>${escapeHtml(`awareness target ${thresholds.awarenessWeeklyFrequencyTarget ?? 5}`)}</small></span>
+      <span>Frequency / week <small>${escapeHtml(`awareness target ${thresholds.awarenessWeeklyFrequencyTarget ?? 5}; decides awareness`)}</small></span>
       <span>Spend and result</span>
     </div>
   `;
@@ -1019,7 +1028,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
   const counts = model.statusCounts || {};
   const thresholds = model.thresholds || {};
   const days = Number(model.periodDays) || 14;
-  const summary = ["saturated", "not_converting", "saturating", "room"]
+  const summary = ["saturated", "not_converting", "saturating", "covered", "room"]
     .filter((status) => counts[status] > 0)
     .map((status) => `<span class="sat-status is-${status}">${saturationIcon(status)}${escapeHtml(`${counts[status]} ${String(labels[status] || status).toLowerCase()}`)}</span>`)
     .join("");
@@ -1048,6 +1057,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
     `Saturated: under ${saturationShare(thresholds.saturatedNewShare)} of the people reached are new, or under ${saturationShare(thresholds.saturatingNewShare)} and getting worse, or a fixed audience ${saturationShare(thresholds.saturatedAudienceShare)} reached in ${days} days.`,
     `Saturating: under ${saturationShare(thresholds.saturatingNewShare)} new, or the new share fell ${Math.round((Number(thresholds.newShareDrop) || 0) * 100)} points or more, or each thousand new people cost ${saturationShare(thresholds.costPerThousandNewRise)} more than the ${days} days before.`,
     `Reaches, does not convert: a conversion ad set that spent ${thresholds.notConvertingCostMultiple || 3}x the account's cost per new customer${model.accountCostPerNewCustomer ? ` (${formatCurrency(model.accountCostPerNewCustomer, currency)})` : ""} without one.`,
+    `Awareness is judged on its own job: repetition. A covered audience below the ${thresholds.awarenessWeeklyFrequencyTarget ?? 5}-a-week target is "covered, room for frequency" - more budget buys the repetition you want - and only covered at or past the target is saturated.`,
     "The period after a launch is judged on its level only, because a launch is everyone-new by definition."
   ].join(" ");
 

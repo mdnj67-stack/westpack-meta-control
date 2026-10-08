@@ -79,9 +79,10 @@ const THRESHOLDS = {
   awarenessWeeklyFrequencyHigh: 8
 };
 
-const STATUS_ORDER = ["saturated", "not_converting", "saturating", "room", "insufficient"];
+const STATUS_ORDER = ["saturated", "not_converting", "saturating", "covered", "room", "insufficient"];
 const STATUS_LABELS = {
   room: "Room to grow",
+  covered: "Covered, room for frequency",
   saturating: "Saturating",
   saturated: "Saturated",
   not_converting: "Reaches, does not convert",
@@ -272,6 +273,50 @@ function classifySaturation({
   const trendCauses = [dropText ? "newShareTrend" : "", costText ? "costTrend" : ""].filter(Boolean);
   const shared = { comparable: Boolean(comparable), previousWasLaunch };
 
+  // Awareness is the opposite job. Its goal is the same people seeing Westpack
+  // again and again - about five times a week - so a covered audience and a low
+  // share of new people are the plan, not exhaustion. LAL - EU on 2026-10-08 read
+  // "saturated" at 84% of its audience while each person saw the ads 1.6 times a
+  // week: more budget there buys exactly the repetition the team wants. An
+  // awareness ad set is only saturated once it is covered AND at the frequency
+  // target, because only then does another krone buy repetition past the target.
+  const frequency = current.weeklyFrequency;
+  if (objectiveGroup === "awareness" && frequency != null) {
+    const target = t.awarenessWeeklyFrequencyTarget;
+    const covered = Boolean(audienceText) || (current.newShare != null && current.newShare < t.saturatingNewShare);
+    const coverText = audienceText || shareText;
+    const coverCause = audienceText ? "audience" : "newShare";
+    if (covered && frequency >= target) {
+      reasons.push(coverText, `${frequency.toFixed(1)} impressions per person a week, at or past the ${target}-a-week target: more budget only adds repetition beyond it`);
+      return { status: "saturated", reasons, causes: [coverCause, "frequency"], ...shared };
+    }
+    if (covered) {
+      const neededPerDay = current.spend > 0 ? (current.spend / PERIOD_DAYS) * (target / frequency) : null;
+      reasons.push(
+        `${coverText}, at ${frequency.toFixed(1)} a week against the ${target}-a-week target`,
+        neededPerDay
+          ? `Reaching ${target} a week across the same people would take about ${Math.round(neededPerDay).toLocaleString("en")} kr. a day at today's cost per impression, an estimate`
+          : ""
+      );
+      return {
+        status: "covered",
+        reasons: reasons.filter(Boolean),
+        causes: ["frequency"],
+        frequencyBudgetPerDay: neededPerDay ? round(neededPerDay, 0) : null,
+        ...shared
+      };
+    }
+    // Below the target, a falling share of new people is repetition building up,
+    // which is what awareness is for. It is not read as saturating.
+    if (frequency < target) {
+      reasons.push(
+        startedInPeriod ? `Started in this period, so everyone is new` : shareText,
+        `${frequency.toFixed(1)} a week against the ${target}-a-week target, so there is room for reach and repetition`
+      );
+      return { status: "room", reasons: reasons.filter(Boolean), causes: [], startedInPeriod, ...shared };
+    }
+  }
+
   const saturated = Boolean(audienceText)
     || (current.newShare != null && current.newShare < t.saturatedNewShare)
     || (current.newShare != null && current.newShare < t.saturatingNewShare && movingWrong);
@@ -349,7 +394,7 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
   const audienceShareSinceLookback = audience.kind === "defined" && size ? round(throughReach / size, 4) : null;
 
   const shareApproximate = audience.kind === "defined" && audience.expansionAllowed;
-  const { status, reasons, causes = [], comparable = false, previousWasLaunch = false, startedInPeriod = false } = classifySaturation({
+  const { status, reasons, causes = [], comparable = false, previousWasLaunch = false, startedInPeriod = false, frequencyBudgetPerDay = null } = classifySaturation({
     current,
     previous,
     audienceShare,
@@ -389,6 +434,7 @@ function buildAdSetRow({ meta, rowsByRange, windows, actionTypes, estimate = nul
     statusLabel: STATUS_LABELS[status],
     reasons,
     causes,
+    frequencyBudgetPerDay,
     comparable,
     previousWasLaunch,
     startedInPeriod,
