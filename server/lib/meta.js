@@ -21,6 +21,67 @@ function isRateLimitMessage(message = "") {
     || /\bcode (4|17|32|613)\b/.test(text);
 }
 
+// Advantage+ creative features that let Meta write, translate, dub or generate what an ad says
+// or shows. Westpack's ads may only make claims the website states, and these features have been
+// seen inventing offers and delivery promises. A copied creative used to inherit whatever the
+// source had switched on, which is how translated market ads ended up with automatic translation.
+// Cosmetic features (brightness, crop, placement fit) are left as the source had them.
+const CLAIM_RISK_CREATIVE_FEATURES = new Set([
+  "text_translation",
+  "translate_voiceover",
+  "text_overlay_translation",
+  "image_text_translation",
+  "text_optimizations",
+  "text_generation",
+  "feed_caption_optimization",
+  "description_automation",
+  "enhance_cta",
+  "generate_cta",
+  "dynamic_cta_text",
+  "add_text_overlay",
+  "replace_media_text",
+  "text_extraction_for_headline",
+  "text_extraction_for_tap_target",
+  "show_summary",
+  "show_destination_blurbs",
+  "ads_with_benefits",
+  "enable_ncs_testimonials",
+  "biz_ai",
+  "image_background_gen",
+  "image_uncrop",
+  "video_uncrop",
+  "pac_genai_recomposition",
+  "music_generation",
+  "video_voiceover"
+]);
+
+// Turns the claim-risk features off on a copied degrees_of_freedom_spec. Only keys the source
+// already carries are touched, so no feature name is sent that Meta did not itself report for
+// that creative. standard_enhancements is a deprecated bundle that includes text rewriting; it is
+// dropped rather than echoed back.
+function sanitizeDegreesOfFreedomSpec(spec) {
+  let parsed = spec;
+  if (typeof parsed === "string") {
+    if (!parsed.trim()) return "";
+    try {
+      parsed = JSON.parse(parsed);
+    } catch (error) {
+      return "";
+    }
+  }
+  if (!parsed || typeof parsed !== "object") return "";
+  const features = parsed.creative_features_spec;
+  if (!features || typeof features !== "object") return parsed;
+  const cleaned = {};
+  for (const [name, setting] of Object.entries(features)) {
+    if (name === "standard_enhancements") continue;
+    cleaned[name] = CLAIM_RISK_CREATIVE_FEATURES.has(name)
+      ? { ...(setting || {}), enroll_status: "OPT_OUT" }
+      : setting;
+  }
+  return { ...parsed, creative_features_spec: cleaned };
+}
+
 function readCacheEntry(key = "", maxAgeMs = META_LOOKUP_CACHE_MAX_AGE_MS) {
   if (!key || !META_LOOKUP_CACHE.has(key)) {
     return null;
@@ -658,7 +719,7 @@ async function createAdCreative(accountId, accessToken, sourceCreative, preview,
         name: creativeName,
         object_story_spec: sanitizeStoryIdentitySpec(sourceCreative?.object_story_spec || {}),
         asset_feed_spec: assetFeedSpec,
-        degrees_of_freedom_spec: sourceCreative?.degrees_of_freedom_spec || "",
+        degrees_of_freedom_spec: sanitizeDegreesOfFreedomSpec(sourceCreative?.degrees_of_freedom_spec),
         url_tags: sourceCreative.url_tags || ""
       }
     });
@@ -974,7 +1035,7 @@ async function createAdCreativeWithAssetFeed(accountId, accessToken, options = {
       name: options.name,
       object_story_spec: options.objectStorySpec,
       asset_feed_spec: options.assetFeedSpec,
-      degrees_of_freedom_spec: options.degreesOfFreedomSpec || "",
+      degrees_of_freedom_spec: sanitizeDegreesOfFreedomSpec(options.degreesOfFreedomSpec),
       url_tags: options.urlTags || ""
     }
   });
@@ -985,6 +1046,8 @@ async function createAdCreativeWithAssetFeed(accountId, accessToken, options = {
 module.exports = {
   ensureAccountId,
   graphRequest,
+  sanitizeDegreesOfFreedomSpec,
+  CLAIM_RISK_CREATIVE_FEATURES,
   buildVideoAssetCustomizationRules,
   isRateLimitMessage,
   createAd,
