@@ -488,7 +488,8 @@ test("the Expansion tab leads with the meters, whatever state the series below i
   const app = readFileSync(join(root, "app.js"), "utf8");
   assert.match(ui, /export function renderExpansionView\(model = null, visible = false, currency = "DKK", errorMessage = "", saturation = null\)/);
   assert.match(ui, /host\.innerHTML = `\$\{saturationHtml\}\$\{html\}`;/);
-  assert.match(ui, /<details class="saturation-thin">/, "thin delivery is folded away");
+  // Every active ad set is drawn, thin delivery included; paused ones are counted, not shown.
+  assert.doesNotMatch(ui, /<details class="saturation-thin">/);
   assert.match(app, /appState\.metaAudienceSaturation = payload\?\.saturation \|\| null;/);
   assert.match(app, /metaExpansionReachError,\s*appState\.metaAudienceSaturation \|\| null/);
 });

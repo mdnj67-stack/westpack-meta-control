@@ -701,9 +701,8 @@ export function renderOverviewExpansionReach(model = null, visible = false, curr
 
 // How much of each audience is used up, one row per ad set, read from the nightly
 // snapshot (server/meta/audience-saturation.js). Every status carries the reasons
-// behind it, because a verdict without its arithmetic cannot be acted on. Ad sets
-// with too little delivery are folded away: most are paused ad sets still spending
-// a few kroner, and they would bury the ones that matter.
+// behind it, because a verdict without its arithmetic cannot be acted on. Only
+// active ad sets are shown, all of them; paused ones are counted, not drawn.
 const SATURATION_TONES = {
   room: "is-success",
   covered: "is-success",
@@ -886,11 +885,17 @@ function writeSaturationOverrides(overrides) {
 }
 
 // The table with whatever lines this viewer has set, reclassified by the shared rules.
+// Only ad sets Meta is running are shown. A paused ad set has nothing left to
+// decide about, and its last fortnight buried the ones that are still spending.
+function isActiveSaturationRow(row) {
+  return row?.effectiveStatus === "ACTIVE";
+}
+
 function applySaturationRules(model) {
   const rules = saturationRules();
   const overrides = readSaturationOverrides();
   const thresholds = { ...(rules?.DEFAULT_THRESHOLDS || {}), ...(model.thresholds || {}), ...overrides };
-  const rows = Array.isArray(model.adSets) ? model.adSets : [];
+  const rows = (Array.isArray(model.adSets) ? model.adSets : []).filter(isActiveSaturationRow);
   if (!rules) {
     return { rows, thresholds, counts: model.statusCounts || {}, overridden: false };
   }
@@ -1180,27 +1185,32 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
     .join("");
 
   // Markets group the rows; they carry spend only, because reach does not add up.
-  // Inside a market the rows keep the server's order: worst status first.
+  // Inside a market the rows keep the server's order: worst status first. Every
+  // active ad set is shown, including one with too little delivery to judge - it
+  // says so in its own status. The market's spend is summed from the rows shown,
+  // never taken from the snapshot, which also counts the paused ones.
   const judged = [];
   const marketSections = (model.markets || []).map((market) => {
     const marketRows = market.adSetIds.map((id) => byId.get(id))
-      .filter((row) => row && row.status !== "insufficient")
+      .filter(Boolean)
       .sort((left, right) => order.get(left.id) - order.get(right.id));
     if (!marketRows.length) return "";
     judged.push(...marketRows);
+    const marketSpend = marketRows.reduce((sum, row) => sum + (Number(row.current?.spend) || 0), 0);
     return `
       <section class="saturation-market">
         <header>
           <h4>${escapeHtml(market.label)}</h4>
-          <span>${escapeHtml(`${formatCurrency(market.spend, currency)} over ${days} days`)}</span>
+          <span>${escapeHtml(`${formatCurrency(marketSpend, currency)} over ${days} days`)}</span>
         </header>
         <ul class="sat-rows">${marketRows.map((row) => renderSaturationGraphicRow(row, thresholds, currency)).join("")}</ul>
       </section>
     `;
   }).join("");
 
-  const thin = rows.filter((row) => row.status === "insufficient");
-  const thinSpend = thin.reduce((sum, row) => sum + (Number(row.current?.spend) || 0), 0);
+  // What was left out is counted, so the spend above is never read as the account's.
+  const inactive = (Array.isArray(model.adSets) ? model.adSets : []).filter((row) => !isActiveSaturationRow(row));
+  const inactiveSpend = inactive.reduce((sum, row) => sum + (Number(row.current?.spend) || 0), 0);
   const rules = [
     `Saturated: under ${saturationShare(thresholds.saturatedNewShare)} of the people reached are new, or under ${saturationShare(thresholds.saturatingNewShare)} and getting worse, or a fixed audience ${saturationShare(thresholds.saturatedAudienceShare)} reached in ${days} days.`,
     `Saturating: under ${saturationShare(thresholds.saturatingNewShare)} new, or the new share fell ${Math.round((Number(thresholds.newShareDrop) || 0) * 100)} points or more, or each thousand new people cost ${saturationShare(thresholds.costPerThousandNewRise)} more than the ${days} days before.`,
@@ -1225,12 +1235,7 @@ function renderAudienceSaturation(model = null, currency = "DKK") {
         <summary>Show every figure as a table</summary>
         ${renderSaturationTable(judged, currency, "Every ad set's figures")}
       </details>
-      ${thin.length ? `
-        <details class="saturation-thin">
-          <summary>${escapeHtml(`${thin.length} ad set${thin.length === 1 ? "" : "s"} with too little delivery to judge (${formatCurrency(thinSpend, currency)} in ${days} days)`)}</summary>
-          ${renderSaturationTable(thin, currency, "Too little delivery")}
-        </details>
-      ` : ""}
+      ${inactive.length ? `<p class="field-hint">${escapeHtml(`Active ad sets only. ${inactive.length} paused or stopped ad set${inactive.length === 1 ? "" : "s"} that delivered in the period ${inactive.length === 1 ? "is" : "are"} left out (${formatCurrency(inactiveSpend, currency)} in ${days} days).`)}</p>` : ""}
       ${renderSaturationEditor(model.adjustable || saturationRules()?.ADJUSTABLE, thresholds, overridden)}
       <div class="wp-card-footer saturation-rules">
         <p><strong>How a status is set.</strong> ${escapeHtml(rules)}</p>

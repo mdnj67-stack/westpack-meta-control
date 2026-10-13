@@ -477,8 +477,14 @@ series (which stays conversion-only and says so).
   `--wp-warning` is ΔE 1.4 from `--wp-danger` under deuteranopia, so chart fills use
   `--wp-chart-warning` (#c98a1b), validated with the dataviz palette script.
 - Every status ships with its reasons, and the thresholds are printed under the table.
-  Ad sets under 1,000 people or 500 kr. in the period are folded away; most are paused
-  ad sets still spending a few kroner.
+- **Only active ad sets are shown, and every active one is** (2026-10-13, the user's
+  rule). The filter is `effective_status === "ACTIVE"` in the browser
+  (`isActiveSaturationRow`), so a paused ad set or one in a paused campaign drops out;
+  the snapshot still holds them. An active ad set under 1,000 people or 500 kr. is drawn
+  in its market with the "Too little delivery" status rather than folded away. A
+  market's spend is summed from the rows shown, never taken from the snapshot's
+  `market.spend`, which includes paused ones; what was left out is counted in one line.
+  An active ad set that delivered nothing in the period is not in the snapshot at all.
 - `tests/browser-files-parse.test.js` runs `node --check` on app.js and src/*.js. The
   pattern-matching tests pass on a file that does not parse, and a parse error in the
   browser stops the app before even the login form shows.

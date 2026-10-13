@@ -303,3 +303,18 @@ test("reach is named on screen as a diagnostic rather than a goal", () => {
   assert.match(ui, /ever possible customers|never a possible customer/, "the broad-targeting caveat is gone from the reach figure");
   assert.match(ui, /function renderExpansionCustomerCurve/);
 });
+
+test("the saturation view shows every active ad set and nothing else", () => {
+  // Paused ad sets still carry a fortnight of delivery in the snapshot, and they
+  // filled the view with rows nobody can act on. The rule: every row is an ad set
+  // Meta is running, and every active one is shown - small ones included, under
+  // their own "too little delivery" status rather than folded away.
+  assert.match(ui, /function isActiveSaturationRow\(row\) \{\s*return row\?\.effectiveStatus === "ACTIVE";/);
+  assert.match(ui, /model\.adSets : \[\]\)\.filter\(isActiveSaturationRow\)/);
+  assert.doesNotMatch(ui, /row\.status !== "insufficient"/);
+  // A market's spend covers the rows it shows, not the paused ones beside them.
+  assert.match(ui, /const marketSpend = marketRows\.reduce/);
+  assert.doesNotMatch(ui, /formatCurrency\(market\.spend, currency\)/);
+  // What was left out is said, with its spend.
+  assert.match(ui, /Active ad sets only\. \$\{inactive\.length\} paused or stopped ad set/);
+});
