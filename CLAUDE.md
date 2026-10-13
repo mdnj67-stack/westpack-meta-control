@@ -614,6 +614,32 @@ Checked and correct after the rebuild: all objectives map with no unclassified s
 `New_customer` and `Existing_customer` conversions resolve to exactly one each, and the
 dashboard's total spend now equals the account total to the krone.
 
+### What each part of the Meta setup is for (2026-10-13)
+
+The campaigns do different jobs, and each must be judged on its own job. Getting this wrong
+produces a confident "biggest inefficiency on the account" verdict that the user has
+explicitly rejected.
+
+- **Conv - 04 - EU - Standard is the profit engine.** One broad English ad set across Europe,
+  ~3,800 DKK/day from 13 Oct 2026, ~770 DKK per incremental new customer. This is where
+  Westpack makes money, and it is judged on cost per new customer and marginal cost of each
+  budget step (8-week windows; CPM-adjusted through Q4).
+- **Conv - 01 DE, 02 FR, 03 IT are a deliberate market-entry investment**, in the local
+  language, ~2,400 DKK/day each, ~4,000–7,000 DKK per incremental new customer. The user runs
+  them knowing they are less efficient: "Det handler om at komme ind på markedet. En
+  investering og forhåbentligt hopper de på." The EU campaign's profit funds them. Never
+  recommend cutting or merging them on cost-per-customer grounds, and never compare them with
+  the EU campaign as if they had the same job. Judge them as an investment instead: the trend
+  in Magento first-time buyers per market (all channels, not only Meta-attributed), repeat
+  purchases by customers acquired there, branded search per country, and the rolling 8-week
+  trend in Meta cost per new customer — against a budget envelope and checkpoints agreed in
+  advance. Repeat value by first-order market has never been measured; it is the number that
+  decides whether the investment pays back.
+- **BA - Reach (awareness, ~30% of spend) is a brand bet with no direct attribution.** It is
+  judged on reach/frequency in the audience, branded search and blended cost per new customer,
+  ideally via a pre-registered geo test — see `knowledge/meta-research/00-awareness-and-budget-split.md`.
+  Ad set budget sharing is on, which moves up to 20% of DE/UK/EU awareness budget to FR/IT.
+
 ### One number per fact, and one place for it
 
 The KPI strip and the stat cards beneath it described the same metrics and disagreed:
