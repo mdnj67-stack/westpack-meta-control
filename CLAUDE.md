@@ -980,6 +980,17 @@ copy about Westpack, rather than inventing USPs. Two claims that sound right and
 samples are **not** free (freight, plus a small charge per logo sample), and logo print is
 included only on jewellery boxes. Refresh with the two scripts in `tools/`.
 
+## Meta advertising research — `knowledge/meta-research/`
+
+Added 2026-10-13. Seven dated research reports (~30,000 words) on Meta advertising for Westpack's
+situation: awareness share and frequency, delivery/structure/bidding, creative, measurement, B2B and
+multi-market Europe, scaling decisions, and a 2025–2026 platform changelog. Every claim is labelled by
+source type and each section ends "For Westpack". Read `README.md` there first — it holds the
+cross-cutting conclusions, the open disagreements and a list of account and code checks the research
+turned up (including deprecated fields still sent by `api/meta/publish-ad.js`). Before advising on a
+Meta setting, budget split or test design, start from these reports rather than general knowledge,
+and refresh any part older than about six months.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →
