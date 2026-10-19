@@ -318,7 +318,8 @@ function buildWestpackKnowledgePromptBlock({
   sourceTexts = [],
   channel = "general",
   mode = "general",
-  adFormat = ""
+  adFormat = "",
+  keepSourceClaims = false
 } = {}) {
   const context = buildWestpackKnowledgeContext({
     sourceTexts,
@@ -334,7 +335,12 @@ function buildWestpackKnowledgePromptBlock({
     jewelleryBoxContext
       ? "Free logo print may be mentioned because this looks like jewellery-box context."
       : "Do not claim free logo print. For non-jewellery-box products, only say logo branding is available with low minimum order quantity when relevant.",
-    "Do not use FSC, green, sustainable, recycled, recyclable, environmental or other eco claims unless the operator explicitly asks for them.",
+    // A translation or rewrite of an existing email must carry the email's own wording over. On
+    // 2026-10-19 a translation failed with exactly the four FSC licence fragments of the footer
+    // missing after three attempts; "do not use FSC" contradicts translating them faithfully.
+    keepSourceClaims
+      ? "Do not add FSC, green, sustainable, recycled, recyclable, environmental or other eco claims that the source does not make. Wording the source already contains - including FSC licence and certification lines in the footer - is approved copy: carry it over faithfully, never drop or blank it."
+      : "Do not use FSC, green, sustainable, recycled, recyclable, environmental or other eco claims unless the operator explicitly asks for them.",
     "Do not infer eco claims from product names such as ECO. Treat those names as series names only unless the operator explicitly wants environmental messaging.",
     "Preferred Westpack sales angles when relevant: premium presentation, stronger perceived value, branding with low MOQ, reliable product quality, broad assortment, retail-ready packaging, strong unboxing experience, and practical packaging for shipping or display."
   ];

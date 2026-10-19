@@ -442,6 +442,7 @@ const appState = {
   klaviyoTemplateGenerating: false,
   klaviyoTemplateGeneratedVariants: [],
   klaviyoTemplateGeneratedFrom: "",
+  klaviyoTemplateFailedLanguages: [],
   klaviyoTemplateTranslationError: "",
   klaviyoTemplateHeroImageOverrides: {},
   klaviyoTemplateHeroImageErrors: {},

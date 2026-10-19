@@ -38,9 +38,25 @@ export async function generateKlaviyoRolloutPreviewAction({
     const sourceSubject = sourceTemplate.subject || sourceTemplate.name;
     const sourcePreviewText = sourceTemplate.previewText || "";
     const sourceBody = sourceTemplate.html || sourceTemplate.body || sourceTemplate.text || "";
+    const sourceKey = sourceTemplate.id || sourceTemplate.name;
     const generatedVariants = [];
+    const failedLanguages = [];
+
+    // After a partial run, generating again retries only the languages that failed. Any change to
+    // the source, the targets or the brief resets the plan, so what is kept here is still current.
+    const retryingFailures = (appState.klaviyoTemplateFailedLanguages || []).length > 0
+      && appState.klaviyoTemplateGeneratedFrom === sourceKey;
+    const keptVariants = new Map(retryingFailures
+      ? (appState.klaviyoTemplateGeneratedVariants || [])
+        .filter((variant) => hasRenderableKlaviyoBody(variant.body))
+        .map((variant) => [variant.code, variant])
+      : []);
 
     for (const language of languages) {
+      if (keptVariants.has(language.code)) {
+        generatedVariants.push(keptVariants.get(language.code));
+        continue;
+      }
       if (language.code === sourceLanguageCode) {
         generatedVariants.push({
           code: language.code,
@@ -55,17 +71,28 @@ export async function generateKlaviyoRolloutPreviewAction({
         continue;
       }
 
-      const translated = await requestKlaviyoTemplateTranslation({
-        sourceTemplateName: sourceTemplate.name,
-        sourceSubject,
-        sourcePreviewText,
-        sourceBody,
-        sourceLanguage: sourceLanguage?.label || sourceTemplate.account,
-        sourceCountry: sourceTemplate.account,
-        targetLanguage: language.label,
-        translationPath: `${sourceLanguage?.label || sourceTemplate.account} -> ${language.label}`,
-        operatorNote: operatorBrief
-      });
+      // One language failing used to throw away every language already translated, and the
+      // operator saw "Missing renderable HTML" on markets that had nothing wrong with them.
+      let translated;
+      try {
+        translated = await requestKlaviyoTemplateTranslation({
+          sourceTemplateName: sourceTemplate.name,
+          sourceSubject,
+          sourcePreviewText,
+          sourceBody,
+          sourceLanguage: sourceLanguage?.label || sourceTemplate.account,
+          sourceCountry: sourceTemplate.account,
+          targetLanguage: language.label,
+          translationPath: `${sourceLanguage?.label || sourceTemplate.account} -> ${language.label}`,
+          operatorNote: operatorBrief
+        });
+        if (!hasRenderableKlaviyoBody(translated.body)) {
+          throw new Error("The translation came back without renderable HTML.");
+        }
+      } catch (error) {
+        failedLanguages.push({ code: language.code, label: language.label, error: error.message || "Translation failed." });
+        continue;
+      }
 
       generatedVariants.push({
         code: language.code,
@@ -79,14 +106,18 @@ export async function generateKlaviyoRolloutPreviewAction({
       });
     }
 
-    const brokenVariant = generatedVariants.find((variant) => !hasRenderableKlaviyoBody(variant.body));
-    if (brokenVariant) {
-      throw new Error(`Generated ${brokenVariant.label} without renderable HTML. Draft push was blocked to avoid creating a broken Klaviyo email.`);
-    }
-
     appState.klaviyoTemplateGeneratedVariants = generatedVariants;
-    appState.klaviyoTemplateGeneratedFrom = sourceTemplate.id || sourceTemplate.name;
+    appState.klaviyoTemplateGeneratedFrom = sourceKey;
     appState.klaviyoTemplatePlanGeneratedAt = new Date().toISOString();
+    appState.klaviyoTemplateFailedLanguages = failedLanguages;
+
+    if (failedLanguages.length) {
+      const readyCount = generatedVariants.length;
+      appState.klaviyoTemplateTranslationError = [
+        ...failedLanguages.map((failure) => `${failure.label}: ${failure.error}`),
+        `${readyCount} other language${readyCount === 1 ? " is" : "s are"} ready. Generate drafts again to retry only ${failedLanguages.length === 1 ? "that language" : "those languages"}; nothing is pushed until every target has a draft.`
+      ].join(" ");
+    }
   } catch (error) {
     appState.klaviyoTemplateTranslationError = error.message || "Translation preview failed.";
   } finally {
@@ -302,10 +333,13 @@ export function renderKlaviyoDuplicateTranslatePanel({
   const plan = buildKlaviyoTemplatePlan();
   const sourceTemplateReady = hasSelectedKlaviyoTemplateDetail() && hasRenderableKlaviyoBody(plan.sourceTemplate.html || plan.sourceTemplate.body || plan.sourceTemplate.text || "");
   const invalidVariant = plan.variants.find((variant) => !hasRenderableKlaviyoBody(variant.body));
+  const failedLanguages = new Map((appState.klaviyoTemplateFailedLanguages || []).map((failure) => [failure.code, failure]));
   const blockingIssue = !sourceTemplateReady
     ? "Source template HTML is not loaded yet."
     : invalidVariant
-      ? `${invalidVariant.label} is missing renderable HTML.`
+      ? (failedLanguages.has(invalidVariant.code)
+        ? `${invalidVariant.label} could not be translated.`
+        : `${invalidVariant.label} is missing renderable HTML.`)
       : "";
   const sourceAccountSelect = document.getElementById("klaviyo-template-source-account");
   const sourceTemplateSelect = document.getElementById("klaviyo-template-source-template");
@@ -401,7 +435,9 @@ export function renderKlaviyoDuplicateTranslatePanel({
             <p>${escapeHtml(
               hasRenderableKlaviyoBody(assignment.body)
                 ? "Renderable HTML loaded."
-                : "Missing renderable HTML. This draft cannot be pushed yet."
+                : failedLanguages.has(assignment.code)
+                  ? `Translation failed: ${failedLanguages.get(assignment.code).error} Generate drafts again to retry this language.`
+                  : "Missing renderable HTML. This draft cannot be pushed yet."
             )}</p>
           </div>
           ${assignment.urlWarnings?.length ? `

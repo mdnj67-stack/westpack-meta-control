@@ -34,6 +34,7 @@ function createGlossaryBlock(input) {
 function createWestpackKnowledgeBlock(input) {
   return buildWestpackKnowledgePromptBlock({
     channel: "klaviyo",
+    keepSourceClaims: true,
     sourceTexts: [
       input?.sourceTemplateName,
       input?.sourceSubject,
@@ -238,11 +239,14 @@ module.exports = async (req, res) => {
         required: ["subject", "previewText", "fragments", "rationale"]
       };
 
+      // A fragment the model has withheld twice is not going to appear on a third identical ask.
+      // The last attempt drops the claim guardrails, which are about not inventing copy and can
+      // read as a reason to withhold source text; the glossary and operator note stay.
       const { fragments: translatedSegments, header: parsed, model } = await requestFragmentsById({
         segments,
-        requestBatch: ({ lines }) => requestStructuredResponse(
+        requestBatch: ({ lines, lastAttempt }) => requestStructuredResponse(
           config,
-          buildHtmlPrompt(input, lines, glossaryBlock, westpackKnowledgeBlock),
+          buildHtmlPrompt(input, lines, glossaryBlock, lastAttempt ? "" : westpackKnowledgeBlock),
           "westpack_klaviyo_html_translation",
           schema
         )

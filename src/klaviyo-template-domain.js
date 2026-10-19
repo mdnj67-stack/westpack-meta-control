@@ -490,6 +490,7 @@ export function createKlaviyoTemplateDomain({
     appState.klaviyoTemplatePlanGeneratedAt = "";
     appState.klaviyoTemplateGeneratedVariants = [];
     appState.klaviyoTemplateGeneratedFrom = "";
+    appState.klaviyoTemplateFailedLanguages = [];
     appState.klaviyoTemplateTranslationError = "";
     appState.klaviyoTemplatePushError = "";
     appState.klaviyoTemplatePushResult = null;

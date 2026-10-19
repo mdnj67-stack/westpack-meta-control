@@ -180,7 +180,7 @@ async function translateFieldsForMarket({
 
   const sourceTexts = translatable.map((field) => field.sourceText);
   const glossaryBlock = buildGlossaryPromptBlock({ targetLanguage, sourceTexts });
-  const knowledgeBlock = buildWestpackKnowledgePromptBlock({ channel: "klaviyo", sourceTexts });
+  const knowledgeBlock = buildWestpackKnowledgePromptBlock({ channel: "klaviyo", keepSourceClaims: true, sourceTexts });
 
   const { parsed, model } = await requestFn({
     config,

@@ -89,7 +89,7 @@ function formatFragmentLines(segments, ids) {
   return ids.map((index) => `[${index + 1}] ${segments[index]}`);
 }
 
-// requestBatch({ ids, lines, first }) must resolve to { parsed, model } where parsed.fragments is
+// requestBatch({ ids, lines, first, attempt, lastAttempt }) must resolve to { parsed, model } where parsed.fragments is
 // an array of { id, text } using the 1-based ids shown in `lines`. The first response's other
 // keys (subject, previewText, ...) are returned as `header`.
 async function requestFragmentsById({
@@ -99,6 +99,8 @@ async function requestFragmentsById({
   maxAttempts = FRAGMENT_MAX_ATTEMPTS
 }) {
   const results = new Array(segments.length);
+  // Why a fragment is still missing, so the error can tell an omission from a blank answer.
+  const returnedBlank = new Set();
   let pending = segments.map((_, index) => index);
   let header = null;
   let model = "";
@@ -112,7 +114,9 @@ async function requestFragmentsById({
     const responses = await Promise.all(batches.map((ids, batchIndex) => requestBatch({
       ids,
       lines: formatFragmentLines(segments, ids),
-      first: header === null && batchIndex === 0
+      first: header === null && batchIndex === 0,
+      attempt,
+      lastAttempt: attempt === maxAttempts - 1
     })));
 
     responses.forEach(({ parsed, model: responseModel }, batchIndex) => {
@@ -123,7 +127,10 @@ async function requestFragmentsById({
       for (const fragment of fragments) {
         const index = Number(fragment?.id) - 1;
         if (!allowed.has(index) || results[index] !== undefined) continue;
-        if (typeof fragment.text !== "string" || !fragment.text.trim()) continue;
+        if (typeof fragment.text !== "string" || !fragment.text.trim()) {
+          returnedBlank.add(index);
+          continue;
+        }
         results[index] = fragment.text;
       }
     });
@@ -132,8 +139,11 @@ async function requestFragmentsById({
   }
 
   if (pending.length) {
+    const first = pending[0];
+    const how = returnedBlank.has(first) ? "returned blank" : "left out";
+    const excerpt = String(segments[first] || "").trim().replace(/s+/g, " ").slice(0, 60);
     throw new Error(
-      `${pending.length} of ${segments.length} HTML text fragments came back missing after ${maxAttempts} attempts (first missing: #${pending[0] + 1}). Nothing was generated for this language - try again.`
+      `${pending.length} of ${segments.length} HTML text fragments came back missing after ${maxAttempts} attempts (first missing: #${first + 1}, ${how}: "${excerpt}"). Nothing was generated for this language - try again.`
     );
   }
 
@@ -156,6 +166,7 @@ function createGlossaryBlock(input) {
 function createWestpackKnowledgeBlock(input) {
   return buildWestpackKnowledgePromptBlock({
     channel: "klaviyo",
+    keepSourceClaims: true,
     sourceTexts: [
       input?.sourceTemplateName,
       input?.sourceSubject,

@@ -82,7 +82,7 @@ test("a fragment still missing after every attempt fails with a count, never sil
   const { calls, requestBatch } = fakeTranslator((ids) => ids.filter((i) => i !== 1));
   await assert.rejects(
     requestFragmentsById({ segments, requestBatch, maxAttempts: 3 }),
-    /1 of 3 HTML text fragments came back missing.*#2/
+    /1 of 3 HTML text fragments came back missing.*#2, left out: "b"/
   );
   assert.equal(calls.length, 3);
 });
@@ -91,4 +91,46 @@ test("the translate route uses the shared segmenter and forbids currency convers
   const route = require("node:fs").readFileSync(require.resolve("../api/openai/klaviyo-translate-template.js"), "utf8");
   assert.doesNotMatch(route, /function rebuildHtml/);
   assert.match(route, /Never convert currency/);
+});
+
+const { buildWestpackKnowledgePromptBlock } = require("../server/lib/westpack-knowledge");
+
+test("translation keeps the source's own FSC lines instead of being told never to use FSC", () => {
+  // A W43 translation failed with exactly the footer's four FSC licence fragments missing, under
+  // a prompt that both said "translate faithfully" and "do not use FSC".
+  const translating = buildWestpackKnowledgePromptBlock({ channel: "klaviyo", keepSourceClaims: true });
+  assert.doesNotMatch(translating, /Do not use FSC/);
+  assert.match(translating, /carry it over faithfully, never drop or blank it/);
+  assert.match(buildWestpackKnowledgePromptBlock({ channel: "meta" }), /Do not use FSC/);
+
+  const fs = require("node:fs");
+  for (const file of ["../api/openai/klaviyo-translate-template.js", "../server/lib/klaviyo-template-variant.js", "../server/canva/translate-fields.js"]) {
+    assert.match(fs.readFileSync(require.resolve(file), "utf8"), /keepSourceClaims: true/, file);
+  }
+});
+
+test("the error says whether a missing fragment was left out or returned blank", async () => {
+  const requestBatch = async ({ ids }) => ({ parsed: { fragments: ids.map((index) => ({ id: index + 1, text: index === 0 ? " " : "T" })) }, model: "m" });
+  await assert.rejects(requestFragmentsById({ segments: ["FSC® licence", "b"], requestBatch }), /#1, returned blank: "FSC® licence"/);
+});
+
+test("only the last attempt is flagged, and the translate route drops the claim guardrails there", async () => {
+  const seen = [];
+  const requestBatch = async ({ ids, attempt, lastAttempt }) => {
+    seen.push({ attempt, lastAttempt });
+    return { parsed: { fragments: lastAttempt ? ids.map((index) => ({ id: index + 1, text: "T" })) : [] }, model: "m" };
+  };
+  const result = await requestFragmentsById({ segments: ["a"], requestBatch, maxAttempts: 3 });
+  assert.deepEqual(result.fragments, ["T"]);
+  assert.deepEqual(seen, [{ attempt: 0, lastAttempt: false }, { attempt: 1, lastAttempt: false }, { attempt: 2, lastAttempt: true }]);
+
+  const route = require("node:fs").readFileSync(require.resolve("../api/openai/klaviyo-translate-template.js"), "utf8");
+  assert.match(route, /lastAttempt \? "" : westpackKnowledgeBlock/);
+});
+
+test("one language failing no longer throws away the languages already translated", () => {
+  const rollout = require("node:fs").readFileSync(require.resolve("../src/klaviyo-template-rollout.js"), "utf8");
+  assert.match(rollout, /failedLanguages\.push\(/);
+  assert.match(rollout, /retry only/);
+  assert.doesNotMatch(rollout, /throw new Error\(`Generated \$\{brokenVariant\.label\}/);
 });
