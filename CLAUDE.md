@@ -1006,6 +1006,18 @@ copy about Westpack, rather than inventing USPs. Two claims that sound right and
 samples are **not** free (freight, plus a small charge per logo sample), and logo print is
 included only on jewellery boxes. Refresh with the two scripts in `tools/`.
 
+## Asana projects the app can read
+
+`GET /api/campaign/brain?action=asana_tasks&kind=` lists one of three projects, resolved by
+`resolveAsanaProjectGid` (`server/lib/asana.js`): `campaign`, `content` (the Content Library) and
+`creatives` — **"Meta Creatives"** (1218826645554863, added 2026-10-20), where designed ads per
+language move Drafts → To Do → In progress → Review. The user's rule: creatives in **Review** may
+be used in ads. An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
+also returns the task's comments, which is where reviewers leave feedback on a creative.
+
+The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns
+sensitive variables empty, so Asana is read through production (log in as `smoke-local.js` does).
+
 ## Meta advertising research — `knowledge/meta-research/`
 
 Added 2026-10-13. Seven dated research reports (~30,000 words) on Meta advertising for Westpack's

@@ -5,7 +5,9 @@ const {
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskBundle,
-  getAsanaWorkspaceProjects
+  getAsanaTaskComments,
+  getAsanaWorkspaceProjects,
+  resolveAsanaProjectGid
 } = require("../../server/lib/asana");
 const { assembleCampaignObject } = require("../../server/campaign/object");
 const {
@@ -291,10 +293,7 @@ module.exports = async (req, res) => {
     }
     try {
       if (action === "asana_tasks") {
-        const projectKind = String(req.query?.kind || "campaign").trim().toLowerCase();
-        const projectGid = projectKind === "content"
-          ? config.asanaContentProjectGid
-          : config.asanaCampaignProjectGid;
+        const { kind: projectKind, projectGid } = resolveAsanaProjectGid(config, req.query?.kind);
         if (!projectGid) {
           sendJson(res, 503, { error: `Asana ${projectKind} project is not configured.` });
           return;
@@ -312,11 +311,16 @@ module.exports = async (req, res) => {
         return;
       }
       if (action === "asana_task") {
-        const bundle = await getAsanaTaskBundle(config, req.query?.taskGid);
+        const withComments = String(req.query?.comments || "") === "true";
+        const [bundle, comments] = await Promise.all([
+          getAsanaTaskBundle(config, req.query?.taskGid),
+          withComments ? getAsanaTaskComments(config, req.query?.taskGid) : null
+        ]);
         sendJson(res, 200, {
           ok: true,
           readOnly: true,
-          ...bundle
+          ...bundle,
+          ...(withComments ? { comments } : {})
         });
         return;
       }

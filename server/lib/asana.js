@@ -258,6 +258,48 @@ async function getAsanaProjectTasks(config, projectGid, { includeCompleted = fal
     });
 }
 
+// The projects the dashboard may list, by the `kind` the API is asked for. An unknown kind is
+// refused rather than falling back to the campaign project, so a typo cannot quietly return the
+// wrong board.
+const ASANA_PROJECT_KINDS = {
+  campaign: "asanaCampaignProjectGid",
+  content: "asanaContentProjectGid",
+  creatives: "asanaCreativesProjectGid"
+};
+
+function resolveAsanaProjectGid(config = {}, kind = "campaign") {
+  const normalizedKind = String(kind || "campaign").trim().toLowerCase();
+  const configKey = ASANA_PROJECT_KINDS[normalizedKind];
+  if (!configKey) {
+    const error = new Error(`Unknown Asana project kind "${normalizedKind}". Use one of: ${Object.keys(ASANA_PROJECT_KINDS).join(", ")}.`);
+    error.statusCode = 400;
+    throw error;
+  }
+  return { kind: normalizedKind, projectGid: String(config[configKey] || "").trim() };
+}
+
+// Comments only, not the system stories (moves, assignments), because the comments are where a
+// reviewer leaves feedback on a creative.
+async function getAsanaTaskComments(config, taskGid) {
+  const normalizedTaskGid = String(taskGid || "").trim();
+  if (!/^\d+$/.test(normalizedTaskGid)) {
+    const error = new Error("A valid Asana task GID is required.");
+    error.statusCode = 400;
+    throw error;
+  }
+  const stories = await collectAsanaPages(config, `/tasks/${normalizedTaskGid}/stories`, {
+    opt_fields: "gid,type,text,created_at,created_by.name"
+  }, 3);
+  return stories
+    .filter((story) => story?.type === "comment")
+    .map((story) => ({
+      gid: String(story.gid || ""),
+      text: String(story.text || ""),
+      createdAt: String(story.created_at || ""),
+      author: String(story.created_by?.name || "")
+    }));
+}
+
 async function getAsanaTaskSubtasks(config, taskGid) {
   const normalizedTaskGid = String(taskGid || "").trim();
   if (!/^\d+$/.test(normalizedTaskGid)) {
@@ -315,7 +357,9 @@ module.exports = {
   asanaGet,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
+  getAsanaTaskComments,
   getAsanaTaskSubtasks,
   getAsanaTaskBundle,
-  getAsanaWorkspaceProjects
+  getAsanaWorkspaceProjects,
+  resolveAsanaProjectGid
 };
