@@ -36,7 +36,9 @@ function collectWestpackSnippetUrlMismatches(content = "", targetCountry = "") {
     const foundSnippet = String(match[1] || "");
     const rest = String(match[2] || "");
     const isProductCatalogUrl = /^\/catalog\/product\/view\/id\/\d+(?:[^\s"'<>]*)?$/i.test(rest);
-    if (KNOWN_SNIPPETS.has(foundSnippet) && !isProductCatalogUrl) {
+    // Only another market's store is a mismatch. Without the comparison every link to the
+    // target market's own store was flagged too, so no template with a store link could push.
+    if (KNOWN_SNIPPETS.has(foundSnippet) && foundSnippet !== expectedSnippet && !isProductCatalogUrl) {
       mismatches.push({
         url: match[0],
         foundSnippet,
