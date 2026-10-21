@@ -25,7 +25,67 @@ function getRedisConfig() {
   };
 }
 
+// Vercel Blob takes precedence over Redis for these snapshots. On 2026-10-21 the
+// Upstash database hit its fixed plan limit and refused every command, reads
+// included, so the Expansion tab went blank for days while Meta had the figures
+// all along. These are three small JSON documents written once a night; they do
+// not need a database, and putting them on a separate service means a full
+// Redis can no longer take the dashboard down with the Content Agent.
+// The store is private: the snapshots are account figures, and a public Blob
+// URL is readable by anyone who has it.
+const BLOB_API_URL = "https://vercel.com/api/blob";
+const BLOB_API_VERSION = "12";
+const BLOB_PATHS = {
+  [HISTORICAL_STORE_KEY]: "meta-snapshots/historical-intelligence.json",
+  [EXPANSION_STORE_KEY]: "meta-snapshots/expansion-reach.json",
+  [SATURATION_STORE_KEY]: "meta-snapshots/audience-saturation.json"
+};
+
+function getBlobToken() {
+  return String(process.env.BLOB_READ_WRITE_TOKEN || "");
+}
+
+// The token is vercel_blob_rw_<storeId>_<secret>; the store id names the host.
+function blobUrl(storeKey) {
+  const storeId = getBlobToken().split("_")[3] || "";
+  if (!storeId) throw new Error("BLOB_READ_WRITE_TOKEN does not name a Blob store.");
+  return `https://${storeId}.private.blob.vercel-storage.com/${BLOB_PATHS[storeKey]}`;
+}
+
+async function blobRead(storeKey) {
+  // cache=0: the snapshot is overwritten in place every night, and a cached
+  // copy would serve yesterday's figures under today's date.
+  const response = await fetch(`${blobUrl(storeKey)}?cache=0`, {
+    headers: { Authorization: `Bearer ${getBlobToken()}` }
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Blob read failed (${response.status}).`);
+  return JSON.parse(await response.text());
+}
+
+async function blobWrite(storeKey, snapshot) {
+  const params = new URLSearchParams({ pathname: BLOB_PATHS[storeKey] });
+  const response = await fetch(`${BLOB_API_URL}/?${params.toString()}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getBlobToken()}`,
+      "x-api-version": BLOB_API_VERSION,
+      "x-vercel-blob-access": "private",
+      "x-add-random-suffix": "0",
+      "x-allow-overwrite": "1",
+      "x-content-type": "application/json",
+      "x-cache-control-max-age": "60"
+    },
+    body: JSON.stringify(snapshot)
+  });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload?.error?.message || `Blob write failed (${response.status}).`);
+  }
+}
+
 function getHistoricalStoreProfile() {
+  if (getBlobToken()) return { mode: "blob", persistent: true };
   const redis = getRedisConfig();
   if (redis.url && redis.token) return { mode: "redis", persistent: true };
   if (!process.env.VERCEL) return { mode: "local_file", persistent: true };
@@ -46,6 +106,21 @@ async function redisCommand(command) {
 
 async function readSnapshot(storeKey) {
   const profile = getHistoricalStoreProfile();
+  if (profile.mode === "blob") {
+    const stored = await blobRead(storeKey);
+    if (stored) return stored;
+    // Nothing in Blob yet: the first read after the switch can still find the
+    // last snapshot Redis holds. Only an answer counts; a full or missing Redis
+    // must not fail a read Blob has simply not been asked to serve yet.
+    const redis = getRedisConfig();
+    if (!redis.url || !redis.token) return null;
+    try {
+      const raw = await redisCommand(["GET", storeKey]);
+      return raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : null;
+    } catch {
+      return null;
+    }
+  }
   if (profile.mode === "redis") {
     const raw = await redisCommand(["GET", storeKey]);
     return raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : null;
@@ -58,7 +133,9 @@ async function readSnapshot(storeKey) {
 
 async function writeSnapshot(storeKey, snapshot) {
   const profile = getHistoricalStoreProfile();
-  if (profile.mode === "redis") {
+  if (profile.mode === "blob") {
+    await blobWrite(storeKey, snapshot);
+  } else if (profile.mode === "redis") {
     await redisCommand(["SET", storeKey, JSON.stringify(snapshot)]);
   } else if (profile.mode === "local_file") {
     const localPath = LOCAL_PATHS[storeKey];

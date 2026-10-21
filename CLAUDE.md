@@ -404,6 +404,11 @@ reads it (`?expansion=status`, zero quota).
   old incrementality set) is never reused from cache, and the first sync after the switch
   logs a restatement whose reason names the definition change.
 - Cold sync ≈ 24 Graph calls, warm ≈ 7. Rate limits are never retried here.
+- **The snapshots live in Vercel Blob, not Redis, once `BLOB_READ_WRITE_TOKEN` is set**
+  (`server/meta/historical-store.js`, private store, pathnames under `meta-snapshots/`).
+  On 2026-10-21 the Upstash database hit its fixed plan limit and refused reads as well as
+  writes, so the tab was blank for days while Meta had the figures. An empty Blob falls back
+  to Redis once, and a failing Redis then reads as "no snapshot" rather than an error.
 
 ### Audience saturation leads the Expansion tab (2026-10-08)
 
