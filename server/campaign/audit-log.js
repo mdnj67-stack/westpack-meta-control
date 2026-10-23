@@ -22,6 +22,8 @@ let volatileEntries = [];
 
 const AUDIT_EVENTS = Object.freeze([
   "klaviyo_draft_created",
+  // A revision written over a draft that already exists, rather than a new draft beside it.
+  "klaviyo_draft_updated",
   "meta_draft_created",
   "studio_draft_saved",
   "job_rejected_restarted",

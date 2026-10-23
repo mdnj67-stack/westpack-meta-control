@@ -237,6 +237,7 @@ module.exports = async function handler(req, res) {
     const rolloutEntries = assignments.length
       ? assignments.map((assignment) => ({
         country: String(assignment?.country || "").trim().toUpperCase(),
+        templateId: String(assignment?.templateId || "").trim(),
         code: String(assignment?.code || "").trim(),
         label: String(assignment?.label || assignment?.code || "").trim(),
         translationPath: String(assignment?.translationPath || "").trim(),
@@ -308,6 +309,8 @@ module.exports = async function handler(req, res) {
           languageCode,
           ok: true,
           dryRun: true,
+          updated: Boolean(entry.templateId),
+          templateId: entry.templateId || undefined,
           templateName,
           htmlLength: html.length,
           textLength: text.length,
@@ -318,6 +321,27 @@ module.exports = async function handler(req, res) {
       }
 
       try {
+        if (entry.templateId) {
+          // A revision replaces the HTML of the draft the team already has, instead of leaving one
+          // more near-identical draft beside it. The name is left alone: an operator may have
+          // renamed it in Klaviyo since.
+          const payload = await klaviyoRequest(
+            `https://a.klaviyo.com/api/templates/${encodeURIComponent(entry.templateId)}`,
+            headers,
+            "PATCH",
+            { data: { type: "template", id: entry.templateId, attributes: { html, text } } }
+          );
+          results.push({
+            country,
+            languageCode,
+            ok: true,
+            updated: true,
+            templateId: String(payload?.data?.id || entry.templateId),
+            templateName: String(payload?.data?.attributes?.name || "")
+          });
+          continue;
+        }
+
         const payload = await klaviyoRequest("https://a.klaviyo.com/api/templates", headers, "POST", {
           data: {
             type: "template",
@@ -361,14 +385,28 @@ module.exports = async function handler(req, res) {
 
     // Recorded after the fact and never allowed to fail the push: the templates already exist in
     // Klaviyo by this point, so a failed audit write must not make the caller think otherwise.
-    await recordAuditEvent("klaviyo_draft_created", {
-      campaignKey: body?.campaignKey || "",
-      campaignTitle: body?.campaignTitle || "",
-      operator: body?.operator || "",
-      reference: results.filter((entry) => entry?.templateId).map((entry) => entry.templateId).join(", "),
-      target: results.map((entry) => entry?.account || entry?.country).filter(Boolean).join(", "),
-      dryRun
-    });
+    const createdEntries = results.filter((entry) => !entry?.updated);
+    const updatedEntries = results.filter((entry) => entry?.updated);
+    if (createdEntries.length) {
+      await recordAuditEvent("klaviyo_draft_created", {
+        campaignKey: body?.campaignKey || "",
+        campaignTitle: body?.campaignTitle || "",
+        operator: body?.operator || "",
+        reference: createdEntries.filter((entry) => entry?.templateId).map((entry) => entry.templateId).join(", "),
+        target: createdEntries.map((entry) => entry?.account || entry?.country).filter(Boolean).join(", "),
+        dryRun
+      });
+    }
+    if (updatedEntries.length) {
+      await recordAuditEvent("klaviyo_draft_updated", {
+        campaignKey: body?.campaignKey || "",
+        campaignTitle: body?.campaignTitle || "",
+        operator: body?.operator || "",
+        reference: updatedEntries.map((entry) => entry.templateId).join(", "),
+        target: updatedEntries.map((entry) => entry?.country).filter(Boolean).join(", "),
+        dryRun
+      });
+    }
 
     sendJson(res, 200, {
       ok,
