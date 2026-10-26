@@ -332,6 +332,14 @@ const klaviyoUrlSnippetCatalog = {
   US: "usd_us_eng"
 };
 
+// Copy of server/lib/westpack-url-path-fixes.js for the rollout preview: store pages whose Danish
+// path does not resolve in one market's store. tests/westpack-url-path-fixes.test.js keeps them equal.
+const klaviyoUrlPathFixes = {
+  UK: {
+    "jewellery-boxes/bas/amsterdam-eco-jewellery-box.html": "jewellery-boxes/cardboard-jewellery-boxes/amsterdam-eco-jewellery-box.html"
+  }
+};
+
 const klaviyoTranslationGuardrails = [
   {
     title: "Protect Klaviyo syntax",
@@ -1166,6 +1174,7 @@ const {
   klaviyoTemplateCatalog,
   klaviyoAccountLanguageMap,
   klaviyoUrlSnippetCatalog,
+  klaviyoUrlPathFixes,
   escapeHtml
 });
 const {

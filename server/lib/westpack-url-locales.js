@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const WESTPACK_PATH_FIXES = require("./westpack-url-path-fixes");
 
 function loadMarketSnippets() {
   try {
@@ -20,6 +21,15 @@ function normalizeCountry(value = "") {
 
 function getWestpackMarketSnippet(country = "") {
   return WESTPACK_MARKET_SNIPPETS[normalizeCountry(country)] || "";
+}
+
+// rest is "/<path>?<query>#<hash>"; only the path is looked up, the query (utm tags) is kept.
+function applyStorePathFix(rest = "", country = "") {
+  const fixes = WESTPACK_PATH_FIXES[normalizeCountry(country)];
+  if (!fixes) return rest;
+  const match = String(rest || "").match(/^\/([^?#]*)(.*)$/);
+  if (!match || !fixes[match[1]]) return rest;
+  return `/${fixes[match[1]]}${match[2]}`;
 }
 
 function collectWestpackSnippetUrlMismatches(content = "", targetCountry = "") {
@@ -118,7 +128,7 @@ function rewriteWestpackSnippetUrls(content = "", targetCountry = "") {
       if (!KNOWN_SNIPPETS.has(normalizedSnippet) || isProductCatalogUrl) {
         return match;
       }
-      return `https://www.westpack.com/${snippet}${normalizedRest}`;
+      return `https://www.westpack.com/${snippet}${applyStorePathFix(normalizedRest, targetCountry)}`;
     }
   );
 }

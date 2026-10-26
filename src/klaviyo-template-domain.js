@@ -5,6 +5,7 @@ export function createKlaviyoTemplateDomain({
   klaviyoTemplateCatalog = [],
   klaviyoAccountLanguageMap = {},
   klaviyoUrlSnippetCatalog = {},
+  klaviyoUrlPathFixes = {},
   escapeHtml = (value = "") => String(value || "")
 } = {}) {
   function getKlaviyoTemplateAccounts() {
@@ -100,7 +101,12 @@ export function createKlaviyoTemplateDomain({
         if (!knownSnippets.has(normalizedSnippet) || isProductCatalogUrl) {
           return match;
         }
-        return `https://www.westpack.com/${expectedSnippet}${normalizedRest}`;
+        // A store page whose Danish path does not resolve in this market's store gets the store's
+        // own path (server/lib/westpack-url-path-fixes.js; the query is kept).
+        const fixes = klaviyoUrlPathFixes[String(targetCountry || "").trim().toUpperCase()] || {};
+        const parts = normalizedRest.match(/^\/([^?#]*)(.*)$/);
+        const fixedRest = parts && fixes[parts[1]] ? `/${fixes[parts[1]]}${parts[2]}` : normalizedRest;
+        return `https://www.westpack.com/${expectedSnippet}${fixedRest}`;
       }
     );
   }
