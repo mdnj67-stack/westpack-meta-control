@@ -24,11 +24,15 @@ function getWestpackMarketSnippet(country = "") {
 }
 
 // rest is "/<path>?<query>#<hash>"; only the path is looked up, the query (utm tags) is kept.
+// "{{ organization.url }}/path" already ends in a slash, so the path arrives as "//path". 59% of DK's
+// email clicks over 90 days (to 2026-10-26) went to such links; the double slash is collapsed first,
+// or the fix table never matches them and e.g. NO's buy-the-whole-look link stays a 404.
 function applyStorePathFix(rest = "", country = "") {
+  const single = String(rest || "").replace(/^\/{2,}/, "/");
   const fixes = WESTPACK_PATH_FIXES[normalizeCountry(country)];
-  if (!fixes) return rest;
-  const match = String(rest || "").match(/^\/([^?#]*)(.*)$/);
-  if (!match || !fixes[match[1]]) return rest;
+  if (!fixes) return single;
+  const match = single.match(/^\/([^?#]*)(.*)$/);
+  if (!match || !fixes[match[1]]) return single;
   return `/${fixes[match[1]]}${match[2]}`;
 }
 

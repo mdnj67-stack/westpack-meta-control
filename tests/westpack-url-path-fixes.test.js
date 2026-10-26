@@ -61,10 +61,30 @@ test("the fix is applied once, so localising a localised body changes nothing", 
   assert.equal(serverLocalize(once, "UK"), once);
 });
 
+// Most DK campaigns write "{{ organization.url }}/path"; the account URL already ends in a slash, so
+// these render as ".../dkk_dk_den//path". 59% of DK's email clicks over 90 days went to such links.
+const SLASHED = [
+  "{{ organization.url }}/buy-the-whole-look.html",
+  "{{ organization.url }}/jewellery-boxes/bas/amsterdam-eco-jewellery-box.html?utm_content=x",
+  "https://www.westpack.com/dkk_dk_den//jewellery-boxes/bas/amsterdam-eco-jewellery-box.html",
+  "{{ organization.url }}/blog/top-5-bags",
+].map((url) => `<a href="${url}">x</a>`).join("");
+
+test("a link written with a slash after the store root still gets its market's store fix", () => {
+  const no = serverLocalize(SLASHED, "NO");
+  assert.match(no, /href="\{\{ organization\.url \}\}inspiration"/, "NO has no buy-the-whole-look page (404 as //)");
+  const uk = serverLocalize(SLASHED, "UK");
+  assert.match(uk, /href="\{\{ organization\.url \}\}jewellery-boxes\/cardboard-jewellery-boxes\/amsterdam-eco-jewellery-box\.html\?utm_content=x"/);
+  assert.match(uk, /gbp_uk_eng\/jewellery-boxes\/cardboard-jewellery-boxes\/amsterdam-eco-jewellery-box\.html"/);
+  assert.match(serverLocalize(SLASHED, "DE"), /href="\{\{ organization\.url \}\}blog\/top-5-bags"/, "and the double slash is gone everywhere");
+  assert.doesNotMatch(uk + no, /\}\}\/|[a-z]\/\//);
+});
+
 test("the rollout preview localises links exactly as the push does, in every market", async () => {
   const domain = await loadBrowserDomain();
   for (const country of Object.keys(SNIPPETS)) {
     assert.equal(domain.localizeKlaviyoWestpackUrls(SOURCE, country), serverLocalize(SOURCE, country), country);
+    assert.equal(domain.localizeKlaviyoWestpackUrls(SLASHED, country), serverLocalize(SLASHED, country), `${country} (slashed)`);
   }
 });
 

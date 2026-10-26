@@ -93,9 +93,12 @@ export function createKlaviyoTemplateDomain({
 
     const knownSnippets = new Set(Object.values(klaviyoUrlSnippetCatalog).filter(Boolean));
     const fixes = klaviyoUrlPathFixes[String(targetCountry || "").trim().toUpperCase()] || {};
+    // "{{ organization.url }}/path" already ends in a slash, so the path arrives as "//path"; it is
+    // collapsed first or the fix table never matches it.
     const fixPath = (rest = "") => {
-      const parts = String(rest).match(/^\/([^?#]*)(.*)$/);
-      return parts && fixes[parts[1]] ? `/${fixes[parts[1]]}${parts[2]}` : rest;
+      const single = String(rest).replace(/^\/{2,}/, "/");
+      const parts = single.match(/^\/([^?#]*)(.*)$/);
+      return parts && fixes[parts[1]] ? `/${fixes[parts[1]]}${parts[2]}` : single;
     };
     return String(content || "").replace(
       /https:\/\/www\.westpack\.com\/([a-z0-9_]+)(\/[^\s"'<>]*)?/gi,
