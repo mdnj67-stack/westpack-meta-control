@@ -337,6 +337,9 @@ const klaviyoUrlSnippetCatalog = {
 const klaviyoUrlPathFixes = {
   UK: {
     "jewellery-boxes/bas/amsterdam-eco-jewellery-box.html": "jewellery-boxes/cardboard-jewellery-boxes/amsterdam-eco-jewellery-box.html"
+  },
+  NO: {
+    "buy-the-whole-look.html": "inspiration"
   }
 };
 

@@ -92,6 +92,11 @@ export function createKlaviyoTemplateDomain({
     }
 
     const knownSnippets = new Set(Object.values(klaviyoUrlSnippetCatalog).filter(Boolean));
+    const fixes = klaviyoUrlPathFixes[String(targetCountry || "").trim().toUpperCase()] || {};
+    const fixPath = (rest = "") => {
+      const parts = String(rest).match(/^\/([^?#]*)(.*)$/);
+      return parts && fixes[parts[1]] ? `/${fixes[parts[1]]}${parts[2]}` : rest;
+    };
     return String(content || "").replace(
       /https:\/\/www\.westpack\.com\/([a-z0-9_]+)(\/[^\s"'<>]*)?/gi,
       (match, foundSnippet = "", rest = "") => {
@@ -103,11 +108,12 @@ export function createKlaviyoTemplateDomain({
         }
         // A store page whose Danish path does not resolve in this market's store gets the store's
         // own path (server/lib/westpack-url-path-fixes.js; the query is kept).
-        const fixes = klaviyoUrlPathFixes[String(targetCountry || "").trim().toUpperCase()] || {};
-        const parts = normalizedRest.match(/^\/([^?#]*)(.*)$/);
-        const fixedRest = parts && fixes[parts[1]] ? `/${fixes[parts[1]]}${parts[2]}` : normalizedRest;
-        return `https://www.westpack.com/${expectedSnippet}${fixedRest}`;
+        return `https://www.westpack.com/${expectedSnippet}${fixPath(normalizedRest)}`;
       }
+    ).replace(
+      // {{ organization.url }} is the market's own store root, so its paths get the same store fixes.
+      /(\{\{\s*organization\.url\s*\}\})([^\s"'<>]*)/gi,
+      (match, tag, rest = "") => `${tag}${fixPath(`/${rest}`).slice(1)}`
     );
   }
 

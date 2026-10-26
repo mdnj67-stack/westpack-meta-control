@@ -130,6 +130,10 @@ function rewriteWestpackSnippetUrls(content = "", targetCountry = "") {
       }
       return `https://www.westpack.com/${snippet}${applyStorePathFix(normalizedRest, targetCountry)}`;
     }
+  ).replace(
+    // {{ organization.url }} is the market's own store root, so its paths get the same store fixes.
+    /(\{\{\s*organization\.url\s*\}\})([^\s"'<>]*)/gi,
+    (match, tag, rest = "") => `${tag}${applyStorePathFix(`/${rest}`, targetCountry).slice(1)}`
   );
 }
 

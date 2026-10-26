@@ -25,18 +25,29 @@ async function loadBrowserDomain() {
 
 const serverLocalize = (html, country) => rewriteWestpackSnippetUrls(rewriteWestpackProductFeedUrls(html, country), country);
 
-// The links the W44 email actually carries, Danish store.
+// The links the W44 email actually carries: Danish store links and the locked header's links.
 const SOURCE = [
   "https://www.westpack.com/dkk_dk_den/jewellery-boxes/bas.html?utm_content=boxtype_hero",
   "https://www.westpack.com/dkk_dk_den/jewellery-boxes/bas/amsterdam-eco-jewellery-box.html?utm_content=boxtype_d_cta",
   "https://www.westpack.com/dkk_dk_den/jewellery-boxes/bas/rome-eco-jewellery-box.html?utm_content=boxtype_i_cta",
   "https://www.westpack.com/dkk_dk_den/jewellery-boxes/bas/lux-loe.html",
+  "{{ organization.url }}",
+  "{{ organization.url }}buy-the-whole-look.html",
+  "{{ organization.url }}blog",
 ].map((url) => `<a href="${url}">x</a>`).join("");
 
 test("a UK link to Amsterdam gets the UK store's own path, with its utm tag kept", () => {
   const html = serverLocalize(SOURCE, "UK");
   assert.match(html, /gbp_uk_eng\/jewellery-boxes\/cardboard-jewellery-boxes\/amsterdam-eco-jewellery-box\.html\?utm_content=boxtype_d_cta/);
   assert.match(html, /gbp_uk_eng\/jewellery-boxes\/bas\/rome-eco-jewellery-box\.html/, "pages whose Danish path redirects in the UK are left alone");
+});
+
+test("the header's Inspiration link points at the page the Norwegian store has", () => {
+  const html = serverLocalize(SOURCE, "NO");
+  assert.match(html, /href="\{\{ organization\.url \}\}inspiration"/);
+  assert.doesNotMatch(html, /buy-the-whole-look/);
+  assert.match(html, /href="\{\{ organization\.url \}\}"/, "the bare store root is untouched");
+  assert.match(serverLocalize(SOURCE, "DE"), /\{\{ organization\.url \}\}buy-the-whole-look\.html/, "other markets keep it");
 });
 
 test("every other market keeps the Danish path, which its store redirects", () => {
