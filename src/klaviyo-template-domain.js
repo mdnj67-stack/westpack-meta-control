@@ -41,7 +41,11 @@ export function createKlaviyoTemplateDomain({
       const foundSnippet = String(match[1] || "");
       const rest = String(match[2] || "");
       const isProductCatalogUrl = /^\/catalog\/product\/view\/id\/\d+(?:[^\s"'<>]*)?$/i.test(rest);
-      if (knownSnippets.has(foundSnippet) && !isProductCatalogUrl) {
+      // Only another market's store is a warning. This runs on the localised body, where every
+      // store link already points at the target market, so without the comparison each of them
+      // was flagged ("expected eur_eu_ger, found eur_eu_ger") and the rollout preview was blocked.
+      // Same rule as collectWestpackSnippetUrlMismatches on the server.
+      if (knownSnippets.has(foundSnippet) && foundSnippet !== expectedSnippet && !isProductCatalogUrl) {
         warnings.push({
           url: match[0],
           foundSnippet,
