@@ -36,7 +36,7 @@ function buildBreakdownRequestBody({ metricId, by, days, now = new Date() }) {
       type: "metric-aggregate",
       attributes: {
         metric_id: metricId,
-        measurements: ["count"],
+        measurements: ["count", "unique"],
         interval: "month",
         by,
         page_size: 500,
@@ -48,13 +48,18 @@ function buildBreakdownRequestBody({ metricId, by, days, now = new Date() }) {
 }
 
 // Klaviyo returns one count per interval for each dimension value; the period total is their sum.
-// Counts are events, not people: one reader who clicks three links counts three times.
+// count is events (a reader who clicks three times counts three times); unique is people, per
+// month - so within one calendar month it is exactly the number of people, across months a sum.
+// A click vote is "URL,Bot Click" read on unique, with Bot Click 1.0 left out.
+const sumSeries = (series) => (Array.isArray(series) ? series : []).reduce((sum, value) => sum + (Number(value) || 0), 0);
+
 function summarizeBreakdown(payload) {
   const groups = Array.isArray(payload?.data?.attributes?.data) ? payload.data.attributes.data : [];
   const label = (value) => (value != null && value !== "" ? String(value) : "(not recorded)");
   const rows = groups.map((group) => ({
     value: (Array.isArray(group?.dimensions) && group.dimensions.length ? group.dimensions : [""]).map(label).join(" | "),
-    count: (Array.isArray(group?.measurements?.count) ? group.measurements.count : []).reduce((sum, value) => sum + (Number(value) || 0), 0)
+    count: sumSeries(group?.measurements?.count),
+    unique: sumSeries(group?.measurements?.unique)
   }));
   const total = rows.reduce((sum, row) => sum + row.count, 0);
   return {

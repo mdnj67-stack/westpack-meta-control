@@ -72,6 +72,8 @@ test("monthly counts are summed per value, sorted, and shares add to one", () =>
     { dimensions: ["tablet"], measurements: { count: [0, 0] } }
   ] } } });
   const paired = summarizeBreakdown({ data: { attributes: { data: [{ dimensions: ["Browser", "1.0"], measurements: { count: [2] } }] } } });
+  const people = summarizeBreakdown({ data: { attributes: { data: [{ dimensions: ["https://x/?utm_content=gp_board_monaco", "0.0"], measurements: { count: [5], unique: [3] } }] } } });
+  assert.equal(people.rows[0].unique, 3, "unique people ride along with the event count");
   assert.equal(paired.rows[0].value, "Browser | 1.0", "two dimensions are reported together");
   assert.equal(summary.total, 100);
   assert.deepEqual(summary.rows.map((row) => [row.value, row.count]), [["mobile", 65], ["desktop", 30], ["(not recorded)", 5]]);
