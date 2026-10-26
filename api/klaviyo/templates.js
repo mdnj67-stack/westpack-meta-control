@@ -162,6 +162,25 @@ module.exports = async function handler(req, res) {
     }
 
     const headers = buildHeaders(String(market.privateKey).trim(), TEMPLATE_API_REVISION);
+
+    // {{ organization.url }} in a template is the account's website URL. Every header link and many
+    // campaign links are built on it, so which store a market's email points at is decided here.
+    if (String(req.query?.organization || "") === "1") {
+      const response = await fetchWithTimeout("https://a.klaviyo.com/api/accounts/", { method: "GET", headers }, KLAVIYO_REQUEST_TIMEOUT_MS);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        sendJson(res, response.status, { error: payload?.errors?.[0]?.detail || `Klaviyo request failed (${response.status}).` });
+        return;
+      }
+      const contact = payload?.data?.[0]?.attributes?.contact_information || {};
+      sendJson(res, 200, {
+        country,
+        organizationName: String(contact.organization_name || ""),
+        organizationUrl: String(contact.website_url || "")
+      });
+      return;
+    }
+
     const listCacheKey = `templates:${country}`;
     const detailCacheKey = templateId ? `template-detail:${country}:${templateId}` : "";
     let templates = [];
