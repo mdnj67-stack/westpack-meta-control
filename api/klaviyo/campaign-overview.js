@@ -5,6 +5,12 @@ const { fetchWithTimeout, sendJson } = require("../../server/lib/http");
 const { recordArtifactLearning } = require("../../server/campaign/campaign-learning-service");
 const { fetchListProfileCount, resolveNewsletterList } = require("../../server/klaviyo/newsletter-lists");
 const {
+  buildBreakdownRequestBody,
+  findKlaviyoMetricId,
+  resolveBreakdownQuery,
+  summarizeBreakdown
+} = require("../../server/klaviyo/engagement-breakdown");
+const {
   buildConsentBreakdown,
   buildDailyJoinSeries,
   buildRecordedTotalsSeries,
@@ -863,6 +869,46 @@ function buildInsightCards(campaignGroups, flowGroups, subscribers, marketCodes)
   return cards.slice(0, 5);
 }
 
+// ?breakdown=1&country=DK&metric=Clicked Email&by=Client Type&days=90 - one market's opens or clicks
+// grouped by a Klaviyo dimension. Two requests: the metric id, then one aggregate.
+async function sendEngagementBreakdown(req, res, config) {
+  const country = String(req.query?.country || "").trim().toUpperCase();
+  const resolved = resolveBreakdownQuery(req.query || {});
+  if (resolved.error) {
+    sendJson(res, 400, { error: resolved.error });
+    return;
+  }
+  let markets = [];
+  try {
+    markets = parseMarkets(config.klaviyoMarketsJson);
+  } catch (error) {
+    sendJson(res, 500, { error: error.message });
+    return;
+  }
+  const market = markets.find((item) => String(item?.country || "").trim().toUpperCase() === country);
+  if (!country || !market?.privateKey) {
+    sendJson(res, 404, { error: `No Klaviyo market configuration found for ${country || "(missing country)"}.` });
+    return;
+  }
+  try {
+    const headers = buildHeaders(String(market.privateKey).trim(), config.klaviyoRevision);
+    const metricId = findKlaviyoMetricId(await getAllPages("https://a.klaviyo.com/api/metrics/", headers), resolved.metric);
+    if (!metricId) {
+      sendJson(res, 404, { error: `${country}: Klaviyo has no "${resolved.metric}" metric.` });
+      return;
+    }
+    const payload = await klaviyoRequest(
+      "https://a.klaviyo.com/api/metric-aggregates/",
+      buildHeaders(String(market.privateKey).trim(), config.klaviyoRevision, true),
+      "POST",
+      buildBreakdownRequestBody({ metricId, by: resolved.by, days: resolved.days })
+    );
+    sendJson(res, 200, { country, metric: resolved.metric, by: resolved.by, days: resolved.days, unit: "events", ...summarizeBreakdown(payload) });
+  } catch (error) {
+    sendJson(res, 502, { error: error.message || "Klaviyo breakdown failed." });
+  }
+}
+
 // One list lookup and one count per market - about two requests each, against the 268 the old walk
 // cost - so a fresh subscriber level is affordable even on the snapshot path.
 async function refreshSubscriberLevels(markets = [], config = {}) {
@@ -975,6 +1021,10 @@ module.exports = async (req, res) => {
   const config = getConfig();
   const currencyContext = buildKlaviyoCurrencyContext(config);
   if (!requireAuth(req, res, config)) {
+    return;
+  }
+  if (String(req.query?.breakdown || "") === "1") {
+    await sendEngagementBreakdown(req, res, config);
     return;
   }
   const forceLive = String(req.query?.forceLive || "").trim() === "1";
