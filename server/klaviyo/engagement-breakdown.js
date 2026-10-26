@@ -4,7 +4,9 @@
 // assumed. The same grouping by URL is how a click vote (utm_content tags) is counted. Read-only.
 
 const BREAKDOWN_METRICS = ["Opened Email", "Clicked Email"];
-const BREAKDOWN_DIMENSIONS = ["Client Type", "Client Name", "Client OS Family", "Client Canonical", "Inbox Provider", "URL", "$message"];
+// Klaviyo validates `by` against its own list; "Client OS Family" is refused there despite being an
+// event property. "Bot Click" exists only on clicks.
+const BREAKDOWN_DIMENSIONS = ["Client Type", "Client Name", "Client Canonical", "Inbox Provider", "Email Domain", "Bot Click", "URL", "$message"];
 const MAX_BREAKDOWN_DAYS = 365;
 
 function formatKlaviyoDate(date) {
