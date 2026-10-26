@@ -49,14 +49,16 @@ test.after(() => {
 });
 
 test("only the two email metrics and the known dimensions are accepted", () => {
-  assert.deepEqual(resolveBreakdownQuery({}), { metric: "Clicked Email", by: "Client Type", days: 90 });
+  assert.deepEqual(resolveBreakdownQuery({}), { metric: "Clicked Email", by: ["Client Type"], days: 90 });
+  assert.deepEqual(resolveBreakdownQuery({ by: "Client Type, Bot Click" }).by, ["Client Type", "Bot Click"]);
+  assert.match(resolveBreakdownQuery({ by: "Client Type,Bot Click,URL" }).error, /one or two/);
   assert.equal(resolveBreakdownQuery({ days: "9999" }).days, 365);
   assert.match(resolveBreakdownQuery({ metric: "Placed Order" }).error, /metric must be one of/);
-  assert.match(resolveBreakdownQuery({ by: "Email" }).error, /by must be one of/);
+  assert.match(resolveBreakdownQuery({ by: "Email" }).error, /by must be one or two of/);
 });
 
 test("the request asks for one dimension over the window ending now", () => {
-  const body = buildBreakdownRequestBody({ metricId: "M1", by: "Client Type", days: 30, now: new Date("2026-10-26T12:00:00Z") });
+  const body = buildBreakdownRequestBody({ metricId: "M1", by: ["Client Type"], days: 30, now: new Date("2026-10-26T12:00:00Z") });
   assert.equal(body.data.type, "metric-aggregate");
   assert.deepEqual(body.data.attributes.by, ["Client Type"]);
   assert.deepEqual(body.data.attributes.filter, ["greater-or-equal(datetime,2026-09-26T12:00:00)", "less-than(datetime,2026-10-26T12:00:00)"]);
@@ -69,6 +71,8 @@ test("monthly counts are summed per value, sorted, and shares add to one", () =>
     { dimensions: [""], measurements: { count: [5, 0] } },
     { dimensions: ["tablet"], measurements: { count: [0, 0] } }
   ] } } });
+  const paired = summarizeBreakdown({ data: { attributes: { data: [{ dimensions: ["Browser", "1.0"], measurements: { count: [2] } }] } } });
+  assert.equal(paired.rows[0].value, "Browser | 1.0", "two dimensions are reported together");
   assert.equal(summary.total, 100);
   assert.deepEqual(summary.rows.map((row) => [row.value, row.count]), [["mobile", 65], ["desktop", 30], ["(not recorded)", 5]]);
   assert.equal(summary.rows.reduce((sum, row) => sum + row.share, 0), 1);

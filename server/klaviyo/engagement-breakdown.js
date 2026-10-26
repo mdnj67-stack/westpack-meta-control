@@ -15,13 +15,15 @@ function formatKlaviyoDate(date) {
 
 function resolveBreakdownQuery(query = {}) {
   const metric = String(query.metric || "Clicked Email").trim();
-  const by = String(query.by || "Client Type").trim();
+  // Up to two dimensions, comma separated: "Client Type,Bot Click" splits devices into people and
+  // security scanners, which a single grouping cannot.
+  const by = String(query.by || "Client Type").split(",").map((value) => value.trim()).filter(Boolean);
   const days = Math.max(1, Math.min(MAX_BREAKDOWN_DAYS, Math.floor(Number(query.days || 90)) || 90));
   if (!BREAKDOWN_METRICS.includes(metric)) {
     return { error: `metric must be one of: ${BREAKDOWN_METRICS.join(", ")}.` };
   }
-  if (!BREAKDOWN_DIMENSIONS.includes(by)) {
-    return { error: `by must be one of: ${BREAKDOWN_DIMENSIONS.join(", ")}.` };
+  if (!by.length || by.length > 2 || by.some((value) => !BREAKDOWN_DIMENSIONS.includes(value))) {
+    return { error: `by must be one or two of: ${BREAKDOWN_DIMENSIONS.join(", ")}.` };
   }
   return { metric, by, days };
 }
@@ -36,7 +38,7 @@ function buildBreakdownRequestBody({ metricId, by, days, now = new Date() }) {
         metric_id: metricId,
         measurements: ["count"],
         interval: "month",
-        by: [by],
+        by,
         page_size: 500,
         filter: [`greater-or-equal(datetime,${formatKlaviyoDate(start)})`, `less-than(datetime,${formatKlaviyoDate(end)})`],
         timezone: "Europe/Copenhagen"
@@ -49,8 +51,9 @@ function buildBreakdownRequestBody({ metricId, by, days, now = new Date() }) {
 // Counts are events, not people: one reader who clicks three links counts three times.
 function summarizeBreakdown(payload) {
   const groups = Array.isArray(payload?.data?.attributes?.data) ? payload.data.attributes.data : [];
+  const label = (value) => (value != null && value !== "" ? String(value) : "(not recorded)");
   const rows = groups.map((group) => ({
-    value: String(Array.isArray(group?.dimensions) && group.dimensions[0] != null && group.dimensions[0] !== "" ? group.dimensions[0] : "(not recorded)"),
+    value: (Array.isArray(group?.dimensions) && group.dimensions.length ? group.dimensions : [""]).map(label).join(" | "),
     count: (Array.isArray(group?.measurements?.count) ? group.measurements.count : []).reduce((sum, value) => sum + (Number(value) || 0), 0)
   }));
   const total = rows.reduce((sum, row) => sum + row.count, 0);
