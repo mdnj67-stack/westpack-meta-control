@@ -6148,6 +6148,79 @@ input[type="file"] {
 .subject-chip.is-selected { border-color: var(--wp-brand-border); background: var(--wp-brand-surface); color: var(--wp-brand-strong); font-weight: var(--wp-weight-semibold); }
 .subject-chip.is-avoided:not(.is-selected) { border-style: dashed; color: var(--wp-text-muted); }
 
+/* What the writer read, under the campaign's name. */
+.subject-read { color: var(--wp-text-secondary); font-size: var(--wp-text-sm); }
+
+/* The steering, closed until wanted. */
+.subject-steer:not(.is-open) .subject-step-head { margin-bottom: 0; }
+
+/* While reading and writing: what is happening, and the shape of what is coming. */
+.subject-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-3);
+  margin-bottom: var(--wp-space-4);
+  font-size: var(--wp-text-sm);
+}
+
+.subject-progress > div { display: grid; gap: 2px; }
+.subject-progress span:not(.wp-spinner) { color: var(--wp-text-muted); font-size: var(--wp-text-xs); }
+.subject-row-skeleton { display: grid; gap: 6px; padding: var(--wp-space-3) var(--wp-space-4); border-bottom: 1px solid var(--wp-border-subtle); }
+.subject-row-skeleton:last-child { border-bottom: 0; }
+.subject-row-skeleton .wp-skeleton-text:first-child { width: 42%; }
+.subject-row-skeleton .wp-skeleton-text:last-child { width: 68%; }
+
+/* The writer's three picks: the lines to send, ready to copy. */
+.subject-picks { display: grid; gap: var(--wp-space-2); margin-bottom: var(--wp-space-4); }
+
+.subject-pick {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+}
+
+.subject-pick:first-child { border-color: var(--wp-brand-border); box-shadow: inset 3px 0 0 var(--wp-brand); }
+
+.subject-pick-rank {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-brand-surface);
+  color: var(--wp-brand-strong);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-bold);
+}
+
+.subject-pick-body { display: grid; gap: var(--wp-space-2); min-width: 0; }
+.subject-pick-inbox { display: grid; gap: 1px; font-size: var(--wp-text-sm); }
+.subject-pick-inbox strong { font-size: var(--wp-text-base); overflow-wrap: anywhere; }
+.subject-pick-inbox > span { color: var(--wp-text-muted); }
+.subject-pick-inbox .subject-pick-sender { color: var(--wp-text-secondary); font-size: var(--wp-text-xs); font-weight: var(--wp-weight-semibold); }
+.subject-pick-actions { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); }
+.subject-hint.is-warning { color: var(--wp-warning-text); }
+
+.subject-ab-suggest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-4);
+  margin-bottom: var(--wp-space-5);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 1px dashed var(--wp-border-strong);
+  border-radius: var(--wp-radius-md);
+}
+
+.subject-ab-suggest-text { display: grid; gap: var(--wp-space-1); min-width: 0; }
+.subject-ab-suggest-text h4 { margin: 0; }
+.subject-ab-suggest-text p { margin: 0; font-size: var(--wp-text-sm); overflow-wrap: anywhere; }
+.subject-results-bar h4 { margin: 0; }
+
 /* Step 3 - the suggestions as an inbox. */
 .subject-strategy {
   max-width: 82ch;

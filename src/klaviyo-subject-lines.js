@@ -1,10 +1,10 @@
 // Subject lines - the operator's screen.
 //
-// One flow in three steps. Choose a Danish template from the DK account; read the brief the
-// analysis makes of it and decide which mechanisms should carry the set; compare the suggestions
-// as an inbox, one row each, because comparing lines is the job and an inbox is how recipients
-// meet them. Detail - the reasoning, the evidence, the rule notes, the actions - opens on a row
-// rather than sitting on every one. A shortlist beside the flow holds what the team saved.
+// One click: choose a Danish template from the DK account and the screen reads the email and
+// writes the lines. The writer's own three picks and an A/B pair come first, with Copy and Use;
+// every line follows as an inbox row, because that is how recipients meet them. The brief and the
+// steering - mechanisms, count, a note - sit closed below for whoever wants them. Detail opens on
+// a row rather than sitting on every one. A shortlist beside the flow holds what the team saved.
 //
 // Two honesty requirements that are easy to lose in a redesign:
 // - Open rates are inflated by Apple Mail Privacy Protection. The screen shows an open *index*
@@ -31,9 +31,13 @@ const state = {
   analysis: null,
   insights: null,
   mechanisms: [],
-  count: 18,
+  count: 12,
   note: "",
   candidates: [],
+  picks: [],
+  abTest: null,
+  steerOpen: false,
+  run: null,
   strategyNote: "",
   examples: [],
   senderLabel: "Westpack",
@@ -44,7 +48,7 @@ const state = {
   mechanismFilter: "",
   team: { favourites: [], banned: [] },
   view: "generator",
-  bankTab: "works",
+  bankTab: "sends",
   bank: { country: SOURCE_ACCOUNT, sort: "recent", query: "", verdict: "", abCountry: "", mechanism: "", campaignType: "", language: "", source: "" },
   history: null,
   patterns: null,
@@ -130,7 +134,7 @@ async function callSubjectLines(action, { method = "GET", body = null, query = {
 // The status line takes no room unless it has something to say.
 function syncStatusLine() {
   const line = byId("subject-lines-status");
-  if (line) line.hidden = !state.busy && !state.feedback;
+  if (line) line.hidden = (!state.busy || Boolean(state.run)) && !state.feedback;
 }
 
 function setFeedback(message, tone = "") {
@@ -168,11 +172,18 @@ async function runAction(label, fn) {
   if (state.busy) return;
   setFeedback("");
   setBusy(label);
+  const started = Date.now();
+  const timer = window.setInterval(() => {
+    const busy = byId("subject-lines-busy");
+    if (busy && state.busy) busy.textContent = `${state.busy} · ${Math.round((Date.now() - started) / 1000)} s`;
+  }, 1000);
   try {
     await fn();
   } catch (error) {
+    state.run = null;
     setFeedback(error?.message || "Something went wrong.", "is-danger");
   } finally {
+    window.clearInterval(timer);
     setBusy("");
   }
 }
@@ -207,6 +218,8 @@ function saveWork() {
       count: state.count,
       note: state.note,
       candidates: state.candidates,
+      picks: state.picks,
+      abTest: state.abTest,
       strategyNote: state.strategyNote,
       examples: state.examples,
       senderLabel: state.senderLabel,
@@ -229,9 +242,11 @@ function restoreWork(templateId) {
     analysis: saved.analysis,
     insights: saved.insights || null,
     mechanisms: saved.mechanisms || [],
-    count: saved.count || 18,
+    count: saved.count || 12,
     note: saved.note || "",
     candidates: saved.candidates || [],
+    picks: saved.picks || [],
+    abTest: saved.abTest || null,
     strategyNote: saved.strategyNote || "",
     examples: saved.examples || [],
     senderLabel: saved.senderLabel || state.senderLabel,
@@ -278,10 +293,10 @@ function renderCampaignStep() {
       <div class="subject-selected">
         <div class="subject-selected-text">
           <strong>${escapeHtml(template.name)}</strong>
-          <span>Edited ${escapeHtml(formatDate(template.updated || template.created))}${state.template?.textLength ? ` · ${formatCount(state.template.textLength)} characters of text` : ""}${state.restoredAt ? ` · brief and suggestions from ${escapeHtml(formatDate(state.restoredAt))}, kept in this browser` : ""}</span>
+          ${state.analysis?.coreMessage ? `<span class="subject-read">Read as: ${escapeHtml(state.analysis.coreMessage)}</span>` : ""}
+          <span>Edited ${escapeHtml(formatDate(template.updated || template.created))}${state.restoredAt ? ` · lines from ${escapeHtml(formatDate(state.restoredAt))}, kept in this browser` : ""}</span>
         </div>
         <button class="ghost-button is-sm" data-subject-action="change-template" data-subject-always="true" type="button">Change</button>
-        <button class="${state.analysis ? "ghost-button" : "primary-button"} is-sm" data-subject-action="analyse" type="button">${state.analysis ? "Analyse again" : "Analyse"}</button>
       </div>`;
     return;
   }
@@ -412,9 +427,19 @@ function renderBriefStep() {
   const typeNode = byId("subject-lines-brief-type");
   if (!section || !node) return;
   const analysis = state.analysis;
-  section.hidden = !analysis;
+  section.hidden = !analysis || Boolean(state.run);
   if (!analysis) return;
-  if (typeNode) typeNode.textContent = [campaignTypeLabel(analysis.campaignType), analysis.secondaryType ? campaignTypeLabel(analysis.secondaryType) : ""].filter(Boolean).join(" · ");
+  if (typeNode) typeNode.textContent = "What the writer read in the email, and how to steer it";
+  const toggle = byId("subject-lines-steer-toggle");
+  if (toggle) {
+    toggle.textContent = state.steerOpen ? "Hide" : "Show";
+    toggle.setAttribute("aria-expanded", String(state.steerOpen));
+  }
+  section.classList.toggle("is-open", state.steerOpen);
+  if (!state.steerOpen) {
+    node.innerHTML = "";
+    return;
+  }
   const insights = state.insights || {};
   const facts = [
     ["Offer", analysis.offer],
@@ -449,7 +474,7 @@ function renderBriefStep() {
       ${analysis.houseEvidence ? `<p class="subject-prose">${escapeHtml(analysis.houseEvidence)}</p>` : ""}
       ${insights.mechanismEvidence?.byMechanism?.length ? `
         <div class="subject-record">
-          <p class="subject-hint">${(insights.mechanismEvidence.byMechanism || []).some((item) => item.signal === "wins" || item.signal === "loses") ? "Mechanisms with a significant record in your A/B tests, and the ones selected below." : `In ${formatCount(insights.mechanismEvidence.headToHeads)} head-to-heads in your A/B tests no mechanism wins or loses more often than chance, so the email decides. The selected ones' records:`} The full record is under The bank, What works.</p>
+          <p class="subject-hint">${(insights.mechanismEvidence.byMechanism || []).some((item) => item.signal === "wins" || item.signal === "loses") ? "Mechanisms with a significant record in your A/B tests, and the ones selected below." : `In ${formatCount(insights.mechanismEvidence.headToHeads)} head-to-heads in your A/B tests no mechanism wins or loses more often than chance, so the email decides. The selected ones' records:`} The full record is under The bank, Statistics.</p>
           ${renderMechanismRecord(insights.mechanismEvidence, { compact: true })}
         </div>` : ""}
       ${(insights.abLessons || []).length ? `<div class="subject-ab-list">${insights.abLessons.slice(0, 2).map(renderAbTest).join("")}</div>${insights.abLessons.some((test) => test.includesRemainder) ? `<p class="subject-hint subject-ab-note">${REMAINDER_NOTE}</p>` : ""}` : ""}
@@ -471,7 +496,8 @@ function renderBriefStep() {
           ${[12, 18, 24].map((count) => `<button class="wp-segment-item${state.count === count ? " active" : ""}" data-subject-action="set-count" data-subject-always="true" data-count="${count}" type="button" aria-pressed="${state.count === count}">${count}</button>`).join("")}
         </div>
         <input class="wp-input subject-note" id="subject-lines-note" type="text" value="${escapeHtml(state.note)}" placeholder="Note for the writer, e.g. more edge, no emoji" aria-label="Note for the writer">
-        <button class="primary-button" data-subject-action="generate" type="button">Write subject lines</button>
+        <button class="primary-button" data-subject-action="generate" type="button">Write with this</button>
+        <button class="ghost-button" data-subject-action="reread" type="button" title="Read the template again from Klaviyo, then write">Read the email again</button>
       </div>
     </footer>`;
 }
@@ -568,7 +594,6 @@ function renderCandidate(candidate) {
             <label class="field"><span>Preheader</span><input class="wp-input" data-edit="preview" type="text" value="${escapeHtml(candidate.preview)}"></label>
           </div>` : ""}
         ${candidate.rationale ? `<p class="subject-prose">${escapeHtml(candidate.rationale)}</p>` : ""}
-        ${candidate.evidence?.length ? `<p class="subject-hint">Leans on: ${candidate.evidence.map((item) => escapeHtml(item.label || item)).join(" · ")}</p>` : ""}
         ${renderCitedTests(candidate)}
         ${state.previews[candidate.id] ? renderMarketPreview(state.previews[candidate.id]) : ""}
         ${candidate.issues?.length ? `<ul class="subject-issues">${candidate.issues.map((issue) => `<li class="is-${escapeHtml(issue.severity)}"><strong>${escapeHtml(issue.label)}:</strong> ${escapeHtml(issue.message)}</li>`).join("")}</ul>` : ""}
@@ -586,35 +611,90 @@ function renderCandidate(candidate) {
     </article>`;
 }
 
+const RUN_STAGES = {
+  read: ["Reading the email", "Checking it against Westpack's own sends and the rules"],
+  write: ["Writing the lines", "Usually half a minute: the brief, the house voice, the bank and the rules"]
+};
+
+function renderProgress() {
+  const [title, detail] = RUN_STAGES[state.run?.stage] || RUN_STAGES.write;
+  return `
+    <div class="subject-progress" aria-live="polite">
+      <span class="wp-spinner"></span>
+      <div><strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span></div>
+    </div>
+    <div class="subject-inbox is-loading" aria-hidden="true">${Array.from({ length: 5 }, () => '<div class="subject-row-skeleton"><span class="wp-skeleton wp-skeleton-text"></span><span class="wp-skeleton wp-skeleton-text"></span></div>').join("")}</div>`;
+}
+
+function renderPick(pick, index) {
+  const candidate = findCandidate(pick.id);
+  if (!candidate) return "";
+  const saved = (state.team.favourites || []).some((item) => item.subject === candidate.subject && item.preview === candidate.preview);
+  return `
+    <article class="subject-pick">
+      <span class="subject-pick-rank" aria-label="Pick ${index + 1}">${index + 1}</span>
+      <div class="subject-pick-body">
+        <div class="subject-pick-inbox">
+          <span class="subject-pick-sender">${escapeHtml(state.senderLabel || "Westpack")}</span>
+          <strong>${renderSubjectText(candidate.subject)}</strong>
+          <span>${escapeHtml(candidate.preview || "(no preheader)")}</span>
+        </div>
+        ${pick.why ? `<p class="subject-hint">${escapeHtml(pick.why)}</p>` : ""}
+        ${candidate.issues?.some((issue) => issue.severity === "warn") ? `<p class="subject-hint is-warning">▲ ${escapeHtml(candidate.issues.find((issue) => issue.severity === "warn").message)}</p>` : ""}
+        <div class="subject-pick-actions">
+          <button class="primary-button is-sm" data-subject-action="copy" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button">Copy</button>
+          <button class="ghost-button is-sm" data-subject-action="use" data-id="${escapeHtml(candidate.id)}" type="button">Use in Duplicate &amp; translate</button>
+          <button class="ghost-button is-sm" data-subject-action="favourite" data-id="${escapeHtml(candidate.id)}" type="button"${saved ? " disabled" : ""}>${saved ? "Saved" : "Save"}</button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderAbSuggestion() {
+  const a = state.abTest ? findCandidate(state.abTest.a) : null;
+  const b = state.abTest ? findCandidate(state.abTest.b) : null;
+  if (!a || !b) return "";
+  return `
+    <div class="subject-ab-suggest">
+      <div class="subject-ab-suggest-text">
+        <h4>Worth an A/B test</h4>
+        <p><span class="subject-ab-letter">A</span> ${escapeHtml(a.subject)} <span class="subject-muted">vs</span> <span class="subject-ab-letter">B</span> ${escapeHtml(b.subject)}</p>
+        ${state.abTest.why ? `<p class="subject-hint">${escapeHtml(state.abTest.why)}</p>` : ""}
+      </div>
+      <button class="ghost-button is-sm" data-subject-action="copy-ab" data-subject-always="true" type="button">Copy both</button>
+    </div>`;
+}
+
 function renderResultsStep() {
   const section = byId("subject-step-results");
   const node = byId("subject-lines-candidates");
   const summary = byId("subject-lines-results-summary");
   if (!section || !node) return;
-  section.hidden = !state.candidates.length;
+  section.hidden = !state.candidates.length && !state.run;
+  if (state.run) {
+    if (summary) summary.textContent = "";
+    node.innerHTML = renderProgress();
+    return;
+  }
   if (!state.candidates.length) return;
   const counts = state.candidates.reduce((acc, candidate) => ({ ...acc, [candidate.status]: (acc[candidate.status] || 0) + 1 }), {});
   if (summary) {
     summary.textContent = [
-      plural(state.candidates.length, "pair", "pairs"),
-      counts.ok ? `${formatCount(counts.ok)} pass` : "",
       counts.warn ? `${formatCount(counts.warn)} to check` : "",
-      counts.block ? `${formatCount(counts.block)} ${counts.block === 1 ? "breaks" : "break"} a rule` : ""
+      counts.block ? `${formatCount(counts.block)} ${counts.block === 1 ? "breaks" : "break"} a rule and ${counts.block === 1 ? "sits" : "sit"} last` : ""
     ].filter(Boolean).join(" · ");
   }
-  const byMechanism = state.candidates.reduce((acc, candidate) => ({ ...acc, [candidate.mechanism]: (acc[candidate.mechanism] || 0) + 1 }), {});
-  const shown = state.candidates.filter((candidate) => !state.mechanismFilter || candidate.mechanism === state.mechanismFilter);
+  const picks = (state.picks || []).filter((pick) => findCandidate(pick.id));
+  const picked = new Set(picks.map((pick) => pick.id));
+  const rest = state.candidates.filter((candidate) => !picked.has(candidate.id));
   node.innerHTML = `
-    ${state.strategyNote ? `<p class="subject-strategy">${escapeHtml(state.strategyNote)}</p>` : ""}
+    ${picks.length ? `<div class="subject-picks">${picks.map(renderPick).join("")}</div>` : ""}
+    ${renderAbSuggestion()}
     <div class="subject-results-bar">
-      <div class="subject-chips" role="group" aria-label="Filter by mechanism">
-        <button class="subject-chip${state.mechanismFilter ? "" : " is-selected"}" data-subject-action="filter-mechanism" data-subject-always="true" data-key="" type="button">All ${formatCount(state.candidates.length)}</button>
-        ${Object.entries(byMechanism).map(([key, count]) => `<button class="subject-chip${state.mechanismFilter === key ? " is-selected" : ""}" data-subject-action="filter-mechanism" data-subject-always="true" data-key="${escapeHtml(key)}" type="button">${escapeHtml(mechanismLabel(key))} ${formatCount(count)}</button>`).join("")}
-      </div>
-      <span class="subject-hint">From ${escapeHtml(state.senderLabel || "Westpack")}, as iPhone Mail shows it. Faded text is cut on a phone.</span>
+      <h4>${picks.length ? `${formatCount(rest.length)} more` : `All ${formatCount(rest.length)}`}</h4>
+      <span class="subject-hint">From ${escapeHtml(state.senderLabel || "Westpack")}, as iPhone Mail shows it; faded text is cut on a phone. Click a line for why, a preview in the other markets, and more.</span>
     </div>
-    <div class="subject-inbox" role="list">${shown.map(renderCandidate).join("")}</div>
-    ${state.examples.length ? `<details class="subject-more"><summary>The ${formatCount(state.examples.length)} bank lines the writer was shown</summary><ul class="subject-list">${state.examples.map((entry) => `<li>${escapeHtml(entry.subject)}${entry.preview ? ` <span class="subject-muted">${escapeHtml(entry.preview)}</span>` : ""} <span class="subject-muted">· ${escapeHtml(mechanismLabel(entry.mechanisms?.[0]))} · ${entry.source !== "authored" ? `sent by ${escapeHtml(entry.sender || "another brand")}` : "written for the bank"}</span></li>`).join("")}</ul></details>` : ""}`;
+    <div class="subject-inbox" role="list">${rest.map(renderCandidate).join("")}</div>`;
 }
 
 function renderShortlist() {
@@ -969,9 +1049,6 @@ async function analyse() {
   state.mechanismFilter = "";
   state.previews = {};
   state.restoredAt = "";
-  saveWork();
-  renderFlow();
-  byId("subject-step-brief")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function generate({ again = false } = {}) {
@@ -990,7 +1067,9 @@ async function generate({ again = false } = {}) {
     }
   });
   state.candidates = payload.candidates || [];
-  state.strategyNote = payload.strategyNote || "";
+  state.picks = payload.picks || [];
+  state.abTest = payload.abTest || null;
+  state.strategyNote = "";
   state.examples = payload.examples || [];
   state.senderLabel = payload.senderLabel || state.senderLabel;
   state.shown = [...new Set([...state.shown, ...state.candidates.map((candidate) => candidate.subject)])];
@@ -1000,8 +1079,24 @@ async function generate({ again = false } = {}) {
   state.previews = {};
   state.restoredAt = "";
   saveWork();
+}
+
+// One run: read the email (unless it has been read), then write. The results step shows what is
+// happening at each stage, so a minute of writing reads as work rather than a hang.
+async function readAndWrite({ reread = false, again = false } = {}) {
+  if (!state.analysis || reread) {
+    state.run = { stage: "read" };
+    syncStatusLine();
+    renderFlow();
+    await analyse();
+  }
+  state.run = { stage: "write" };
+  state.note = String(byId("subject-lines-note")?.value ?? state.note).trim();
+  syncStatusLine();
   renderFlow();
-  byId("subject-step-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  await generate({ again });
+  state.run = null;
+  renderFlow();
 }
 
 function findCandidate(id) {
@@ -1089,7 +1184,16 @@ function handleClick(event) {
         state.restoredAt = "";
         state.open = "";
         state.mechanismFilter = "";
-        if (restoreWork(id)) setFeedback("Your last brief and suggestions for this template are back. Analyse again to read the email fresh.");
+        state.picks = [];
+        state.abTest = null;
+        state.picking = false;
+        if (restoreWork(id)) {
+          renderFlow();
+          return;
+        }
+        renderFlow();
+        runAction("Reading the email and writing", () => readAndWrite());
+        return;
       }
       state.picking = false;
       renderFlow();
@@ -1099,9 +1203,22 @@ function handleClick(event) {
       renderCampaignStep();
       byId("subject-lines-template-search")?.focus();
     },
-    analyse: () => runAction("Reading the email and the house evidence", analyse),
-    generate: () => runAction(`Writing ${state.count} pairs - about a minute`, () => generate()),
-    "generate-again": () => runAction(`Writing ${state.count} new pairs - about a minute`, () => generate({ again: true })),
+    generate: () => runAction("Writing", () => readAndWrite()),
+    "generate-again": () => runAction("Writing new ones", () => readAndWrite({ again: true })),
+    reread: () => runAction("Reading the email again and writing", () => readAndWrite({ reread: true })),
+    "toggle-steer": () => {
+      state.note = String(byId("subject-lines-note")?.value ?? state.note);
+      state.steerOpen = !state.steerOpen;
+      renderBriefStep();
+    },
+    "copy-ab": () => {
+      const a = state.abTest ? findCandidate(state.abTest.a) : null;
+      const b = state.abTest ? findCandidate(state.abTest.b) : null;
+      if (!a || !b) return;
+      copyText(`A: ${a.subject}${a.preview ? `\n${a.preview}` : ""}\n\nB: ${b.subject}`, b.preview || "");
+      recordUse("copy", a);
+      recordUse("copy", b);
+    },
     "set-count": () => {
       state.count = Number(button.dataset.count) || 18;
       state.note = String(byId("subject-lines-note")?.value ?? state.note);

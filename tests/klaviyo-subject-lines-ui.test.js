@@ -35,8 +35,8 @@ test("Campaign Studio's mode buttons never match the Campaign Studio panel itsel
   assert.match(appJs, /querySelectorAll\("button\[data-campaign-mode\]"\)/);
 });
 
-test("the three steps are one flow, and the suggestions are an inbox list", () => {
-  for (const step of ['id="subject-step-campaign"', 'id="subject-step-brief"', 'id="subject-step-results"', "<h3>Campaign</h3>", "<h3>Brief</h3>", "<h3>Suggestions</h3>"]) {
+test("one click from campaign to lines: picks first, every line as an inbox row, steering closed", () => {
+  for (const step of ['id="subject-step-campaign"', 'id="subject-step-results"', 'id="subject-step-brief"', "<h3>Campaign</h3>", "<h3>Subject lines</h3>", "<h3>Brief and steering</h3>"]) {
     assert.ok(indexHtml.includes(step), `missing: ${step}`);
   }
   assert.match(moduleJs, /api\/klaviyo\/templates\?country=\$\{SOURCE_ACCOUNT\}/);
@@ -44,6 +44,12 @@ test("the three steps are one flow, and the suggestions are an inbox list", () =
   assert.match(moduleJs, /class="subject-inbox" role="list"/);
   // Duplicate & translate's own translated copies are not campaigns to write for.
   assert.match(moduleJs, /const ROLLOUT_DRAFT = /);
+  // Choosing a campaign reads the email and writes; there is no separate Analyse step.
+  assert.ok(moduleJs.includes('runAction("Reading the email and writing", () => readAndWrite())'));
+  assert.match(moduleJs, /class="subject-picks"/);
+  assert.ok(moduleJs.includes("function renderAbSuggestion()"));
+  assert.match(moduleJs, /steerOpen: false/);
+  assert.ok(indexHtml.indexOf('id="subject-step-results"') < indexHtml.indexOf('id="subject-step-brief"'), "lines before steering");
 });
 
 test("open rates are shown as an index against the market's own level, and the screen says why", () => {
@@ -106,6 +112,7 @@ test("the screen records what is done with a line, remembers work per browser, a
   assert.match(moduleJs, /data-subject-action="preview-markets"/);
   assert.match(moduleJs, /function renderCitedTests\(candidate\)/);
   assert.match(indexHtml, /data-subject-bank-tab="works"/);
+  assert.match(moduleJs, /bankTab: "sends"/);
   for (const action of ["tag_history", "preview_markets", "record_use"]) assert.ok(apiJs.includes(action), action);
   // The nightly cron may tag new lines without a session, like the sync.
   assert.match(apiJs, /action === "tag_history" && \(isVercelCronRequest\(req\) \|\| isAuthorizedCronRequest\(req, config\)\)/);

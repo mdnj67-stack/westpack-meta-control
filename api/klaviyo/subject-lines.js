@@ -37,6 +37,7 @@ const {
   finalizeCandidates,
   generateSubjectLines,
   previewInMarkets,
+  resolvePicks,
   tagImportedLines
 } = require("../../server/klaviyo/subject-line-generator");
 const {
@@ -240,10 +241,10 @@ async function handleGenerate(req, res, config, body) {
     imported: team.imported,
     banned: team.banned,
     analysis,
-    limit: 30,
+    limit: 24,
     seed: `${templateId}:${attempt}`
   });
-  const { strategyNote, candidates, model } = await generateSubjectLines({
+  const { candidates, picks, abTest, model } = await generateSubjectLines({
     config,
     templateName: template.name,
     emailText: template.emailText,
@@ -256,9 +257,10 @@ async function handleGenerate(req, res, config, body) {
     note: String(body.note || "").slice(0, 600),
     count: Number(body.count) || DEFAULT_CANDIDATE_COUNT
   });
+  const finalized = finalizeCandidates(candidates, { emailText: template.emailText, pastSubjects: insights.pastSubjects, examples, abTests: insights.abLessons });
   sendJson(res, 200, {
-    strategyNote,
-    candidates: finalizeCandidates(candidates, { emailText: template.emailText, pastSubjects: insights.pastSubjects, examples, abTests: insights.abLessons }),
+    ...resolvePicks({ picks, abTest, candidates: finalized }),
+    candidates: finalized,
     examples: examples.map(({ id, subject, preview, mechanisms, campaignType, language, source, sender, why }) => ({ id, subject, preview, mechanisms, campaignType, language, source, sender, why })),
     senderLabel: insights.senderLabel,
     model

@@ -19,7 +19,9 @@ const { buildRulesPromptBlock, checkSubjectLine } = require("./subject-line-rule
 
 const EMAIL_TEXT_LIMIT = 9000;
 const PROMPT_EMAIL_TEXT_LIMIT = 6500;
-const DEFAULT_CANDIDATE_COUNT = 18;
+// Twelve strong lines, with the writer's own three picks on top, is what an operator can actually
+// weigh; "write new ones" adds more without repeats.
+const DEFAULT_CANDIDATE_COUNT = 12;
 // Two attempts (the stronger model, then the default) must fit inside the function's 300 seconds.
 const REQUEST_TIMEOUT_MS = 130_000;
 
@@ -149,7 +151,7 @@ function describeTest(test) {
   return `[ab:${test.campaignId}] ${test.country} ${String(test.sentAt).slice(0, 10)} ${test.campaignName}: ${arms}. Vinder på åbning: ${winner} (${test.verdict}, z=${test.z}).${note}`;
 }
 
-function buildHouseEvidenceBlock(insights = {}, { compact = false } = {}) {
+function buildHouseEvidenceBlock(insights = {}, { compact = false, features = true } = {}) {
   if (!insights?.sendCount) {
     return "Westpack's own send history is not synced yet, so there is no house evidence for this campaign. Say so where it matters rather than guessing.";
   }
@@ -204,7 +206,7 @@ function buildHouseEvidenceBlock(insights = {}, { compact = false } = {}) {
     outcomes.rows.filter((row) => row.sent).slice(0, 10).forEach((row) => lines.push(`- "${row.sent.subject}" (${mechanismLabel(row.mechanism)}, ${String(row.sent.sentAt).slice(0, 10)}, open index ${Number.isFinite(row.sent.openIndex) ? row.sent.openIndex.toFixed(2) : "n/a"})`));
     lines.push("");
   }
-  if (insights.featureStats?.length) {
+  if (features && insights.featureStats?.length) {
     lines.push("Median open index with and without a feature (correlation across different emails and seasons - weak evidence, never a rule):");
     insights.featureStats.slice(0, 8).forEach((stat) => lines.push(`- ${stat.label}: ${stat.openIndexWith.toFixed(2)} with (${stat.withCount}) vs ${stat.openIndexWithout.toFixed(2)} without (${stat.withoutCount}); click index ${stat.clickIndexWith ?? "n/a"} vs ${stat.clickIndexWithout ?? "n/a"}.`));
   }
@@ -328,7 +330,6 @@ function buildCandidateSchema(count) {
     type: "object",
     additionalProperties: false,
     properties: {
-      strategyNote: { type: "string" },
       candidates: {
         type: "array",
         minItems: count,
@@ -348,9 +349,26 @@ function buildCandidateSchema(count) {
           },
           required: ["subject", "preview", "mechanism", "secondaryMechanism", "rationale", "evidence", "translationRisk", "translationNote"]
         }
+      },
+      picks: {
+        type: "array",
+        minItems: 3,
+        maxItems: 3,
+        items: {
+          type: "object",
+          additionalProperties: false,
+          properties: { number: { type: "integer" }, why: { type: "string" } },
+          required: ["number", "why"]
+        }
+      },
+      abTest: {
+        type: "object",
+        additionalProperties: false,
+        properties: { a: { type: "integer" }, b: { type: "integer" }, why: { type: "string" } },
+        required: ["a", "b", "why"]
       }
     },
-    required: ["strategyNote", "candidates"]
+    required: ["candidates", "picks", "abTest"]
   };
 }
 
@@ -363,7 +381,7 @@ function describeBankExample(entry) {
   return `[${entry.id}] ${entry.mechanisms.join("+")} · ${entry.campaignType} · ${entry.language}: "${entry.subject}" / "${entry.preview}" (${origin}${entry.why ? ` - ${entry.why}` : ""})`;
 }
 
-async function generateSubjectLines({ config, templateName = "", emailText = "", analysis = {}, insights = {}, examples = [], favourites = [], banned = [], avoid = [], note = "", count = DEFAULT_CANDIDATE_COUNT }) {
+async function generateSubjectLines({ config, templateName = "", emailText = "", analysis = {}, insights = {}, examples = [], favourites = [], banned = [], avoid = [], note = "", count = DEFAULT_CANDIDATE_COUNT, reasoningEffort = "" }) {
   const total = Math.max(6, Math.min(30, Number(count) || DEFAULT_CANDIDATE_COUNT));
   const input = [
     {
@@ -384,7 +402,8 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
           "- No two pairs may share an opening or a construction. Never reuse a past Westpack subject line, and never copy a bank example: borrow the construction, not the words.",
           "- The Danish master is translated into about fifteen languages. Mark translationRisk honestly (wordplay and idiom are hoej) and give at least four pairs with translationRisk lav. translationNote says what would break, or is empty.",
           "- rationale: one Danish sentence on why this pair gets this email opened, naming in words the evidence you leaned on (\"A/B-testen W17 Urskrin\", \"en tidligere udsendelse\"). Never put an id in the rationale. evidence lists the ids from square brackets you used, such as ab:... or pb-..., and nothing else.",
-          "- strategyNote: two Danish sentences on how the set is built and which pairs you would A/B test against each other first.",
+          "- picks: the three pairs you would send, best first, by their number in your list (1 = the first pair). why: one short Danish sentence each, written for a busy marketer.",
+          "- abTest: the two pairs you would A/B test against each other - both strong, built on different mechanisms, so the test teaches something. why: one short Danish sentence on what the test would show.",
           "",
           "Westpack's house voice is warm, concrete and a little cheeky - recent sends below show it. Match that voice and beat it. Energy comes from desire for the product and from the reader's own situation, never from belittling the reader's shop or packaging.",
           "",
@@ -410,9 +429,9 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
           emailText.slice(0, PROMPT_EMAIL_TEXT_LIMIT),
           "",
           "Recent Westpack subject lines, for the voice (newest first):",
-          ...(insights.voiceSamples || []).slice(0, 20).map((entry) => `- "${entry.subject}"${entry.previewText ? ` / "${entry.previewText}"` : ""}`),
+          ...(insights.voiceSamples || []).slice(0, 15).map((entry) => `- "${entry.subject}"${entry.previewText ? ` / "${entry.previewText}"` : ""}`),
           "",
-          buildHouseEvidenceBlock(insights),
+          buildHouseEvidenceBlock(insights, { compact: true, features: false }),
           "",
           "Pattern bank - chosen for this brief. Some are real lines other brands sent (their results are unknown), some were written for the bank; none is evidence, use them for range. Most real ones are in English: borrow the construction into natural Danish, never translate them word for word:",
           ...examples.map((entry) => `- ${describeBankExample(entry)}`),
@@ -424,16 +443,43 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
       }]
     }
   ];
-  // Twelve pairs on medium reasoning took about 95 seconds on 2026-10-27; twenty-four would not
-  // leave room for the fallback model inside the function's 300 seconds, so a large set reasons less.
+  // Writing reasons on "low". Measured 2026-10-27 on one brief, the same examples and email: medium
+  // took 68 seconds and low 30, with all twelve lines passing the rules both times and no loss a
+  // reader would notice. Half a minute is what makes one click from campaign to lines feel immediate.
   const { parsed, model } = await requestStructured(config, {
     input,
     schemaName: "westpack_subject_line_candidates",
     schema: buildCandidateSchema(total),
-    reasoningEffort: total > 18 ? "low" : "medium",
+    reasoningEffort: reasoningEffort || "low",
     writing: true
   });
-  return { strategyNote: String(parsed?.strategyNote || ""), candidates: Array.isArray(parsed?.candidates) ? parsed.candidates : [], model };
+  return {
+    candidates: Array.isArray(parsed?.candidates) ? parsed.candidates : [],
+    picks: Array.isArray(parsed?.picks) ? parsed.picks : [],
+    abTest: parsed?.abTest || null,
+    model
+  };
+}
+
+// The writer's picks refer to its own numbering, which is the candidates' ids (c1, c2, ...) before
+// blocked lines are moved last. A pick that breaks a rule is dropped and the next line that passes
+// takes its place, so the top of the screen is always something that can be sent.
+function resolvePicks({ picks = [], abTest = null, candidates = [] }) {
+  const byId = new Map(candidates.map((candidate) => [candidate.id, candidate]));
+  const sendable = (id) => byId.has(id) && byId.get(id).status !== "block";
+  const chosen = [];
+  for (const pick of picks) {
+    const id = `c${Number(pick?.number)}`;
+    if (sendable(id) && !chosen.some((item) => item.id === id)) chosen.push({ id, why: String(pick.why || "") });
+  }
+  for (const candidate of candidates) {
+    if (chosen.length >= 3) break;
+    if (candidate.status === "ok" && !chosen.some((item) => item.id === candidate.id)) chosen.push({ id: candidate.id, why: "" });
+  }
+  const a = `c${Number(abTest?.a)}`;
+  const b = `c${Number(abTest?.b)}`;
+  const pair = abTest && a !== b && sendable(a) && sendable(b) ? { a, b, why: String(abTest.why || "") } : null;
+  return { picks: chosen.slice(0, 3), abTest: pair };
 }
 
 function comparable(value = "") {
@@ -697,5 +743,6 @@ module.exports = {
   generateSubjectLines,
   PREVIEW_LANGUAGES,
   previewInMarkets,
+  resolvePicks,
   tagImportedLines
 };

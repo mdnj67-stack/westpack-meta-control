@@ -1403,7 +1403,7 @@ Vis tal og forretningscase</textarea>
             <div class="topbar-copy">
               <p class="section-label">Klaviyo</p>
               <h2>Subject lines</h2>
-              <p class="topbar-sub">Subject lines and preheaders for a Danish campaign, written from Westpack's own results, a pattern bank and the house rules.</p>
+              <p class="topbar-sub">Pick a Danish campaign and get subject lines and preheaders that fit it, written in Westpack's voice and checked against the house rules.</p>
             </div>
             <div class="topbar-actions">
               <div class="wp-segment" role="group" aria-label="View">
@@ -1430,23 +1430,23 @@ Vis tal og forretningscase</textarea>
                 <div id="subject-lines-campaign"></div>
               </section>
 
-              <section class="subject-step" id="subject-step-brief" hidden>
-                <header class="subject-step-head">
-                  <span class="subject-step-num">2</span>
-                  <h3>Brief</h3>
-                  <span class="subject-step-note" id="subject-lines-brief-type"></span>
-                </header>
-                <div id="subject-lines-brief"></div>
-              </section>
-
               <section class="subject-step" id="subject-step-results" hidden>
                 <header class="subject-step-head">
-                  <span class="subject-step-num">3</span>
-                  <h3>Suggestions</h3>
+                  <span class="subject-step-num">2</span>
+                  <h3>Subject lines</h3>
                   <span class="subject-step-note" id="subject-lines-results-summary"></span>
                   <button class="ghost-button is-sm subject-step-action" data-subject-action="generate-again" type="button">Write new ones</button>
                 </header>
                 <div id="subject-lines-candidates"></div>
+              </section>
+
+              <section class="subject-step subject-steer" id="subject-step-brief" hidden>
+                <header class="subject-step-head">
+                  <h3>Brief and steering</h3>
+                  <span class="subject-step-note" id="subject-lines-brief-type"></span>
+                  <button class="ghost-button is-sm subject-step-action" data-subject-action="toggle-steer" data-subject-always="true" type="button" aria-expanded="false" id="subject-lines-steer-toggle">Show</button>
+                </header>
+                <div id="subject-lines-brief"></div>
               </section>
             </div>
 
@@ -1463,12 +1463,12 @@ Vis tal og forretningscase</textarea>
             <div id="subject-lines-layers"></div>
             <section class="subject-step">
               <div class="wp-tabs" role="tablist" aria-label="The bank">
-                <button class="wp-tab active" data-subject-bank-tab="works" role="tab" aria-selected="true" type="button">What works</button>
-                <button class="wp-tab" data-subject-bank-tab="sends" role="tab" aria-selected="false" type="button">Westpack's sends</button>
+                <button class="wp-tab active" data-subject-bank-tab="sends" role="tab" aria-selected="true" type="button">Westpack's sends</button>
                 <button class="wp-tab" data-subject-bank-tab="ab" role="tab" aria-selected="false" type="button">A/B tests</button>
                 <button class="wp-tab" data-subject-bank-tab="patterns" role="tab" aria-selected="false" type="button">Pattern bank</button>
                 <button class="wp-tab" data-subject-bank-tab="rules" role="tab" aria-selected="false" type="button">Rules</button>
                 <button class="wp-tab" data-subject-bank-tab="import" role="tab" aria-selected="false" type="button">Import and bans</button>
+                <button class="wp-tab" data-subject-bank-tab="works" role="tab" aria-selected="false" type="button">Statistics</button>
               </div>
               <div id="subject-lines-bank-content"></div>
             </section>

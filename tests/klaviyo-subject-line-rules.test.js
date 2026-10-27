@@ -57,6 +57,14 @@ test("a number in the line must be a whole number in the email, not a digit insi
   assert.ok(result.issues.some((issue) => issue.ruleId === "claim_not_in_email"));
 });
 
+test("length and series names are notes on the line, not marks against it", () => {
+  const long = checkSubjectLine({ subject: "Kan smykkeæsker have personlighed? Døm selv 👀", preview: "Vi har givet fire smykkeæsker en personlighedstest." });
+  assert.equal(long.status, "ok");
+  assert.deepEqual(long.issues.map((issue) => `${issue.ruleId}:${issue.severity}`), ["subject_length:note"]);
+  assert.equal(checkSubjectLine({ subject: "Skal Monaco tage titlen?", preview: "Stem på din favorit blandt fire" }).status, "ok");
+  assert.equal(checkSubjectLine({ subject: "x".repeat(61), preview: "Noget andet end emnelinjen her" }).status, "warn");
+});
+
 test("Westpack's own recent subject lines pass without a blocking rule", () => {
   const sent = [
     ["Kan smykkeæsker have personlighed? Døm selv 👀", "Vi har givet fire smykkeæsker en personlighedstest."],

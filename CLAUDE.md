@@ -1067,13 +1067,32 @@ to sixty days after - same words (emoji ignored) or a near match (≥75% of the 
 sending") - so the screen and the writer's prompt can show how the generator's own lines did. The
 first such pairs can only appear after a campaign written with it has been sent and synced.
 
+### Simple out of the box (2026-10-27)
+
+The user's standing direction for this screen: "pisse godt out of the box", simple, work on
+functionality - not more analysis on screen. So:
+
+- **One click.** Choosing a template reads the email and writes; there is no Analyse step. The
+  brief lives in a closed "Brief and steering" panel below the lines (mechanisms, count, note,
+  "Read the email again"). Restored work for a template shows at once instead of re-running.
+- **The writer's three picks and an A/B pair come first** (`picks`/`abTest` in the schema,
+  `resolvePicks` swaps a pick that breaks a rule for the next line that passes), then the rest as
+  inbox rows. Default 12 lines; "Write new ones" adds more without repeats.
+- **Writing reasons on "low".** Same brief, examples and email: medium 68 s, low 30 s, all twelve
+  passing the rules both times and no visible loss. Click to lines is ~45 s in the browser.
+- **Only real problems mark a line.** Length (42-60 characters) and a series name are notes on the
+  line's detail (`NOTE`), not "check"; over 60 characters still warns.
+- The statistics moved to the bank's last tab ("Statistics"); the bank opens on Westpack's sends.
+
 ### Other decisions
 
-- The analysis runs on the default model (`OPENAI_MODEL`); writing runs on `CONTENT_AGENT_MODEL`
-  (gpt-5.6, 60-95 s for 12 pairs once the mechanism record is in the prompt; more than 18 pairs
-  reason on "low" so the fallback model still fits in 300 s). The strong model ran past 130 s on
-  the analysis alone.
-- "Analyse" always fetches the template fresh; generate and check reuse a 10-minute cache.
+- The analysis runs on the default model (`OPENAI_MODEL`, ~10 s); writing runs on
+  `CONTENT_AGENT_MODEL` (gpt-5.6) on low reasoning. The strong model ran past 130 s on the
+  analysis alone.
+- A full page load of the app also loads the Meta dashboard snapshot, so browser tests of this
+  screen spend Meta quota too - test with one page load, or with fixtures injected into
+  `__subjectLinesInternals.state` (see `tmp/playwright-runner/subject-lines-design.js`).
+- "Read the email again" fetches the template fresh; writing reuses a 10-minute cache.
 - "Preview in the other markets" (`?action=preview_markets`) translates just the pair into the 12
   other languages with the glossary, one call, ~5 s, and shows each against the iPhone cut. The
   rollout translates again with the whole email; this is a look before committing.

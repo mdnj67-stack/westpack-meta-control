@@ -14,6 +14,10 @@
 
 const BLOCK = "block";
 const WARN = "warn";
+// A note is said on the line's detail but does not mark the line: a 44-character subject or a
+// series name in a feature email is often the right call, and flagging every one of them buried
+// the warnings that matter.
+const NOTE = "note";
 
 // iPhone Mail in portrait shows roughly this many characters of a subject before the ellipsis.
 // Gmail on Android shows a few more, Outlook on a desktop far more. The generator aims under it;
@@ -225,12 +229,12 @@ const RULES = [
   },
   {
     id: "subject_length",
-    severity: WARN,
+    severity: NOTE,
     label: "Readable on a phone",
     prompt: `Aim for a subject under ${MOBILE_SUBJECT_VISIBLE} characters, with the hook in the first 30; iPhone Mail cuts the rest. Never over ${SUBJECT_HARD_LONG}.`,
     check: ({ subject }) => {
       const length = [...subject].length;
-      if (length > SUBJECT_HARD_LONG) return { message: `${length} tegn. Over ${SUBJECT_HARD_LONG} ses slutningen ikke nogen steder.` };
+      if (length > SUBJECT_HARD_LONG) return { severity: WARN, message: `${length} tegn. Over ${SUBJECT_HARD_LONG} ses slutningen ikke nogen steder.` };
       if (length > MOBILE_SUBJECT_VISIBLE) return { message: `${length} tegn. iPhone viser ca. ${MOBILE_SUBJECT_VISIBLE}, så slutningen ses ikke på mobil.` };
       return null;
     }
@@ -273,7 +277,7 @@ const RULES = [
   },
   {
     id: "series_name",
-    severity: WARN,
+    severity: NOTE,
     label: "Sell the category, not the series name",
     prompt: "Buyers rarely know Westpack's series names. Lead with the category (smykkeæsker, gaveæsker, bæreposer) unless the email presents named series side by side.",
     check: ({ subject }) => {
@@ -309,7 +313,7 @@ function checkSubjectLine({ subject = "", preview = "", emailText = "" } = {}) {
 
   const status = issues.some((issue) => issue.severity === BLOCK)
     ? BLOCK
-    : issues.length ? WARN : "ok";
+    : issues.some((issue) => issue.severity === WARN) ? WARN : "ok";
 
   return {
     status,
@@ -335,6 +339,7 @@ function describeRules() {
 
 module.exports = {
   BLOCK,
+  NOTE,
   WARN,
   MOBILE_SUBJECT_VISIBLE,
   RULES,
