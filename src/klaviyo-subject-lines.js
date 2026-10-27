@@ -44,10 +44,12 @@ const state = {
   mechanismFilter: "",
   team: { favourites: [], banned: [] },
   view: "generator",
-  bankTab: "sends",
+  bankTab: "works",
   bank: { country: SOURCE_ACCOUNT, sort: "recent", query: "", verdict: "", abCountry: "", mechanism: "", campaignType: "", language: "", source: "" },
   history: null,
   patterns: null,
+  previews: {},
+  restoredAt: "",
   busy: "",
   feedback: "",
   feedbackTone: ""
@@ -175,6 +177,80 @@ async function runAction(label, fn) {
   }
 }
 
+/* ------------------------------------------------------------------ remembered work */
+
+// The brief and the suggestions for a template survive a reload in this browser, so an operator
+// who steps away does not pay for the analysis and the writing twice. Per browser on purpose: the
+// shared, durable record of what was chosen is the shortlist and the recorded use, on the server.
+const WORK_KEY = "westpack-subject-lines:work:v1";
+const WORK_KEEP = 10;
+
+function readWork() {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(WORK_KEY) || "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function saveWork() {
+  if (!state.selectedTemplateId || !state.analysis) return;
+  try {
+    const work = readWork();
+    work[state.selectedTemplateId] = {
+      savedAt: new Date().toISOString(),
+      template: state.template,
+      analysis: state.analysis,
+      insights: state.insights,
+      mechanisms: state.mechanisms,
+      count: state.count,
+      note: state.note,
+      candidates: state.candidates,
+      strategyNote: state.strategyNote,
+      examples: state.examples,
+      senderLabel: state.senderLabel,
+      shown: state.shown,
+      attempt: state.attempt,
+      previews: Object.fromEntries(Object.entries(state.previews).filter(([, value]) => value && value !== "loading" && !value.error))
+    };
+    const keep = Object.entries(work).sort((left, right) => String(right[1].savedAt).localeCompare(String(left[1].savedAt))).slice(0, WORK_KEEP);
+    window.localStorage.setItem(WORK_KEY, JSON.stringify(Object.fromEntries(keep)));
+  } catch (error) {
+    // Storage full or blocked: the work simply is not remembered.
+  }
+}
+
+function restoreWork(templateId) {
+  const saved = readWork()[templateId];
+  if (!saved?.analysis) return false;
+  Object.assign(state, {
+    template: saved.template || state.template,
+    analysis: saved.analysis,
+    insights: saved.insights || null,
+    mechanisms: saved.mechanisms || [],
+    count: saved.count || 18,
+    note: saved.note || "",
+    candidates: saved.candidates || [],
+    strategyNote: saved.strategyNote || "",
+    examples: saved.examples || [],
+    senderLabel: saved.senderLabel || state.senderLabel,
+    shown: saved.shown || [],
+    attempt: saved.attempt || 0,
+    previews: saved.previews || {},
+    restoredAt: saved.savedAt || ""
+  });
+  return true;
+}
+
+// What an operator did with a line is recorded quietly; it never holds up the screen.
+function recordUse(kind, candidate) {
+  callSubjectLines("team", {
+    method: "POST",
+    body: { op: "record_use", kind, subject: candidate.subject, preview: candidate.preview, mechanism: candidate.mechanism || "", templateId: state.selectedTemplateId, templateName: state.template?.name || "" }
+  }).catch(() => {});
+}
+
 /* ------------------------------------------------------------------ step 1: campaign */
 
 function visibleTemplates() {
@@ -202,7 +278,7 @@ function renderCampaignStep() {
       <div class="subject-selected">
         <div class="subject-selected-text">
           <strong>${escapeHtml(template.name)}</strong>
-          <span>Edited ${escapeHtml(formatDate(template.updated || template.created))}${state.template?.textLength ? ` · ${formatCount(state.template.textLength)} characters of text` : ""}</span>
+          <span>Edited ${escapeHtml(formatDate(template.updated || template.created))}${state.template?.textLength ? ` · ${formatCount(state.template.textLength)} characters of text` : ""}${state.restoredAt ? ` · brief and suggestions from ${escapeHtml(formatDate(state.restoredAt))}, kept in this browser` : ""}</span>
         </div>
         <button class="ghost-button is-sm" data-subject-action="change-template" data-subject-always="true" type="button">Change</button>
         <button class="${state.analysis ? "ghost-button" : "primary-button"} is-sm" data-subject-action="analyse" type="button">${state.analysis ? "Analyse again" : "Analyse"}</button>
@@ -255,6 +331,37 @@ function renderAbTest(test) {
         </div>`;
       }).join("")}
     </article>`;
+}
+
+const SIGNAL = {
+  wins: ["is-up", "▲ Wins more often than chance"],
+  loses: ["is-down", "▼ Loses more often than chance"],
+  leans_win: ["", "Leans towards winning"],
+  leans_loss: ["", "Leans towards losing"],
+  unclear: ["", "No clear pattern"]
+};
+
+// The record of each mechanism in Westpack's own A/B tests. The verdict is read on distinct tests,
+// because one test translated into five markets is one experiment.
+function renderMechanismRecord(evidence, { compact = false } = {}) {
+  const all = [...(evidence?.byMechanism || [])].sort((left, right) => right.z - left.z);
+  const rows = compact ? all.filter((item) => item.signal !== "unclear" || state.mechanisms.includes(item.mechanism)) : all;
+  if (!rows.length) return "";
+  return `
+    <div class="wp-table-wrap">
+      <table class="wp-table subject-record-table">
+        <thead><tr><th scope="col">Mechanism</th><th scope="col" class="is-num">Distinct tests won on opens</th><th scope="col">Verdict</th><th scope="col" class="is-num">Head-to-heads won on clicks</th></tr></thead>
+        <tbody>${rows.map((item) => {
+          const [tone, text] = SIGNAL[item.signal] || SIGNAL.unclear;
+          return `<tr>
+            <th scope="row">${escapeHtml(mechanismLabel(item.mechanism))}</th>
+            <td class="is-num">${formatCount(item.familyWins)} of ${formatCount(item.familyTests)}</td>
+            <td><span class="subject-signal ${tone}">${escapeHtml(text)}</span></td>
+            <td class="is-num">${formatCount(item.clickWins)} of ${formatCount(item.headToHeads)}</td>
+          </tr>`;
+        }).join("")}</tbody>
+      </table>
+    </div>`;
 }
 
 function renderSendRows(entries = []) {
@@ -339,6 +446,11 @@ function renderBriefStep() {
       <h4>What Westpack's own sends say</h4>
       ${insights.sendCount ? "" : '<div class="wp-alert is-warning">The send history is not synced, so there is no house evidence yet. Sync it under The bank.</div>'}
       ${analysis.houseEvidence ? `<p class="subject-prose">${escapeHtml(analysis.houseEvidence)}</p>` : ""}
+      ${insights.mechanismEvidence?.byMechanism?.length ? `
+        <div class="subject-record">
+          <p class="subject-hint">Mechanisms in your A/B tests where the two lines used different mechanisms${renderMechanismRecord(insights.mechanismEvidence, { compact: true }) ? " - the ones with a pattern, and the ones selected below" : ""}. The full record is under The bank, What works.</p>
+          ${renderMechanismRecord(insights.mechanismEvidence, { compact: true })}
+        </div>` : ""}
       ${(insights.abLessons || []).length ? `<div class="subject-ab-list">${insights.abLessons.slice(0, 2).map(renderAbTest).join("")}</div>${insights.abLessons.some((test) => test.includesRemainder) ? `<p class="subject-hint subject-ab-note">${REMAINDER_NOTE}</p>` : ""}` : ""}
       ${(insights.abLessons || []).length > 2 ? `<details class="subject-more"><summary>${plural(insights.abLessons.length - 2, "more A/B test", "more A/B tests")} that bear on this email</summary><div class="subject-ab-list">${insights.abLessons.slice(2).map(renderAbTest).join("")}</div></details>` : ""}
       ${(insights.relevant || []).length ? `<details class="subject-more"><summary>${plural(insights.relevant.length, "past send", "past sends")} about something similar</summary>${renderSendRows(insights.relevant)}<p class="subject-hint">Index: the send against its market's typical rate in the weeks around it, 1,00 = typical. Not a raw open rate, because Apple Mail opens mail nobody read.</p></details>` : ""}
@@ -384,6 +496,47 @@ function renderSubjectText(subject) {
   return `${escapeHtml(visible)}${hidden ? `<span class="subject-cut" title="Cut on iPhone Mail">${escapeHtml(hidden)}</span>` : ""}`;
 }
 
+// A rationale that says "the A/B test W31 showed..." is the model's reading. The test itself sits
+// one click away, so the operator can see whether it really showed that.
+function renderCitedTests(candidate) {
+  const tests = (candidate.evidence || [])
+    .filter((item) => item.kind === "ab")
+    .map((item) => (state.insights?.abLessons || []).find((test) => `ab:${test.campaignId}` === item.id))
+    .filter(Boolean);
+  if (!tests.length) return "";
+  return `<details class="subject-more"><summary>The A/B ${tests.length === 1 ? "test" : "tests"} it cites</summary><div class="subject-ab-list">${tests.map(renderAbTest).join("")}</div></details>`;
+}
+
+function renderMarketPreview(preview) {
+  if (preview === "loading") return '<p class="subject-hint">Translating the two lines into the other markets…</p>';
+  if (preview?.error) return `<p class="subject-hint">${escapeHtml(preview.error)}</p>`;
+  return `
+    <div class="wp-table-wrap">
+      <table class="wp-table subject-market-table">
+        <thead><tr><th scope="col">Markets</th><th scope="col">As a phone shows it</th><th scope="col" class="is-num">Subject</th></tr></thead>
+        <tbody>${preview.markets.map((market) => `
+          <tr>
+            <th scope="row">${escapeHtml(market.markets.join(", "))}<span class="subject-cell-sub">${escapeHtml(market.name)}</span></th>
+            <td><strong>${renderSubjectText(market.subject)}</strong><span class="subject-cell-sub">${escapeHtml(market.preview)}</span>${market.note ? `<span class="subject-cell-sub is-warning">${escapeHtml(market.note)}</span>` : ""}</td>
+            <td class="is-num${market.subjectLength > MOBILE_VISIBLE ? " is-long" : ""}">${formatCount(market.subjectLength)}</td>
+          </tr>`).join("")}</tbody>
+      </table>
+    </div>
+    <p class="subject-hint">A quick look at the two lines alone, ${formatCount(preview.sourceLength)} characters in Danish. Duplicate &amp; translate translates them again with the whole email.</p>`;
+}
+
+async function previewMarkets(candidate) {
+  state.previews[candidate.id] = "loading";
+  renderResultsStep();
+  try {
+    state.previews[candidate.id] = await callSubjectLines("preview_markets", { method: "POST", body: { subject: candidate.subject, preview: candidate.preview } });
+  } catch (error) {
+    state.previews[candidate.id] = { error: error.message || "The preview could not be made." };
+  }
+  renderResultsStep();
+  saveWork();
+}
+
 function renderCandidate(candidate) {
   const open = state.open === candidate.id;
   const editing = state.editing === candidate.id;
@@ -415,6 +568,8 @@ function renderCandidate(candidate) {
           </div>` : ""}
         ${candidate.rationale ? `<p class="subject-prose">${escapeHtml(candidate.rationale)}</p>` : ""}
         ${candidate.evidence?.length ? `<p class="subject-hint">Leans on: ${candidate.evidence.map((item) => escapeHtml(item.label || item)).join(" · ")}</p>` : ""}
+        ${renderCitedTests(candidate)}
+        ${state.previews[candidate.id] ? renderMarketPreview(state.previews[candidate.id]) : ""}
         ${candidate.issues?.length ? `<ul class="subject-issues">${candidate.issues.map((issue) => `<li class="is-${escapeHtml(issue.severity)}"><strong>${escapeHtml(issue.label)}:</strong> ${escapeHtml(issue.message)}</li>`).join("")}</ul>` : ""}
         <p class="subject-hint">${escapeHtml([mechanismLabel(candidate.mechanism), candidate.secondaryMechanism ? mechanismLabel(candidate.secondaryMechanism) : "", riskLabel(candidate.translationRisk), `preheader ${candidate.metrics?.previewLength ?? [...candidate.preview].length} characters`].filter(Boolean).join(" · "))}${candidate.translationNote ? `. ${escapeHtml(candidate.translationNote)}` : ""}</p>
         <div class="subject-row-buttons">
@@ -422,6 +577,7 @@ function renderCandidate(candidate) {
             ? `<button class="primary-button is-sm" data-subject-action="check-edit" data-id="${escapeHtml(candidate.id)}" type="button">Check</button>
                <button class="ghost-button is-sm" data-subject-action="cancel-edit" data-subject-always="true" type="button">Cancel</button>`
             : `<button class="primary-button is-sm" data-subject-action="use" data-id="${escapeHtml(candidate.id)}" type="button"${candidate.status === "block" ? " disabled" : ""}>Use in Duplicate &amp; translate</button>
+               <button class="ghost-button is-sm" data-subject-action="preview-markets" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button"${state.previews[candidate.id] === "loading" ? " disabled" : ""}>${state.previews[candidate.id] && state.previews[candidate.id] !== "loading" ? "Translate again" : "Preview in the other markets"}</button>
                <button class="ghost-button is-sm" data-subject-action="edit" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button">Edit</button>
                <button class="ghost-button is-sm" data-subject-action="ban" data-id="${escapeHtml(candidate.id)}" type="button" title="The generator will steer away from lines like this">Not like this</button>`}
         </div>
@@ -501,6 +657,9 @@ function renderLayers() {
   const bank = status.bank || {};
   const rules = status.rules || [];
   const blocking = rules.filter((rule) => rule.severity === "block").length;
+  // A failed account keeps its last good figures, which is right, but nobody would know it had
+  // stopped updating without this.
+  const failedAccounts = (history.markets || []).filter((market) => market.lastError).map((market) => market.country);
   node.innerHTML = `
     <div class="wp-metrics subject-layers">
       <div class="wp-metric">
@@ -523,9 +682,14 @@ function renderLayers() {
         <span class="wp-metric-value">${formatCount(rules.length)}</span>
         <span class="wp-metric-caption">${formatCount(blocking)} block, ${formatCount(rules.length - blocking)} warn. Run on every suggestion against the email's own text.</span>
       </div>
+      <div class="wp-metric">
+        <span class="wp-metric-label">Generator lines sent</span>
+        <span class="wp-metric-value">${formatCount(status.generator?.sent || 0)}</span>
+        <span class="wp-metric-caption">${status.generator?.recorded ? `Of ${formatCount(status.generator.recorded)} copied, saved or used.${status.generator.sent ? ` Median open index ${formatIndex(status.generator.medianOpenIndex)}.` : ""}` : "Paired with their results once sent."}</span>
+      </div>
     </div>
     <div class="subject-sync">
-      <span class="subject-hint">${history.syncedAt ? `History synced ${escapeHtml(formatDate(history.syncedAt))}, and every night.` : "History not synced."}</span>
+      <span class="subject-hint">${history.syncedAt ? `History synced ${escapeHtml(formatDate(history.syncedAt))}, and every night.` : "History not synced."}${failedAccounts.length ? ` <span class="subject-warning">Last sync failed for ${escapeHtml(failedAccounts.join(", "))}.</span>` : ""}</span>
       <button class="ghost-button is-sm" data-subject-action="sync" type="button">Sync from Klaviyo now</button>
     </div>`;
 }
@@ -541,6 +705,64 @@ function renderBank() {
   const markets = (state.status?.history?.markets || []).map((market) => market.country);
   const select = (id, value, options) => `<select class="wp-select" id="${id}">${options.map(([optionValue, label]) => `<option value="${escapeHtml(optionValue)}"${optionValue === value ? " selected" : ""}>${escapeHtml(label)}</option>`).join("")}</select>`;
   const marketOptions = (includeAll) => [...(includeAll ? [["", "All markets"]] : []), ...markets.map((code) => [code, code])];
+
+  if (state.bankTab === "works") {
+    const history = state.history;
+    if (!history) {
+      node.innerHTML = '<p class="subject-empty">Loading…</p>';
+      return;
+    }
+    const evidence = history.mechanismEvidence || {};
+    const coverage = evidence.coverage || {};
+    const outcomes = history.generatorOutcomes || { recorded: 0, sent: 0, rows: [] };
+    node.innerHTML = `
+      <section class="subject-works">
+        <h4>Mechanisms in your A/B tests</h4>
+        <p class="subject-hint">Every A/B test where the two subject lines used different mechanisms is a head-to-head. Many tests were one test translated into several markets, so the verdict counts distinct tests and asks whether the record beats a coin flip. Opens and clicks are both shown because they can disagree: a line can win the open and lose the click.</p>
+        ${renderMechanismRecord(evidence) || '<p class="subject-empty">No head-to-heads yet: Westpack\'s own lines have not been tagged with mechanisms.</p>'}
+        <div class="subject-table-foot">
+          <span class="subject-hint">${formatCount(coverage.taggedArms || 0)} of ${formatCount(coverage.totalArms || 0)} A/B arms and ${formatCount(coverage.taggedDk || 0)} of ${formatCount(coverage.totalDk || 0)} DK sends tagged. New sends are tagged every night.</span>
+          <button class="ghost-button is-sm" data-subject-action="tag-history" type="button">Tag new lines now</button>
+        </div>
+      </section>
+
+      ${(evidence.pairs || []).length ? `
+      <section class="subject-works">
+        <h4>Head to head</h4>
+        <ul class="subject-pairs">${evidence.pairs.map((pair) => `<li><span>${escapeHtml(mechanismLabel(pair.a))}</span><strong>${formatCount(pair.aWins)} – ${formatCount(pair.bWins)}</strong><span>${escapeHtml(mechanismLabel(pair.b))}</span></li>`).join("")}</ul>
+        <p class="subject-hint">Wins on opens across all markets, so a test run in five markets counts five times here.</p>
+      </section>` : ""}
+
+      ${(evidence.dkIndex || []).length ? `
+      <section class="subject-works">
+        <h4>DK sends by mechanism</h4>
+        <div class="wp-table-wrap"><table class="wp-table subject-record-table">
+          <thead><tr><th scope="col">Mechanism</th><th scope="col" class="is-num">Sends</th><th scope="col" class="is-num">Median open index</th><th scope="col" class="is-num">Median click index</th></tr></thead>
+          <tbody>${evidence.dkIndex.map((item) => `<tr><th scope="row">${escapeHtml(mechanismLabel(item.mechanism))}</th><td class="is-num">${formatCount(item.sends)}</td><td class="is-num">${indexBadge(item.openIndex, "Open")}</td><td class="is-num">${indexBadge(item.clickIndex, "Click")}</td></tr>`).join("")}</tbody>
+        </table></div>
+        <p class="subject-hint">Outside the tests, so different emails, seasons and lists are compared: correlation, not effect. The flat open indexes are what Apple Mail's automatic opens do to a comparison.</p>
+      </section>` : ""}
+
+      <section class="subject-works">
+        <h4>The generator's own record</h4>
+        <p class="subject-prose">${outcomes.recorded
+          ? `${plural(outcomes.recorded, "line", "lines")} from the generator copied, saved or handed to Duplicate &amp; translate; ${formatCount(outcomes.sent)} of them sent from the DK account so far${outcomes.sent ? `, with a median open index of ${formatIndex(outcomes.medianOpenIndex)} and click index of ${formatIndex(outcomes.medianClickIndex)}` : ""}.`
+          : "Nothing recorded yet. Every line that is copied, saved or used is recorded here, and paired with its send and results once the campaign has gone out."}</p>
+        ${outcomes.rows?.length ? `
+        <div class="wp-table-wrap"><table class="wp-table subject-history-table">
+          <thead><tr><th scope="col">Recorded</th><th scope="col">Line</th><th scope="col">Sent</th><th scope="col" class="is-num">Open index</th><th scope="col" class="is-num">Click index</th></tr></thead>
+          <tbody>${outcomes.rows.slice(0, 50).map((row) => `
+            <tr>
+              <td class="subject-history-when"><span class="subject-nowrap">${escapeHtml(formatDate(row.at))}</span><span class="subject-cell-sub">${escapeHtml({ copy: "Copied", save: "Saved", use: "Handed to Duplicate & translate" }[row.kind] || row.kind)}</span></td>
+              <td class="subject-history-line"><strong>${escapeHtml(row.subject)}</strong><span class="subject-cell-sub is-clipped">${escapeHtml([mechanismLabel(row.mechanism), row.templateName].filter(Boolean).join(" · "))}</span></td>
+              <td>${row.sent ? `<span class="subject-nowrap">${escapeHtml(formatDate(row.sent.sentAt))}</span><span class="subject-cell-sub">${row.sent.match === "near" ? "Edited before sending" : "As written"}${row.sent.abTest ? " · A/B arm" : ""}</span>` : '<span class="subject-muted subject-nowrap">Not sent yet</span>'}</td>
+              <td class="is-num">${row.sent ? indexBadge(row.sent.openIndex, "Open") : ""}</td>
+              <td class="is-num">${row.sent ? indexBadge(row.sent.clickIndex, "Click") : ""}</td>
+            </tr>`).join("")}</tbody>
+        </table></div>` : ""}
+      </section>`;
+    return;
+  }
 
   if (state.bankTab === "sends") {
     const history = state.history;
@@ -704,7 +926,7 @@ async function loadPatterns({ append = false } = {}) {
 }
 
 function loadBankTab() {
-  if (state.bankTab === "sends" || state.bankTab === "ab") return loadHistory();
+  if (state.bankTab === "sends" || state.bankTab === "ab" || state.bankTab === "works") return loadHistory();
   if (state.bankTab === "patterns") return loadPatterns();
   if (state.bankTab === "import") return loadTeam().then(renderBank);
   renderBank();
@@ -737,6 +959,9 @@ async function analyse() {
   state.attempt = 0;
   state.open = "";
   state.mechanismFilter = "";
+  state.previews = {};
+  state.restoredAt = "";
+  saveWork();
   renderFlow();
   byId("subject-step-brief")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -764,6 +989,9 @@ async function generate({ again = false } = {}) {
   state.editing = "";
   state.open = "";
   state.mechanismFilter = "";
+  state.previews = {};
+  state.restoredAt = "";
+  saveWork();
   renderFlow();
   byId("subject-step-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -795,6 +1023,8 @@ async function checkEdit(candidate) {
     rationale: candidate.rationale ? `${candidate.rationale} (Redigeret.)` : ""
   });
   state.editing = "";
+  delete state.previews[candidate.id];
+  saveWork();
   setFeedback(payload.candidate.status === "ok" ? "Your edit passes the rules." : "Your edit was checked: see the notes on the line.", payload.candidate.status === "block" ? "is-danger" : "");
 }
 
@@ -847,6 +1077,11 @@ function handleClick(event) {
         state.insights = null;
         state.candidates = [];
         state.strategyNote = "";
+        state.previews = {};
+        state.restoredAt = "";
+        state.open = "";
+        state.mechanismFilter = "";
+        if (restoreWork(id)) setFeedback("Your last brief and suggestions for this template are back. Analyse again to read the email fresh.");
       }
       state.picking = false;
       renderFlow();
@@ -879,7 +1114,12 @@ function handleClick(event) {
       state.open = state.open === id ? "" : id;
       renderResultsStep();
     },
-    copy: () => candidate && copyText(candidate.subject, candidate.preview),
+    copy: () => {
+      if (!candidate) return;
+      copyText(candidate.subject, candidate.preview);
+      recordUse("copy", candidate);
+    },
+    "preview-markets": () => candidate && previewMarkets(candidate),
     "copy-favourite": () => {
       const item = (state.team.favourites || []).find((favourite) => favourite.id === id);
       if (item) copyText(item.subject, item.preview);
@@ -894,7 +1134,11 @@ function handleClick(event) {
       renderResultsStep();
     },
     "check-edit": () => candidate && runAction("Checking your edit", () => checkEdit(candidate)),
-    favourite: () => candidate && runAction("Saving", () => teamOp({ op: "favourite", subject: candidate.subject, preview: candidate.preview, mechanism: candidate.mechanism, campaignName: state.template?.name || "", templateId: state.selectedTemplateId }, "Saved to the shortlist.")),
+    favourite: () => {
+      if (!candidate) return;
+      recordUse("save", candidate);
+      runAction("Saving", () => teamOp({ op: "favourite", subject: candidate.subject, preview: candidate.preview, mechanism: candidate.mechanism, campaignName: state.template?.name || "", templateId: state.selectedTemplateId }, "Saved to the shortlist."));
+    },
     unfavourite: () => runAction("Removing", () => teamOp({ op: "unfavourite", id }, "Removed from the shortlist.")),
     ban: () => candidate && runAction("Saving", () => teamOp({ op: "ban", subject: candidate.subject, reason: `Afvist til ${state.template?.name || "en kampagne"}` }, "Noted. The writer will steer away from lines like this.")),
     "ban-pattern": () => {
@@ -902,7 +1146,11 @@ function handleClick(event) {
       return runAction("Saving", () => teamOp({ op: "ban", id, subject: entry?.subject || id, reason: "Mønster fravalgt i banken" }, "The writer will not be shown this line again."));
     },
     unban: () => runAction("Saving", () => teamOp({ op: "unban", id }, "Allowed again.")),
-    use: () => candidate && useInDuplicator(state.selectedTemplateId, state.template?.name || "", candidate.subject, candidate.preview),
+    use: () => {
+      if (!candidate) return;
+      recordUse("use", candidate);
+      useInDuplicator(state.selectedTemplateId, state.template?.name || "", candidate.subject, candidate.preview);
+    },
     sync: () => runAction("Syncing from Klaviyo", async () => {
       let payload = await callSubjectLines("sync_history", { method: "POST", body: {} });
       for (let round = 0; payload.remaining?.length && round < 4; round += 1) {
@@ -911,6 +1159,17 @@ function handleClick(event) {
       }
       await loadStatus();
       setFeedback(`Synced ${formatCount(payload.history?.sends || 0)} sends${payload.failed?.length ? `. Failed: ${payload.failed.map((item) => item.country).join(", ")}` : ""}.`, payload.failed?.length ? "is-warning" : "");
+    }),
+    "tag-history": () => runAction("Tagging Westpack's own lines with mechanisms", async () => {
+      let payload = await callSubjectLines("tag_history", { method: "POST", body: {} });
+      let tagged = payload.tagged || 0;
+      for (let round = 0; payload.remaining && payload.tagged && round < 5; round += 1) {
+        setBusy(`Tagging - ${formatCount(payload.remaining)} lines left`);
+        payload = await callSubjectLines("tag_history", { method: "POST", body: {} });
+        tagged += payload.tagged || 0;
+      }
+      await Promise.all([loadStatus(), loadHistory()]);
+      setFeedback(`${plural(tagged, "line", "lines")} tagged${payload.remaining ? `, ${formatCount(payload.remaining)} left` : ""}.`);
     }),
     "history-more": () => runAction("Loading", () => loadHistory({ append: true })),
     "patterns-more": () => runAction("Loading", () => loadPatterns({ append: true })),

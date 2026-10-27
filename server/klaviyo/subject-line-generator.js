@@ -13,7 +13,8 @@
 
 const { buildWestpackKnowledgePromptBlock } = require("../lib/westpack-knowledge");
 const { repairModelJsonText } = require("../lib/model-json");
-const { MECHANISMS, CAMPAIGN_TYPES, MECHANISM_KEYS, CAMPAIGN_TYPE_KEYS, TRANSLATION_RISKS, TONE_KEYS } = require("./subject-line-taxonomy");
+const { MECHANISMS, CAMPAIGN_TYPES, MECHANISM_KEYS, CAMPAIGN_TYPE_KEYS, TRANSLATION_RISKS, TONE_KEYS, mechanismLabel } = require("./subject-line-taxonomy");
+const { buildGlossaryPromptBlock } = require("../lib/glossary");
 const { buildRulesPromptBlock, checkSubjectLine } = require("./subject-line-rules");
 
 const EMAIL_TEXT_LIMIT = 9000;
@@ -177,6 +178,23 @@ function buildHouseEvidenceBlock(insights = {}, { compact = false } = {}) {
     insights.relevant.slice(0, compact ? 6 : 10).forEach((entry) => lines.push(`- ${describeSend(entry)}`));
     lines.push("");
   }
+  const evidence = insights.mechanismEvidence;
+  if (evidence?.byMechanism?.length) {
+    const signalText = { wins: "wins more often than chance", loses: "loses more often than chance", leans_win: "leans towards winning", leans_loss: "leans towards losing", unclear: "no clear pattern" };
+    lines.push(`Mechanisms in Westpack's own A/B tests: ${evidence.headToHeads} head-to-heads where the two arms used different mechanisms. Many tests were one test translated into several markets, so the verdict is read on distinct tests only (a sign test against a coin flip). Opens and clicks are both shown because they can disagree:`);
+    evidence.byMechanism.forEach((item) => lines.push(`- ${mechanismLabel(item.mechanism)} (${item.mechanism}): on opens won ${item.familyWins} of ${item.familyTests} distinct tests - ${signalText[item.signal] || "no clear pattern"} (${item.wins} of ${item.headToHeads} head-to-heads across markets); on clicks won ${item.clickWins} of ${item.headToHeads}.`));
+    if (evidence.dkIndex?.length) {
+      lines.push("Median open index of DK sends by mechanism (outside the tests, so correlation only):");
+      evidence.dkIndex.forEach((item) => lines.push(`- ${mechanismLabel(item.mechanism)}: ${item.openIndex.toFixed(2)} (${item.sends} sends), click index ${item.clickIndex ?? "n/a"}.`));
+    }
+    lines.push("");
+  }
+  const outcomes = insights.generatorOutcomes;
+  if (outcomes?.sent) {
+    lines.push(`Lines this generator wrote that Westpack then sent (${outcomes.sent} so far, median open index ${Number(outcomes.medianOpenIndex).toFixed(2)}):`);
+    outcomes.rows.filter((row) => row.sent).slice(0, 10).forEach((row) => lines.push(`- "${row.sent.subject}" (${mechanismLabel(row.mechanism)}, ${String(row.sent.sentAt).slice(0, 10)}, open index ${Number.isFinite(row.sent.openIndex) ? row.sent.openIndex.toFixed(2) : "n/a"})`));
+    lines.push("");
+  }
   if (insights.featureStats?.length) {
     lines.push("Median open index with and without a feature (correlation across different emails and seasons - weak evidence, never a rule):");
     insights.featureStats.slice(0, 8).forEach((stat) => lines.push(`- ${stat.label}: ${stat.openIndexWith.toFixed(2)} with (${stat.withCount}) vs ${stat.openIndexWithout.toFixed(2)} without (${stat.withoutCount}); click index ${stat.clickIndexWith ?? "n/a"} vs ${stat.clickIndexWithout ?? "n/a"}.`));
@@ -253,8 +271,8 @@ async function analyseCampaign({ config, templateName = "", emailText = "", insi
           "`coreMessage` is one sentence of at most 25 words: the single thing the email wants the reader to do or feel. Detail belongs in the other fields.",
           "Never invent. Every offer, number, deadline, product and fact you list must be in the email text; if the email has no offer, `offer` is empty. `evidence` quotes the email.",
           "`mustNotPromise` lists what a subject line could plausibly be tempted to promise that the email does not deliver, plus any of Westpack's standing rules this email comes close to.",
-          "`recommendedMechanisms` are ranked; the reasons refer to this email and, where it exists, to Westpack's own A/B evidence below. `avoidMechanisms` only where a mechanism would mislead or clash with the email.",
-          "`houseEvidence` is two or three sentences on what Westpack's own sends and A/B tests suggest for an email like this one, naming the tests. If the evidence is thin or inconclusive, say so plainly.",
+          "`recommendedMechanisms` are ranked; the reasons refer to this email and, where it exists, to Westpack's own A/B evidence below. Weigh the mechanism record from Westpack's A/B tests: a mechanism that keeps winning head-to-heads deserves a place when it fits the email, one that keeps losing needs a reason from this email to be recommended. Never let the record override what the email is about. `avoidMechanisms` only where a mechanism would mislead or clash with the email.",
+          "`houseEvidence` is two or three sentences on what Westpack's own sends and A/B tests suggest for an email like this one, naming the tests by their campaign name - never by an id in square brackets. If the evidence is thin or inconclusive, say so plainly.",
           "Write every prose field in Danish.",
           "",
           taxonomyBlock(),
@@ -279,7 +297,16 @@ async function analyseCampaign({ config, templateName = "", emailText = "", insi
     }
   ];
   const { parsed, model } = await requestStructured(config, { input, schemaName: "westpack_subject_line_analysis", schema: ANALYSIS_SCHEMA, reasoningEffort: "low" });
-  return { analysis: parsed, model };
+  // Ids the model was told not to write still come through now and then; they become the test's
+  // name, as in the suggestions' rationales.
+  const phrases = evidencePhrases({ abTests: insights.abLessons || [] });
+  const analysis = {
+    ...parsed,
+    houseEvidence: cleanRationale(parsed?.houseEvidence, phrases),
+    recommendedMechanisms: (parsed?.recommendedMechanisms || []).map((item) => ({ ...item, reason: cleanRationale(item.reason, phrases) })),
+    avoidMechanisms: (parsed?.avoidMechanisms || []).map((item) => ({ ...item, reason: cleanRationale(item.reason, phrases) }))
+  };
+  return { analysis, model };
 }
 
 function buildCandidateSchema(count) {
@@ -383,11 +410,13 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
       }]
     }
   ];
+  // Twelve pairs on medium reasoning took about 95 seconds on 2026-10-27; twenty-four would not
+  // leave room for the fallback model inside the function's 300 seconds, so a large set reasons less.
   const { parsed, model } = await requestStructured(config, {
     input,
     schemaName: "westpack_subject_line_candidates",
     schema: buildCandidateSchema(total),
-    reasoningEffort: "medium",
+    reasoningEffort: total > 18 ? "low" : "medium",
     writing: true
   });
   return { strategyNote: String(parsed?.strategyNote || ""), candidates: Array.isArray(parsed?.candidates) ? parsed.candidates : [], model };
@@ -397,13 +426,17 @@ function comparable(value = "") {
   return String(value || "").toLowerCase().replace(/[^\p{L}\d%]+/gu, " ").trim();
 }
 
-const EVIDENCE_ID = /\s*[[(]((?:ab:|pb-|im-)[^\])]*)[\])]/g;
+const EVIDENCE_ID = /\s*[[(]((?:ab:|pb-|im-|rg-)[^\])]*)[\])]/g;
 
 // The model is told to keep ids out of the rationale and still writes "[ab:01GV...]" now and then.
 // A known id is replaced by what it points at, so the sentence still reads; an unknown one is
 // dropped, together with the connective it leaves dangling ("strukturen i og.").
 function cleanRationale(text = "", lookup = new Map()) {
-  let cleaned = String(text || "").replace(EVIDENCE_ID, (match, id) => (lookup.has(id) ? ` ${lookup.get(id)}` : ""));
+  // An id written in parentheses keeps them, so "(ab:X)" reads "(A/B-testen ...)".
+  let cleaned = String(text || "").replace(EVIDENCE_ID, (match, id) => {
+    if (!lookup.has(id)) return "";
+    return match.trim().startsWith("(") ? ` (${lookup.get(id)})` : ` ${lookup.get(id)}`;
+  });
   for (let pass = 0; pass < 4; pass += 1) {
     const next = cleaned.replace(/\s+(?:i|og|fra|samt|via|jf\.?|som i|ligesom)\s*(?=[.,;:)]|$)/g, "");
     if (next === cleaned) break;
@@ -472,7 +505,7 @@ function finalizeCandidates(candidates = [], { emailText = "", pastSubjects = []
         rationale: cleanRationale(candidate.rationale, phrases),
         evidence: describeEvidence([
           ...(Array.isArray(candidate.evidence) ? candidate.evidence : []),
-          ...(String(candidate.rationale || "").match(/(?:ab:|pb-|im-)[^\])\s,]+/g) || [])
+          ...(String(candidate.rationale || "").match(/(?:ab:|pb-|im-|rg-)[^\])\s,]+/g) || [])
         ], { abTests, examples }),
         translationRisk: candidate.translationRisk,
         translationNote: String(candidate.translationNote || ""),
@@ -482,6 +515,94 @@ function finalizeCandidates(candidates = [], { emailText = "", pastSubjects = []
       };
     })
     .sort((left, right) => (severityRank[left.status] === 2) - (severityRank[right.status] === 2));
+}
+
+// How a Danish line will read in the other markets, before anyone commits to it. Duplicate &
+// translate does the real translation later, with the whole email; this is a quick look at the
+// two lines alone - length against the phone's cut, and wordplay that does not survive.
+const PREVIEW_LANGUAGES = [
+  { code: "de", name: "German", markets: ["DE"], glossary: "DE" },
+  { code: "en", name: "English (UK)", markets: ["UK", "EU", "US"], glossary: "UK" },
+  { code: "fr", name: "French", markets: ["FR"], glossary: "FR" },
+  { code: "nl", name: "Dutch", markets: ["NL"], glossary: "NL" },
+  { code: "sv", name: "Swedish", markets: ["SE"], glossary: "SE" },
+  { code: "nb", name: "Norwegian (Bokmål)", markets: ["NO"], glossary: "NO" },
+  { code: "fi", name: "Finnish", markets: ["FI"], glossary: "FI" },
+  { code: "it", name: "Italian", markets: ["IT"], glossary: "IT" },
+  { code: "es", name: "Spanish", markets: ["ES"], glossary: "ES" },
+  { code: "pt", name: "Portuguese", markets: ["PT"], glossary: "PT" },
+  { code: "pl", name: "Polish", markets: ["PL"], glossary: "PL" },
+  { code: "ro", name: "Romanian", markets: ["RO"], glossary: "RO" }
+];
+
+async function previewInMarkets({ config, subject = "", preview = "" }) {
+  const sourceTexts = [subject, preview];
+  const glossary = PREVIEW_LANGUAGES
+    .map((language) => buildGlossaryPromptBlock({ targetLanguage: language.glossary, sourceTexts }))
+    .filter(Boolean)
+    .join("\n\n");
+  const input = [
+    {
+      role: "system",
+      content: [{
+        type: "input_text",
+        text: [
+          "You translate one Danish email subject line and its preheader for Westpack, a B2B packaging supplier, into its other markets' languages.",
+          "Write what a native marketing copywriter in each market would send: natural, the same intent and tone, emoji kept where they are, as short as the language allows. Never add a claim, number or offer.",
+          "`note` is empty unless something is lost - wordplay, an idiom, a cultural reference - in which case say what in one short English clause.",
+          glossary ? `\n${glossary}` : ""
+        ].join("\n")
+      }]
+    },
+    {
+      role: "user",
+      content: [{
+        type: "input_text",
+        text: [`Subject: ${subject}`, `Preheader: ${preview || "(none)"}`, "", `Languages: ${PREVIEW_LANGUAGES.map((language) => `${language.code} (${language.name})`).join(", ")}`].join("\n")
+      }]
+    }
+  ];
+  const schema = {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      translations: {
+        type: "array",
+        minItems: PREVIEW_LANGUAGES.length,
+        maxItems: PREVIEW_LANGUAGES.length,
+        items: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            language: { type: "string", enum: PREVIEW_LANGUAGES.map((language) => language.code) },
+            subject: { type: "string" },
+            preview: { type: "string" },
+            note: { type: "string" }
+          },
+          required: ["language", "subject", "preview", "note"]
+        }
+      }
+    },
+    required: ["translations"]
+  };
+  const { parsed, model } = await requestStructured(config, { input, schemaName: "westpack_subject_line_market_preview", schema });
+  const byCode = new Map((parsed?.translations || []).map((item) => [item.language, item]));
+  return {
+    model,
+    sourceLength: [...subject].length,
+    markets: PREVIEW_LANGUAGES.map((language) => {
+      const item = byCode.get(language.code) || { subject: "", preview: "", note: "" };
+      return {
+        language: language.code,
+        name: language.name,
+        markets: language.markets,
+        subject: String(item.subject || ""),
+        preview: String(item.preview || ""),
+        note: String(item.note || ""),
+        subjectLength: [...String(item.subject || "")].length
+      };
+    })
+  };
 }
 
 const IMPORT_SCHEMA_ITEM = {
@@ -558,5 +679,7 @@ module.exports = {
   extractEmailText,
   finalizeCandidates,
   generateSubjectLines,
+  PREVIEW_LANGUAGES,
+  previewInMarkets,
   tagImportedLines
 };

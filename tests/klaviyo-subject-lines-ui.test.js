@@ -98,6 +98,26 @@ test("the chosen pair replaces the template name as the rollout's subject, for t
   assert.equal(domain.getSelectedKlaviyoTemplate().subject, "W43: Højsæsonen", "another template never inherits the line");
 });
 
+test("the screen records what is done with a line, remembers work per browser, and can preview markets", () => {
+  for (const kind of ['recordUse("copy"', 'recordUse("save"', 'recordUse("use"']) assert.ok(moduleJs.includes(kind), kind);
+  // Browser storage can throw (private window, blocked site data); the screen must still work.
+  assert.match(moduleJs, /function readWork\(\) \{\s*try \{/);
+  assert.match(moduleJs, /function saveWork\(\) \{\s*if[^\n]*\n\s*try \{/);
+  assert.match(moduleJs, /data-subject-action="preview-markets"/);
+  assert.match(moduleJs, /function renderCitedTests\(candidate\)/);
+  assert.match(indexHtml, /data-subject-bank-tab="works"/);
+  for (const action of ["tag_history", "preview_markets", "record_use"]) assert.ok(apiJs.includes(action), action);
+  // The nightly cron may tag new lines without a session, like the sync.
+  assert.match(apiJs, /action === "tag_history" && \(isVercelCronRequest\(req\) \|\| isAuthorizedCronRequest\(req, config\)\)/);
+});
+
+test("Duplicate & translate shows the chosen subject line and can drop it", () => {
+  const rollout = read("src", "klaviyo-template-rollout.js");
+  assert.match(indexHtml, /id="klaviyo-chosen-subject"/);
+  assert.match(rollout, /subjectSource === "subject_lines"/);
+  assert.match(appJs, /data-clear-chosen-subject/);
+});
+
 test("the API never writes to Klaviyo", () => {
   assert.doesNotMatch(apiJs, /method:\s*"(PATCH|PUT|DELETE)"/);
   assert.doesNotMatch(apiJs, /campaign-messages|\/api\/campaigns\//);

@@ -40,6 +40,7 @@ test-results/
 # hold every account's send figures and must never be served as static files.
 data/klaviyo-subject-line-history.json
 data/klaviyo-subject-line-team.json
+data/klaviyo-subject-line-tags.json
 
 # Not needed at runtime.
 tests/

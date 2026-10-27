@@ -1033,10 +1033,50 @@ history / bank / team / sync_history), `src/klaviyo-subject-lines.js`, `server/k
    *and* run over every candidate; a blocked candidate stays on screen, last, with the reason.
    Patterns use Unicode letter boundaries - `\b` treats æ/ø/å as non-letters.
 
+### What wins for Westpack - the mechanism record (2026-10-27)
+
+Westpack's own lines are tagged with the bank's mechanisms (`server/klaviyo/subject-line-mechanisms.js`,
+tags in Blob `klaviyo-snapshots/subject-line-tags.json`, keyed by message id): every arm of every
+subject/preheader A/B test in all markets (1,006 arms) and DK's sends. An A/B test whose two arms
+used different mechanisms is a head-to-head - 262 of them. Two things make the record honest, and
+both matter:
+
+- **A test translated into five markets is one experiment.** Counted per head-to-head, "Konkret
+  værdi" won 54 of 87 (62%) and looked like a finding; counted per distinct test (`familyKey`) it is
+  20 of 34 and no pattern. The verdict (`signal`) is a sign test on distinct tests only.
+- **Opens and clicks disagree.** The one robust result: **subject lines built on an offer lose on
+  opens - 5 of 25 distinct tests, z = -3.0 - but win on clicks, 39 of 67 head-to-heads**, and DK
+  offer sends have the highest median click index (1.36). Everything else is "no clear pattern".
+  DK sends outside tests show flat open indexes (0.98-1.08) for every mechanism: Apple MPP.
+
+The record is in the analysis and writing prompts (weighed, never overriding what the email is
+about), in the brief, and in the bank's "What works" tab. New lines are tagged by the nightly sync
+(200 a night); `?action=tag_history` catches up in chunks of 600.
+
+### The generator's own record
+
+Copy, Save and "Use in Duplicate & translate" are recorded (`op: record_use`, team doc `used`).
+`server/klaviyo/subject-line-outcomes.js` pairs each recorded line with a DK send from a day before
+to sixty days after - same words (emoji ignored) or a near match (≥75% of the words, "edited before
+sending") - so the screen and the writer's prompt can show how the generator's own lines did. The
+first such pairs can only appear after a campaign written with it has been sent and synced.
+
 ### Other decisions
 
 - The analysis runs on the default model (`OPENAI_MODEL`); writing runs on `CONTENT_AGENT_MODEL`
-  (gpt-5.6, ~70 s for 12 pairs). The strong model ran past 130 s on the analysis alone.
+  (gpt-5.6, 60-95 s for 12 pairs once the mechanism record is in the prompt; more than 18 pairs
+  reason on "low" so the fallback model still fits in 300 s). The strong model ran past 130 s on
+  the analysis alone.
+- "Analyse" always fetches the template fresh; generate and check reuse a 10-minute cache.
+- "Preview in the other markets" (`?action=preview_markets`) translates just the pair into the 12
+  other languages with the glossary, one call, ~5 s, and shows each against the iPhone cut. The
+  rollout translates again with the whole email; this is a look before committing.
+- The brief and suggestions for a template are kept in the browser (`localStorage`, last 10
+  templates, try/catch) and restored when it is chosen again. Shared state stays on the server.
+- Duplicate & translate shows the chosen subject line under its source picker, with a way back to
+  the template name.
+- Rationales and the analysis' evidence text get model-written ids (`[ab:…]`, `(pb-…)`, `rg-…`)
+  replaced by what they point at, and a cited A/B test can be opened on the suggestion itself.
 - A Klaviyo template has no subject line. Duplicate & translate used to translate the template's
   **name** as the subject. "Use in Duplicate & translate" sets `appState.klaviyoTemplateSubjectOverride`
   for that one template, so the rollout translates the chosen pair into every market.

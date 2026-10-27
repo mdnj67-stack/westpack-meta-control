@@ -370,6 +370,23 @@ export function renderKlaviyoDuplicateTranslatePanel({
     sourceTemplateSelect.disabled = appState.klaviyoTemplateLoading;
   }
 
+  // A subject line chosen on the Subject lines screen replaces the template's name as the subject
+  // the rollout translates. Without saying so here, the operator would only discover it in the
+  // generated drafts.
+  const chosenSubject = document.getElementById("klaviyo-chosen-subject");
+  if (chosenSubject) {
+    const chosen = plan.sourceTemplate?.subjectSource === "subject_lines";
+    chosenSubject.hidden = !chosen;
+    chosenSubject.innerHTML = chosen ? `
+      <div>
+        <span class="section-label">Subject line from Subject lines</span>
+        <strong>${escapeHtml(plan.sourceTemplate.subject)}</strong>
+        ${plan.sourceTemplate.previewText ? `<span>${escapeHtml(plan.sourceTemplate.previewText)}</span>` : ""}
+        <small>Translated into every target market with the template.</small>
+      </div>
+      <button class="ghost-button is-sm" data-clear-chosen-subject="true" type="button">Use the template name instead</button>` : "";
+  }
+
   if (targetGrid) {
     targetGrid.innerHTML = getKlaviyoTemplateAccounts().map((account) => {
       const isActive = (appState.klaviyoTemplateTargets || []).includes(account);

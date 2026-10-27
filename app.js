@@ -8,7 +8,7 @@ import {
   initCanvaLocalizer,
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
-import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261027-subjectlines2";
+import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261027-subjectlines3";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -44,10 +44,10 @@ import {
 } from "./src/klaviyo-campaign-ai.js?v=20260715-klaviyocampaignai1";
 import {
   createKlaviyoTemplateDomain
-} from "./src/klaviyo-template-domain.js?v=20260715-klaviyotemplatedomain1";
+} from "./src/klaviyo-template-domain.js?v=20261027-klaviyotemplatedomain2";
 import {
   createKlaviyoDashboardDomain
-} from "./src/klaviyo-dashboard-domain.js?v=20260715-klaviyodashboarddomain1";
+} from "./src/klaviyo-dashboard-domain.js?v=20261027-klaviyodashboarddomain2";
 import {
   createMetaMasterArtifactDraft,
   createMetaMasterCardDrafts,
@@ -68,7 +68,7 @@ import {
   loadKlaviyoTemplateDetailAction,
   pushKlaviyoRolloutDraftsAction,
   renderKlaviyoDuplicateTranslatePanel
-} from "./src/klaviyo-template-rollout.js?v=20260715-klaviyotemplaterollout1";
+} from "./src/klaviyo-template-rollout.js?v=20261027-klaviyotemplaterollout2";
 import {
   analyzeCreateVideoAction,
   attachCreateStudioEventsModule,
@@ -14119,6 +14119,12 @@ function attachEvents() {
     if (catalogLoaded && appState.klaviyoTemplateSourceAccount === chosen.account) {
       loadKlaviyoTemplateDetail(chosen.templateId);
     }
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-clear-chosen-subject]")) return;
+    appState.klaviyoTemplateSubjectOverride = null;
+    resetKlaviyoGeneratedPlan();
+    renderKlaviyoWorkspace();
   });
 
   document.querySelectorAll(".klaviyo-dashboard-subtab").forEach((button) => {

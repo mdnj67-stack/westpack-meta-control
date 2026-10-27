@@ -1,10 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-// Five snapshots share this module's storage plumbing: the historical creative
+// Six snapshots share this module's storage plumbing: the historical creative
 // intelligence the Content Agent reads, the expansion reach series and the
 // audience saturation table the Meta dashboard renders, and the subject line
-// generator's Klaviyo send history and team data. They are kept under separate keys rather than in one blob,
+// generator's Klaviyo send history, its mechanism tags and team data. They are kept under separate keys rather than in one blob,
 // because each is written by its own job and a shared value would make
 // one job's write clobber the other's.
 const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
@@ -12,13 +12,15 @@ const EXPANSION_STORE_KEY = "westpack:meta-expansion-reach:v1";
 const SATURATION_STORE_KEY = "westpack:meta-audience-saturation:v1";
 const SUBJECT_HISTORY_STORE_KEY = "westpack:klaviyo-subject-line-history:v1";
 const SUBJECT_TEAM_STORE_KEY = "westpack:klaviyo-subject-line-team:v1";
+const SUBJECT_TAGS_STORE_KEY = "westpack:klaviyo-subject-line-tags:v1";
 
 const LOCAL_PATHS = {
   [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
   [EXPANSION_STORE_KEY]: path.join(process.cwd(), "data", "meta-expansion-reach.json"),
   [SATURATION_STORE_KEY]: path.join(process.cwd(), "data", "meta-audience-saturation.json"),
   [SUBJECT_HISTORY_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-history.json"),
-  [SUBJECT_TEAM_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-team.json")
+  [SUBJECT_TEAM_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-team.json"),
+  [SUBJECT_TAGS_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-tags.json")
 };
 
 const volatileSnapshots = new Map();
@@ -45,7 +47,8 @@ const BLOB_PATHS = {
   [EXPANSION_STORE_KEY]: "meta-snapshots/expansion-reach.json",
   [SATURATION_STORE_KEY]: "meta-snapshots/audience-saturation.json",
   [SUBJECT_HISTORY_STORE_KEY]: "klaviyo-snapshots/subject-line-history.json",
-  [SUBJECT_TEAM_STORE_KEY]: "klaviyo-snapshots/subject-line-team.json"
+  [SUBJECT_TEAM_STORE_KEY]: "klaviyo-snapshots/subject-line-team.json",
+  [SUBJECT_TAGS_STORE_KEY]: "klaviyo-snapshots/subject-line-tags.json"
 };
 
 function getBlobToken() {
@@ -168,6 +171,8 @@ const readSubjectLineHistory = () => readSnapshot(SUBJECT_HISTORY_STORE_KEY);
 const writeSubjectLineHistory = (snapshot) => writeSnapshot(SUBJECT_HISTORY_STORE_KEY, snapshot);
 const readSubjectLineTeam = () => readSnapshot(SUBJECT_TEAM_STORE_KEY);
 const writeSubjectLineTeam = (snapshot) => writeSnapshot(SUBJECT_TEAM_STORE_KEY, snapshot);
+const readSubjectLineTags = () => readSnapshot(SUBJECT_TAGS_STORE_KEY);
+const writeSubjectLineTags = (snapshot) => writeSnapshot(SUBJECT_TAGS_STORE_KEY, snapshot);
 
 module.exports = {
   getHistoricalStoreProfile,
@@ -180,5 +185,7 @@ module.exports = {
   readSubjectLineHistory,
   writeSubjectLineHistory,
   readSubjectLineTeam,
-  writeSubjectLineTeam
+  writeSubjectLineTeam,
+  readSubjectLineTags,
+  writeSubjectLineTags
 };

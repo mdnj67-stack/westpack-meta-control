@@ -5813,6 +5813,24 @@ input[type="file"] {
 .sat-rules-input small { font-size: var(--wp-text-2xs); color: var(--wp-text-subtle); }
 
 
+/* The chosen subject line, shown where Duplicate & translate picks its source. */
+.klaviyo-chosen-subject {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  margin-top: var(--wp-space-3);
+  padding: var(--wp-space-3);
+  border: 1px solid var(--wp-brand-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-brand-surface);
+}
+
+.klaviyo-chosen-subject > div { display: grid; gap: 2px; min-width: 0; font-size: var(--wp-text-sm); }
+.klaviyo-chosen-subject span:not(.section-label),
+.klaviyo-chosen-subject small { color: var(--wp-text-muted); }
+.klaviyo-chosen-subject small { font-size: var(--wp-text-xs); }
+
 /* ---------------------------------------------------------------------------
    Subject lines
 
@@ -6057,6 +6075,47 @@ input[type="file"] {
 
 .subject-index.is-up { background: var(--wp-success-surface); color: var(--wp-success-text); }
 .subject-index.is-down { background: var(--wp-warning-surface); color: var(--wp-warning-text); }
+
+/* The mechanism record: what wins and loses in Westpack's own A/B tests. */
+.subject-record { display: grid; gap: var(--wp-space-2); margin-bottom: var(--wp-space-4); }
+.subject-record-table th[scope="row"] { font-weight: var(--wp-weight-medium); }
+.subject-record-table .is-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.subject-signal { font-size: var(--wp-text-xs); color: var(--wp-text-muted); white-space: nowrap; }
+.subject-signal.is-up { color: var(--wp-success-text); font-weight: var(--wp-weight-semibold); }
+.subject-signal.is-down { color: var(--wp-warning-text); font-weight: var(--wp-weight-semibold); }
+
+.subject-works + .subject-works { margin-top: var(--wp-space-6); padding-top: var(--wp-space-5); border-top: 1px solid var(--wp-border-subtle); }
+.subject-works h4 { margin-bottom: var(--wp-space-1); }
+.subject-works > .subject-hint { margin-bottom: var(--wp-space-3); }
+
+.subject-pairs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--wp-space-1) var(--wp-space-5);
+  margin: 0 0 var(--wp-space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.subject-pairs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--wp-space-3);
+  align-items: baseline;
+  padding: var(--wp-space-1) 0;
+  border-bottom: 1px solid var(--wp-border-subtle);
+  font-size: var(--wp-text-sm);
+}
+
+.subject-pairs li span:first-child { text-align: right; }
+.subject-pairs strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.subject-market-table { margin-top: var(--wp-space-1); }
+.subject-market-table td { vertical-align: top; }
+.subject-market-table .is-num { text-align: right; font-variant-numeric: tabular-nums; }
+.subject-market-table .is-num.is-long { color: var(--wp-warning-text); font-weight: var(--wp-weight-semibold); }
+.subject-cell-sub.is-warning,
+.subject-warning { color: var(--wp-warning-text); }
 
 .subject-compose {
   display: grid;

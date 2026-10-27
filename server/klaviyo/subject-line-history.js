@@ -609,8 +609,21 @@ function compactEntry(entry) {
   };
 }
 
+// Every analyse, generate, check and history request reads the same snapshot, and building the
+// view indexes every send in eighteen accounts. A snapshot is replaced, never mutated, when it is
+// synced, so the view is kept per snapshot object and drops out with it.
+const viewCache = new WeakMap();
+
 function buildHistoryView(snapshot, { country = "DK" } = {}) {
   const code = String(country || "DK").toUpperCase();
+  if (!snapshot || typeof snapshot !== "object") return computeHistoryView(snapshot, code);
+  const perSnapshot = viewCache.get(snapshot) || new Map();
+  viewCache.set(snapshot, perSnapshot);
+  if (!perSnapshot.has(code)) perSnapshot.set(code, computeHistoryView(snapshot, code));
+  return perSnapshot.get(code);
+}
+
+function computeHistoryView(snapshot, code) {
   const entries = buildMarketEntries(snapshot?.markets?.[code]);
   const allTests = Object.values(snapshot?.markets || {}).flatMap((market) => buildAbTests(buildMarketEntries(market)));
   return {
