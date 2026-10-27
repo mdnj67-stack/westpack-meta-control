@@ -39,7 +39,7 @@ async function tagAll() {
       const batch = batches[cursor];
       cursor += 1;
       try {
-        const tagged = await tagImportedLines({ config, rows: batch.map((card) => ({ subject: card.subject, preview: "", slug: card.slug })) });
+        const tagged = await tagImportedLines({ config, rows: batch.map((card) => ({ subject: card.subject, preview: card.preview || "", slug: card.slug })) });
         for (const row of tagged) {
           tags[row.slug] = { language: row.language, mechanisms: row.mechanisms, campaignType: row.campaignType, tone: row.tone, translationRisk: row.translationRisk, why: row.why };
         }
@@ -61,7 +61,7 @@ async function tagAll() {
     .map((card) => ({
       id: `rg-${crypto.createHash("sha1").update(card.slug).digest("hex").slice(0, 10)}`,
       subject: card.subject,
-      preview: "",
+      preview: card.preview || "",
       ...tags[card.slug],
       context: "generisk",
       source: "collected",

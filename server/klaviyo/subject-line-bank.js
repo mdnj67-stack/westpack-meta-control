@@ -105,12 +105,20 @@ function selectBankExamples({ bank = loadPatternBank(), imported = [], banned = 
     .map((entry) => ({ entry, score: scoreEntry(entry, context) + random() * 2.5 }))
     .sort((left, right) => right.score - left.score)
     .map((item) => item.entry);
+  // An odd slot count leaves one slot over; it goes to a real line and a written one in turn, or
+  // the many one-slot mechanisms would all go to real lines and the Danish patterns would vanish.
+  let oddToReal = true;
   for (const [mechanism, count] of slots) {
     if (!count) continue;
     const forMechanism = pool.filter((entry) => entry.mechanisms[0] === mechanism && !used.has(entry.id));
     const real = ranked(forMechanism.filter((entry) => entry.source !== "authored"));
     const authored = ranked(forMechanism.filter((entry) => entry.source === "authored"));
-    const realSlots = Math.min(real.length, Math.ceil(count / 2));
+    let half = Math.floor(count / 2);
+    if (count % 2) {
+      if (oddToReal) half += 1;
+      oddToReal = !oddToReal;
+    }
+    const realSlots = Math.min(real.length, half);
     const picked = [...real.slice(0, realSlots), ...authored.slice(0, count - realSlots)];
     // Whichever pool runs short, the other fills the gap.
     if (picked.length < count) picked.push(...real.slice(realSlots, realSlots + count - picked.length));
