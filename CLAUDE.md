@@ -1108,6 +1108,29 @@ turned up (including deprecated fields still sent by `api/meta/publish-ad.js`). 
 Meta setting, budget split or test design, start from these reports rather than general knowledge,
 and refresh any part older than about six months.
 
+## The Trustpilot carousel is a template — `templates/meta-trustpilot-carousel/`
+
+Added 2026-10-27 at the user's request: "a carousel we can always use on Meta with Trustpilot, across
+languages, images swapped, but the graphics and overlay always the same". The design is the French
+carousel the user approved that day (PH - AD26). A new version is a spec file (`specs/`): language,
+TrustScore, 1–8 verbatim reviews and photos. Do not redesign it per market; change data, not CSS. Its
+README (Danish, for the marketing team) holds the workflow and rules.
+
+- `carousel-spec.js` turns a spec into every text on the cards **and** in the Meta creative, so the two
+  cannot drift. It is a plain script like `src/saturation-rules.js` (Node and browser).
+- `render.js --reviews=<Trustpilot Business export>` checks every quote word for word, same author,
+  rating and date, and refuses to render on a mismatch or on text that does not fit. The export holds
+  reviewers' e-mail addresses: it is never committed. trustpilot.com refuses automated reads, so the
+  export is the only source of reviews.
+- `publish.js` creates the ad **PAUSED** only, never retries a write, refuses a spec changed since the
+  render, and opts out of every Advantage+ creative feature. Those features rewrite text, and one added
+  a "See offer" button to the first build. Test a change with `--creative-only` (builds the creative, no
+  ad) and delete that test creative afterwards.
+- `locales.js`: `fr` is approved; `de`, `it`, `en`, `en-uk`, `en-us` are drafts whose offer claims were
+  read off each store on 2026-10-27. Logo print is free on jewellery boxes only, so the packs are for
+  jewellery-box carousels.
+- `tests/meta-trustpilot-carousel.test.js` pins the French text to what AD26 carries.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

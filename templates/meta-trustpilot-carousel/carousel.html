@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Trustpilot carousel</title>
+<!--
+  The Westpack Trustpilot carousel for Meta: one design, every language. Open through render.js (or any local
+  server) as carousel.html?spec=specs/<file>.json. Each <section class="card"> is one 1080x1080 card.
+
+  The design is fixed - photo full bleed, a floating ivory review card on the paper below the box, the quote
+  mark on the card's edge, big Trustpilot stars and logo in the footer. Only the spec changes: language,
+  photos, quotes and the TrustScore. Text that runs long in another language is shrunk within set limits;
+  if it still does not fit, window.problems says so and render.js refuses to write the cards.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --green: #143A2F; --ivory: #FBF8F3; --muted: #66706B; --gold: #A8864C; --line: #E7DFD2; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #222; font-family: Montserrat, sans-serif; color: var(--green); }
+  .card { width: 1080px; height: 1080px; position: relative; overflow: hidden; margin-bottom: 40px; }
+  /* the photos are 9:16 studio shots on plain seamless paper, so the box can sit high and the paper below
+     carries the review card without a seam */
+  .photo { position: absolute; inset: 0; background-repeat: no-repeat; }
+  .wp { position: absolute; top: 48px; right: 48px; background: #fff; border-radius: 14px; padding: 11px 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+  .wp img { height: 38px; display: block; }
+
+  .panel { position: absolute; left: 48px; right: 48px; bottom: 48px; height: 420px; background: var(--ivory); border-radius: 28px; box-shadow: 0 22px 60px rgba(30, 24, 18, .16); padding: 0 56px; }
+  .foot { position: absolute; left: 56px; right: 56px; bottom: 38px; display: flex; align-items: center; gap: 16px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .foot .by { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; }
+  .foot .line { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+  .foot .stars { height: 60px; width: auto; display: block; }
+  .foot .tp { height: 54px; margin-left: auto; display: block; flex: none; }
+
+  /* card 1: the packaging is the subject, the rating is the footnote */
+  .hero h1 { font-weight: 800; font-size: 64px; line-height: 1.02; letter-spacing: -.025em; margin-top: 40px; white-space: nowrap; }
+  .hero .sub { font-weight: 600; font-size: 29px; color: var(--muted); margin-top: 16px; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+  .hero .sub b { color: var(--gold); font-weight: 700; }
+  .hero .rate { font-weight: 600; font-size: 21px; color: var(--muted); }
+
+  /* quote cards: the mark sits on the card's edge so the card reads as a review before a word is read */
+  .q .mark { position: absolute; top: -78px; left: 44px; font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 200px; line-height: 1; color: var(--green); }
+  .q blockquote { font-weight: 600; font-size: 41px; line-height: 1.3; letter-spacing: -.01em; margin-top: 62px; }
+  .q.short blockquote { font-size: 52px; line-height: 1.2; margin-top: 66px; }
+  .q .who { font-weight: 700; font-size: 25px; }
+  .q .when { font-weight: 500; font-size: 21px; color: var(--muted); }
+
+  /* last card: the offer */
+  .cta h2 { font-weight: 800; font-size: 58px; line-height: 1.04; letter-spacing: -.025em; margin-top: 50px; }
+  .cta h2 .head { white-space: nowrap; }
+  .cta h2.wrap .head { white-space: normal; text-wrap: balance; display: block; }
+  .cta h2 .accent { color: var(--gold); }
+  .cta ul { list-style: none; margin-top: 26px; display: flex; gap: 26px; }
+  .cta ul.stack { flex-direction: column; gap: 10px; margin-top: 20px; }
+  .cta li { white-space: nowrap; font-weight: 600; font-size: 23px; display: flex; align-items: center; gap: 11px; }
+  .cta li i { width: 32px; height: 32px; border-radius: 50%; background: var(--green); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .cta li i svg { width: 17px; height: 17px; }
+  .cta .foot { font-weight: 700; font-size: 23px; }
+  .cta .foot img.logo { height: 44px; }
+  .cta .foot .stars { margin-left: auto; height: 48px; }
+  .cta .foot .tp { margin-left: 0; height: 46px; }
+
+  #problems { color: #ffb4a8; font: 16px/1.5 system-ui, sans-serif; padding: 16px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div id="problems"></div>
+<div id="cards"></div>
+<script src="locales.js"></script>
+<script src="carousel-spec.js"></script>
+<script>
+  const CHECK = '<i><svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F3" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>';
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const T = window.WestpackTrustpilotCarousel;
+
+  function photo(p) {
+    return `<div class="photo" style="background-image:url('${esc(p.src)}'); background-size:${Number(p.zoom)}px auto; background-position:${esc(p.x)} ${Number(p.y)}px"></div>`;
+  }
+
+  function cardHtml(card, i) {
+    const id = `c${i + 1}`;
+    if (card.kind === "hero") {
+      return `<section class="card hero" id="${id}">${photo(card.photo)}
+        <div class="wp"><img src="assets/westpack-logo.svg" alt=""></div>
+        <div class="panel">
+          <h1>${card.headline.map(esc).join("<br>")}</h1>
+          <div class="sub">${esc(card.sub)} <b>→</b></div>
+          <div class="foot"><div class="by"><img class="stars" src="assets/${card.stars}"><div class="line"><span class="rate">${esc(card.rating)}</span></div></div><img class="tp" src="assets/logo-black.svg"></div>
+        </div></section>`;
+    }
+    if (card.kind === "quote") {
+      const short = card.text.length <= 70 ? " short" : "";
+      return `<section class="card q${short}" id="${id}">${photo(card.photo)}
+        <div class="panel">
+          <div class="mark">“</div>
+          <blockquote>${esc(T.typographicSpaces(card.text))}</blockquote>
+          <div class="foot"><div class="by"><img class="stars" src="assets/${card.stars}"><div class="line"><span class="who">${esc(card.author)}</span><span class="when">· ${esc(card.date)}</span></div></div><img class="tp" src="assets/logo-black.svg"></div>
+        </div></section>`;
+    }
+    return `<section class="card cta" id="${id}">${photo(card.photo)}
+      <div class="panel">
+        <h2><span class="head">${esc(card.headline)}</span><br><span class="accent">${esc(card.accent)}</span></h2>
+        <ul>${card.checks.map((c) => `<li>${CHECK}${esc(c)}</li>`).join("")}</ul>
+        <div class="foot"><img class="logo" src="assets/westpack-logo.svg">westpack.com<img class="stars" src="assets/${card.stars}"><img class="tp" src="assets/logo-black.svg"></div>
+      </div></section>`;
+  }
+
+  // Shrink one element's font a pixel at a time until `fits()` holds or the floor is reached.
+  function shrink(el, floor, fits) {
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    while (!fits() && size > floor) {
+      size -= 1;
+      el.style.fontSize = `${size}px`;
+    }
+    return fits();
+  }
+
+  function fitCard(section) {
+    const problems = [];
+    const panel = section.querySelector(".panel");
+    const foot = section.querySelector(".foot");
+    const limit = () => foot.getBoundingClientRect().top - 18;
+    const bottom = (el) => el.getBoundingClientRect().bottom;
+    const name = section.id;
+
+    if (section.classList.contains("hero")) {
+      const h1 = section.querySelector("h1"), sub = section.querySelector(".sub");
+      const ok = shrink(h1, 46, () => h1.scrollWidth <= h1.clientWidth && bottom(sub) <= limit());
+      if (!ok) problems.push(`${name}: the headline does not fit even at 46px - shorten it`);
+      if (sub.scrollWidth > sub.clientWidth) problems.push(`${name}: the line under the headline is too long`);
+    }
+    if (section.classList.contains("q")) {
+      const bq = section.querySelector("blockquote");
+      if (!shrink(bq, 30, () => bottom(bq) <= limit())) problems.push(`${name}: the quote does not fit even at 30px - pick a shorter excerpt`);
+    }
+    if (section.classList.contains("cta")) {
+      const h2 = section.querySelector("h2"), ul = section.querySelector("ul");
+      // the checks stay on one row down to 22px; smaller than that they are hard to read, so they stack
+      const wide = () => ul.scrollWidth <= ul.clientWidth;
+      if (!wide()) {
+        const items = [...ul.querySelectorAll("li")];
+        let size = 23;
+        while (!wide() && size > 22) { size -= 1; items.forEach((li) => (li.style.fontSize = `${size}px`)); }
+        if (!wide()) { ul.classList.add("stack"); items.forEach((li) => (li.style.fontSize = "")); }
+      }
+      // the headline stays on one line down to 46px; a longer one wraps onto two balanced lines instead of
+      // leaving one word alone on the second
+      const oneLine = shrink(h2, 46, () => h2.scrollWidth <= h2.clientWidth);
+      if (!oneLine) { h2.classList.add("wrap"); h2.style.fontSize = "54px"; }
+      if (!shrink(h2, 40, () => h2.scrollWidth <= h2.clientWidth && bottom(ul) <= limit())) problems.push(`${name}: the offer does not fit even at 40px - shorten it`);
+    }
+    // the footer: name and date must clear the Trustpilot logo
+    const line = section.querySelector(".foot .line"), tp = section.querySelector(".foot .tp");
+    if (line && tp) {
+      // measured from the text itself: the flex box around it would shrink and hide an overrun
+      const clear = () => line.getBoundingClientRect().left + line.scrollWidth <= tp.getBoundingClientRect().left - 16;
+      const parts = [...line.children].map((el) => [el, parseFloat(getComputedStyle(el).fontSize)]);
+      for (let k = 1; !clear() && k > 0.7; k -= 0.03) parts.forEach(([el, size]) => (el.style.fontSize = `${(size * k).toFixed(1)}px`));
+      if (!clear()) problems.push(`${name}: the name and date collide with the Trustpilot logo - shorten the name`);
+    }
+    if (panel.scrollWidth > panel.clientWidth + 1) problems.push(`${name}: something runs out of the review card`);
+    return problems;
+  }
+
+  const loadImage = (src) => new Promise((resolve) => { const im = new Image(); im.onload = () => resolve(true); im.onerror = () => resolve(false); im.src = src; });
+
+  window.problems = [];
+  window.ready = (async () => {
+    const q = new URLSearchParams(location.search);
+    const spec = await (await fetch(q.get("spec") || "specs/fr-ecrins-2026-10.json", { cache: "no-store" })).json();
+    const r = T.resolveSpec(spec);
+    window.resolved = r;
+    if (r.errors.length) {
+      window.problems = r.errors;
+      document.getElementById("problems").textContent = r.errors.join("\n");
+      return false;
+    }
+    document.documentElement.lang = r.locale.slice(0, 2);
+    document.getElementById("cards").innerHTML = r.cards.map(cardHtml).join("\n");
+    await Promise.all(["800 64px Montserrat", "700 25px Montserrat", "600 41px Montserrat", "500 21px Montserrat"].map((f) => document.fonts.load(f)));
+    await document.fonts.ready;
+    const missing = [];
+    await Promise.all([
+      ...r.cards.map((c) => loadImage(c.photo.src).then((ok) => ok || missing.push(c.photo.src))),
+      ...[...document.images].map((im) => im.complete ? 1 : new Promise((res) => { im.onload = im.onerror = res; }))
+    ]);
+    const problems = missing.map((src) => `photo not found: ${src}`);
+    document.querySelectorAll("section.card").forEach((s) => problems.push(...fitCard(s)));
+    window.problems = problems;
+    document.getElementById("problems").textContent = problems.join("\n");
+    return problems.length === 0;
+  })();
+</script>
+</body>
+</html>

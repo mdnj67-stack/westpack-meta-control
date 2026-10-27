@@ -1,0 +1,38 @@
+{
+  "id": "fr-ecrins-2026-10",
+  "note": "The French carousel approved 2026-10-27 (PH - AD26 in the Placeholder bank). Quotes checked word for word against the Trustpilot Business export of 27/10.",
+  "locale": "fr",
+  "trustpilot": { "score": 4.6, "reviews": 2796, "asOf": "2026-10" },
+  "hero": { "photo": { "src": "photos/kundelogo-02.jpg", "y": -600 } },
+  "quotes": [
+    {
+      "text": "Produits de qualité, service et réactivité impeccable, catalogue clair et efficace, bien sûr je recommande!",
+      "author": "Les Néréides Montmartre",
+      "date": "2026-10-24",
+      "stars": 5,
+      "photo": { "src": "photos/kundelogo-01.jpg" }
+    },
+    {
+      "text": "Impression parfaite, je suis plus que satisfaite du rendu !",
+      "author": "NØMARA",
+      "date": "2026-07-27",
+      "stars": 5,
+      "photo": { "src": "photos/kundelogo-14.jpg" }
+    },
+    {
+      "text": "Et surtout : au moindre souci, on peut parler à un humain. Pas un robot, pas un mail qui traîne trois jours.",
+      "author": "Serengeti Gems & Jewels",
+      "date": "2026-07-16",
+      "stars": 5,
+      "photo": { "src": "photos/kundelogo-04.jpg" }
+    },
+    {
+      "text": "La matière est magnifique avec de belles finitions. Un service impeccable",
+      "author": "Ancoria Bijoutière holistique",
+      "date": "2025-08-25",
+      "stars": 5,
+      "photo": { "src": "photos/kundelogo-11.jpg" }
+    }
+  ],
+  "offer": { "photo": { "src": "photos/kundelogo-03.jpg" } }
+}
