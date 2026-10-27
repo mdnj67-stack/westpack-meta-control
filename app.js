@@ -8255,7 +8255,10 @@ function renderCampaignBrainPanel() {
     document.body.classList.toggle("campaign-studio-review-mode", Boolean(appState.campaignStudioReviewJob && appState.campaignStudioReviewOpen));
   }
 
-  document.querySelectorAll("[data-campaign-mode]").forEach((button) => {
+  // Buttons only: the panel itself carries data-campaign-mode (styles.css reads it), and matching
+  // it here marked Campaign Studio "active" on every Klaviyo render, so it showed above whichever
+  // Klaviyo screen was open.
+  document.querySelectorAll("button[data-campaign-mode]").forEach((button) => {
     button.classList.toggle("active", button.getAttribute("data-campaign-mode") === appState.campaignStudioMode);
   });
   document.querySelectorAll("[data-campaign-mode-group]").forEach((node) => {
@@ -14209,7 +14212,7 @@ function attachEvents() {
     await assembleCampaignObject();
   });
 
-  document.querySelectorAll("[data-campaign-mode]").forEach((button) => {
+  document.querySelectorAll("button[data-campaign-mode]").forEach((button) => {
     button.addEventListener("click", () => {
       setCampaignStudioMode(button.getAttribute("data-campaign-mode") || "asana_combo");
     });
