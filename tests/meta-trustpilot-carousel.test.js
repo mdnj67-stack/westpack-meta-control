@@ -107,6 +107,18 @@ test("quotes are checked word for word against the Trustpilot export", () => {
   assert.match(T.verifyQuotes(spec("x", { author: "Somebody Else" }), reviews)[0].errors[0], /no review by/);
 });
 
+test("a private reviewer is shown by display name while the check still matches the Trustpilot name", () => {
+  const spec = JSON.parse(JSON.stringify(FR_SPEC));
+  spec.quotes[0] = Object.assign({}, spec.quotes[0], { author: "Matthew Bogosian", display: "Matthew B. · Los Angeles" });
+  const r = T.resolveSpec(spec);
+  assert.equal(r.cards[1].author, "Matthew B. · Los Angeles");
+  assert.equal(r.meta.cards[1].description, "Matthew B. · Los Angeles");
+  const reviews = [{ author: "Matthew Bogosian", content: spec.quotes[0].text, stars: "5", date: `${spec.quotes[0].date} 16:28` }];
+  assert.deepEqual(T.verifyQuotes({ quotes: [spec.quotes[0]] }, reviews)[0].errors, []);
+  spec.quotes[0].display = " ";
+  assert.ok(T.resolveSpec(spec).errors.some((e) => /display is empty/.test(e)));
+});
+
 test("French typography keeps punctuation on its word's line without touching the characters", () => {
   assert.equal(T.typographicSpaces("du rendu !"), `du rendu${NB}!`);
   assert.equal(T.typographicSpaces("Et surtout : au"), `Et surtout${NB}: au`);

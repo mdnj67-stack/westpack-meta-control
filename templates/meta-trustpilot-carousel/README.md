@@ -69,6 +69,11 @@ sprog, billeder, anmeldelser og TrustScore. Første version er den franske karru
 - **Citater er ordrette.** Uddrag må forkortes, men skal starte, hvor en sætning starter i originalen. Der må ikke laves
   et stort bogstav for at få det til at ligne en sætning. Det var derfor, Serengeti-citatet blev "Et surtout : au moindre
   souci…".
+- **Privatpersoner vises med fornavn og forbogstav**, aldrig med fulde navn. Sæt `"display": "Matthew B. · Los Angeles"` ved
+  citatet. `author` er stadig navnet på Trustpilot, og det er det, citat-tjekket matcher på. Et sted eller land tilføjes
+  kun, når anmelderen selv nævner det i anmeldelsen. Virksomheder vises med deres navn.
+- **Eksporten har ikke anmelderens land.** Til en markedsrettet version (fx amerikanere) findes anmelderne via deres egne
+  ord: "American customer", "moved … to the USA", en by eller stat, LLC. Se `specs/en-us-jewelry-2026-10.json`.
 - **Tallet står altid med ordet "TrustScore"**, antal anmeldelser og måned. Trustpilots logo er med på hvert kort.
 - **"Excellent"** (Hervorragend, Eccezionale …) er Trustpilots ord for 4,3 og derover. Under det skal `trustpilot.label`
   være Trustpilots eget ord.

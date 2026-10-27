@@ -8,6 +8,8 @@
  * - an excerpt starts where a sentence starts, so no letter is re-cased to make it look like one
  * - the score always carries the word "TrustScore", a review count and the month it was read
  * - "Excellent" (and its translations) is Trustpilot's word for 4.3 and up only
+ * - a private person is shown as first name and initial (`display`), never by full name; a place is added only
+ *   when the reviewer names it themselves. `author` stays the Trustpilot name, which the check matches on.
  *
  * A plain script: module.exports in Node, globalThis.WestpackTrustpilotCarousel in the browser.
  */
@@ -136,11 +138,12 @@
       if (!String(q.author || "").trim()) errors.push(`${where}: author is missing - use the name exactly as it stands on Trustpilot`);
       if (!isDate(q.date)) errors.push(`${where}: date must be the review date, "YYYY-MM-DD"`);
       if (!STAR_FILES[stars] || !Number.isInteger(stars)) errors.push(`${where}: stars must be 3, 4 or 5 - the review's own rating`);
+      if (q.display !== undefined && !String(q.display).trim()) errors.push(`${where}: display is empty - leave it out to show the Trustpilot name`);
       cards.push({
         kind: "quote",
         photo: normalizePhoto(q.photo, where, errors),
         text,
-        author: String(q.author || "").trim(),
+        author: String(q.display || q.author || "").trim(),
         date: isDate(q.date) ? formatDay(q.date, L.intl) : "",
         stars: STAR_FILES[stars] || null,
         starCount: stars
