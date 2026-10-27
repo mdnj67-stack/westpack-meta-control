@@ -1038,20 +1038,26 @@ history / bank / team / sync_history), `src/klaviyo-subject-lines.js`, `server/k
 Westpack's own lines are tagged with the bank's mechanisms (`server/klaviyo/subject-line-mechanisms.js`,
 tags in Blob `klaviyo-snapshots/subject-line-tags.json`, keyed by message id): every arm of every
 subject/preheader A/B test in all markets (1,006 arms) and DK's sends. An A/B test whose two arms
-used different mechanisms is a head-to-head - 262 of them. Two things make the record honest, and
-both matter:
+used different mechanisms is a head-to-head - 258 in production. **The finding is that there is no
+finding**, and three traps had to be closed to see it - do not reopen them:
 
-- **A test translated into five markets is one experiment.** Counted per head-to-head, "Konkret
-  værdi" won 54 of 87 (62%) and looked like a finding; counted per distinct test (`familyKey`) it is
-  20 of 34 and no pattern. The verdict (`signal`) is a sign test on distinct tests only.
-- **Opens and clicks disagree.** The one robust result: **subject lines built on an offer lose on
-  opens - 5 of 25 distinct tests, z = -3.0 - but win on clicks, 39 of 67 head-to-heads**, and DK
-  offer sends have the highest median click index (1.36). Everything else is "no clear pattern".
-  DK sends outside tests show flat open indexes (0.98-1.08) for every mechanism: Apple MPP.
+- **A test translated into five markets is one experiment.** Per head-to-head "Konkret værdi" won
+  54 of 87 (62%); per distinct test (`familyKey`) 20 of 34 - no pattern. Verdicts (`signal`) are a
+  sign test on distinct tests only.
+- **The model's tags are fuzzy.** One tagging said offer-led lines lose on opens (5 of 25 distinct
+  tests, z = -3.0); a second tagging of the same lines said 8.5 of 24 (z = -1.4). Read from the
+  words of the line (`buildOfferCheck`: %, rabat, spar, tilbud and their DE/NL/EN forms), an offer
+  against no offer is **8.5 of 19 distinct tests on opens and 28 of 58 on clicks - no difference**.
+  The tagger had called weak offer lines "tilbud" and strong ones "konkret værdi". This was briefly
+  reported as a robust result on 2026-10-27 and then retracted.
+- **DK sends outside tests** show flat open indexes (0.98-1.08) for every mechanism: Apple MPP.
 
-The record is in the analysis and writing prompts (weighed, never overriding what the email is
-about), in the brief, and in the bank's "What works" tab. New lines are tagged by the nightly sync
-(200 a night); `?action=tag_history` catches up in chunks of 600.
+So the writer is told about a mechanism only if its record is significant (none is), and otherwise
+that the house's tests do not pick a mechanism; the offer check is told as is. Lists of a few
+hundred simply cannot separate two decent lines - the value of the generator is range, quality and
+the rules, and its own outcome record (below) is what will eventually say whether it helps.
+Tagging runs at temperature 0. New lines are tagged by the nightly sync (200 a night);
+`?action=tag_history` catches up in chunks of 600.
 
 ### The generator's own record
 

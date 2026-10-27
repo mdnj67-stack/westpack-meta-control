@@ -345,7 +345,8 @@ const SIGNAL = {
 // because one test translated into five markets is one experiment.
 function renderMechanismRecord(evidence, { compact = false } = {}) {
   const all = [...(evidence?.byMechanism || [])].sort((left, right) => right.z - left.z);
-  const rows = compact ? all.filter((item) => item.signal !== "unclear" || state.mechanisms.includes(item.mechanism)) : all;
+  // The brief shows only what is significant, plus the mechanisms selected for this set.
+  const rows = compact ? all.filter((item) => item.signal === "wins" || item.signal === "loses" || state.mechanisms.includes(item.mechanism)) : all;
   if (!rows.length) return "";
   return `
     <div class="wp-table-wrap">
@@ -448,7 +449,7 @@ function renderBriefStep() {
       ${analysis.houseEvidence ? `<p class="subject-prose">${escapeHtml(analysis.houseEvidence)}</p>` : ""}
       ${insights.mechanismEvidence?.byMechanism?.length ? `
         <div class="subject-record">
-          <p class="subject-hint">Mechanisms in your A/B tests where the two lines used different mechanisms${renderMechanismRecord(insights.mechanismEvidence, { compact: true }) ? " - the ones with a pattern, and the ones selected below" : ""}. The full record is under The bank, What works.</p>
+          <p class="subject-hint">${(insights.mechanismEvidence.byMechanism || []).some((item) => item.signal === "wins" || item.signal === "loses") ? "Mechanisms with a significant record in your A/B tests, and the ones selected below." : `In ${formatCount(insights.mechanismEvidence.headToHeads)} head-to-heads in your A/B tests no mechanism wins or loses more often than chance, so the email decides. The selected ones' records:`} The full record is under The bank, What works.</p>
           ${renderMechanismRecord(insights.mechanismEvidence, { compact: true })}
         </div>` : ""}
       ${(insights.abLessons || []).length ? `<div class="subject-ab-list">${insights.abLessons.slice(0, 2).map(renderAbTest).join("")}</div>${insights.abLessons.some((test) => test.includesRemainder) ? `<p class="subject-hint subject-ab-note">${REMAINDER_NOTE}</p>` : ""}` : ""}
@@ -716,9 +717,16 @@ function renderBank() {
     const coverage = evidence.coverage || {};
     const outcomes = history.generatorOutcomes || { recorded: 0, sent: 0, rows: [] };
     node.innerHTML = `
+      ${evidence.offerCheck?.headToHeads ? `
+      <section class="subject-works">
+        <h4>An offer in the subject</h4>
+        <p class="subject-prose">In ${formatCount(evidence.offerCheck.headToHeads)} head-to-heads one line named a discount (%, "rabat", "spar", "tilbud" and the same in the other languages) and the other did not. The offer line won ${formatCount(evidence.offerCheck.familyWins)} of ${formatCount(evidence.offerCheck.familyTests)} distinct tests on opens and ${formatCount(evidence.offerCheck.clickWins)} of ${formatCount(evidence.offerCheck.headToHeads)} on clicks: <strong>${evidence.offerCheck.signal === "wins" ? "it wins more often than chance" : evidence.offerCheck.signal === "loses" ? "it loses more often than chance" : "no reliable difference either way"}</strong>.</p>
+        <p class="subject-hint">Read from the words of the line, not from the model's mechanism tags - those once said offers lose, because the tagger called the weak offer lines "Tilbud" and the strong ones "Konkret værdi".</p>
+      </section>` : ""}
+
       <section class="subject-works">
         <h4>Mechanisms in your A/B tests</h4>
-        <p class="subject-hint">Every A/B test where the two subject lines used different mechanisms is a head-to-head. Many tests were one test translated into several markets, so the verdict counts distinct tests and asks whether the record beats a coin flip. Opens and clicks are both shown because they can disagree: a line can win the open and lose the click.</p>
+        <p class="subject-hint">Every A/B test where the two subject lines used different mechanisms is a head-to-head. Many tests were one test translated into several markets, so the verdict counts distinct tests and asks whether the record beats a coin flip. Mechanism tags are the model's reading and can differ between two taggings, so treat anything short of a significant verdict as noise.</p>
         ${renderMechanismRecord(evidence) || '<p class="subject-empty">No head-to-heads yet: Westpack\'s own lines have not been tagged with mechanisms.</p>'}
         <div class="subject-table-foot">
           <span class="subject-hint">${formatCount(coverage.taggedArms || 0)} of ${formatCount(coverage.totalArms || 0)} A/B arms and ${formatCount(coverage.taggedDk || 0)} of ${formatCount(coverage.totalDk || 0)} DK sends tagged. New sends are tagged every night.</span>

@@ -7,10 +7,15 @@
 // are a wording test and say nothing about mechanisms, so they are left out.
 //
 // The tests ran in five languages (DK, UK, DE, NL, EU) and many are one test translated, so a
-// mechanism's record is reported both across all markets and for DK alone, with counts - never as
-// a rate without its n. A/B tests on lists of a few hundred are mostly inconclusive one by one;
-// what this adds is the tally across many of them. Sends outside A/B tests add only a weaker,
-// correlational view: the median open index of DK sends by mechanism.
+// mechanism's verdict is a sign test on distinct tests, with counts - never a rate without its n.
+// Sends outside A/B tests add only a weaker, correlational view: DK's median open index by
+// mechanism.
+//
+// What the record showed on 2026-10-27 is itself the finding: across 258 head-to-heads no
+// mechanism beat a coin flip on distinct tests. Lists of a few hundred cannot separate two decent
+// lines, and the model's mechanism tags are fuzzy enough that two taggings of the same lines moved
+// a verdict (see buildOfferCheck). So the writer is told about a mechanism only when its record is
+// significant, and is otherwise told plainly that the house's tests do not pick a mechanism.
 
 const { tagImportedLines } = require("./subject-line-generator");
 const { MIN_RECIPIENTS_FOR_INDEX } = require("./subject-line-history");
@@ -65,6 +70,45 @@ async function tagHistoryRows({ config, rows = [] }) {
 
 function primary(tags, id) {
   return tags[id]?.m?.[0] || "";
+}
+
+// "Does an offer in the subject cost opens?" is the question operators actually ask, and it can be
+// answered without a model: a line either names a discount or it does not. On 2026-10-27 the model
+// tags said offer-led lines lost on opens (5 of 25 distinct tests, z = -3.0) and a second tagging
+// of the same lines said 8.5 of 24 (z = -1.4); read from the words alone it was 8.5 of 19 (z = -0.5)
+// - no difference. The tagger had labelled weak offer lines "tilbud" and strong ones "konkret
+// vaerdi", so the label tracked quality, not the offer. This check is the one to trust.
+const OFFER_WORDS = /%|(?<![\p{L}\d])(?:rabat\p{L}*|spar|tilbud\p{L}*|udsalg\p{L}*|sale|off|discount\p{L}*|save|rabatt\p{L}*|angebot\p{L}*|sparen|korting\p{L}*|aanbieding\p{L}*|uitverkoop|bespaar)(?![\p{L}\d])/iu;
+
+function signFor(wins, tests) {
+  const z = tests ? (wins - tests / 2) / Math.sqrt(tests / 4) : 0;
+  return { z: Number(z.toFixed(2)), signal: z >= 1.96 ? "wins" : z <= -1.96 ? "loses" : z >= 1.28 ? "leans_win" : z <= -1.28 ? "leans_loss" : "unclear" };
+}
+
+function buildOfferCheck(abTests = []) {
+  const families = new Map();
+  let headToHeads = 0;
+  let openWins = 0;
+  let clickWins = 0;
+  for (const test of abTests) {
+    if (test.differs === "content") continue;
+    const [winner, runnerUp] = [...test.arms].sort((left, right) => (right.openRate || 0) - (left.openRate || 0));
+    if (!winner || !runnerUp) continue;
+    const winnerOffer = OFFER_WORDS.test(winner.subject);
+    if (winnerOffer === OFFER_WORDS.test(runnerUp.subject)) continue;
+    headToHeads += 1;
+    if (winnerOffer) openWins += 1;
+    const offerArm = winnerOffer ? winner : runnerUp;
+    const plainArm = winnerOffer ? runnerUp : winner;
+    if ((offerArm.clickRate || 0) > (plainArm.clickRate || 0)) clickWins += 1;
+    const key = test.familyKey || test.campaignId;
+    const vote = families.get(key) || { wins: 0, total: 0 };
+    vote.total += 1;
+    if (winnerOffer) vote.wins += 1;
+    families.set(key, vote);
+  }
+  const familyWins = [...families.values()].reduce((sum, vote) => sum + (vote.wins * 2 > vote.total ? 1 : vote.wins * 2 === vote.total ? 0.5 : 0), 0);
+  return { headToHeads, openWins, clickWins, familyTests: families.size, familyWins, ...signFor(familyWins, families.size) };
 }
 
 function buildMechanismEvidence({ abTests = [], dkEntries = [], tags = {} } = {}) {
@@ -151,7 +195,6 @@ function buildMechanismEvidence({ abTests = [], dkEntries = [], tags = {} } = {}
       const familyWins = votes.reduce((sum, vote) => sum + (vote.wins * 2 > vote.total ? 1 : vote.wins * 2 === vote.total ? 0.5 : 0), 0);
       const familyTests = votes.length;
       // Sign test against a coin flip, on distinct tests only.
-      const z = familyTests ? (familyWins - familyTests / 2) / Math.sqrt(familyTests / 4) : 0;
       return {
         ...item,
         winShare: Number((item.wins / item.headToHeads).toFixed(3)),
@@ -159,8 +202,7 @@ function buildMechanismEvidence({ abTests = [], dkEntries = [], tags = {} } = {}
         averageLiftPoints: Number((item.liftPoints / item.headToHeads).toFixed(1)),
         familyTests,
         familyWins,
-        z: Number(z.toFixed(2)),
-        signal: z >= 1.96 ? "wins" : z <= -1.96 ? "loses" : z >= 1.28 ? "leans_win" : z <= -1.28 ? "leans_loss" : "unclear"
+        ...signFor(familyWins, familyTests)
       };
     })
     .sort((left, right) => right.winShare - left.winShare || right.headToHeads - left.headToHeads);
@@ -177,6 +219,7 @@ function buildMechanismEvidence({ abTests = [], dkEntries = [], tags = {} } = {}
 
   return {
     headToHeads,
+    offerCheck: buildOfferCheck(abTests),
     byMechanism,
     pairs: [...pairs.values()].filter((pair) => pair.aWins + pair.bWins >= 2).sort((left, right) => (right.aWins + right.bWins) - (left.aWins + left.bWins)).slice(0, 12),
     dkIndex,
@@ -186,7 +229,9 @@ function buildMechanismEvidence({ abTests = [], dkEntries = [], tags = {} } = {}
 
 module.exports = {
   MIN_HEAD_TO_HEADS,
+  OFFER_WORDS,
   buildMechanismEvidence,
+  buildOfferCheck,
   selectUntagged,
   tagHistoryRows
 };

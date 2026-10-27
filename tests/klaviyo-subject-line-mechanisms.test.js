@@ -80,6 +80,24 @@ test("a consistent record across distinct tests is called, and a coin flip is no
   assert.deepEqual(evidence.pairs[0], { a: "konkret_vaerdi", b: "tilbud", aWins: 11, bWins: 1 });
 });
 
+test("the offer check reads the words of the line, not the model's tags", () => {
+  const { buildOfferCheck } = require("../server/klaviyo/subject-line-mechanisms");
+  const tests = [
+    // Offer loses on opens, wins on clicks.
+    abTest({ campaignId: "C1", familyKey: "w45 panic", arms: [{ id: "a", subject: "Sidste chance: 10% rabat", openRate: 0.52, clickRate: 0.03 }, { id: "b", subject: "Tik tak.. sidste chance", openRate: 0.6, clickRate: 0.01 }] }),
+    // The same test in another market counts once at the family level.
+    abTest({ campaignId: "C2", familyKey: "w45 panic", country: "UK", arms: [{ id: "c", subject: "Last chance: 10% off", openRate: 0.5, clickRate: 0.02 }, { id: "d", subject: "Tick tock.. last chance", openRate: 0.55, clickRate: 0.01 }] }),
+    // German offer wording is recognised too, and here the offer wins.
+    abTest({ campaignId: "C3", familyKey: "w47 black week", country: "DE", arms: [{ id: "e", subject: "Black Week: Sparen Sie 20%", openRate: 0.6, clickRate: 0.02 }, { id: "f", subject: "Black Week ist da", openRate: 0.5, clickRate: 0.01 }] }),
+    // Both lines carry an offer: not a head-to-head on the offer question.
+    abTest({ campaignId: "C4", familyKey: "w48", arms: [{ id: "g", subject: "-20% på æsker", openRate: 0.6 }, { id: "h", subject: "Spar 20%", openRate: 0.5 }] })
+  ];
+  const check = buildOfferCheck(tests);
+  assert.deepEqual([check.headToHeads, check.openWins, check.clickWins], [3, 1, 3]);
+  assert.deepEqual([check.familyTests, check.familyWins], [2, 1]);
+  assert.equal(check.signal, "unclear");
+});
+
 test("DK sends by mechanism need ten indexed sends before a median is shown", () => {
   const tags = {};
   const dkEntries = Array.from({ length: 12 }, (_, index) => {

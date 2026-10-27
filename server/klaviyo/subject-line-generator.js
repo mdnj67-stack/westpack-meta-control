@@ -82,12 +82,13 @@ function resolveModels(config = {}, { writing = false } = {}) {
 
 // When the preferred model is unavailable on the key or times out, the other one still produces a
 // usable answer rather than an error.
-async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false }) {
+async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false, temperature = null }) {
   if (!config.openAiApiKey) throw new Error("OPENAI_API_KEY is not configured.");
   let lastError = null;
   for (const model of resolveModels(config, { writing })) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const reasoningModel = /^gpt-5/i.test(model);
     try {
       const response = await fetch("https://api.openai.com/v1/responses", {
         method: "POST",
@@ -96,7 +97,9 @@ async function requestStructured(config, { input, schemaName, schema, reasoningE
           model,
           input,
           text: { format: { type: "json_schema", name: schemaName, schema } },
-          ...(reasoningEffort && /^gpt-5/i.test(model) ? { reasoning: { effort: reasoningEffort } } : {})
+          ...(reasoningEffort && reasoningModel ? { reasoning: { effort: reasoningEffort } } : {}),
+          // Reasoning models refuse a temperature; the others take one.
+          ...(temperature !== null && !reasoningModel ? { temperature } : {})
         }),
         signal: controller.signal
       });
@@ -178,14 +181,20 @@ function buildHouseEvidenceBlock(insights = {}, { compact = false } = {}) {
     insights.relevant.slice(0, compact ? 6 : 10).forEach((entry) => lines.push(`- ${describeSend(entry)}`));
     lines.push("");
   }
+  // Only a significant record is told to the writer. A "leans" verdict on twenty tests moved when
+  // the same lines were tagged twice, and a model told it would treat it as a rule.
   const evidence = insights.mechanismEvidence;
-  if (evidence?.byMechanism?.length) {
-    const signalText = { wins: "wins more often than chance", loses: "loses more often than chance", leans_win: "leans towards winning", leans_loss: "leans towards losing", unclear: "no clear pattern" };
-    lines.push(`Mechanisms in Westpack's own A/B tests: ${evidence.headToHeads} head-to-heads where the two arms used different mechanisms. Many tests were one test translated into several markets, so the verdict is read on distinct tests only (a sign test against a coin flip). Opens and clicks are both shown because they can disagree:`);
-    evidence.byMechanism.forEach((item) => lines.push(`- ${mechanismLabel(item.mechanism)} (${item.mechanism}): on opens won ${item.familyWins} of ${item.familyTests} distinct tests - ${signalText[item.signal] || "no clear pattern"} (${item.wins} of ${item.headToHeads} head-to-heads across markets); on clicks won ${item.clickWins} of ${item.headToHeads}.`));
-    if (evidence.dkIndex?.length) {
-      lines.push("Median open index of DK sends by mechanism (outside the tests, so correlation only):");
-      evidence.dkIndex.forEach((item) => lines.push(`- ${mechanismLabel(item.mechanism)}: ${item.openIndex.toFixed(2)} (${item.sends} sends), click index ${item.clickIndex ?? "n/a"}.`));
+  if (evidence?.headToHeads) {
+    const significant = (evidence.byMechanism || []).filter((item) => item.signal === "wins" || item.signal === "loses");
+    if (significant.length) {
+      lines.push(`Mechanisms with a significant record in Westpack's own A/B tests (sign test on distinct tests, opens):`);
+      significant.forEach((item) => lines.push(`- ${mechanismLabel(item.mechanism)} ${item.signal === "wins" ? "wins" : "loses"} more often than chance: ${item.familyWins} of ${item.familyTests} distinct tests; on clicks ${item.clickWins} of ${item.headToHeads} head-to-heads.`));
+    } else {
+      lines.push(`Across ${evidence.headToHeads} head-to-heads in Westpack's own A/B tests where the two lines used different mechanisms, no mechanism wins or loses more often than a coin flip on distinct tests. The house's tests do not pick a mechanism: choose by what the email is about.`);
+    }
+    const offer = evidence.offerCheck;
+    if (offer?.headToHeads) {
+      lines.push(`An offer in the subject (a discount, %, "spar", "rabat") against no offer: the offer line won ${offer.familyWins} of ${offer.familyTests} distinct tests on opens and ${offer.clickWins} of ${offer.headToHeads} head-to-heads on clicks - ${offer.signal === "wins" ? "it wins more often than chance" : offer.signal === "loses" ? "it loses more often than chance" : "no reliable difference either way"}. Use an offer when the email has one, and never invent one.`);
     }
     lines.push("");
   }
@@ -649,7 +658,9 @@ async function tagImportedLines({ config, rows = [] }) {
     const { parsed } = await requestStructured(config, {
       input,
       schemaName: "westpack_subject_line_import_tags",
-      schema: { type: "object", additionalProperties: false, properties: { lines: { type: "array", minItems: batch.length, maxItems: batch.length, items: IMPORT_SCHEMA_ITEM } }, required: ["lines"] }
+      schema: { type: "object", additionalProperties: false, properties: { lines: { type: "array", minItems: batch.length, maxItems: batch.length, items: IMPORT_SCHEMA_ITEM } }, required: ["lines"] },
+      // Tags feed a tally; two taggings of the same lines once disagreed enough to move a verdict.
+      temperature: 0
     });
     for (const tag of parsed?.lines || []) {
       const row = batch[tag.index];
