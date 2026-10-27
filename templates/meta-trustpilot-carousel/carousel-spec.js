@@ -139,11 +139,14 @@
       if (!isDate(q.date)) errors.push(`${where}: date must be the review date, "YYYY-MM-DD"`);
       if (!STAR_FILES[stars] || !Number.isInteger(stars)) errors.push(`${where}: stars must be 3, 4 or 5 - the review's own rating`);
       if (q.display !== undefined && !String(q.display).trim()) errors.push(`${where}: display is empty - leave it out to show the Trustpilot name`);
+      // A country flag only where the reviewer says in the review where they are; assets/flag-<code>.svg.
+      if (q.flag !== undefined && !/^[a-z]{2}$/.test(String(q.flag))) errors.push(`${where}: flag must be a two-letter country code, e.g. "us"`);
       cards.push({
         kind: "quote",
         photo: normalizePhoto(q.photo, where, errors),
         text,
         author: String(q.display || q.author || "").trim(),
+        flag: /^[a-z]{2}$/.test(String(q.flag || "")) ? q.flag : null,
         date: isDate(q.date) ? formatDay(q.date, L.intl) : "",
         stars: STAR_FILES[stars] || null,
         starCount: stars
@@ -162,7 +165,9 @@
     const cardText = cards.map((card) => {
       if (card.kind === "hero") return { name: fill(L.cardText.hero[0], values), description: fill(L.cardText.hero[1], values) };
       if (card.kind === "offer") return { name: L.cardText.offer[0], description: L.cardText.offer[1] };
-      return { name: fill(L.cardText.quote, { stars: card.starCount }), description: card.author };
+      // Phones draw the regional-indicator pair as a flag; the card itself uses the SVG, since Windows does not.
+      const flag = card.flag ? ` ${String.fromCodePoint(...card.flag.toUpperCase().split("").map((c) => 0x1f1e6 + c.charCodeAt(0) - 65))}` : "";
+      return { name: fill(L.cardText.quote, { stars: card.starCount }), description: card.author + flag };
     });
 
     const primaryText = fill([].concat(L.primaryText).join("\n"), values);

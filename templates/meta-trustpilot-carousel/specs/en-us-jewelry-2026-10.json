@@ -1,17 +1,29 @@
 {
   "id": "en-us-jewelry-2026-10",
-  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach (US - AD07). The user's rule (27/10): one card with a clear US link, the rest names an American can relate to - not a name like 'Jens Thomsen'. Matthew Bogosian signs 'Los Angeles' in his review. Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
+  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach (US - AD07). The user's rule (27/10): one card with a clear US link, the rest names an American can relate to - not a name like 'Jens Thomsen'. Tony Boskovich writes 'as an American customer' in his review, so his card carries the US flag. Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
   "locale": "en-us",
-  "trustpilot": { "score": 4.6, "reviews": 2796, "asOf": "2026-10" },
-  "hero": { "photo": { "src": "photos/kundelogo-02.jpg", "y": -600 } },
+  "trustpilot": {
+    "score": 4.6,
+    "reviews": 2796,
+    "asOf": "2026-10"
+  },
+  "hero": {
+    "photo": {
+      "src": "photos/kundelogo-02.jpg",
+      "y": -600
+    }
+  },
   "quotes": [
     {
-      "text": "First and foremost, I love the fact that Westpack buys great packaging in bulk and is able to custom print smaller, more manageable quantities of boxes and gift bags than bulk suppliers demand.",
-      "author": "Matthew Bogosian",
-      "display": "Matthew B. · Los Angeles",
-      "date": "2025-06-01",
+      "text": "I have used Westpack since I began my small business. They have been helpful and quick to respond to questions, and have always delivered a superb product.",
+      "author": "Tony Boskovich",
+      "display": "Tony B.",
+      "flag": "us",
+      "date": "2025-07-12",
       "stars": 5,
-      "photo": { "src": "photos/kundelogo-01.jpg" }
+      "photo": {
+        "src": "photos/kundelogo-01.jpg"
+      }
     },
     {
       "text": "Every single detail was captured, and no excess foil was anywhere. Every box was 100% perfect.",
@@ -19,7 +31,9 @@
       "display": "David W.",
       "date": "2025-05-08",
       "stars": 5,
-      "photo": { "src": "photos/kundelogo-14.jpg" }
+      "photo": {
+        "src": "photos/kundelogo-14.jpg"
+      }
     },
     {
       "text": "Really easy to order a proof. Turned out great on the first try so I ordered another 96 boxes",
@@ -27,7 +41,9 @@
       "display": "Jake H.",
       "date": "2026-04-13",
       "stars": 5,
-      "photo": { "src": "photos/kundelogo-04.jpg" }
+      "photo": {
+        "src": "photos/kundelogo-04.jpg"
+      }
     },
     {
       "text": "Boxes are such a high standard and beautifully finished. I have received loads of compliments about them already.",
@@ -35,8 +51,14 @@
       "display": "Claire H.",
       "date": "2026-03-08",
       "stars": 5,
-      "photo": { "src": "photos/kundelogo-11.jpg" }
+      "photo": {
+        "src": "photos/kundelogo-11.jpg"
+      }
     }
   ],
-  "offer": { "photo": { "src": "photos/kundelogo-03.jpg" } }
+  "offer": {
+    "photo": {
+      "src": "photos/kundelogo-03.jpg"
+    }
+  }
 }

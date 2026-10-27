@@ -43,6 +43,7 @@
   .q blockquote { font-weight: 600; font-size: 41px; line-height: 1.3; letter-spacing: -.01em; margin-top: 62px; }
   .q.short blockquote { font-size: 52px; line-height: 1.2; margin-top: 66px; }
   .q .who { font-weight: 700; font-size: 25px; }
+  .q .who .flag { height: 0.95em; width: auto; margin-left: 0.4em; vertical-align: -0.12em; border-radius: 3px; box-shadow: 0 0 0 1px rgba(20, 58, 47, .12); }
   .q .when { font-weight: 500; font-size: 21px; color: var(--muted); }
 
   /* last card: the offer */
@@ -107,7 +108,7 @@
         <div class="panel">
           <div class="mark">“</div>
           <blockquote>${esc(T.typographicSpaces(card.text))}</blockquote>
-          <div class="foot"><div class="by"><img class="stars" src="assets/${card.stars}"><div class="line"><span class="who">${esc(card.author)}</span><span class="when">· ${esc(card.date)}</span></div></div><img class="tp" src="assets/logo-black.svg"></div>
+          <div class="foot"><div class="by"><img class="stars" src="assets/${card.stars}"><div class="line"><span class="who">${esc(card.author)}${card.flag ? `<img class="flag" src="assets/flag-${card.flag}.svg" alt="">` : ""}</span><span class="when">· ${esc(card.date)}</span></div></div><img class="tp" src="assets/logo-black.svg"></div>
         </div></section>`;
     }
     return `<section class="card cta" id="${id}">${photo(card.photo)}

@@ -119,6 +119,18 @@ test("a private reviewer is shown by display name while the check still matches 
   assert.ok(T.resolveSpec(spec).errors.some((e) => /display is empty/.test(e)));
 });
 
+test("a reviewer who names their country can carry its flag on the card and in the Meta description", () => {
+  const spec = JSON.parse(JSON.stringify(FR_SPEC));
+  spec.quotes[0] = Object.assign({}, spec.quotes[0], { display: "Tony B.", flag: "us" });
+  const r = T.resolveSpec(spec);
+  assert.equal(r.cards[1].flag, "us");
+  assert.equal(r.meta.cards[1].description, "Tony B. \u{1F1FA}\u{1F1F8}");
+  assert.equal(r.cards[2].flag, null);
+  assert.ok(fs.existsSync(path.join(DIR, "assets", "flag-us.svg")));
+  spec.quotes[0].flag = "USA";
+  assert.ok(T.resolveSpec(spec).errors.some((e) => /two-letter country code/.test(e)));
+});
+
 test("French typography keeps punctuation on its word's line without touching the characters", () => {
   assert.equal(T.typographicSpaces("du rendu !"), `du rendu${NB}!`);
   assert.equal(T.typographicSpaces("Et surtout : au"), `Et surtout${NB}: au`);
