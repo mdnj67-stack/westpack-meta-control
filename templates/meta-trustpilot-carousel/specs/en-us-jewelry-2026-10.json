@@ -1,19 +1,8 @@
 {
   "id": "en-us-jewelry-2026-10",
-  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach. Only reviewers who place themselves in the US in their own review: Matthew Bogosian signs 'Los Angeles', Tony Boskovich writes 'as an American customer', Emily Frances Deakin 'moved from Spain to the USA', The Girls With The Pear Earrings, LLC 'Was not able to find the same in the USA'. Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
+  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach (US - AD07). The user's rule (27/10): one card with a clear US link, the rest names an American can relate to - not a name like 'Jens Thomsen'. Matthew Bogosian signs 'Los Angeles' in his review. Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
   "locale": "en-us",
   "trustpilot": { "score": 4.6, "reviews": 2796, "asOf": "2026-10" },
-  "text": {
-    "hero": { "sub": "What our US customers say" },
-    "primaryText": [
-      "Our US customers say it best ✨",
-      "Westpack is rated {label} on Trustpilot: TrustScore {score} from {reviews} reviews ({month}).",
-      "",
-      "✔ Jewelry boxes with your logo from 48 units",
-      "✔ Free logo printing on every jewelry box",
-      "✔ All US duties included at checkout"
-    ]
-  },
   "hero": { "photo": { "src": "photos/kundelogo-02.jpg", "y": -600 } },
   "quotes": [
     {
@@ -25,25 +14,26 @@
       "photo": { "src": "photos/kundelogo-01.jpg" }
     },
     {
-      "text": "Quality and customer service perfection! Was not able to find the same in the USA.",
-      "author": "The Girls With The Pear Earrings, LLC",
-      "date": "2019-03-05",
+      "text": "Every single detail was captured, and no excess foil was anywhere. Every box was 100% perfect.",
+      "author": "David Wilson",
+      "display": "David W.",
+      "date": "2025-05-08",
       "stars": 5,
       "photo": { "src": "photos/kundelogo-14.jpg" }
     },
     {
-      "text": "I have used Westpack since I began my small business. They have been helpful and quick to respond to questions, and have always delivered a superb product.",
-      "author": "Tony Boskovich",
-      "display": "Tony B. · USA",
-      "date": "2025-07-12",
+      "text": "Really easy to order a proof. Turned out great on the first try so I ordered another 96 boxes",
+      "author": "Jake Hyvonen",
+      "display": "Jake H.",
+      "date": "2026-04-13",
       "stars": 5,
       "photo": { "src": "photos/kundelogo-04.jpg" }
     },
     {
-      "text": "I have moved from Spain to the USA a couple years ago and continue to purchase from Westpack, probably always will as long as I have my business.",
-      "author": "Emily Frances Deakin",
-      "display": "Emily D. · USA",
-      "date": "2023-06-08",
+      "text": "Boxes are such a high standard and beautifully finished. I have received loads of compliments about them already.",
+      "author": "Claire Hurley",
+      "display": "Claire H.",
+      "date": "2026-03-08",
       "stars": 5,
       "photo": { "src": "photos/kundelogo-11.jpg" }
     }

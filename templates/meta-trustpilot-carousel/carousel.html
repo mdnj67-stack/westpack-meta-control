@@ -9,8 +9,9 @@
 
   The design is fixed - photo full bleed, a floating ivory review card on the paper below the box, the quote
   mark on the card's edge, big Trustpilot stars and logo in the footer. Only the spec changes: language,
-  photos, quotes and the TrustScore. Text that runs long in another language is shrunk within set limits;
-  if it still does not fit, window.problems says so and render.js refuses to write the cards.
+  photos, quotes and the TrustScore. A long quote makes every quote card's review panel taller (up to a
+  limit) rather than its type smaller; other text that runs long is shrunk within set limits. If it still
+  does not fit, window.problems says so and render.js refuses to write the cards.
 -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -74,6 +75,19 @@
 
   function photo(p) {
     return `<div class="photo" style="background-image:url('${esc(p.src)}'); background-size:${Number(p.zoom)}px auto; background-position:${esc(p.x)} ${Number(p.y)}px"></div>`;
+  }
+
+  // A long quote first gets a taller review card, not smaller type: every quote card grows by the same amount, so
+  // the cards do not jump as people swipe. The photo stays put - the customers' logos sit in the upper half of the
+  // boxes, so the card covers more of a box's base rather than cutting a logo at the top. Move one with photo.y in
+  // the spec if it needs it. Only text that still does not fit at the tallest card is shrunk (fitCard).
+  const PANEL = 420, PANEL_MAX = 520;
+  function growQuoteCards() {
+    const quotes = [...document.querySelectorAll("section.q")];
+    const over = quotes.map((s) => s.querySelector("blockquote").getBoundingClientRect().bottom - (s.querySelector(".foot").getBoundingClientRect().top - 18));
+    const grow = Math.min(PANEL_MAX - PANEL, Math.ceil(Math.max(0, ...over)));
+    if (grow) quotes.forEach((s) => (s.querySelector(".panel").style.height = `${PANEL + grow}px`));
+    return grow;
   }
 
   function cardHtml(card, i) {
@@ -184,6 +198,7 @@
       ...[...document.images].map((im) => im.complete ? 1 : new Promise((res) => { im.onload = im.onerror = res; }))
     ]);
     const problems = missing.map((src) => `photo not found: ${src}`);
+    window.quoteCardGrowth = growQuoteCards();
     document.querySelectorAll("section.card").forEach((s) => problems.push(...fitCard(s)));
     window.problems = problems;
     document.getElementById("problems").textContent = problems.join("\n");

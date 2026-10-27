@@ -6,6 +6,8 @@
  *        --adset=<ad set id> --name="AD27 - Avis Trustpilot - Karrusel - fr_FR" [--dry-run | --creative-only]
  *
  * --creative-only uploads the cards and builds the creative but creates no ad: a test that Meta accepts it.
+ * --update=<ad id> puts the new cards on an existing ad instead of creating one (it keeps its name). The ad must
+ * be paused and in --adset; Meta reviews it again.
  *
  * Run render.js with --reviews first. It refuses when the spec has changed since the render, when the quotes
  * were not checked against the Trustpilot export, or when the ad set already has an ad with that name.
@@ -53,9 +55,10 @@ const call = (p, token, method, params) => graphRequest(`/${String(p).replace(/^
 (async () => {
   const specFile = process.argv.slice(2).find((a) => !a.startsWith("--"));
   const adsetId = arg("adset");
-  const adName = arg("name");
-  if (!specFile || !adsetId || !adName) {
-    throw new Error('Usage: node publish.js <spec.json> --adset=<ad set id> --name="<ad name>" [--dry-run]');
+  const updateId = arg("update");
+  let adName = arg("name");
+  if (!specFile || !adsetId || (!adName && !updateId)) {
+    throw new Error('Usage: node publish.js <spec.json> --adset=<ad set id> (--name="<ad name>" | --update=<ad id>) [--dry-run | --creative-only]');
   }
   const specText = fs.readFileSync(specFile, "utf8");
   const spec = JSON.parse(specText);
@@ -78,8 +81,16 @@ const call = (p, token, method, params) => graphRequest(`/${String(p).replace(/^
 
   const adset = await call(adsetId, token, "GET", { fields: "name,effective_status,campaign{name,effective_status}" });
   console.log(`Ad set: ${adset.name} (${adset.effective_status}) in ${adset.campaign.name} (${adset.campaign.effective_status})`);
-  const existing = await call(`${adsetId}/ads`, token, "GET", { fields: "name", limit: 200 });
-  if ((existing.data || []).some((a) => a.name === adName)) throw new Error(`The ad set already has an ad named "${adName}".`);
+  if (updateId) {
+    const target = await call(updateId, token, "GET", { fields: "name,status,adset_id" });
+    if (target.adset_id !== adsetId) throw new Error(`Ad ${updateId} is not in ad set ${adsetId}.`);
+    if (target.status !== "PAUSED") throw new Error(`Ad ${updateId} is ${target.status}: only a paused ad is updated here, so a live ad never changes under the user.`);
+    adName = target.name;
+    console.log(`Updating ${adName} (${updateId})`);
+  } else {
+    const existing = await call(`${adsetId}/ads`, token, "GET", { fields: "name", limit: 200 });
+    if ((existing.data || []).some((a) => a.name === adName)) throw new Error(`The ad set already has an ad named "${adName}".`);
+  }
 
   console.log(`\nPrimary text:\n${meta.primaryText}\n`);
   meta.cards.forEach((c, i) => console.log(`  card ${i + 1}: ${c.file} | ${c.name} | ${c.description}`));
@@ -122,7 +133,13 @@ const call = (p, token, method, params) => graphRequest(`/${String(p).replace(/^
     console.log(`\nCreative ${creative.id} built, no ad created. Features on: ${onNow.length ? onNow.join(", ") : "none"}`);
     return;
   }
-  const ad = await call(`${account}/ads`, token, "POST", { name: adName, adset_id: adsetId, creative: { creative_id: creative.id }, status: "PAUSED" });
+  let ad;
+  if (updateId) {
+    await call(updateId, token, "POST", { creative: { creative_id: creative.id } });
+    ad = { id: updateId };
+  } else {
+    ad = await call(`${account}/ads`, token, "POST", { name: adName, adset_id: adsetId, creative: { creative_id: creative.id }, status: "PAUSED" });
+  }
 
   const check = await call(ad.id, token, "GET", { fields: "name,status,effective_status,preview_shareable_link,creative{degrees_of_freedom_spec}" });
   const features = ((check.creative || {}).degrees_of_freedom_spec || {}).creative_features_spec || {};
@@ -132,7 +149,7 @@ const call = (p, token, method, params) => graphRequest(`/${String(p).replace(/^
   const log = fs.existsSync(logFile) ? JSON.parse(fs.readFileSync(logFile, "utf8")) : [];
   fs.writeFileSync(logFile, JSON.stringify(log.concat(record), null, 1));
 
-  console.log(`\nCreated ${check.name} | ad ${ad.id} | ${check.status} (${check.effective_status})`);
+  console.log(`\n${updateId ? "Updated" : "Created"} ${check.name} | ad ${ad.id} | ${check.status} (${check.effective_status})`);
   console.log(`Preview: ${record.preview || "(none returned)"}`);
   if (on.length) console.warn(`WARNING: Meta switched these creative features on: ${on.join(", ")} - turn them off in Ads Manager before the ad runs.`);
 })().catch((e) => {

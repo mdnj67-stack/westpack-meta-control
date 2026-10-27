@@ -15,8 +15,9 @@ sprog, billeder, anmeldelser og TrustScore. Første version er den franske karru
 - **Sidste kort:** tilbuddet – «&nbsp;… dès 48 pièces&nbsp;», gratis logotryk og gratis cliché ved første ordre.
   Nederst Westpack-logo, westpack.com og Trustpilot.
 - Billedet fylder hele kortet. Anmeldelseskortet ligger på det rene papir under æsken.
-- Er en tekst for lang på et andet sprog, gør skabelonen den mindre inden for faste grænser. Kan den stadig ikke være
-  der, nægter den at rendere og siger hvilket kort og hvilken tekst.
+- Er et citat langt, bliver anmeldelseskortet højere på alle citatkort (op til 520 px), så skriften er lige stor overalt,
+  og kortene ikke hopper, når man swiper. Anden tekst, der er for lang på et andet sprog, gøres mindre inden for faste
+  grænser. Kan den stadig ikke være der, nægter skabelonen at rendere og siger hvilket kort og hvilken tekst.
 
 ## Lav en ny version
 
@@ -61,7 +62,9 @@ sprog, billeder, anmeldelser og TrustScore. Første version er den franske karru
    node templates/meta-trustpilot-carousel/publish.js templates/meta-trustpilot-carousel/specs/<fil>.json --adset=<id> --name="AD27 - Avis Trustpilot - Karrusel - de_DE"
    ```
 
-   `--dry-run` viser teksterne uden at oprette noget. Annoncen oprettes **pauset** og tændes i Ads Manager. Scriptet
+   `--dry-run` viser teksterne uden at oprette noget. `--update=<annonce-id>` (i stedet for `--name`) sætter nye kort
+   på en eksisterende annonce, så den beholder navn og plads. Det virker kun på en pauset annonce, og Meta reviewer den
+   igen. Annoncen oprettes **pauset** og tændes i Ads Manager. Scriptet
    nægter, hvis spec'en er ændret siden renderingen, eller hvis navnet allerede findes i ad settet.
 
 ## Reglerne (Trustpilot og Westpack)
@@ -72,8 +75,11 @@ sprog, billeder, anmeldelser og TrustScore. Første version er den franske karru
 - **Privatpersoner vises med fornavn og forbogstav**, aldrig med fulde navn. Sæt `"display": "Matthew B. · Los Angeles"` ved
   citatet. `author` er stadig navnet på Trustpilot, og det er det, citat-tjekket matcher på. Et sted eller land tilføjes
   kun, når anmelderen selv nævner det i anmeldelsen. Virksomheder vises med deres navn.
-- **Eksporten har ikke anmelderens land.** Til en markedsrettet version (fx amerikanere) findes anmelderne via deres egne
-  ord: "American customer", "moved … to the USA", en by eller stat, LLC. Se `specs/en-us-jewelry-2026-10.json`.
+- **Vælg anmeldelser, markedet kan genkende sig i.** Mindst én skal have en tydelig forbindelse til landet, fx en
+  amerikaner, der skriver "Los Angeles". Resten skal bare have navne, man kan forholde sig til der, og ikke "Jens
+  Thomsen" i en amerikansk annonce. Vælg hellere nye og stærke anmeldelser end gamle, der tilfældigvis nævner landet.
+  Eksporten har ikke anmelderens land, så forbindelsen findes i anmelderens egne ord: en by, en stat, "American
+  customer", LLC. Se `specs/en-us-jewelry-2026-10.json`.
 - **Tallet står altid med ordet "TrustScore"**, antal anmeldelser og måned. Trustpilots logo er med på hvert kort.
 - **"Excellent"** (Hervorragend, Eccezionale …) er Trustpilots ord for 4,3 og derover. Under det skal `trustpilot.label`
   være Trustpilots eget ord.
