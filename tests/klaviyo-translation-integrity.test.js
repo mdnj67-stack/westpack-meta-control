@@ -32,6 +32,28 @@ test("translated fragments keep the spaces that separate them from inline tags",
   );
 });
 
+test("text inside translate=\"no\" reaches every market exactly as written", () => {
+  const source = [
+    "<p>Det siger kunderne:</p>",
+    "<td translate=\"no\" lang=\"de\"><p>Hervorragende Ausführung, <strong>gute Druckqualität</strong>.</p>",
+    "<table><tr><td>Steinbichler</td></tr></table></td>",
+    "<p>Læs flere anmeldelser</p>"
+  ].join("");
+  const { tokens, segments } = extractHtmlSegments(source);
+  // A nested <td> closing must not end the protection early, and text after the element is copy again.
+  assert.deepEqual(segments, ["Det siger kunderne:", "Læs flere anmeldelser"]);
+  assert.equal(
+    rebuildHtml(tokens, segments.map((segment) => segment.toUpperCase())),
+    source.replace("Det siger kunderne:", "DET SIGER KUNDERNE:").replace("Læs flere anmeldelser", "LÆS FLERE ANMELDELSER")
+  );
+});
+
+test("class=\"notranslate\" protects text too, and a void tag inside does not unbalance it", () => {
+  const source = "<span class=\"brand notranslate\">Fellsocke<br>by Westpack</span><span>æske</span>";
+  const { segments } = extractHtmlSegments(source);
+  assert.deepEqual(segments, ["æske"]);
+});
+
 const { requestFragmentsById } = require("../server/lib/klaviyo-template-variant");
 
 function fakeTranslator(misbehave) {

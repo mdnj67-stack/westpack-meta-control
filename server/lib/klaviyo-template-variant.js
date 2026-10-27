@@ -19,20 +19,50 @@ function isProtectedTextSegment(value = "") {
   return false;
 }
 
+// translate="no" (or class="notranslate", which Gmail and Google Translate honour) marks text that
+// must reach every market exactly as written. A Trustpilot review is quoted in the language its
+// author wrote it in: translating it would put words in a customer's mouth, which Trustpilot's
+// rules forbid. Brand names use it the same way. Both spellings are read, so the protection
+// survives an editor that drops one of them.
+const VOID_TAGS = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]);
+
+function readTag(markup = "") {
+  const match = /^<\s*(\/)?\s*([a-z][a-z0-9-]*)/i.exec(markup);
+  if (!match) return null;
+  const name = match[2].toLowerCase();
+  return { name, closing: Boolean(match[1]), opensElement: !match[1] && !VOID_TAGS.has(name) && !/\/\s*>$/.test(markup) };
+}
+
+function marksNoTranslate(markup = "") {
+  return /\stranslate\s*=\s*["']?no\b/i.test(markup) || /\sclass\s*=\s*["'][^"']*\bnotranslate\b/i.test(markup);
+}
+
 function extractHtmlSegments(html = "") {
   const source = String(html || "");
   const parts = source.split(/(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)/gi);
   const tokens = [];
   const segments = [];
+  // The open translate="no" element: its tag name and how many same-named elements are open inside it.
+  let untranslated = null;
 
   for (const part of parts) {
     if (!part) continue;
     if (/^(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)$/i.test(part)) {
       tokens.push({ type: "markup", value: part });
+      const tag = readTag(part);
+      if (!tag) continue;
+      if (untranslated) {
+        if (tag.name !== untranslated.name) continue;
+        if (tag.opensElement) untranslated.depth += 1;
+        if (tag.closing) untranslated.depth -= 1;
+        if (untranslated.depth === 0) untranslated = null;
+      } else if (tag.opensElement && marksNoTranslate(part)) {
+        untranslated = { name: tag.name, depth: 1 };
+      }
       continue;
     }
 
-    if (isProtectedTextSegment(part)) {
+    if (untranslated || isProtectedTextSegment(part)) {
       tokens.push({ type: "text", value: part, translatable: false });
       continue;
     }
