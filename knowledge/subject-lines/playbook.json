@@ -1,0 +1,4350 @@
+{
+ "mechanisms": {
+  "tal": {
+   "mechanism": "tal",
+   "label": "Tal og lister",
+   "linesRead": 220,
+   "model": "gpt-5.6-sol",
+   "essence": "Et konkret tal gør værdien synlig med det samme: Læseren kan hurtigt vurdere omfang, relevans og tidsforbrug. I B2B virker tal bedst, når de hjælper med et reelt valg, dokumenterer et resultat eller afgrænser en nyttig liste.",
+   "patterns": [
+    {
+     "name": "Den konkrete liste",
+     "formula": "[Antal] måder at [opnå mål]",
+     "why": "Tallet lover et overskueligt og handlingsklart indhold, som er hurtigt at bruge i butikken.",
+     "bestFor": [
+      "inspiration",
+      "service",
+      "produktfokus"
+     ],
+     "watchOut": "Listen mister troværdighed, hvis punkterne er selvfølgelige eller blot variationer af samme råd.",
+     "seenIn": [
+      {
+       "subject": "4 ways to get started",
+       "preview": "Start building in just a few steps",
+       "source": "collected",
+       "sender": "Webflow"
+      },
+      {
+       "subject": "3 Easy Ways to Tap into Pallets to Pints",
+       "preview": "Watch the video series on our website, YouTube or Spotify — anytime, anywhere.",
+       "source": "collected",
+       "sender": "Rehrig Pacific"
+      },
+      {
+       "subject": "Savvy travelers know these 3 Airbnb tips",
+       "preview": "A few easy ways to find great homes",
+       "source": "collected",
+       "sender": "Airbnb"
+      }
+     ]
+    },
+    {
+     "name": "Talte grunde",
+     "formula": "[Antal] grunde til at [vælge eller gøre noget]",
+     "why": "Konstruktionen gør en overvejelse lettere ved at varsle en kort og struktureret argumentation.",
+     "bestFor": [
+      "produktfokus",
+      "service",
+      "kundecase"
+     ],
+     "watchOut": "Undgå at gøre produktet til et mirakel; hver grund skal være konkret og kunne dokumenteres i mailen.",
+     "seenIn": [
+      {
+       "subject": "Four Reasons to Mix Metals",
+       "preview": "Explore two-tone silver and gold watches.",
+       "source": "collected",
+       "sender": "Shinola"
+      },
+      {
+       "subject": "Three reasons people love parking with Metropolis",
+       "preview": "Discover the future of parking",
+       "source": "collected",
+       "sender": "Metropolis"
+      },
+      {
+       "subject": "6 Benefits of bathing",
+       "preview": "",
+       "source": "collected",
+       "sender": "Mount Sapo"
+      }
+     ]
+    },
+    {
+     "name": "Toplisten",
+     "formula": "Top [antal]: [produkter eller valg]",
+     "why": "En rangering skaber nysgerrighed og hjælper travle indkøbere med hurtigt at finde et sikkert udgangspunkt.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Skriv kun “top”, “mest populære” eller “mest bestilte”, når rangeringen bygger på reelle data.",
+     "seenIn": [
+      {
+       "subject": "Our top 5 webinars of 2025",
+       "preview": "Catch up on the year’s most-watched sessions, from AI agents to scaled creative ops.",
+       "source": "collected",
+       "sender": "Airtable"
+      },
+      {
+       "subject": "Explore the 100 Most Popular Brunch spots",
+       "preview": "",
+       "source": "collected",
+       "sender": "OpenTable"
+      },
+      {
+       "subject": "The annual Top 100 restaurants list is here",
+       "preview": "",
+       "source": "collected",
+       "sender": "OpenTable"
+      }
+     ]
+    },
+    {
+     "name": "Nyt i et antal",
+     "formula": "[Antal] nye [produkter, farver eller funktioner]",
+     "why": "Tallet gør en produktnyhed konkret og viser straks, hvor meget nyt læseren får at se.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "forhandler"
+     ],
+     "watchOut": "Lad kategorien komme før et ukendt serienavn, og undgå at kalde små justeringer for store nyheder.",
+     "seenIn": [
+      {
+       "subject": "3 new products. 3 deep dives. Watch now.",
+       "preview": "Insights to fight fraud, unlock revenue & manage risk—see what’s new at Plaid .",
+       "source": "collected",
+       "sender": "Plaid"
+      },
+      {
+       "subject": "2 new Co-op Cycles bikes + 1 new clothing brand",
+       "preview": "",
+       "source": "collected",
+       "sender": "REI"
+      },
+      {
+       "subject": "Claude Developer Platform: Three features to explore",
+       "preview": "Level up your AI development with these tools.",
+       "source": "collected",
+       "sender": "Claude"
+      }
+     ]
+    },
+    {
+     "name": "Dokumenteret resultat",
+     "formula": "Sådan [kunde] opnåede [målt resultat]",
+     "why": "Et præcist resultat giver kundecasen tyngde og gør gevinsten lettere at forstå.",
+     "bestFor": [
+      "kundecase",
+      "service",
+      "virksomhed"
+     ],
+     "watchOut": "Resultatet må ikke formuleres som en garanti, og både målemetode og kontekst skal fremgå af mailen.",
+     "seenIn": [
+      {
+       "subject": "Reduce ticket response time by 61%",
+       "preview": "Quick tips for setting up automations.",
+       "source": "collected",
+       "sender": "ZenDesk"
+      },
+      {
+       "subject": "How we save over 160 hours per month",
+       "preview": "Asit Shah on how he stopped being the bottleneck — and follows up with customers faster.",
+       "source": "collected",
+       "sender": "Quo"
+      },
+      {
+       "subject": "GLP-1 users save $416/year on groceries",
+       "preview": "Your medication could pay for itself in grocery savings",
+       "source": "collected",
+       "sender": "Found"
+      }
+     ]
+    },
+    {
+     "name": "Mange samlet i én",
+     "formula": "[Antal] [dele]. Én [løsning eller helhed].",
+     "why": "Kontrasten mellem flere dele og én samlet løsning gør sortimentet eller konceptet let at afkode.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "virksomhed"
+     ],
+     "watchOut": "Konstruktionen bliver tom reklameretorik, hvis mailen ikke tydeligt viser, hvordan delene hænger sammen.",
+     "seenIn": [
+      {
+       "subject": "Ten events. One new Pace Breaker kit.",
+       "preview": "The decathlete of training gear is here.",
+       "source": "collected",
+       "sender": "Lululemon"
+      },
+      {
+       "subject": "Thousands of classes. One Membership.",
+       "preview": "Explore Membership",
+       "source": "collected",
+       "sender": "Peloton"
+      },
+      {
+       "subject": "One blood draw. 40 cell types. Years of warning.",
+       "preview": "Stanford mapped aging cell by cell—and the predictions are wild.",
+       "source": "collected",
+       "sender": "Healthspan"
+      }
+     ]
+    },
+    {
+     "name": "Værdi på få minutter",
+     "formula": "[Antal] minutter til [konkret opgave]",
+     "why": "Et lille tidsforbrug sænker tærsklen for at åbne en guide, tjekliste eller aktivitet.",
+     "bestFor": [
+      "service",
+      "inspiration",
+      "konkurrence"
+     ],
+     "watchOut": "Tidsangivelsen skal være realistisk og må ikke love, at et forretningsresultat opnås på samme tid.",
+     "seenIn": [
+      {
+       "subject": "5 minutes to optimize your processes",
+       "preview": "Get started with GitLab CI. Here are some resources to get started, troubleshooting docs, and more.",
+       "source": "collected",
+       "sender": "GitLab"
+      },
+      {
+       "subject": "10 minutes for a chance to win a $100 gift card",
+       "preview": "Let’s get real about email.",
+       "source": "collected",
+       "sender": "Email on Acid"
+      }
+     ]
+    },
+    {
+     "name": "Jubilæet i tal",
+     "formula": "[Antal] år med [produkt, håndværk eller virksomhed]",
+     "why": "Et rundt tal giver virksomhedshistorien aktualitet og fungerer som et enkelt bevis på erfaring.",
+     "bestFor": [
+      "virksomhed"
+     ],
+     "watchOut": "Et jubilæum er ikke interessant alene; preheaderen skal tilføre en historie, et menneske eller et produktperspektiv.",
+     "seenIn": [
+      {
+       "subject": "100 years of Poul Henningsen",
+       "preview": "One revolutionary system, a century of glare-free light.",
+       "source": "collected",
+       "sender": "Design Within Reach"
+      },
+      {
+       "subject": "25 Years! 🎉",
+       "preview": "",
+       "source": "collected",
+       "sender": "Krink"
+      },
+      {
+       "subject": "Seventy-five And Counting.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Palisades Tahoe"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Vis, hvad listen faktisk rummer, ved at nævne to eller tre forskellige eksempler.",
+    "Forklar datagrundlaget bag en topliste, procent eller besparelse.",
+    "Tilføj målgruppe eller brugssituation, så læseren kan se, om indholdet er relevant.",
+    "Gør kontrasten færdig: Forklar, hvordan de mange dele bliver til én løsning eller serie, der hænger sammen."
+   ],
+   "avoid": [
+    "Tal uden betydning, kilde eller forklaring i selve mailen.",
+    "Vage toplister som “vores 5 bedste”, når der ikke findes et klart udvælgelseskriterium.",
+    "Overfyldte emnelinjer med flere procenter, priser og budskaber på én gang.",
+    "Dobbeltangivelser som “over 800+”, hvor ét af signalerne er nok.",
+    "At gentage det samme tal og løfte ordret i preheaderen i stedet for at tilføre ny information."
+   ]
+  },
+  "spoergsmaal": {
+   "mechanism": "spoergsmaal",
+   "label": "Spørgsmål",
+   "linesRead": 328,
+   "model": "gpt-5.6-sol",
+   "essence": "Et godt spørgsmål får modtageren til straks at vurdere egen butik, arbejdsgang eller indkøb, så åbningen begynder som et svar i hovedet. I B2B virker mekanismen bedst, når spørgsmålet er konkret, let at oversætte og tæt knyttet til en beslutning, modtageren faktisk skal træffe.",
+   "patterns": [
+    {
+     "name": "Det konkrete behovstjek",
+     "formula": "Er [område] klar til [situation/krav]?",
+     "why": "Modtageren foretager et hurtigt mentalt tjek og åbner for at se, om noget kræver handling.",
+     "bestFor": [
+      "service",
+      "frist",
+      "saeson",
+      "produktfokus"
+     ],
+     "watchOut": "Spørgsmålet må ikke skræmme, udskamme eller antyde, at modtagerens nuværende emballage er forkert.",
+     "seenIn": [
+      {
+       "subject": "Are your emails accessible?",
+       "preview": "Spot and fix accessibility issues as you design. No expert knowledge or extra tools required.",
+       "source": "collected",
+       "sender": "beefree"
+      },
+      {
+       "subject": "Are your goals on track?",
+       "preview": "Check in on your portfolio to see if it's aligned with your goals.",
+       "source": "collected",
+       "sender": "Robinhood"
+      },
+      {
+       "subject": "Does your hiring strategy stack up?",
+       "preview": "Answer 12 questions to assess your hiring maturity.",
+       "source": "collected",
+       "sender": "Greenhouse"
+      }
+     ]
+    },
+    {
+     "name": "Hvilken passer til dig?",
+     "formula": "Hvilken [produktkategori/løsning] passer til [dit behov]?",
+     "why": "Spørgsmålet lover hjælp til et konkret valg og gør en produktoversigt mere relevant.",
+     "bestFor": [
+      "produktfokus",
+      "produktnyhed",
+      "inspiration",
+      "service"
+     ],
+     "watchOut": "Brug kategorien frem for et ukendt serienavn, og sørg for, at mailen faktisk hjælper med at vælge.",
+     "seenIn": [
+      {
+       "subject": "Which bookmaking tool is right for you?",
+       "preview": "Learn the options, plus save 30%.",
+       "source": "collected",
+       "sender": "Blurb"
+      },
+      {
+       "subject": "Which Litter-Robot is right for you?",
+       "preview": "",
+       "source": "collected",
+       "sender": "Whisker"
+      },
+      {
+       "subject": "Which Ford vehicle fits you?",
+       "preview": "Employee pricing ends soon. Choose today.",
+       "source": "collected",
+       "sender": "Ford"
+      }
+     ]
+    },
+    {
+     "name": "Har du prøvet det?",
+     "formula": "Har du prøvet [produkt/funktion/service] endnu?",
+     "why": "Modtageren svarer automatisk ja eller nej, og et nej skaber en enkel grund til at åbne.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Konstruktionen bliver hurtigt flad, hvis produktet ikke er nyt, overset eller relevant for modtagerens arbejde.",
+     "seenIn": [
+      {
+       "subject": "Have you tried our Subscription Service yet?",
+       "preview": "",
+       "source": "collected",
+       "sender": "Ashley & Co"
+      },
+      {
+       "subject": "Are you using Discover on Plex?",
+       "preview": "Finding what to watch is just a tab away",
+       "source": "collected",
+       "sender": "Plex"
+      },
+      {
+       "subject": "Did you know you could do this with Typeform?",
+       "preview": "Here are 3 things you could start doing with Typeform—right now...",
+       "source": "collected",
+       "sender": "Typeform"
+      }
+     ]
+    },
+    {
+     "name": "Klar til næste skridt",
+     "formula": "Klar til at [ønsket handling/resultat]?",
+     "why": "Spørgsmålet kobler produktet til en ønsket fremdrift uden først at forklare hele løsningen.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "“Klar til” er en slidt åbning og kræver et specifikt, attraktivt næste skridt for ikke at blive reklamefyld.",
+     "seenIn": [
+      {
+       "subject": "Ready to move smarter?",
+       "preview": "See how your body responds in real time.",
+       "source": "collected",
+       "sender": "Oura"
+      },
+      {
+       "subject": "Ready to find your best adventure?",
+       "preview": "Here’s how to search for and plan your first route today.",
+       "source": "collected",
+       "sender": "Komoot"
+      },
+      {
+       "subject": "Ready to make a good first impression?",
+       "preview": "",
+       "source": "collected",
+       "sender": "Panasonic"
+      }
+     ]
+    },
+    {
+     "name": "Forklaringsspørgsmålet",
+     "formula": "[Hvorfor/Hvordan] [sker konkret fænomen eller opgave]?",
+     "why": "Det vækker faglig nysgerrighed og lover en forklaring, som modtageren kan bruge i praksis.",
+     "bestFor": [
+      "inspiration",
+      "service",
+      "produktfokus",
+      "virksomhed"
+     ],
+     "watchOut": "Spørgsmålet må ikke love en stor afsløring, hvis mailen kun giver et almindeligt produktråd.",
+     "seenIn": [
+      {
+       "subject": "Why does decaf taste so flat? 👀",
+       "preview": "Ours doesn't. And we'll prove it.",
+       "source": "collected",
+       "sender": "Heist"
+      },
+      {
+       "subject": "How do you even wash period underwear?",
+       "preview": "+ more from the blog",
+       "source": "collected",
+       "sender": "Knix"
+      },
+      {
+       "subject": "Can you wear Oura Ring in water?",
+       "preview": "Spoiler: It's tougher than you think.",
+       "source": "collected",
+       "sender": "Oura"
+      }
+     ]
+    },
+    {
+     "name": "Hvad nu hvis?",
+     "formula": "Hvad hvis [produkt/løsning] kunne [konkret mulighed]?",
+     "why": "Modtageren forestiller sig resultatet i egen forretning, før løsningen bliver præsenteret.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "kundecase",
+      "service"
+     ],
+     "watchOut": "Muligheden må ikke blive en udokumenteret gevinst eller en skjult garanti om salg, tid eller besparelse.",
+     "seenIn": [
+      {
+       "subject": "What if your Meta ads could cost less and convert more?",
+       "preview": "Wunderkind reveals how to supercharge Meta ad spend with identity data and AI.",
+       "source": "collected",
+       "sender": "Wunderkind"
+      },
+      {
+       "subject": "What would 30 days with BodyScan 2 show you?",
+       "preview": "Try it risk-free. Send it back if you're not convinced.",
+       "source": "collected",
+       "sender": "Withings"
+      },
+      {
+       "subject": "If You Could Use Miro for Just One Thing ...",
+       "preview": "",
+       "source": "collected",
+       "sender": "Miro"
+      }
+     ]
+    },
+    {
+     "name": "Valget mellem to",
+     "formula": "[Mulighed A] eller [mulighed B] – hvad passer bedst?",
+     "why": "Et overskueligt enten-eller-valg får modtageren til at tage stilling med det samme.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "service",
+      "saeson"
+     ],
+     "watchOut": "De to muligheder skal være reelle alternativer, og svaret må ikke være manipuleret, så kun ét valg virker fornuftigt.",
+     "seenIn": [
+      {
+       "subject": "Morning or Night: When Should You Plunge?",
+       "preview": "Understand the benefits for your daily rhythm",
+       "source": "collected",
+       "sender": "Nordicwave"
+      },
+      {
+       "subject": "Is a fixed or adjustable rate better for you?",
+       "preview": "Find your ideal mortgage option.",
+       "source": "collected",
+       "sender": "Zillow"
+      },
+      {
+       "subject": "To DIY or not DIY? That is the question",
+       "preview": "",
+       "source": "collected",
+       "sender": "Gumtree"
+      }
+     ]
+    },
+    {
+     "name": "Det aktuelle behov",
+     "formula": "Mangler du stadig [produkt/løsning] til [anledning]?",
+     "why": "Spørgsmålet rammer en opgave, der allerede kan stå på modtagerens liste, og gør mailen handlingsnær.",
+     "bestFor": [
+      "saeson",
+      "frist",
+      "tilbud",
+      "produktfokus"
+     ],
+     "watchOut": "Undgå kunstig hast, konkrete fælles fristdatoer og formuleringer, der giver modtageren dårlig samvittighed.",
+     "seenIn": [
+      {
+       "subject": "Need a Father’s Day gift?",
+       "preview": "Check out these epic 🍔 recipes",
+       "source": "collected",
+       "sender": "Tillamook"
+      },
+      {
+       "subject": "Big project coming up? Manage it with Fiverr Pro.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Fiverr"
+      },
+      {
+       "subject": "Have the photos, but not the time?",
+       "preview": "",
+       "source": "collected",
+       "sender": "Artifact Uprising"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Besvar ikke spørgsmålet helt; tilføj den konkrete hjælp, modtageren finder i mailen.",
+    "Følg et valgspørgsmål med kriteriet for valget, fx størrelse, smykketype eller salgssituation.",
+    "Følg et behovstjek med et praktisk næste skridt: sammenlign modeller, bestil prøver eller se landets frist.",
+    "Tilføj dokumentation fra mailen, fx en kundecase, produktionstid eller et konkret produktsortiment, uden at gentage emnelinjen."
+   ],
+   "avoid": [
+    "Vage spørgsmål uden genstand, fx “Need help?”, “Have we met?” og “Up for something amazing?”.",
+    "Slidte lokkemidler som “Why wait?”, “Worth the hype?” og “Something catch your eye?”, medmindre de gøres specifikke for kategori og situation.",
+    "Spørgsmål, hvor svaret åbenlyst er nej, eller som kun fungerer som en påstand med spørgsmålstegn.",
+    "Frygt, skyld og angreb på modtagerens butik, emballage eller tidligere valg.",
+    "Ordspil, kulturelle referencer og skæve idiomer, der ikke kan oversættes naturligt til cirka femten markeder."
+   ]
+  },
+  "nysgerrighed": {
+   "mechanism": "nysgerrighed",
+   "label": "Nysgerrighed",
+   "linesRead": 355,
+   "model": "gpt-5.6-sol",
+   "essence": "Nysgerrighed virker i B2B, når emnelinjen peger på en konkret detalje, forklaring eller afsløring, som er relevant for læserens arbejde, men holder svaret tilbage. Hullet skal være lille og troværdigt nok til, at mailen kan lukke det hurtigt med produkter, dokumentation eller brugbar viden.",
+   "patterns": [
+    {
+     "name": "Noget er på vej",
+     "formula": "Noget [nyt/godt/uventet] er på vej",
+     "why": "Den varsler en relevant nyhed uden at afsløre den og skaber forventning med få ord.",
+     "bestFor": [
+      "produktnyhed",
+      "saeson",
+      "virksomhed"
+     ],
+     "watchOut": "Den bliver tom teasertekst, hvis preheaderen ikke konkretiserer kategori, anledning eller tidspunkt uden at love levering.",
+     "seenIn": [
+      {
+       "subject": "Something new is coming...",
+       "preview": "Join us on 5 March for the announcement.",
+       "source": "collected",
+       "sender": "Nothing"
+      },
+      {
+       "subject": "Something good is coming.",
+       "preview": "Get a sneak peek at our Prime Deals",
+       "source": "collected",
+       "sender": "Elgato"
+      },
+      {
+       "subject": "There will be signs…",
+       "preview": "Meet the powerful new addition to the Oura App.",
+       "source": "collected",
+       "sender": "Oura"
+      }
+     ]
+    },
+    {
+     "name": "Svaret ligger indeni",
+     "formula": "[Produkt/detalje/svar] er inde i mailen",
+     "why": "Den gør åbningen til den naturlige vej til en konkret afsløring, demonstration eller visuel detalje.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Brug den kun, når mailen faktisk viser noget tydeligt og værd at lede efter.",
+     "seenIn": [
+      {
+       "subject": "Your New Favorite Color is Inside This Email",
+       "preview": "A new way to find your color.",
+       "source": "collected",
+       "sender": "Benjamin Moore"
+      },
+      {
+       "subject": "What's Actually Inside the Sleep Support Gel Pack 🌙",
+       "preview": "A closer look at what's inside every Sleep Support sachet.",
+       "source": "collected",
+       "sender": "FlavCity"
+      },
+      {
+       "subject": "Take a peep 👀 at what's in our packs",
+       "preview": "Peek inside fan-favorite packs",
+       "source": "collected",
+       "sender": "Cotopaxi"
+      }
+     ]
+    },
+    {
+     "name": "Den oversete faktor",
+     "formula": "Den [faktor/detalje/variabel], ingen taler om",
+     "why": "Den antyder faglig viden, som kan ændre læserens vurdering eller beslutning.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "service"
+     ],
+     "watchOut": "Konstruktionen bliver hurtigt clickbait, hvis faktoren er banal, eller hvis den gør læserens nuværende valg til grin.",
+     "seenIn": [
+      {
+       "subject": "The longevity variable nobody's talking about",
+       "preview": "It's not diet or exercise — it's timing",
+       "source": "collected",
+       "sender": "Tally Health"
+      },
+      {
+       "subject": "The carb number nobody tells you",
+       "preview": "Not too many, not too few — and it changes by the day. Plus $100 off Lumen while it lasts.",
+       "source": "collected",
+       "sender": "Lumen"
+      },
+      {
+       "subject": "Most people never see these numbers",
+       "preview": "Standard care tests 15 biomarkers. Lifeforce tests 50+. Here's why that gap matters.",
+       "source": "collected",
+       "sender": "Lifeforce"
+      }
+     ]
+    },
+    {
+     "name": "Hvorfor det betyder noget",
+     "formula": "Hvorfor [overraskende observation] – og hvorfor det betyder noget",
+     "why": "Den kombinerer et konkret spørgsmål med løftet om en praktisk forklaring.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "service",
+      "virksomhed"
+     ],
+     "watchOut": "Spørgsmålet skal kunne besvares præcist i mailen og må ikke skjule en selvfølgelighed bag dramatisk sprog.",
+     "seenIn": [
+      {
+       "subject": "Why blueberries are blue (and why it matters)",
+       "preview": "The important plant compounds you've never heard of",
+       "source": "collected",
+       "sender": "Buoy"
+      },
+      {
+       "subject": "Why 2026 might be the best year to have an STR",
+       "preview": "Plus: how to find the markets that are thriving before everyone else does.",
+       "source": "collected",
+       "sender": "AirDNA"
+      }
+     ]
+    },
+    {
+     "name": "Gæt afsløringen",
+     "formula": "Kan du gætte [produktet/farven/detaljen]?",
+     "why": "Den gør læseren aktiv og skaber et klart spørgsmål, som mailen kan besvare visuelt.",
+     "bestFor": [
+      "konkurrence",
+      "produktnyhed",
+      "saeson",
+      "inspiration"
+     ],
+     "watchOut": "Gåden skal være enkel at forstå på alle markeder og må ikke afhænge af ordspil eller kulturelle referencer.",
+     "seenIn": [
+      {
+       "subject": "Can You Crack the Code? 🔎",
+       "preview": "20% off is hiding inside 👀",
+       "source": "collected",
+       "sender": "OLIPOP"
+      },
+      {
+       "subject": "Guess who’s flying into Piknik? 👀",
+       "preview": "",
+       "source": "collected",
+       "sender": "Piknik"
+      },
+      {
+       "subject": "Guess what? It’s quiz time!",
+       "preview": "",
+       "source": "collected",
+       "sender": "Natalist"
+      }
+     ]
+    },
+    {
+     "name": "Se, hvad der er sket",
+     "formula": "Se, hvad der lige [ankom/flyttede ind/ændrede sig]",
+     "why": "Den giver følelsen af at være blandt de første til at opdage en konkret forandring.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "virksomhed"
+     ],
+     "watchOut": "Undgå den generiske version, hvis preheaderen ikke fortæller, hvilken produktkategori eller forandring læseren skal kigge efter.",
+     "seenIn": [
+      {
+       "subject": "Look what just moved in",
+       "preview": "",
+       "source": "collected",
+       "sender": "Castlery"
+      },
+      {
+       "subject": "Look what we skipped this year!",
+       "preview": "125 million f-words were skipped by VidAngel customers. How many will you skip next year?",
+       "source": "collected",
+       "sender": "VidAngel"
+      },
+      {
+       "subject": "See what’s waiting for you in the GoodRx app",
+       "preview": "Save money and manage your prescriptions.",
+       "source": "collected",
+       "sender": "GoodRx"
+      }
+     ]
+    },
+    {
+     "name": "Det overraskede os",
+     "formula": "[Resultatet/reaktionen] overraskede os",
+     "why": "En ærlig reaktion antyder et uventet resultat og inviterer læseren til at se dokumentationen.",
+     "bestFor": [
+      "kundecase",
+      "produktfokus",
+      "inspiration",
+      "virksomhed"
+     ],
+     "watchOut": "Overraskelsen skal være reel og underbygget i mailen, ellers lyder den fabrikeret og overdrevet.",
+     "seenIn": [
+      {
+       "subject": "The results after 60 surprised us",
+       "preview": "Dad will thank you a week later.",
+       "source": "collected",
+       "sender": "YCODE"
+      },
+      {
+       "subject": "Wow, we didn’t expect this 😳",
+       "preview": "",
+       "source": "collected",
+       "sender": "Pearly"
+      },
+      {
+       "subject": "Word is in from the Test Spin circuit 👀",
+       "preview": "Spoiler: We’re hearing good things.",
+       "source": "collected",
+       "sender": "ALSO"
+      }
+     ]
+    },
+    {
+     "name": "Glemt noget?",
+     "formula": "Glemt [opgave/produkt]? Du har stadig muligheder",
+     "why": "Den åbner et praktisk informationshul og lover hjælp uden nødvendigvis at lokke med rabat.",
+     "bestFor": [
+      "frist",
+      "service",
+      "tilbud"
+     ],
+     "watchOut": "Den må hverken udskamme læseren, love en bestemt ankomst eller antyde, at alle muligheder stadig er åbne.",
+     "seenIn": [
+      {
+       "subject": "So you forgot some gifts",
+       "preview": "",
+       "source": "collected",
+       "sender": "Gossamer"
+      },
+      {
+       "subject": "Forgot? You’re Not Out of Options",
+       "preview": "Last-Minute? Right On Time.",
+       "source": "collected",
+       "sender": "Misc. Goods Co"
+      },
+      {
+       "subject": "Forgot something?",
+       "preview": "Complete your consultation and unlock 60% off your first order.",
+       "source": "collected",
+       "sender": "Prose"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Navngiv produktkategorien, hvis emnelinjen kun siger “noget” eller “det”.",
+    "Giv ét konkret spor uden at afsløre hele svaret, eksempelvis materiale, anvendelse eller den detalje mailen viser.",
+    "Fortæl, hvad læseren får i mailen: en sammenligning, video, guide, beregning eller kundecase."
+   ],
+   "avoid": [
+    "Vage en- eller toords-emner som “Introducing…” og “reservations”, når intet peger på værdien for læseren.",
+    "Generiske kommandoer som “Discover”, “Unlock” og “Find out more” uden et konkret objekt eller spørgsmål.",
+    "Overdramatiske hemmeligheder, chok og “du vil ikke tro det”, når afsløringen er almindelig.",
+    "En preheader, der gentager eller parafraserer emnelinjen i stedet for at tilføre et nyt spor."
+   ]
+  },
+  "deadline": {
+   "mechanism": "deadline",
+   "label": "Frist",
+   "linesRead": 303,
+   "model": "gpt-5.6-sol",
+   "essence": "En frist virker i B2B, når den er reel, konkret og forklarer, hvad modtageren mister ved at vente: pris, udvalg, adgang eller tid i produktionen. For Westpack er den stærkeste version rolig og hjælpsom: vis kategorien først, forklar processen, og led læseren til fristen for netop deres land.",
+   "patterns": [
+    {
+     "name": "Tilbuddet slutter",
+     "formula": "[Tilbud] slutter [i dag/i morgen/snart]",
+     "why": "Den kobler en klar fordel med en reel tidsgrænse, så køberen hurtigt kan prioritere.",
+     "bestFor": [
+      "tilbud",
+      "frist"
+     ],
+     "watchOut": "Brug kun tidsangivelsen, hvis den gælder i alle markeder, og gentag ikke samme budskab i preheaderen.",
+     "seenIn": [
+      {
+       "subject": "Our Annual Sale ends tomorrow.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Blu Dot"
+      },
+      {
+       "subject": "Final weekend to get 20% off all sunglasses",
+       "preview": "",
+       "source": "collected",
+       "sender": "Ray-ban"
+      },
+      {
+       "subject": "Mother’s Day Sale ends soon ⏳",
+       "preview": "",
+       "source": "collected",
+       "sender": "Nike"
+      }
+     ]
+    },
+    {
+     "name": "Sidste chance for produktet",
+     "formula": "Sidste chance for [produkt/fordel]",
+     "why": "Den gør konsekvensen af at vente tydelig og holder samtidig produktet som mailens hovedperson.",
+     "bestFor": [
+      "frist",
+      "tilbud",
+      "produktnyhed",
+      "konkurrence"
+     ],
+     "watchOut": "“Sidste chance” mister troværdighed, hvis fristen forlænges, eller hvis det ikke fremgår, hvad chancen gælder.",
+     "seenIn": [
+      {
+       "subject": "Last chance for Smoky BBQ!",
+       "preview": "Bite into a summer favorite before it’s gone",
+       "source": "collected",
+       "sender": "Shake Shack"
+      },
+      {
+       "subject": "Last Chance: Rose Farm Peach",
+       "preview": "Sun-ripened White Peach, Honey Babe, and Frost peaches, grown on Rose Farm and infused with 7mg sativa flower rosin.",
+       "source": "collected",
+       "sender": "Rose Delights"
+      },
+      {
+       "subject": "Last chance to shop our Holiday Sale",
+       "preview": "",
+       "source": "collected",
+       "sender": "Beats by Dre"
+      }
+     ]
+    },
+    {
+     "name": "Nedtælling med handling",
+     "formula": "[Antal] [dage/timer] tilbage til [handling]",
+     "why": "Et præcist tidsrum gør fristen let at afkode og peger direkte på den nødvendige handling.",
+     "bestFor": [
+      "frist",
+      "tilbud",
+      "konkurrence",
+      "forhandler"
+     ],
+     "watchOut": "Tallet skal stå i mailen og fungere på tværs af udsendelsestidspunkter og tidszoner.",
+     "seenIn": [
+      {
+       "subject": "24 hours left! RSVP today!",
+       "preview": "",
+       "source": "collected",
+       "sender": "beefree"
+      },
+      {
+       "subject": "2 days left to get ApolloNext tickets for $99",
+       "preview": "Prices increase soon. Agenda details inside.",
+       "source": "collected",
+       "sender": "Apollo.io"
+      },
+      {
+       "subject": "One week left to register: Free AI ROI strategy sessions",
+       "preview": "It only happens twice a year - don’t wait until Q4 to learn these tactics",
+       "source": "collected",
+       "sender": "Section"
+      }
+     ]
+    },
+    {
+     "name": "Før vilkåret ændres",
+     "formula": "[Handling] før [prisen/vilkåret] ændres",
+     "why": "Den forklarer, hvorfor det økonomisk eller praktisk giver mening at handle nu uden at råbe.",
+     "bestFor": [
+      "tilbud",
+      "frist",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Nævn kun prisstigning eller ændrede vilkår, når ændringen er fastlagt og forklaret i mailen.",
+     "seenIn": [
+      {
+       "subject": "Grab your ApolloNext ticket before prices increase",
+       "preview": "Save your spot at the GTM event of the year for just $99.",
+       "source": "collected",
+       "sender": "Apollo.io"
+      },
+      {
+       "subject": "⏰ Time is running out – save now on your Team '26 pass",
+       "preview": "Rates increase soon",
+       "source": "collected",
+       "sender": "Atlassian"
+      },
+      {
+       "subject": "Last chance to save $200",
+       "preview": "The current ticket tier won't last much longer. Register before General Admission reaches $1,599.",
+       "source": "collected",
+       "sender": "HubSpot"
+      }
+     ]
+    },
+    {
+     "name": "Lukker snart",
+     "formula": "[Tilmelding/forudbestilling/adgang] lukker snart",
+     "why": "Formuleringen passer til processer, hvor en liste, produktion eller adgang faktisk lukker på et bestemt tidspunkt.",
+     "bestFor": [
+      "frist",
+      "konkurrence",
+      "forhandler",
+      "service"
+     ],
+     "watchOut": "“Snart” bliver tomt, hvis preheaderen ikke tilføjer årsagen, konsekvensen eller næste skridt.",
+     "seenIn": [
+      {
+       "subject": "Closing soon: Apply for the Fall ’26 cohort",
+       "preview": "Early enrollment closes August 4. Applying is free and takes 5 minutes.",
+       "source": "collected",
+       "sender": "Masterclass"
+      },
+      {
+       "subject": "Preorders Open For a Limited Time",
+       "preview": "New optical AI glasses and seasonal colors",
+       "source": "collected",
+       "sender": "Ray-ban"
+      },
+      {
+       "subject": "Last weekend to claim a crypto bonus",
+       "preview": "Claim yours during HOOD Month.",
+       "source": "collected",
+       "sender": "Robinhood"
+      }
+     ]
+    },
+    {
+     "name": "Der er stadig tid",
+     "formula": "Der er stadig tid til [handling]",
+     "why": "Den skaber fremdrift uden panik og passer godt til købere, som stadig kan nå en enkel beslutning.",
+     "bestFor": [
+      "frist",
+      "service",
+      "inspiration",
+      "forhandler"
+     ],
+     "watchOut": "Undgå at love ankomst eller levering; peg i stedet på produktionstid og modtagerens landespecifikke frist.",
+     "seenIn": [
+      {
+       "subject": "There’s still time to gift a getaway",
+       "preview": "",
+       "source": "collected",
+       "sender": "Airbnb"
+      },
+      {
+       "subject": "There's still time to send a digital gift card",
+       "preview": "Make their spirits bright.",
+       "source": "collected",
+       "sender": "Sonos"
+      },
+      {
+       "subject": "It's not too late- Join us at ZapConnect 2025 tomorrow",
+       "preview": "There's still time to register—join us as we shed light on the power of AI.",
+       "source": "collected",
+       "sender": "Zapier"
+      }
+     ]
+    },
+    {
+     "name": "Landespecifik frist",
+     "formula": "[Kategori] med logo: Find fristen for dit land",
+     "why": "Den gør Westpacks forskellige markedsfrister relevante uden at trykke en dato, som kan være forkert efter oversættelse.",
+     "bestFor": [
+      "frist",
+      "produktfokus",
+      "saeson",
+      "service"
+     ],
+     "watchOut": "Skriv aldrig én bestemt ordredato i den danske master, og lov ikke, hvornår varen ankommer.",
+     "seenIn": [
+      {
+       "subject": "Hvornår er din julefrist egentlig?",
+       "preview": "Den afhænger af dit land og ligger før selve julehandlen. Vi har samlet dem alle på én side.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Én frist pr. land. Kend din. 📅",
+       "preview": "Vi sender til mange lande, og fristerne følger fragten, ikke kalenderen. Find den, der gælder dig.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Your Christmas cut-off is earlier than Christmas",
+       "preview": "Each country has its own. Find yours before the production queue gets any longer.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Planlæg sæsonen baglæns",
+     "formula": "[Sæsonen] er [senere]. [Logoordren] er nu.",
+     "why": "Kontrasten viser den skjulte produktionstid og hjælper professionelle indkøbere med at planlægge baglæns.",
+     "bestFor": [
+      "frist",
+      "saeson",
+      "produktfokus",
+      "forhandler"
+     ],
+     "watchOut": "Den må ikke blive kunstigt dramatisk; produktionstid og øvrige trin skal kunne dokumenteres i mailen.",
+     "seenIn": [
+      {
+       "subject": "Mors dag er i maj. Logoet er i april.",
+       "preview": "Regn produktionstiden baglæns fra din kampagne, og læg fragten til dit land oveni.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Valentinsæsker bestilles i januar 💌",
+       "preview": "Februar er kort, og et nyt logo skal have 7–8 arbejdsdage i produktion, før salget kan starte.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Black Friday-poser skal bestilles før Black Friday",
+       "preview": "Lyder indlysende, indtil 7–8 arbejdsdages produktion lægges oveni. Så er det pludselig nu.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Forklar årsagen til fristen: grafikertjek, korrektur, produktionstid eller kapacitetsplanlægning.",
+    "Peg på fristen for modtagerens land i stedet for at skrive en fælles dato.",
+    "Skeln tydeligt mellem produktionstid og fragt; lov aldrig en bestemt ankomstdag."
+   ],
+   "avoid": [
+    "Vage alarmord som “Skynd dig”, “Handl nu” og “Gå ikke glip af det” uden en reel forklaring.",
+    "Kapitæler, flere alarm-emojis, dobbelte udråbstegn og overdrevet “FINAL HOURS”-stil.",
+    "At forlænge en frist efter at have kaldt mailen “sidste chance”.",
+    "Konkrete ordredatoer i den danske master, fordi fristerne varierer mellem markederne."
+   ]
+  },
+  "social_proof": {
+   "mechanism": "social_proof",
+   "label": "Andre gør det",
+   "linesRead": 208,
+   "model": "gpt-5.6-sol",
+   "essence": "Social proof virker i B2B, fordi andre butikkers valg gør en stor indkøbsbeslutning lettere og mindre risikabel. Det står stærkest, når populariteten dokumenteres med konkrete ordrer, genbestillinger, anmeldelser eller kundecases frem for løse påstande.",
+   "patterns": [
+    {
+     "name": "Flertallet peger",
+     "formula": "[Kategori], som [kundetype] vælger lige nu",
+     "why": "Læseren får hurtigt øje på det sikre og aktuelle valg blandt mange muligheder.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Ord som „alle“ og „besat“ bliver let utroværdige og skal erstattes af en præcis kundegruppe eller dokumentation.",
+     "seenIn": [
+      {
+       "subject": "What everyone's actually wearing right now.",
+       "preview": "Tried, tested, and built for taking it easy. Shop the crowd favorites.",
+       "source": "collected",
+       "sender": "Duvin Design Co."
+      },
+      {
+       "subject": "The styles everyone’s talking about",
+       "preview": "Discover July’s top-rated styles.",
+       "source": "collected",
+       "sender": "Merrell"
+      },
+      {
+       "subject": "The Flavor Everyone's Falling For 🍓❤️",
+       "preview": "",
+       "source": "collected",
+       "sender": "American Dream Nut Butter"
+      }
+     ]
+    },
+    {
+     "name": "Bestsellerlisten",
+     "formula": "[Sæsonens] mest bestilte [kategori]",
+     "why": "En rangering fungerer som en hurtig indkøbsliste og reducerer tiden brugt på at vælge.",
+     "bestFor": [
+      "produktfokus",
+      "tilbud",
+      "saeson",
+      "forhandler"
+     ],
+     "watchOut": "Kald kun noget en bestseller, hvis mailen viser, hvad listen bygger på, eksempelvis antal ordrer eller en tydelig periode.",
+     "seenIn": [
+      {
+       "subject": "🖤 Our Black Friday best sellers",
+       "preview": "Find classics up to 50% off.",
+       "source": "collected",
+       "sender": "Altitude Sports"
+      },
+      {
+       "subject": "Our bestselling, most-wanted pieces.",
+       "preview": "Keeping it 💯 for the herd.",
+       "source": "collected",
+       "sender": "Cotopaxi"
+      },
+      {
+       "subject": "Bestsellers you’ll fall for – or already have.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Jo Malone London"
+      }
+     ]
+    },
+    {
+     "name": "Kundens egne ord",
+     "formula": "“[Kort, konkret kundecitat]”",
+     "why": "En tydelig oplevelse i kundens eget sprog føles mere troværdig end virksomhedens egen produktros.",
+     "bestFor": [
+      "produktfokus",
+      "kundecase",
+      "service"
+     ],
+     "watchOut": "Citatet skal være autentisk, godkendt og forståeligt uden kontekst, og det må ikke omskrives til en stærkere påstand.",
+     "seenIn": [
+      {
+       "subject": "“Best cookies I’ve ever had.”",
+       "preview": "Get the gift everyone’s gifting",
+       "source": "collected",
+       "sender": "Milk Bar"
+      },
+      {
+       "subject": "“Slept the best I have in weeks.”",
+       "preview": "Why whole food magnesium hits different.",
+       "source": "collected",
+       "sender": "Buoy"
+      },
+      {
+       "subject": "🚿 \"My hair has never looked better!\"",
+       "preview": "",
+       "source": "collected",
+       "sender": "canopy"
+      }
+     ]
+    },
+    {
+     "name": "Anmeldelserne taler",
+     "formula": "Det siger [kundetype] om [kategori]",
+     "why": "Konstruktionen lover flere uafhængige erfaringer og giver læseren mulighed for selv at vurdere produktet.",
+     "bestFor": [
+      "produktfokus",
+      "service",
+      "virksomhed",
+      "kundecase"
+     ],
+     "watchOut": "Undgå kun at håndplukke overdreven ros; ved Trustpilot må Westpack alene bruge den aktuelle TrustScore 4.6.",
+     "seenIn": [
+      {
+       "subject": "The Reviews are In...",
+       "preview": "And everyone LOVES Gametime! Take a peak as to why!",
+       "source": "collected",
+       "sender": "Gametime"
+      },
+      {
+       "subject": "What cat parents are saying about Smalls.",
+       "preview": "Real reviews from real customers.",
+       "source": "collected",
+       "sender": "Smalls"
+      },
+      {
+       "subject": "See what the design world says about Gantri.",
+       "preview": "“Gantri has long been changing the lighting game”",
+       "source": "collected",
+       "sender": "Gantri"
+      }
+     ]
+    },
+    {
+     "name": "Lånt autoritet",
+     "formula": "[Medie eller ekspert] vælger [kategori]",
+     "why": "En relevant faglig eller redaktionel anbefaling overfører troværdighed til produktet med få ord.",
+     "bestFor": [
+      "produktfokus",
+      "virksomhed",
+      "kundecase"
+     ],
+     "watchOut": "Brug kun navnet med dokumentation og tilladelse, og gør ikke en enkelt omtale til en pris eller generel godkendelse.",
+     "seenIn": [
+      {
+       "subject": "GQ and Esquire love them: Our bestsellers",
+       "preview": "",
+       "source": "collected",
+       "sender": "Frontman"
+      },
+      {
+       "subject": "As seen in Runner’s World 👟",
+       "preview": "Plus, a free, science-backed guide for race recovery",
+       "source": "collected",
+       "sender": "Therabody"
+      },
+      {
+       "subject": "Wired's favorite office chair is up to 20% off",
+       "preview": "Shop the Ergonomic Chair Pro, on sale for a limited time.",
+       "source": "collected",
+       "sender": "Branch"
+      }
+     ]
+    },
+    {
+     "name": "Mængden som bevis",
+     "formula": "Hvad [antal] [kundetype] vælger",
+     "why": "Et konkret antal gør kundeadfærden håndgribelig og vækker nysgerrighed om mønsteret bag valgene.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "virksomhed",
+      "service"
+     ],
+     "watchOut": "Antal, periode, datakilde og konklusion skal kunne dokumenteres i mailen og må ikke overføres ukritisk mellem markeder.",
+     "seenIn": [
+      {
+       "subject": "What 799 companies built on beehiiv",
+       "preview": "The 2026 enterprise data: $23M earned, 448M AI crawls, and how the audience growth playbook for businesses like yours changed this year.",
+       "source": "collected",
+       "sender": "beehiiv"
+      },
+      {
+       "subject": "We ran an actual sleep study.",
+       "preview": "Eight weeks, 129 people, measured by Oura ring.",
+       "source": "collected",
+       "sender": "Everyday Dose"
+      },
+      {
+       "subject": "4 in 5 dogs agree: fresh is best.",
+       "preview": "Your pups will love it too",
+       "source": "collected",
+       "sender": "Butternut Box"
+      }
+     ]
+    },
+    {
+     "name": "Se kollegaen gøre det",
+     "formula": "Sådan bruger [kunde eller kundetype] [produkt eller service]",
+     "why": "En genkendelig virksomhed viser løsningen i praksis og giver læseren noget konkret at kopiere.",
+     "bestFor": [
+      "kundecase",
+      "inspiration",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Casen må ikke love, at alle får samme resultat, og kundens navn, tal og billeder kræver godkendelse.",
+     "seenIn": [
+      {
+       "subject": "How HubSpot runs Clay across 90 million records",
+       "preview": "",
+       "source": "collected",
+       "sender": "Clay"
+      },
+      {
+       "subject": "Why top brands are going sound-on",
+       "preview": "Cut through doomscrolling with audio ads",
+       "source": "collected",
+       "sender": "Spotify"
+      },
+      {
+       "subject": "A Big Year for Michelin-Guide Restaurants using Marsh Hen Mill!",
+       "preview": "See the featured restaurants cooking with our grains.",
+       "source": "collected",
+       "sender": "Marsh Hen Mill"
+      }
+     ]
+    },
+    {
+     "name": "De kommer tilbage",
+     "formula": "[Kategori], kunderne vender tilbage til",
+     "why": "Genbestilling signalerer vedvarende nytte og er stærkere B2B-bevis end almindelig opmærksomhed.",
+     "bestFor": [
+      "produktfokus",
+      "tilbud",
+      "saeson",
+      "forhandler"
+     ],
+     "watchOut": "Skeln klart mellem genbestilt, udsolgt og tilbage på lager, da ordene dokumenterer forskellige ting.",
+     "seenIn": [
+      {
+       "subject": "The Flavors You Kept Coming Back To",
+       "preview": "See which one was your #1",
+       "source": "collected",
+       "sender": "Verb"
+      },
+      {
+       "subject": "Our 6x Sold-Out Viral Fragrance",
+       "preview": "",
+       "source": "collected",
+       "sender": "Phlur"
+      },
+      {
+       "subject": "Our sellout star: Cheek",
+       "preview": "Sold out twice. You’re about to see why.",
+       "source": "collected",
+       "sender": "Normal"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Nævn datakilden: ordrer, genbestillinger, anmeldelser eller kundebilleder.",
+    "Fortæl, hvilken kundetype der vælger produktet, og i hvilken købssituation.",
+    "Fremhæv én konkret grund til, at kunderne vælger eller genbestiller."
+   ],
+   "avoid": [
+    "Udokumenterede superlativer som „alle elsker“, „viral“ og „internettet er besat“.",
+    "Selvudnævnte bestsellere uden periode, datakilde eller forklaring på rangeringen.",
+    "Opfundne antal, procenter, anmeldelser, rabatter eller resultater, som ikke findes i mailen.",
+    "Femstjernede påstande; ved anmeldelser bruges kun den aktuelle TrustScore 4.6, hvis den fremgår af mailen."
+   ]
+  },
+  "kontrast": {
+   "mechanism": "kontrast",
+   "label": "Kontrast",
+   "linesRead": 336,
+   "model": "gpt-5.6-sol",
+   "essence": "Kontrast virker, når den vender en kendt antagelse og hurtigt viser køberen en ny fordel, anvendelse eller anledning. I B2B skal overraskelsen kunne forklares konkret i mailen, så emnelinjen føles skarp frem for smart for smarthedens skyld.",
+   "patterns": [
+    {
+     "name": "Mindre af det ene, mere af det andet",
+     "formula": "Mindre [friktion]. Mere [ønsket resultat].",
+     "why": "Den lover en tydelig byttehandel, som køberen kan afkode på få sekunder.",
+     "bestFor": [
+      "produktfokus",
+      "tilbud",
+      "service",
+      "inspiration"
+     ],
+     "watchOut": "Kontrasten falder sammen, hvis mailen ikke dokumenterer begge sider, eller hvis den antyder en gevinst, produktet ikke kan levere.",
+     "seenIn": [
+      {
+       "subject": "Less bloat, more poop 💩",
+       "preview": "No more overpriced probiotics.",
+       "source": "collected",
+       "sender": "Buoy"
+      },
+      {
+       "subject": "Less menu-diving. More making stuff.",
+       "preview": "5 signs you’ve found the right tools for your workflow.",
+       "source": "collected",
+       "sender": "True Grit Texture Supply"
+      },
+      {
+       "subject": "Dump the Sugar Crash, Keep the Green 🍀",
+       "preview": "Same minty magic. Zero regret.",
+       "source": "collected",
+       "sender": "FlavCity"
+      }
+     ]
+    },
+    {
+     "name": "Lille ting, stor virkning",
+     "formula": "Lille [produkt eller detalje]. Stor [virkning].",
+     "why": "Spændet mellem størrelse og effekt gør selv et enkelt produkt relevant og mindeværdigt.",
+     "bestFor": [
+      "produktfokus",
+      "produktnyhed",
+      "inspiration",
+      "service"
+     ],
+     "watchOut": "Undgå luftige ord som “stor effekt”; peg på en virkning, der faktisk vises i mailen.",
+     "seenIn": [
+      {
+       "subject": "A little SMS goes a long way",
+       "preview": "See how easy it is to grow your reach with our simple SMS tools.",
+       "source": "collected",
+       "sender": "MailChimp"
+      },
+      {
+       "subject": "Meet the K-Mini Mate: tiny coffee maker, big on taste.",
+       "preview": "Petite never packed so much punch.",
+       "source": "collected",
+       "sender": "Keurig Canada"
+      },
+      {
+       "subject": "Big News for Small Dogs",
+       "preview": "The Tiny One is live now",
+       "source": "collected",
+       "sender": "Little Chonk"
+      }
+     ]
+    },
+    {
+     "name": "Fordelen uden kompromiset",
+     "formula": "[Ønsket fordel] uden [forventet ulempe].",
+     "why": "Den rammer en velkendt købsbarriere og åbner muligheden for at få begge dele.",
+     "bestFor": [
+      "produktfokus",
+      "tilbud",
+      "service",
+      "produktnyhed"
+     ],
+     "watchOut": "“Uden kompromis” bliver hurtigt en tom absolut påstand, så nævn det konkrete kompromis og underbyg det i mailen.",
+     "seenIn": [
+      {
+       "subject": "Treat Yourself Without the Guilt Trip 🤎",
+       "preview": "No-bake pies with triple protein.",
+       "source": "collected",
+       "sender": "FlavCity"
+      },
+      {
+       "subject": "Same sound & quality. Way more affordable. 🙌",
+       "preview": "We're better on your budget without sacrificing quality.",
+       "source": "collected",
+       "sender": "Jabra Enhance"
+      },
+      {
+       "subject": "No Tradeoffs. Just Clean, Beautiful Air.",
+       "preview": "Meet the Discovery Set—where fine fragrance meets non-toxic science.",
+       "source": "collected",
+       "sender": "Realm"
+      }
+     ]
+    },
+    {
+     "name": "To verdener mødes",
+     "formula": "Når [verden A] møder [verden B]",
+     "why": "En uventet kombination skaber et mentalt billede og vækker lyst til at se resultatet.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Kombinationen skal kunne ses i produktet eller indholdet og ikke blot være to pæne, abstrakte ord.",
+     "seenIn": [
+      {
+       "subject": "Where Art and Stone Collide.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Karst"
+      },
+      {
+       "subject": "Where Craft Meets Form",
+       "preview": "Pieces that balance geometry, craftsmanship, and timeless design.",
+       "source": "collected",
+       "sender": "Lumens"
+      },
+      {
+       "subject": "Cookies + Flowers = 💙",
+       "preview": "Meet the birthday gift that does it all.",
+       "source": "collected",
+       "sender": "Levain Bakery"
+      }
+     ]
+    },
+    {
+     "name": "Ikke bare det oplagte",
+     "formula": "Ikke bare [forventet funktion]. Også [uventet værdi].",
+     "why": "Den udvider produktets rolle uden først at tale dets grundfunktion ned.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Skriv ikke “mere end bare” uden straks at fortælle, hvad det ekstra konkret er.",
+     "seenIn": [
+      {
+       "subject": "Not Just Team Pride. Face Pride.",
+       "preview": "Show up daily with a shave that means business.",
+       "source": "collected",
+       "sender": "Dollar Shave Club"
+      },
+      {
+       "subject": "So much more than just stock content.",
+       "preview": "We tick all the boxes ✅ for next-level work.",
+       "source": "collected",
+       "sender": "Shutterstock"
+      },
+      {
+       "subject": "Not just for bachelorette parties 👀",
+       "preview": "",
+       "source": "collected",
+       "sender": "Batch"
+      }
+     ]
+    },
+    {
+     "name": "Antagelsen vendt om",
+     "formula": "[Kendt antagelse] er ikke [det, man tror]",
+     "why": "En direkte korrektion skaber et videnshul, som læseren åbner mailen for at få lukket.",
+     "bestFor": [
+      "inspiration",
+      "service",
+      "produktfokus",
+      "virksomhed"
+     ],
+     "watchOut": "Vend en antagelse om kategorien, ikke læserens valg, og sørg for solid dokumentation i mailen.",
+     "seenIn": [
+      {
+       "subject": "Women are NOT small men",
+       "preview": "So why have we been taught to exercise like small men? 🤔",
+       "source": "collected",
+       "sender": "Rootless"
+      },
+      {
+       "subject": "Social media is NOT free",
+       "preview": "Take power back from Big Tech",
+       "source": "collected",
+       "sender": "Lush"
+      },
+      {
+       "subject": "Engagement is a strategy, not a campaign",
+       "preview": "Download the ebook to build a lifecycle strategy that fits every stage.",
+       "source": "collected",
+       "sender": "Acoustic"
+      }
+     ]
+    },
+    {
+     "name": "Sæsonen på det forkerte tidspunkt",
+     "formula": "[Sæsonting] i [uventet måned eller sæson]?",
+     "why": "Bruddet med kalenderen stopper blikket og giver en naturlig åbning til en aktuel vare eller anledning.",
+     "bestFor": [
+      "saeson",
+      "produktnyhed",
+      "tilbud",
+      "inspiration"
+     ],
+     "watchOut": "Sæsonreferencer og højtider varierer mellem markeder, så konstruktionen skal kunne oversættes uden at miste logikken.",
+     "seenIn": [
+      {
+       "subject": "Snow in September?",
+       "preview": "",
+       "source": "collected",
+       "sender": "Vallon"
+      },
+      {
+       "subject": "Cooler nights, even in August*",
+       "preview": "$100 off the Pod, email exclusive",
+       "source": "collected",
+       "sender": "Eight Sleep"
+      },
+      {
+       "subject": "Sick of summer? 🎃",
+       "preview": "Summerween to the rescue",
+       "source": "collected",
+       "sender": "Lush"
+      }
+     ]
+    },
+    {
+     "name": "Både det ene og det andet",
+     "formula": "Det er [kategori A]. Det er [kategori B]. Det er [produkt].",
+     "why": "Kategorisammenstødet gør et nyt eller alsidigt produkt svært at placere og derfor interessant at undersøge.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Brug kun konstruktionen, når produktet reelt forener begge kategorier, ellers bliver den en gåde uden belønning.",
+     "seenIn": [
+      {
+       "subject": "It’s a truck. It’s an SUV. It’s a Slate.",
+       "preview": "Welcome to Slate.",
+       "source": "collected",
+       "sender": "SLATE Auto"
+      },
+      {
+       "subject": "PostHog is now a fashion brand",
+       "preview": "But we're one with a Slack app.",
+       "source": "collected",
+       "sender": "PostHog"
+      },
+      {
+       "subject": "This conference is for humans (and agents)",
+       "preview": "See what we’re building at Cloudflare Connect 2026.",
+       "source": "collected",
+       "sender": "Cloudflare"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Forklar mekanismen bag kontrasten med én konkret egenskab, anvendelse eller detalje.",
+    "Vis den praktiske B2B-værdi: hvor produktet bruges, hvad køberen kan vælge, eller hvordan processen fungerer.",
+    "Lad emnelinjen levere overraskelsen og preheaderen levere beviset; gentag ikke de samme ord.",
+    "Ved sæson og frister: peg på, at lokale frister kommer tidligt, og lad læseren finde fristen for sit marked uden en fast dato."
+   ],
+   "avoid": [
+    "Klichéer som “hits different”, “but make it”, “meet your match” og “just got better/cooler”, medmindre drejningen er helt specifik.",
+    "Kontrast for kontrastens skyld, hvor de to halvdele lyder flotte, men ikke afslører en reel produktfordel.",
+    "At gøre læserens butik, emballage eller tidligere valg til problemet eller vittigheden.",
+    "Uunderbyggede priser, besparelser, antal, procentsatser, superlativer eller løfter om levering."
+   ]
+  },
+  "konkret_vaerdi": {
+   "mechanism": "konkret_vaerdi",
+   "label": "Konkret værdi",
+   "linesRead": 590,
+   "model": "gpt-5.6-sol",
+   "essence": "Konkret værdi virker, når emnelinjen lover et tydeligt resultat, en lettere opgave eller et brugbart beslutningsgrundlag. I B2B skal værdien være specifik nok til, at en indkøber straks kan se, hvad mailen hjælper med – uden at løftet bliver større end indholdet.",
+   "patterns": [
+    {
+     "name": "Resultatet først",
+     "formula": "[Gør handling] til [konkret resultat]",
+     "why": "Et aktivt verbum gør udbyttet synligt med det samme og hjælper læseren med at koble produktet til en forretningsopgave.",
+     "bestFor": [
+      "produktfokus",
+      "produktnyhed",
+      "service"
+     ],
+     "watchOut": "Undgå brede løfter som ”løft dit brand”, medmindre mailen viser præcist hvordan.",
+     "seenIn": [
+      {
+       "subject": "Turn visitors into customers 💰",
+       "preview": "",
+       "source": "collected",
+       "sender": "Linktree"
+      },
+      {
+       "subject": "Make any presentation interactive with slide sync",
+       "preview": "",
+       "source": "collected",
+       "sender": "Kahoot!"
+      },
+      {
+       "subject": "Control your video’s privacy",
+       "preview": "Hand-pick your audience by limiting access to your videos.",
+       "source": "collected",
+       "sender": "Vimeo"
+      }
+     ]
+    },
+    {
+     "name": "Værdi på kortere tid",
+     "formula": "[Opnå resultat] på [konkret tid]",
+     "why": "En troværdig tidsbesparelse rammer indkøbere, der vil træffe beslutninger og komme videre hurtigt.",
+     "bestFor": [
+      "produktnyhed",
+      "service"
+     ],
+     "watchOut": "Tidsangivelsen skal kunne dokumenteres og må aldrig bruges som løfte om, hvornår varer ankommer.",
+     "seenIn": [
+      {
+       "subject": "Hire talent in days, not weeks",
+       "preview": "",
+       "source": "collected",
+       "sender": "Upwork"
+      },
+      {
+       "subject": "Get your first prototype running in minutes",
+       "preview": "Let’s get you building 🚀",
+       "source": "collected",
+       "sender": "beefree"
+      },
+      {
+       "subject": "Turn email HTML into editable designs — in seconds 🚀",
+       "preview": "Introducing the HTML Importer in Beefree.",
+       "source": "collected",
+       "sender": "beefree"
+      }
+     ]
+    },
+    {
+     "name": "Opgaven uden besværet",
+     "formula": "[Løs opgave] uden [konkret besvær]",
+     "why": "Konstruktionen viser både den ønskede handling og den friktion, produktet eller servicen fjerner.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "service"
+     ],
+     "watchOut": "Besværet skal være reelt og genkendeligt uden at gøre kundens nuværende valg til grin.",
+     "seenIn": [
+      {
+       "subject": "Record meetings without a bot",
+       "preview": "",
+       "source": "collected",
+       "sender": "Fellow"
+      },
+      {
+       "subject": "Run multiple tasks at once with Cowork",
+       "preview": "Walk away from your computer. Come back to finished work.",
+       "source": "collected",
+       "sender": "Claude"
+      },
+      {
+       "subject": "Request supplier quotes straight from your Schedule",
+       "preview": "Plus: import your whole contact list in one go, and turn meeting notes into tracked tasks.",
+       "source": "collected",
+       "sender": "Programa"
+      }
+     ]
+    },
+    {
+     "name": "Præcis økonomisk gevinst",
+     "formula": "[Få/Spar/Optjen] [beløb, procent eller antal] [på betingelse]",
+     "why": "Tal gør værdien let at afkode og giver modtageren en konkret grund til at åbne.",
+     "bestFor": [
+      "tilbud",
+      "konkurrence",
+      "forhandler"
+     ],
+     "watchOut": "Alle tal og vilkår skal stå i mailen, og rabatter, gevinster eller fordele må aldrig opfindes.",
+     "seenIn": [
+      {
+       "subject": "Earn $600 for every new Host you refer",
+       "preview": "",
+       "source": "collected",
+       "sender": "Airbnb"
+      },
+      {
+       "subject": "Get 2,500 GoodRx Rewards points",
+       "preview": "Unlock up to 20% more savings, exclusive offers, and more.",
+       "source": "collected",
+       "sender": "GoodRx"
+      },
+      {
+       "subject": "Subscribe today and save 54% off a full year.",
+       "preview": "Unlock exclusive reporting and premium stories.",
+       "source": "collected",
+       "sender": "The Columbus Dispatch"
+      }
+     ]
+    },
+    {
+     "name": "Kategori til situationen",
+     "formula": "[Produktkategori] til [konkret anledning eller behov]",
+     "why": "Læseren kan straks se både produktet og den situation, det er udvalgt til.",
+     "bestFor": [
+      "saeson",
+      "inspiration",
+      "produktfokus"
+     ],
+     "watchOut": "Situationen skal være specifik; generelle formuleringer som ”til enhver anledning” udvander værdien.",
+     "seenIn": [
+      {
+       "subject": "Outerwear for the coldest jobs",
+       "preview": "",
+       "source": "collected",
+       "sender": "Patagonia"
+      },
+      {
+       "subject": "Hotels for a shoulder-season getaway",
+       "preview": "",
+       "source": "collected",
+       "sender": "TripAdvisor"
+      },
+      {
+       "subject": "Sport-specific packs for your best sessions",
+       "preview": "Plus, a behind-the-scenes visit to our HQ.",
+       "source": "collected",
+       "sender": "Patagonia"
+      }
+     ]
+    },
+    {
+     "name": "Alt samlet",
+     "formula": "Alt til [opgave eller anledning] i [én løsning/ét sted]",
+     "why": "Konstruktionen lover færre valg, mindre koordinering og et mere overskueligt indkøb.",
+     "bestFor": [
+      "produktfokus",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Mailen skal faktisk dække hele behovet, ellers bliver ”alt” et utroværdigt fyldord.",
+     "seenIn": [
+      {
+       "subject": "One subscription. Multiple ways to stay ahead.",
+       "preview": "Subscribe for unlimited access to HBR’s articles, research, events, and more.",
+       "source": "collected",
+       "sender": "Harvard Business Review"
+      },
+      {
+       "subject": "Everything for your coffee moment",
+       "preview": "The details make the cup",
+       "source": "collected",
+       "sender": "aarke"
+      },
+      {
+       "subject": "Simplify your supplement stack 👀",
+       "preview": "Everything you need, all in one daily system.",
+       "source": "collected",
+       "sender": "Asystem"
+      }
+     ]
+    },
+    {
+     "name": "Udvalgt efter behov",
+     "formula": "[Anbefalede produkter eller løsninger] baseret på [behov eller handling]",
+     "why": "Relevante anbefalinger reducerer søgetiden og gør et stort sortiment lettere at handle i.",
+     "bestFor": [
+      "inspiration",
+      "produktfokus",
+      "service"
+     ],
+     "watchOut": "Brug kun personalisering, der bygger på reelle data eller tydelige valg, og undgå tomme vendinger som ”kun til dig”.",
+     "seenIn": [
+      {
+       "subject": "Recommended templates based on your search",
+       "preview": "Templates recommended just for you.",
+       "source": "collected",
+       "sender": "Canva"
+      },
+      {
+       "subject": "Get fantastic picks (just for you!) in the app",
+       "preview": "It’s like having a personal shopper in your pocket.",
+       "source": "collected",
+       "sender": "Etsy"
+      },
+      {
+       "subject": "Your perfect wellness plan",
+       "preview": "Choose from 3 options",
+       "source": "collected",
+       "sender": "AG1"
+      }
+     ]
+    },
+    {
+     "name": "Beslutningspakken",
+     "formula": "[Data, guide, tjekliste eller udvalg] til [konkret beslutning]",
+     "why": "Emnelinjen lover et anvendeligt værktøj frem for blot mere information.",
+     "bestFor": [
+      "inspiration",
+      "service",
+      "virksomhed",
+      "frist"
+     ],
+     "watchOut": "Navngiv det faktiske indhold og undgå vage ord som ”indsigter”, hvis mailen ikke giver konkrete svar.",
+     "seenIn": [
+      {
+       "subject": "New Data, Trends, and Tips for Your Finances & Business",
+       "preview": "Insights to help you grow your business and make more of your money.",
+       "source": "collected",
+       "sender": "Live Oak Bank"
+      },
+      {
+       "subject": "Essential gear: our top picks.",
+       "preview": "Your ride, fully equipped.",
+       "source": "collected",
+       "sender": "ALSO"
+      },
+      {
+       "subject": "Plan your 2026 with confidence",
+       "preview": "Take the quiz",
+       "source": "collected",
+       "sender": "Brevo"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Forklar mekanismen bag resultatet, fx hvilke mål, størrelser, produkter eller værktøjer mailen indeholder.",
+    "Tilføj et konkret valgparameter, som emnelinjen ikke nævner: farver, mindsteantal, foliemuligheder eller anvendelse.",
+    "Underbyg tallet med de vigtigste betingelser uden at gentage rabatten eller gevinsten."
+   ],
+   "avoid": [
+    "Vage gevinster som ”løft dit brand”, ”frigør dit potentiale” og ”tag det til næste niveau”.",
+    "Udokumenterede superlativer som ”den bedste”, ”ultimativ” og ”nemmeste”.",
+    "Miljøpåstande af enhver art, også om produkter i en ECO-serie.",
+    "”Gratis prøve”; prøver har fragt, og prøver med logo koster et mindre beløb."
+   ]
+  },
+  "personlig": {
+   "mechanism": "personlig",
+   "label": "Personlig stemme",
+   "linesRead": 411,
+   "model": "gpt-5.6-sol",
+   "essence": "Den personlige stemme virker, når en navngiven eller tydeligt menneskelig afsender deler en ærlig mening, et konkret råd eller noget, vedkommende netop har opdaget. I B2B bliver mailen lettere at åbne, fordi den føles som en relevant besked fra en hjælpsom fagperson – ikke som endnu en kampagne fra en leverandør.",
+   "patterns": [
+    {
+     "name": "Navn og direkte spørgsmål",
+     "formula": "[Navn], [kort spørgsmål om behov eller handling]?",
+     "why": "Navnet fanger blikket, mens et enkelt relevant spørgsmål gør henvendelsen personlig og inviterende.",
+     "bestFor": [
+      "service",
+      "produktfokus",
+      "inspiration",
+      "tilbud"
+     ],
+     "watchOut": "Brug kun fornavn med sikre kundedata, og undgå spørgsmål, der antyder, at modtageren har gjort noget forkert.",
+     "seenIn": [
+      {
+       "subject": "Michael, ready to book your next virtual appointment?",
+       "preview": "With CVS Virtual Care, healthier happens on your schedule.",
+       "source": "collected",
+       "sender": "Aetna"
+      },
+      {
+       "subject": "Justine, why make things harder?",
+       "preview": "Sometimes the best way forward is back to basics",
+       "source": "collected",
+       "sender": "Todoist"
+      },
+      {
+       "subject": "Matthew, how much did you save last month?",
+       "preview": "Hint: you did great.",
+       "source": "collected",
+       "sender": "ecobee"
+      }
+     ]
+    },
+    {
+     "name": "En hilsen fra et menneske",
+     "formula": "En hilsen fra [navn/rolle]",
+     "why": "En konkret afsender lover et menneskeligt perspektiv og gør selv virksomhedsstof mere nærværende.",
+     "bestFor": [
+      "virksomhed",
+      "service",
+      "saeson",
+      "inspiration"
+     ],
+     "watchOut": "Afsenderen skal faktisk komme til orde i mailen, ellers bliver konstruktionen tom staffage.",
+     "seenIn": [
+      {
+       "subject": "A Note from Michael J Fox",
+       "preview": "Interactive Email Form Submit",
+       "source": "collected",
+       "sender": "The Micheal J. Fox Foundation"
+      },
+      {
+       "subject": "A Thank You Note From Jared 🙏",
+       "preview": "",
+       "source": "collected",
+       "sender": "Sometimes Always"
+      },
+      {
+       "subject": "A Note From Chrissy ❤️",
+       "preview": "From my kitchen to yours",
+       "source": "collected",
+       "sender": "Cravings"
+      }
+     ]
+    },
+    {
+     "name": "Ærlig indrømmelse",
+     "formula": "Ærligt? Jeg [holdning/indrømmelse]",
+     "why": "En lille indrømmelse bryder salgstonen og skaber nysgerrighed omkring afsenderens faglige vurdering.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson",
+      "virksomhed"
+     ],
+     "watchOut": "Indrømmelsen må ikke være konstrueret, negativ eller gøre kundens emballage til problemet.",
+     "seenIn": [
+      {
+       "subject": "Admit it, you’re on your phone",
+       "preview": "Your customers are, too. Reach them on their lock screens with SMS.",
+       "source": "collected",
+       "sender": "MailChimp"
+      },
+      {
+       "subject": "We still believe the internet should make you smarter",
+       "preview": "",
+       "source": "collected",
+       "sender": "Medium"
+      },
+      {
+       "subject": "What I see all the time as Different Dogs in-house Vet",
+       "preview": "A quick note from Alison, our in-house Vet",
+       "source": "collected",
+       "sender": "Different Dog"
+      }
+     ]
+    },
+    {
+     "name": "Personligt udvalg",
+     "formula": "Mine [favoritter/valg] til [anledning]",
+     "why": "Et personligt kurateret udvalg gør mange produkter lettere at overskue og giver modtageren en tydelig vej ind.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson",
+      "tilbud"
+     ],
+     "watchOut": "Forklar udvalgets kriterium i mailen, og lad ikke en intern serienavn være hovedkrogen.",
+     "seenIn": [
+      {
+       "subject": "Our founder’s ultimate gift picks ⭐",
+       "preview": "",
+       "source": "collected",
+       "sender": "Supergoop!"
+      },
+      {
+       "subject": "Thought You’d Like These",
+       "preview": "A few Schoolhouse favorites, picked with your home in mind.",
+       "source": "collected",
+       "sender": "Schoolhouse"
+      },
+      {
+       "subject": "This one’s for you 🤩",
+       "preview": "We curated these with your taste in mind.",
+       "source": "collected",
+       "sender": "Etsy"
+      }
+     ]
+    },
+    {
+     "name": "Jeg har noget at vise",
+     "formula": "Må jeg vise dig [nyhed/fund]?",
+     "why": "Den lavmælte invitation føles som en besked fra en begejstret kollega frem for en produktannoncering.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "kundecase",
+      "inspiration"
+     ],
+     "watchOut": "Det, der vises, skal være konkret og nyt nok til at bære nysgerrigheden uden overdrivelse.",
+     "seenIn": [
+      {
+       "subject": "We pulled a card for you…",
+       "preview": "Open for your 2026 reading 🔮✨",
+       "source": "collected",
+       "sender": "Huha"
+      },
+      {
+       "subject": "We noticed you checking us out… 👀",
+       "preview": "They are best sellers for a reason",
+       "source": "collected",
+       "sender": "MeUndies"
+      },
+      {
+       "subject": "Can I show you something new? ✨",
+       "preview": "It arrived this morning and I've already rearranged my desk around it. Our new gift box.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Tak for noget konkret",
+     "formula": "Tak for [handling/fælles milepæl]",
+     "why": "En specifik tak anerkender relationen og giver afsenderen en naturlig anledning til at skrive.",
+     "bestFor": [
+      "virksomhed",
+      "kundecase",
+      "saeson",
+      "service"
+     ],
+     "watchOut": "Undgå generiske takkemails uden en nyhed, et resultat eller noget nyttigt som næste led.",
+     "seenIn": [
+      {
+       "subject": "Thank You for Being Part of This Milestone",
+       "preview": "Even Realities has officially reached unicorn status",
+       "source": "collected",
+       "sender": "Even Realities"
+      },
+      {
+       "subject": "Thank You for an Incredible Year ✨",
+       "preview": "",
+       "source": "collected",
+       "sender": "Shift Robotics"
+      },
+      {
+       "subject": "Thanks for choosing us",
+       "preview": "Sharing moments together 💚",
+       "source": "collected",
+       "sender": "Starbucks"
+      }
+     ]
+    },
+    {
+     "name": "Vi savner dig",
+     "formula": "Vi savner dig, [navn]",
+     "why": "Den korte, menneskelige genkontakt kan få tidligere kunder til at se, hvad der er sket siden sidst.",
+     "bestFor": [
+      "service",
+      "produktfokus",
+      "tilbud"
+     ],
+     "watchOut": "Brug den kun ved reel inaktivitet, og undgå skyld, falsk intimitet eller et tilbud, der ikke findes i mailen.",
+     "seenIn": [
+      {
+       "subject": "We miss you, Smiles 🧡",
+       "preview": "Let’s rekindle things.",
+       "source": "collected",
+       "sender": "Etsy"
+      },
+      {
+       "subject": "We miss you, Mike. So we got you a present!",
+       "preview": "",
+       "source": "collected",
+       "sender": "Minor Hotels"
+      },
+      {
+       "subject": "Hey Matt, don’t be a stranger",
+       "preview": "Get back out there and enjoy nature at its finest",
+       "source": "collected",
+       "sender": "AllTrails"
+      }
+     ]
+    },
+    {
+     "name": "Personlig status",
+     "formula": "[Navn], din [måned/periode] i korte træk",
+     "why": "En statuslinje signalerer individuelt og nyttigt indhold, som modtageren hurtigt kan orientere sig i.",
+     "bestFor": [
+      "service",
+      "virksomhed",
+      "kundecase"
+     ],
+     "watchOut": "Personaliseringen skal bygge på korrekte data, og alle tal eller resultater skal kunne dokumenteres i mailen.",
+     "seenIn": [
+      {
+       "subject": "Mike, your September account in review",
+       "preview": "Keep earning points toward FREE food in the app.",
+       "source": "collected",
+       "sender": "McDonald’s"
+      },
+      {
+       "subject": "Your July member update",
+       "preview": "",
+       "source": "collected",
+       "sender": "TripAdvisor"
+      },
+      {
+       "subject": "Matt's 2025 Resy Recap",
+       "preview": "You made 5 reservations this year",
+       "source": "collected",
+       "sender": "Resy"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Lad afsenderen fortsætte tanken med en konkret begrundelse: hvorfor skriver jeg netop nu?",
+    "Navngiv produktkategorien eller rådet, hvis emnelinjen primært bærer personligheden.",
+    "Tilføj ét bevis eller én praktisk detalje, der findes i mailen, fx antal, produktionstid eller TrustScore 4.6."
+   ],
+   "avoid": [
+    "..."
+   ]
+  },
+  "nyhed": {
+   "mechanism": "nyhed",
+   "label": "Nyhed",
+   "linesRead": 543,
+   "model": "gpt-5.6-sol",
+   "essence": "Nyhed virker i B2B, når modtageren straks kan se, hvilken relevant produktkategori der er kommet, ændret eller vendt tilbage. Det nye skal gøres konkret med en farve, størrelse, funktion eller anvendelse – ikke blot annonceres som »spændende nyt«.",
+   "patterns": [
+    {
+     "name": "Ny, helt enkelt",
+     "formula": "Ny: [kategori] i [variant]",
+     "why": "Den korte nyhedsmarkør giver øjeblikkelig orientering, mens kategorien fortæller køberen, om mailen er relevant.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus"
+     ],
+     "watchOut": "»Ny« mister kraft, hvis resten kun er et ukendt serienavn eller en vag påstand.",
+     "seenIn": [
+      {
+       "subject": "New: Strawberry Matcha Cookies 🍵🍓",
+       "preview": "The summer treat that's only at the bakery",
+       "source": "collected",
+       "sender": "Milk Bar"
+      },
+      {
+       "subject": "NEW: Schedule Substack Notes in Buffer",
+       "preview": "Schedule, cross-post, and track subscribers.",
+       "source": "collected",
+       "sender": "Buffer"
+      },
+      {
+       "subject": "NEW: Everyday Alchemy Seasonal Box",
+       "preview": "Some Practical Magic",
+       "source": "collected",
+       "sender": "Flamingo Estate"
+      }
+     ]
+    },
+    {
+     "name": "Mød nyheden",
+     "formula": "Mød [kategori]: [navn eller forskel]",
+     "why": "Invitationen gør lanceringen mere nærværende og giver plads til både kategori og særkende.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus"
+     ],
+     "watchOut": "Lad ikke produktnavnet stå alene, da Westpacks købere sjældent kender serienavnene på forhånd.",
+     "seenIn": [
+      {
+       "subject": "Meet the new K-Mini Mate Plus",
+       "preview": "Tiny coffee maker, big taste. Hot or iced, coffee just the way you like it.",
+       "source": "collected",
+       "sender": "Keurig Canada"
+      },
+      {
+       "subject": "Meet Brain Octane® MCT Powder",
+       "preview": "The same C8 MCTs, now in a scoop",
+       "source": "collected",
+       "sender": "Bulletproof"
+      },
+      {
+       "subject": "Meet Coffee Ka'Chava ☕",
+       "preview": "New flavor, same whole-body goodness",
+       "source": "collected",
+       "sender": "Ka'chava"
+      }
+     ]
+    },
+    {
+     "name": "Den er landet",
+     "formula": "[Ny kategori eller variant] er landet",
+     "why": "Formuleringen skaber følelsen af, at noget netop er blevet tilgængeligt og kan ses nu.",
+     "bestFor": [
+      "produktnyhed",
+      "saeson"
+     ],
+     "watchOut": "Brug kun »landet« eller »på lager«, når lagerstatus faktisk gælder de relevante markeder, og lov aldrig en leveringsdato.",
+     "seenIn": [
+      {
+       "subject": "New beach towels just landed 🐚",
+       "preview": "May prevent summer melting",
+       "source": "collected",
+       "sender": "Tarta Gelatina"
+      },
+      {
+       "subject": "Spring flavors are here 💐",
+       "preview": "Lavender’s back, plus new flavors to love.",
+       "source": "collected",
+       "sender": "Starbucks"
+      },
+      {
+       "subject": "Brooks Ghost Amp has arrived",
+       "preview": "Max cushion meets real energy",
+       "source": "collected",
+       "sender": "Fleet Feet "
+      }
+     ]
+    },
+    {
+     "name": "Nu i en ny variant",
+     "formula": "[Kategori] – nu i [farve, størrelse eller materiale]",
+     "why": "Den velkendte kategori sænker forståelsesbarrieren, mens den konkrete variant leverer nyheden.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "saeson"
+     ],
+     "watchOut": "Farven eller størrelsen skal være meningsfuld for køberen og ikke blot nævnes som intern produktinformation.",
+     "seenIn": [
+      {
+       "subject": "Land Collection: Now in Walnut",
+       "preview": "A sophisticated expression for heirloom-quality timber.",
+       "source": "collected",
+       "sender": "Herman Miller"
+      },
+      {
+       "subject": "Lito & Lito mini Enhanced: Now with USB-C Charging",
+       "preview": "",
+       "source": "collected",
+       "sender": "Lumio"
+      },
+      {
+       "subject": "The colour of Tui & Kahili – Now back in stock!",
+       "preview": "",
+       "source": "collected",
+       "sender": "Ashley & Co"
+      }
+     ]
+    },
+    {
+     "name": "Tilbage igen",
+     "formula": "[Kategori eller favorit] er tilbage",
+     "why": "Genkendelse og tidligere efterspørgsel giver nyhedsenergi uden at kræve en helt ny produktidé.",
+     "bestFor": [
+      "produktfokus",
+      "saeson"
+     ],
+     "watchOut": "Undgå at påstå, at kunderne har ventet eller bedt om produktet, medmindre mailen kan dokumentere det.",
+     "seenIn": [
+      {
+       "subject": "Saffron Body Mist is back ❤️ 🔥",
+       "preview": "The restock you’ve been waiting for.",
+       "source": "collected",
+       "sender": "Salt & Stone"
+      },
+      {
+       "subject": "Boo Buckets are back!",
+       "preview": "get a Happy Meal & costume inspo >>>",
+       "source": "collected",
+       "sender": "McDonald’s"
+      },
+      {
+       "subject": "Flavored lip balms are BACK!",
+       "preview": "these best sellers are as tasty as they are nourishing 😋",
+       "source": "collected",
+       "sender": "Subtl Beauty"
+      }
+     ]
+    },
+    {
+     "name": "På lager igen",
+     "formula": "På lager igen: [kategori eller produkt]",
+     "why": "Den funktionelle formulering rammer købere, der tidligere har manglet varen eller vil genbestille.",
+     "bestFor": [
+      "produktfokus",
+      "service"
+     ],
+     "watchOut": "Lagerbudskabet skal være aktuelt ved udsendelsen og må ikke forveksles med et løfte om, hvornår ordren ankommer.",
+     "seenIn": [
+      {
+       "subject": "BACK IN STOCK: Chili Infused Oil",
+       "preview": "Mild heat and warm spice",
+       "source": "collected",
+       "sender": "Algae Cooking Club"
+      },
+      {
+       "subject": "Back In-Stock: Roval Rapide Cockpit",
+       "preview": "",
+       "source": "collected",
+       "sender": "Specialized Bicycle Components"
+      },
+      {
+       "subject": "BACK IN STOCK: PEACH PERSIMMON",
+       "preview": "",
+       "source": "collected",
+       "sender": "ARMRA"
+      }
+     ]
+    },
+    {
+     "name": "Talt nyhed",
+     "formula": "[Antal] nye [produkter, farver eller funktioner]",
+     "why": "Et konkret antal gør mailens indhold overskueligt og signalerer, at der er flere nyheder at opdage.",
+     "bestFor": [
+      "produktnyhed",
+      "service",
+      "inspiration"
+     ],
+     "watchOut": "Tallet skal fremgå og kunne genfindes præcist i mailen, ellers føles konstruktionen som lokkemad.",
+     "seenIn": [
+      {
+       "subject": "Six new tools for the trail",
+       "preview": "You asked, we listened. Check ‘em out!",
+       "source": "collected",
+       "sender": "AllTrails"
+      },
+      {
+       "subject": "Three Brand-New Puzzles 🧩",
+       "preview": "Our new summer puzzles are now available.",
+       "source": "collected",
+       "sender": "Le Puzz"
+      },
+      {
+       "subject": "Four new Rovo features worth trying right now",
+       "preview": "New AI features. Less busywork. Try them now",
+       "source": "collected",
+       "sender": "Atlassian"
+      }
+     ]
+    },
+    {
+     "name": "Den første af sin slags",
+     "formula": "Vores første [kategori eller variant]",
+     "why": "En reel premiere giver lanceringen betydning og gør det tydeligt, hvad virksomheden ikke har tilbudt før.",
+     "bestFor": [
+      "produktnyhed",
+      "virksomhed"
+     ],
+     "watchOut": "Brug kun »første«, når påstanden er bogstaveligt sand og afgrænset tydeligt nok til at kunne forsvares.",
+     "seenIn": [
+      {
+       "subject": "New: Our first-ever gaming desk",
+       "preview": "Introducing Coyl.",
+       "source": "collected",
+       "sender": "Herman Miller"
+      },
+      {
+       "subject": "The Luka Sneaker: Our Very First",
+       "preview": "",
+       "source": "collected",
+       "sender": "Mackage"
+      },
+      {
+       "subject": "Our First Bronze Runwell",
+       "preview": "Bronze evolves with wear, creating a unique patina.",
+       "source": "collected",
+       "sender": "Shinola"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Nævn den konkrete forskel: farve, størrelse, indlæg, overflade eller anvendelse.",
+    "Vis sortimentet bag nyheden, fx hvilke æsker, poser eller displays der findes i serien.",
+    "Giv købsrelevant dokumentation som mål, mindsteantal eller produktionsmetode.",
+    "Forklar anvendelsen: hvilket smykke, hvilken kollektion eller hvilken butikssituation den passer til."
+   ],
+   "avoid": [
+    "Vage emner som »Noget nyt«, »On the Pulse« eller »Se vores seneste nyt« uden en kategori.",
+    "Pressemeddelelsessprog som »vi er glade for at annoncere« og lange interne produktnavne.",
+    "At lade preheaderen gentage »ny«, »landet« eller produktnavnet uden at tilføre en forskel.",
+    "Udokumenterede superlativer, kunstig knaphed og påstande om, at »alle har ventet«.",
+    "Versaler, flere emojis, dobbelte udråbstegn og generiske fraser som »The wait is over« eller »game changer«."
+   ]
+  },
+  "guide": {
+   "mechanism": "guide",
+   "label": "Guide og tips",
+   "linesRead": 281,
+   "model": "gpt-5.6-sol",
+   "essence": "Guide- og tips-emails virker, når emnelinjen lover hjælp til én konkret opgave, beslutning eller arbejdsgang i modtagerens butik. Den stærkeste B2B-version gør udbyttet tydeligt med få ord og lader preheaderen vise, hvor praktisk og anvendelig hjælpen er.",
+   "patterns": [
+    {
+     "name": "Sådan-krogen",
+     "formula": "Sådan [gør/vælger/forbereder] du [konkret opgave]",
+     "why": "Den lover en direkte og anvendelig vej fra spørgsmål til handling.",
+     "bestFor": [
+      "service",
+      "produktfokus",
+      "inspiration",
+      "forhandler"
+     ],
+     "watchOut": "Undgå brede mål som ”sådan får du succes”, og brug en formulering, der kan oversættes uden ordspil.",
+     "seenIn": [
+      {
+       "subject": "How to simplify your testing stack",
+       "preview": "Tool consolidation + IBM integration = speed without sprawl",
+       "source": "collected",
+       "sender": "Sauce Labs"
+      },
+      {
+       "subject": "How to Layer a Bed With Intention",
+       "preview": "Three simple design principles for a bedroom that feels collected, comfortable, and distinctly yours.",
+       "source": "collected",
+       "sender": "Schoolhouse"
+      },
+      {
+       "subject": "How to show someone how special they are",
+       "preview": "(And $5 off to help you delight them)",
+       "source": "collected",
+       "sender": "Wonderbly"
+      }
+     ]
+    },
+    {
+     "name": "Nummereret nytte",
+     "formula": "[Antal] [tips/trin/greb] til [konkret mål]",
+     "why": "Et tal gør indholdet overskueligt og fortæller, hvor stor en indsats læseren kan forvente.",
+     "bestFor": [
+      "inspiration",
+      "service",
+      "produktfokus",
+      "saeson"
+     ],
+     "watchOut": "Tallet og alle lovede tips skal findes i mailen, og et højt tal kan få guiden til at virke tidskrævende.",
+     "seenIn": [
+      {
+       "subject": "5 tips to start creating your board",
+       "preview": "",
+       "source": "collected",
+       "sender": "Miro"
+      },
+      {
+       "subject": "3 chef-approved cooking hacks",
+       "preview": "Thank you chef 🫡",
+       "source": "collected",
+       "sender": "Graza"
+      },
+      {
+       "subject": "5 steps to find and engage high-potential accounts",
+       "preview": "In 3 mins or less, find lookalike companies based on your best customers.",
+       "source": "collected",
+       "sender": "Apollo.io"
+      }
+     ]
+    },
+    {
+     "name": "Guiden i hånden",
+     "formula": "Din guide til [kategori/anledning/opgave]",
+     "why": "Ordet guide signalerer samlet hjælp og reducerer usikkerheden før et valg eller en proces.",
+     "bestFor": [
+      "produktfokus",
+      "saeson",
+      "service",
+      "inspiration"
+     ],
+     "watchOut": "”Guide” bliver hurtigt generisk, hvis emnet ikke afgrænses til en tydelig kategori, anledning eller beslutning.",
+     "seenIn": [
+      {
+       "subject": "Your Engagement Ring Guide",
+       "preview": "",
+       "source": "collected",
+       "sender": "Brilliant Earth"
+      },
+      {
+       "subject": "The Ski Goggle Guide",
+       "preview": "",
+       "source": "collected",
+       "sender": "Vallon"
+      },
+      {
+       "subject": "Your guide to fall cat comfort 🍂",
+       "preview": "3 tips to help your cat thrive this season",
+       "source": "collected",
+       "sender": "Smalls"
+      }
+     ]
+    },
+    {
+     "name": "Tjeklisten",
+     "formula": "[Opgave/anledning]: din tjekliste",
+     "why": "En tjekliste lover noget konkret, som modtageren kan bruge direkte i planlægningen eller butikken.",
+     "bestFor": [
+      "frist",
+      "saeson",
+      "service",
+      "virksomhed"
+     ],
+     "watchOut": "Brug den kun, hvis mailen faktisk indeholder en afkrydsningsklar liste, og undgå specifikke fristdatoer på tværs af markeder.",
+     "seenIn": [
+      {
+       "subject": "Your autumn health to-do list",
+       "preview": "Flu shot basics | Health tools for women",
+       "source": "collected",
+       "sender": "Blue Shield California"
+      },
+      {
+       "subject": "🖥️ Shopping for a new helpdesk? Use this checklist",
+       "preview": "Plus, join us on the In Conversation Tour in a city near you",
+       "source": "collected",
+       "sender": "Gorgias"
+      },
+      {
+       "subject": "Your Back-to-School Checklist is here 🎒",
+       "preview": "A+ shoes, gear & looks for every kid + FREE shipping",
+       "source": "collected",
+       "sender": "Zappos.com"
+      }
+     ]
+    },
+    {
+     "name": "Valget mellem to",
+     "formula": "[Mulighed A] eller [mulighed B]? Sådan vælger du",
+     "why": "Den spejler en reel købsbeslutning og lover klare kriterier frem for et ensidigt salgsargument.",
+     "bestFor": [
+      "produktfokus",
+      "service",
+      "inspiration",
+      "forhandler"
+     ],
+     "watchOut": "Mulighederne skal være meningsfuldt forskellige, uden at den ene fremstilles som et dumt eller forkert valg.",
+     "seenIn": [
+      {
+       "subject": "Mindful drinking or alcohol-free? Here’s how to enjoy Mardi Gras your way",
+       "preview": "",
+       "source": "collected",
+       "sender": "Pelago"
+      },
+      {
+       "subject": "What to do (and skip) this summer",
+       "preview": "Tips for boosting your family's microbiome health",
+       "source": "collected",
+       "sender": "tinyhealth"
+      },
+      {
+       "subject": "Find your perfect fit",
+       "preview": "",
+       "source": "collected",
+       "sender": "Branch"
+      }
+     ]
+    },
+    {
+     "name": "Myten eller fejlen",
+     "formula": "[Myte om emnet] – eller [fejl] du skal undgå",
+     "why": "Den åbner et videnshul og giver læseren mulighed for hurtigt at kontrollere sin egen forståelse.",
+     "bestFor": [
+      "service",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Gør aldrig læserens nuværende emballage eller valg til joken, og undgå konstruerede myter, som ingen faktisk tror på.",
+     "seenIn": [
+      {
+       "subject": "Debunking hair loss myths",
+       "preview": "Get the truth about these common hair loss myths.",
+       "source": "collected",
+       "sender": "hims"
+      },
+      {
+       "subject": "Brushing mistakes to avoid",
+       "preview": "",
+       "source": "collected",
+       "sender": "PÄRLA"
+      },
+      {
+       "subject": "Tips for Avoiding New, Modern Marketing Pitfalls",
+       "preview": "Ensure your strategy sells (not just dazzles) and that your AI talent is equipped to actually deploy.",
+       "source": "collected",
+       "sender": "Monks"
+      }
+     ]
+    },
+    {
+     "name": "Fagpersonen viser",
+     "formula": "[Fagpersonens] guide til [opgave]",
+     "why": "En tydelig faglig afsender gør rådene mere troværdige og giver dem en praktisk vinkel.",
+     "bestFor": [
+      "kundecase",
+      "inspiration",
+      "forhandler",
+      "virksomhed"
+     ],
+     "watchOut": "Titlen eller erfaringen skal være reel, og rådene må ikke løftes til garantier eller universelle sandheder.",
+     "seenIn": [
+      {
+       "subject": "Chef's Dining Guide: Los Angeles",
+       "preview": "Chef Gilberto Cetina of Holbox shares where he actually eats in LA.",
+       "source": "collected",
+       "sender": "Made In Cookware"
+      },
+      {
+       "subject": "How I use Miro as a Project Manager",
+       "preview": "Discover ways to see dependencies, stay super organized, and run workshops from anywhere.",
+       "source": "collected",
+       "sender": "Miro"
+      },
+      {
+       "subject": "3 chef-approved cooking hacks",
+       "preview": "Thank you chef 🫡",
+       "source": "collected",
+       "sender": "Graza"
+      }
+     ]
+    },
+    {
+     "name": "Forklar mekanismen",
+     "formula": "Hvorfor [produkt/metode] [virker eller gør en forskel]",
+     "why": "Den appellerer til professionelle købere, som gerne vil forstå begrundelsen før de vælger eller rådgiver kunder.",
+     "bestFor": [
+      "produktfokus",
+      "service",
+      "virksomhed"
+     ],
+     "watchOut": "Undgå pseudo-videnskab, udokumenterede effekter og tekniske formuleringer, der bliver uklare i oversættelse.",
+     "seenIn": [
+      {
+       "subject": "How Rx treatments support hair regrowth",
+       "preview": "Learn the science behind the ingredients.",
+       "source": "collected",
+       "sender": "hims"
+      },
+      {
+       "subject": "The skin-deep science of Vitamin C",
+       "preview": "Collagen, radiance, resilience — vitamin C is at the center of it all.",
+       "source": "collected",
+       "sender": "Tally Health"
+      },
+      {
+       "subject": "🔮 The Science Behind NOON",
+       "preview": "Learn why good science feels like magic",
+       "source": "collected",
+       "sender": "NOON WORLD"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Nævn de konkrete trin eller emner, som emnelinjen ikke har plads til.",
+    "Tilføj beslutningskriterier, fx størrelse, materiale, anvendelse eller ordremængde.",
+    "Fortæl, om mailen indeholder en tjekliste, skabelon, quiz eller sammenligning."
+   ],
+   "avoid": [
+    "Tom nyttesprog som ”tag det til næste niveau”, ”kom foran flokken” og ”start her” uden en konkret opgave.",
+    "Overbrede løfter som ”alt, du skal vide”, medmindre mailen reelt dækker hele det afgrænsede emne.",
+    "Miljøpåstande eller ord som FSC, bæredygtig, miljø, genbrug, CO2 og klimaneutral – også om ECO-serier.",
+    "”Gratis prøve”, leveringsløfter, femstjernede påstande eller ”gratis logotryk” uden for de smykkeæsker, hvor det faktisk er inkluderet."
+   ]
+  },
+  "bag_kulisserne": {
+   "mechanism": "bag_kulisserne",
+   "label": "Bag kulisserne",
+   "linesRead": 176,
+   "model": "gpt-5.6-sol",
+   "essence": "Bag kulisserne virker, når modtageren får adgang til mennesker, valg og produktionsdetaljer, som normalt er skjult. I B2B skal indblikket samtidig gøre køberen klogere på produktet, kvaliteten eller processen – ikke blot underholde.",
+   "patterns": [
+    {
+     "name": "Et kig indenfor",
+     "formula": "Et kig ind i [produkt/proces/sted]",
+     "why": "Det lover konkret adgang til noget, modtageren normalt ikke ser, uden at afsløre hele historien i emnelinjen.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "virksomhed",
+      "forhandler"
+     ],
+     "watchOut": "Konstruktionen bliver hurtigt generisk, hvis [produkt/proces/sted] ikke er konkret eller genkendeligt på tværs af markeder.",
+     "seenIn": [
+      {
+       "subject": "Inside the next generation of Oura",
+       "preview": "Meet the technology behind Oura Ring 5.",
+       "source": "collected",
+       "sender": "Oura"
+      },
+      {
+       "subject": "Inside Surface RTX Spark Dev Box",
+       "preview": "Discover how performance shaped every detail of Surface RTX Spark Dev Box.",
+       "source": "collected",
+       "sender": "Microsoft"
+      },
+      {
+       "subject": "An inside look at how we build at Figma",
+       "preview": "The real stories behind what shipped",
+       "source": "collected",
+       "sender": "Figma"
+      }
+     ]
+    },
+    {
+     "name": "Mød mennesket bag",
+     "formula": "Mød [person/rolle] bag [produkt]",
+     "why": "Et navn eller en tydelig fagrolle giver processen et ansigt og tilfører troværdig ekspertise.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "virksomhed",
+      "kundecase"
+     ],
+     "watchOut": "Brug ikke et ukendt navn alene; rollen eller forbindelsen til produktet skal fremgå tidligt.",
+     "seenIn": [
+      {
+       "subject": "Meet Harry Teng, lead industrial designer of the Surface Laptop Ultra",
+       "preview": "Explore Surface Laptop Ultra with one of the makers who helped bring it to life.",
+       "source": "collected",
+       "sender": "Microsoft"
+      },
+      {
+       "subject": "Meet one of the makers behind the Surface Laptop Ultra experience",
+       "preview": "Erica Arnold shares why great technology should feel like a seamless part of the creative process.",
+       "source": "collected",
+       "sender": "Microsoft"
+      },
+      {
+       "subject": "Meet a guitar tech",
+       "preview": "",
+       "source": "collected",
+       "sender": "Orangewood Guitars"
+      }
+     ]
+    },
+    {
+     "name": "Sådan bliver det lavet",
+     "formula": "Sådan bliver [produkt] lavet",
+     "why": "Den enkle procesåbning rammer køberens naturlige nysgerrighed om materialer, håndværk og kvalitet.",
+     "bestFor": [
+      "produktfokus",
+      "virksomhed",
+      "forhandler",
+      "service"
+     ],
+     "watchOut": "Undgå en skolebogsagtig gennemgang; mailen skal vise detaljer, billeder eller valg, som ikke er åbenlyse.",
+     "seenIn": [
+      {
+       "subject": "How are our wrappers made?",
+       "preview": "Three artists, a splash of inspiration",
+       "source": "collected",
+       "sender": "Who Gives A Crap"
+      },
+      {
+       "subject": "How We Build",
+       "preview": "",
+       "source": "collected",
+       "sender": "!Boring"
+      },
+      {
+       "subject": "every one of these gets printed by hand",
+       "preview": "why the wise fool is a pre-order",
+       "source": "collected",
+       "sender": "World Piece"
+      }
+     ]
+    },
+    {
+     "name": "Hvor kommer det fra?",
+     "formula": "Se, hvor [produkt] kommer fra",
+     "why": "Oprindelse gør et velkendt produkt nyt ved at føre læseren tilbage til fabrikken, værkstedet eller råvaren.",
+     "bestFor": [
+      "produktfokus",
+      "virksomhed",
+      "forhandler",
+      "kundecase"
+     ],
+     "watchOut": "Lad ikke oprindelsen blive til en bred eller udokumenteret kvalitetsfortælling, og undgå enhver miljøpåstand.",
+     "seenIn": [
+      {
+       "subject": "See Where Your Clare Paint Comes From",
+       "preview": "An exclusive look at our process.",
+       "source": "collected",
+       "sender": "Clare"
+      },
+      {
+       "subject": "Peek inside Slate's factory in Warsaw, IN.",
+       "preview": "Explore the history of Slate's new factory.",
+       "source": "collected",
+       "sender": "SLATE Auto"
+      },
+      {
+       "subject": "Crafted with Care: Boxes proudly made in Kansas City",
+       "preview": "Did you know that your boxes are made here in the United States? &amp",
+       "source": "collected",
+       "sender": "Box Genie"
+      }
+     ]
+    },
+    {
+     "name": "Teknologien bag",
+     "formula": "[Teknologien/håndværket] bag [produkt/resultat]",
+     "why": "Konstruktionen forbinder det synlige produkt med den skjulte kunnen, der gør forskellen.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "virksomhed",
+      "service"
+     ],
+     "watchOut": "Ord som “magi” og “innovation” bliver let tomme eller svære at oversætte; navngiv hellere den konkrete teknik.",
+     "seenIn": [
+      {
+       "subject": "The magic behind Halloween Mode",
+       "preview": "Look inside the technology that brings Ghostbusters to your vehicle.",
+       "source": "collected",
+       "sender": "Rivian"
+      },
+      {
+       "subject": "Thoughtful craftsmanship underpins every piece from Herman Miller",
+       "preview": "Save 20% – from sofas to storage.",
+       "source": "collected",
+       "sender": "Design Within Reach"
+      },
+      {
+       "subject": "Inside the next generation of Oura",
+       "preview": "Meet the technology behind Oura Ring 5.",
+       "source": "collected",
+       "sender": "Oura"
+      }
+     ]
+    },
+    {
+     "name": "Smugkig undervejs",
+     "formula": "Smugkig: [det vi er ved at skabe]",
+     "why": "Et ufærdigt arbejde skaber spænding og giver modtageren følelsen af at være inviteret ind før alle andre.",
+     "bestFor": [
+      "produktnyhed",
+      "virksomhed",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Tilbagehold ikke så meget, at emnelinjen bliver ren drilleri; mailen skal vise noget reelt og relevant.",
+     "seenIn": [
+      {
+       "subject": "Sneak peek: What we’re unveiling at GitLab Transcend",
+       "preview": "Discover how teams are applying agentic AI to automate repetitive tasks, streamline cross-stage workflows, and accelerate releases.",
+       "source": "collected",
+       "sender": "GitLab"
+      },
+      {
+       "subject": "Work in progress: Our team is in Iceland",
+       "preview": "We’re not ready to show you the brand. Yet.",
+       "source": "collected",
+       "sender": "Creative Supply"
+      },
+      {
+       "subject": "[Preview] A Little Christmas Cheer From the Mill 🌽✨",
+       "preview": "Find us at a local partner near you!",
+       "source": "collected",
+       "sender": "Marsh Hen Mill"
+      }
+     ]
+    },
+    {
+     "name": "På besøg i værkstedet",
+     "formula": "På besøg i [studie/værksted/fabrik] hos [person/brand]",
+     "why": "Et tydeligt sted gør historien sanselig og egner sig til billeder, arbejdsredskaber og personlige detaljer.",
+     "bestFor": [
+      "inspiration",
+      "kundecase",
+      "virksomhed",
+      "produktfokus"
+     ],
+     "watchOut": "Stedet må ikke overskygge køberens udbytte; forbind besøget med produktet eller en relevant arbejdsmetode.",
+     "seenIn": [
+      {
+       "subject": "Studio Visit: Another Feather",
+       "preview": "",
+       "source": "collected",
+       "sender": "Shop Boswell"
+      },
+      {
+       "subject": "In the studio with Raw Color.🧡",
+       "preview": "A new take on colour and composition",
+       "source": "collected",
+       "sender": "Paper Collective"
+      },
+      {
+       "subject": "Inside Letterform Archive with Rob Saunders",
+       "preview": "",
+       "source": "collected",
+       "sender": "Eames Institute"
+      }
+     ]
+    },
+    {
+     "name": "Se processen i aktion",
+     "formula": "Se [team/fagperson] [teste/skabe/pakke] [produkt]",
+     "why": "Et aktivt udsagn lover dokumentation frem for polerede påstande og gør processen lettere at forestille sig.",
+     "bestFor": [
+      "produktfokus",
+      "produktnyhed",
+      "virksomhed",
+      "service"
+     ],
+     "watchOut": "Testen eller demonstrationen skal være reel og forklaret i mailen; undgå at antyde garantier, som resultatet ikke kan bære.",
+     "seenIn": [
+      {
+       "subject": "Watch our team test the truck in the Nevada desert.",
+       "preview": "Hop in, we're going on a hot trip.",
+       "source": "collected",
+       "sender": "SLATE Auto"
+      },
+      {
+       "subject": "Discover what these illustrators have created with our Fineliners",
+       "preview": "",
+       "source": "collected",
+       "sender": "Winsor & Newton"
+      },
+      {
+       "subject": "We're rebuilding real emails live. Want to watch?",
+       "preview": "A live before/after for Higher Ed, DTC, and everyone in between.",
+       "source": "collected",
+       "sender": "Really Good Emails"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Navngiv den konkrete detalje, emnelinjen ikke afslører: en maskine, et materiale, et trin eller en fagperson.",
+    "Fortæl, hvad læseren får lov at se: eksempelvis skitser, test, arbejdsstationer eller processen fra start til slut.",
+    "Tilføj et fagligt køberudbytte, såsom hvordan et materiale reagerer, eller hvorfor et produktionstrin er nødvendigt."
+   ],
+   "avoid": [
+    "Generiske åbninger som “Bag magien”, “eksklusivt kig” og “kom med bag kulisserne” uden en konkret proces eller genstand.",
+    "Engelske forkortelser som “BTS” og idiomer, der bliver uklare eller kunstige i oversættelse.",
+    "At gentage emnelinjen i preheaderen med andre ord i stedet for at føre historien videre.",
+    "At lede med interne serienavne, som køberen ikke kender; begynd med smykkeæsker, gaveæsker, bæreposer eller en anden kategori."
+   ]
+  },
+  "eksklusivitet": {
+   "mechanism": "eksklusivitet",
+   "label": "Først til",
+   "linesRead": 214,
+   "model": "gpt-5.6-sol",
+   "essence": "Først til virker i B2B, når modtageren får en reel tidsmæssig eller praktisk fordel: at se, vælge eller bestille før den brede lancering. Eksklusiviteten skal være konkret og dokumenteret i mailen – hvem får adgang, til hvad, og hvad der faktisk er begrænset.",
+   "patterns": [
+    {
+     "name": "Forhåndsadgang først",
+     "formula": "[Kategori] åbner først for [kundetype]",
+     "why": "En tydelig fordel før den offentlige lancering giver køberen en konkret grund til at åbne nu.",
+     "bestFor": [
+      "produktnyhed",
+      "tilbud",
+      "saeson",
+      "forhandler"
+     ],
+     "watchOut": "Brug kun konstruktionen, når modtageren reelt får adgang før andre, og undgå engelske standardfraser i oversættelserne.",
+     "seenIn": [
+      {
+       "subject": "Early Access: Spring Sale Starts Now 🌼",
+       "preview": "",
+       "source": "collected",
+       "sender": "Fable"
+      },
+      {
+       "subject": "Black Friday Early Access: You’re in",
+       "preview": "Thank you for subscribing",
+       "source": "collected",
+       "sender": "Alessi"
+      },
+      {
+       "subject": "SUMMER SALES EARLY ACCESS",
+       "preview": "Password inside. Up to 30% OFF.",
+       "source": "collected",
+       "sender": "COLD CULTURE"
+      }
+     ]
+    },
+    {
+     "name": "Første kig",
+     "formula": "Første kig: [antal] nye [kategori]",
+     "why": "Et konkret smugkig vækker produktlyst uden at gøre modtagerens nuværende sortiment til problemet.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Sæt kategorien før et ukendt serienavn, og brug kun et antal, der fremgår af mailen.",
+     "seenIn": [
+      {
+       "subject": "Your first look at LEGO® Black Friday!",
+       "preview": "",
+       "source": "collected",
+       "sender": "Lego"
+      },
+      {
+       "subject": "DROP PREVIEW: Running Thunder",
+       "preview": "Spring Drop 1 goes live soon.",
+       "source": "collected",
+       "sender": "Satisfy"
+      },
+      {
+       "subject": "EARLY ACCESS: New Gear For Your Next Hunt",
+       "preview": "Two new colors, one requested restock.",
+       "source": "collected",
+       "sender": "YETI"
+      }
+     ]
+    },
+    {
+     "name": "Den personlige invitation",
+     "formula": "Du er inviteret: [arrangement]",
+     "why": "Invitationsformen signalerer en afgrænset kreds og gør et arrangement eller en fremvisning mere værdifuld.",
+     "bestFor": [
+      "service",
+      "virksomhed",
+      "forhandler",
+      "inspiration"
+     ],
+     "watchOut": "Den mister kraft, hvis alle kan deltage, eller hvis emnet ikke hurtigt fortæller, hvad invitationen gælder.",
+     "seenIn": [
+      {
+       "subject": "You're invited to ZapConnect 2026",
+       "preview": "Refound your company for the AI era.",
+       "source": "collected",
+       "sender": "Zapier"
+      },
+      {
+       "subject": "You’re invited to Burberry Bond Street",
+       "preview": "",
+       "source": "collected",
+       "sender": "Burberry"
+      },
+      {
+       "subject": "You're Invited: SS25 Runway Show",
+       "preview": "",
+       "source": "collected",
+       "sender": "Max Mara"
+      }
+     ]
+    },
+    {
+     "name": "Kunderne kommer først",
+     "formula": "[Kundetype] får [kategori/fordel] først",
+     "why": "Den navngiver målgruppen og omsætter loyalitet eller forhandlerstatus til en synlig fordel.",
+     "bestFor": [
+      "forhandler",
+      "produktnyhed",
+      "tilbud",
+      "service"
+     ],
+     "watchOut": "Undgå tomme VIP-betegnelser, og skriv den faktiske kundetype frem for at foregive personlig udvælgelse.",
+     "seenIn": [
+      {
+       "subject": "SMS subscribers get Black Friday deals first",
+       "preview": "Opt in now →",
+       "source": "collected",
+       "sender": "Shift Robotics"
+      },
+      {
+       "subject": "Surprise! Subscribers unlock early access to Black Friday deals",
+       "preview": "6 months free starts now",
+       "source": "collected",
+       "sender": "Noom"
+      },
+      {
+       "subject": "Mike, Black Friday starts early for you",
+       "preview": "Seriously. Take $200 off now →",
+       "source": "collected",
+       "sender": "Shift Robotics"
+      }
+     ]
+    },
+    {
+     "name": "Førstevalg",
+     "formula": "Få førstevalg af [kategori]",
+     "why": "Førstevalg lover en praktisk indkøbsfordel, især når farver, størrelser eller antal er begrænsede.",
+     "bestFor": [
+      "produktnyhed",
+      "saeson",
+      "tilbud",
+      "forhandler"
+     ],
+     "watchOut": "Udtryk som “first dibs” bør ikke oversættes direkte, og fordelen skal være reel frem for kunstig hast.",
+     "seenIn": [
+      {
+       "subject": "First dibs on Dunks for mom ♥️",
+       "preview": "",
+       "source": "collected",
+       "sender": "Nike"
+      },
+      {
+       "subject": "Get first dibs: NEW holiday flavors 🍫",
+       "preview": "A little peppermint, a little gingerbread, a lot festive.",
+       "source": "collected",
+       "sender": "Milk Bar"
+      },
+      {
+       "subject": "Get priority access.",
+       "preview": "",
+       "source": "collected",
+       "sender": "The Black Tux"
+      }
+     ]
+    },
+    {
+     "name": "Begrænset oplag",
+     "formula": "Begrænset oplag: [kategori]",
+     "why": "En sand produktbegrænsning gør nyheden mere særlig og hjælper indkøberen med at prioritere.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "saeson",
+      "tilbud"
+     ],
+     "watchOut": "Skriv ikke “begrænset”, medmindre oplag, produktionsrunde eller adgang faktisk er afgrænset og forklaret i mailen.",
+     "seenIn": [
+      {
+       "subject": "Limited edition: the GABRIELLE CHANEL ESSENCE purse spray",
+       "preview": "A fragrance that can be worn like a piece of jewelry",
+       "source": "collected",
+       "sender": "CHANEL"
+      },
+      {
+       "subject": "The Wasp Factory Limited Edition is Here",
+       "preview": "",
+       "source": "collected",
+       "sender": "The Folio Society"
+      },
+      {
+       "subject": "Try Our Limited-Release Golden Hour Blend",
+       "preview": "The perfect summer coffee",
+       "source": "collected",
+       "sender": "Blue Bottle"
+      }
+     ]
+    },
+    {
+     "name": "Adgang bekræftet",
+     "formula": "Du er med: [kategori] før lancering",
+     "why": "Bekræftelsen giver en følelse af allerede at være lukket ind og gør næste skridt let at forstå.",
+     "bestFor": [
+      "service",
+      "tilbud",
+      "konkurrence",
+      "produktnyhed"
+     ],
+     "watchOut": "Brug den primært efter tilmelding eller optagelse, ellers kan “du er med” virke misvisende.",
+     "seenIn": [
+      {
+       "subject": "You're in. You now have early access to freeways.",
+       "preview": "Enjoy faster trips in the SF Bay Area, Phoenix, and Los Angeles",
+       "source": "collected",
+       "sender": "Waymo"
+      },
+      {
+       "subject": "You're in. Now for the good stuff.",
+       "preview": "Product drops, invites, & more.",
+       "source": "collected",
+       "sender": "Lululemon"
+      },
+      {
+       "subject": "You’re Officially in the Running",
+       "preview": "For this month’s Ketone-IQ giveaway",
+       "source": "collected",
+       "sender": "Ketone"
+      }
+     ]
+    },
+    {
+     "name": "Kun her",
+     "formula": "Kun her: [kategori/indhold]",
+     "why": "Kanaleksklusivitet skaber nysgerrighed, når produktet, materialet eller adgangen faktisk ikke findes andre steder.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "kundecase",
+      "tilbud"
+     ],
+     "watchOut": "“Kun her” bliver hurtigt utroværdigt, hvis det samme kan findes på webshoppen, sociale medier eller hos andre forhandlere.",
+     "seenIn": [
+      {
+       "subject": "You can’t get this anywhere else",
+       "preview": "Launch a career of purpose and progress with TFA",
+       "source": "collected",
+       "sender": "Teach For America"
+      },
+      {
+       "subject": "Exclusively at Lumens",
+       "preview": "New finds from Louis Poulsen and LODES.",
+       "source": "collected",
+       "sender": "Lumens"
+      },
+      {
+       "subject": "Things get ✨exclusive ✨ in our app",
+       "preview": "Download for secret discounts and sneak peeks.",
+       "source": "collected",
+       "sender": "EF Ultimate Break"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Forklar den konkrete fordel: hvad modtageren kan se, vælge eller bestille før andre.",
+    "Angiv forskellen fra den offentlige lancering uden at bruge en markedsspecifik bestillingsfrist.",
+    "Nævn et begrænset antal eller oplag, når tallet står og forklares i selve mailen.",
+    "Tilføj B2B-værdien, fx mulighed for at planlægge sortimentet eller vælge farver tidligt, frem for at gentage “først”."
+   ],
+   "avoid": [
+    "Generiske ord som “eksklusiv”, “VIP” og “hemmelig” uden bevis på en reel fordel.",
+    "Falsk hast, opdigtet knaphed eller personalisering, der antyder, at modtageren er særligt udvalgt.",
+    "Engelske idiomer som “first dibs”, “A-list” og “unlock”, der bliver stive eller uklare på tværs af markeder.",
+    "Versaler, flere udråbstegn og en emoji, der bærer hele budskabet.",
+    "En preheader, der blot gentager “tidlig adgang”, “først” eller emnelinjens produktnavn med andre ord."
+   ]
+  },
+  "humor": {
+   "mechanism": "humor",
+   "label": "Humor og ordspil",
+   "linesRead": 177,
+   "model": "gpt-5.6-sol",
+   "essence": "Humor virker i B2B, når en kort sproglig overraskelse skaber et smil uden at skjule produktet eller den forretningsmæssige relevans. Joken skal kunne afkodes straks, mens preheaderen leverer den konkrete grund til at åbne.",
+   "patterns": [
+    {
+     "name": "Lydligt produktordspil",
+     "formula": "[Kendt ord eller frase] omskrevet med [produktord]",
+     "why": "Genkendelsen kommer først, og den lille sproglige fejl giver et hurtigt smil.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "saeson",
+      "tilbud"
+     ],
+     "watchOut": "Lydlige ordspil tåler sjældent direkte oversættelse og må ikke gøre produktkategorien uklar.",
+     "seenIn": [
+      {
+       "subject": "IT'S THE SOOOOUPER BOWL 🍲",
+       "preview": "",
+       "source": "collected",
+       "sender": "Graza"
+      },
+      {
+       "subject": "You won’t be-leaf the homes we found for you 🍁",
+       "preview": "",
+       "source": "collected",
+       "sender": "Kindred"
+      },
+      {
+       "subject": "Ikke så ringe endda 💍",
+       "preview": "Ringæskerne i vinterens farver, set fra alle sider og med logo i guldfolie.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Kliché med nyt indhold",
+     "formula": "[Kendt frase], men med [produkt eller aktuel anledning]",
+     "why": "En velkendt formulering sænker læsemodstanden, mens drejningen skaber nysgerrighed.",
+     "bestFor": [
+      "saeson",
+      "inspiration",
+      "produktnyhed",
+      "produktfokus"
+     ],
+     "watchOut": "Undgå referencer, der kræver bestemt popkultur, dato eller sprog for at give mening.",
+     "seenIn": [
+      {
+       "subject": "May the 4th be with you, LEGO® Fan",
+       "preview": "Unsubscribe",
+       "source": "collected",
+       "sender": "Lego"
+      },
+      {
+       "subject": "Because socks are a cry for help",
+       "preview": "Our Gift Bundles should do the trick.",
+       "source": "collected",
+       "sender": "Athletic Brewing"
+      },
+      {
+       "subject": "Nu kommer der boller på suppen 🍲",
+       "preview": "Fra mandag leverer vi også suppe til frokostordninger – med friskbagte boller ved siden af.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Produktet får en vilje",
+     "formula": "[Produkt] [menneskelig handling eller holdning]. [Tørt efterstik]",
+     "why": "Personificering gør en produktegenskab levende og lettere at huske.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Lad produktet være jokens hovedperson, så kundens butik eller valg aldrig bliver gjort til grin.",
+     "seenIn": [
+      {
+       "subject": "Duo’s not getting any younger… 🫠",
+       "preview": "It’s been 9 days since your last lesson…",
+       "source": "collected",
+       "sender": "Duolingo"
+      },
+      {
+       "subject": "Monday called. It wants a stronger roast ☕",
+       "preview": "Our new dark roast, for offices and cafés getting through the longest day of the week.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Ringen nægter at flytte ud af æsken",
+       "preview": "Kunden har haft den i en måned, og den bor der stadig. Vi tager det som en kompliment.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Påstand med tilbagetog",
+     "formula": "[Skråsikker påstand]. [Næsten/forbehold i parentes]",
+     "why": "Det hurtige tilbagetog bryder reklametonen og får afsenderen til at lyde menneskelig.",
+     "bestFor": [
+      "produktfokus",
+      "virksomhed",
+      "service",
+      "produktnyhed"
+     ],
+     "watchOut": "Forbeholdet må ikke underminere kvalitet, service eller en vigtig faktuel påstand.",
+     "seenIn": [
+      {
+       "subject": "🚨 This is not a drill (It kind of is)",
+       "preview": "",
+       "source": "collected",
+       "sender": "Psilly Goose"
+      },
+      {
+       "subject": "IMMEDIATE(ISH) GRATIFICATION",
+       "preview": "AVAILABLE TO SHIP WITHIN 2 WEEKS",
+       "source": "collected",
+       "sender": "Apparatus"
+      },
+      {
+       "subject": "En mail uden en eneste æske. Næsten",
+       "preview": "Den handler om de omkring 200 mennesker, der laver dem. Okay, der er én æske til sidst.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Absurd overdrivelse",
+     "formula": "[Produkt] er så [egenskab], at [umulig eller komisk konsekvens]",
+     "why": "Overdrivelsen oversætter en egenskab til et tydeligt mentalt billede.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Preheaderen skal hurtigt erstatte overdrivelsen med dokumenterbare mål, materialer eller anvendelser.",
+     "seenIn": [
+      {
+       "subject": "Leave your pants at home",
+       "preview": "Summer shorts for every type of fun.",
+       "source": "collected",
+       "sender": "Patagonia"
+      },
+      {
+       "subject": "Posen er så stor, at vi mistede en kollega i den 😅",
+       "preview": "Han er fundet igen. XXL-bæreposen er 45 cm bred med plads til et logo på 15 × 15 cm.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "A sofa you'll have to be dragged off",
+       "preview": "Deep seat, feather cushions and a tendency to cancel your plans. Showroom samples now in.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Tør kontrast",
+     "formula": "[Hverdagsdetalje]: [underspillet]. [Produktdetalje]: [positiv kontrast]",
+     "why": "Kontrasten giver rytme og lader produktets styrke stå skarpere uden store superlativer.",
+     "bestFor": [
+      "produktfokus",
+      "virksomhed",
+      "produktnyhed",
+      "kundecase"
+     ],
+     "watchOut": "Kontrasten skal kunne forstås på få ord og må ikke afhænge af intern humor alene.",
+     "seenIn": [
+      {
+       "subject": "Packaging that's dressed better than we are",
+       "preview": "Carrier bags in nine colours, boxes in plenty more. Our office wardrobe runs to grey.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Vejret i Holstebro: gråt. Guldfolien: upåvirket",
+       "preview": "Et kig ind i produktionen en helt almindelig tirsdag, hvor det eneste, der skinner, er logoerne.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Boxes and bags: 200,000 a day. Biscuits: fewer",
+       "preview": "A look round production in Holstebro, where the boxes comfortably outnumber the people.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Selvironisk afsender",
+     "formula": "[Produkt eller kunde] kan [noget imponerende]. Vi kan [noget mere beskedent]",
+     "why": "Selvironi gør virksomheden sympatisk, samtidig med at produktet eller kunden får æren.",
+     "bestFor": [
+      "virksomhed",
+      "kundecase",
+      "produktfokus",
+      "forhandler"
+     ],
+     "watchOut": "Selvironien må aldrig skabe tvivl om faglighed, kvalitet eller evnen til at levere.",
+     "seenIn": [
+      {
+       "subject": "Our customers' shops are prettier than our office",
+       "preview": "So we asked three of them how they display and pack. Our office is taking notes.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Not to brag, but our lids fit",
+       "preview": "A low bar, you'd think. We've still spent seventy-odd years clearing it properly.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Vi har lavet en æske, der er pænere end kontoret",
+       "preview": "Ikke svært, siger kollegerne. Men se selv: den nye serie smykkeæsker i mørkeblå og guld.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    },
+    {
+     "name": "Spørgsmål med skævt svar",
+     "formula": "[Spørgsmål om produkt eller situation]? [Kort, uventet svar]",
+     "why": "Spørgsmålet åbner et informationshul, og svaret leverer personlighed med det samme.",
+     "bestFor": [
+      "produktfokus",
+      "konkurrence",
+      "inspiration",
+      "tilbud"
+     ],
+     "watchOut": "Spørgsmålet må ikke være clickbait, og svaret må ikke gøre læseren til punchline.",
+     "seenIn": [
+      {
+       "subject": "Do you know the muffin man?",
+       "preview": "And have you tried his cereal?",
+       "source": "collected",
+       "sender": "Surreal"
+      },
+      {
+       "subject": "Hvem bestiller 9.600 smykkeæsker? Kloge folk",
+       "preview": "Bulkkøb af de populære smykkeæsker giver op til 40 % rabat, med 7–8 ugers produktion.",
+       "source": "authored",
+       "sender": ""
+      },
+      {
+       "subject": "Hvor bliver alle kuglepennene af? 🕵️",
+       "preview": "Vi ved det heller ikke. Men en kasse med 50 koster det halve i denne uge.",
+       "source": "authored",
+       "sender": ""
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Afkod ordspillet med den konkrete kategori, anvendelse eller nyhed.",
+    "Følg en absurd overdrivelse med mål, materiale eller anden dokumentation fra mailen.",
+    "Lad preheaderen levere andet slag i joken i stedet for at gentage emnelinjen."
+   ],
+   "avoid": [
+    "Ordspil, der kun virker med engelsk udtale, bogstavrim eller lokale kendisser.",
+    "Vittigheder på bekostning af læserens butik, emballage eller tidligere valg.",
+    "Mystiske brandord og interne jokes, hvor produktkategorien først afsløres langt senere.",
+    "Råbende versaler, lange lydord, flere emojis og falske svar- eller videresendelsesmarkører."
+   ]
+  },
+  "oejeblik": {
+   "mechanism": "oejeblik",
+   "label": "Øjeblikket",
+   "linesRead": 274,
+   "model": "gpt-5.6-sol",
+   "essence": "Øjeblikket virker, når emnelinjen kobler mailen til den sæson, travlhed eller anledning, modtageren allerede har i hovedet. I B2B skal øjeblikket hurtigt føre til en konkret konsekvens for sortiment, lager, indpakning eller planlægning.",
+   "patterns": [
+    {
+     "name": "Sæsonen er her",
+     "formula": "[Sæson eller anledning] er her",
+     "why": "Den skaber øjeblikkelig genkendelse og gør mailen aktuel uden en lang forklaring.",
+     "bestFor": [
+      "saeson",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Den bliver en kliché, hvis preheaderen ikke forklarer, hvad sæsonen konkret betyder for butikken.",
+     "seenIn": [
+      {
+       "subject": "Candle Season Is Here 🔥",
+       "preview": "And so is our leisure-enhancing lineup of Vacation® Luxury Scented Candles",
+       "source": "collected",
+       "sender": "Vacation"
+      },
+      {
+       "subject": "It’s Wedding Season",
+       "preview": "",
+       "source": "collected",
+       "sender": "Acustom Apparel"
+      },
+      {
+       "subject": "Black Friday Deals are here 🖤",
+       "preview": "Don’t miss our biggest deals of the year!",
+       "source": "collected",
+       "sender": "Counter Culture Coffee"
+      }
+     ]
+    },
+    {
+     "name": "Sæsonen nærmer sig",
+     "formula": "[Sæson eller anledning] nærmer sig",
+     "why": "Den åbner et naturligt planlægningsvindue, før travlheden eller efterspørgslen topper.",
+     "bestFor": [
+      "saeson",
+      "frist",
+      "service"
+     ],
+     "watchOut": "Undgå konkrete ordredatoer og løfter om ankomst på tværs af markeder.",
+     "seenIn": [
+      {
+       "subject": "Halloween night is approaching",
+       "preview": "Browse garments and accessories dedicated to Fall's spookiest celebration",
+       "source": "collected",
+       "sender": "Ferrari"
+      },
+      {
+       "subject": "Black Friday is almost here...",
+       "preview": "Get ready for exclusive holiday pricing. November 19.",
+       "source": "collected",
+       "sender": "Gozney"
+      },
+      {
+       "subject": "Cozy holiday incoming",
+       "preview": "",
+       "source": "collected",
+       "sender": "Lululemon"
+      }
+     ]
+    },
+    {
+     "name": "Er du klar?",
+     "formula": "Klar til [sæson eller anledning]?",
+     "why": "Spørgsmålet får modtageren til kort at vurdere lager, sortiment eller forberedelser.",
+     "bestFor": [
+      "saeson",
+      "service",
+      "inspiration"
+     ],
+     "watchOut": "Formuleringen er slidt og må følges af en præcis kategori eller hjælp frem for løs dramatik.",
+     "seenIn": [
+      {
+       "subject": "Valentine’s Day Is Coming… Are You Ready? ❤️",
+       "preview": "",
+       "source": "collected",
+       "sender": "LINE FRIENDS"
+      },
+      {
+       "subject": "Gearing up for a fall race? We have you covered",
+       "preview": "Shop our top picks for training + racing",
+       "source": "collected",
+       "sender": "Fleet Feet "
+      },
+      {
+       "subject": "Get Ready for Wedding Season",
+       "preview": "",
+       "source": "collected",
+       "sender": "Suiteness"
+      }
+     ]
+    },
+    {
+     "name": "Tid til handling",
+     "formula": "Tid til at [relevant handling]",
+     "why": "Den omsætter kalenderøjeblikket til en enkel handling, som køberen kan tage nu.",
+     "bestFor": [
+      "service",
+      "saeson",
+      "produktfokus"
+     ],
+     "watchOut": "Handlingen skal være relevant for modtagerens arbejde og ikke blot betyde køb nu.",
+     "seenIn": [
+      {
+       "subject": "It’s time to book summer flights",
+       "preview": "Going with Points: ✈️🏰🏖️",
+       "source": "collected",
+       "sender": "Going"
+      },
+      {
+       "subject": "It’s time to treat the Dads",
+       "preview": "Useful and lasting gifts — handpicked for Father’s Day",
+       "source": "collected",
+       "sender": "Mud Australia"
+      },
+      {
+       "subject": "Time To Lounge 💫",
+       "preview": "",
+       "source": "collected",
+       "sender": "Recess"
+      }
+     ]
+    },
+    {
+     "name": "Produkt til øjeblikket",
+     "formula": "[Kategori] til [sæsonens konkrete situation]",
+     "why": "Den forbinder produktet direkte med et behov, som allerede er synligt i butikken eller kalenderen.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Led med en kendt kategori som smykkeæsker eller bæreposer frem for et internt serienavn.",
+     "seenIn": [
+      {
+       "subject": "Running gear for winter’s worst",
+       "preview": "Plus, a visit to the remote Montana home of two legendary runners.",
+       "source": "collected",
+       "sender": "Patagonia"
+      },
+      {
+       "subject": "Long weekend looks",
+       "preview": "Made a different pace",
+       "source": "collected",
+       "sender": "On"
+      },
+      {
+       "subject": "Get Skin-Ready for Halloween - Before the Makeup Goes On 🎃",
+       "preview": "Heavy makeup ahead? Prep and protect your skin before the big night.",
+       "source": "collected",
+       "sender": "Rael"
+      }
+     ]
+    },
+    {
+     "name": "Sæsonen kalder på",
+     "formula": "[Sæson eller måned] kalder på [produkt eller handling]",
+     "why": "Den gør sæsonskiftet sanseligt og giver produktet en naturlig rolle i øjeblikket.",
+     "bestFor": [
+      "produktfokus",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Metaforen skal være enkel nok til at fungere naturligt i alle oversættelser.",
+     "seenIn": [
+      {
+       "subject": "September calls for something extra",
+       "preview": "Protective Face Mist as a gift on all orders over €60",
+       "source": "collected",
+       "sender": "Gun Ana"
+      },
+      {
+       "subject": "Raise a Glass to Hosting Season 🍷",
+       "preview": "Timeless stemware for every toast.",
+       "source": "collected",
+       "sender": "Fable"
+      },
+      {
+       "subject": "‘Tis the season to cozy up with velvets",
+       "preview": "",
+       "source": "collected",
+       "sender": "Lights Lacquer"
+      }
+     ]
+    },
+    {
+     "name": "Start stærkt",
+     "formula": "Start [periode eller sæson] stærkt",
+     "why": "Den udnytter lysten til at begynde en ny periode organiseret og på forkant.",
+     "bestFor": [
+      "service",
+      "inspiration",
+      "saeson"
+     ],
+     "watchOut": "Ordet stærkt bliver tomt, hvis preheaderen ikke viser den konkrete hjælp eller varekategori.",
+     "seenIn": [
+      {
+       "subject": "Start the year strong",
+       "preview": "",
+       "source": "collected",
+       "sender": "reMarkable"
+      },
+      {
+       "subject": "Start the school year strong",
+       "preview": "Shop kids’ shoes, everyday apparel and more back-to-school favorites",
+       "source": "collected",
+       "sender": "Fleet Farm"
+      },
+      {
+       "subject": "Boxing Day — Let's end the year on a high note!",
+       "preview": "A last push before the year closes",
+       "source": "collected",
+       "sender": "Misc. Goods Co."
+      }
+     ]
+    },
+    {
+     "name": "I gang nu",
+     "formula": "[Tilbud, begivenhed eller kampagne] er i gang",
+     "why": "Den signalerer, at noget relevant allerede sker, og giver en klar grund til at åbne nu.",
+     "bestFor": [
+      "tilbud",
+      "konkurrence",
+      "virksomhed"
+     ],
+     "watchOut": "Brug kun konstruktionen, når kampagnen faktisk er aktiv, og alle tilbudsoplysninger står i mailen.",
+     "seenIn": [
+      {
+       "subject": "On Now: Spring Refresh Sale",
+       "preview": "Save up to 20% for a limited time.",
+       "source": "collected",
+       "sender": "Lumens"
+      },
+      {
+       "subject": "Our Summer Sale Continues",
+       "preview": "Enjoy up to 50% off",
+       "source": "collected",
+       "sender": "Rebecca Udall"
+      },
+      {
+       "subject": "Day 2 is live. Get your industry's marketing playbook. Free on Salesforce+.",
+       "preview": "Expert-led sessions, customer stories, and virtual hands-on trainings. Streaming now.",
+       "source": "collected",
+       "sender": "Salesforce"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Forklar, hvad sæsonen konkret betyder for butikkens lager, sortiment eller arbejdsgang.",
+    "Nævn den relevante kategori, hvis emnelinjen kun sætter scenen.",
+    "Tilføj næste skridt: se udvalget, planlæg lageret, sammenlign muligheder eller find landets frist.",
+    "Vis den praktiske gevinst i travlheden, eksempelvis hurtigere pakning eller lettere genbestilling, når mailen dokumenterer den Gevinst ."
+   ],
+   "avoid": [
+    "Tomme kalenderhilsner som “Godt nytår” eller blot navnet på en mærkedag.",
+    "Vag hast som “This is it”, “Don’t miss out” og “Are you ready?” uden et konkret objekt.",
+    "At erklære, at sæsonen er begyndt, når det allerede er for sent at planlægge den relevante emballage.",
+    "Preheaders, der gentager eller omskriver emnelinjen i stedet for at føre tanken videre.",
+    "Konkrete ordredatoer, ankomstløfter eller andre oplysninger, der varierer mellem markederne ."
+   ]
+  },
+  "historie": {
+   "mechanism": "historie",
+   "label": "Historie",
+   "linesRead": 181,
+   "model": "gpt-5.6-sol",
+   "essence": "Historie virker i B2B, når en konkret person, situation eller forandring gør produktet relevant, før salgsbudskabet kommer. Den stærkeste emnelinje åbner en scene eller et spørgsmål, mens preheaderen forbinder fortællingen med butikkens sortiment, sæson eller næste beslutning.",
+   "patterns": [
+    {
+     "name": "Sådan gjorde de",
+     "formula": "Sådan [kunde/person] [opnåede konkret resultat]",
+     "why": "En navngiven aktør og et tydeligt resultat lover både en fortælling og noget, læseren kan lære af.",
+     "bestFor": [
+      "kundecase",
+      "forhandler",
+      "service",
+      "virksomhed"
+     ],
+     "watchOut": "Resultatet må ikke pustes op, og både person, tal og effekt skal kunne dokumenteres i mailen.",
+     "seenIn": [
+      {
+       "subject": "How Even G2 Helped a Healthtech Founder Present at APEC",
+       "preview": "See how Teleprompter and Live Translation helped Manuel stay present in Shenzhen",
+       "source": "collected",
+       "sender": "Even Realities"
+      },
+      {
+       "subject": "How climbers helped save a valley",
+       "preview": "Victory in Chile, plus halting the hand sweats.",
+       "source": "collected",
+       "sender": "Patagonia"
+      },
+      {
+       "subject": "How 3 Reggie pups found their new baseline.",
+       "preview": "Real routines from real dogs.",
+       "source": "collected",
+       "sender": "Reggie"
+      }
+     ]
+    },
+    {
+     "name": "Fra–til-rejsen",
+     "formula": "Fra [beskedent udgangspunkt] til [ny position/resultat]",
+     "why": "Kontrasten skaber fremdrift og får læseren til at ville kende trinene mellem begyndelsen og resultatet.",
+     "bestFor": [
+      "kundecase",
+      "virksomhed",
+      "forhandler",
+      "produktfokus"
+     ],
+     "watchOut": "Undgå luftige slutpunkter som ”succes”, medmindre mailen viser konkret, hvad forandringen består i.",
+     "seenIn": [
+      {
+       "subject": "From zero to 200K views: How one seller turned a product into a TikTok obsession.",
+       "preview": "",
+       "source": "collected",
+       "sender": "TikTok"
+      },
+      {
+       "subject": "From startup to gold standard",
+       "preview": "We're different by design.",
+       "source": "collected",
+       "sender": "eero"
+      },
+      {
+       "subject": "From the Dust Bowl to Today's Success: A Legacy of Action",
+       "preview": "",
+       "source": "collected",
+       "sender": "Ducks Unlimited "
+      }
+     ]
+    },
+    {
+     "name": "Mød personen bag",
+     "formula": "Mød [personen/karakteren] bag [produkt, farve eller proces]",
+     "why": "Et menneske bag varen gør håndværk, udvikling og valg lettere at relatere til.",
+     "bestFor": [
+      "produktfokus",
+      "produktnyhed",
+      "virksomhed",
+      "inspiration"
+     ],
+     "watchOut": "Karakteren skal have en reel rolle i historien og må ikke blot være en sød omvej til et produktlink.",
+     "seenIn": [
+      {
+       "subject": "Meet the Moose Behind Moose 🫎",
+       "preview": "The dog behind our newest Linen shade.",
+       "source": "collected",
+       "sender": "Barney"
+      },
+      {
+       "subject": "Junior J shows us where Green Bananas come from.",
+       "preview": "",
+       "source": "collected",
+       "sender": "Soft Services"
+      },
+      {
+       "subject": "One researcher. A curious mind. Endless innovation.",
+       "preview": "Science can move fast. Surface keeps up.",
+       "source": "collected",
+       "sender": "Microsoft"
+      }
+     ]
+    },
+    {
+     "name": "Oprindelsen som kapitel",
+     "formula": "[Kategoriens/produktets] historie: Kapitel [nummer] – [oprindelse eller vendepunkt]",
+     "why": "Kapitelgrebet signalerer en større fortælling og gør oprindelse, designvalg eller virksomhedshistorie overskuelig.",
+     "bestFor": [
+      "virksomhed",
+      "produktnyhed",
+      "produktfokus",
+      "inspiration"
+     ],
+     "watchOut": "Brug kun kapitler, hvis der faktisk er en serie eller et klart narrativ; ukendte serienavne bør ikke stå før kategorien.",
+     "seenIn": [
+      {
+       "subject": "The Akris Chronicles: Chapter 1 - Origin",
+       "preview": "",
+       "source": "collected",
+       "sender": "Akris"
+      },
+      {
+       "subject": "📙 The Orange Gelée Backstory",
+       "preview": "",
+       "source": "collected",
+       "sender": "Vacation"
+      },
+      {
+       "subject": "A Look Back at the Story of New York",
+       "preview": "",
+       "source": "collected",
+       "sender": "New York Magazine"
+      }
+     ]
+    },
+    {
+     "name": "Det afgørende øjeblik",
+     "formula": "[Tiden/situationen], hvor [noget uventet skete]",
+     "why": "Et præcist øjeblik placerer læseren midt i handlingen og åbner et naturligt spørgsmål om, hvad der skete bagefter.",
+     "bestFor": [
+      "kundecase",
+      "virksomhed",
+      "saeson",
+      "frist"
+     ],
+     "watchOut": "Dramatikken må ikke konstrueres, og en fristemail må aldrig love levering eller bruge én konkret dato på tværs af markeder.",
+     "seenIn": [
+      {
+       "subject": "The winter that froze birds in midair",
+       "preview": "The monthslong deep freeze that changed everything.",
+       "source": "collected",
+       "sender": "Britannica"
+      },
+      {
+       "subject": "They risked everything for clean water",
+       "preview": "This Giving Tuesday, you can show up alongside them, mike.",
+       "source": "collected",
+       "sender": "Charity Water"
+      },
+      {
+       "subject": "Looking back on the swell of the winter",
+       "preview": "Surf photos from Hawaiʻi and California.",
+       "source": "collected",
+       "sender": "Patagonia"
+      }
+     ]
+    },
+    {
+     "name": "Milepælen med en vinkel",
+     "formula": "[Antal] år med [uventet eller menneskelig vinkel]",
+     "why": "Et konkret jubilæum bliver mere åbneværdigt, når årene kobles til læring, fejl eller en fælles oplevelse.",
+     "bestFor": [
+      "virksomhed",
+      "kundecase",
+      "forhandler"
+     ],
+     "watchOut": "Et rundt årstal er ikke en historie i sig selv, og tallet skal både være korrekt og forklaret i mailen.",
+     "seenIn": [
+      {
+       "subject": "Celebrating 10 years of failures at Gantri",
+       "preview": "Celebrating 10 years of failures at Gantri",
+       "source": "collected",
+       "sender": "Gantri"
+      },
+      {
+       "subject": "Celebrating 130 years of family discovery",
+       "preview": "",
+       "source": "collected",
+       "sender": "FamilySearch"
+      },
+      {
+       "subject": "15 Years of Gran Fondo Hincapie Greenville — Celebrate With Us",
+       "preview": "The full story, and your invitation to ride the anniversary.",
+       "source": "collected",
+       "sender": "Hincapie"
+      }
+     ]
+    },
+    {
+     "name": "Citatet åbner scenen",
+     "formula": "”[Kort, overraskende citat]” — [navn/rolle]",
+     "why": "En autentisk stemme skaber nærhed og lader læseren overhøre et øjeblik, der kræver en forklaring.",
+     "bestFor": [
+      "kundecase",
+      "inspiration",
+      "produktfokus",
+      "konkurrence"
+     ],
+     "watchOut": "Citatet skal være ægte, forståeligt efter oversættelse og må ikke stå alene som en udokumenteret produktpåstand.",
+     "seenIn": [
+      {
+       "subject": "“There are never enough hearts”",
+       "preview": "Explore Miriam Mirri’s poetic gift ideas for Valentine’s Day.",
+       "source": "collected",
+       "sender": "Alessi"
+      },
+      {
+       "subject": "‘My mattress is making me late.’ — Tia",
+       "preview": "She called it life-changing. We think she’s right.",
+       "source": "collected",
+       "sender": "Purple"
+      }
+     ]
+    },
+    {
+     "name": "Hvorfor-historien",
+     "formula": "Hvorfor [valg, forandring eller produkt] tog [tid] eller ændrede [noget]",
+     "why": "”Hvorfor” lover en årsag frem for blot en nyhed og gør processen bag resultatet til selve lokkemidlet.",
+     "bestFor": [
+      "produktnyhed",
+      "produktfokus",
+      "virksomhed",
+      "kundecase"
+     ],
+     "watchOut": "Spørgsmålet skal besvares tidligt i mailen og må ikke gemme en banal forklaring bag overdreven mystik.",
+     "seenIn": [
+      {
+       "subject": "Why Change Matters to Me",
+       "preview": "Why I founded NOBL",
+       "source": "collected",
+       "sender": "NOBL"
+      },
+      {
+       "subject": "Why 'Good Luck, Have Fun, Don’t Die’s AI Cautionary Tale Took 6 Years To Make",
+       "preview": "Plus: 10 years of Deadpool, Chris Hemsworth's spin on the LA heist movie, & what the heck is going on with 'Nirvanna the Band the Show The Movie.'",
+       "source": "collected",
+       "sender": "Inverse"
+      },
+      {
+       "subject": "How cycle syncing changed everything for me",
+       "preview": "You’re not broken — you’re cyclical",
+       "source": "collected",
+       "sender": "Inner Code"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Afslør historiens praktiske relevans: hvad en guldsmed, butiksejer eller indkøber kan tage med videre.",
+    "Tilføj næste led i handlingen uden at afsløre hele slutningen: hvad ændrede sig, og hvad viser mailen?",
+    "Forbind karakteren med kategorien: fx smykkeæsker, gaveæsker, bæreposer, poser eller displays."
+   ],
+   "avoid": [
+    "Generiske overskrifter som ”Vores historie”, ”Story time” og ”En fortælling om kvalitet”, der ikke åbner en konkret scene.",
+    "At gentage eller parafrasere emnelinjen i preheaderen; preheaderen skal føre historien videre.",
+    "Opdigtede konflikter, kunder, citater, resultater, tal, rabatter eller fordele.",
+    "At gøre kundens butik, emballage eller tidligere valg til historiens punchline.",
+    "Ukendte serienavne først; begynd med kategorien, medmindre flere navngivne serier sammenlignes i mailen."
+   ]
+  },
+  "tilbud": {
+   "mechanism": "tilbud",
+   "label": "Tilbud",
+   "linesRead": 326,
+   "model": "gpt-5.6-sol",
+   "essence": "Tilbud virker i B2B, når værdien kan aflæses med det samme: hvad er sat ned, hvor meget og eventuelt på hvilken betingelse. Den direkte formulering skal følges af præcis afgrænsning, så indkøberen hurtigt kan vurdere, om tilbuddet passer til sortiment, antal og timing.",
+   "patterns": [
+    {
+     "name": "Rabat først",
+     "formula": "[Rabat] på [produktkategori]",
+     "why": "Den konkrete besparelse står først, mens kategorien straks fortæller indkøberen, om tilbuddet er relevant.",
+     "bestFor": [
+      "tilbud",
+      "produktfokus",
+      "produktnyhed"
+     ],
+     "watchOut": "Brug kun procentsatsen, hvis den gælder det nævnte udvalg, og skriv »udvalgte«, når ikke hele kategorien er med.",
+     "seenIn": [
+      {
+       "subject": "20% off photo books",
+       "preview": "",
+       "source": "collected",
+       "sender": "Papier"
+      },
+      {
+       "subject": "Take 40% OFF Select Cold-Weather Gear",
+       "preview": "",
+       "source": "collected",
+       "sender": "Duluth Trading"
+      },
+      {
+       "subject": "25% off Coyl Gaming Desk",
+       "preview": "Save on a winning foundation.",
+       "source": "collected",
+       "sender": "Herman Miller"
+      }
+     ]
+    },
+    {
+     "name": "Op til-rabatten",
+     "formula": "Op til [rabat] på [kategori]",
+     "why": "En høj maksimal besparelse skaber opmærksomhed og giver samtidig plads til flere rabattrin i samme kampagne.",
+     "bestFor": [
+      "tilbud",
+      "saeson",
+      "produktfokus"
+     ],
+     "watchOut": "Den højeste rabat må ikke være lokkemad på få irrelevante varer, og spændet skal forklares tydeligt i mailen.",
+     "seenIn": [
+      {
+       "subject": "Up to 40% off past-season gear",
+       "preview": "Plus, a wild first ascent on Yashkuk Sar I.",
+       "source": "collected",
+       "sender": "Patagonia"
+      },
+      {
+       "subject": "Save up to 25% on all our cookware",
+       "preview": "Now’s the time to stock up!",
+       "source": "collected",
+       "sender": "Made In Cookware"
+      },
+      {
+       "subject": "Flash Sale: Save up to 30% on Oura Ring 4",
+       "preview": "Limited time offer.",
+       "source": "collected",
+       "sender": "Oura"
+      }
+     ]
+    },
+    {
+     "name": "Anledning plus rabat",
+     "formula": "[Anledning]: [rabat] på [kategori]",
+     "why": "Den velkendte anledning giver tilbuddet en naturlig købssituation uden at skygge for den konkrete fordel.",
+     "bestFor": [
+      "saeson",
+      "tilbud",
+      "frist"
+     ],
+     "watchOut": "Undgå ordspil, højtidsspecifikke referencer og engelske salgsnavne, der ikke fungerer ens på tværs af markeder.",
+     "seenIn": [
+      {
+       "subject": "Cyber Monday Sale: 30% Off Everything",
+       "preview": "",
+       "source": "collected",
+       "sender": "The Hill-Side"
+      },
+      {
+       "subject": "Spring Sale 20% Off Towels",
+       "preview": "",
+       "source": "collected",
+       "sender": "Public Pool"
+      },
+      {
+       "subject": "Summer Sale: Save 50% on Certificates",
+       "preview": "",
+       "source": "collected",
+       "sender": "Masterclass"
+      }
+     ]
+    },
+    {
+     "name": "Kort tilbudsvindue",
+     "formula": "Kun [tidsrum]: [tilbud]",
+     "why": "Et reelt og overskueligt tidsvindue hjælper travle indkøbere med at prioritere beslutningen.",
+     "bestFor": [
+      "frist",
+      "tilbud",
+      "saeson"
+     ],
+     "watchOut": "Brug ikke en bestemt ordredato i den fælles master, og skab aldrig hastværk uden en faktisk slutning på tilbuddet.",
+     "seenIn": [
+      {
+       "subject": "This weekend only, double points on all purchases*💰",
+       "preview": "More points, more perks",
+       "source": "collected",
+       "sender": "Alpinestars"
+      },
+      {
+       "subject": "Today only: Double your gift",
+       "preview": "Show up today and we’ll go twice as far.",
+       "source": "collected",
+       "sender": "Charity Water"
+      },
+      {
+       "subject": "25% OFF Everything Starts…",
+       "preview": "Right now!",
+       "source": "collected",
+       "sender": "Duluth Trading"
+      }
+     ]
+    },
+    {
+     "name": "Din rabat er klar",
+     "formula": "Din [rabat/rabatkode] er her",
+     "why": "Formuleringen gør fordelen konkret og passer især godt, når modtageren har tilmeldt sig eller tilhører en afgrænset kundegruppe.",
+     "bestFor": [
+      "tilbud",
+      "service",
+      "forhandler"
+     ],
+     "watchOut": "Skriv ikke »din« eller »kun til dig«, hvis alle modtagere får præcis det samme tilbud uden en relevant relation.",
+     "seenIn": [
+      {
+       "subject": "Your 15% discount code is here!",
+       "preview": "Welcome to Rose Boreal, we're glad to have you part of our community!",
+       "source": "collected",
+       "sender": "Rose Boreal"
+      },
+      {
+       "subject": "Your 15% off, as promised",
+       "preview": "",
+       "source": "collected",
+       "sender": "Guitar Center"
+      },
+      {
+       "subject": "Find your 20% off voucher inside",
+       "preview": "Thank you for subscribing to Samsøe Samsøe! Discover our selection and use your exclusive 20% voucher code for your first purchase.",
+       "source": "collected",
+       "sender": "SAMSØE SAMSØE"
+      }
+     ]
+    },
+    {
+     "name": "Mere ved samlet køb",
+     "formula": "Køb [antal/kombination], få [rabat eller fordel]",
+     "why": "Den tydelige betingelse viser både indkøbsniveauet og gevinsten og kan løfte ordren uden kompliceret rabatsprog.",
+     "bestFor": [
+      "tilbud",
+      "produktfokus",
+      "forhandler"
+     ],
+     "watchOut": "Det skal fremgå, hvilke produkter der kan kombineres, og hvordan rabatten beregnes, især ved forskellige priser.",
+     "seenIn": [
+      {
+       "subject": "Perfect Pairs for Valentine’s 💕 Buy 2, Get 20% Off",
+       "preview": "Two gifts. One sweet deal. Valentine’s starts now 💝",
+       "source": "collected",
+       "sender": "Sudio"
+      },
+      {
+       "subject": "Get 20% off any jacket + backpack combo.",
+       "preview": "Complete your Back to School kit",
+       "source": "collected",
+       "sender": "The North Face"
+      },
+      {
+       "subject": "Sleep Gummies are now BOGO 50%",
+       "preview": "",
+       "source": "collected",
+       "sender": "Feals"
+      }
+     ]
+    },
+    {
+     "name": "Beløbet af prisen",
+     "formula": "Få [beløb] i rabat på [produkt]",
+     "why": "En fast besparelse gør værdien nem at regne ind i budgettet, især på produkter med en tydelig styk- eller ordrepris.",
+     "bestFor": [
+      "tilbud",
+      "produktfokus",
+      "service"
+     ],
+     "watchOut": "Beløbet skal passe til den valuta og pris, der vises i hvert marked, så konstruktionen kræver sikker lokalisering.",
+     "seenIn": [
+      {
+       "subject": "$40 off Live NYC Subway Map! 🍎🗽",
+       "preview": "Just one month left on the $40 discount.",
+       "source": "collected",
+       "sender": "the design rules company"
+      },
+      {
+       "subject": "Get $15 off any book you like 🌟",
+       "preview": "Don't miss our sale",
+       "source": "collected",
+       "sender": "Wonderbly"
+      },
+      {
+       "subject": "Take $4 off a Starbucks treat for Mother’s Day",
+       "preview": "",
+       "source": "collected",
+       "sender": "DoorDash"
+      }
+     ]
+    },
+    {
+     "name": "Pris med rabatbevis",
+     "formula": "[Pris] – det er [rabat] mindre",
+     "why": "Kombinationen af slutpris og besparelse giver indkøberen et hurtigt sammenligningsgrundlag.",
+     "bestFor": [
+      "tilbud",
+      "produktfokus",
+      "forhandler"
+     ],
+     "watchOut": "Både førpris, slutpris og procent skal kunne dokumenteres i mailen og lokaliseres korrekt i alle valutaer.",
+     "seenIn": [
+      {
+       "subject": "€72 for Pro, that’s 50% off",
+       "preview": "🎓 Make your writing sound clear, confident, and ready.",
+       "source": "collected",
+       "sender": "Grammarly"
+      },
+      {
+       "subject": "$199 for a limited time. HSA/FSA eligible.",
+       "preview": "Plus, free standard shipping",
+       "source": "collected",
+       "sender": "Whoop"
+      },
+      {
+       "subject": "$5 to pick up where you left off.",
+       "preview": "Handle, blades, and shave butter. Ships free.",
+       "source": "collected",
+       "sender": "Dollar Shave Club"
+      }
+     ]
+    }
+   ],
+   "preheaderMoves": [
+    "Afgræns tilbuddet med de udvalgte produkttyper, størrelser eller farver.",
+    "Forklar købskravet: mindsteantal, kombination eller relevant mængdetrin.",
+    "Fortæl, om rabatten trækkes automatisk, eller hvor koden findes."
+   ],
+   "avoid": [
+    "Vage formuleringer som »fantastisk tilbud«, »store besparelser« og »noget episk venter« uden tal eller produkt.",
+    "Udokumenterede superlativer som »årets største udsalg«, »laveste pris« og »bedste tilbud«.",
+    "Store bogstaver, flere emojis, »!!« og støjende alarmord som »HURRY« eller »HUGE SALE ALERT«.",
+    "Skjulte begrænsninger, hvor emnelinjen lover rabat på alt, men mailen kun viser få udvalgte varer.",
+    "Falsk personalisering som »kun til dig«, når tilbuddet sendes bredt til hele kundebasen intention? Need no trailing thoughts."
+   ]
+  }
+ },
+ "note": "Generated by knowledge/subject-lines/tools/build-playbook.js from pattern-bank.json. The constructions that recur across the whole bank, for the writer's prompt. Do not edit by hand.",
+ "builtAt": "2026-10-27T13:33:55.910Z",
+ "bankSize": 5340
+}

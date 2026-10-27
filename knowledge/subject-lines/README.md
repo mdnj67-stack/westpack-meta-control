@@ -47,6 +47,11 @@ email's own text - the bank's premises never become a promise on their own.
 - `collected/really-good-emails.json` — the collected lines, tagged.
 - `pattern-bank.json` — the built bank: both of the above validated, de-duplicated, with blocking
   rule breaks removed and stable ids. Do not edit by hand.
+- `pattern-bank.vectors.bin` / `.vectors.json` — one embedding per bank line, row for row with the
+  bank, so the generator is shown the lines closest in meaning to the email it writes for.
+- `playbook.json` — every line of each mechanism distilled into the constructions that recur, with
+  real lines that use them. It goes into every writing prompt, so the writer knows the whole bank
+  and not only the two dozen lines it is shown.
 
 Refreshing the collected lines (about an hour for 3,000 email pages; resumes from `tmp/rge-crawl/`):
 
@@ -54,7 +59,13 @@ Refreshing the collected lines (about an hour for 3,000 email pages; resumes fro
 node knowledge/subject-lines/tools/collect-rge.js 3000
 node knowledge/subject-lines/tools/tag-collected.js
 node knowledge/subject-lines/tools/build-bank.js
+node knowledge/subject-lines/tools/build-embeddings.js
+node knowledge/subject-lines/tools/build-playbook.js
 ```
+
+The last two follow any change to the bank: embeddings in under a minute, the playbook in about
+five (one mechanism at a time if you name them). A vectors file that no longer lines up with the
+bank is ignored at runtime and fails a test.
 
 ## Entry schema (source files)
 

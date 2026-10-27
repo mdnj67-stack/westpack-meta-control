@@ -16,6 +16,7 @@ const { repairModelJsonText } = require("../lib/model-json");
 const { MECHANISMS, CAMPAIGN_TYPES, MECHANISM_KEYS, CAMPAIGN_TYPE_KEYS, TRANSLATION_RISKS, TONE_KEYS, mechanismLabel } = require("./subject-line-taxonomy");
 const { buildGlossaryPromptBlock } = require("../lib/glossary");
 const { buildRulesPromptBlock, checkSubjectLine } = require("./subject-line-rules");
+const { buildPlaybookPromptBlock } = require("./subject-line-playbook");
 
 const EMAIL_TEXT_LIMIT = 9000;
 const PROMPT_EMAIL_TEXT_LIMIT = 6500;
@@ -84,12 +85,12 @@ function resolveModels(config = {}, { writing = false } = {}) {
 
 // When the preferred model is unavailable on the key or times out, the other one still produces a
 // usable answer rather than an error.
-async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false, temperature = null }) {
+async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false, temperature = null, timeoutMs = REQUEST_TIMEOUT_MS }) {
   if (!config.openAiApiKey) throw new Error("OPENAI_API_KEY is not configured.");
   let lastError = null;
   for (const model of resolveModels(config, { writing })) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     const reasoningModel = /^gpt-5/i.test(model);
     try {
       const response = await fetch("https://api.openai.com/v1/responses", {
@@ -114,7 +115,7 @@ async function requestStructured(config, { input, schemaName, schema, reasoningE
       }
       return { parsed: JSON.parse(extractJsonText(payload)), model: payload.model || model };
     } catch (error) {
-      if (error?.name === "AbortError") lastError = new Error(`OpenAI request exceeded ${REQUEST_TIMEOUT_MS / 1000} seconds.`);
+      if (error?.name === "AbortError") lastError = new Error(`OpenAI request exceeded ${timeoutMs / 1000} seconds.`);
       else lastError = error;
       if (error?.name !== "AbortError" && !/model/i.test(String(error?.message || ""))) throw lastError;
     } finally {
@@ -400,6 +401,7 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
           "- An emoji only where it adds meaning, at most one per subject, in at most half of the pairs.",
           "- Every offer, number, product and fact must be in the email text. Respect the brief's mustNotPromise. A subject that promises more than the email delivers costs the next open.",
           "- No two pairs may share an opening or a construction. Never reuse a past Westpack subject line, and never copy a bank example: borrow the construction, not the words.",
+          "- The playbook distils every line in the bank. Build most pairs on its constructions for the brief's mechanisms, reach into the other mechanisms' formulas for the alternatives, and heed its watch-outs.",
           "- The Danish master is translated into about fifteen languages. Mark translationRisk honestly (wordplay and idiom are hoej) and give at least four pairs with translationRisk lav. translationNote says what would break, or is empty.",
           "- rationale: one Danish sentence on why this pair gets this email opened, naming in words the evidence you leaned on (\"A/B-testen W17 Urskrin\", \"en tidligere udsendelse\"). Never put an id in the rationale. evidence lists the ids from square brackets you used, such as ab:... or pb-..., and nothing else.",
           "- picks: the three pairs you would send, best first, by their number in your list (1 = the first pair). why: one short Danish sentence each, written for a busy marketer.",
@@ -433,7 +435,9 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
           "",
           buildHouseEvidenceBlock(insights, { compact: true, features: false }),
           "",
-          "Pattern bank - chosen for this brief. Some are real lines other brands sent (their results are unknown), some were written for the bank; none is evidence, use them for range. Most real ones are in English: borrow the construction into natural Danish, never translate them word for word:",
+          buildPlaybookPromptBlock(analysis),
+          "",
+          "Pattern bank - lines chosen for this brief. Some are real lines other brands sent (their results are unknown), some were written for the bank; none is evidence, use them for range. Most real ones are in English: borrow the construction into natural Danish, never translate them word for word:",
           ...examples.map((entry) => `- ${describeBankExample(entry)}`),
           ...(favourites.length ? ["", "Lines the team has saved as favourites before (taste, not templates):", ...favourites.slice(0, 15).map((item) => `- "${item.subject}"${item.preview ? ` / "${item.preview}"` : ""}`)] : []),
           ...(banned.length ? ["", "The team has banned these patterns or phrases - do not write anything like them:", ...banned.slice(0, 20).map((item) => `- ${item.subject || item.phrase}${item.reason ? ` (${item.reason})` : ""}`)] : []),
@@ -743,6 +747,7 @@ module.exports = {
   generateSubjectLines,
   PREVIEW_LANGUAGES,
   previewInMarkets,
+  requestStructured,
   resolvePicks,
   tagImportedLines
 };

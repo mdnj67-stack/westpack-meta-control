@@ -8,6 +8,13 @@
 // every other mechanism keeps one or two. Within each mechanism about half the slots go to real
 // lines, so the generator always sees what senders actually wrote and not only what was written to
 // teach it. Lines the team has banned never appear.
+//
+// Inside a mechanism, lines are ranked by how close they are in meaning to the brief when the
+// semantic index is available (subject-line-semantic.js), and by tags and chance when it is not.
+// Ranking by meaning alone would fill a mechanism's five slots with five ways of saying the same
+// thing, so each next line is also penalised for resembling the ones already chosen. Meaning is
+// about topic, so the campaign type still counts: a line from another brand's giveaway is a better
+// model for a Westpack vote than a line that merely mentions gift boxes.
 
 const { MECHANISM_KEYS, CAMPAIGN_TYPE_KEYS, TONE_KEYS, TRANSLATION_RISKS } = require("./subject-line-taxonomy");
 
@@ -89,7 +96,48 @@ function allocateSlots(recommended = [], limit = 30) {
   return slots;
 }
 
-function selectBankExamples({ bank = loadPatternBank(), imported = [], banned = [], analysis = {}, limit = 30, seed = "" } = {}) {
+const RELEVANCE_WINDOW = 40;
+const REDUNDANCY_PENALTY = 0.4;
+// On the scale of cosine similarity, where the closest lines to a brief sit around 0.4 to 0.7.
+const SAME_TYPE_BONUS = 0.06;
+const SECOND_TYPE_BONUS = 0.03;
+const IMPORTED_BONUS = 0.03;
+
+function relevanceScore(entry, relevance, { campaignType, secondaryType }) {
+  const similarity = relevance.similarity.get(entry.id);
+  if (similarity === undefined) return -1;
+  let score = similarity;
+  if (entry.campaignType === campaignType) score += SAME_TYPE_BONUS;
+  else if (secondaryType && entry.campaignType === secondaryType) score += SECOND_TYPE_BONUS;
+  if (entry.source === "imported") score += IMPORTED_BONUS;
+  return score;
+}
+
+// Greedy maximal marginal relevance over the closest lines: each step takes the line most like the
+// brief and least like what is already chosen, here or for an earlier mechanism - otherwise a vote
+// brief gets a vote line in every mechanism. "Write new ones" moves on to the next lines in that
+// order rather than drawing new ones at random.
+function orderByRelevance(list, relevance, { context = {}, attempt = 0, take = 1, prior = [] } = {}) {
+  const remaining = list
+    .map((entry) => ({ entry, score: relevanceScore(entry, relevance, context) }))
+    .sort((left, right) => right.score - left.score)
+    .slice(0, RELEVANCE_WINDOW)
+    .map((item) => ({ ...item, redundancy: prior.reduce((max, chosen) => Math.max(max, relevance.between(item.entry.id, chosen.id)), 0) }));
+  const ordered = [];
+  while (remaining.length) {
+    let best = 0;
+    remaining.forEach((item, index) => {
+      if (item.score - REDUNDANCY_PENALTY * item.redundancy > remaining[best].score - REDUNDANCY_PENALTY * remaining[best].redundancy) best = index;
+    });
+    const [next] = remaining.splice(best, 1);
+    ordered.push(next.entry);
+    for (const item of remaining) item.redundancy = Math.max(item.redundancy, relevance.between(item.entry.id, next.entry.id));
+  }
+  const shift = ordered.length ? (attempt * take) % ordered.length : 0;
+  return [...ordered.slice(shift), ...ordered.slice(0, shift)];
+}
+
+function selectBankExamples({ bank = loadPatternBank(), imported = [], banned = [], analysis = {}, limit = 30, seed = "", relevance = null, attempt = 0 } = {}) {
   const bannedIds = new Set(banned.map((item) => item.id).filter(Boolean));
   const pool = [...bank, ...imported].filter((entry) => !bannedIds.has(entry.id) && isValidEntry(entry));
   const recommended = (analysis.recommendedMechanisms || []).map((item) => item.mechanism || item);
@@ -101,18 +149,20 @@ function selectBankExamples({ bank = loadPatternBank(), imported = [], banned = 
   const context = { campaignType: analysis.campaignType, secondaryType: analysis.secondaryType };
   const chosen = [];
   const used = new Set();
-  const ranked = (list) => list
-    .map((entry) => ({ entry, score: scoreEntry(entry, context) + random() * 2.5 }))
-    .sort((left, right) => right.score - left.score)
-    .map((item) => item.entry);
+  const ranked = (list, take) => (relevance
+    ? orderByRelevance(list, relevance, { context, attempt, take, prior: chosen })
+    : list
+      .map((entry) => ({ entry, score: scoreEntry(entry, context) + random() * 2.5 }))
+      .sort((left, right) => right.score - left.score)
+      .map((item) => item.entry));
   // An odd slot count leaves one slot over; it goes to a real line and a written one in turn, or
   // the many one-slot mechanisms would all go to real lines and the Danish patterns would vanish.
   let oddToReal = true;
   for (const [mechanism, count] of slots) {
     if (!count) continue;
     const forMechanism = pool.filter((entry) => entry.mechanisms[0] === mechanism && !used.has(entry.id));
-    const real = ranked(forMechanism.filter((entry) => entry.source !== "authored"));
-    const authored = ranked(forMechanism.filter((entry) => entry.source === "authored"));
+    const real = ranked(forMechanism.filter((entry) => entry.source !== "authored"), count);
+    const authored = ranked(forMechanism.filter((entry) => entry.source === "authored"), count);
     let half = Math.floor(count / 2);
     if (count % 2) {
       if (oddToReal) half += 1;

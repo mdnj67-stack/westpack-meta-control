@@ -22,7 +22,8 @@
       "maxDuration": 300
     },
     "api/klaviyo/subject-lines.js": {
-      "maxDuration": 300
+      "maxDuration": 300,
+      "includeFiles": "knowledge/subject-lines/pattern-bank.vectors.*"
     }
   },
   "crons": [

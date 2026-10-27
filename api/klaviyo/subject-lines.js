@@ -28,6 +28,7 @@ const {
   syncSubjectLineHistory
 } = require("../../server/klaviyo/subject-line-history");
 const { filterBank, loadPatternBank, parseImportedLines, selectBankExamples, summarizeBank } = require("../../server/klaviyo/subject-line-bank");
+const { relevanceToBrief } = require("../../server/klaviyo/subject-line-semantic");
 const { buildMechanismEvidence, selectUntagged, tagHistoryRows } = require("../../server/klaviyo/subject-line-mechanisms");
 const { buildGeneratorOutcomes } = require("../../server/klaviyo/subject-line-outcomes");
 const {
@@ -237,12 +238,15 @@ async function handleGenerate(req, res, config, body) {
   const [template, snapshot, team, tags] = await Promise.all([fetchTemplate(config, country, templateId), readHistory(), readTeam(), readTags()]);
   const insights = { ...buildHistoryInsights(snapshot, { country, focusText: focusTextFor(template, analysis) }), ...evidenceFor(snapshot, tags, team, country) };
   const attempt = Math.max(0, Number(body.attempt) || 0);
+  const relevance = await relevanceToBrief(config, { bank: loadPatternBank(), analysis, extra: team.imported });
   const examples = selectBankExamples({
     imported: team.imported,
     banned: team.banned,
     analysis,
     limit: 24,
-    seed: `${templateId}:${attempt}`
+    seed: `${templateId}:${attempt}`,
+    relevance,
+    attempt
   });
   const { candidates, picks, abTest, model } = await generateSubjectLines({
     config,
@@ -263,6 +267,7 @@ async function handleGenerate(req, res, config, body) {
     candidates: finalized,
     examples: examples.map(({ id, subject, preview, mechanisms, campaignType, language, source, sender, why }) => ({ id, subject, preview, mechanisms, campaignType, language, source, sender, why })),
     senderLabel: insights.senderLabel,
+    retrieval: relevance ? "semantic" : "tags",
     model
   });
 }

@@ -1084,6 +1084,40 @@ functionality - not more analysis on screen. So:
   line's detail (`NOTE`), not "check"; over 60 characters still warns.
 - The statistics moved to the bank's last tab ("Statistics"); the bank opens on Westpack's sends.
 
+### The writer knows the whole bank, not just what it is shown (2026-10-27)
+
+The writer is shown 24 of the bank's 5,340 lines per run, so on its own a bigger bank changed
+almost nothing. The user asked how the generator gets *all* of that knowledge. Two parts:
+
+- **A playbook in every prompt.** `knowledge/subject-lines/playbook.json` (`tools/build-playbook.js`)
+  is every line of each mechanism read by the strong model and distilled into 8 constructions: a
+  formula with placeholders, why it is opened, when it fits, how it goes wrong, and 1-3 real lines
+  that use it. `server/klaviyo/subject-line-playbook.js` puts the brief's three mechanisms in full
+  and the other thirteen as one line of formulas (~20k characters). Measured on one brief, it adds
+  a few seconds at most to writing; run-to-run variance is larger.
+  - **No model-written example lines in it.** The first version had them; they copied library lines
+    nearly word for word and invented facts ("kundeservice har åbent til 18"). A cited line must
+    exist in the bank or it is dropped, and a pattern with none is dropped.
+  - **The build refuses the fallback model.** At the app's 130 s timeout four mechanisms quietly fell
+    back to gpt-4.1, which wrote "utbytte" and cited only lines written for the bank. The build
+    allows 290 s and fails a mechanism answered by anything but `CONTENT_AGENT_MODEL`.
+  - The strong model's lists sometimes run on in the last item (the rules pasted back in English,
+    glued sentences, "*REMOVE*"). Items over 200 characters are dropped (`--tidy` reruns that alone).
+- **The lines shown are the closest in meaning.** `server/klaviyo/subject-line-semantic.js`: every
+  bank line has a text-embedding-3-small vector (256 dimensions, one signed byte each, 1.3 MB in
+  `pattern-bank.vectors.bin`, ids in `.vectors.json`, built by `tools/build-embeddings.js` and
+  bundled via `includeFiles` in `vercel.json`). Each run embeds the brief and the team's imported
+  lines in one call (~0.3 s). Within each mechanism's slots lines rank by similarity plus a small
+  bonus for the brief's campaign type, with a redundancy penalty against lines already chosen in
+  any mechanism; "Write new ones" moves to the next lines in that order. Tag scoring is the fallback
+  when the file is missing or stale, or the call fails; the response says which (`retrieval`).
+  - **Series names stay out of the query.** "Monaco" and "Grand Prix" pulled in Formula 1 lines.
+    Danish nouns are lower case, so a capitalised product is a name and is left out.
+  - Rebuild order when the bank changes: `build-bank.js`, then `build-embeddings.js` (the vectors
+    are checked against the bank's ids and ignored if they do not line up, and a test fails), then
+    `build-playbook.js`.
+- Tests: `tests/klaviyo-subject-line-knowledge.test.js`.
+
 ### Other decisions
 
 - The analysis runs on the default model (`OPENAI_MODEL`, ~10 s); writing runs on
@@ -1106,7 +1140,7 @@ functionality - not more analysis on screen. So:
   **name** as the subject. "Use in Duplicate & translate" sets `appState.klaviyoTemplateSubjectOverride`
   for that one template, so the rollout translates the chosen pair into every market.
 - Read-only towards Klaviyo; the only POST is the metric-aggregates query.
-- Tests: `tests/klaviyo-subject-line-{rules,history,bank,generator}.test.js`,
+- Tests: `tests/klaviyo-subject-line-{rules,history,bank,generator,knowledge}.test.js`,
   `tests/klaviyo-subject-lines-ui.test.js`.
 
 ## Model JSON output can carry NUL characters
