@@ -133,7 +133,9 @@ async function downloadCampaignAssetFile(sourceUrl) {
 }
 
 function decodeCampaignImageDataUri(dataUri = "") {
-  const match = String(dataUri || "").match(/^data:(image\/(?:jpeg|png|webp));base64,([a-z0-9+/=]+)$/i);
+  // GIF is allowed so an animation built for an email can be hosted like any other image; the
+  // uploader (email-asset-hosting.js) already names and types .gif files.
+  const match = String(dataUri || "").match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([a-z0-9+/=]+)$/i);
   if (!match) throw new Error("Cropped campaign image is not a supported image payload.");
   const bytes = Buffer.from(match[2], "base64");
   if (!bytes.length || bytes.length > 5_000_000) throw new Error("Cropped campaign image is empty or too large.");
