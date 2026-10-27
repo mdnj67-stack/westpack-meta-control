@@ -250,6 +250,7 @@ async function analyseCampaign({ config, templateName = "", emailText = "", insi
           "You are Westpack's senior email strategist.",
           "Westpack is a Danish B2B packaging supplier - jewellery boxes, pouches, gift boxes, carrier bags, displays - selling to shops and brands that package what they sell, with jewellery businesses at the core. Emails go out from a Danish master and are translated into about fifteen markets.",
           "You read one Danish campaign email and write the brief a copywriter needs for its subject line and preheader.",
+          "`coreMessage` is one sentence of at most 25 words: the single thing the email wants the reader to do or feel. Detail belongs in the other fields.",
           "Never invent. Every offer, number, deadline, product and fact you list must be in the email text; if the email has no offer, `offer` is empty. `evidence` quotes the email.",
           "`mustNotPromise` lists what a subject line could plausibly be tempted to promise that the email does not deliver, plus any of Westpack's standing rules this email comes close to.",
           "`recommendedMechanisms` are ranked; the reasons refer to this email and, where it exists, to Westpack's own A/B evidence below. `avoidMechanisms` only where a mechanism would mislead or clash with the email.",
@@ -313,7 +314,11 @@ function buildCandidateSchema(count) {
 }
 
 function describeBankExample(entry) {
-  const origin = entry.source === "imported" ? `importeret fra ${entry.sender || "en afsender"}` : entry.context === "generisk" ? "skrevet til banken, anden branche" : "skrevet til banken";
+  const origin = entry.source === "imported"
+    ? `importeret fra ${entry.sender || "en afsender"}`
+    : entry.source === "collected"
+      ? `sendt af ${entry.sender || "et andet brand"} (${entry.collectedFrom || "indsamlet"})`
+      : entry.context === "generisk" ? "skrevet til banken, anden branche" : "skrevet til banken";
   return `[${entry.id}] ${entry.mechanisms.join("+")} · ${entry.campaignType} · ${entry.language}: "${entry.subject}" / "${entry.preview}" (${origin}${entry.why ? ` - ${entry.why}` : ""})`;
 }
 
@@ -368,7 +373,7 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
           "",
           buildHouseEvidenceBlock(insights),
           "",
-          "Pattern bank - patterns from the bank, chosen for this brief. They carry no measured results; use them for range:",
+          "Pattern bank - chosen for this brief. Some are real lines other brands sent (their results are unknown), some were written for the bank; none is evidence, use them for range. Most real ones are in English: borrow the construction into natural Danish, never translate them word for word:",
           ...examples.map((entry) => `- ${describeBankExample(entry)}`),
           ...(favourites.length ? ["", "Lines the team has saved as favourites before (taste, not templates):", ...favourites.slice(0, 15).map((item) => `- "${item.subject}"${item.preview ? ` / "${item.preview}"` : ""}`)] : []),
           ...(banned.length ? ["", "The team has banned these patterns or phrases - do not write anything like them:", ...banned.slice(0, 20).map((item) => `- ${item.subject || item.phrase}${item.reason ? ` (${item.reason})` : ""}`)] : []),
@@ -415,7 +420,7 @@ function evidencePhrases({ abTests = [], examples = [] } = {}) {
   const phrases = new Map();
   for (const test of abTests) phrases.set(`ab:${test.campaignId}`, `A/B-testen ${test.campaignName}`);
   for (const entry of examples) {
-    phrases.set(entry.id, entry.source === "imported" ? `»${entry.subject}« fra ${entry.sender || "en anden afsender"}` : `mønsteret »${entry.subject}«`);
+    phrases.set(entry.id, entry.source === "authored" ? `mønsteret »${entry.subject}«` : `»${entry.subject}« fra ${entry.sender || "en anden afsender"}`);
   }
   return phrases;
 }
@@ -432,7 +437,8 @@ function describeEvidence(ids = [], { abTests = [], examples = [] } = {}) {
       }
       if (patterns.has(id)) {
         const entry = patterns.get(id);
-        return { id, kind: entry.source === "imported" ? "imported" : "pattern", label: `${entry.source === "imported" ? "Imported" : "Pattern"}: "${entry.subject}"` };
+        if (entry.source === "authored") return { id, kind: "pattern", label: `Pattern: "${entry.subject}"` };
+        return { id, kind: entry.source, label: `${entry.sender || "Another sender"}: "${entry.subject}"` };
       }
       return null;
     })

@@ -10,19 +10,36 @@ const { checkSubjectLine } = require("../server/klaviyo/subject-line-rules");
 // own rules - a line that would be refused as output must not be shown to it as an example.
 
 const bank = loadPatternBank();
+const authored = bank.filter((entry) => entry.source === "authored");
+const collected = bank.filter((entry) => entry.source === "collected");
+const collectedPath = path.join(__dirname, "..", "knowledge", "subject-lines", "collected", "really-good-emails.json");
 
 test("the built bank is current with its sources", () => {
   const sourceDir = path.join(__dirname, "..", "knowledge", "subject-lines", "source");
   const sourceSubjects = new Set(fs.readdirSync(sourceDir).filter((name) => name.endsWith(".json"))
     .flatMap((name) => JSON.parse(fs.readFileSync(path.join(sourceDir, name), "utf8")).map((entry) => entry.subject.trim())));
-  for (const entry of bank) assert.ok(sourceSubjects.has(entry.subject), `"${entry.subject}" is in pattern-bank.json but in no source file - rebuild the bank`);
+  const collectedSubjects = new Set(fs.existsSync(collectedPath) ? JSON.parse(fs.readFileSync(collectedPath, "utf8")).entries.map((entry) => entry.subject.trim()) : []);
+  for (const entry of bank) {
+    const known = entry.source === "collected" ? collectedSubjects : sourceSubjects;
+    assert.ok(known.has(entry.subject), `"${entry.subject}" is in pattern-bank.json but not in its source - rebuild the bank`);
+  }
+});
+
+test("collected lines are real sends, named by sender and linked to where they were found", () => {
+  for (const entry of collected) {
+    assert.match(entry.id, /^rg-[0-9a-f]{10}$/);
+    assert.ok(entry.sender, `${entry.subject} has no sender`);
+    assert.match(entry.url, /^https:\/\/reallygoodemails\.com\/emails\/[a-z0-9-]+$/);
+    assert.equal(entry.collectedFrom, "Really Good Emails");
+    assert.equal(entry.context, "generisk");
+  }
 });
 
 test("the bank is large and covers every mechanism and campaign type", () => {
-  assert.ok(bank.length >= 1800, `only ${bank.length} entries`);
+  assert.ok(authored.length >= 1800, `only ${authored.length} authored entries`);
   const byMechanism = {};
   const byType = {};
-  for (const entry of bank) {
+  for (const entry of authored) {
     byMechanism[entry.mechanisms[0]] = (byMechanism[entry.mechanisms[0]] || 0) + 1;
     byType[entry.campaignType] = (byType[entry.campaignType] || 0) + 1;
   }
@@ -30,14 +47,16 @@ test("the bank is large and covers every mechanism and campaign type", () => {
   for (const key of CAMPAIGN_TYPE_KEYS) assert.ok(byType[key] >= 20, `${key}: ${byType[key] || 0}`);
 });
 
-test("every entry is valid, authored, Danish or English, unique, and breaks no blocking rule", () => {
+test("every entry is valid, unique, and breaks no blocking rule; authored ones are Danish or English", () => {
   const ids = new Set();
   const subjects = new Set();
   for (const entry of bank) {
     assert.ok(isValidEntry(entry), entry.subject);
-    assert.ok(["da", "en"].includes(entry.language), entry.subject);
-    assert.equal(entry.source, "authored");
-    assert.match(entry.id, /^pb-[0-9a-f]{10}$/);
+    assert.ok(["authored", "collected"].includes(entry.source), entry.subject);
+    if (entry.source === "authored") {
+      assert.ok(["da", "en"].includes(entry.language), entry.subject);
+      assert.match(entry.id, /^pb-[0-9a-f]{10}$/);
+    }
     assert.ok(!ids.has(entry.id), `duplicate id ${entry.id}`);
     ids.add(entry.id);
     const key = entry.subject.toLowerCase().replace(/[^\p{L}\d]+/gu, " ").trim();
@@ -61,6 +80,11 @@ test("retrieval gives the recommended mechanisms most slots and keeps range acro
   assert.ok(new Set(picked.map((entry) => entry.mechanisms[0])).size >= 10, "range beyond the recommendations");
   assert.deepEqual(selectBankExamples({ analysis, limit: 30, seed: "YjmdfN:0" }).map((entry) => entry.id), picked.map((entry) => entry.id), "same seed, same examples");
   assert.notDeepEqual(selectBankExamples({ analysis, limit: 30, seed: "YjmdfN:1" }).map((entry) => entry.id), picked.map((entry) => entry.id), "'write new ones' shows other examples");
+  if (collected.length) {
+    const real = picked.filter((entry) => entry.source !== "authored").length;
+    assert.ok(real >= 10, `only ${real} real lines among ${picked.length} examples`);
+    assert.ok(picked.length - real >= 8, "the written Danish patterns stay in the mix");
+  }
 });
 
 test("banned patterns are never shown, and imported lines from real senders rank first", () => {

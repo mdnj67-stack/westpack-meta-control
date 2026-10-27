@@ -1,11 +1,13 @@
 // Layer 2 of the subject line generator: the pattern bank, and the retrieval that decides which
-// thirty of its ~2,000 pairs a given campaign's generator sees.
+// thirty of its lines a given campaign's generator sees.
 //
-// The bank is authored, not collected (knowledge/subject-lines/README.md says why), so it carries
-// no evidence - only range. Retrieval therefore optimises for range: the mechanisms the analysis
-// recommends get most of the slots, but every other mechanism keeps one or two, so the generator
-// is shown a way of writing it would not have reached for on its own. Lines the team imported
-// from real senders rank above authored ones, and lines the team has banned never appear.
+// Three kinds of line, none with a measured result (knowledge/subject-lines/README.md): pairs
+// authored for the bank, real lines other brands sent (collected from Really Good Emails), and real
+// lines the team imported from its own inboxes. So the bank carries range, not evidence, and
+// retrieval optimises for range: the mechanisms the analysis recommends get most of the slots, but
+// every other mechanism keeps one or two. Within each mechanism about half the slots go to real
+// lines, so the generator always sees what senders actually wrote and not only what was written to
+// teach it. Lines the team has banned never appear.
 
 const { MECHANISM_KEYS, CAMPAIGN_TYPE_KEYS, TONE_KEYS, TRANSLATION_RISKS } = require("./subject-line-taxonomy");
 
@@ -99,14 +101,20 @@ function selectBankExamples({ bank = loadPatternBank(), imported = [], banned = 
   const context = { campaignType: analysis.campaignType, secondaryType: analysis.secondaryType };
   const chosen = [];
   const used = new Set();
+  const ranked = (list) => list
+    .map((entry) => ({ entry, score: scoreEntry(entry, context) + random() * 2.5 }))
+    .sort((left, right) => right.score - left.score)
+    .map((item) => item.entry);
   for (const [mechanism, count] of slots) {
     if (!count) continue;
-    const candidates = pool
-      .filter((entry) => entry.mechanisms[0] === mechanism && !used.has(entry.id))
-      .map((entry) => ({ entry, score: scoreEntry(entry, context) + random() * 2.5 }))
-      .sort((left, right) => right.score - left.score)
-      .slice(0, count);
-    for (const { entry } of candidates) {
+    const forMechanism = pool.filter((entry) => entry.mechanisms[0] === mechanism && !used.has(entry.id));
+    const real = ranked(forMechanism.filter((entry) => entry.source !== "authored"));
+    const authored = ranked(forMechanism.filter((entry) => entry.source === "authored"));
+    const realSlots = Math.min(real.length, Math.ceil(count / 2));
+    const picked = [...real.slice(0, realSlots), ...authored.slice(0, count - realSlots)];
+    // Whichever pool runs short, the other fills the gap.
+    if (picked.length < count) picked.push(...real.slice(realSlots, realSlots + count - picked.length));
+    for (const entry of picked.slice(0, count)) {
       used.add(entry.id);
       chosen.push(entry);
     }
@@ -120,7 +128,9 @@ function summarizeBank(bank = loadPatternBank(), imported = []) {
     return acc;
   }, {});
   return {
-    authored: bank.length,
+    authored: bank.filter((entry) => entry.source === "authored").length,
+    collected: bank.filter((entry) => entry.source === "collected").length,
+    collectedSenders: new Set(bank.filter((entry) => entry.source === "collected").map((entry) => entry.sender)).size,
     imported: imported.length,
     byMechanism: count([...bank, ...imported], (entry) => entry.mechanisms?.[0] || "unknown"),
     byLanguage: count([...bank, ...imported], (entry) => entry.language || "unknown"),

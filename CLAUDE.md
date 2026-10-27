@@ -1018,12 +1018,15 @@ history / bank / team / sync_history), `src/klaviyo-subject-lines.js`, `server/k
 
 1. **History** - measured. Stored in Vercel Blob (`klaviyo-snapshots/subject-line-history.json`, via
    `server/meta/historical-store.js`), not Redis, which has been full since 2026-10-21.
-2. **Pattern bank** - `knowledge/subject-lines/` (~2,000 pairs, 16 mechanisms, 11 campaign types).
-   **Authored, not collected**: Milled answers 403 on every brand page and Really Good Emails renders
-   client-side, and the bank does not work around a site that refuses automated requests. Labelled as
-   unmeasured everywhere it appears. Real lines enter through the screen's import (team pastes from
-   their own inbox; tagged by the default model; stored with the team data, marked with the sender).
-   Rebuild with `node knowledge/subject-lines/tools/build-bank.js` after editing `source/`.
+2. **Pattern bank** - `knowledge/subject-lines/` (16 mechanisms, 11 campaign types). ~2,000 pairs
+   **authored** for the bank (Danish-first), plus real lines other brands sent, **collected** from
+   Really Good Emails within its robots.txt (category listings and sitemap email pages; `/api/` is
+   disallowed and never touched), plus lines the team **imports** from its own inbox on the screen.
+   None is measured, and every line says which kind it is. Retrieval gives real lines about half of
+   each mechanism's slots. **Milled is not collected**: its robots.txt disallows ClaudeBot and AI
+   agents by name, it 403s bots, and its archive is its product - the user asked to bypass it on
+   2026-10-27 and was told no. Refresh: `tools/collect-rge.js`, `tools/tag-collected.js`, then
+   `tools/build-bank.js` (see the README there).
 3. **Rules** - `server/klaviyo/subject-line-rules.js`: the standing corrections (no eco claims, no
    free samples, production time not delivery, no single deadline date, no five stars, no watch boxes,
    never talk down) plus numbers/claims that must appear in the email itself. Written into the prompt
