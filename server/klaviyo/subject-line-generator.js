@@ -281,7 +281,8 @@ async function analyseCampaign({ config, templateName = "", emailText = "", insi
           "Never invent. Every offer, number, deadline, product and fact you list must be in the email text; if the email has no offer, `offer` is empty. `evidence` quotes the email.",
           "`mustNotPromise` lists what a subject line could plausibly be tempted to promise that the email does not deliver, plus any of Westpack's standing rules this email comes close to.",
           "`recommendedMechanisms` are ranked; the reasons refer to this email and, where it exists, to Westpack's own A/B evidence below. Weigh the mechanism record from Westpack's A/B tests: a mechanism that keeps winning head-to-heads deserves a place when it fits the email, one that keeps losing needs a reason from this email to be recommended. Never let the record override what the email is about. `avoidMechanisms` only where a mechanism would mislead or clash with the email.",
-          "`houseEvidence` is two or three sentences on what Westpack's own sends and A/B tests suggest for an email like this one, naming the tests by their campaign name - never by an id in square brackets. If the evidence is thin or inconclusive, say so plainly.",
+          "`houseEvidence` is two or three sentences on what Westpack's own sends and A/B tests suggest for an email like this one, naming the tests by their campaign name - never by an id in square brackets. A single A/B test is a single result: say what it showed (\"in W31 the question beat the statement\"), never that a mechanism \"performs best\" or \"clearly wins\" unless the mechanism record below says it wins more often than chance. If the evidence is thin or inconclusive, say so plainly.",
+          "Each mechanism appears at most once in `recommendedMechanisms`.",
           "Write every prose field in Danish.",
           "",
           taxonomyBlock(),
@@ -309,10 +310,14 @@ async function analyseCampaign({ config, templateName = "", emailText = "", insi
   // Ids the model was told not to write still come through now and then; they become the test's
   // name, as in the suggestions' rationales.
   const phrases = evidencePhrases({ abTests: insights.abLessons || [] });
+  // The schema cannot forbid a repeated mechanism, and a repeat would give it two slots' weight.
+  const seen = new Set();
   const analysis = {
     ...parsed,
     houseEvidence: cleanRationale(parsed?.houseEvidence, phrases),
-    recommendedMechanisms: (parsed?.recommendedMechanisms || []).map((item) => ({ ...item, reason: cleanRationale(item.reason, phrases) })),
+    recommendedMechanisms: (parsed?.recommendedMechanisms || [])
+      .filter((item) => (seen.has(item.mechanism) ? false : seen.add(item.mechanism)))
+      .map((item) => ({ ...item, reason: cleanRationale(item.reason, phrases) })),
     avoidMechanisms: (parsed?.avoidMechanisms || []).map((item) => ({ ...item, reason: cleanRationale(item.reason, phrases) }))
   };
   return { analysis, model };
