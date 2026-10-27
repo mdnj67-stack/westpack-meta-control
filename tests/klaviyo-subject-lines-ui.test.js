@@ -35,12 +35,15 @@ test("Campaign Studio's mode buttons never match the Campaign Studio panel itsel
   assert.match(appJs, /querySelectorAll\("button\[data-campaign-mode\]"\)/);
 });
 
-test("the three steps are on one screen", () => {
-  for (const step of ["Choose the campaign", "The brief", "Subject lines and preheaders"]) {
-    assert.ok(indexHtml.includes(step), `missing step: ${step}`);
+test("the three steps are one flow, and the suggestions are an inbox list", () => {
+  for (const step of ['id="subject-step-campaign"', 'id="subject-step-brief"', 'id="subject-step-results"', "<h3>Campaign</h3>", "<h3>Brief</h3>", "<h3>Suggestions</h3>"]) {
+    assert.ok(indexHtml.includes(step), `missing: ${step}`);
   }
   assert.match(moduleJs, /api\/klaviyo\/templates\?country=\$\{SOURCE_ACCOUNT\}/);
   assert.match(moduleJs, /const SOURCE_ACCOUNT = "DK"/);
+  assert.match(moduleJs, /class="subject-inbox" role="list"/);
+  // Duplicate & translate's own translated copies are not campaigns to write for.
+  assert.match(moduleJs, /const ROLLOUT_DRAFT = /);
 });
 
 test("open rates are shown as an index against the market's own level, and the screen says why", () => {
@@ -51,12 +54,16 @@ test("open rates are shown as an index against the market's own level, and the s
 
 test("an A/B arm only 'won' when the test is clear, and the remainder note names Klaviyo's pick", () => {
   assert.match(moduleJs, /test\.verdict === "klar" \? "Won on opens" : "Ahead on opens"/);
-  assert.match(moduleJs, /The larger arm was Klaviyo\\'s pick/);
+  // Explained once above a list of tests, and marked on the arm itself.
+  assert.match(moduleJs, /const REMAINDER_NOTE = "\+ rest of list: the larger arm was Klaviyo's pick/);
+  assert.match(moduleJs, /class="subject-ab-rest"/);
 });
 
-test("the pattern bank is labelled as written for the bank, not measured", () => {
-  assert.match(moduleJs, /Written for the bank, not collected from real senders/);
+test("the pattern bank says which lines are real and that none of it is measured", () => {
+  assert.match(moduleJs, /Their results are unknown/);
+  assert.match(moduleJs, /written for the bank and never sent/);
   assert.match(moduleJs, /Patterns, not proof/);
+  assert.match(moduleJs, /sent by \$\{escapeHtml\(entry\.sender/);
 });
 
 test("a chosen pair reaches Duplicate & translate for that template only", () => {
@@ -107,9 +114,11 @@ test("the history sync runs nightly and the route has the long function budget",
 });
 
 test("status is never colour alone, and the screen is styled in the design system", () => {
-  assert.match(moduleJs, /■ Breaks a rule/);
-  assert.match(moduleJs, /▲ Check/);
-  assert.match(moduleJs, /● Passes the rules/);
-  assert.match(designSystemCss, /\.subject-candidate \{/);
-  assert.doesNotMatch(designSystemCss.slice(designSystemCss.indexOf("Subject lines")), /#[0-9a-f]{3,6}\b/i);
+  assert.match(moduleJs, /aria-label="Breaks a rule">■/);
+  assert.match(moduleJs, /aria-label="Check">▲/);
+  assert.match(moduleJs, /aria-label="Passes the rules">●/);
+  const ownCss = designSystemCss.slice(designSystemCss.indexOf("   Subject lines"));
+  assert.match(ownCss, /\.subject-row \{/);
+  assert.doesNotMatch(ownCss, /#[0-9a-f]{3,6}\b/i, "colours come from tokens");
+  assert.doesNotMatch(ownCss, /box-shadow:\s*0\s/, "no drop shadows on a work surface");
 });

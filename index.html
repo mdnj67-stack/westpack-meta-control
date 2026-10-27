@@ -1392,127 +1392,85 @@ Vis tal og forretningscase</textarea>
           </div>
         </section>
 
-        <!-- Subject lines. Choose a Danish template, read the brief, write subject line + preheader
-             pairs from three layers: Westpack's own measured sends, the pattern bank and the rules.
-             Open rates are shown as an index against each market's own level, never as a verdict,
-             because Apple Mail Privacy Protection opens mail nobody read. -->
-        <section class="klaviyo-view-panel" id="klaviyo-subject-lines-panel">
+        <!-- Subject lines. One flow: choose a Danish template, read the brief, compare suggestions as
+             an inbox - the way a recipient sees them. Writing from three layers: Westpack's own
+             measured sends, the pattern bank and the rules. Open rates are shown as an index
+             against each market's own level, never as a verdict, because
+             Apple Mail Privacy Protection opens mail nobody read. -->
+        <section class="klaviyo-view-panel subject-lines" id="klaviyo-subject-lines-panel">
           <section class="topbar klaviyo-topbar">
             <div class="topbar-copy">
               <p class="section-label">Klaviyo</p>
               <h2>Subject lines</h2>
-              <p class="topbar-sub">Pick a Danish campaign. The generator reads it, checks what Westpack's own sends and A/B tests say, and writes subject lines and preheaders from three layers: your history, the pattern bank and the rules.</p>
+              <p class="topbar-sub">Subject lines and preheaders for a Danish campaign, written from Westpack's own results, a pattern bank and the house rules.</p>
             </div>
             <div class="topbar-actions">
-              <div class="status-pill warning" id="subject-lines-status-pill">History not synced</div>
               <div class="wp-segment" role="group" aria-label="View">
-                <button class="wp-segment-item active" data-subject-view="generator" type="button" aria-pressed="true">Generator</button>
+                <button class="wp-segment-item active" data-subject-view="generator" type="button" aria-pressed="true">Write</button>
                 <button class="wp-segment-item" data-subject-view="bank" type="button" aria-pressed="false">The bank</button>
               </div>
             </div>
           </section>
 
-          <div class="studio-shell klaviyo-studio-shell" id="subject-lines-generator">
-            <div class="studio-main">
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Step 1</p>
-                    <h3>Choose the campaign</h3>
-                  </div>
-                  <p>The 20 most recently edited templates in the DK account, the same list Duplicate &amp; translate starts from.</p>
-                </div>
-                <label class="field subject-template-search">
-                  <span>Search</span>
-                  <input class="wp-input" id="subject-lines-template-search" type="search" placeholder="Campaign name">
-                </label>
-                <div class="subject-template-grid" id="subject-lines-templates"></div>
+          <div class="subject-workspace" id="subject-lines-generator">
+            <div class="subject-flow">
+              <div class="subject-status" id="subject-lines-status" hidden>
+                <span class="wp-spinner" id="subject-lines-spinner" hidden></span>
+                <span id="subject-lines-busy" hidden></span>
+                <span class="inline-feedback" id="subject-lines-feedback" aria-live="polite"></span>
+              </div>
+
+              <section class="subject-step" id="subject-step-campaign">
+                <header class="subject-step-head">
+                  <span class="subject-step-num">1</span>
+                  <h3>Campaign</h3>
+                  <span class="subject-step-note">Templates in the DK account</span>
+                </header>
+                <div id="subject-lines-campaign"></div>
               </section>
 
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Step 2</p>
-                    <h3>The brief</h3>
-                  </div>
-                  <p>What the email says, what a subject line may promise, and what Westpack's own sends and A/B tests suggest.</p>
-                </div>
+              <section class="subject-step" id="subject-step-brief" hidden>
+                <header class="subject-step-head">
+                  <span class="subject-step-num">2</span>
+                  <h3>Brief</h3>
+                  <span class="subject-step-note" id="subject-lines-brief-type"></span>
+                </header>
                 <div id="subject-lines-brief"></div>
               </section>
 
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Step 3</p>
-                    <h3>Subject lines and preheaders</h3>
-                  </div>
-                  <p>Every pair is checked against the rules and the email's own text after it is written.</p>
-                </div>
+              <section class="subject-step" id="subject-step-results" hidden>
+                <header class="subject-step-head">
+                  <span class="subject-step-num">3</span>
+                  <h3>Suggestions</h3>
+                  <span class="subject-step-note" id="subject-lines-results-summary"></span>
+                  <button class="ghost-button is-sm subject-step-action" data-subject-action="generate-again" type="button">Write new ones</button>
+                </header>
                 <div id="subject-lines-candidates"></div>
               </section>
             </div>
 
-            <aside class="studio-side klaviyo-studio-side">
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Run</p>
-                    <h3>Actions</h3>
-                  </div>
-                </div>
-                <div class="action-stack">
-                  <button class="primary-button" data-subject-action="analyse" type="button" disabled>Analyse the campaign</button>
-                  <button class="ghost-button" data-subject-action="generate" type="button" disabled>Write subject lines</button>
-                  <button class="ghost-button" data-subject-action="generate-again" type="button" disabled>Write new ones</button>
-                </div>
-                <label class="field">
-                  <span>How many</span>
-                  <select class="wp-select" id="subject-lines-count">
-                    <option value="12">12</option>
-                    <option value="18" selected>18</option>
-                    <option value="24">24</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Note for the writer</span>
-                  <input class="wp-input" id="subject-lines-note" type="text" placeholder="Optional, e.g. more edge, no emoji">
-                </label>
-                <div class="wp-help" id="subject-lines-busy" hidden></div>
-                <div class="inline-feedback" id="subject-lines-feedback" aria-live="polite"></div>
-              </section>
-
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Sources</p>
-                    <h3>The three layers</h3>
-                  </div>
-                </div>
-                <div id="subject-lines-layers"></div>
-              </section>
-
-              <section class="card klaviyo-operator-card">
-                <div class="dashboard-section-head">
-                  <div>
-                    <p class="section-label">Team</p>
-                    <h3>Favourites</h3>
-                  </div>
-                </div>
-                <div id="subject-lines-favourites"></div>
-              </section>
+            <aside class="subject-rail" aria-label="Shortlist">
+              <header class="subject-rail-head">
+                <h3>Shortlist</h3>
+                <span class="subject-step-note">Shared with the team</span>
+              </header>
+              <div id="subject-lines-favourites"></div>
             </aside>
           </div>
 
-          <section class="card klaviyo-operator-card subject-bank" id="subject-lines-bank" hidden>
-            <div class="wp-tabs" role="tablist" aria-label="The bank">
-              <button class="wp-tab active" data-subject-bank-tab="sends" role="tab" aria-selected="true" type="button">Westpack's sends</button>
-              <button class="wp-tab" data-subject-bank-tab="ab" role="tab" aria-selected="false" type="button">A/B tests</button>
-              <button class="wp-tab" data-subject-bank-tab="patterns" role="tab" aria-selected="false" type="button">Pattern bank</button>
-              <button class="wp-tab" data-subject-bank-tab="rules" role="tab" aria-selected="false" type="button">Rules</button>
-              <button class="wp-tab" data-subject-bank-tab="import" role="tab" aria-selected="false" type="button">Import and bans</button>
-            </div>
-            <div id="subject-lines-bank-content"></div>
-          </section>
+          <div class="subject-bank" id="subject-lines-bank" hidden>
+            <div id="subject-lines-layers"></div>
+            <section class="subject-step">
+              <div class="wp-tabs" role="tablist" aria-label="The bank">
+                <button class="wp-tab active" data-subject-bank-tab="sends" role="tab" aria-selected="true" type="button">Westpack's sends</button>
+                <button class="wp-tab" data-subject-bank-tab="ab" role="tab" aria-selected="false" type="button">A/B tests</button>
+                <button class="wp-tab" data-subject-bank-tab="patterns" role="tab" aria-selected="false" type="button">Pattern bank</button>
+                <button class="wp-tab" data-subject-bank-tab="rules" role="tab" aria-selected="false" type="button">Rules</button>
+                <button class="wp-tab" data-subject-bank-tab="import" role="tab" aria-selected="false" type="button">Import and bans</button>
+              </div>
+              <div id="subject-lines-bank-content"></div>
+            </section>
+          </div>
         </section>
 
         <!-- Canva Localizer. One screen, four blocks, actions in the right column. Canva's REST

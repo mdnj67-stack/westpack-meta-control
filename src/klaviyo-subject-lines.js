@@ -1,42 +1,51 @@
 // Subject lines - the operator's screen.
 //
-// Choose a Danish template from the DK account (the same list Duplicate & translate offers), read
-// the brief the analysis makes of it, then write subject line + preheader pairs from three layers:
-// Westpack's own sends, the pattern bank and the rules. The brief is shown before anything is
-// written so a wrong reading of the email is caught there, and the operator can steer which
-// mechanisms carry the set.
+// One flow in three steps. Choose a Danish template from the DK account; read the brief the
+// analysis makes of it and decide which mechanisms should carry the set; compare the suggestions
+// as an inbox, one row each, because comparing lines is the job and an inbox is how recipients
+// meet them. Detail - the reasoning, the evidence, the rule notes, the actions - opens on a row
+// rather than sitting on every one. A shortlist beside the flow holds what the team saved.
 //
 // Two honesty requirements that are easy to lose in a redesign:
 // - Open rates are inflated by Apple Mail Privacy Protection. The screen shows an open *index*
 //   against the market's own level, never a bare open rate as a verdict, and says why.
-// - The pattern bank is authored, not measured. It is labelled as such wherever it appears.
+// - The pattern bank is not measured: real lines from other brands have unknown results, and the
+//   authored ones were never sent. Each line says which it is wherever it appears.
 
 import { NUMBER_LOCALE } from "./format.js?v=20260921-format1";
 
 const SOURCE_ACCOUNT = "DK";
 const MOBILE_VISIBLE = 41;
+// Duplicate & translate pushes translated copies back as templates named
+// "W44: Adventskalender | Dansk (DK) | DK | Draft | 2026-10-21 06:53". They are not campaigns.
+const ROLLOUT_DRAFT = /\|\s*[A-Z]{2}\s*\|\s*Draft\s*\|/;
 
 const state = {
   loaded: false,
   status: null,
   templates: [],
   templateQuery: "",
+  picking: true,
   selectedTemplateId: "",
   template: null,
   analysis: null,
   insights: null,
   mechanisms: [],
+  count: 18,
+  note: "",
   candidates: [],
   strategyNote: "",
   examples: [],
   senderLabel: "Westpack",
   attempt: 0,
   shown: [],
+  open: "",
   editing: "",
+  mechanismFilter: "",
   team: { favourites: [], banned: [] },
   view: "generator",
   bankTab: "sends",
-  bank: { country: SOURCE_ACCOUNT, sort: "recent", query: "", verdict: "", mechanism: "", campaignType: "", language: "", source: "", offset: 0 },
+  bank: { country: SOURCE_ACCOUNT, sort: "recent", query: "", verdict: "", abCountry: "", mechanism: "", campaignType: "", language: "", source: "" },
   history: null,
   patterns: null,
   busy: "",
@@ -82,13 +91,17 @@ function campaignTypeLabel(key) {
   return state.status?.taxonomy?.campaignTypes?.find((item) => item.key === key)?.label || key || "";
 }
 
-// An index badge says "above or below this market's usual level", with the number. Shape and words
+function plural(count, one, many) {
+  return `${formatCount(count)} ${count === 1 ? one : many}`;
+}
+
+// An index says "above or below this market's usual level", with the number. Shape and words
 // carry the meaning, not colour alone.
 function indexBadge(value, kind = "Open") {
-  if (!Number.isFinite(value)) return `<span class="wp-badge" title="${kind} index unavailable: too few recipients or too few sends around it">${kind} –</span>`;
-  const tone = value >= 1.05 ? "is-success" : value <= 0.95 ? "is-warning" : "";
-  const arrow = value >= 1.05 ? "▲" : value <= 0.95 ? "▼" : "•";
-  return `<span class="wp-badge ${tone}" title="${kind} index: ${formatIndex(value)} × the market's typical ${kind.toLowerCase()} rate in the weeks around this send">${arrow} ${kind} ${formatIndex(value)}</span>`;
+  if (!Number.isFinite(value)) return `<span class="subject-index" title="${kind} index unavailable: too few recipients or too few sends around it">–</span>`;
+  const direction = value >= 1.05 ? "is-up" : value <= 0.95 ? "is-down" : "";
+  const arrow = value >= 1.05 ? "▲" : value <= 0.95 ? "▼" : "";
+  return `<span class="subject-index ${direction}" title="${kind} index: ${formatIndex(value)} × the market's typical ${kind.toLowerCase()} rate in the weeks around this send">${arrow}${formatIndex(value)}</span>`;
 }
 
 async function callSubjectLines(action, { method = "GET", body = null, query = {} } = {}) {
@@ -112,36 +125,47 @@ async function callSubjectLines(action, { method = "GET", body = null, query = {
   return payload;
 }
 
+// The status line takes no room unless it has something to say.
+function syncStatusLine() {
+  const line = byId("subject-lines-status");
+  if (line) line.hidden = !state.busy && !state.feedback;
+}
+
 function setFeedback(message, tone = "") {
   state.feedback = message;
   state.feedbackTone = tone;
   const node = byId("subject-lines-feedback");
-  if (!node) return;
-  node.textContent = message;
-  node.className = `inline-feedback${tone ? ` ${tone}` : ""}`;
+  if (node) {
+    node.textContent = message;
+    node.className = `inline-feedback${tone ? ` ${tone}` : ""}`;
+  }
+  syncStatusLine();
 }
 
 function setBusy(label) {
   state.busy = label;
-  const node = byId("subject-lines-busy");
-  if (node) {
-    node.textContent = label || "";
-    node.hidden = !label;
+  const busy = byId("subject-lines-busy");
+  const spinner = byId("subject-lines-spinner");
+  if (busy) {
+    busy.textContent = label || "";
+    busy.hidden = !label;
   }
+  if (spinner) spinner.hidden = !label;
+  syncStatusLine();
+  byId("klaviyo-subject-lines-panel")?.classList.toggle("is-busy", Boolean(label));
   document.querySelectorAll("[data-subject-action]").forEach((button) => {
     if (button.dataset.subjectAlways === "true") return;
     button.disabled = Boolean(label);
   });
-  // Re-enabling everything would also enable buttons a card keeps disabled on purpose ("Saved",
-  // "Use" on a line that breaks a rule), so the cards are redrawn from state instead.
-  if (!label && state.editing === "") renderCandidates();
-  renderActions();
+  // Re-enabling everything would also enable buttons kept disabled on purpose ("Saved", "Use" on a
+  // line that breaks a rule), so the flow is redrawn from state instead.
+  if (!label && !state.editing) renderFlow();
 }
 
 async function runAction(label, fn) {
   if (state.busy) return;
-  setBusy(label);
   setFeedback("");
+  setBusy(label);
   try {
     await fn();
   } catch (error) {
@@ -151,112 +175,51 @@ async function runAction(label, fn) {
   }
 }
 
-/* ------------------------------------------------------------------ status and layers */
+/* ------------------------------------------------------------------ step 1: campaign */
 
-function renderLayers() {
-  const node = byId("subject-lines-layers");
-  const pill = byId("subject-lines-status-pill");
-  const status = state.status;
-  if (!node || !status) return;
-  const history = status.history || {};
-  const dk = (history.markets || []).find((market) => market.country === SOURCE_ACCOUNT);
-  if (pill) {
-    pill.className = history.sends ? "status-pill" : "status-pill warning";
-    pill.textContent = history.sends ? `History synced ${formatDate(history.syncedAt)}` : "History not synced";
-  }
-  node.innerHTML = `
-    <ol class="subject-layer-list">
-      <li>
-        <span class="subject-layer-step">1</span>
-        <div>
-          <strong>Westpack's own sends</strong>
-          <p>${history.sends ? `${formatCount(history.sends)} subject lines in ${formatCount((history.markets || []).length)} accounts, ${formatCount(history.abTests)} A/B tests. DK: ${formatCount(dk?.sends)} sends, ${formatCount(dk?.abTests)} A/B tests.` : "Not synced yet. Sync reads every sent campaign from Klaviyo."}</p>
-          <p class="wp-help">Measured. Open rates are scored against each market's own level, because Apple Mail opens mail nobody read.</p>
-        </div>
-      </li>
-      <li>
-        <span class="subject-layer-step">2</span>
-        <div>
-          <strong>Pattern bank</strong>
-          <p>${formatCount(status.bank?.authored)} pairs written for the bank${status.bank?.imported ? `, ${formatCount(status.bank.imported)} imported from real senders` : ""}, across ${formatCount(Object.keys(status.bank?.byMechanism || {}).length)} mechanisms.</p>
-          <p class="wp-help">Patterns, not proof: the authored pairs have no measured results.</p>
-        </div>
-      </li>
-      <li>
-        <span class="subject-layer-step">3</span>
-        <div>
-          <strong>Rules</strong>
-          <p>${formatCount((status.rules || []).length)} rules, ${formatCount((status.rules || []).filter((rule) => rule.severity === "block").length)} of them blocking. Every suggestion is checked against the email's own text.</p>
-        </div>
-      </li>
-    </ol>
-    <button class="ghost-button is-sm" data-subject-action="sync" type="button">Sync history from Klaviyo</button>
-  `;
+function visibleTemplates() {
+  return state.templates.filter((template) => !ROLLOUT_DRAFT.test(String(template.name || "")));
 }
 
-function renderFavourites() {
-  const node = byId("subject-lines-favourites");
-  if (!node) return;
-  const favourites = state.team.favourites || [];
-  if (!favourites.length) {
-    node.innerHTML = '<p class="wp-help">Saved lines show here for the whole team, and the generator reads them as taste.</p>';
-    return;
-  }
-  node.innerHTML = `<ul class="subject-favourite-list">${favourites.slice(0, 12).map((item) => `
-    <li>
-      <div>
-        <strong>${escapeHtml(item.subject)}</strong>
-        ${item.preview ? `<span>${escapeHtml(item.preview)}</span>` : ""}
-        <small>${escapeHtml(item.campaignName || "")}${item.savedAt ? ` · ${formatDate(item.savedAt)}` : ""}</small>
-      </div>
-      <button class="wp-icon-button" data-subject-action="unfavourite" data-id="${escapeHtml(item.id)}" data-subject-always="true" type="button" aria-label="Remove from favourites" title="Remove">×</button>
-    </li>`).join("")}</ul>`;
-}
-
-/* ------------------------------------------------------------------ step 1: templates */
-
-function renderTemplates() {
-  const node = byId("subject-lines-templates");
+function renderTemplateList() {
+  const node = byId("subject-lines-template-list");
   if (!node) return;
   const needle = state.templateQuery.trim().toLowerCase();
-  const list = state.templates.filter((template) => !needle || String(template.name || "").toLowerCase().includes(needle));
-  if (!state.templates.length) {
-    node.innerHTML = '<p class="wp-help">No templates loaded from the DK account yet.</p>';
+  const list = visibleTemplates().filter((template) => !needle || String(template.name || "").toLowerCase().includes(needle));
+  node.innerHTML = list.length ? list.map((template) => `
+    <button class="subject-template-row${template.id === state.selectedTemplateId ? " is-selected" : ""}" data-subject-action="select-template" data-subject-always="true" data-id="${escapeHtml(template.id)}" type="button">
+      <span class="subject-template-name">${escapeHtml(template.name || "Untitled template")}</span>
+      <span class="subject-template-meta">${escapeHtml(formatDate(template.updated || template.created))}</span>
+    </button>`).join("") : `<p class="subject-empty">${state.templates.length ? "No template matches the search." : "Loading the DK templates…"}</p>`;
+}
+
+function renderCampaignStep() {
+  const node = byId("subject-lines-campaign");
+  if (!node) return;
+  const template = state.templates.find((item) => item.id === state.selectedTemplateId) || state.template;
+  if (!state.picking && template) {
+    node.innerHTML = `
+      <div class="subject-selected">
+        <div class="subject-selected-text">
+          <strong>${escapeHtml(template.name)}</strong>
+          <span>Edited ${escapeHtml(formatDate(template.updated || template.created))}${state.template?.textLength ? ` · ${formatCount(state.template.textLength)} characters of text` : ""}</span>
+        </div>
+        <button class="ghost-button is-sm" data-subject-action="change-template" data-subject-always="true" type="button">Change</button>
+        <button class="${state.analysis ? "ghost-button" : "primary-button"} is-sm" data-subject-action="analyse" type="button">${state.analysis ? "Analyse again" : "Analyse"}</button>
+      </div>`;
     return;
   }
-  node.innerHTML = list.length ? list.map((template) => `
-    <button class="subject-template-card${template.id === state.selectedTemplateId ? " is-selected" : ""}" data-subject-action="select-template" data-id="${escapeHtml(template.id)}" type="button" aria-pressed="${template.id === state.selectedTemplateId}">
-      <span class="subject-template-name">${escapeHtml(template.name || "Untitled template")}</span>
-      <span class="subject-template-meta">${escapeHtml(formatDate(template.updated || template.created))} · ${escapeHtml(String(template.editorType || "").replace("SYSTEM_DRAGGABLE", "Drag & drop").replace("CODE", "Code"))}</span>
-    </button>`).join("") : '<p class="wp-help">No template matches the search.</p>';
-}
-
-/* ------------------------------------------------------------------ step 2: the brief */
-
-function renderList(items = [], empty = "None") {
-  return items.length ? `<ul class="subject-brief-list">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : `<p class="wp-help">${escapeHtml(empty)}</p>`;
-}
-
-function renderAbArmLine(test, arm) {
-  const winner = arm.id === test.winnerId;
-  // Only a clear result is a win; otherwise the arm is merely ahead, and saying "won" over a
-  // 0.3-point gap would teach the operator a lesson the test never taught.
-  const winnerLabel = test.verdict === "klar" ? "Won on opens" : "Ahead on opens";
-  return `
-    <div class="subject-ab-arm${winner ? " is-winner" : ""}">
-      <span class="subject-ab-letter">${escapeHtml(arm.letter)}</span>
-      <div class="subject-ab-copy">
-        <strong>${escapeHtml(arm.subject)}</strong>
-        ${arm.previewText ? `<span>${escapeHtml(arm.previewText)}</span>` : ""}
-      </div>
-      <div class="subject-ab-figures">
-        <span>${formatPercent(arm.openRate)} opened</span>
-        <span>${formatPercent(arm.clickRate, 2)} clicked</span>
-        <span>${formatCount(arm.received)} recipients</span>
-      </div>
-      ${winner ? `<span class="wp-badge${test.verdict === "klar" ? " is-success" : ""}">${winnerLabel}</span>` : ""}
+  const hidden = state.templates.length - visibleTemplates().length;
+  node.innerHTML = `
+    <div class="subject-picker">
+      <input class="wp-input subject-picker-search" id="subject-lines-template-search" type="search" placeholder="Search the 20 most recently edited templates" value="${escapeHtml(state.templateQuery)}" aria-label="Search templates">
+      <div class="subject-template-list" id="subject-lines-template-list"></div>
+      ${hidden ? `<p class="subject-hint">${plural(hidden, "translated draft", "translated drafts")} from Duplicate &amp; translate hidden.</p>` : ""}
     </div>`;
+  renderTemplateList();
 }
+
+/* ------------------------------------------------------------------ step 2: brief */
 
 function verdictBadge(verdict) {
   const map = { klar: ["is-success", "Clear winner"], tendens: ["is-info", "Leaning"], uafgjort: ["", "Inconclusive"] };
@@ -264,35 +227,48 @@ function verdictBadge(verdict) {
   return `<span class="wp-badge ${tone}">${escapeHtml(label)}</span>`;
 }
 
+// Said once above a list of tests, not in every card.
+const REMAINDER_NOTE = "+ rest of list: the larger arm was Klaviyo's pick and was also sent to the rest of the list afterwards, so its figures include a later send.";
+
 function renderAbTest(test) {
+  // Only a clear result is a win; otherwise the arm is merely ahead, and saying "won" over a
+  // 0.3-point gap would teach the operator a lesson the test never taught.
+  const winnerLabel = test.verdict === "klar" ? "Won on opens" : "Ahead on opens";
+  const tested = test.differs === "both" ? "subject and preheader" : test.differs === "preview" ? "preheader" : "subject";
+  const largest = Math.max(...test.arms.map((arm) => arm.received));
   return `
-    <article class="subject-ab-test">
+    <article class="subject-ab">
       <header>
-        <div>
-          <strong>${escapeHtml(test.campaignName)}</strong>
-          <span>${escapeHtml(test.country)} · ${escapeHtml(formatDate(test.sentAt))} · tested ${escapeHtml(test.differs === "both" ? "subject and preheader" : test.differs === "preview" ? "preheader" : "subject")}</span>
-        </div>
+        <strong>${escapeHtml(test.campaignName)}</strong>
+        <span>${escapeHtml(test.country)} · ${escapeHtml(formatDate(test.sentAt))} · tested the ${escapeHtml(tested)}</span>
         ${verdictBadge(test.verdict)}
       </header>
-      ${test.arms.map((arm) => renderAbArmLine(test, arm)).join("")}
-      ${test.includesRemainder ? '<p class="wp-help">The larger arm was Klaviyo\'s pick and was also sent to the rest of the list afterwards, so its figures include a later send.</p>' : ""}
+      ${test.arms.map((arm) => {
+        const winner = arm.id === test.winnerId;
+        return `
+        <div class="subject-ab-arm${winner ? " is-winner" : ""}">
+          <span class="subject-ab-letter" aria-label="${winner ? winnerLabel : "Variant"}">${winner ? "✓" : ""} ${escapeHtml(arm.letter)}</span>
+          <span class="subject-ab-copy"><strong>${escapeHtml(arm.subject)}</strong>${arm.previewText && test.differs !== "subject" ? `<span>${escapeHtml(arm.previewText)}</span>` : ""}</span>
+          <span class="subject-ab-figure" title="${winner ? winnerLabel : ""}">${formatPercent(arm.openRate)}</span>
+          <span class="subject-ab-figure is-muted">${formatPercent(arm.clickRate, 2)} clicked</span>
+          <span class="subject-ab-figure is-muted">${formatCount(arm.received)}${test.includesRemainder && arm.received === largest ? ' <span class="subject-ab-rest" title="Klaviyo\'s pick, also sent to the rest of the list afterwards">+ rest of list</span>' : ""}</span>
+        </div>`;
+      }).join("")}
     </article>`;
 }
 
-function renderSendRow(entry) {
-  return `
-    <li class="subject-send">
-      <div>
-        <strong>${escapeHtml(entry.subject)}</strong>
-        ${entry.previewText ? `<span>${escapeHtml(entry.previewText)}</span>` : ""}
-        <small>${escapeHtml(entry.campaignName)} · ${escapeHtml(formatDate(entry.sentAt))}</small>
-      </div>
-      <div class="subject-send-badges">${indexBadge(entry.openIndex, "Open")}${indexBadge(entry.clickIndex, "Click")}</div>
-    </li>`;
+function renderSendRows(entries = []) {
+  return `<ul class="subject-sends">${entries.map((entry) => `
+    <li>
+      <span class="subject-sends-text"><strong>${escapeHtml(entry.subject)}</strong>${entry.previewText ? ` <span>${escapeHtml(entry.previewText)}</span>` : ""}</span>
+      <span class="subject-sends-date">${escapeHtml(formatDate(entry.sentAt))}</span>
+      ${indexBadge(entry.openIndex, "Open")}
+      ${indexBadge(entry.clickIndex, "Click")}
+    </li>`).join("")}</ul>`;
 }
 
 function renderFeatureStats(stats = []) {
-  if (!stats.length) return '<p class="wp-help">Not enough indexed sends to compare features.</p>';
+  if (!stats.length) return '<p class="subject-hint">Not enough indexed sends to compare features.</p>';
   return `
     <div class="wp-table-wrap">
       <table class="wp-table subject-feature-table">
@@ -308,172 +284,251 @@ function renderFeatureStats(stats = []) {
           </tr>`).join("")}</tbody>
       </table>
     </div>
-    <p class="wp-help">Medians across different emails, seasons and list sizes: a pattern in the house's own sends, not an effect. A/B tests are the stronger evidence.</p>`;
+    <p class="subject-hint">Medians across different emails, seasons and list sizes: a pattern in the house's own sends, not an effect. A/B tests are the stronger evidence.</p>`;
 }
 
-function renderMechanismPicker() {
+function renderMechanismChips() {
   const all = state.status?.taxonomy?.mechanisms || [];
   const reasons = new Map((state.analysis?.recommendedMechanisms || []).map((item) => [item.mechanism, item.reason]));
   const avoided = new Map((state.analysis?.avoidMechanisms || []).map((item) => [item.mechanism, item.reason]));
-  return `
-    <div class="subject-mechanism-grid" role="group" aria-label="Mechanisms that should carry the set">
-      ${all.map((mechanism) => {
-        const selected = state.mechanisms.includes(mechanism.key);
-        const title = reasons.get(mechanism.key) || avoided.get(mechanism.key) || mechanism.description;
-        return `<button class="subject-mechanism-chip${selected ? " is-selected" : ""}${avoided.has(mechanism.key) ? " is-avoided" : ""}" data-subject-action="toggle-mechanism" data-key="${escapeHtml(mechanism.key)}" data-subject-always="true" type="button" aria-pressed="${selected}" title="${escapeHtml(title)}">${selected ? "✓ " : ""}${escapeHtml(mechanism.label)}</button>`;
-      }).join("")}
-    </div>`;
+  return `<div class="subject-chips" role="group" aria-label="Mechanisms that carry the set">${all.map((mechanism) => {
+    const selected = state.mechanisms.includes(mechanism.key);
+    const title = reasons.get(mechanism.key) || (avoided.has(mechanism.key) ? `Avoid: ${avoided.get(mechanism.key)}` : mechanism.description);
+    return `<button class="subject-chip${selected ? " is-selected" : ""}${avoided.has(mechanism.key) ? " is-avoided" : ""}" data-subject-action="toggle-mechanism" data-subject-always="true" data-key="${escapeHtml(mechanism.key)}" type="button" aria-pressed="${selected}" title="${escapeHtml(title)}">${selected ? '<span aria-hidden="true">✓ </span>' : ""}${escapeHtml(mechanism.label)}</button>`;
+  }).join("")}</div>`;
 }
 
-function renderBrief() {
+function renderBriefStep() {
+  const section = byId("subject-step-brief");
   const node = byId("subject-lines-brief");
-  if (!node) return;
+  const typeNode = byId("subject-lines-brief-type");
+  if (!section || !node) return;
   const analysis = state.analysis;
-  if (!analysis) {
-    node.innerHTML = `<p class="wp-help">${state.selectedTemplateId ? "Analyse the campaign to see the brief." : "Choose a template first."}</p>`;
-    return;
-  }
+  section.hidden = !analysis;
+  if (!analysis) return;
+  if (typeNode) typeNode.textContent = [campaignTypeLabel(analysis.campaignType), analysis.secondaryType ? campaignTypeLabel(analysis.secondaryType) : ""].filter(Boolean).join(" · ");
   const insights = state.insights || {};
+  const facts = [
+    ["Offer", analysis.offer],
+    ["Deadline", analysis.deadline],
+    ["Products", (analysis.products || []).join(", ")],
+    ["The reader right now", analysis.readerMoment]
+  ];
   const reasons = analysis.recommendedMechanisms || [];
   node.innerHTML = `
-    <div class="subject-brief">
-      <div class="subject-brief-core">
-        <p class="section-label">Core message</p>
-        <h4>${escapeHtml(analysis.coreMessage)}</h4>
-        <div class="subject-chip-row">
-          <span class="wp-badge is-brand">${escapeHtml(campaignTypeLabel(analysis.campaignType))}</span>
-          ${analysis.secondaryType ? `<span class="wp-badge">${escapeHtml(campaignTypeLabel(analysis.secondaryType))}</span>` : ""}
-        </div>
-        ${analysis.readerMoment ? `<p><strong>The reader right now:</strong> ${escapeHtml(analysis.readerMoment)}</p>` : ""}
-        ${analysis.emotionalAngle ? `<p><strong>Angle:</strong> ${escapeHtml(analysis.emotionalAngle)}</p>` : ""}
-      </div>
+    <p class="subject-lead">${escapeHtml(analysis.coreMessage)}</p>
+    <dl class="subject-facts">${facts.map(([label, value]) => `<div><dt>${label}</dt><dd${value ? ` title="${escapeHtml(value)}"` : ' class="is-empty"'}>${escapeHtml(value || "None in the email")}</dd></div>`).join("")}</dl>
 
-      <dl class="subject-brief-facts">
-        <div><dt>Offer</dt><dd>${escapeHtml(analysis.offer || "None in the email")}</dd></div>
-        <div><dt>Deadline</dt><dd>${escapeHtml(analysis.deadline || "None in the email")}</dd></div>
-        <div><dt>Products</dt><dd>${escapeHtml((analysis.products || []).join(", ") || "–")}</dd></div>
-      </dl>
-
-      <div class="subject-brief-columns">
-        <section>
-          <h5>Hooks in the email</h5>
-          <ul class="subject-hook-list">${(analysis.hooks || []).map((hook) => `<li><strong>${escapeHtml(hook.hook)}</strong><q>${escapeHtml(hook.evidence)}</q></li>`).join("")}</ul>
-        </section>
-        <section>
-          <h5>What the email states</h5>
-          ${renderList(analysis.facts, "No specific claims.")}
-          <h5>Must not promise</h5>
-          <div class="subject-must-not">${renderList(analysis.mustNotPromise, "Nothing flagged.")}</div>
-        </section>
-      </div>
-
+    <div class="subject-columns">
       <section>
-        <h5>Mechanisms to carry the set</h5>
-        <p class="wp-help">Recommended ones are selected. Click to add or remove; the generator gives about two thirds of the lines to the selected ones and keeps the rest for range.</p>
-        ${renderMechanismPicker()}
-        <ul class="subject-reason-list">${reasons.map((item) => `<li><strong>${escapeHtml(mechanismLabel(item.mechanism))}:</strong> ${escapeHtml(item.reason)}</li>`).join("")}
-        ${(analysis.avoidMechanisms || []).map((item) => `<li class="is-avoid"><strong>Avoid ${escapeHtml(mechanismLabel(item.mechanism))}:</strong> ${escapeHtml(item.reason)}</li>`).join("")}</ul>
+        <h4>The email says</h4>
+        ${(analysis.facts || []).length ? `<ul class="subject-list">${analysis.facts.map((fact) => `<li>${escapeHtml(fact)}</li>`).join("")}</ul>` : '<p class="subject-hint">No specific claims.</p>'}
       </section>
-
-      <section class="subject-evidence">
-        <h5>What Westpack's own sends say</h5>
-        ${analysis.houseEvidence ? `<p>${escapeHtml(analysis.houseEvidence)}</p>` : ""}
-        ${insights.sendCount ? "" : '<div class="wp-alert is-warning">The send history is not synced, so there is no house evidence yet. Use "Sync history from Klaviyo".</div>'}
-        ${(insights.abLessons || []).length ? `<h6>A/B tests that bear on this email</h6>${insights.abLessons.slice(0, 4).map(renderAbTest).join("")}` : ""}
-        ${(insights.relevant || []).length ? `<h6>Past sends about something similar</h6><ul class="subject-send-list">${insights.relevant.slice(0, 6).map(renderSendRow).join("")}</ul>` : ""}
-        ${(insights.featureStats || []).length ? `<details><summary>Features in DK subject lines, last three years</summary>${renderFeatureStats(insights.featureStats)}</details>` : ""}
+      <section>
+        <h4>Must not promise</h4>
+        ${(analysis.mustNotPromise || []).length ? `<ul class="subject-list is-negative">${analysis.mustNotPromise.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : '<p class="subject-hint">Nothing flagged.</p>'}
       </section>
+    </div>
 
-      ${analysis.translationNotes ? `<p class="wp-help"><strong>Translation:</strong> ${escapeHtml(analysis.translationNotes)}</p>` : ""}
-    </div>`;
+    <section class="subject-block">
+      <h4>Hooks in the email</h4>
+      <ul class="subject-hooks">${(analysis.hooks || []).map((hook) => `<li><strong>${escapeHtml(hook.hook)}</strong><q>${escapeHtml(hook.evidence)}</q></li>`).join("")}</ul>
+    </section>
+
+    <section class="subject-block">
+      <h4>What Westpack's own sends say</h4>
+      ${insights.sendCount ? "" : '<div class="wp-alert is-warning">The send history is not synced, so there is no house evidence yet. Sync it under The bank.</div>'}
+      ${analysis.houseEvidence ? `<p class="subject-prose">${escapeHtml(analysis.houseEvidence)}</p>` : ""}
+      ${(insights.abLessons || []).length ? `<div class="subject-ab-list">${insights.abLessons.slice(0, 2).map(renderAbTest).join("")}</div>${insights.abLessons.some((test) => test.includesRemainder) ? `<p class="subject-hint subject-ab-note">${REMAINDER_NOTE}</p>` : ""}` : ""}
+      ${(insights.abLessons || []).length > 2 ? `<details class="subject-more"><summary>${plural(insights.abLessons.length - 2, "more A/B test", "more A/B tests")} that bear on this email</summary><div class="subject-ab-list">${insights.abLessons.slice(2).map(renderAbTest).join("")}</div></details>` : ""}
+      ${(insights.relevant || []).length ? `<details class="subject-more"><summary>${plural(insights.relevant.length, "past send", "past sends")} about something similar</summary>${renderSendRows(insights.relevant)}<p class="subject-hint">Index: the send against its market's typical rate in the weeks around it, 1,00 = typical. Not a raw open rate, because Apple Mail opens mail nobody read.</p></details>` : ""}
+      ${(insights.featureStats || []).length ? `<details class="subject-more"><summary>Features in DK subject lines, last three years</summary>${renderFeatureStats(insights.featureStats)}</details>` : ""}
+    </section>
+
+    <footer class="subject-compose">
+      <div class="subject-compose-row">
+        <h4>Carry the set with</h4>
+        <span class="subject-hint">Recommended ones are selected. They get about two thirds of the lines; the rest are there for range.</span>
+      </div>
+      ${renderMechanismChips()}
+      ${reasons.length ? `<details class="subject-more"><summary>Why these</summary><ul class="subject-list">${reasons.map((item) => `<li><strong>${escapeHtml(mechanismLabel(item.mechanism))}:</strong> ${escapeHtml(item.reason)}</li>`).join("")}${(analysis.avoidMechanisms || []).map((item) => `<li><strong>Avoid ${escapeHtml(mechanismLabel(item.mechanism))}:</strong> ${escapeHtml(item.reason)}</li>`).join("")}</ul></details>` : ""}
+      ${analysis.translationNotes ? `<p class="subject-hint"><strong>Translation:</strong> ${escapeHtml(analysis.translationNotes)}</p>` : ""}
+      <div class="subject-compose-controls">
+        <div class="wp-segment" role="group" aria-label="How many">
+          ${[12, 18, 24].map((count) => `<button class="wp-segment-item${state.count === count ? " active" : ""}" data-subject-action="set-count" data-subject-always="true" data-count="${count}" type="button" aria-pressed="${state.count === count}">${count}</button>`).join("")}
+        </div>
+        <input class="wp-input subject-note" id="subject-lines-note" type="text" value="${escapeHtml(state.note)}" placeholder="Note for the writer, e.g. more edge, no emoji" aria-label="Note for the writer">
+        <button class="primary-button" data-subject-action="generate" type="button">Write subject lines</button>
+      </div>
+    </footer>`;
 }
 
-/* ------------------------------------------------------------------ step 3: candidates */
+/* ------------------------------------------------------------------ step 3: suggestions */
 
-// The inbox line as iPhone Mail shows it: the subject is cut at about 41 characters, so whatever
-// runs past that is drawn faded after the cut rather than hidden - the operator sees what is lost.
-function renderInbox(candidate) {
-  const characters = [...candidate.subject];
+function statusMark(candidate) {
+  if (candidate.status === "block") return '<span class="subject-mark is-block" title="Breaks a rule" aria-label="Breaks a rule">■</span>';
+  if (candidate.status === "warn") return '<span class="subject-mark is-warn" title="Check" aria-label="Check">▲</span>';
+  return '<span class="subject-mark is-ok" title="Passes the rules" aria-label="Passes the rules">●</span>';
+}
+
+function riskLabel(risk) {
+  return { lav: "Translates easily", middel: "Translation: some risk", hoej: "Translation: high risk" }[risk] || "";
+}
+
+// The subject as iPhone Mail shows it: whatever runs past about 41 characters is drawn faded after
+// the cut rather than hidden, so the operator sees what a phone loses.
+function renderSubjectText(subject) {
+  const characters = [...subject];
   const visible = characters.slice(0, MOBILE_VISIBLE).join("");
   const hidden = characters.slice(MOBILE_VISIBLE).join("");
-  return `
-    <div class="subject-inbox" aria-label="Inbox preview">
-      <div class="subject-inbox-sender">${escapeHtml(state.senderLabel || "Westpack")}</div>
-      <div class="subject-inbox-subject">${escapeHtml(visible)}${hidden ? `<span class="subject-inbox-cut" title="Cut on iPhone Mail">${escapeHtml(hidden)}</span>` : ""}</div>
-      <div class="subject-inbox-preview">${escapeHtml(candidate.preview || "(no preheader)")}</div>
-    </div>`;
-}
-
-function statusBadge(candidate) {
-  if (candidate.status === "block") return '<span class="wp-badge is-danger">■ Breaks a rule</span>';
-  if (candidate.status === "warn") return '<span class="wp-badge is-warning">▲ Check</span>';
-  return '<span class="wp-badge is-success">● Passes the rules</span>';
-}
-
-function riskBadge(risk) {
-  const map = { lav: ["", "Translates easily"], middel: ["is-info", "Translation: some risk"], hoej: ["is-warning", "Translation: high risk"] };
-  const [tone, label] = map[risk] || ["", risk || ""];
-  return label ? `<span class="wp-badge ${tone}">${escapeHtml(label)}</span>` : "";
+  return `${escapeHtml(visible)}${hidden ? `<span class="subject-cut" title="Cut on iPhone Mail">${escapeHtml(hidden)}</span>` : ""}`;
 }
 
 function renderCandidate(candidate) {
+  const open = state.open === candidate.id;
   const editing = state.editing === candidate.id;
-  const favourite = (state.team.favourites || []).some((item) => item.subject === candidate.subject && item.preview === candidate.preview);
+  const saved = (state.team.favourites || []).some((item) => item.subject === candidate.subject && item.preview === candidate.preview);
+  const length = candidate.metrics?.subjectLength ?? [...candidate.subject].length;
   return `
-    <article class="subject-candidate is-${escapeHtml(candidate.status)}" data-candidate="${escapeHtml(candidate.id)}">
-      <header class="subject-candidate-head">
-        <span class="wp-badge is-brand">${escapeHtml(mechanismLabel(candidate.mechanism))}</span>
-        ${candidate.secondaryMechanism ? `<span class="wp-badge">${escapeHtml(mechanismLabel(candidate.secondaryMechanism))}</span>` : ""}
-        ${statusBadge(candidate)}
-      </header>
-      ${editing ? `
-        <label class="field"><span>Subject</span><input class="wp-input" data-edit="subject" type="text" value="${escapeHtml(candidate.subject)}"></label>
-        <label class="field"><span>Preheader</span><input class="wp-input" data-edit="preview" type="text" value="${escapeHtml(candidate.preview)}"></label>
-      ` : renderInbox(candidate)}
-      <p class="subject-candidate-metrics">${candidate.metrics?.subjectLength ?? [...candidate.subject].length} / ${MOBILE_VISIBLE} characters · preheader ${candidate.metrics?.previewLength ?? [...candidate.preview].length}</p>
-      ${candidate.rationale ? `<p class="subject-candidate-why">${escapeHtml(candidate.rationale)}</p>` : ""}
-      ${candidate.evidence?.length ? `<p class="subject-candidate-evidence">Leans on: ${candidate.evidence.map((item) => escapeHtml(item.label || item)).join(" · ")}</p>` : ""}
-      <div class="subject-chip-row">${riskBadge(candidate.translationRisk)}</div>
-      ${candidate.translationNote ? `<p class="wp-help">${escapeHtml(candidate.translationNote)}</p>` : ""}
-      ${candidate.issues?.length ? `<ul class="subject-issue-list">${candidate.issues.map((issue) => `<li class="is-${escapeHtml(issue.severity)}"><strong>${escapeHtml(issue.label)}:</strong> ${escapeHtml(issue.message)}</li>`).join("")}</ul>` : ""}
-      <div class="subject-candidate-actions">
-        ${editing
-          ? `<button class="primary-button is-sm" data-subject-action="check-edit" data-id="${escapeHtml(candidate.id)}" type="button">Check</button>
-             <button class="ghost-button is-sm" data-subject-action="cancel-edit" data-subject-always="true" type="button">Cancel</button>`
-          : `<button class="ghost-button is-sm" data-subject-action="copy" data-id="${escapeHtml(candidate.id)}" data-subject-always="true" type="button">Copy</button>
-             <button class="ghost-button is-sm" data-subject-action="edit" data-id="${escapeHtml(candidate.id)}" data-subject-always="true" type="button">Edit</button>
-             <button class="ghost-button is-sm" data-subject-action="favourite" data-id="${escapeHtml(candidate.id)}" type="button"${favourite ? " disabled" : ""}>${favourite ? "Saved" : "Save"}</button>
-             <button class="ghost-button is-sm" data-subject-action="use" data-id="${escapeHtml(candidate.id)}" type="button"${candidate.status === "block" ? " disabled" : ""}>Use in Duplicate &amp; translate</button>
-             <button class="ghost-button is-sm" data-subject-action="ban" data-id="${escapeHtml(candidate.id)}" type="button" title="The generator will not write lines like this again">Not like this</button>`}
+    <article class="subject-row is-${escapeHtml(candidate.status)}${open ? " is-open" : ""}" data-candidate="${escapeHtml(candidate.id)}">
+      <div class="subject-row-line">
+        <button class="subject-row-main" data-subject-action="toggle" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button" aria-expanded="${open}">
+          ${statusMark(candidate)}
+          <span class="subject-row-text">
+            <span class="subject-row-subject">${renderSubjectText(candidate.subject)}</span>
+            <span class="subject-row-preview">${escapeHtml(candidate.preview || "(no preheader)")}</span>
+          </span>
+          <span class="subject-row-tag">${escapeHtml(mechanismLabel(candidate.mechanism))}</span>
+          <span class="subject-row-count${length > MOBILE_VISIBLE ? " is-long" : ""}" title="Characters in the subject; about ${MOBILE_VISIBLE} show on an iPhone">${length}</span>
+        </button>
+        <div class="subject-row-actions">
+          <button class="ghost-button is-sm" data-subject-action="copy" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button">Copy</button>
+          <button class="ghost-button is-sm" data-subject-action="favourite" data-id="${escapeHtml(candidate.id)}" type="button"${saved ? " disabled" : ""}>${saved ? "Saved" : "Save"}</button>
+        </div>
       </div>
+      ${open ? `
+      <div class="subject-row-detail">
+        ${editing ? `
+          <div class="subject-edit">
+            <label class="field"><span>Subject</span><input class="wp-input" data-edit="subject" type="text" value="${escapeHtml(candidate.subject)}"></label>
+            <label class="field"><span>Preheader</span><input class="wp-input" data-edit="preview" type="text" value="${escapeHtml(candidate.preview)}"></label>
+          </div>` : ""}
+        ${candidate.rationale ? `<p class="subject-prose">${escapeHtml(candidate.rationale)}</p>` : ""}
+        ${candidate.evidence?.length ? `<p class="subject-hint">Leans on: ${candidate.evidence.map((item) => escapeHtml(item.label || item)).join(" · ")}</p>` : ""}
+        ${candidate.issues?.length ? `<ul class="subject-issues">${candidate.issues.map((issue) => `<li class="is-${escapeHtml(issue.severity)}"><strong>${escapeHtml(issue.label)}:</strong> ${escapeHtml(issue.message)}</li>`).join("")}</ul>` : ""}
+        <p class="subject-hint">${escapeHtml([mechanismLabel(candidate.mechanism), candidate.secondaryMechanism ? mechanismLabel(candidate.secondaryMechanism) : "", riskLabel(candidate.translationRisk), `preheader ${candidate.metrics?.previewLength ?? [...candidate.preview].length} characters`].filter(Boolean).join(" · "))}${candidate.translationNote ? `. ${escapeHtml(candidate.translationNote)}` : ""}</p>
+        <div class="subject-row-buttons">
+          ${editing
+            ? `<button class="primary-button is-sm" data-subject-action="check-edit" data-id="${escapeHtml(candidate.id)}" type="button">Check</button>
+               <button class="ghost-button is-sm" data-subject-action="cancel-edit" data-subject-always="true" type="button">Cancel</button>`
+            : `<button class="primary-button is-sm" data-subject-action="use" data-id="${escapeHtml(candidate.id)}" type="button"${candidate.status === "block" ? " disabled" : ""}>Use in Duplicate &amp; translate</button>
+               <button class="ghost-button is-sm" data-subject-action="edit" data-subject-always="true" data-id="${escapeHtml(candidate.id)}" type="button">Edit</button>
+               <button class="ghost-button is-sm" data-subject-action="ban" data-id="${escapeHtml(candidate.id)}" type="button" title="The generator will steer away from lines like this">Not like this</button>`}
+        </div>
+      </div>` : ""}
     </article>`;
 }
 
-function renderCandidates() {
+function renderResultsStep() {
+  const section = byId("subject-step-results");
   const node = byId("subject-lines-candidates");
-  if (!node) return;
-  if (!state.candidates.length) {
-    node.innerHTML = `<p class="wp-help">${state.analysis ? "Write subject lines when the brief looks right." : "The suggestions appear here after the analysis."}</p>`;
-    return;
-  }
+  const summary = byId("subject-lines-results-summary");
+  if (!section || !node) return;
+  section.hidden = !state.candidates.length;
+  if (!state.candidates.length) return;
   const counts = state.candidates.reduce((acc, candidate) => ({ ...acc, [candidate.status]: (acc[candidate.status] || 0) + 1 }), {});
+  if (summary) {
+    summary.textContent = [
+      plural(state.candidates.length, "pair", "pairs"),
+      counts.ok ? `${formatCount(counts.ok)} pass` : "",
+      counts.warn ? `${formatCount(counts.warn)} to check` : "",
+      counts.block ? `${formatCount(counts.block)} ${counts.block === 1 ? "breaks" : "break"} a rule` : ""
+    ].filter(Boolean).join(" · ");
+  }
+  const byMechanism = state.candidates.reduce((acc, candidate) => ({ ...acc, [candidate.mechanism]: (acc[candidate.mechanism] || 0) + 1 }), {});
+  const shown = state.candidates.filter((candidate) => !state.mechanismFilter || candidate.mechanism === state.mechanismFilter);
   node.innerHTML = `
-    ${state.strategyNote ? `<div class="wp-alert is-info subject-strategy">${escapeHtml(state.strategyNote)}</div>` : ""}
-    <p class="wp-help">${formatCount(state.candidates.length)} pairs · ${formatCount(counts.ok || 0)} pass the rules, ${formatCount(counts.warn || 0)} to check, ${formatCount(counts.block || 0)} break a rule and stay last. Inbox preview as iPhone Mail shows it; faded text is cut on a phone.</p>
-    <div class="subject-candidate-grid">${state.candidates.map(renderCandidate).join("")}</div>
-    ${state.examples.length ? `<details class="subject-examples"><summary>The ${formatCount(state.examples.length)} bank patterns the generator was shown</summary><ul>${state.examples.map((entry) => `<li><span class="wp-badge">${escapeHtml(mechanismLabel(entry.mechanisms?.[0]))}</span> ${escapeHtml(entry.subject)}${entry.preview ? ` <span class="subject-muted">— ${escapeHtml(entry.preview)}</span>` : ""}${entry.source === "imported" ? ` <span class="wp-badge is-info">From ${escapeHtml(entry.sender || "a real sender")}</span>` : ""}</li>`).join("")}</ul></details>` : ""}`;
+    ${state.strategyNote ? `<p class="subject-strategy">${escapeHtml(state.strategyNote)}</p>` : ""}
+    <div class="subject-results-bar">
+      <div class="subject-chips" role="group" aria-label="Filter by mechanism">
+        <button class="subject-chip${state.mechanismFilter ? "" : " is-selected"}" data-subject-action="filter-mechanism" data-subject-always="true" data-key="" type="button">All ${formatCount(state.candidates.length)}</button>
+        ${Object.entries(byMechanism).map(([key, count]) => `<button class="subject-chip${state.mechanismFilter === key ? " is-selected" : ""}" data-subject-action="filter-mechanism" data-subject-always="true" data-key="${escapeHtml(key)}" type="button">${escapeHtml(mechanismLabel(key))} ${formatCount(count)}</button>`).join("")}
+      </div>
+      <span class="subject-hint">From ${escapeHtml(state.senderLabel || "Westpack")}, as iPhone Mail shows it. Faded text is cut on a phone.</span>
+    </div>
+    <div class="subject-inbox" role="list">${shown.map(renderCandidate).join("")}</div>
+    ${state.examples.length ? `<details class="subject-more"><summary>The ${formatCount(state.examples.length)} bank lines the writer was shown</summary><ul class="subject-list">${state.examples.map((entry) => `<li>${escapeHtml(entry.subject)}${entry.preview ? ` <span class="subject-muted">${escapeHtml(entry.preview)}</span>` : ""} <span class="subject-muted">· ${escapeHtml(mechanismLabel(entry.mechanisms?.[0]))} · ${entry.source !== "authored" ? `sent by ${escapeHtml(entry.sender || "another brand")}` : "written for the bank"}</span></li>`).join("")}</ul></details>` : ""}`;
 }
 
-function renderActions() {
-  const analyse = document.querySelector('[data-subject-action="analyse"]');
-  const generate = document.querySelector('[data-subject-action="generate"]');
+function renderShortlist() {
+  const node = byId("subject-lines-favourites");
+  if (!node) return;
+  const favourites = state.team.favourites || [];
+  if (!favourites.length) {
+    node.innerHTML = '<p class="subject-hint">Save a suggestion to keep it here. The team sees the same list, and the writer reads it as taste.</p>';
+    return;
+  }
+  node.innerHTML = `<ul class="subject-shortlist">${favourites.slice(0, 30).map((item) => `
+    <li>
+      <div class="subject-shortlist-text">
+        <strong>${escapeHtml(item.subject)}</strong>
+        ${item.preview ? `<span>${escapeHtml(item.preview)}</span>` : ""}
+        <small>${escapeHtml(item.campaignName || "")}</small>
+      </div>
+      <div class="subject-shortlist-actions">
+        <button class="ghost-button is-sm" data-subject-action="copy-favourite" data-subject-always="true" data-id="${escapeHtml(item.id)}" type="button">Copy</button>
+        <button class="wp-icon-button" data-subject-action="unfavourite" data-id="${escapeHtml(item.id)}" type="button" aria-label="Remove from the shortlist" title="Remove">×</button>
+      </div>
+    </li>`).join("")}</ul>`;
+}
+
+function renderFlow() {
+  renderCampaignStep();
+  renderBriefStep();
+  renderResultsStep();
+  renderShortlist();
   const again = document.querySelector('[data-subject-action="generate-again"]');
-  if (analyse) analyse.disabled = Boolean(state.busy) || !state.selectedTemplateId;
-  if (generate) generate.disabled = Boolean(state.busy) || !state.analysis;
-  if (again) again.disabled = Boolean(state.busy) || !state.candidates.length;
+  if (again) again.disabled = Boolean(state.busy) || !state.analysis;
 }
 
 /* ------------------------------------------------------------------ the bank view */
+
+function renderLayers() {
+  const node = byId("subject-lines-layers");
+  const status = state.status;
+  if (!node || !status) return;
+  const history = status.history || {};
+  const bank = status.bank || {};
+  const rules = status.rules || [];
+  const blocking = rules.filter((rule) => rule.severity === "block").length;
+  node.innerHTML = `
+    <div class="wp-metrics subject-layers">
+      <div class="wp-metric">
+        <span class="wp-metric-label">Westpack's sends</span>
+        <span class="wp-metric-value">${formatCount(history.sends || 0)}</span>
+        <span class="wp-metric-caption">${history.sends ? `${formatCount((history.markets || []).length)} Klaviyo accounts since 2021. Measured, as an index against each market's own level.` : "Not synced yet."}</span>
+      </div>
+      <div class="wp-metric">
+        <span class="wp-metric-label">A/B tests</span>
+        <span class="wp-metric-value">${formatCount(history.abTests || 0)}</span>
+        <span class="wp-metric-caption">Of a subject or preheader. The strongest evidence: Apple Mail's automatic opens hit both arms alike.</span>
+      </div>
+      <div class="wp-metric">
+        <span class="wp-metric-label">Pattern bank</span>
+        <span class="wp-metric-value">${formatCount((bank.authored || 0) + (bank.collected || 0) + (bank.imported || 0))}</span>
+        <span class="wp-metric-caption">${bank.collected ? `${formatCount(bank.collected)} real lines from ${formatCount(bank.collectedSenders)} brands, ` : ""}${formatCount(bank.authored || 0)} written for the bank${bank.imported ? `, ${formatCount(bank.imported)} imported` : ""}. Patterns, not proof.</span>
+      </div>
+      <div class="wp-metric">
+        <span class="wp-metric-label">Rules</span>
+        <span class="wp-metric-value">${formatCount(rules.length)}</span>
+        <span class="wp-metric-caption">${formatCount(blocking)} block, ${formatCount(rules.length - blocking)} warn. Run on every suggestion against the email's own text.</span>
+      </div>
+    </div>
+    <div class="subject-sync">
+      <span class="subject-hint">${history.syncedAt ? `History synced ${escapeHtml(formatDate(history.syncedAt))}, and every night.` : "History not synced."}</span>
+      <button class="ghost-button is-sm" data-subject-action="sync" type="button">Sync from Klaviyo now</button>
+    </div>`;
+}
 
 function renderBank() {
   const node = byId("subject-lines-bank-content");
@@ -484,43 +539,40 @@ function renderBank() {
     tab.setAttribute("aria-selected", String(active));
   });
   const markets = (state.status?.history?.markets || []).map((market) => market.country);
-  const marketSelect = (id, value, includeAll = false) => `
-    <select class="wp-select" id="${id}">
-      ${includeAll ? '<option value="">All markets</option>' : ""}
-      ${markets.map((code) => `<option value="${escapeHtml(code)}"${code === value ? " selected" : ""}>${escapeHtml(code)}</option>`).join("")}
-    </select>`;
+  const select = (id, value, options) => `<select class="wp-select" id="${id}">${options.map(([optionValue, label]) => `<option value="${escapeHtml(optionValue)}"${optionValue === value ? " selected" : ""}>${escapeHtml(label)}</option>`).join("")}</select>`;
+  const marketOptions = (includeAll) => [...(includeAll ? [["", "All markets"]] : []), ...markets.map((code) => [code, code])];
 
   if (state.bankTab === "sends") {
     const history = state.history;
     node.innerHTML = `
-      <div class="wp-toolbar subject-bank-toolbar">
-        <label class="field"><span>Account</span>${marketSelect("subject-bank-country", state.bank.country)}</label>
-        <label class="field"><span>Search</span><input class="wp-input" id="subject-bank-query" type="search" value="${escapeHtml(state.bank.query)}" placeholder="Word in subject or campaign"></label>
-        <label class="field"><span>Sort</span><select class="wp-select" id="subject-bank-sort">
-          ${[["recent", "Newest first"], ["open_index", "Highest open index"], ["click_index", "Highest click index"]].map(([value, label]) => `<option value="${value}"${state.bank.sort === value ? " selected" : ""}>${label}</option>`).join("")}
-        </select></label>
+      <div class="subject-toolbar">
+        <label class="field"><span>Account</span>${select("subject-bank-country", state.bank.country, marketOptions(false))}</label>
+        <label class="field subject-toolbar-grow"><span>Search</span><input class="wp-input" id="subject-bank-query" type="search" value="${escapeHtml(state.bank.query)}" placeholder="Word in subject or campaign, then Enter"></label>
+        <label class="field"><span>Sort</span>${select("subject-bank-sort", state.bank.sort, [["recent", "Newest first"], ["open_index", "Highest open index"], ["click_index", "Highest click index"]])}</label>
       </div>
-      <p class="wp-help">Open and click index: the send against its own market's typical rate in the weeks around it (1,00 = typical). Bot clicks are left out. A raw open rate is shown nowhere as a verdict, because Apple Mail opens mail nobody read.</p>
+      <p class="subject-hint">Index: the send against its own market's typical rate in the weeks around it, 1,00 = typical. Bot clicks are left out. A raw open rate is never the verdict, because Apple Mail opens mail nobody read.</p>
       ${history ? `
-        <p class="wp-help">${formatCount(history.total)} sends${history.syncedAt ? ` · synced ${escapeHtml(formatDate(history.syncedAt))}` : ""}</p>
         <div class="wp-table-wrap">
           <table class="wp-table subject-history-table">
-            <thead><tr><th scope="col">Sent</th><th scope="col">Subject and preheader</th><th scope="col">Recipients</th><th scope="col">Opened</th><th scope="col">Open index</th><th scope="col">Clicked</th><th scope="col">Click index</th></tr></thead>
+            <thead><tr><th scope="col">Sent</th><th scope="col">Subject and preheader</th><th scope="col" class="is-num">Recipients</th><th scope="col" class="is-num">Opened</th><th scope="col" class="is-num">Open index</th><th scope="col" class="is-num">Clicked</th><th scope="col" class="is-num">Click index</th></tr></thead>
             <tbody>${history.entries.map((entry) => `
               <tr>
-                <td>${escapeHtml(formatDate(entry.sentAt))}</td>
-                <td><strong>${escapeHtml(entry.subject)}</strong>${entry.previewText ? `<br><span class="subject-muted">${escapeHtml(entry.previewText)}</span>` : ""}<br><small class="subject-muted">${escapeHtml(entry.campaignName)}${entry.abTest ? " · A/B arm" : ""}</small></td>
-                <td>${formatCount(entry.received)}</td>
-                <td>${formatPercent(entry.openRate)}</td>
-                <td>${indexBadge(entry.openIndex, "Open")}</td>
-                <td>${formatPercent(entry.clickRate, 2)}</td>
-                <td>${indexBadge(entry.clickIndex, "Click")}</td>
+                <td class="subject-history-when"><span class="subject-nowrap">${escapeHtml(formatDate(entry.sentAt))}</span><span class="subject-cell-sub" title="${escapeHtml(entry.campaignName)}">${escapeHtml(entry.campaignName)}${entry.abTest ? " · A/B arm" : ""}</span></td>
+                <td class="subject-history-line"><strong>${escapeHtml(entry.subject)}</strong>${entry.previewText ? `<span class="subject-cell-sub is-clipped" title="${escapeHtml(entry.previewText)}">${escapeHtml(entry.previewText)}</span>` : ""}</td>
+                <td class="is-num">${formatCount(entry.received)}</td>
+                <td class="is-num">${formatPercent(entry.openRate)}</td>
+                <td class="is-num">${indexBadge(entry.openIndex, "Open")}</td>
+                <td class="is-num">${formatPercent(entry.clickRate, 2)}</td>
+                <td class="is-num">${indexBadge(entry.clickIndex, "Click")}</td>
               </tr>`).join("")}</tbody>
           </table>
         </div>
-        ${history.entries.length < history.total ? '<button class="ghost-button is-sm" data-subject-action="history-more" data-subject-always="true" type="button">Show more</button>' : ""}
-        <details><summary>Features in this account's subject lines, last three years</summary>${renderFeatureStats(history.featureStats)}</details>
-      ` : '<p class="wp-help">Loading…</p>'}`;
+        <div class="subject-table-foot">
+          <span class="subject-hint">${formatCount(history.entries.length)} of ${formatCount(history.total)} sends${history.syncedAt ? ` · synced ${escapeHtml(formatDate(history.syncedAt))}` : ""}</span>
+          ${history.entries.length < history.total ? '<button class="ghost-button is-sm" data-subject-action="history-more" data-subject-always="true" type="button">Show more</button>' : ""}
+        </div>
+        <details class="subject-more"><summary>Features in this account's subject lines, last three years</summary>${renderFeatureStats(history.featureStats)}</details>
+      ` : '<p class="subject-empty">Loading…</p>'}`;
     return;
   }
 
@@ -528,57 +580,54 @@ function renderBank() {
     const history = state.history;
     const tests = history?.abTests || [];
     node.innerHTML = `
-      <div class="wp-toolbar subject-bank-toolbar">
-        <label class="field"><span>Market</span>${marketSelect("subject-ab-country", state.bank.abCountry || "", true)}</label>
-        <label class="field"><span>Result</span><select class="wp-select" id="subject-ab-verdict">
-          ${[["", "All"], ["klar", "Clear winner"], ["tendens", "Leaning"], ["uafgjort", "Inconclusive"]].map(([value, label]) => `<option value="${value}"${state.bank.verdict === value ? " selected" : ""}>${label}</option>`).join("")}
-        </select></label>
+      <div class="subject-toolbar">
+        <label class="field"><span>Market</span>${select("subject-ab-country", state.bank.abCountry, marketOptions(true))}</label>
+        <label class="field"><span>Result</span>${select("subject-ab-verdict", state.bank.verdict, [["", "All"], ["klar", "Clear winner"], ["tendens", "Leaning"], ["uafgjort", "Inconclusive"]])}</label>
       </div>
-      <p class="wp-help">Each test is a randomised split of one list, so Apple Mail's automatic opens land on both arms alike and the difference between them is real. With a few hundred recipients per arm, most tests cannot tell two good lines apart; "clear" means a two-sided test at 95 %.</p>
-      ${(history?.abFamilies || []).length ? `<details><summary>The same test in several markets (${formatCount(history.abFamilies.length)})</summary><ul class="subject-family-list">${history.abFamilies.slice(0, 60).map((family) => `<li><strong>${escapeHtml(family.campaignName)}</strong>: variant ${escapeHtml(family.leader)} won on opens in ${formatCount(family.leaderWins)} of ${formatCount(family.tests)} markets (${escapeHtml(family.markets.join(", "))}), ${formatCount(family.decisive)} clearly.</li>`).join("")}</ul></details>` : ""}
-      ${history ? `<p class="wp-help">${formatCount(history.abTestTotal)} tests of a subject or preheader${history.abTestTotal > tests.length ? `, newest ${formatCount(tests.length)} shown` : ""}.</p><div class="subject-ab-grid">${tests.map(renderAbTest).join("")}</div>` : '<p class="wp-help">Loading…</p>'}`;
+      <p class="subject-hint">Each test split one list at random, so Apple Mail's automatic opens land on both arms alike and the difference between them is real. With a few hundred recipients per arm most tests cannot tell two good lines apart; "clear" means a two-sided test at 95 %. ${REMAINDER_NOTE}</p>
+      ${(history?.abFamilies || []).length ? `<details class="subject-more"><summary>The same test in several markets (${formatCount(history.abFamilies.length)})</summary><ul class="subject-list">${history.abFamilies.slice(0, 60).map((family) => `<li><strong>${escapeHtml(family.campaignName)}</strong>: variant ${escapeHtml(family.leader)} ahead on opens in ${formatCount(family.leaderWins)} of ${formatCount(family.tests)} markets (${escapeHtml(family.markets.join(", "))}), ${formatCount(family.decisive)} clearly.</li>`).join("")}</ul></details>` : ""}
+      ${history ? `<p class="subject-hint">${formatCount(history.abTestTotal)} tests${history.abTestTotal > tests.length ? `, newest ${formatCount(tests.length)} shown` : ""}.</p><div class="subject-ab-grid">${tests.map(renderAbTest).join("")}</div>` : '<p class="subject-empty">Loading…</p>'}`;
     return;
   }
 
   if (state.bankTab === "patterns") {
     const patterns = state.patterns;
-    const mechanisms = state.status?.taxonomy?.mechanisms || [];
-    const types = state.status?.taxonomy?.campaignTypes || [];
     const banned = new Set((state.team.banned || []).map((item) => item.id));
     node.innerHTML = `
-      <div class="wp-toolbar subject-bank-toolbar">
-        <label class="field"><span>Mechanism</span><select class="wp-select" id="subject-pattern-mechanism"><option value="">All</option>${mechanisms.map((item) => `<option value="${escapeHtml(item.key)}"${state.bank.mechanism === item.key ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></label>
-        <label class="field"><span>Campaign type</span><select class="wp-select" id="subject-pattern-type"><option value="">All</option>${types.map((item) => `<option value="${escapeHtml(item.key)}"${state.bank.campaignType === item.key ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></label>
-        <label class="field"><span>Language</span><select class="wp-select" id="subject-pattern-language">${[["", "All"], ["da", "Danish"], ["en", "English"]].map(([value, label]) => `<option value="${value}"${state.bank.language === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
-        <label class="field"><span>Source</span><select class="wp-select" id="subject-pattern-source">${[["", "All"], ["authored", "Written for the bank"], ["imported", "Imported from real senders"]].map(([value, label]) => `<option value="${value}"${state.bank.source === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
-        <label class="field"><span>Search</span><input class="wp-input" id="subject-pattern-query" type="search" value="${escapeHtml(state.bank.query)}"></label>
+      <div class="subject-toolbar">
+        <label class="field"><span>Mechanism</span>${select("subject-pattern-mechanism", state.bank.mechanism, [["", "All"], ...(state.status?.taxonomy?.mechanisms || []).map((item) => [item.key, item.label])])}</label>
+        <label class="field"><span>Campaign type</span>${select("subject-pattern-type", state.bank.campaignType, [["", "All"], ...(state.status?.taxonomy?.campaignTypes || []).map((item) => [item.key, item.label])])}</label>
+        <label class="field"><span>Language</span>${select("subject-pattern-language", state.bank.language, [["", "All"], ["da", "Danish"], ["en", "English"]])}</label>
+        <label class="field"><span>Source</span>${select("subject-pattern-source", state.bank.source, [["", "All"], ["collected", "Real lines, Really Good Emails"], ["imported", "Real lines, imported by the team"], ["authored", "Written for the bank"]])}</label>
+        <label class="field subject-toolbar-grow"><span>Search</span><input class="wp-input" id="subject-pattern-query" type="search" value="${escapeHtml(state.bank.query)}" placeholder="Then Enter"></label>
       </div>
-      <p class="wp-help">Written for the bank, not collected from real senders, and none of it measured: these are patterns for range. Lines imported from real senders are marked with the sender.</p>
+      <p class="subject-hint">Real lines carry the sender's name: other brands' sends collected from Really Good Emails, and lines the team imported. Their results are unknown. The rest were written for the bank and never sent. None of it is measured; it is there for range.</p>
       ${patterns ? `
-        <p class="wp-help">${formatCount(patterns.total)} pairs match.</p>
-        <ul class="subject-pattern-list">${patterns.entries.map((entry) => `
+        <ul class="subject-patterns">${patterns.entries.map((entry) => `
           <li class="${banned.has(entry.id) ? "is-banned" : ""}">
-            <div>
-              <strong>${escapeHtml(entry.subject)}</strong>
-              ${entry.preview ? `<span>${escapeHtml(entry.preview)}</span>` : ""}
-              <small>${(entry.mechanisms || []).map((key) => escapeHtml(mechanismLabel(key))).join(" + ")} · ${escapeHtml(campaignTypeLabel(entry.campaignType))} · ${escapeHtml(entry.language)}${entry.source === "imported" ? ` · from ${escapeHtml(entry.sender || "a real sender")}` : ""}${entry.why ? ` · ${escapeHtml(entry.why)}` : ""}</small>
+            <div class="subject-patterns-text">
+              <strong>${escapeHtml(entry.subject)}</strong>${entry.preview ? ` <span>${escapeHtml(entry.preview)}</span>` : ""}
+              <small>${(entry.mechanisms || []).map((key) => escapeHtml(mechanismLabel(key))).join(" + ")} · ${escapeHtml(campaignTypeLabel(entry.campaignType))} · ${escapeHtml(entry.language)}${entry.source === "authored" ? " · written for the bank" : ` · sent by ${escapeHtml(entry.sender || "another brand")}${entry.source === "collected" ? " (Really Good Emails)" : " (imported)"}`}</small>
             </div>
             ${banned.has(entry.id)
               ? `<button class="ghost-button is-sm" data-subject-action="unban" data-id="${escapeHtml(entry.id)}" type="button">Allow again</button>`
               : `<button class="ghost-button is-sm" data-subject-action="ban-pattern" data-id="${escapeHtml(entry.id)}" type="button">Never use</button>`}
           </li>`).join("")}</ul>
-        ${patterns.entries.length < patterns.total ? '<button class="ghost-button is-sm" data-subject-action="patterns-more" data-subject-always="true" type="button">Show more</button>' : ""}
-      ` : '<p class="wp-help">Loading…</p>'}`;
+        <div class="subject-table-foot">
+          <span class="subject-hint">${formatCount(patterns.entries.length)} of ${formatCount(patterns.total)}</span>
+          ${patterns.entries.length < patterns.total ? '<button class="ghost-button is-sm" data-subject-action="patterns-more" data-subject-always="true" type="button">Show more</button>' : ""}
+        </div>
+      ` : '<p class="subject-empty">Loading…</p>'}`;
     return;
   }
 
   if (state.bankTab === "rules") {
     node.innerHTML = `
-      <p class="wp-help">Every suggestion is checked against these after it is written, using the email's own text. A blocking rule keeps the line on screen with the reason, at the bottom; a warning asks a person to look.</p>
-      <ul class="subject-rule-list">${(state.status?.rules || []).map((rule) => `
+      <p class="subject-hint">Run on every suggestion after it is written, against the email's own text. A blocking rule keeps the line on screen, last, with the reason; a warning asks a person to look.</p>
+      <ul class="subject-rules">${(state.status?.rules || []).map((rule) => `
         <li>
-          ${rule.severity === "block" ? '<span class="wp-badge is-danger">■ Blocks</span>' : '<span class="wp-badge is-warning">▲ Warns</span>'}
-          <div><strong>${escapeHtml(rule.label)}</strong><p>${escapeHtml(rule.description)}</p></div>
+          <span class="subject-mark ${rule.severity === "block" ? "is-block" : "is-warn"}" aria-hidden="true">${rule.severity === "block" ? "■" : "▲"}</span>
+          <div><strong>${escapeHtml(rule.label)}</strong> <span class="subject-muted">${rule.severity === "block" ? "Blocks" : "Warns"}</span><p>${escapeHtml(rule.description)}</p></div>
         </li>`).join("")}</ul>`;
     return;
   }
@@ -587,14 +636,13 @@ function renderBank() {
     const banned = state.team.banned || [];
     node.innerHTML = `
       <div class="subject-import">
-        <p>Paste subject lines from newsletters you rate, one per line. "Subject — preheader" or a tab between them keeps both. They are tagged by mechanism and campaign type and join the pattern bank for the whole team, marked with the sender.</p>
-        <label class="field"><span>Sender</span><input class="wp-input" id="subject-import-sender" type="text" placeholder="e.g. the brand or shop"></label>
-        <label class="field"><span>Subject lines</span><textarea class="wp-textarea" id="subject-import-lines" rows="8" placeholder="Subject line — preheader"></textarea></label>
-        <button class="primary-button" data-subject-action="import" type="button">Add to the bank</button>
-        <p class="wp-help">${formatCount(state.status?.bank?.imported || 0)} imported lines in the bank.</p>
+        <p class="subject-prose">Paste subject lines from newsletters you rate, one per line; "Subject — preheader" or a tab between them keeps both. They are tagged and join the pattern bank for the whole team, marked with the sender.</p>
+        <label class="field"><span>Sender</span><input class="wp-input" id="subject-import-sender" type="text" placeholder="The brand or shop"></label>
+        <label class="field"><span>Subject lines</span><textarea class="wp-textarea" id="subject-import-lines" rows="7" placeholder="Subject line — preheader"></textarea></label>
+        <div><button class="primary-button" data-subject-action="import" type="button">Add to the bank</button></div>
       </div>
-      <h5>Never like this</h5>
-      ${banned.length ? `<ul class="subject-pattern-list">${banned.map((item) => `<li><div><strong>${escapeHtml(item.subject || item.id)}</strong>${item.reason ? `<small>${escapeHtml(item.reason)}</small>` : ""}</div><button class="ghost-button is-sm" data-subject-action="unban" data-id="${escapeHtml(item.id)}" type="button">Allow again</button></li>`).join("")}</ul>` : '<p class="wp-help">Nothing banned. "Not like this" on a suggestion, or "Never use" on a pattern, puts it here.</p>'}`;
+      <h4 class="subject-subhead">Never like this</h4>
+      ${banned.length ? `<ul class="subject-patterns">${banned.map((item) => `<li><div class="subject-patterns-text"><strong>${escapeHtml(item.subject || item.id)}</strong>${item.reason ? `<small>${escapeHtml(item.reason)}</small>` : ""}</div><button class="ghost-button is-sm" data-subject-action="unban" data-id="${escapeHtml(item.id)}" type="button">Allow again</button></li>`).join("")}</ul>` : '<p class="subject-hint">Nothing banned. "Not like this" on a suggestion, or "Never use" on a pattern, puts it here.</p>'}`;
   }
 }
 
@@ -610,12 +658,8 @@ function renderView() {
 
 function renderAll() {
   renderView();
+  renderFlow();
   renderLayers();
-  renderFavourites();
-  renderTemplates();
-  renderBrief();
-  renderCandidates();
-  renderActions();
   if (state.view === "bank") renderBank();
   setFeedback(state.feedback, state.feedbackTone);
 }
@@ -630,7 +674,7 @@ async function loadStatus() {
 async function loadTeam() {
   const team = await callSubjectLines("team");
   state.team = { favourites: team.favourites || [], banned: team.banned || [] };
-  renderFavourites();
+  renderShortlist();
 }
 
 async function loadTemplates() {
@@ -638,13 +682,13 @@ async function loadTemplates() {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload?.error || "The DK templates could not be loaded.");
   state.templates = Array.isArray(payload.templates) ? payload.templates : [];
-  renderTemplates();
+  renderCampaignStep();
 }
 
 async function loadHistory({ append = false } = {}) {
   const offset = append ? (state.history?.entries?.length || 0) : 0;
   const payload = await callSubjectLines("history", {
-    query: { country: state.bank.country, q: state.bank.query, sort: state.bank.sort, offset, limit: 150, verdict: state.bank.verdict, abCountry: state.bank.abCountry || "" }
+    query: { country: state.bank.country, q: state.bank.query, sort: state.bank.sort, offset, limit: 150, verdict: state.bank.verdict, abCountry: state.bank.abCountry }
   });
   state.history = append && state.history ? { ...payload, entries: [...state.history.entries, ...payload.entries] } : payload;
   renderBank();
@@ -691,23 +735,23 @@ async function analyse() {
   state.examples = [];
   state.shown = [];
   state.attempt = 0;
-  renderBrief();
-  renderCandidates();
-  setFeedback(`Brief ready for "${payload.template?.name}". Adjust the mechanisms if needed, then write subject lines.`);
+  state.open = "";
+  state.mechanismFilter = "";
+  renderFlow();
+  byId("subject-step-brief")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function generate({ again = false } = {}) {
   if (again) state.attempt += 1;
-  const count = Number(byId("subject-lines-count")?.value) || 18;
-  const note = String(byId("subject-lines-note")?.value || "").trim();
+  state.note = String(byId("subject-lines-note")?.value ?? state.note).trim();
   const payload = await callSubjectLines("generate", {
     method: "POST",
     body: {
       country: SOURCE_ACCOUNT,
       templateId: state.selectedTemplateId,
       analysis: selectedAnalysis(),
-      note,
-      count,
+      note: state.note,
+      count: state.count,
       attempt: state.attempt,
       avoid: again ? state.shown : []
     }
@@ -718,28 +762,29 @@ async function generate({ again = false } = {}) {
   state.senderLabel = payload.senderLabel || state.senderLabel;
   state.shown = [...new Set([...state.shown, ...state.candidates.map((candidate) => candidate.subject)])];
   state.editing = "";
-  renderCandidates();
-  setFeedback(`${state.candidates.length} pairs written${payload.model ? ` with ${payload.model}` : ""}.`);
+  state.open = "";
+  state.mechanismFilter = "";
+  renderFlow();
+  byId("subject-step-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function findCandidate(id) {
   return state.candidates.find((candidate) => candidate.id === id) || null;
 }
 
-async function copyCandidate(candidate) {
-  const text = candidate.preview ? `${candidate.subject}\n${candidate.preview}` : candidate.subject;
+async function copyText(subject, preview) {
   try {
-    await navigator.clipboard.writeText(text);
-    setFeedback("Copied: subject on the first line, preheader on the second.");
+    await navigator.clipboard.writeText(preview ? `${subject}\n${preview}` : subject);
+    setFeedback("Copied: the subject on the first line, the preheader on the second.");
   } catch (error) {
-    setFeedback("The browser refused the clipboard. Select the text in the card instead.", "is-warning");
+    setFeedback("The browser refused the clipboard. Select the text instead.", "is-warning");
   }
 }
 
 async function checkEdit(candidate) {
-  const card = document.querySelector(`[data-candidate="${CSS.escape(candidate.id)}"]`);
-  const subject = card?.querySelector('[data-edit="subject"]')?.value || "";
-  const preview = card?.querySelector('[data-edit="preview"]')?.value || "";
+  const row = document.querySelector(`[data-candidate="${CSS.escape(candidate.id)}"]`);
+  const subject = row?.querySelector('[data-edit="subject"]')?.value || "";
+  const preview = row?.querySelector('[data-edit="preview"]')?.value || "";
   const payload = await callSubjectLines("check", { method: "POST", body: { country: SOURCE_ACCOUNT, templateId: state.selectedTemplateId, subject, preview, mechanism: candidate.mechanism } });
   Object.assign(candidate, {
     subject: payload.candidate.subject,
@@ -750,15 +795,14 @@ async function checkEdit(candidate) {
     rationale: candidate.rationale ? `${candidate.rationale} (Redigeret.)` : ""
   });
   state.editing = "";
-  renderCandidates();
-  setFeedback(payload.candidate.status === "ok" ? "Your edit passes the rules." : "Your edit was checked - see the notes on the card.", payload.candidate.status === "block" ? "is-danger" : "");
+  setFeedback(payload.candidate.status === "ok" ? "Your edit passes the rules." : "Your edit was checked: see the notes on the line.", payload.candidate.status === "block" ? "is-danger" : "");
 }
 
 async function teamOp(body, message) {
   const payload = await callSubjectLines("team", { method: "POST", body });
   if (payload.team) state.team = { favourites: payload.team.favourites || [], banned: payload.team.banned || [] };
-  renderFavourites();
-  renderCandidates();
+  renderShortlist();
+  renderResultsStep();
   if (state.view === "bank") renderBank();
   if (message) setFeedback(message);
   return payload;
@@ -766,15 +810,9 @@ async function teamOp(body, message) {
 
 // Hands the chosen pair to Duplicate & translate, which then translates it into every market's
 // language with the template - instead of translating the template's name as the subject.
-function useInDuplicator(candidate) {
+function useInDuplicator(templateId, templateName, subject, preview) {
   window.dispatchEvent(new CustomEvent("westpack-subject-line-use", {
-    detail: {
-      account: SOURCE_ACCOUNT,
-      templateId: state.selectedTemplateId,
-      templateName: state.template?.name || "",
-      subject: candidate.subject,
-      preview: candidate.preview
-    }
+    detail: { account: SOURCE_ACCOUNT, templateId, templateName, subject, preview }
   }));
 }
 
@@ -802,53 +840,77 @@ function handleClick(event) {
 
   const handlers = {
     "select-template": () => {
-      if (state.selectedTemplateId === id) return;
-      state.selectedTemplateId = id;
-      state.analysis = null;
-      state.insights = null;
-      state.candidates = [];
-      state.strategyNote = "";
-      state.template = state.templates.find((template) => template.id === id) || null;
-      renderTemplates();
-      renderBrief();
-      renderCandidates();
-      renderActions();
+      if (state.selectedTemplateId !== id) {
+        state.selectedTemplateId = id;
+        state.template = state.templates.find((template) => template.id === id) || null;
+        state.analysis = null;
+        state.insights = null;
+        state.candidates = [];
+        state.strategyNote = "";
+      }
+      state.picking = false;
+      renderFlow();
+    },
+    "change-template": () => {
+      state.picking = true;
+      renderCampaignStep();
+      byId("subject-lines-template-search")?.focus();
     },
     analyse: () => runAction("Reading the email and the house evidence", analyse),
-    generate: () => runAction("Writing subject lines", () => generate()),
-    "generate-again": () => runAction("Writing new ones", () => generate({ again: true })),
+    generate: () => runAction(`Writing ${state.count} pairs - about a minute`, () => generate()),
+    "generate-again": () => runAction(`Writing ${state.count} new pairs - about a minute`, () => generate({ again: true })),
+    "set-count": () => {
+      state.count = Number(button.dataset.count) || 18;
+      state.note = String(byId("subject-lines-note")?.value ?? state.note);
+      renderBriefStep();
+    },
     "toggle-mechanism": () => {
       const key = button.dataset.key;
+      state.note = String(byId("subject-lines-note")?.value ?? state.note);
       state.mechanisms = state.mechanisms.includes(key) ? state.mechanisms.filter((item) => item !== key) : [...state.mechanisms, key];
-      renderBrief();
+      renderBriefStep();
     },
-    copy: () => candidate && copyCandidate(candidate),
+    "filter-mechanism": () => {
+      state.mechanismFilter = button.dataset.key || "";
+      renderResultsStep();
+    },
+    toggle: () => {
+      if (state.editing && state.editing !== id) state.editing = "";
+      state.open = state.open === id ? "" : id;
+      renderResultsStep();
+    },
+    copy: () => candidate && copyText(candidate.subject, candidate.preview),
+    "copy-favourite": () => {
+      const item = (state.team.favourites || []).find((favourite) => favourite.id === id);
+      if (item) copyText(item.subject, item.preview);
+    },
     edit: () => {
       state.editing = id;
-      renderCandidates();
+      state.open = id;
+      renderResultsStep();
     },
     "cancel-edit": () => {
       state.editing = "";
-      renderCandidates();
+      renderResultsStep();
     },
-    "check-edit": () => candidate && runAction("Checking", () => checkEdit(candidate)),
-    favourite: () => candidate && runAction("Saving", () => teamOp({ op: "favourite", subject: candidate.subject, preview: candidate.preview, mechanism: candidate.mechanism, campaignName: state.template?.name || "", templateId: state.selectedTemplateId }, "Saved for the team.")),
-    unfavourite: () => runAction("Removing", () => teamOp({ op: "unfavourite", id }, "Removed.")),
-    ban: () => candidate && runAction("Saving", () => teamOp({ op: "ban", subject: candidate.subject, reason: `Afvist til ${state.template?.name || "en kampagne"}` }, "Noted. The generator will steer away from lines like this.")),
+    "check-edit": () => candidate && runAction("Checking your edit", () => checkEdit(candidate)),
+    favourite: () => candidate && runAction("Saving", () => teamOp({ op: "favourite", subject: candidate.subject, preview: candidate.preview, mechanism: candidate.mechanism, campaignName: state.template?.name || "", templateId: state.selectedTemplateId }, "Saved to the shortlist.")),
+    unfavourite: () => runAction("Removing", () => teamOp({ op: "unfavourite", id }, "Removed from the shortlist.")),
+    ban: () => candidate && runAction("Saving", () => teamOp({ op: "ban", subject: candidate.subject, reason: `Afvist til ${state.template?.name || "en kampagne"}` }, "Noted. The writer will steer away from lines like this.")),
     "ban-pattern": () => {
       const entry = state.patterns?.entries?.find((item) => item.id === id);
-      return runAction("Saving", () => teamOp({ op: "ban", id, subject: entry?.subject || id, reason: "Mønster fravalgt i banken" }, "The generator will not be shown this pattern again."));
+      return runAction("Saving", () => teamOp({ op: "ban", id, subject: entry?.subject || id, reason: "Mønster fravalgt i banken" }, "The writer will not be shown this line again."));
     },
     unban: () => runAction("Saving", () => teamOp({ op: "unban", id }, "Allowed again.")),
-    use: () => candidate && useInDuplicator(candidate),
-    sync: () => runAction("Syncing from Klaviyo - a first full sync takes a few minutes", async () => {
+    use: () => candidate && useInDuplicator(state.selectedTemplateId, state.template?.name || "", candidate.subject, candidate.preview),
+    sync: () => runAction("Syncing from Klaviyo", async () => {
       let payload = await callSubjectLines("sync_history", { method: "POST", body: {} });
       for (let round = 0; payload.remaining?.length && round < 4; round += 1) {
         setBusy(`Syncing - ${payload.remaining.length} accounts left`);
         payload = await callSubjectLines("sync_history", { method: "POST", body: {} });
       }
       await loadStatus();
-      setFeedback(`Synced ${payload.history?.sends ? `${formatCount(payload.history.sends)} sends` : ""}${payload.failed?.length ? `. Failed: ${payload.failed.map((item) => item.country).join(", ")}` : ""}.`, payload.failed?.length ? "is-warning" : "");
+      setFeedback(`Synced ${formatCount(payload.history?.sends || 0)} sends${payload.failed?.length ? `. Failed: ${payload.failed.map((item) => item.country).join(", ")}` : ""}.`, payload.failed?.length ? "is-warning" : "");
     }),
     "history-more": () => runAction("Loading", () => loadHistory({ append: true })),
     "patterns-more": () => runAction("Loading", () => loadPatterns({ append: true })),
@@ -876,11 +938,15 @@ function handleChange(event) {
   return undefined;
 }
 
-function handleKeydown(event) {
+function handleKeyup(event) {
   const target = event.target;
   if (target.id === "subject-lines-template-search") {
     state.templateQuery = target.value;
-    renderTemplates();
+    renderTemplateList();
+    return;
+  }
+  if (target.id === "subject-lines-note") {
+    state.note = target.value;
     return;
   }
   if (event.key !== "Enter") return;
@@ -900,7 +966,7 @@ export function initSubjectLines() {
   panel.dataset.subjectWired = "true";
   panel.addEventListener("click", handleClick);
   panel.addEventListener("change", handleChange);
-  panel.addEventListener("keyup", handleKeydown);
+  panel.addEventListener("keyup", handleKeyup);
 }
 
 export function loadSubjectLines({ force = false } = {}) {
@@ -917,4 +983,4 @@ export function loadSubjectLines({ force = false } = {}) {
   });
 }
 
-export const __subjectLinesInternals = { state, renderInbox, selectedAnalysis };
+export const __subjectLinesInternals = { state, renderAll, selectedAnalysis };
