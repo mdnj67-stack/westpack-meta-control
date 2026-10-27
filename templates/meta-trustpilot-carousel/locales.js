@@ -119,7 +119,7 @@
       ],
       sources: [
         "eur_eu_ita home: «Ordinate anche solo 48 pezzi con il vostro logo»",
-        "eur_eu_ita home: «Stampa gratuita su scatole per gioielli» (the category page hedges: «sulla maggior parte degli astucci in cartoncino»)",
+        "eur_eu_ita home: «Stampa gratuita su scatole per gioielli» (the category page says «sulla maggior parte»; the user confirmed 2026-10-27 that logo print is free on every jewellery box, whatever the material)",
         "eur_eu_ita USP: «Cliché gratuito per il primo ordine»"
       ]
     },
@@ -170,28 +170,30 @@
         sub: "What our customers say",
         rating: "TrustScore {score} · {reviews} reviews · {month}"
       },
+      // Duties replace the foil plate here: for a US buyer the import cost is the open question, and the
+      // duties carousel was the US account's best ad (11 of 23 purchases).
       offer: {
         headline: "Jewelry boxes with your logo",
         accent: "from 48 units",
-        checks: ["Free logo printing", "Free foil plate with your first order"]
+        checks: ["Free logo printing", "US duties included at checkout"]
       },
       cardText: {
         hero: ["Jewelry boxes with your logo", "TrustScore {score} · {reviews} reviews"],
         quote: "{stars}-star review",
-        offer: ["From 48 units", "Free logo printing"]
+        offer: ["From 48 units", "US duties included"]
       },
       primaryText: [
         "Our customers say it best ✨",
         "Westpack is rated {label} on Trustpilot: TrustScore {score} from {reviews} reviews ({month}).",
         "",
         "✔ Jewelry boxes with your logo from 48 units",
-        "✔ Free logo printing on jewelry boxes",
-        "✔ Complimentary foil stamping plate with your first order"
+        "✔ Free logo printing on every jewelry box",
+        "✔ All US duties included at checkout"
       ],
       sources: [
         "usd_us_eng jewelry boxes: \"MOQ: 48 units\"",
-        "usd_us_eng: \"Free logo printing on jewelry boxes\"",
-        "usd_us_eng USP: \"Complimentary foil stamping plate with first order\""
+        "usd_us_eng: \"Free logo printing on jewelry boxes\" - on every jewelry box, whatever the material (user, 2026-10-27)",
+        "usd_us_eng header: \"All Duties Included at Checkout for US Orders\" (also the blog post /usd_us_eng/blog/us-orders)"
       ]
     }
   };

@@ -101,9 +101,13 @@ der kan sætte en "See offer"-knap på.
 | `en-us` | Udkast | usd_us_eng/jewelry-boxes.html |
 
 Alle påstande på tilbudskortet er læst på hvert lands egen shop 27/10/2026 (se `sources` i `locales.js`). Teksten på
-udkastene skal læses af en, der taler sproget, før den kører. Render-scriptet minder om det. Den italienske
-kategoriside siger "gratis logotryk på de fleste papæsker", og forsiden siger "gratis tryk på smykkeæsker". Hold øje
-med det, hvis shoppen ændres.
+udkastene skal læses af en, der taler sproget, før den kører. Render-scriptet minder om det.
+
+Logotryk er gratis på **alle** smykkeæsker uanset materiale (bekræftet 27/10/2026). Den italienske kategoriside skriver
+"de fleste", men det gælder alle. Det gælder stadig kun smykkeæsker: poser, pochoner og flade æsker kan koste et tillæg.
+
+`en-us` har told på tilbudskortet ("US duties included at checkout") i stedet for den gratis prægeplade, fordi told er det
+store spørgsmål for en amerikansk køber. Påstanden står i US-shoppens topbjælke og i bloggen /usd_us_eng/blog/us-orders.
 
 ## Filer
 
