@@ -970,6 +970,74 @@ as a small Canva-side companion app that talks to this backend. Browser automati
 Canva editor is not an option worth revisiting: the editor is a canvas application, so there is
 no stable DOM, and it would fail by producing wrong artwork rather than an error.
 
+## Subject line generator — Klaviyo email → Subject lines
+
+Added 2026-10-27 at the user's request ("emnelinje generator i biblen" - "biblen" is this app, once
+"Mads' bibel"). Choose a Danish template from the DK account (the same 20-template list Duplicate &
+translate offers), read the brief the analysis makes of it, then write subject line + preheader pairs
+from three layers. `api/klaviyo/subject-lines.js` (`?action=` status / analyse / generate / check /
+history / bank / team / sync_history), `src/klaviyo-subject-lines.js`, `server/klaviyo/subject-line-*.js`.
+
+### What Klaviyo exposes (verified against the live accounts 2026-10-27)
+
+- Subject, preheader and sender label ("Ida/Jette/Louise fra Westpack") are on the **campaign
+  message**: `GET /api/campaigns/?filter=...&include=campaign-messages`, `attributes.content.subject`
+  / `preview_text` / `from_label` on revision 2024-10-15. 100 campaigns a page.
+- ~7,050 sent subject lines across 18 accounts since September 2021 (DK 775, UK 747, NL/DE/EU ~520,
+  most others ~420; CZ/HU/SK one each). **~500 A/B tests of a subject or preheader**, almost all in
+  DK, UK, DE, NL and EU, and almost all from 2021–2023.
+- `campaign-values-reports` cannot tell A/B arms apart (one row per campaign), allows at most **one
+  year** per request ("Passed in timeframe is greater than 1 year") and throttles after two calls.
+  Not used here.
+- **Event aggregates can.** `metric-aggregates` grouped by `$message` (= campaign id, not message
+  id) and `$variation` (= the A/B arm's message id; empty for a single send) gives Received/Opened/
+  Clicked per arm. A third dimension `Bot Click` removes link scanners. Three calls per year per
+  account. Klaviyo exposes **no** machine-open (Apple MPP) dimension - "Apple Privacy Open",
+  "Machine Open" etc. are all refused.
+- Full sync of all 18 accounts: ~180 s with five accounts in parallel (DK alone ~80 s). Afterwards
+  only the current year is re-read. The route starts no new market after 120 s, so the first sync in
+  production takes two calls; the nightly cron (04:50 UTC) one.
+
+### How the figures may be read
+
+- Open rates are 55-70% because Apple Mail and Gmail's proxy open mail nobody read. Every send is
+  scored as an **open index** against its own market's median in the ±45 days around it (1.00 =
+  typical), never as a raw rate. Inside an A/B test the inflation hits both arms alike, so the
+  difference is real: A/B tests are the strong evidence, judged by a two-proportion z-test (`klar`
+  ≥ 1.96, `tendens` ≥ 1.28, else `uafgjort`). In DK 9 of 98 subject tests are clear; most lists of
+  ~800 cannot separate two good lines.
+- Klaviyo sends the winning arm on to the rest of the list, so a much larger arm mixes the test with
+  a later send (`includesRemainder`). Shown on screen and in the prompt.
+- Surface features (question, emoji, length, number) move DK's median open index by less than ±3%;
+  a discount in the subject goes with a click index of 1.6. Correlation only, and labelled so.
+
+### Three layers, and what each is allowed to claim
+
+1. **History** - measured. Stored in Vercel Blob (`klaviyo-snapshots/subject-line-history.json`, via
+   `server/meta/historical-store.js`), not Redis, which has been full since 2026-10-21.
+2. **Pattern bank** - `knowledge/subject-lines/` (~2,000 pairs, 16 mechanisms, 11 campaign types).
+   **Authored, not collected**: Milled answers 403 on every brand page and Really Good Emails renders
+   client-side, and the bank does not work around a site that refuses automated requests. Labelled as
+   unmeasured everywhere it appears. Real lines enter through the screen's import (team pastes from
+   their own inbox; tagged by the default model; stored with the team data, marked with the sender).
+   Rebuild with `node knowledge/subject-lines/tools/build-bank.js` after editing `source/`.
+3. **Rules** - `server/klaviyo/subject-line-rules.js`: the standing corrections (no eco claims, no
+   free samples, production time not delivery, no single deadline date, no five stars, no watch boxes,
+   never talk down) plus numbers/claims that must appear in the email itself. Written into the prompt
+   *and* run over every candidate; a blocked candidate stays on screen, last, with the reason.
+   Patterns use Unicode letter boundaries - `\b` treats æ/ø/å as non-letters.
+
+### Other decisions
+
+- The analysis runs on the default model (`OPENAI_MODEL`); writing runs on `CONTENT_AGENT_MODEL`
+  (gpt-5.6, ~70 s for 12 pairs). The strong model ran past 130 s on the analysis alone.
+- A Klaviyo template has no subject line. Duplicate & translate used to translate the template's
+  **name** as the subject. "Use in Duplicate & translate" sets `appState.klaviyoTemplateSubjectOverride`
+  for that one template, so the rollout translates the chosen pair into every market.
+- Read-only towards Klaviyo; the only POST is the metric-aggregates query.
+- Tests: `tests/klaviyo-subject-line-{rules,history,bank,generator}.test.js`,
+  `tests/klaviyo-subject-lines-ui.test.js`.
+
 ## Model JSON output can carry NUL characters
 
 Added 2026-09-24, from an operator report that duplicating and translating a Klaviyo campaign

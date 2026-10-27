@@ -1,0 +1,1752 @@
+[
+  {
+    "subject": "200.000 om dagen – og din er én af dem",
+    "preview": "Sådan bliver hver logoordre set af et menneske, også midt i højsæsonen i Holstebro.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det store tal gør fabrikken håndgribelig, og »din« trækker det ned til modtagerens egen ordre."
+  },
+  {
+    "subject": "Holstebro siden 1953 – nu med robotarme 🦾",
+    "preview": "Et kig ned langs produktionslinjen, hvor håndværk og nye maskiner deler gulvplads.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Årstallet og robotarmene trækker i hver sin retning, og spændingen gør en virksomhedshistorie værd at åbne."
+  },
+  {
+    "subject": "Omkring 200 mennesker. Én æske ad gangen.",
+    "preview": "Grafikere, maskinfolk og pakkere – mød nogle af dem, der rører din ordre, før du gør.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem de mange mennesker og den ene æske gør en stor produktion personlig."
+  },
+  {
+    "subject": "Vi prøver at få sølv til at anløbe. Med vilje. 🧪",
+    "preview": "Materialerne bliver testet i eget hus for det, dine smykker aldrig må opleve i en skuffe.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En tilsyneladende selvmodsigelse åbner mailen, og forklaringen viser sig at være en tryghed for modtageren."
+  },
+  {
+    "subject": "Hvad laver en grafiker egentlig med dit logo?",
+    "preview": "Zoomer ind, retter streger, der er for tynde til folie, og sender dig et digitalt proof før tryk.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet peger på et menneske, modtageren aldrig møder, og svaret handler om deres egen ordre."
+  },
+  {
+    "subject": "Dit logo under luppen 🔍",
+    "preview": "Det er her, grafikerne fanger de streger, der ville forsvinde i folien – før du ser dit proof.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et kort billede af et nærstudie vækker nysgerrighed, og forhåndsvisningen forklarer, hvorfor det gavner modtageren."
+  },
+  {
+    "subject": "Cirka 25 foliefarver på hylden. Hvilken er din? 🎨",
+    "preview": "Guld, sølv, rosaguld og kobber – fotograferet på rigtige æsker, ikke tegnet på en skærm.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet viser fabrikkens bredde, og spørgsmålet gør valget til modtagerens eget."
+  },
+  {
+    "subject": "Det her sker, når du trykker »Bestil« 👇",
+    "preview": "Fra ordren lander hos os, over grafikernes tjek og dit proof, til den første æske er trykt.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren kender kun sit eget klik, og mailen lover resten af historien, de aldrig ser."
+  },
+  {
+    "subject": "Den lille metalplade, der bærer dit logo",
+    "preview": "Mød klichéen: dit logo i aluminium, der presser varm folie fast på æsken.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En ukendt genstand med modtagerens eget logo på skaber en nysgerrighed, kun mailen kan lukke."
+  },
+  {
+    "subject": "Inden din første æske: en kliché",
+    "preview": "Vi laver den til dit logo, og på din første ordre er der ingen opstartsomkostninger.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Processen forklarer fordelen, så »ingen opstartsomkostninger« føles som noget konkret og ikke som et slogan."
+  },
+  {
+    "subject": "Robotarmene har travlt. Det er efterår 🍂",
+    "preview": "Højsæsonen er i gang i Holstebro – her er, hvad den betyder for produktionstiden på din logoordre.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et billede fra fabrikken gør sæsonen konkret, før mailen kommer til det praktiske."
+  },
+  {
+    "subject": "Sådan ser højsæson ud fra fabriksgulvet",
+    "preview": "Fyldte paller, varm folie og en klar besked til dig, der vil have logo på julens æsker.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Scenen fra gulvet gør travlheden synlig, og forhåndsvisningen afslører, at der følger en besked med."
+  },
+  {
+    "subject": "Hvorfor er logofristerne så tidlige? ⏳",
+    "preview": "Svaret står på fabriksgulvet: en højsæson, hvor tusindvis af julens logoæsker deler samme linje.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet tager modtagerens undren alvorligt, og svaret bag kulisserne gør fristen forståelig."
+  },
+  {
+    "subject": "Det sker der i de 7–8 arbejdsdage ⏱️",
+    "preview": "Grafikertjek, kliché, proof, folie og kontrol – produktionstiden bag en ny logoordre, trin for trin.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et tidsrum, modtageren kender fra produktsiden, bliver pakket ud, så ventetiden giver mening."
+  },
+  {
+    "subject": "Før folien: et menneske kigger på dit logo",
+    "preview": "Hver logofil bliver gennemgået af en grafiker, og du godkender et digitalt proof før produktion.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ordet »menneske« står i kontrast til forestillingen om en maskine og giver tryghed i et køb med logo."
+  },
+  {
+    "subject": "Det, vi gør, hvis dit logo ikke kan trykkes",
+    "preview": "Fine streger og skygger forsvinder i folie. Så tegner grafikerne det om – og viser dig det først.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Linjen tager en bekymring, modtageren måske ikke har sagt højt, og svarer på den med en proces."
+  },
+  {
+    "subject": "Hvorfor en gradient aldrig bliver til folie",
+    "preview": "Varmprægning er én farve ad gangen. Sådan oversætter grafikerne et logo, så det står skarpt.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et teknisk »aldrig« vækker nysgerrighed, og mailen gør begrænsningen til et designråd."
+  },
+  {
+    "subject": "En dag på fabrikken i 9 billeder 📸",
+    "preview": "Fra de første paller om morgenen til de sidste kasser, der forlader Holstebro om aftenen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et fast antal billeder lover en hurtig, overskuelig tur ind i en verden, modtageren aldrig ser."
+  },
+  {
+    "subject": "Hvem kigger på din æske, før du gør? 👀",
+    "preview": "Kvalitetskontrollen er sidste stop på fabrikken – og den mest kræsne kunde, vi har.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør modtageren til nummer to i køen, og svaret er et menneske, der passer på deres ordre."
+  },
+  {
+    "subject": "Må vi vise dig rundt i Holstebro? 🏭",
+    "preview": "En tur gennem lager og produktion på 14.000 m² – med et stop ved grafikernes skriveborde.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En høflig invitation føles personlig og lover en rundvisning, de fleste kunder aldrig får."
+  },
+  {
+    "subject": "Holstebro, Kina og Indonesien – og din æske",
+    "preview": "Hvorfor vi har egne kontorer på den anden side af jorden, og hvad det betyder for det, du bestiller.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre steder i én linje vækker nysgerrighed om, hvordan de hænger sammen, og »din æske« gør det relevant."
+  },
+  {
+    "subject": "Ingen anløbsfremmende kemikalier. Sådan ved vi det",
+    "preview": "Materialerne bliver testet i eget hus, før de bliver til æsker, dine sølvsmykker skal ligge i.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Påstanden kommer først og beviset bagefter, og det er beviset, modtageren åbner for."
+  },
+  {
+    "subject": "Sådan kommer guldfolien over på dit låg ✨",
+    "preview": "Varme, tryk og en kliché med dit logo – og et øjeblik senere er det en del af æsken.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et »sådan« lover at vise et kort, næsten magisk øjeblik, modtageren aldrig ser selv."
+  },
+  {
+    "subject": "Kan man trykke et foto i folie? Nej. Men…",
+    "preview": "…sådan får du i stedet et detaljeret logo til at stå skarpt i én enkelt foliefarve.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet besvares straks med et nej, og det hængende »men« får modtageren til at læse videre."
+  },
+  {
+    "subject": "En hylde på vores lager med dit navn på",
+    "preview": "Bestil stort, opbevar hos os, og betal, efterhånden som du trækker på lageret.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Billedet af en hylde med modtagerens navn gør en lagerservice konkret og næsten personlig."
+  },
+  {
+    "subject": "Bag døren til vores designstudie ✏️",
+    "preview": "Her bliver helt egne æsker tegnet fra bunden, med én fast kontaktperson hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lukket dør er den enkleste form for nysgerrighed, og forhåndsvisningen siger, hvad der venter bag den."
+  },
+  {
+    "subject": "Når en ordre hedder 9.600 æsker",
+    "preview": "Sådan planlægger vi de store bulkordrer – og derfor kan de blive op til 40 % billigere.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort, præcist tal skaber et billede af skala, og prisfordelen bliver forklaret i stedet for bare påstået."
+  },
+  {
+    "subject": "Hvorfor 48 stk. er nok til en logoordre",
+    "preview": "Bestil helt ned til 48 stk. med dit logo – sådan ser en lille serie ud på produktionslinjen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lavt, konkret tal fjerner en barriere, og kulissen viser, at små ordrer også bliver taget alvorligt."
+  },
+  {
+    "subject": "Tre ting at se efter i dit digitale proof",
+    "preview": "Grafikerne har gjort deres del. Nu er det dig, der godkender – sådan gør du det med ro i maven.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tallet lover et kort, brugbart tjek, og forhåndsvisningen viser, at modtageren har sidste ord."
+  },
+  {
+    "subject": "Ny æske, samme test 🔬",
+    "preview": "Før den nye serie kom i shoppen, gik den gennem den samme anløbningstest som alle de andre.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den korte kontrast mellem nyt og velkendt gør en lancering til et løfte om kvalitet."
+  },
+  {
+    "subject": "Den nye æske kom ud. Grafikerne kom løbende",
+    "preview": "Efterårets nye smykkeæske, og de foliefarver, der klædte den bedst på det første prøvetryk.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den lille anekdote viser begejstring indefra, og det gør nyheden mere troværdig end et udråbstegn."
+  },
+  {
+    "subject": "Bæreposer: folie på papir er en anden sport",
+    "preview": "Papir tager imod varm folie anderledes end karton – sådan får vi logoet skarpt på din bærepose.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Idiomet giver et smil, og forklaringen viser, at der ligger håndværk bag selv en pose."
+  },
+  {
+    "subject": "Lyden af højsæson 🔊",
+    "preview": "Vi satte en mikrofon ved linjen en tirsdag i oktober. Skru op, og hør julens æsker blive til.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En uventet sans – lyden – gør en velkendt sæson ny og lover noget, man kan opleve."
+  },
+  {
+    "subject": "Mens du tænker på jul, trykker vi den",
+    "preview": "Julens logoæsker er allerede på produktionslinjen i Holstebro – se, hvordan de bliver til.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Butikkens og fabrikkens verden mødes i én sætning og gør sæsonen konkret."
+  },
+  {
+    "subject": "Hos os starter julen, når bladene falder",
+    "preview": "Efteråret er højsæson på fabrikken, og derfor er det nu, logoordrer til jul skal ind.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En poetisk forskydning af julen til efteråret gør fristen forståelig uden at råbe."
+  },
+  {
+    "subject": "Gæt dagens tal fra fabrikken 🎯",
+    "preview": "Hvor mange æsker og poser forlader Holstebro på en dag? Tætteste gæt vinder – præmien står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gættelegen involverer modtageren med det samme og lærer dem noget om fabrikken undervejs."
+  },
+  {
+    "subject": "Navngiv robotarmen 🤖",
+    "preview": "Den har arbejdet uden navn alt for længe. Bedste forslag vinder, og reglerne står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En absurd lille opgave gør konkurrencen let at sige ja til og giver et smil først."
+  },
+  {
+    "subject": "Du bestemmer, hvad vi filmer på fabrikken 🎬",
+    "preview": "Folie, kliché, robotarme eller anløbningstest? Stem i mailen – vinderen bliver næste video.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At give modtageren styringen gør dem til medskaber af den næste mail."
+  },
+  {
+    "subject": "Én kundes logo, fulgt fra fil til færdig æske",
+    "preview": "Vi har fulgt en rigtig ordre gennem huset: grafiker, proof, kliché og den første trykte æske.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En enkelt, virkelig ordre gør en abstrakt proces til en historie med begyndelse og slutning."
+  },
+  {
+    "subject": "Vi tog med en æske hjem til kunden",
+    "preview": "Fra produktionslinjen i Holstebro til disken i en smykkebutik – hele vejen rundt med kamera.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rejsen fra fabrik til butik giver en kundecase et forløb, man har lyst til at følge."
+  },
+  {
+    "subject": "For forhandlere: et kig ind i maskinrummet",
+    "preview": "Når du sælger vores æsker videre, skal du kunne svare på, hvordan de bliver lavet. Her er svarene.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Linjen henvender sig direkte til én rolle og lover viden, de kan bruge over for deres egne kunder."
+  },
+  {
+    "subject": "Din profil, vores annoncekroner",
+    "preview": "Bag om partnerprogrammet: sådan bliver en samarbejdsannonce til, fra første idé til dit feed.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Modsætningen mellem »din« og »vores« siger fordelen, før forhåndsvisningen viser processen."
+  },
+  {
+    "subject": "Vi har ryddet en hylde på lageret 📦",
+    "preview": "Restpartier fra højsæsonen til en pris, der står i mailen – så længe hylden ikke er tom.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret billede fra lageret giver tilbuddet en grund og gør det mere troværdigt end et procenttal."
+  },
+  {
+    "subject": "Fra Holstebro til over 30.000 brands 🌍",
+    "preview": "Hvordan en fabrik i Vestjylland endte med at pakke for butikker over hele verden.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem den lille by og det store tal fortæller en historie på få ord."
+  },
+  {
+    "subject": "Din fil til venstre, dit proof til højre",
+    "preview": "Forskellene mellem de to er det, grafikerne har rettet, så logoet står skarpt i folie.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et før-og-efter-billede i selve emnelinjen lover, at modtageren kan se forskellen med egne øjne."
+  },
+  {
+    "subject": "Guldet kommer på rulle",
+    "preview": "Hver foliefarve er en tynd rulle, der bliver presset fast med varme. Se dem side om side på hylden.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En overraskende, konkret detalje om guld vækker nysgerrighed uden at love for meget."
+  },
+  {
+    "subject": "Vi printer ikke dit logo. Vi præger det",
+    "preview": "Forskellen er varme, tryk og en metalkliché – og den kan ses, når æsken fanger lyset.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Skiftet fra »printe« til »præge« retter en forestilling og gør håndværket til en kvalitet."
+  },
+  {
+    "subject": "Varme, tryk og tålmodighed 🔥",
+    "preview": "Tre ingredienser i hvert folietryk fra Holstebro – og den ene kan ikke købes på rulle.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Opremsningen lyder som en opskrift, og pointen om tålmodighed gør håndværket menneskeligt."
+  },
+  {
+    "subject": "Hvor stort må dit logo være på låget?",
+    "preview": "Hver æske har sit eget logofelt, og grafikerne finder den størrelse, der står bedst.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et praktisk spørgsmål, modtageren selv har stillet, lover et svar fra dem, der faktisk trykker."
+  },
+  {
+    "subject": "Pallerne bliver højere i oktober",
+    "preview": "Efteråret er vores travleste tid. Her er, hvordan du planlægger logoæskerne til sæsonen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et fysisk billede af travlhed siger mere om sæsonen end et »nu er det højsæson«."
+  },
+  {
+    "subject": "Hvorfor laver vi stadig æsker i Danmark?",
+    "preview": "Fordi folie, logo og kvalitet kræver korte veje mellem grafiker, maskine og kontrol.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet foregriber en tanke, modtageren måske har haft, og svaret gør geografien til en fordel."
+  },
+  {
+    "subject": "»Den streg overlever ikke folien«",
+    "preview": "Det siger grafikerne tit. Her er, hvad de gør ved den, og hvorfor du ser det i dit proof.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et citat fra arbejdsbordet lyder ægte og lover et indblik, der handler om modtagerens eget logo."
+  },
+  {
+    "subject": "3 ting, vi ofte retter i logoer ✍️",
+    "preview": "Tynde streger, lille tekst og skygger – se dem før og efter, grafikerne har været der.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille tal lover noget overskueligt, og før-og-efter gør det til ren læring."
+  },
+  {
+    "subject": "Du har sidste ord. Altid.",
+    "preview": "Ingen logoordre går i produktion, før du har set og godkendt det digitale proof. Sådan foregår det.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kort løfte om kontrol beroliger, og forhåndsvisningen forklarer, hvordan det bliver holdt."
+  },
+  {
+    "subject": "Kalenderen på fabrikken er ved at blive fuld 🗓️",
+    "preview": "Højsæsonen fylder produktionsplanen, og fristerne for logoordrer falder tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen bliver begrundet i noget fysisk – en fuld kalender – i stedet for et »skynd dig«."
+  },
+  {
+    "subject": "Klichéen skal laves, før folien kan varmes",
+    "preview": "Derfor tæller en ny logoordre 7–8 arbejdsdages produktion, og derfor skal den ind før fristen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Årsagskæden fra kliché til frist gør tidsgrænsen logisk i stedet for vilkårlig."
+  },
+  {
+    "subject": "Inside a day of 200,000 boxes and bags 📦",
+    "preview": "Pallets in, cartons out, and somewhere in the middle, a designer zooming in on your logo.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det enorme tal og den lille detalje i forhåndsvisningen spiller sammen og gør skalaen personlig."
+  },
+  {
+    "subject": "We redraw logos before they reach the foil",
+    "preview": "Fine lines and shadows don't survive hot-foil printing. Here's what our designers do instead.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret løfte om håndarbejde fjerner en bekymring, før modtageren har nået at få den."
+  },
+  {
+    "subject": "Since 1953, in a town called Holstebro",
+    "preview": "A short walk through the factory where your logo meets the foil and the boxes meet the pallet.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Eventyrtonen inviterer indenfor, og forhåndsvisningen lover en konkret rundtur."
+  },
+  {
+    "subject": "Old factory, new arms 🦾",
+    "preview": "Robot arms now share the line in Holstebro with the people who keep an eye on every order.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet på »arms« og kontrasten mellem gammelt og nyt giver et smil og et billede."
+  },
+  {
+    "subject": "Why your silver won't mind our boxes",
+    "preview": "Every material is tarnish-tested in-house before it becomes a box. Here's what that test involves.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Personificeringen af sølvet gør en teknisk test til en lille, tryg historie."
+  },
+  {
+    "subject": "Rose gold, copper or classic silver? 🎨",
+    "preview": "We photographed the foils on real boxes at the factory, so you're not choosing from a screen.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Valget i emnelinjen involverer modtageren, og forhåndsvisningen fjerner usikkerheden ved at vælge på en skærm."
+  },
+  {
+    "subject": "The second your logo becomes permanent 🔥",
+    "preview": "Heat, pressure and a metal cliché: the moment in production you'd never otherwise get to see.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kort, afgørende øjeblik lover noget, modtageren ikke kan se andre steder."
+  },
+  {
+    "subject": "Your December is our October 🍂",
+    "preview": "High season at the factory is now, so Christmas logo deadlines come sooner than you'd think.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Byttet om på månederne viser på få ord, hvorfor fristen ligger tidligere, end modtageren regner med."
+  },
+  {
+    "subject": "Five stops between your file and your first box",
+    "preview": "Designer check, cliché, proof, foil and final inspection, each one photographed in Holstebro.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et tal sætter rammen for en proces, modtageren ellers kun kender som ventetid."
+  },
+  {
+    "subject": "What 'no start-up costs' actually covers",
+    "preview": "Meet the cliché behind your logo, and see why your first order comes without that cost.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At pakke en standardfordel ud gør den håndgribelig og troværdig i stedet for et slogan."
+  },
+  {
+    "subject": "As few as 48, and here's how 👇",
+    "preview": "Pieces with your logo, that is. Follow a small run through the factory, from proof to packing.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lave tal fjerner en barriere, og »here's how« lover et kig bag kulisserne frem for en påstand."
+  },
+  {
+    "subject": "We'll keep your boxes on our shelves 📦",
+    "preview": "Order in volume, store it with us and pay as you draw on the stock, box by box.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et hverdagsagtigt løfte gør en lagerservice konkret og fjerner bekymringen for plads i butikken."
+  },
+  {
+    "subject": "Every bespoke box starts as a pencil line ✏️",
+    "preview": "Inside our design studio, with one named contact from first sketch to finished packaging.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det mindste udgangspunkt – en blyantstreg – gør skræddersyet emballage til en historie, man vil følge."
+  },
+  {
+    "subject": "Inside our autumn, one pallet at a time",
+    "preview": "A photo diary from high season in Holstebro, and what it means for your logo order right now.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Dagbogsformen gør sæsonen personlig, og forhåndsvisningen kobler den til modtagerens egen ordre."
+  },
+  {
+    "subject": "Your customers will ask how it's made",
+    "preview": "A factory briefing for resellers: foil, proofs and tarnish testing, explained in plain terms.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Linjen forudser et spørgsmål fra forhandlerens egne kunder og lover svaret på forhånd."
+  },
+  {
+    "subject": "From our foil to her window display",
+    "preview": "A customer let us follow the whole journey, from digital proof to the first box on her counter.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rejsen fra fabrik til butiksvindue giver en kundecase en begyndelse og en slutning."
+  },
+  {
+    "subject": "First off the line, photographed still warm 📸",
+    "preview": "New jewellery box colours, shot on the factory floor the day production started.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den sanselige detalje gør nyheden frisk på en måde, en produktliste aldrig kan."
+  },
+  {
+    "subject": "Guess the foil, win the box",
+    "preview": "Five close-ups from our foil shelf. Name the colours correctly and you're in the draw.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det korte imperativpar gør konkurrencen enkel at forstå på et sekund."
+  },
+  {
+    "subject": "Why simple logos shine brightest in foil ✨",
+    "preview": "Our designers on line weight, small text and the details hot foil quietly swallows.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et designråd fra dem, der trykker, føles mere troværdigt end et generelt tip."
+  },
+  {
+    "subject": "Klokken 5.40 tænder vi for risteren ☕",
+    "preview": "Første batch er altid til os selv. Den anden er den, der ender i din pose i næste uge.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist klokkeslæt sætter modtageren midt i en morgen, de aldrig ser, og gør kaffen personlig."
+  },
+  {
+    "subject": "Det her sidder inde i din sofa",
+    "preview": "Fjedre, skum og tre lag stof, de fleste aldrig ser. Vi har skåret en op, så du slipper.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et skjult indre gør selv et velkendt møbel spændende, og »vi har skåret en op« lover noget konkret at se."
+  },
+  {
+    "subject": "Sådan bliver 40 tons papir til notesbøger",
+    "preview": "Fra rullerne kommer ind ad porten, til de sidste kasser står pakket til butikkerne.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det store, konkrete tal sætter skala på en proces, modtageren kun kender fra hylden."
+  },
+  {
+    "subject": "Surdejen er ældre end vores yngste bager 🍞",
+    "preview": "Den har boet i samme spand siden 2009. Mød den – og manden, der fodrer den hver morgen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Sammenligningen giver et smil og gør en ingrediens til en karakter, man gerne vil møde."
+  },
+  {
+    "subject": "Vi smagte 61 vine for at finde 6 🍷",
+    "preview": "Notaterne fra smagebordet, inklusive dem, vi helst ville glemme igen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Forholdet mellem de to tal fortæller om kræsenhed og gør udvalget mere værd."
+  },
+  {
+    "subject": "Kl. 4 på blomstermarkedet 💐",
+    "preview": "Det er her, vi vælger dine roser til fredag – og her, vi siger nej til halvdelen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tidspunktet og stedet tager modtageren med ind i en verden, de aldrig ser, og nej'et viser kvalitet."
+  },
+  {
+    "subject": "Hvad der sker med din cykel, når du går",
+    "preview": "Tolv punkter, mekanikerne tjekker ved hvert eftersyn. Nummer ni overrasker de fleste.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Linjen tager modtageren med bag værkstedsdisken, og »nummer ni« planter en lille nysgerrighed."
+  },
+  {
+    "subject": "Vores tesmager siger nej 9 gange ud af 10",
+    "preview": "Sådan udvælger vi de få partier, der ender i dåserne – og hvad der sker med resten.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det strenge tal gør udvælgelsen synlig og får modtageren til at stole på det, der er tilbage."
+  },
+  {
+    "subject": "Farvebadet, der gav os grå hår 🧶",
+    "preview": "Efterårets nye garnfarve tog fire forsøg i gryden. Her er de tre, der ikke blev til noget.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Idiomet og den ærlige fejlhistorie gør en ny farve til en lille fortælling."
+  },
+  {
+    "subject": "Temperering: 14 minutter, ingen pauser",
+    "preview": "Det mest nervepirrende kvarter i vores køkken, filmet fra kanten af marmorbordet.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det præcise tidsrum og »ingen pauser« skaber spænding om et håndværk, kunden kun ser resultatet af."
+  },
+  {
+    "subject": "Vi hælder voks, mens du sover 🕯️",
+    "preview": "Natholdet i støberiet har lavet julens duftlys siden september. Her er deres morgen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Kontrasten mellem modtagerens nat og værkstedets arbejde gør produktet personligt."
+  },
+  {
+    "subject": "Hvem vælger bøgerne i vores vindue? 📚",
+    "preview": "Tre boghandlere, ét bord og en heftig diskussion hver mandag. Denne uge vandt den tynde roman.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet afslører, at der ligger mennesker og uenighed bag et udstillingsvindue."
+  },
+  {
+    "subject": "Ovnen er 1.240 grader. Kopperne er klar 🔥",
+    "preview": "Fra drejeskiven til hylden tager en kop tre uger. I dag åbner vi ovnen – kom med indenfor.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den ekstreme temperatur gør en lancering sanselig og lover et øjeblik, man kan være med til."
+  },
+  {
+    "subject": "Vi vender 800 oste hver tirsdag 🧀",
+    "preview": "Lagerkælderen, hvor osten modnes, og hvorfor den bedste først er klar i februar.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret, lidt absurd arbejdstal gør et håndværk synligt og troværdigt."
+  },
+  {
+    "subject": "Sømmen, du aldrig ser, tog længst tid",
+    "preview": "Vores skrædder viser, hvorfor en jakke fra os kan syes om – to gange.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det usynlige bliver hovedpersonen, og det løfter kvaliteten uden at sige ordet."
+  },
+  {
+    "subject": "Vi har talt rødder i drivhuset",
+    "preview": "Hvorfor stiklingerne får en uge ekstra, før de kommer på hylden hos dig.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En mærkværdig arbejdsopgave vækker nysgerrighed og forklarer en kvalitet, kunden ellers ikke kan se."
+  },
+  {
+    "subject": "Vores trykker kan høre en dårlig farve",
+    "preview": "Tyve år ved maskinen giver et øre for, hvornår blækket er forkert. Mød ham og maskinen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En overraskende sanselig evne gør en medarbejder til en karakter og håndværket til noget levende."
+  },
+  {
+    "subject": "Syv stop mellem havnen og din cafébar",
+    "preview": "Vi har fotograferet hver station, en sæk bønner passerer, før den står ristet i din kværn.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret antal stop gør en lang forsyningskæde overskuelig for en B2B-kunde."
+  },
+  {
+    "subject": "Natten før skolestart, set fra lageret ✏️",
+    "preview": "Hvordan vi pakkede 4.000 ordrer til butikkerne på én aften – og hvorfor jeres kom med.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kendt travlt øjeblik set fra den anden side giver forhandleren et kig ind i leverandørens maskinrum."
+  },
+  {
+    "subject": "Dine nye glas bliver slebet i kælderen",
+    "preview": "Ikke i en fabrik langt væk. Kom med ned og se, hvordan din styrke bliver til et stykke glas.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det uventede sted – kælderen – gør nærhed til en kvalitet og inviterer indenfor."
+  },
+  {
+    "subject": "Vanilje tager længere tid, end du tror 🍦",
+    "preview": "Bælgene skal ligge i fløden et døgn, før vi rører. Derfor laver vi kun to spande ad gangen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den mest almindelige smag får en hemmelighed, og det gør det velkendte værd at læse om."
+  },
+  {
+    "subject": "Træet til dit bord har ligget her i 2 år",
+    "preview": "Sådan tørrer vi egetræet langsomt i laden – og hvorfor det aldrig kommer i en ovn.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ventetiden bliver et kvalitetsbevis, og »dit bord« gør det til modtagerens historie."
+  },
+  {
+    "subject": "Vi hældte 400 liter i kloakken. Igen.",
+    "preview": "Den nye øl blev brygget fem gange, før den smagte rigtigt. Her er fejl nummer fire.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den ærlige fiasko giver et smil og gør den færdige øl mere troværdig."
+  },
+  {
+    "subject": "Hvem har egentlig rørt ved din creme?",
+    "preview": "Tre mennesker, ét laboratorium i Odense og en dåse, der først bliver fyldt, når du bestiller.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lyder næsten foruroligende, og svaret er så konkret, at det bliver en kvalitet."
+  },
+  {
+    "subject": "Personalet har slidt 30 par løbesko op i år",
+    "preview": "Vi tester alt, før det kommer på hylden. Her er de fem, der klarede regnen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et overdrevent tal viser, at anbefalingerne er prøvet på egen krop."
+  },
+  {
+    "subject": "Hvorfor sengen er billigere i marts",
+    "preview": "Vi bestiller stoffet et halvt år frem, og i marts har lageret plads til at give dig forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten får en logisk forklaring fra lageret, og det gør den mere troværdig end et procenttal."
+  },
+  {
+    "subject": "Skæve småkager, samme smør",
+    "preview": "Dem, der knækkede på bagepladen i går, sælger vi til halv pris i dag. De smager præcis ens.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Kontrasten mellem udseende og indhold gør et restsalg charmerende i stedet for billigt."
+  },
+  {
+    "subject": "Fredag pakker vi den sidste julepalle 🎄",
+    "preview": "Bestillinger efter torsdag kl. 12 kommer først med i januar. Her er hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen bliver konkret gennem et fysisk billede fra lageret i stedet for en dato alene."
+  },
+  {
+    "subject": "Gæt vægten på gårdens største græskar 🎃",
+    "preview": "Det er vokset bag laden hele sommeren. Tætteste bud vinder suppe til vinteren – vejes fredag.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Gættelegen inviterer til deltagelse med det samme, og historien om græskarret giver konkurrencen liv."
+  },
+  {
+    "subject": "Vi lavede 200 stole til én restaurant",
+    "preview": "Fra den første skitse på en serviet til åbningsaftenen – inklusive alt det, der gik galt.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et stort, konkret projekt og løftet om fejl undervejs gør en kundecase ærlig og værd at læse."
+  },
+  {
+    "subject": "Forhandlerdag: se, hvor jeres te bliver pakket",
+    "preview": "Vi åbner pakkeriet for jer, der sælger vores te. Rundvisning, kaffe og et smugkig på foråret.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Invitationen giver forhandleren adgang til noget, slutkunden aldrig får at se."
+  },
+  {
+    "subject": "Tina åbner din returpakke",
+    "preview": "Hun tjekker den på to minutter, og varen er tilbage på hylden samme dag. Sådan foregår det.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et navn og et tidsrum gør en kedsommelig proces menneskelig og troværdig."
+  },
+  {
+    "subject": "Vores produktfotos er taget i et skur 📸",
+    "preview": "Lys fra et vindue, to hvide plader og en stol. Sådan kopierer du opsætningen i din egen shop.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den ydmyge afsløring overrasker, og forhåndsvisningen gør den til et råd, modtageren kan bruge."
+  },
+  {
+    "subject": "Tre generationer ved den samme høvlebænk",
+    "preview": "Bedstefar byggede den, far sleb den om, og i dag står datteren ved den hver morgen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Familiehistorien i ét møbel gør værkstedet til noget, man vil høre mere om."
+  },
+  {
+    "subject": "Hvorfor vi vejer hver krydderipose to gange",
+    "preview": "Fordi vægten kan drive et halvt gram i fugtigt vejr – og du betaler for det, der står på posen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille, omhyggelig vane bag kulisserne viser respekt for kunden uden at sige det."
+  },
+  {
+    "subject": "Prototype nr. 7 blev til din nye lampe 💡",
+    "preview": "De seks før den står stadig på værkstedet. Vi har stillet dem på række, så du kan se forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nummeret afslører en lang proces og gør det endelige produkt til en sejr, man har lyst til at se."
+  },
+  {
+    "subject": "Julekalenderne blev pakket i juli ☀️",
+    "preview": "400 kalendere, ét varmt lager og et hold, der sang julesange i 28 grader.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Juleting i hedebølge er en sjov kontrast, der viser, hvor tidligt arbejdet starter."
+  },
+  {
+    "subject": "Vores lager lugter af cedertræ",
+    "preview": "Det er ikke et tilfælde. Sådan opbevarer vi uldtæpperne, så de ikke tager skade over sommeren.",
+    "language": "da",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En duft er en uventet indgang til en praktisk historie om omhu."
+  },
+  {
+    "subject": "We burned a batch so you wouldn't have to ☕",
+    "preview": "The test roasts behind our new single-origin, including the three that didn't make the cut.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den selvironiske indrømmelse giver et smil og gør det endelige produkt mere troværdigt."
+  },
+  {
+    "subject": "We built a café's counter, start to finish",
+    "preview": "A month of oak shavings, one tight deadline and the morning the first flat white was poured on it.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret projekt fra start til slut lover en historie med en tilfredsstillende afslutning."
+  },
+  {
+    "subject": "How 12,000 notebooks leave us on a Monday",
+    "preview": "Pick lists, tape guns and the one person who checks every box against your order sheet.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et stort tal og et enkelt menneske i forhåndsvisningen gør logistik til noget, man kan se for sig."
+  },
+  {
+    "subject": "4am, flour everywhere, and your Friday loaf",
+    "preview": "The overnight shift that makes the weekend bread, photographed from a corner of the bakehouse.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "oejeblik"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre korte billeder bygger en scene, der ender ved modtagerens eget brød."
+  },
+  {
+    "subject": "What our tasters reject, and why",
+    "preview": "A morning at the cupping table, where most of this season's samples never reach your shelves.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fokus på det fravalgte gør udvælgelsen synlig for forhandleren, der skal stå inde for varen."
+  },
+  {
+    "subject": "Why your mug took three firings 🔥",
+    "preview": "Bisque, glaze and a final kiln run, each one explained, with the cracks we didn't send you.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret antal trin forklarer pris og kvalitet uden at nævne nogen af dem."
+  },
+  {
+    "subject": "Meet the tank we call Brenda 🍺",
+    "preview": "She's brewed every winter ale since 2016, and she has opinions about this year's recipe.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "At give et stykke udstyr et navn gør bryggeriet menneskeligt og sæsonøllen til en karakterhistorie."
+  },
+  {
+    "subject": "We soaked your jacket for 48 hours",
+    "preview": "The rain test every new shell goes through before it's allowed anywhere near the shop floor.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den konkrete tortur af produktet beviser kvalitet bedre end et adjektiv."
+  },
+  {
+    "subject": "The cold room smells like spring 🌷",
+    "preview": "Where your wedding flowers rest for two nights before they're arranged, and why that matters.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En duft fra et sted, kunden aldrig ser, åbner en praktisk forklaring på en sanselig måde."
+  },
+  {
+    "subject": "Our warehouse is too full. Your gain.",
+    "preview": "We over-ordered linen for autumn. Instead of storing it until spring, we're pricing it to move.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Ærligheden om en fejlbestilling giver rabatten en grund og gør den troværdig."
+  },
+  {
+    "subject": "Win a day on our roasting floor",
+    "preview": "One customer gets an apron, a seat by the roaster and their own blend, named however they like.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien er selve adgangen bag kulisserne, og det gør konkurrencen anderledes end endnu et gavekort."
+  },
+  {
+    "subject": "The last pallet leaves Thursday",
+    "preview": "After that the warehouse closes for stock-take, and nothing ships until the second week of January.",
+    "language": "en",
+    "mechanisms": [
+      "bag_kulisserne",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et fysisk billede af den sidste palle gør fristen konkret og begrundet."
+  }
+]

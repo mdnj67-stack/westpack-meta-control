@@ -8,6 +8,7 @@ import {
   initCanvaLocalizer,
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
+import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261027-subjectlines1";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -4268,7 +4269,7 @@ function getKlaviyoSourceLabel() {
 }
 
 function setKlaviyoView(nextView = "overview") {
-  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer"].includes(nextView) ? nextView : "dashboard";
+  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer", "subject_lines"].includes(nextView) ? nextView : "dashboard";
   appState.klaviyoView = requestedView;
   document.querySelectorAll("[data-klaviyo-view]").forEach((button) => {
     button.classList.toggle("active", button.dataset.klaviyoView === appState.klaviyoView);
@@ -4278,6 +4279,10 @@ function setKlaviyoView(nextView = "overview") {
   document.getElementById("klaviyo-campaign-ai-panel")?.classList.toggle("active", appState.klaviyoView === "campaign_ai");
   document.getElementById("klaviyo-campaign-brain-panel")?.classList.toggle("active", appState.klaviyoView === "campaign_brain");
   document.getElementById("klaviyo-canva-localizer-panel")?.classList.toggle("active", appState.klaviyoView === "canva_localizer");
+  document.getElementById("klaviyo-subject-lines-panel")?.classList.toggle("active", appState.klaviyoView === "subject_lines");
+  if (appState.klaviyoView === "subject_lines") {
+    loadSubjectLines();
+  }
   if (appState.klaviyoView === "duplicate_translate") {
     loadKlaviyoTemplateCatalog();
   }
@@ -14090,6 +14095,31 @@ function attachEvents() {
     setWorkspace("klaviyo");
     setKlaviyoView("canva_localizer");
   }
+
+  // The Subject lines screen hands a chosen pair to Duplicate & translate for one DK template, so
+  // the rollout translates that line into every market instead of the template's name.
+  initSubjectLines();
+  window.addEventListener("westpack-subject-line-use", (event) => {
+    const chosen = event.detail || {};
+    if (!chosen.templateId || !chosen.subject) return;
+    const catalogLoaded = appState.klaviyoTemplateLiveAttempted === `${chosen.account}:list`;
+    appState.klaviyoTemplateSubjectOverride = {
+      account: chosen.account,
+      templateId: chosen.templateId,
+      subject: chosen.subject,
+      preview: chosen.preview || ""
+    };
+    if (appState.klaviyoTemplateSourceAccount !== chosen.account) {
+      appState.klaviyoTemplateSourceAccount = chosen.account;
+      appState.klaviyoTemplateLiveAttempted = "";
+    }
+    appState.klaviyoTemplateSourceTemplate = chosen.templateId;
+    resetKlaviyoGeneratedPlan();
+    setKlaviyoView("duplicate_translate");
+    if (catalogLoaded && appState.klaviyoTemplateSourceAccount === chosen.account) {
+      loadKlaviyoTemplateDetail(chosen.templateId);
+    }
+  });
 
   document.querySelectorAll(".klaviyo-dashboard-subtab").forEach((button) => {
     button.addEventListener("click", () => {

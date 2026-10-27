@@ -1,0 +1,1752 @@
+[
+  {
+    "subject": "Ringen blev båret. Æsken blev gemt.",
+    "preview": "Den rigtige smykkeæske bliver i skuffen i årevis. Her er dem, kunderne ikke nænner at smide ud.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To korte sætninger fortæller en hel historie, og vendingen gør æsken til hovedpersonen."
+  },
+  {
+    "subject": "Lukketid om fire minutter. Gaveæske, tak 🎁",
+    "preview": "Det øjeblik, hvor en færdig gaveæske under disken redder både salget og din aften.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En scene, alle butiksfolk kender, fortalt i to korte slag, gør behovet indlysende."
+  },
+  {
+    "subject": "Den lille sorte æske tager til Paris ✈️",
+    "preview": "Følg en smykkeæske fra Holstebro til en natbordsskuffe – og se, hvad den møder på vejen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En genstand som hovedperson på rejse gør en virksomhedsmail til en lille fortælling, man vil følge."
+  },
+  {
+    "subject": "Han kom efter en ring. Han gik med en oplevelse",
+    "preview": "Indpakningen ved disken er det, kunden fortæller videre. Her er fem måder at gøre den til en scene.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Parallellen mellem det, kunden kom efter, og det, han gik med, rammer præcis det, emballagen gør."
+  },
+  {
+    "subject": "Dagbog fra en æske, dag 1: varm folie 📓",
+    "preview": "Første kapitel i en lille serie, hvor en smykkeæske fortæller, hvordan den fik sit logo.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Dagbogsformen skaber en tilbagevendende karakter og lover et næste kapitel."
+  },
+  {
+    "subject": "Bruden ville have æsken med på billedet 📸",
+    "preview": "Når æsken skal med på bryllupsbillederne, betyder detaljerne mere. Se dem, der tåler et nærbillede.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret, følelsesladet øjeblik viser, hvor meget emballagen betyder, uden at sige det."
+  },
+  {
+    "subject": "Lige før låget går op",
+    "preview": "Den lille pause er designet, ikke tilfældig. Her er smykkeæskerne, der giver kunden den.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et frosset øjeblik vækker nysgerrighed om, hvad der sker i det, og svaret er produktet."
+  },
+  {
+    "subject": "Holstebro, juni 1953. Vi hed noget andet.",
+    "preview": "Westpap, dengang. Historien om, hvordan en lille virksomhed endte med at pakke smykker verden over.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et sted, en dato og en lille gåde om navnet åbner en firmahistorie som et første kapitel."
+  },
+  {
+    "subject": "Westpack har fået en britisk søster",
+    "preview": "Wrapology og Westpack er nu WP Packaging Group, og begge mærker fortsætter hver for sig.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Familiebilledet gør en opkøbsnyhed varm og menneskelig i stedet for en pressemeddelelse."
+  },
+  {
+    "subject": "Kassen fra Holstebro står på disken 📦",
+    "preview": "Du skærer tapen op, og der ligger de: dine æsker, med dit logo, i den folie, du valgte.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser sig selv i scenen, og forhåndsvisningen lader dem mærke øjeblikket, før de har bestilt."
+  },
+  {
+    "subject": "Første gang, du ser dit logo i guld ✨",
+    "preview": "Det kan begynde med en lille ordre: bestil helt ned til 48 stk. med dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et øjeblik, modtageren kan forestille sig, bliver koblet til en lav tærskel for at opleve det."
+  },
+  {
+    "subject": "Lørdag, kø til døren – og æskerne er væk 😬",
+    "preview": "Den version af december kan du undgå med ét blik på lageret nu. Her er en tjekliste.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et mareridtsscenarie, alle butikker kender, gør en tjekliste til en redning."
+  },
+  {
+    "subject": "Mød klichéen. Den har dit logo på ryggen",
+    "preview": "Den lille metalplade præger dit logo i folie. På din første ordre er der ingen opstartsomkostninger.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En ukendt genstand bliver en karakter, og fordelen kommer som pointen i dens historie."
+  },
+  {
+    "subject": "Han glemte valentinsdag. Næsten. 💌",
+    "preview": "Den panikslagne kunde kl. 17 er din bedste – hvis gaveæskerne står klar. Sådan gør du.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det lille »næsten« vender historien og giver et smil, før budskabet kommer."
+  },
+  {
+    "subject": "Grafikerens bord, en almindelig tirsdag ☕",
+    "preview": "Kaffe, en lup på skærmen og en bunke logoer, der skal stå lige så skarpt i folie som på papir.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En hverdagsscene gør en ukendt fagperson nærværende og arbejdet til modtagerens fordel."
+  },
+  {
+    "subject": "»Har du en æske til den?«",
+    "preview": "Spørgsmålet, alle butikker hører ved disken – og fem svar, der får kunden til at smile.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En replik, modtageren har hørt hundrede gange, trækker dem direkte ind i deres egen butik."
+  },
+  {
+    "subject": "Kl. 9.58. Du låser op og tænder lyset 💡",
+    "preview": "To minutter før de første kunder: sådan gør du disken klar til højsæsonen med displays og bakker.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist klokkeslæt sætter modtageren ind i sin egen morgen og gør rådene konkrete."
+  },
+  {
+    "subject": "Det var november, og logoæskerne var ikke bestilt",
+    "preview": "Sådan undgår du den historie i år: fristerne for logoordrer falder tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Historien om en for sen ordre lader modtageren mærke konsekvensen uden at pege fingre."
+  },
+  {
+    "subject": "Den rolige december blev bestilt i september 🎄",
+    "preview": "Sådan planlægger du logoordrerne, så december handler om kunderne og ikke om æskerne.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Historien springer til slutningen – en rolig december – og lader modtageren regne baglæns."
+  },
+  {
+    "subject": "Hvem fik æsken? Du bestemmer slutningen ✍️",
+    "preview": "Vi har skrevet begyndelsen. Send os din slutning – den bedste bliver illustreret og belønnet.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En åben fortælling inviterer modtageren til at skrive med og gør konkurrencen til en leg."
+  },
+  {
+    "subject": "Vis os din disk – og fortæl dens historie",
+    "preview": "Den bedste butiksfortælling bliver vist i næste nyhedsbrev. Præmien står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "social_proof"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Opfordringen gør modtageren til fortæller og deres butik til hovedperson."
+  },
+  {
+    "subject": "Fra køkkenbordet til egen butik",
+    "preview": "En smykkedesigners vej fra den første lille logoordre til fast sortiment, fortalt af hende selv.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rejsen fra lille til stor er en klassisk fortælling, som mange mindre kunder kan spejle sig i."
+  },
+  {
+    "subject": "Hvad hun ville ønske, hun vidste fra dag ét",
+    "preview": "En smykkebrandejer ser tilbage på sin første logoordre og deler det, hun ville gøre anderledes.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Bagklogskab fra en kollega lover læring uden selv at skulle betale for fejlene."
+  },
+  {
+    "subject": "Kunden spørger til æsken. Nu har du svaret.",
+    "preview": "Historien om Westpack fra 1953 til i dag, kort nok til at fortælle ved disken.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Linjen forudser en situation hos forhandleren og lover præcis det, der mangler i den."
+  },
+  {
+    "subject": "Hvem er butikken, alle ringer til i december? 📞",
+    "preview": "Det er den, der har æsker på hylden, når de andre er løbet tør. Sådan bliver du den forhandler.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet appellerer til ambitionen om at være den, kunderne stoler på, når det gælder."
+  },
+  {
+    "subject": "Det er tredje gang i år, du bestiller dem…",
+    "preview": "…så er bulk værd at regne på: fra 9.600 stk. og op til 40 % billigere på populære smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen og forhåndsvisningen er én sætning, og pointen kommer først, når de læses sammen."
+  },
+  {
+    "subject": "Vi fandt en palle, vi havde glemt alt om 👀",
+    "preview": "Restpartier af gaveæsker og poser til nedsat pris, så længe pallen holder. Først til mølle.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Den lille fortælling om et fund gør et restsalg til en skattejagt."
+  },
+  {
+    "subject": "Den streg, der næsten forsvandt",
+    "preview": "Historien om et logo, der var for fint til folie, og grafikeren, der fik det til at stå skarpt.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille dramatisk titel gør en teknisk rettelse til en fortælling med en helt."
+  },
+  {
+    "subject": "Prøven ligger på disken. Hvad nu? 🤔",
+    "preview": "Bestil en prøve med eller uden dit logo, og brug den sådan her, før du lægger den store ordre.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Scenen lander modtageren i et konkret øjeblik og lover en plan for det næste skridt."
+  },
+  {
+    "subject": "Hun havde aldrig set æsken før. Vi filmede det 🎥",
+    "preview": "En kollega fra et helt andet hjørne af huset møder vores nye smykkeæske for første gang.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ægte førstehåndsindtryk gør en lancering mere troværdig end en produkttekst."
+  },
+  {
+    "subject": "To grafikere, én ny æske, ingen enighed",
+    "preview": "Sort med guldfolie eller nude med sølv? Se begge versioner af den nye æske, og stem selv.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille intern uenighed bliver en historie, modtageren selv kan afgøre."
+  },
+  {
+    "subject": "Den nye farve blev døbt over frokosten",
+    "preview": "Sådan fik efterårets nye æskefarve sit navn – og sådan ser den ud med guld- og sølvfolie.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En hverdagsanekdote gør en ny farve til noget med en historie i stedet for bare et navn."
+  },
+  {
+    "subject": "Samme ring, tre slags indpakning",
+    "preview": "Vi lod tre kunder åbne hver sin version. Gæt, hvem der smilede mest – og hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille eksperiment med én variabel gør forskellen på emballage synlig og lidt spændende."
+  },
+  {
+    "subject": "Lyset, lyden, låget. Sådan føles et køb.",
+    "preview": "En smykkeforretning set med kundens øjne, og de tre øjeblikke, hvor emballagen gør forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Allitterationen og de tre sanser giver rytme og gør emballagen til en del af en oplevelse."
+  },
+  {
+    "subject": "Black Friday, set fra en pose 🛍️",
+    "preview": "Den travleste weekend i november går din pose ud ad døren igen og igen. Med dit logo?",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Posens perspektiv gør en kendt travl dag ny og minder om, at logoet går med ud ad døren."
+  },
+  {
+    "subject": "Han har valgt ringen. Nu mangler æsken 💍",
+    "preview": "Mors dag er der, hvor indpakningen afgør, om gaven bliver husket. Små æsker, stor forskel.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Historien stopper lige før slutningen, og det er emballagen, der skal skrive den."
+  },
+  {
+    "subject": "Folierullen med rosaguld har travlt ✨",
+    "preview": "Et kig på rosaguldfolien i højsæsonen – og de æskefarver, den klæder allerbedst.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Personificeringen giver en teknisk detalje liv og gør farvevalget til en lille historie."
+  },
+  {
+    "subject": "Robotarmen har aldrig set en butik 🤖",
+    "preview": "Den arbejder med æsker hele dagen uden at vide, hvor de ender. Så vi viser den det.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den rørende lille præmis forbinder fabrikken med butikken på en måde, et faktaark aldrig kan."
+  },
+  {
+    "subject": "Du har pakket 40 gaver i dag. Den 41. er til dig",
+    "preview": "En pause midt i højsæsonen: fem idéer til gaveindpakning, der går hurtigere ved disken.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Historien anerkender modtagerens travle dag og vender den om til en lille gave i form af hjælp."
+  },
+  {
+    "subject": "Smykkeposen, der blev med i tasken",
+    "preview": "Den bliver ikke smidt ud efter købet, den bliver brugt. Derfor er dit logo på den værd at have.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Posens videre liv efter købet er en historie, der sælger logoet uden at nævne prisen."
+  },
+  {
+    "subject": "En tirsdag flyttede hun alle bakkerne",
+    "preview": "Små ændringer på disken, store forskelle i, hvad kunderne kigger på. Se displays, der gør det let.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille handling uden forklaring vækker nysgerrighed om, hvorfor – og hvad der skete bagefter."
+  },
+  {
+    "subject": "Vi spurgte en guldsmed, hvad kunderne husker",
+    "preview": "Svaret handlede ikke om prisen. Læs hele samtalen, og hvad den betyder for din egen disk.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et interview med en kollega lover et svar, modtageren ikke selv kan få, og forhåndsvisningen udelukker det oplagte."
+  },
+  {
+    "subject": "Hun filmede unboxingen til sine følgere 📱",
+    "preview": "Når kunden deler sit køb, bliver æsken en del af din markedsføring. Sådan ser den godt ud på film.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et genkendeligt nutidigt øjeblik viser værdien af emballage i en kanal, modtageren selv bruger."
+  },
+  {
+    "subject": "Vi leder efter butikker med en god historie",
+    "preview": "Som partner kan din profil blive hovedperson i annoncer, vi betaler for. Sådan kommer du med.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Opfordringen vender rollerne, så modtagerens egen historie bliver det, der efterspørges."
+  },
+  {
+    "subject": "Hvad lå der i din første smykkeæske? 💭",
+    "preview": "Del historien med os. De bedste bliver vist i næste nyhedsbrev, og én af dem vinder.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet vækker et personligt minde, før modtageren har nået at tænke på konkurrencen."
+  },
+  {
+    "subject": "Briterne har handlet hos os siden 80'erne",
+    "preview": "Hvordan en fabrik i Holstebro fik et af sine vigtigste markeder på den anden side af Nordsøen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lang relation fortalt som et venskab giver virksomheden personlighed og troværdighed."
+  },
+  {
+    "subject": "Den gave, der blev pakket ud to gange 🎁",
+    "preview": "Første gang af modtageren, anden gang af alle gæsterne ved bordet. Det er gaveæskens job.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gåden i emnelinjen løses i forhåndsvisningen med en pointe om, hvad emballage faktisk gør."
+  },
+  {
+    "subject": "Kalenderen siger oktober. Fabrikken siger jul. 🎄",
+    "preview": "Fristerne for logoordrer til jul falder tidligere, end du tror. Se dit lands frister i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To modstridende kalendere skaber en lille spænding, som fristen i mailen løser."
+  },
+  {
+    "subject": "En guldsmeds december, time for time",
+    "preview": "Fra morgenkaffen til kasseafslutningen – og de steder i dagen, hvor emballagen sparer dig tid.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et dagsforløb fra modtagerens eget liv gør rådene konkrete og placerer dem i tid."
+  },
+  {
+    "subject": "Forestil dig at bestille én gang om året",
+    "preview": "Læg ordren på lager hos os, og betal, efterhånden som du trækker på den. Sådan virker det.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Opfordringen til at forestille sig en lettere hverdag gør en lagerservice til en historie om ro."
+  },
+  {
+    "subject": "Det er ikke bare en æske. Okay, det er en æske.",
+    "preview": "Men den er det første, kunden rører ved, og det sidste, de smider ud. Se efterårets smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Selvironien afvæbner, og forhåndsvisningen leverer det seriøse argument bagefter."
+  },
+  {
+    "subject": "Hun gik ud ad døren, og hele gaden så posen",
+    "preview": "En god bærepose arbejder videre, længe efter kunden har forladt butikken. Se dem med dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Scenen følger posen ud på gaden og viser værdien af et logo i bevægelse."
+  },
+  {
+    "subject": "Plot twist: emballagen var hovedpersonen 🎬",
+    "preview": "Hvad dine kunder tager med hjem ud over smykket. Spoiler: det er ikke kvitteringen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Fortællerbegreberne fra film gør en pointe om emballage legende og let at huske."
+  },
+  {
+    "subject": "Dit logo tager på rejse i dag 🧳",
+    "preview": "Fra din mail til grafikerens skærm, videre til klichéen og ud på låget. Følg turen trin for trin.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At gøre logoet til en rejsende giver en procesbeskrivelse en hovedperson, modtageren holder af."
+  },
+  {
+    "subject": "Den første frost, og vinduet skal skiftes ❄️",
+    "preview": "Det er det skifte, kunderne lægger mærke til. Displays og bakker, der gør det hurtigt.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et sanseligt sæsontegn sætter scenen og gør et praktisk skifte til noget, man har lyst til."
+  },
+  {
+    "subject": "Konfirmanden fik sit første rigtige smykke",
+    "preview": "Og æsken, det lå i, står stadig på hylden på værelset. Forårets gaveæsker er klar.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et stort øjeblik i et ungt liv gør æsken til et minde, og det er det, butikken sælger med."
+  },
+  {
+    "subject": "Someone just walked in asking for a gift box",
+    "preview": "Ten minutes to closing, and your answer decides the sale. How to be ready under the counter.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Scenen er genkendelig for enhver butiksejer og gør beredskab til en konkret fordel."
+  },
+  {
+    "subject": "In 1953, it was called Westpap",
+    "preview": "How a small business in a Danish market town ended up supplying jewellers around the world.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et gammelt navn er en lille gåde, der åbner en firmahistorie uden at lyde som en pressemeddelelse."
+  },
+  {
+    "subject": "The pouch that came back from Rome ✈️",
+    "preview": "Some packaging is gone by the car park. A good jewellery pouch travels for years. Here's why.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En genstand med en rejse bag sig gør en pose til en historie om varig værdi."
+  },
+  {
+    "subject": "What the gift box heard at the party",
+    "preview": "A gift box's-eye view of the moment it's opened, and the details that made the table go quiet.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det skæve fortællerperspektiv giver et smil og gør åbningsøjeblikket til noget, man vil forstå."
+  },
+  {
+    "subject": "The bag walked out. Your logo went too 🛍️",
+    "preview": "Every bag that leaves your shop keeps working down the high street. See them with your logo.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den lille fortælling om posen på gaden gør logoets værdi synlig uden et salgsargument."
+  },
+  {
+    "subject": "It started with 48 boxes",
+    "preview": "Order as few as 48 pieces with your logo: a good place for a brand to begin, and here's how.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, konkret tal som første linje i en historie gør starten overkommelig."
+  },
+  {
+    "subject": "A proof, a coffee and one tiny line",
+    "preview": "The story of a logo too delicate for foil, and the designer who made it print sharp anyway.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre små ting i emnelinjen bygger en scene, og forhåndsvisningen giver den en helt."
+  },
+  {
+    "subject": "We've been shipping to Britain since the 1980s",
+    "preview": "No customs charges for UK buyers, and a story that goes back four decades. Here it is.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lang relation fortalt som et venskab giver troværdighed, og fordelen kommer som en pointe."
+  },
+  {
+    "subject": "Once upon a time, a ring needed a home 💍",
+    "preview": "A fairy tale for December, with a happy ending you can stock: jewellery boxes with your logo.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Eventyrformen er umiddelbart genkendelig og gør en produktmail til en lille fortælling."
+  },
+  {
+    "subject": "Tell us your best counter story 🎁",
+    "preview": "The funniest or sweetest moment at your till. The best one wins; the prize is in the email.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Opfordringen gør modtageren til fortæller og deres hverdag til indholdet."
+  },
+  {
+    "subject": "Every reseller has a December story",
+    "preview": "Here's how to make yours about full shelves: the stock and logo orders to plan now.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Linjen anerkender forhandlerens erfaring og lover en bedre slutning på årets historie."
+  },
+  {
+    "subject": "Chapter one: no start-up costs",
+    "preview": "From your first file to your first box: a short story of how a first logo order unfolds.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Kapitelformen gør en standardfordel til begyndelsen på en historie, modtageren selv er med i."
+  },
+  {
+    "subject": "How a market stall became a jewellery brand",
+    "preview": "A customer's story, from the first small logo order to a shop with their name over the door.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rejsen fra lille bod til eget mærke er en fortælling, mange mindre kunder kan se sig selv i."
+  },
+  {
+    "subject": "What changed when her name went on the lid",
+    "preview": "A jewellery designer on her first order with her own logo, and what customers said at the counter.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet om forandring lover en konkret effekt fortalt af en, der har prøvet det."
+  },
+  {
+    "subject": "Before the new box, there was a question",
+    "preview": "What do jewellers need in a box that doesn't exist yet? This season's new box is our answer.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lanceringen fortælles som svaret på et spørgsmål, og det gør produktet til en løsning."
+  },
+  {
+    "subject": "Your December, written in advance ✍️",
+    "preview": "Christmas logo deadlines fall earlier than you think and differ by country. Yours are inside.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ideen om at skrive december på forhånd gør fristen til planlægning frem for pres."
+  },
+  {
+    "subject": "A shop window, before and after one Sunday",
+    "preview": "One afternoon, a few trays and displays, and a window people stopped to look at. How to do yours.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Før-og-efter-formen lover en synlig forvandling og et råd, modtageren kan gentage."
+  },
+  {
+    "subject": "December. Shelves full. No panic.",
+    "preview": "Store your order with us, draw on it as the season builds and pay as you go. Here's how it works.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte scener tegner den ideelle december og gør lagerservicen til vejen dertil."
+  },
+  {
+    "subject": "Saturday, 11am: the bride's mother calls",
+    "preview": "She needs twelve gift boxes for the bridesmaids by Monday. Here's what to keep in stock.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret telefonopkald med en tidsfrist gør behovet for gaveæsker på lager genkendeligt og påtrængende."
+  },
+  {
+    "subject": "Risteren Bent har en ny favorit ☕",
+    "preview": "Han har smagt 14 partier i denne måned. Nummer 11 fik ham til at tie stille.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En navngiven karakter med en mening gør en ny kaffe til et øjeblik, man vil være med til."
+  },
+  {
+    "subject": "Sofaen stod i vinduet i 212 dage 🛋️",
+    "preview": "Så satte et par sig i den en hel time. Nu har vi bestilt ti mere – kom og prøv den selv.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det mærkeligt præcise tal skaber en gåde, og vendingen gør produktet til en hovedperson."
+  },
+  {
+    "subject": "En dreng spurgte efter »den med dragen«",
+    "preview": "Vi fandt den til sidst. Her er fem andre bøger, som børn kun kan huske forsiden på.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En lille replik fra butikken trækker modtageren ind, og listen bagefter gør det nyttigt."
+  },
+  {
+    "subject": "Kl. 3.30 står Ole allerede ved dejen 🥐",
+    "preview": "Mød manden bag weekendens kanelsnegle, og hør, hvorfor han aldrig vil afsløre sit smør.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et tidspunkt og et navn tegner en scene, og hemmeligheden får modtageren til at åbne."
+  },
+  {
+    "subject": "Han købte roser hver fredag i 30 år 🌹",
+    "preview": "I sidste uge bad han om noget nyt. Her er buketten, vi lavede – og hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En vane, der bliver brudt efter mange år, er en historie, alle vil kende slutningen på."
+  },
+  {
+    "subject": "Flasken blev åbnet ti år for tidligt 🍷",
+    "preview": "En lille tragedie fra vores egen kælder – og guiden til, hvornår vinterens vine er klar.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den lille ulykke giver et smil og gør en tør guide til noget, man har lyst til at læse."
+  },
+  {
+    "subject": "Hun cyklede 4.000 km på vores sadel",
+    "preview": "Fra Skagen til Gibraltar med ét punkteret dæk. Læs hendes rute, og se den cykel, hun valgte.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et imponerende tal og en kunde som helt gør produktet til et bevis i stedet for en påstand."
+  },
+  {
+    "subject": "Te-tante Inger er tilbage med vintersorterne",
+    "preview": "Hun har smagt i en måned og har meninger om dem alle. Den røgede fik fem kopper.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "En tilbagevendende karakter med et kælenavn skaber genkendelse og glæde ved hver ny sæson."
+  },
+  {
+    "subject": "Trøjen, der tog tre vintre at strikke 🧶",
+    "preview": "En kundes historie om pauser, optrevlinger og mønsteret, vi nu har fået lov at dele med dig.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tålmodigheden i historien gør mønsteret mere værd, og kunden som fortæller giver troværdighed."
+  },
+  {
+    "subject": "Bedstemors opskrift lå i en skuffe i 40 år",
+    "preview": "Vi fandt den, da butikken skulle males. Nu står hendes nøddekonfekt i disken – kun i december.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fundet af en glemt opskrift er en lille skattejagt, og »kun i december« gør den kostbar."
+  },
+  {
+    "subject": "Mød Gamle Svend. Han er 36 måneder. 🧀",
+    "preview": "Den ældste ost i kælderen er klar til sit store øjeblik. Der er kun 40 skiver af ham.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Personificeringen giver et smil, og det begrænsede antal skiver gør det til en mulighed."
+  },
+  {
+    "subject": "En butiksejer i Odense ringede kl. 7",
+    "preview": "Hun manglede 200 kalendere til en skoleklasse. Sådan fik vi dem pakket inden frokost.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille nødsituation med en lykkelig slutning beviser servicen bedre end et løfte."
+  },
+  {
+    "subject": "Revnerne var et uheld. Nu er de hele kollektionen",
+    "preview": "Glasuren sprang i ovnen en tirsdag i marts. Vi kunne ikke lade være med at gøre det igen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et uheld, der bliver til design, er en fortælling, der gør produktet unikt."
+  },
+  {
+    "subject": "Hun bad om et lys, der duftede af sommerhus 🕯️",
+    "preview": "Det tog tre forsøg. Nu står »Sommerhus« på hylden, og det dufter af tjære og fyrretræ.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En kundes ønske som udgangspunkt gør en ny duft til et svar og ikke bare et produkt."
+  },
+  {
+    "subject": "Han så sit barnebarn skarpt for første gang",
+    "preview": "Et lille øjeblik i vores butik i sidste uge – og hvorfor vi altid måler to gange.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et rørende øjeblik giver en teknisk service et menneskeligt formål."
+  },
+  {
+    "subject": "Kjolen hang her en hel sæson. Så kom hun.",
+    "preview": "Nogle gange venter tøjet på den rigtige. Se efterårets nye kjoler – måske venter en af dem på dig.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den romantiske ventetid gør et nyt sortiment til en invitation om at være den, der passer."
+  },
+  {
+    "subject": "Bryggeren tabte en sæk humle i karret 🍺",
+    "preview": "Resultatet blev vores bitreste øl. Kun 600 flasker, og de fleste er allerede lovet væk.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et uheld som begyndelse og et lille antal som slutning gør en ny øl både sjov og sjælden."
+  },
+  {
+    "subject": "Den dag, printeren stoppede på hele kontoret",
+    "preview": "En mandag uden toner – og hvorfor vores forhandlere nu kan tilbyde blæk som abonnement.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "forhandler",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et hverdagskaos, alle kender, gør en ny B2B-ordning til den åbenlyse løsning."
+  },
+  {
+    "subject": "Den første kunde stod der i snestorm 🍦",
+    "preview": "Hvert år åbner vi isbaren i marts, og hvert år er der én, der ikke kan vente. Sæsonen er i gang.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem is og snestorm gør sæsonstarten til en scene med et smil."
+  },
+  {
+    "subject": "Kniven, der blev slebet 300 gange",
+    "preview": "En kok har brugt den i 20 år. Vi har lånt den og viser, hvordan din kan holde lige så længe.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En genstand med et langt liv er beviset, og guiden lover modtageren det samme."
+  },
+  {
+    "subject": "Det regnede, og ingen kom. Så nu…",
+    "preview": "…har vi 30 regnfrakker for mange og en lørdag, der skal reddes. Alle frakker 25 % i weekenden.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den ærlige, lidt selvironiske begyndelse giver tilbuddet en grund og en pointe."
+  },
+  {
+    "subject": "Sidste stol i serien har en ridse 🪑",
+    "preview": "Lille, på venstre ben, kun synlig hvis man leder. Den får 40 % rabat og en god historie med.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille, ærlig fejl gør rabatten troværdig og produktet til et unikt eksemplar."
+  },
+  {
+    "subject": "Sidste pakke til jul: Lotte står klar ved båndet",
+    "preview": "Bestil inden torsdag kl. 12, så pakker hun din ordre samme dag. Derefter er det januar.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et menneske ved pakkebordet gør fristen personlig i stedet for en kold dato."
+  },
+  {
+    "subject": "Hvem har den ældste fyldepen i landet? 🖋️",
+    "preview": "Send et billede og historien bag. Den ældste vinder et års blæk og en plads i vores vindue.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet sætter gang i en jagt i skuffen, og det er præcis den deltagelse, konkurrencen vil have."
+  },
+  {
+    "subject": "Vores hund har valgt en vinder 🐶",
+    "preview": "Hun snusede til 412 lodsedler og satte sig ved én. Se, hvem der vinder vinterens kurv.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En sjov karakter gør en lodtrækning til en lille historie, og nysgerrigheden går på vinderen."
+  },
+  {
+    "subject": "Flakonen kom fra Grasse i en trækasse",
+    "preview": "Den eneste af sin slags i år. Kom og dufte, før den bliver delt i 50 små flasker til jul.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En genstands rejse fra et berømt sted giver produktet aura og sjældenhed."
+  },
+  {
+    "subject": "Hvad lærte vi af 1.000 returnerede sko?",
+    "preview": "Hver retur fortæller noget om pasform. Her er de tre ting, der ændrede vores størrelsesguide.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lover læring fra mange små historier, og resultatet hjælper modtageren direkte."
+  },
+  {
+    "subject": "Kunden ringede igen. Og igen. Og igen.",
+    "preview": "Hun ville bare vide, hvor pakken var. Derfor kan du nu følge din ordre time for time.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Gentagelsen giver rytme og et smil, og løsningen kommer som historiens slutning."
+  },
+  {
+    "subject": "Caféen i Ribe, der løb tør for kopper",
+    "preview": "Hvordan en travl sommer endte med en ny bestillingsrytme – og hvad andre caféer kan lære af den.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et genkendeligt problem hos en kollega gør løsningen relevant for alle i samme branche."
+  },
+  {
+    "subject": "Hun indrettede butikken efter et maleri",
+    "preview": "Farverne kom fra et landskab, hun fandt på et loppemarked. Se de fem farver, og hvordan de bruges.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En uventet inspirationskilde vækker nysgerrighed og gør råd om farver til en historie."
+  },
+  {
+    "subject": "Første søndag i advent, kl. 10.00 🎄",
+    "preview": "Dørene går op, gløggen er varm, og vinduet har aldrig været så stort. Sådan ser det ud.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et præcist tidspunkt i en kendt tradition sætter scenen og inviterer modtageren med."
+  },
+  {
+    "subject": "Vores revisor græd. Af glæde.",
+    "preview": "Første år med den nye butik gik bedre end budgettet. Det fejrer vi med 20 % på alt i weekenden.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Twistet efter punktummet giver et smil og en grund til at fejre med kunderne."
+  },
+  {
+    "subject": "Vi flyttede 9.000 bøger på én weekend 📚",
+    "preview": "Ny adresse, samme rod i krimiafdelingen. Kom til åbning på lørdag – kaffen er på huset.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Det store tal og den selvironiske detalje gør en flyttenyhed til en lille fortælling."
+  },
+  {
+    "subject": "Han solgte vores te fra en cykel i 2011",
+    "preview": "I dag har han tre butikker. Sådan bygger vi forhandleraftaler, der kan vokse med jer.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En forhandlers rejse fra lille til stor viser, hvad partnerskabet kan blive til."
+  },
+  {
+    "subject": "Tasken har været i Sahara. To gange.",
+    "preview": "Vi lånte en kundes rygsæk tilbage efter 8 år. Se, hvad der holdt, og hvad vi har lavet om siden.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et ekstremt sted og et tørt »to gange« bygger en historie om holdbarhed uden at påstå den."
+  },
+  {
+    "subject": "Sådan fandt vi den rigtige blå",
+    "preview": "Fire måneder, 23 prøvefarver og en maler, der til sidst gav op. Her er resultatet på væggen.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Jagten på én farve gør en ny nuance til en historie med fejl og en sejr til sidst."
+  },
+  {
+    "subject": "Hun lærte at binde bøger i Firenze",
+    "preview": "Nu sidder hun i vores værksted og laver de notesbøger, der kun findes i 30 eksemplarer om året.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "eksklusivitet"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En håndværkers baggrund gør produktet personligt, og det lille antal gør det sjældent."
+  },
+  {
+    "subject": "Den hurtigste kunde i år brugte 47 sekunder",
+    "preview": "Ind, ud, med den rigtige gave. Her er listen, der gør det muligt for dig, der har travlt.",
+    "language": "da",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille rekord fra butikken giver et smil og lover en genvej til den travle læser."
+  },
+  {
+    "subject": "The man who bought the same scarf three times",
+    "preview": "Once for himself, once for his wife, once for her sister. This winter's scarves are in.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Gentagelsen bygger en lille fortælling med en pointe om, hvor godt produktet er."
+  },
+  {
+    "subject": "Our delivery van has a name. It's Doris. 🚐",
+    "preview": "And Doris has visited every café we supply this week. Here's the new route, and your slot.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En navngiven varevogn gør logistik til en karakter, og ruten bliver noget, man vil følge."
+  },
+  {
+    "subject": "The chair that took 40 hours to make",
+    "preview": "Meet the joiner who made it, and see why we only build twelve a month.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tiden bag et enkelt produkt gør prisen forståelig og håndværket synligt."
+  },
+  {
+    "subject": "It poured on launch day. Nobody left.",
+    "preview": "A queue of umbrellas, one very small shop and the candle everyone wanted. It's back in stock.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "social_proof"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En scene med trofaste kunder i regnvejr er socialt bevis fortalt som en historie."
+  },
+  {
+    "subject": "A letter arrived from a customer in Kyoto",
+    "preview": "It was about a notebook she bought from us in 2015. We've reprinted its paper because of it.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "personlig"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et brev fra et fjernt sted er en lille gåde, og svaret viser, at virksomheden lytter."
+  },
+  {
+    "subject": "Last orders: our baker is going on holiday",
+    "preview": "He's packing the ovens away on Friday at 2pm. Order your Christmas stollen before he does.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen bliver en lille historie om et menneske, og det gør den lettere at huske."
+  },
+  {
+    "subject": "Win our founder's old espresso machine ☕",
+    "preview": "It's made 80,000 coffees and still works. Tell us your best café story to be in with a chance.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien har en historie, og det gør den mere attraktiv end en ny maskine fra hylden."
+  },
+  {
+    "subject": "The florist who arranged a shop by smell",
+    "preview": "Front to back, light to heavy scents. Her trick works for any shop with more than one aisle.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En usædvanlig metode fra en fagperson vækker nysgerrighed og kan overføres til modtagerens egen butik."
+  },
+  {
+    "subject": "Half price, because the label is upside down 🍯",
+    "preview": "Five hundred jars of honey, one sleepy Tuesday on the labelling line. The honey is perfect.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den absurde grund til rabatten giver et smil og gør tilbuddet troværdigt."
+  },
+  {
+    "subject": "We almost closed in 2009",
+    "preview": "What kept the doors open was a handful of regulars. This anniversary week is for every one of you.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En sårbar indrømmelse skaber nærhed og gør en jubilæumsmail til en tak frem for et salg."
+  },
+  {
+    "subject": "Our first stockist still orders by fax",
+    "preview": "Twenty years on, she's our longest partner, and she taught us how small shops really buy.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den gammeldags detalje giver et smil og gør en lang forhandlerrelation til en levende historie."
+  },
+  {
+    "subject": "The first frost always brings him in",
+    "preview": "Every year, the same customer, the same wool socks, the same joke. Winter stock is on the shelves.",
+    "language": "en",
+    "mechanisms": [
+      "historie",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En tilbagevendende kunde markerer sæsonskiftet og gør varerne til en del af et ritual."
+  }
+]

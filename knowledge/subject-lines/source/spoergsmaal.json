@@ -1,0 +1,1691 @@
+[
+  {
+    "subject": "Hvad når kunden at mærke, før låget går op?",
+    "preview": "Vægten i hånden, papirets overflade, modstanden i låget. Det hele tæller med.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at forestille sig sin egen kundes hænder, og preview'et svarer i sanser."
+  },
+  {
+    "subject": "Guld, sølv eller rosaguld på låget?",
+    "preview": "Tre klassikere i folietryk – og godt 20 andre farver, hvis ingen af dem er dig.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre valgmuligheder gør spørgsmålet let at besvare, og preview'et åbner for resten af paletten."
+  },
+  {
+    "subject": "Hvor står 5.000 æsker, til du skal bruge dem?",
+    "preview": "Hos os. Vi lagrer ordren, og du betaler i takt med, at du trækker på den.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer et praktisk pladsproblem, og preview'et løser det i samme åndedrag."
+  },
+  {
+    "subject": "Hvad gør æsken ved sølvet? 🔍",
+    "preview": "Vi tester for anløbning i eget hus. Her er, hvad vi kigger efter, og hvorfor det betyder noget.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, smykkehandlere sjældent stiller højt, men gerne vil have svar på."
+  },
+  {
+    "subject": "Hvor mange gaver pakker I ind på en lørdag?",
+    "preview": "Gang med antallet af lørdage til jul. Så har du din indkøbsliste.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren regner svaret ud i hovedet, og preview'et gør tallet til en indkøbsliste."
+  },
+  {
+    "subject": "Hvornår løber du tør for gaveæsker? 📦",
+    "preview": "Skriv datoen ned, og læg den ved siden af fristerne for logotryk. Det er dem, der bestemmer.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren gætter på sin egen dato, og preview'et minder om, at fristen for logotryk kommer før den."
+  },
+  {
+    "subject": "Hvad skal stå på låget?",
+    "preview": "Logo, butiksnavn eller en kort hilsen. Vores grafikere kigger det hele igennem, før vi trykker.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et åbent spørgsmål, der får modtageren til at se sit eget låg for sig."
+  },
+  {
+    "subject": "Har dit logo en skygge?",
+    "preview": "Folietryk er én farve. Skal logoet tilpasses, tegner vores grafikere det om uden beregning.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille spørgsmål, modtageren kan tjekke på sit eget logo, mens preview'et fjerner bekymringen."
+  },
+  {
+    "subject": "Hvor lille kan dit logo blive?",
+    "preview": "En ringæske giver ikke meget plads. Se, hvordan fem meget forskellige logoer klarer det.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren forestiller sig sit eget logo i miniature og vil se, om det holder."
+  },
+  {
+    "subject": "Hvilken æske ville du selv gemme?",
+    "preview": "Seks æsker, der er for pæne til at ryge ud sammen med gavepapiret.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren svarer som privatperson, og det gør æskens liv efter gaven til noget personligt."
+  },
+  {
+    "subject": "Pose eller æske til en sølvring?",
+    "preview": "Vi har et klart svar – og én situation, hvor posen faktisk vinder.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et dilemma, alle smykkehandlere kender, og preview'et lover både et svar og en undtagelse."
+  },
+  {
+    "subject": "Hvad siger din pose på gågaden? 🛍️",
+    "preview": "Den bliver båret forbi flere butiksvinduer end dit eget. Fire størrelser med plads til logo.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet gør bæreposen til en reklamesøjle, modtageren ikke har tænkt på som en."
+  },
+  {
+    "subject": "Hvilken farve har din butik indeni? 🎨",
+    "preview": "Ni farver bæreposer og godt 20 foliefarver. En af kombinationerne er din.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et skævt spørgsmål får modtageren til at se sin egen butik for sig, før produktet dukker op."
+  },
+  {
+    "subject": "Hvem i butikken pakker hurtigst ind? 🎀",
+    "preview": "Tre greb, der giver de andre en chance, når køen når helt ud til døren.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet peger på en kollega og starter en lille konkurrence i hovedet."
+  },
+  {
+    "subject": "48 æsker med dit logo – nok til en start?",
+    "preview": "Nok til at se dem på din egen disk, før du bestiller stort. Så lavt kan du gå.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret tal stillet som spørgsmål får modtageren til at måle det mod sit eget behov."
+  },
+  {
+    "subject": "Må vi vise din butik frem? 📸",
+    "preview": "Vi betaler annoncerne. De kører fra din egen profil med dine smykker i hovedrollen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet er en invitation, og preview'et fjerner den åbenlyse indvending om pris."
+  },
+  {
+    "subject": "Hvordan ser din drømmeæske ud?",
+    "preview": "Westpack Design Studio tegner den fra bunden – med én fast kontakt fra skitse til færdig æske.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et åbent spørgsmål lader modtageren drømme, før preview'et viser, at det kan lade sig gøre."
+  },
+  {
+    "subject": "Hvornår går julen i gang hos dig? 🎄",
+    "preview": "Hos os starter den, når de første logoer skal i folie – og det er tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren tænker på sin egen julestart, og preview'et rykker den frem uden at nævne en dato."
+  },
+  {
+    "subject": "Er der plads til et kort i æsken?",
+    "preview": "En håndskrevet linje fylder ingenting, men den bliver husket. Tre måder at få den med.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ja/nej-spørgsmål om en lille detalje åbner for en idé, modtageren kan bruge i morgen."
+  },
+  {
+    "subject": "Hvad ser kunden først i dit vindue?",
+    "preview": "Tit er det displayet, ikke smykket. Otte opstillinger, der løfter ringene op i øjenhøjde.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser sit eget vindue for sig, og preview'et flytter blikket fra smykket til det, der bærer det."
+  },
+  {
+    "subject": "Kan en smykkeæske komme gennem brevsprækken? 📬",
+    "preview": "Ja, når den er bygget til det: lav højde, fast indlæg og stadig en ordentlig åbning.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et praktisk spørgsmål med et overraskende ja, som webshops kan bruge med det samme."
+  },
+  {
+    "subject": "Hvilken æske lukker med et klik? 🧲",
+    "preview": "Den med skjult magnet. Lyden er lille, men det er den, kunden husker bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet vækker en lyd i hovedet, og preview'et kobler den til kundens oplevelse."
+  },
+  {
+    "subject": "Hvad sker der efter 'tak for din ordre'?",
+    "preview": "Pakken lander på et køkkenbord. Sådan bliver de første sekunder en del af din butik.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet følger webshoppens pakke helt hjem til kunden, hvor butikken ellers ikke er med."
+  },
+  {
+    "subject": "Køber dine kunder til sig selv eller til andre?",
+    "preview": "Er svaret 'til andre', hører gaveæsken til lige ved kassen. Se fire, der fungerer der.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren kender svaret, og preview'et omsætter det til en konkret placering i butikken."
+  },
+  {
+    "subject": "Papir, tape og bånd – eller bare et låg? ⏱️",
+    "preview": "Regn indpakningstiden om til timer i december, og se tre gaveæsker, der springer papiret over.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør indpakning til en udgift i tid, som modtageren selv regner ud."
+  },
+  {
+    "subject": "Første logo-ordre – hvad koster opstarten?",
+    "preview": "Ingenting. Ingen opstartsomkostninger på din første ordre, og grafikerne tjekker logoet.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rejser selv indvendingen, og preview'et svarer med ét ord."
+  },
+  {
+    "subject": "Hvad ville du gøre med 9.600 æsker? 💭",
+    "preview": "Fra det antal starter bulkprisen på vores mest populære smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort, skævt tal vækker nysgerrighed, og preview'et forklarer, hvorfor det lige er det tal."
+  },
+  {
+    "subject": "Skal Black Friday-kunden have en pose med? 🖤",
+    "preview": "Så følger dit logo med hele vejen hjem fra årets travleste shoppingdag.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet har kun ét fornuftigt svar, og preview'et viser, hvad modtageren får ud af det."
+  },
+  {
+    "subject": "Fem æsker i finalen. Hvem får din stemme? 🗳️",
+    "preview": "Én stemme pr. butik, og den tager ti sekunder. Resultatet kommer i næste nyhedsbrev.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren har allerede en mening om æsker og vil se, om favoritten er med."
+  },
+  {
+    "subject": "Gæt: hvor mange æsker og poser på én dag?",
+    "preview": "Svaret har seks cifre og en masse travle hænder bag sig. Det står øverst i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et gættespil med en indbygget pointe: modtageren vil vide, om de ramte."
+  },
+  {
+    "subject": "Hvad har 30.000 brands til fælles?",
+    "preview": "Et logo på en æske fra os. Mød et par af dem, og hør hvorfor de blev.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort tal stillet som en gåde, som preview'et løser og gør personligt."
+  },
+  {
+    "subject": "Hvornår er en butik klar til sin egen æske?",
+    "preview": "En smykkebutik fortæller, hvornår logoet kom på, og hvad kunderne sagde bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at måle sin egen butik, og casen giver et konkret pejlemærke."
+  },
+  {
+    "subject": "Er du typen, der vil se nyhederne først?",
+    "preview": "Så er den her til dig: den nye serie, inden den ligger i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lader modtageren vælge sig selv ind, og preview'et belønner valget med forhåndsadgang."
+  },
+  {
+    "subject": "Hvad hvis æsken også var displayet? ✨",
+    "preview": "Åben front, smykket på plads og klar til disken. Den nye serie klarer begge jobs.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et hvad-nu-hvis, der får modtageren til at se sin disk med én ting mindre på."
+  },
+  {
+    "subject": "Ved du, hvor din æske bliver lavet?",
+    "preview": "Nogle af dem på vores egen fabrik i Danmark. Kom med en tur rundt mellem maskinerne.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør en vare til et sted, og preview'et inviterer indenfor."
+  },
+  {
+    "subject": "Hvem tegner dit logo om, når det driller?",
+    "preview": "Mød holdet, der kigger hvert eneste logo igennem, før det kommer i folie.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet sætter ansigt på en service, modtageren måske tog for givet."
+  },
+  {
+    "subject": "Sælger du også emballage videre?",
+    "preview": "Så har vi et forhandlerprogram. Det tager to minutter at se, om det passer til din butik.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ja/nej-spørgsmål sorterer modtagerne, så dem, det er relevant for, åbner."
+  },
+  {
+    "subject": "Hvilket smykke sælger du flest af i december?",
+    "preview": "Start der, når du bestiller æsker. Vi har sorteret størrelserne efter smykketype.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren svarer med det samme, og preview'et gør svaret til en bestillingsplan."
+  },
+  {
+    "subject": "Hvem åbner æsken – køberen eller modtageren?",
+    "preview": "De ser den med hver sine øjne. Sådan vælger du en æske, der virker for begge.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet skelner mellem to mennesker, modtageren sjældent tænker på hver for sig."
+  },
+  {
+    "subject": "Hvor langt rejser dine pakker? 🌍",
+    "preview": "Forsendelsesemballage, der stadig ser ordentlig ud, når pakken lander langt hjemmefra.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får webshops til at tænke på den rejse, pakken tager uden dem."
+  },
+  {
+    "subject": "Hvor ender posen, når gaven er pakket ud?",
+    "preview": "Den lever videre som madpakkepose og skotaske – med dit logo på hver eneste gang.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet følger posen ud af butikken og ind i kundens hverdag."
+  },
+  {
+    "subject": "Øreringe: indlæg eller pude?",
+    "preview": "Det afgør, om stikkene sidder fast hele vejen hjem. Fem modeller, og hvad hver især gør bedst.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et helt konkret valg, som alle, der har pakket øreringe, kan nikke genkendende til."
+  },
+  {
+    "subject": "Prøve først, logo bagefter?",
+    "preview": "Bestil op til fem prøver online, med eller uden logo. Prøver med logo koster et lille beløb pr. stk.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet giver et ærligt svar på noget, mange tøver med at spørge om."
+  },
+  {
+    "subject": "Hvad pakker du dit dyreste smykke i? 💎",
+    "preview": "Den æske skal kunne bære prisen. Seks bud, hvor tyngden kan mærkes, før låget åbnes.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet går direkte til butikkens fineste vare og løfter forventningen til æsken."
+  },
+  {
+    "subject": "Hvor skal dit logo stå først?",
+    "preview": "Æske, pose eller smykkepose – med budget til ét sted er der et klart svar.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et prioriteringsspørgsmål, mange har tænkt over, men aldrig fået et klart svar på."
+  },
+  {
+    "subject": "Æsken på disken – og på Instagram? 📱",
+    "preview": "Kunderne deler deres unboxings. Seks æsker, der ser lige så godt ud på skærmen som i hånden.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet flytter æsken fra disken til kundens feed, hvor den også skal holde."
+  },
+  {
+    "subject": "Kommer gavekøberen igen?",
+    "preview": "Vi kender ikke tallet for din butik. Men vi ved, hvad der får folk til at huske navnet på æsken.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet kan ikke besvares præcist, og preview'et indrømmer det og lover noget bedre."
+  },
+  {
+    "subject": "Hvem skal have en tak fra butikken i år?",
+    "preview": "Stamkunder, leverandører, personalet. Gaveæsker med jeres logo til dem, der har fortjent det.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at lave en liste i hovedet – og listen skal pakkes ind."
+  },
+  {
+    "subject": "Hvad er et logo i guldfolie værd ved kassen?",
+    "preview": "Det står ikke på bonen, men kunden ser det. Sådan løfter folien en æske fra emballage til gave.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet sætter pris på noget uhåndgribeligt, og preview'et gør det synligt."
+  },
+  {
+    "subject": "Plads til én farve mere på hylden?",
+    "preview": "Den nye farve er landet, og den klæder både guld og sølv.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ja/nej-spørgsmål, hvor den eneste høflige vej videre er at åbne og se farven."
+  },
+  {
+    "subject": "Hvor mange steder møder kunden dit logo?",
+    "preview": "Æsken, posen, smykkeposen, kortet. Når det hele matcher, følger butikken med hele vejen hjem.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at tælle sine egne berøringspunkter, ét produkt ad gangen."
+  },
+  {
+    "subject": "Hvad får smykket med hjem fra reparation?",
+    "preview": "En lille pose med dit logo gør en reparation til en oplevelse – ikke kun nyt guld fortjener det.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål om en hverdagssituation hos guldsmeden, som sjældent får sin egen emballage."
+  },
+  {
+    "subject": "Hvornår skal æskerne stå hos dig – helt præcist?",
+    "preview": "Regn produktionstiden med: 7–8 arbejdsdage med nyt logo, 4–5 med et, vi allerede har.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet tvinger en dato frem, og preview'et giver tallene til at regne baglæns."
+  },
+  {
+    "subject": "Kan du se, hvilken æske der er den ældste? 👀",
+    "preview": "Fem æsker fra fem årtier. Gæt rigtigt, og vær med i lodtrækningen om et sæt poser med logo.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille gætteleg med præmie, som modtageren har svaret på i hovedet, før mailen er åben."
+  },
+  {
+    "subject": "Hvor ender den første logo-ordre?",
+    "preview": "Fra kassen til hylden bagved: en butik med én disk viser, hvor æskerne gjorde mest.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lover et konkret billede, modtageren straks kan holde op mod sin egen butik."
+  },
+  {
+    "subject": "Hvem tager telefonen, når du ringer?",
+    "preview": "Mød holdet bag kundeservice – og hør, hvilket spørgsmål de får allerflest gange.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et enkelt spørgsmål sætter et menneske i den anden ende af røret."
+  },
+  {
+    "subject": "What would your packaging say if it could talk? 💬",
+    "preview": "Five boxes, five personalities. One of them probably sounds a lot like your shop.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et legende hypotetisk spørgsmål giver emballagen en stemme, og modtageren hører straks sin egen."
+  },
+  {
+    "subject": "What colour is your brand, exactly?",
+    "preview": "Bring your designer along: our hot-foil chart runs to around 25 colours.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ordet 'exactly' udfordrer modtageren til at være præcis, og preview'et belønner det med en hel palet."
+  },
+  {
+    "subject": "How long does your logo take to print?",
+    "preview": "7–8 working days for a new one, 4–5 if we already have it. That's production, before shipping.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et praktisk spørgsmål med et ærligt svar, der holder produktion og forsendelse adskilt."
+  },
+  {
+    "subject": "When does your rush start this year? ⏳",
+    "preview": "Logo print deadlines land earlier than most people expect. A short list to check this week.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser sin egen travle periode for sig, og preview'et minder om, at fristen kommer før den."
+  },
+  {
+    "subject": "How heavy should a premium box feel?",
+    "preview": "We put the question to our own factory. The answer involves board, cloth and a hidden magnet.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Alle har en fornemmelse af svaret, og preview'et lover det fra dem, der laver æskerne."
+  },
+  {
+    "subject": "Window, counter or website first?",
+    "preview": "Where packaging earns its keep depends on how you sell. A quick way to decide where to start.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tre valgmuligheder, som modtageren straks rangerer efter sin egen forretning."
+  },
+  {
+    "subject": "What did a two-person studio order first?",
+    "preview": "A small run of boxes with their logo, and a plan for the next one. Here's how they chose.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lader en lille butik spejle sig i en, der ligner den selv."
+  },
+  {
+    "subject": "Fancy a say in our next bag colour? 🗳️",
+    "preview": "Three shades are in the running. Vote in one tap, and we'll share the winner next month.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En invitation formuleret som spørgsmål giver modtageren medbestemmelse, før mailen er åben."
+  },
+  {
+    "subject": "Black Friday at your till: calm or chaos? 🖤",
+    "preview": "Queues, gift requests and no time to wrap. Boxes and bags that keep the line moving.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser sin travleste dag for sig, og preview'et genkender presset uden at dømme."
+  },
+  {
+    "subject": "Is this the year your name goes on the box?",
+    "preview": "From 48 pieces with your logo, and no start-up costs on your first order.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør en beslutning til et personligt øjeblik, og preview'et fjerner to forhindringer."
+  },
+  {
+    "subject": "Want us to pay for your next ad? 📣",
+    "preview": "Partner shops run ads from their own profile, with their jewellery in our boxes. We fund them.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål med et overraskende generøst svar, som preview'et forklarer."
+  },
+  {
+    "subject": "How old is the oldest box in your stockroom?",
+    "preview": "Our story goes back to 1953 in Holstebro, under a different name. Here's what changed since.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et skævt spørgsmål om modtagerens lager åbner for virksomhedens egen historie."
+  },
+  {
+    "subject": "Which piece in your shop is hardest to package?",
+    "preview": "Long chains, odd-sized pendants, sets of three. We've matched each one to a box.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Alle har et svar med det samme, og preview'et lover en løsning til netop det smykke."
+  },
+  {
+    "subject": "New colours for the counter – which is yours? ✨",
+    "preview": "Four fresh shades for our jewellery boxes. One of them is quietly becoming our favourite.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør en farvenyhed til et personligt valg, og preview'et tilføjer en lille holdning."
+  },
+  {
+    "subject": "What sits next to the till in December? 🎀",
+    "preview": "Ribbon, tissue paper and gift boxes in the sizes you reach for most.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser sin egen disk i december for sig, og preview'et fylder den op."
+  },
+  {
+    "subject": "Could your parcel say hello before it's opened? 📦",
+    "preview": "Your brand starts at the doorstep. Postal packaging made for jewellery webshops.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet giver pakken en stemme og gør forsendelsen til en del af brandet."
+  },
+  {
+    "subject": "Who checks your logo before it's printed?",
+    "preview": "A graphic designer, every time. If it won't print well in foil, they redraw it at no charge.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, modtageren ikke vidste, de skulle stille, med et betryggende svar."
+  },
+  {
+    "subject": "Do customers ever ask for a bag? 🛍️",
+    "preview": "Have one ready with your logo on it. Luxury carrier bags from small to XXL, in nine colours.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et genkendeligt øjeblik ved kassen, som preview'et gør til en plads for logoet."
+  },
+  {
+    "subject": "How many boxes do you go through in a year?",
+    "preview": "If it's thousands, bulk pricing on our most popular jewellery boxes starts at 9,600 pieces.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren regner sit eget årsforbrug ud og ser straks, om bulkprisen passer."
+  },
+  {
+    "subject": "Hvad bestiller dine gæster før kl. 9? ☕",
+    "preview": "Hold øje i morgen. Svaret afgør, om espresso eller filter skal fylde mest i næste levering.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet giver caféejeren en lille opgave, og preview'et viser, hvad svaret skal bruges til."
+  },
+  {
+    "subject": "Hvor sidder du, når du læser søndagsavisen?",
+    "preview": "Det hjørne fortjener en ordentlig lænestol. Vi har fundet fem, der passer til små stuer.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet placerer modtageren i sit eget hjem, før produktet bliver nævnt."
+  },
+  {
+    "subject": "Kuglepennene er væk igen – hvem bestiller nye?",
+    "preview": "Er svaret 'den, der lige står nærmest', har vi en fast ordning, der klarer det for jer.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet rammer en kontorvirkelighed, alle kender, og preview'et tilbyder en nem vej ud."
+  },
+  {
+    "subject": "Hvad skal der på bordet søndag morgen? 🥐",
+    "preview": "Vi bager tebirkes fra kl. 6 og har lagt en kanelsnegl til side til de første ti kunder.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Et hverdagsspørgsmål får mundvandet til at løbe, før tilbuddet bliver nævnt."
+  },
+  {
+    "subject": "Hvad drikker I til andestegen i år? 🍷",
+    "preview": "Tre flasker under 150 kr., som vores indkøber har smagt sig frem til – og én til fejringen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet går direkte til julemiddagen, og preview'et svarer i flere prisklasser."
+  },
+  {
+    "subject": "Er cyklen klar til mørke morgener?",
+    "preview": "Lygter, refleks og bremser, der tager fat i vådt løv. Book et tjek på 20 minutter.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet kobler sæsonen til en konkret bekymring, og preview'et tilbyder en hurtig løsning."
+  },
+  {
+    "subject": "Hvilket projekt ligger halvfærdigt i kurven? 🧶",
+    "preview": "Vi har garnet, der mangler, og strikkecafé torsdag, hvor du kan få hjælp til det sidste stykke.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alle strikkere har et svar, og preview'et tilbyder både garn og selskab til at gøre det færdigt."
+  },
+  {
+    "subject": "Hvor varmt skal vandet egentlig være? 🍵",
+    "preview": "Kogende er ikke altid svaret. En lille temperaturguide til fem slags te, du har i skabet.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, mange aldrig har stillet, men straks vil vide svaret på."
+  },
+  {
+    "subject": "Hvem står for blomsterne i jeres reception?",
+    "preview": "Et fast abonnement giver friske buketter hver mandag – uden at nogen skal huske at bestille.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer en opgave, der ofte hænger på én person, og preview'et tager den fra dem."
+  },
+  {
+    "subject": "Hvor gemmer hunden sig nytårsaften? 🐕",
+    "preview": "Fem ting, der gør aftenen roligere – fra en tætsiddende vest til et tyggeben, der tager tid.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet rammer en reel bekymring hos hundeejere i dagene op til nytår."
+  },
+  {
+    "subject": "Hvilken bog har du lånt ud og aldrig fået igen? 📚",
+    "preview": "Nu kan du købe den igen. Paperbacks er tre for to hele weekenden.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et spørgsmål med et lille stik af genkendelse, som preview'et vender til et køb."
+  },
+  {
+    "subject": "Hvilken kop rækker du ud efter først?",
+    "preview": "Den med den rigtige hank og den rigtige vægt. Vi har drejet en ny serie efter samme princip.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alle har en yndlingskop, og spørgsmålet får modtageren til at tænke over hvorfor."
+  },
+  {
+    "subject": "Hvor langt går du på en søndag?",
+    "preview": "Op til 8 km holder dine sneakers. Over det har vi tre vandresko, der er lette nok til hverdag.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtageren svarer med et tal, og preview'et giver et konkret skæringspunkt."
+  },
+  {
+    "subject": "Hvor mange størrelser vokser et barn på et år?",
+    "preview": "Flere end man har lyst til at tælle. Derfor er vores flyverdragter syet med ekstra ærmelængde.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forældre kender både svaret og sukket, og preview'et svarer med et konkret produktgreb."
+  },
+  {
+    "subject": "Hvad gør din hud i januar? ❄️",
+    "preview": "Strammer, skaller og kræver mere. Tre produkter til den tørre del af vinteren.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kort spørgsmål, modtageren svarer på med en fornemmelse i ansigtet."
+  },
+  {
+    "subject": "Tallerkener, der går i stykker – hvor tit sker det?",
+    "preview": "Regn det om til kroner. Vores porcelæn til storkøkkener er testet til 2.000 opvaske.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et tal, køkkenchefen kender, men sjældent omregner til penge."
+  },
+  {
+    "subject": "Otte timer på samme stol – hvordan har ryggen det?",
+    "preview": "Tre kontorstole, vi selv ville sidde på hele dagen, og hvad de gør anderledes.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør stolen til et spørgsmål om velbefindende, ikke om kroner."
+  },
+  {
+    "subject": "Hvorfor smager kaffen anderledes hos naboen?",
+    "preview": "Vi har en mistanke om, at det handler om malingsgraden. Tre indstillinger, der flytter meget.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alle har undret sig over det, og preview'et lover en forklaring, man kan bruge i eget køkken."
+  },
+  {
+    "subject": "Hvad siger tjeneren, når gæsten beder om et råd?",
+    "preview": "Giv ham seks nye svar i samme prisleje – vine, gæsterne ikke kender fra supermarkedet.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet går direkte til restaurantens hverdag og lover noget, gæsterne ikke har smagt."
+  },
+  {
+    "subject": "Hvilken bog skal byen læse i februar?",
+    "preview": "Stem på en af fem kandidater. Vinderen bliver månedens læseklubbog – med 20 % på.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør modtageren til jurymedlem, før mailen er åbnet."
+  },
+  {
+    "subject": "Hvad skal vores nye rugbrød hedde? 🍞",
+    "preview": "Kom med dit bedste bud. Vinderen får et friskt brød hver uge resten af året.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Alle kan svare, og præmien gør det værd at prøve."
+  },
+  {
+    "subject": "Hvordan bestiller en skole papir til 600 elever?",
+    "preview": "Én samlet ordre om året og levering i fire bidder. En skoleleder fortæller, hvordan det spiller.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et konkret scenarie, som andre indkøbere straks holder op mod deres egen hverdag."
+  },
+  {
+    "subject": "Hvordan indretter man 38 m² til to? 🛋️",
+    "preview": "Et par i en etværelses viser, hvor sofaen endte, og hvorfor sengen står midt i rummet.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret mål gør spørgsmålet håndgribeligt, og preview'et lover et svar med overraskelser."
+  },
+  {
+    "subject": "Hvor højt oppe vokser din morgenkaffe?",
+    "preview": "1.700 meter, på én gård i Huila. Vi besøgte den i marts og har billeder med hjem.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet gør en vane til en rejse, og preview'et sætter svaret på landkortet."
+  },
+  {
+    "subject": "Hvem har rørt dit spisebord, før du fik det?",
+    "preview": "Fire par hænder, fra planken kommer ind, til bordet kører ud ad porten. Mød dem alle sammen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, ingen kender svaret på, men alle vil vide, før de åbner."
+  },
+  {
+    "subject": "Serverer I te, der kan sælges med hjem?",
+    "preview": "Som forhandler får I vores dåser med egen hyldeplads og en fast rabat.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet åbner en ny indtægt for caféen, som preview'et gør konkret."
+  },
+  {
+    "subject": "Spørger jeres kunder efter garn?",
+    "preview": "Vi søger tre nye forhandlere i Jylland: startpakke, display og ingen minimumsordre det første år.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet lader butikken forestille sig sine egne kunder ved en ny hylde."
+  },
+  {
+    "subject": "Hvor hurtigt skal jeres tryksager være klar?",
+    "preview": "Bestil før kl. 12, så trykker vi samme dag. Visitkort, flyers og plakater op til A1.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål om tempo, som preview'et svarer på med et klokkeslæt."
+  },
+  {
+    "subject": "Er nytårsboblerne på indkøbslisten endnu? 🥂",
+    "preview": "Vi køler de sidste kasser ned til fredag. Bestil senest torsdag kl. 12, så står de klar.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtageren tjekker sin egen liste i hovedet, og preview'et giver en klar frist."
+  },
+  {
+    "subject": "Skal kunderne have en julegave fra firmaet i år? 🎁",
+    "preview": "Bestil inden fredag, så pakker vi dem med kort og leverer på én dag.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Indkøberen har allerede en liste i hovedet, og preview'et sætter en frist på den."
+  },
+  {
+    "subject": "Hvad koster en våd fod?",
+    "preview": "En dårlig dag på stien. Vores vandtætte støvler er 25 % ned frem til søndag.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et skævt spørgsmål, der prissætter ubehag, før rabatten bliver nævnt."
+  },
+  {
+    "subject": "Hvor meget printerpapir bruger I på et kvartal?",
+    "preview": "Køb et kvartal ad gangen og få 12 % på hele pallen. Tilbuddet gælder til månedens udgang.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får indkøberen til at tænke i kvartaler, og preview'et belønner det."
+  },
+  {
+    "subject": "Solcreme, der ikke klistrer – findes den? ☀️",
+    "preview": "Ingen hvid hinde, ingen klæbrighed. Vores nye SPF 30 trækker ind på et minut.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet vender en kendt irritation, og preview'et bekræfter, at den er væk."
+  },
+  {
+    "subject": "Har du strikket i alpaka før?",
+    "preview": "Det kradser ikke og vejer næsten ingenting. Ni nye farver er landet på hylden i dag.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et ja/nej-spørgsmål, der vækker nysgerrighed, uanset hvad modtageren svarer."
+  },
+  {
+    "subject": "Hvor skal gæsterne sove i julen? 🛏️",
+    "preview": "Sovesofaer, der ikke ligner sovesofaer – og én madras, der faktisk er god at sove på.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et praktisk juleproblem, stillet som spørgsmål, så modtageren selv mærker presset."
+  },
+  {
+    "subject": "Hvor længe holder din buket?",
+    "preview": "Med tre små greb kan den holde en uge længere. Det første handler om saksen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtageren gætter på et antal dage, og preview'et lover at forlænge det."
+  },
+  {
+    "subject": "Hvem samler skrivebordene, når de kommer?",
+    "preview": "Vi gør. Montering er med i prisen, og vi tager emballagen med igen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et praktisk spørgsmål, som preview'et svarer på med to ord."
+  },
+  {
+    "subject": "Kage til eftermiddagskaffen – bager I selv?",
+    "preview": "Hvis ikke, tøer vores nye frosne kager op på 40 minutter og smager, som kom de fra ovnen.",
+    "language": "da",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet går til caféejerens daglige udvalg og lover en lettere eftermiddag."
+  },
+  {
+    "subject": "What are you reading on the train this week?",
+    "preview": "Five slim novels that fit a coat pocket, picked by staff who read on the train too.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet placerer modtageren i en konkret situation, før anbefalingen kommer."
+  },
+  {
+    "subject": "How fast does your house blend run out? ☕",
+    "preview": "If it's under a week, our 5kg bags are on trial pricing this month – both roasts.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Caféejeren svarer med en tidsramme, og preview'et gør den til en købsgrund."
+  },
+  {
+    "subject": "Where does the post land in your hallway?",
+    "preview": "If it's the floor, a narrow console might be the answer. Six that are under 30cm deep.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille, genkendeligt øjeblik i hjemmet, som preview'et løser med et konkret mål."
+  },
+  {
+    "subject": "Running low on anything before quarter end?",
+    "preview": "Our quarter-end bundle covers paper, toner and pens in one delivery. Order by Thursday.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får indkøberen til at tjekke skabet i hovedet, før fristen bliver nævnt."
+  },
+  {
+    "subject": "Who's getting flowers on Friday? 💐",
+    "preview": "Order by 2pm Thursday and we'll hand-tie them in the morning, ready to collect.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at tænke på en bestemt person, og preview'et giver en klar frist."
+  },
+  {
+    "subject": "Red or white with the goose? 🍷",
+    "preview": "Neither, says our buyer. She's picked a dry rosé that cuts through the fat – plus two backups.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et klassisk dilemma, som preview'et vender med et uventet svar."
+  },
+  {
+    "subject": "What does your skin do on a long-haul flight? ✈️",
+    "preview": "Tightens, then shines. A three-step travel kit that fits the 100ml rule.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet trækker en konkret oplevelse frem, og preview'et svarer med noget, der passer i håndbagagen."
+  },
+  {
+    "subject": "Fancy guessing our most-repaired part? 🔧",
+    "preview": "Get it right and your next service is on us. Regular riders might be surprised.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et gættespil med en præmie, som modtageren vil prøve, før de har besluttet sig for at åbne."
+  },
+  {
+    "subject": "Which teas do your guests actually finish?",
+    "preview": "Six individually wrapped blends for hotel rooms, picked from what guests reach for first.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet går til hotellets egen erfaring og lover et sortiment bygget på den."
+  },
+  {
+    "subject": "Ever wondered what a chef orders twice?",
+    "preview": "Plates, side bowls and one very particular teapot. A 12-cover restaurant explains its reorder.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet peger på genbestillingen som det ærligste bevis, og preview'et lover detaljerne."
+  },
+  {
+    "subject": "Would you camp through three nights of rain? ⛺",
+    "preview": "Two of our staff did, to test the new tents. Here's what leaked and what didn't.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet åbner bag kulisserne, og preview'et lover en historie med modgang."
+  },
+  {
+    "subject": "Is your dog a chewer or a hider? 🐾",
+    "preview": "We've sorted the new toys by personality. One of the lists is very short.",
+    "language": "en",
+    "mechanisms": [
+      "spoergsmaal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et valg mellem to typer, som alle hundeejere straks placerer deres egen hund i."
+  }
+]

@@ -1,0 +1,1713 @@
+[
+  {
+    "subject": "Før du sender dit logo: læs det her",
+    "preview": "Én farve, ingen forløb, ingen skygger – sådan gør du filen klar til folie.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet kommer lige før handlingen, så mailen føles som hjælp på det rigtige tidspunkt."
+  },
+  {
+    "subject": "Lad kortet ligge under smykket, ikke ovenpå",
+    "preview": "Så ser kunden smykket først og hilsenen bagefter – og åbningen varer lidt længere.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret råd i emnet kan bruges med det samme og giver lyst til flere af samme slags."
+  },
+  {
+    "subject": "Skum eller vat? Sådan vælger du indlæg 💍",
+    "preview": "Skum holder ringen fast i en slids, vat giver blødhed til kæder og vedhæng. Se dem side om side.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et valg mellem to kendte muligheder er let at svare på og lover en klar anbefaling."
+  },
+  {
+    "subject": "Planlæg julens æsker baglæns 🗓️",
+    "preview": "Start ved fristen for dit land, træk produktionstiden fra, og læg en uge til at fylde hylderne.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En metode i stedet for en dato virker i alle lande og giver modtageren kontrol."
+  },
+  {
+    "subject": "Bestil prøven, før du bestiller logoet",
+    "preview": "Æsker med tryk kan ikke sendes retur, så mærk farven og lukningen i hånden først – det koster lidt.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rækkefølgen er selve rådet, og den ærlige pris i preview gør det troværdigt."
+  },
+  {
+    "subject": "Mørk æske, lys folie. Lys æske, mørk folie. ✨",
+    "preview": "Tommelfingerreglen for kontrast – og de to tilfælde, hvor du med fordel kan bryde den.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spejlvendingen gør reglen let at huske, og undtagelserne giver grund til at åbne."
+  },
+  {
+    "subject": "Sådan holder sølvet sig blankt i æsken",
+    "preview": "Hvad der får sølv til at anløbe – og hvorfor vores æsker bliver testet for det i huset.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "bag_kulisserne"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et problem, enhver sølvforhandler kender, gør guiden relevant før den er læst."
+  },
+  {
+    "subject": "Indret pakkebordet, før julen rammer 🎄",
+    "preview": "Æsker til venstre, papir i midten, poser til højre – og kortene i en fast bunke ved kassen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et fysisk, konkret setup kan kopieres direkte, og sæsonen gør det presserende."
+  },
+  {
+    "subject": "Posen skal være lidt for stor. Her er hvorfor.",
+    "preview": "Lidt luft om æsken giver plads til silkepapir og kort – og posen står pænere på disken.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et råd, der lyder forkert, skaber et lille hul, som forklaringen lukker."
+  },
+  {
+    "subject": "Det, en guldsmed lærte af sin første logoordre",
+    "preview": "Hvad hun ville gøre anderledes, og hvad hun ville gøre præcis igen, hvis hun startede i dag.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lærdom fra en kollega føles mere brugbar end råd fra leverandøren selv."
+  },
+  {
+    "subject": "Genbestilling? Brug det logo, vi allerede har",
+    "preview": "Når logoet er kendt, er produktionstiden 4–5 arbejdsdage i stedet for 7–8. Sådan bestiller du det.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet sparer modtageren tid, og preview viser præcis hvor meget."
+  },
+  {
+    "subject": "Sådan laver du en partnerannonce, folk ser færdig",
+    "preview": "Filmet på telefonen i din egen butik: de første tre sekunder, lyset og det, du siger til sidst.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et lovet resultat plus konkrete greb gør partnerskabet til noget, man selv kan klare."
+  },
+  {
+    "subject": "Fotografér æsken i dagslys, ikke under spots 📸",
+    "preview": "Sådan får du foliepræget til at glimte på produktbilledet – med en hvid karton og et vindue.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et imperativ med en klar kontrast giver et råd, man kan prøve samme eftermiddag."
+  },
+  {
+    "subject": "Hvornår kan bulk betale sig for dig?",
+    "preview": "Kender du dine bestsellere og har du plads – eller en aftale om lager – så er regnestykket her.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet lader modtageren selv vurdere relevansen, før tilbuddet nævnes."
+  },
+  {
+    "subject": "How to prepare your logo for foil",
+    "preview": "One colour, clean lines, no gradients – and what our designers do if it still won't print well.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En klassisk how-to-formulering lover præcis den viden, man mangler før en ordre."
+  },
+  {
+    "subject": "Matching your foil to your shopfront ✨",
+    "preview": "Gold, silver, rose gold or a colour: how to pick the foil that looks like your brand in daylight.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet knytter emballagen til butikken, modtageren allerede er stolt af."
+  },
+  {
+    "subject": "A calm way to plan Christmas packaging",
+    "preview": "Work back from your country's deadline, allow for production time, and order samples first.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ordet rolig er et løfte midt i en presset sæson, og preview leverer metoden."
+  },
+  {
+    "subject": "Sådan skal kaffen ikke opbevares 🥶",
+    "preview": "Fryseren, køleskabet og glasset på køkkenbordet – og det ene sted, bønnerne har det bedst.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En omvendt guide vækker tvivl om egne vaner og får modtageren til at tjekke."
+  },
+  {
+    "subject": "Olie bordet nu – før fyringssæsonen 🪵",
+    "preview": "Tør luft og varme radiatorer trækker fugten ud af egetræet. Sådan gør du på en halv time.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rådet er bundet til et tidspunkt, så det føles som nu eller aldrig."
+  },
+  {
+    "subject": "Vand mindre, end du tror",
+    "preview": "Stueplanter dør oftere af omsorg end af tørke. Stik en finger i jorden, og mærk efter det her.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et råd, der går imod instinktet, er det, folk husker og deler."
+  },
+  {
+    "subject": "Sådan sælger du en ukendt drue over disken",
+    "preview": "Tre sætninger, dine kunder forstår, og ét spørgsmål, der får dem til at smage.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Guiden løser forhandlerens eget salgsproblem og ikke kun leverandørens."
+  },
+  {
+    "subject": "Første gang, lyset brænder, bestemmer resten",
+    "preview": "Lad hele overfladen smelte første gang – ellers graver lyset en tunnel, det aldrig kommer op af.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En påstand om et afgørende øjeblik åbner et spørgsmål, preview straks svarer på."
+  },
+  {
+    "subject": "Your chain is telling you something 🚲",
+    "preview": "A squeak, a skip or a dull grey colour – what each one means and the five-minute fix for it.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Personificeringen gør vedligehold til et lille mysterium, som guiden opklarer."
+  },
+  {
+    "subject": "How to stop a fountain pen from skipping",
+    "preview": "It's almost never the nib. Start with the ink, then the paper – here's the order we check in.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret irritationsmoment i emnet rammer præcis dem, der har problemet."
+  },
+  {
+    "subject": "Brødet holder længere i et viskestykke",
+    "preview": "Plast holder på fugten og gør skorpen sej. Sådan gemmer du surdejsbrødet til fredag.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et overraskende, men enkelt råd kan afprøves samme dag."
+  },
+  {
+    "subject": "Hvad er en kliché?",
+    "preview": "Metalpladen, der præger dit logo i folien. Til din første ordre følger standardklichéen med.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et fagord, mange nikker til uden at kende, gør det trygt at åbne og lære."
+  },
+  {
+    "subject": "Folie, præg, indlæg: små ord forklaret",
+    "preview": "En kort ordbog til dig, der bestiller med logo for første gang og vil vide, hvad du siger ja til.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Fagordene i emnet signalerer en ordbog, som gør modtageren klogere på fem minutter."
+  },
+  {
+    "subject": "En smykkedesigner viser sit pakkebord 👀",
+    "preview": "Hvor æskerne står, hvordan hun folder papiret, og det lille greb, hun lukker posen med.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "bag_kulisserne"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "At se en kollegas arbejdsplads lærer mere end en liste med gode råd."
+  },
+  {
+    "subject": "Pose eller æske til ørestikkerne?",
+    "preview": "Posen er let at sende og sælge i sæt, æsken giver mere ved disken – sådan vælger du efter din butik.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret valg, modtageren står med, gør spørgsmålet umuligt at ignorere."
+  },
+  {
+    "subject": "Vælg én foliefarve, og hold fast i den",
+    "preview": "Når æsker, poser og kort har samme farve, genkender kunden dit brand, før de ser smykket.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et klart, lidt stædigt råd lyder som erfaring og ikke som salg."
+  },
+  {
+    "subject": "Julen uden panik: en tjekliste til oktober 🎄",
+    "preview": "Tæl dine bestsellere, bestil prøverne, godkend logoet – og find fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En tjekliste bundet til måneden gør julen til noget, man kan begynde på i dag."
+  },
+  {
+    "subject": "Sådan slipper du for et lager fuld af æsker",
+    "preview": "Vi kan opbevare din ordre, og du betaler, efterhånden som du trækker på den. Sådan sætter du det op.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Guiden tager udgangspunkt i et pladsproblem, ikke i Westpacks ydelse."
+  },
+  {
+    "subject": "Sådan pakker du et smykke til posten 📦",
+    "preview": "Æske, fyld og forsendelsesæske – så det ser ud, som om du selv rakte det over disken.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Preview lover samme oplevelse online som i butikken, og det er hele grunden til at læse."
+  },
+  {
+    "subject": "Valentinsgaven skal kunne åbnes med én hånd",
+    "preview": "Den anden holder jo om den, der giver den. Tre æsker, der åbner let – og en, der gør det langsomt.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et praktisk råd med et glimt i øjet gør sæsonmailen til en, man smiler af."
+  },
+  {
+    "subject": "Ny kollektion? Stil æsken de her spørgsmål",
+    "preview": "Hvad skal smykket ligge i, hvad skal kunden føle, og hvor skal æsken stå – før du vælger serie.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At give modtageren spørgsmålene i stedet for svaret gør guiden brugbar for alle."
+  },
+  {
+    "subject": "Which carrier bag for which box?",
+    "preview": "A quick guide to the four luxury bag sizes – and the boxes that sit neatly inside each one.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et praktisk matchspørgsmål lover et opslagsværk, man gemmer."
+  },
+  {
+    "subject": "What jewellers ask us before a first logo order",
+    "preview": "The questions that come up again and again, answered plainly – from minimums to how the proof works.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "social_proof"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres spørgsmål er en ufarlig måde at få svar på dem, man ikke selv har stillet."
+  },
+  {
+    "subject": "Unboxing, slowed down 🎁",
+    "preview": "Lid, tissue, jewellery, card: a step-by-step for making the first ten seconds feel deliberate.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Billedet af slowmotion lover en detaljeret gennemgang af et øjeblik, der går for hurtigt."
+  },
+  {
+    "subject": "Reorder now, relax in December",
+    "preview": "If your logo is already with us, a reorder goes into production in 4–5 working days. Here's how.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Rimet mellem nu og december gør rådet let at huske og handle på."
+  },
+  {
+    "subject": "Ost skal ud af køleskabet en time før 🧀",
+    "preview": "Kold ost smager af ingenting. Sådan sætter du et ostebord, der står klar, når gæsterne kommer.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tippet står færdigt i emnet, og preview lover resten af opskriften."
+  },
+  {
+    "subject": "Slib kniven i en vinkel på 15 grader",
+    "preview": "Hold den mod stenen, som om du skubber et stykke papir – sådan mærker du, når vinklen er rigtig.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et præcist tal i et råd signalerer håndværk og gør det let at efterleve."
+  },
+  {
+    "subject": "Uld skal ikke vaskes – den skal luftes 🧶",
+    "preview": "Hæng sweateren ud natten over, og den dufter frisk igen. Vask kun, når der er en plet.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rådet vender en vane på hovedet og sparer samtidig modtageren arbejde."
+  },
+  {
+    "subject": "Sådan prismærker du uden at skjule varen",
+    "preview": "Små skilte, der kan læses på to meter, og hvor de skal sidde på hylden – med skabelon til print.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Guiden løser et dagligt problem for forhandleren og giver et værktøj med."
+  },
+  {
+    "subject": "Vinduet sælger, når det siger én ting 🪟",
+    "preview": "Vælg én vare, gentag den tre gange, og lad resten blive inde i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et princip sagt som en sandhed får modtageren til at se på sit eget vindue."
+  },
+  {
+    "subject": "Rækkefølgen er vigtigere end produktet",
+    "preview": "Tyndeste først, tykkeste sidst – og hvorfor solcremen altid er det sidste, du smører på.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En påstand, der underspiller produktet, gør guiden troværdig og nysgerrighedsvækkende."
+  },
+  {
+    "subject": "Bitter te? 80 grader 🍵",
+    "preview": "Hvid og lys te brænder ved kogepunktet. Lad kedlen stå i to minutter, og smag forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Problem og løsning står i emnet, så rådet virker selv uden at åbne."
+  },
+  {
+    "subject": "En bog til en, der ikke læser 🎁",
+    "preview": "Start med de serier, de ser, ikke med det, du selv elsker. Fem spørgsmål, der rammer plet.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En velkendt julegavekval gøres til en opgave, guiden kan løse."
+  },
+  {
+    "subject": "Rugs: measure the sofa, not the room",
+    "preview": "The front legs should sit on the rug. Here's the rule of thumb for every living-room shape.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem to mål retter en udbredt fejl uden at pege fingre."
+  },
+  {
+    "subject": "Open the red an hour early. Here's why.",
+    "preview": "Air softens young tannins – and the two kinds of wine you should never decant at all.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rådet er brugbart i sig selv, og 'here's why' lover den viden, der gør det til ens eget."
+  },
+  {
+    "subject": "How to dial in a grinder before opening ☕",
+    "preview": "Pull one shot, taste, adjust a single step: the routine our trainers teach every new café.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Guiden er skrevet til forhandlerens morgenrutine og løser et konkret problem."
+  },
+  {
+    "subject": "Quiz: kan du se forskel på foliefarverne? 🎯",
+    "preview": "Gæt guld, sølv og rosaguld på tre sekunder – og lær, hvad der skiller dem ad i lyset.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lille udfordring gør læringen til en leg, man vil prøve kræfter med."
+  },
+  {
+    "subject": "Det tjekker vores grafikere på dit logo",
+    "preview": "Stregtykkelse, små detaljer og om det tåler at blive presset i folie – og hvad de gør, hvis ikke.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At vise faglisternes tjekliste lærer modtageren at tænke som dem."
+  },
+  {
+    "subject": "Ny smykkeæske: sådan får du mest ud af den",
+    "preview": "Hvilke smykker den er lavet til, hvilken foliefarve der klæder den, og hvordan den står i vinduet.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden pakkes ind som brugsanvisning, så den føles som hjælp og ikke reklame."
+  },
+  {
+    "subject": "Sådan regner du bulkprisen ud på din æske",
+    "preview": "Tag dit årlige forbrug, se på pladsen – og vurder, om 9.600 stk. giver mening for netop dig.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tilbuddet bliver et regnestykke, modtageren selv styrer, og det skaber tillid."
+  },
+  {
+    "subject": "Tre ting, vi har lært af 30.000+ brands",
+    "preview": "Om farver, om mængder og om det øjeblik, kunden løfter låget – samlet fra mange års ordrer.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Erfaring fra mange kolleger på én gang gør rådene tungere end en enkelt mening."
+  },
+  {
+    "subject": "Hvid æske? Så skal silkepapiret have farve 🎨",
+    "preview": "Sådan bruger du papiret til at skifte stemning efter sæsonen – uden at skifte æske.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et hvis-så-råd rammer præcis dem, der har den hvide æske, og giver dem noget nyt at gøre."
+  },
+  {
+    "subject": "Sådan læser du en digital korrektur",
+    "preview": "Tjek stavning, placering og størrelse på logoet – og hvad du skriver, hvis noget skal rettes.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille, men nervøs opgave forklares, før modtageren står med den."
+  },
+  {
+    "subject": "Regn æsken ind i prisen, ikke oveni",
+    "preview": "Læg emballagen ind i salgsprisen, så gaveindpakning føles som service og ikke som et tillæg.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet handler om modtagerens indtjening, ikke om æsken, og det gør det værd at læse."
+  },
+  {
+    "subject": "Efterårets farver på disken – samme æske 🍂",
+    "preview": "Bånd, papir og kort i rust og okker: sådan følger butikken sæsonen med det, du allerede har.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonen bliver en lille opgave, der kan løses uden at købe nyt."
+  },
+  {
+    "subject": "Sådan får du mest ud af at være partner",
+    "preview": "Hvad vi har brug for fra dig, hvordan du bliver vist som case, og hvordan annoncerne kører.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En brugsanvisning til et samarbejde fjerner usikkerheden om, hvad man har sagt ja til."
+  },
+  {
+    "subject": "Displayet skal stå i øjenhøjde. Næsten.",
+    "preview": "Ringe lidt under, øreringe lidt over: sådan placerer du bakkerne, så kunderne rækker ud.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det korte forbehold til sidst bryder en regel, man troede man kendte."
+  },
+  {
+    "subject": "How to photograph foil so it actually shines 📸",
+    "preview": "Angle the light, not the box – and the white card trick that makes gold look like gold on screen.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kendt problem med produktfotos løses med et konkret greb, man kan prøve i dag."
+  },
+  {
+    "subject": "Your first logo order, step by step",
+    "preview": "From choosing the box to approving the proof – with the questions worth asking at each stage.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Trin-for-trin-løftet gør en ukendt proces tryg for den, der står foran den."
+  },
+  {
+    "subject": "Quiz: which box suits your brand? 👀",
+    "preview": "Five questions about what you sell and how you sell it – with a box type waiting at the end.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Quizformatet gør en anbefaling personlig, før modtageren har åbnet."
+  },
+  {
+    "subject": "What turns your file into a sharp impression",
+    "preview": "Heat, pressure and a clean line: a look at the foil press and what it needs from your logo.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Processen bag præget forklares, så modtageren kan levere et bedre logo næste gang."
+  },
+  {
+    "subject": "Sådan bygger du et kortstativ, der sælger 💌",
+    "preview": "Fødselsdag i øjenhøjde, sæson øverst, tak og kondolence nederst – med plantegning til stativet.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Guiden giver forhandleren en færdig plan, der gør leverandørens varer lettere at sælge."
+  },
+  {
+    "subject": "Lædersofaen skal have creme to gange om året",
+    "preview": "Forår og efterår, med en blød klud og tynde lag. Her er, hvordan du ser, at den trænger.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fast frekvens gør plejen konkret og nem at sætte i kalenderen."
+  },
+  {
+    "subject": "Pump dækkene, før du smører kæden 🚲",
+    "preview": "Rækkefølgen betyder noget – og trykket står altid på dækket, hvis du ved, hvor du skal kigge.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En overraskende rækkefølge får modtageren til at spørge hvorfor og åbne."
+  },
+  {
+    "subject": "Mælkeskum til 60 grader – ikke mere ☕",
+    "preview": "Over 65 forsvinder sødmen. Læg hånden på kanden: når du ikke kan holde den mere, så stop.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist tal og en håndfast tommelfingerregel gør baristaviden tilgængelig."
+  },
+  {
+    "subject": "Omplant i marts, ikke i december 🌱",
+    "preview": "Planten hviler om vinteren. Sådan ser du, at den er klar, og hvilken jord du skal bruge.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To måneder sat op mod hinanden gør timingen til selve rådet."
+  },
+  {
+    "subject": "Nyt rugbrød – sådan skærer du det tyndt",
+    "preview": "Lad det hvile et døgn, brug en savtakket kniv, og skær fra bunden. Så smuldrer det ikke.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden kommer med en brugsanvisning, så kunden lykkes med den første gang."
+  },
+  {
+    "subject": "Spar på malingen: sådan regner du liter ud",
+    "preview": "Mål væggen, træk vinduerne fra, gang med to lag. Og denne uge er alle spande 20 % billigere.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Guiden kommer først og tilbuddet bagefter, så rabatten føles som en bonus."
+  },
+  {
+    "subject": "A café owner's trick for slow Tuesdays",
+    "preview": "She moved the pastry case two metres closer to the door. Here's what happened, and how to try it.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et trick fra en kollega med et konkret problem lover et råd, der er afprøvet."
+  },
+  {
+    "subject": "What we learned roasting through a heatwave",
+    "preview": "Beans behave differently above 30°C. How we adjusted, and what it means for your next bag.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen lærdom deles åbent, og modtageren får noget brugbart med."
+  },
+  {
+    "subject": "Make your shop smell like December 🕯️",
+    "preview": "Cinnamon by the till, pine by the door, nothing near the food: a scent map for the season.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et sanseligt løfte gør en butiksguide til noget, man kan forestille sig med det samme."
+  },
+  {
+    "subject": "Myte: logotryk kræver tusindvis af æsker",
+    "preview": "Helt ned til 48 stk. kan få dit logo i folie. Her er, hvordan en lille første ordre skrues sammen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At aflive en myte giver modtageren ny viden og fjerner en barriere på samme tid."
+  },
+  {
+    "subject": "Det første, kunden rører, er låget",
+    "preview": "Derfor sidder logoet der – og sådan vælger du en overflade, der føles som din butik.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En iagttagelse, alle kan genkende, bliver indgangen til et konkret råd."
+  },
+  {
+    "subject": "Snydeark: smykke → æskestørrelse 📏",
+    "preview": "Ørestikker, ringe, vedhæng, armbånd og lange kæder – med de indvendige mål, der passer.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Ordet snydeark lover et opslag, man gemmer og bruger igen."
+  },
+  {
+    "subject": "Nyt logo til jul? Start med prøven",
+    "preview": "Prøve, korrektur, produktion – i den rækkefølge, for fristerne falder tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet giver fristen en første handling i stedet for blot en advarsel."
+  },
+  {
+    "subject": "Samme æske året rundt – tre butikkers greb",
+    "preview": "Bånd til jul, kort til Valentins, ingenting i januar: sådan skifter de stemning uden at skifte æske.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kollegers løsninger på samme udfordring er lette at kopiere og svære at ignorere."
+  },
+  {
+    "subject": "Fine streger i logoet? Sådan kommer de med",
+    "preview": "Folie har en grænse for, hvor tyndt den kan præge – og vores grafikere kan tegne linjen op.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer en konkret bekymring, og svaret viser en løsning frem for et nej."
+  },
+  {
+    "subject": "Unboxing på video: 4 greb til telefonen 🎬",
+    "preview": "Lyset fra siden, låget i ét træk, smykket i fokus – og stop, før det bliver for langt.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille antal greb til et værktøj, alle har i lommen, gør det let at gå i gang."
+  },
+  {
+    "subject": "Mat eller blank æske? Sådan vælger du 🤔",
+    "preview": "Mat føles roligt og skjuler fingeraftryk, blank fanger lyset i vinduet. Se dem side om side.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et enten-eller-spørgsmål, modtageren allerede har overvejet, lover et klart svar."
+  },
+  {
+    "subject": "Ring til os, før du bestiller. Her er hvorfor.",
+    "preview": "Vi kan sige, om et logo vil stå skarpt, og hvilken æske der passer – før du har bestilt noget.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et uventet råd fra en leverandør om at vente med at købe skaber tillid."
+  },
+  {
+    "subject": "Black Friday-pakning, der holder til køen",
+    "preview": "Poser foldet ud på forhånd, æsker stablet efter størrelse og et fast sted til kvitteringen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet er knyttet til dagens største pres, så det føles nødvendigt at læse."
+  },
+  {
+    "subject": "Sådan bruger du din første ordre klogt",
+    "preview": "Ingen opstartsomkostninger første gang – så vælg den æske, du sælger mest i, og prøv logoet dér.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen bliver til en strategi, så tilbuddet føles som et godt råd."
+  },
+  {
+    "subject": "Arranging a ring tray that sells 💍",
+    "preview": "Odd numbers, one hero piece and room to breathe – three layout rules for any counter.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et salgsresultat i emnet og konkrete regler i preview gør guiden umiddelbart nyttig."
+  },
+  {
+    "subject": "Gift-wrapping at speed, without it showing 🎄",
+    "preview": "Pre-cut tissue, boxes sorted by size and one fold you can teach a new starter in a minute.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Løftet om både fart og finish rammer præcis sæsonens dilemma."
+  },
+  {
+    "subject": "Advice from a jeweller who's done it",
+    "preview": "What she'd do again, what she'd change, and the question she wishes she'd asked first.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Råd fra en, der har prøvet det, vejer tungere end leverandørens egne."
+  },
+  {
+    "subject": "Where to keep boxes between orders",
+    "preview": "Dry, out of direct sun and lids down – so the foil and the colour look new when you need them.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille praktisk spørgsmål, få tænker over, beskytter en investering, modtageren allerede har."
+  },
+  {
+    "subject": "Skriv prisen i blyant ✏️",
+    "preview": "Så kan kunden se, at det er en vurdering – og du kan rette den, når markedet ændrer sig.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kort, konkret råd i emnet vækker spørgsmålet hvorfor."
+  },
+  {
+    "subject": "Lad kunden skrive med pennen først ✍️",
+    "preview": "En prøveblok ved kassen sælger mere end en vitrine. Sådan sætter du den op, så den bliver brugt.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rådet hjælper forhandleren med at sælge leverandørens vare, og alle vinder."
+  },
+  {
+    "subject": "Pak osten ind i papir, aldrig i film",
+    "preview": "Den skal kunne ånde. Sådan pakker du den, så skorpen ikke sveder, og smagen holder til næste uge.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To materialer sat op mod hinanden gør rådet let at huske ved køledisken."
+  },
+  {
+    "subject": "Sådan ser du, om en stol er godt lavet",
+    "preview": "Vend den om. Samlingerne under sædet fortæller mere end betrækket – her er, hvad du kigger efter.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At lære modtageren at bedømme kvalitet selv er stærkere end at påstå den."
+  },
+  {
+    "subject": "Skær stilken skråt – og under vand 💐",
+    "preview": "Så trækker blomsten vand i stedet for luft. Fire andre greb, der giver buketten en uge mere.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den lille tilføjelse efter tankestregen er det, de fleste ikke vidste."
+  },
+  {
+    "subject": "Imprægnér jakken, mens den er våd 🧥",
+    "preview": "Det lyder bagvendt, men sprayen trækker bedre ind i fugtigt stof. Sådan gør du på altanen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et råd, der lyder forkert, kræver en forklaring, og den står bag klikket."
+  },
+  {
+    "subject": "Boghandleren, der skrev én linje på hver bog",
+    "preview": "Små håndskrevne kort under hylderne – hvad hun skriver, og hvordan du laver dine egne på en time.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En person og en lille vane bliver til en metode, modtageren kan låne."
+  },
+  {
+    "subject": "No soap on cast iron? Not quite.",
+    "preview": "A drop of soap is fine. Soaking it is not – here's the five-minute routine that keeps it seasoned.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At korrigere en kendt regel gør modtageren nysgerrig på, hvad der faktisk gælder."
+  },
+  {
+    "subject": "Folding a shirt for the shop window 👔",
+    "preview": "Collar up, sleeves tucked, one pin you can't see – so it looks pressed for a whole week.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En meget specifik opgave lover en håndværksdetalje, man ikke finder andre steder."
+  },
+  {
+    "subject": "New: the oak board. Oil it once, then this.",
+    "preview": "A tablespoon of oil on day one, then a damp cloth only – the care card is inside the box.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden præsenteres gennem plejen, så kunden føler sig klar til at eje den."
+  },
+  {
+    "subject": "Spørg dig selv: hvad skal kunden gemme?",
+    "preview": "Æsken, kortet eller posen – det, der bliver gemt, bærer dit navn videre. Vælg med vilje.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, modtageren stiller sig selv, giver et nyt blik på hele emballagen."
+  },
+  {
+    "subject": "Bestil prøverne, før travlheden starter",
+    "preview": "Sådan bruger du november: én prøve af hver æske, du overvejer, og et logo godkendt i god tid.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen bliver til en plan for en måned, så den føles overkommelig frem for truende."
+  },
+  {
+    "subject": "Det lærte vi af 73 år med æsker",
+    "preview": "Om kvalitet, om at holde det enkelt og om at sige det ærligt, når noget ikke kan lade sig gøre.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Erfaring delt som lærdom og ikke som pral gør virksomhedsmailen værd at læse."
+  },
+  {
+    "subject": "Test dig selv: hvilken pose til hvilken æske? 🛍️",
+    "preview": "Fem æsker, fire poser og ét rigtigt match for hver – svarene står nederst i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille test gør viden til leg, og svarene sidst holder modtageren i mailen."
+  },
+  {
+    "subject": "Nye farver? Sådan matcher du dem med dit logo",
+    "preview": "Hvilken foliefarve der står stærkest på hver af de nye nuancer – vist på det samme logo.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden kommer med svaret på det første spørgsmål, enhver køber stiller."
+  },
+  {
+    "subject": "Lager eller bulk? Sådan vælger du",
+    "preview": "Har du plads, så køb stort. Har du ikke, så lad os opbevare æskerne, og betal, når du trækker.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To muligheder stillet op som et valg gør det let at finde sin egen situation."
+  },
+  {
+    "subject": "Silkepapiret skal kunne høres 🎁",
+    "preview": "Den lille knitren, når låget løftes, er en del af gaven. Sådan folder du, så den er der hver gang.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En uventet sans i emnet vækker nysgerrighed, og preview gør det til et råd."
+  },
+  {
+    "subject": "Sådan kom unboxingen med i webshoppens pakker",
+    "preview": "Æske, kort, forsendelsesemballage: rækkefølgen, fortalt af en kunde, der pakker hver dag.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kollegas løsning på et konkret problem er en guide med indbygget bevis."
+  },
+  {
+    "subject": "Sådan bestiller du prøver uden at gætte",
+    "preview": "Vælg op til fem, med eller uden logo, og læg dem ved siden af dine smykker, før du beslutter dig.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Løftet om at slippe for at gætte rammer den usikkerhed, der holder folk tilbage."
+  },
+  {
+    "subject": "Hvilken æske til en lang halskæde?",
+    "preview": "Aflang eller flad – og sådan lægger du kæden, så den ikke filtrer, når æsken åbnes.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et snævert, praktisk spørgsmål rammer præcis dem, der står med problemet."
+  },
+  {
+    "subject": "Sådan sælger du emballage videre til dine kunder",
+    "preview": "Til dig, der er forhandler: hvordan du viser æsker med logo frem, så kunden selv vil bestille.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Guiden handler om forhandlerens salg, ikke Westpacks, og det gør den relevant."
+  },
+  {
+    "subject": "What to write on the card inside the box ✉️",
+    "preview": "Three lines that work for a gift, a repeat customer and an online order – copy them as they are.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Færdige formuleringer er den mest direkte form for hjælp, en guide kan give."
+  },
+  {
+    "subject": "Before you approve the proof, check this",
+    "preview": "Spelling, logo size, placement on the lid – the three things worth a second look every time.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet er timet til et bestemt øjeblik, så det føles som en kollega, der kigger med."
+  },
+  {
+    "subject": "Ask us if your logo will print",
+    "preview": "Send it to our sales team before you order – they'll tell you whether it will stay sharp in foil.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En invitation til at spørge først sænker tærsklen og viser, at der sidder mennesker bag."
+  },
+  {
+    "subject": "Sådan holder du surdejen i live på ferie 🍞",
+    "preview": "Fodr den, sæt den i køleskabet, og glem den i to uger. Sådan vækker du den igen bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille, kendt bekymring får en løsning, man kan stole på før sommerferien."
+  },
+  {
+    "subject": "Bitter kaffe? Tjek kværnen først",
+    "preview": "Gamle olier i kværnen smager igennem. En rengøring på fem minutter hver uge – trin for trin.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Problemet i emnet er café-forhandlerens eget, og løsningen er lettere end forventet."
+  },
+  {
+    "subject": "Sådan hænger du et billede i den rigtige højde 🖼️",
+    "preview": "Midten skal sidde i 145 cm, uanset loftshøjden. Over en sofa: en hånds bredde over ryggen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist mål i preview gør et diffust spørgsmål til et klart svar."
+  },
+  {
+    "subject": "Det tog os tre år at lære at riste lyst",
+    "preview": "Hvad vi gjorde forkert, hvad der fik smagen på plads – og hvordan du brygger den hjemme.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ærlighed om lang læring gør rådene til sidst mere værd."
+  },
+  {
+    "subject": "Gæt druen – og lær at smage den 🍇",
+    "preview": "Tre glas, tre noter og én drue, du nok ikke kender. Rigtigt svar giver et lod i lodtrækningen.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Konkurrencen er en smagsskole i forklædning, så deltagerne lærer noget undervejs."
+  },
+  {
+    "subject": "Holder vinterdækkene et år til? ❄️",
+    "preview": "Stik en tændstik i mønsteret. Under 4 mm? Så er vores vinterdæk 15 % billigere denne uge.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Testen kommer først, så tilbuddet kun rammer dem, der faktisk har brug for det."
+  },
+  {
+    "subject": "Påskebordet: dæk det dagen før 🐰",
+    "preview": "Duge, servietter og blomster aftenen før, så frokosten starter med gæsterne og ikke med opvasken.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et simpelt timingråd lover en mere rolig helligdag."
+  },
+  {
+    "subject": "Denne kniv skal ikke i opvaskeren",
+    "preview": "Varme og salt sløver æggen. Skyl, tør og hæng den op – så holder den sig skarp i årevis.",
+    "language": "da",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forbud i emnet stopper en vane og gør plejen til en del af produktet."
+  },
+  {
+    "subject": "En tømrer om de tre værktøjer, han aldrig låner ud",
+    "preview": "Og hvordan han passer dem, så de holder til næste generation. Med hans egen plejeliste.",
+    "language": "da",
+    "mechanisms": [
+      "guide",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fagmands personlige regel gør en plejeguide til en historie."
+  },
+  {
+    "subject": "How to keep cut tulips standing straight 🌷",
+    "preview": "They keep growing in the vase. A pin through the stem and a tall, narrow glass – that's the trick.",
+    "language": "en",
+    "mechanisms": [
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et velkendt irritationsmoment løses med et trick, der føles som en hemmelighed."
+  },
+  {
+    "subject": "Last week to plant bulbs – here's how deep 🌱",
+    "preview": "Three times the bulb's height, pointy end up, and water once. Then forget them until March.",
+    "language": "en",
+    "mechanisms": [
+      "guide",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen gør rådet presserende, og guiden gør det let at nå."
+  }
+]

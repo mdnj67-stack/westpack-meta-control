@@ -1,0 +1,1745 @@
+[
+  {
+    "subject": "Ikke så ringe endda 💍",
+    "preview": "Ringæskerne i vinterens farver, set fra alle sider og med logo i guldfolie.",
+    "language": "da",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Jysk underdrivelse og et ordspil på ring giver et smil, der kun virker på dansk."
+  },
+  {
+    "subject": "Vi hed engang Westpap 📦",
+    "preview": "Så blev vi et A/S i starten af 80'erne og byttede pap ud med pack. Pappet har vi beholdt.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En lille, sand navnehistorie med en pointe til sidst gør virksomhedsstof til en anekdote."
+  },
+  {
+    "subject": "Undskyld klichéen, men den er nødvendig",
+    "preview": "Det er metalpladen, der trykker dit logo. Første ordre: ingen opstartsomkostninger.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordet kliché betyder både floskel og trykplade, og preview afslører den dobbelte bund."
+  },
+  {
+    "subject": "Rom tog længere tid end dit logo 🏛️",
+    "preview": "Nyt logo: 7–8 arbejdsdages produktion. Kendt logo: 4–5. Rom: betydeligt længere.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En absurd sammenligning gør produktionstider til en pointe i stedet for en tabel."
+  },
+  {
+    "subject": "Sølvet er dramatisk. Æsken er rolig",
+    "preview": "Testet for anløbning hos os selv, så æsken aldrig er grunden til, at sølvet surmuler.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Sølvet får et temperament, og en teknisk egenskab bliver til en lille karakterkomedie."
+  },
+  {
+    "subject": "Julen kommer igen i år. Vi har tjekket",
+    "preview": "Og fristerne for logotryk falder hvert år tidligere, end man tror. Se dit lands frist her.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tør underdrivelse om det mest forudsigelige i verden får fristen til at glide ned med et smil."
+  },
+  {
+    "subject": "Hvem bestemte, at december kun har 31 dage?",
+    "preview": "Vi har klaget uden held. Tjek i stedet logofristen for dit land – den falder før, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et fjollet spørgsmål, alle i detailhandlen kan nikke til, åbner for en alvorlig frist."
+  },
+  {
+    "subject": "Indrømmet: julen kan vi ikke flytte",
+    "preview": "Men vi kan vise dig fristen for logotryk i dit land, så den ikke kommer bag på dig.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En ydmyg indrømmelse gør afsenderen menneskelig og fristen til en hjælp frem for et pres."
+  },
+  {
+    "subject": "Selv nisserne har en logofrist 🎅",
+    "preview": "Deres falder tidligere end din. Men din falder nok også tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Nisserne gør en tør frist til et eventyr, og preview vender pointen tilbage mod modtageren."
+  },
+  {
+    "subject": "Bæreposen har været til flere fester end os 🛍️",
+    "preview": "Bryllupper, fødselsdage og mindst ét frieri. Vi har mest været i Holstebro.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Selvironi om afsenderen og et festligt liv for produktet giver et varmt smil."
+  },
+  {
+    "subject": "Vi har lavet en æske, der er pænere end kontoret",
+    "preview": "Ikke svært, siger kollegerne. Men se selv: den nye serie smykkeæsker i mørkeblå og guld.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen gør grin med sig selv og løfter produktet i samme bevægelse."
+  },
+  {
+    "subject": "Den nye smykkeæske har fået fans på lageret",
+    "preview": "Flere har allerede spurgt, om de må tage en med hjem. Svaret er stadig nej.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kollegernes begær efter æsken er en lille historie, der virker som anbefaling."
+  },
+  {
+    "subject": "Ni farver, og bæreposen er stadig ikke tilfreds",
+    "preview": "Det bliver du nok: sort, grå, creme, pink, terracotta og fire til, alle med vævede hanke.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En kræsen bærepose gør et stort farveudvalg til en pointe i stedet for en liste."
+  },
+  {
+    "subject": "Smykkeposer til smykker, der ikke gider æsker",
+    "preview": "Bløde poser til armbånd, kæder og alt det andet, der hellere vil ligge ned.",
+    "language": "da",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Smykkerne får en mening om deres emballage, og det gør kategorien sjov at kigge på."
+  },
+  {
+    "subject": "Vores displays står stille. Det er pointen",
+    "preview": "Ringe, øreringe og halskæder får et sted at stå, så dine hænder er fri til at sælge.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En banal egenskab sagt med tørt alvor bliver til en pointe om, hvad displayet gør for butikken."
+  },
+  {
+    "subject": "Selv sokker ser betænksomme ud i den her 🧦",
+    "preview": "Gaveæsker til alle butikker, ikke kun smykkebutikker – med dit logo på låget, hvis du vil.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Verdens mest forudsigelige gave i en flot æske er et billede, alle kan se for sig."
+  },
+  {
+    "subject": "Færre æsker end gæster til et bryllup",
+    "preview": "Du kan bestille helt ned til 48 stk. med dit logo. Det er en mellemstor fest.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En hverdagsagtig målestok gør minimumsantallet lille og konkret på én gang."
+  },
+  {
+    "subject": "Hvem bestiller 9.600 smykkeæsker? Kloge folk",
+    "preview": "Bulkkøb af de populære smykkeæsker giver op til 40 % rabat, med 7–8 ugers produktion.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmål og svar i samme linje giver et smil og et kompliment til dem, der køber stort."
+  },
+  {
+    "subject": "En prøve koster lidt. At gætte koster mere",
+    "preview": "Bestil op til fem prøver online, med eller uden dit logo, og hold æsken, før du bestiller 500.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille ordsprog gør det ærligt, at prøver koster noget, og vender det til en fordel."
+  },
+  {
+    "subject": "Regnbuer i guldfolie? Det har vi prøvet 🌈",
+    "preview": "Gik ikke. Folie er én farve ad gangen, så grafikerne tegner logoet til, så det ikke savner resten.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderens eget fejlslagne forsøg forklarer en teknisk begrænsning uden at belære."
+  },
+  {
+    "subject": "Cirka 25 foliefarver (vi tæller stadig)",
+    "preview": "Trykkeriet bliver ved med at forelske sig i nye. Her er dem alle, fra guld til kobber.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Parentesen gør et upræcist tal charmerende i stedet for usikkert."
+  },
+  {
+    "subject": "Vi prøvede at tælle dagens æsker. Vi gav op",
+    "preview": "Det bliver til omkring 200.000 æsker og poser om dagen, siger dem, der er bedre til tal.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et nederlag sagt helt tørt gør det store tal imponerende uden at prale."
+  },
+  {
+    "subject": "Over 70 år, og guldfolie rører os stadig ✨",
+    "preview": "Siden 1953, og vi bliver stadig blanke i øjnene, når et nyt logo kommer ud af pressen.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Alder og rørstrømskhed i samme linje gør en lang historie menneskelig og lidt fjollet."
+  },
+  {
+    "subject": "Black Friday er sort. Æskerne behøver ikke være det",
+    "preview": "Creme, mørkeblå og terracotta, så din pakke skiller sig ud i en uge, hvor alt andet er sort.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Navnet på dagen bliver taget bogstaveligt, og pointen bliver et argument for at skille sig ud."
+  },
+  {
+    "subject": "Det eneste uhyggelige i dag er julefristerne 🎃",
+    "preview": "Halloween går over. Logofristerne til jul kommer tættere på – se dit lands her.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Dagens tema bruges til at gøre en frist til det egentlige gys."
+  },
+  {
+    "subject": "Amor har pil og bue. Vi har guldfolie 💘",
+    "preview": "Gaveæsker og smykkeposer i rosa og creme til Valentins, så gaven rammer lige så præcist.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En skæv sammenligning med Amor gør sæsonens produkter til et våben i samme kamp."
+  },
+  {
+    "subject": "Husk solcreme, pas og logoæsker ☀️",
+    "preview": "Bestil emballagen til efteråret, før du tager af sted, så kan ferien handle om alt andet.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det tredje punkt på pakkelisten er det overraskende, og det er det, mailen handler om."
+  },
+  {
+    "subject": "Ringen nægter at flytte ud af æsken",
+    "preview": "Kunden har haft den i en måned, og den bor der stadig. Vi tager det som en kompliment.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En stædig ring er en lille historie, der roser æsken uden at sige det direkte."
+  },
+  {
+    "subject": "Posen er så stor, at vi mistede en kollega i den 😅",
+    "preview": "Han er fundet igen. XXL-bæreposen er 45 cm bred med plads til et logo på 15 × 15 cm.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En absurd overdrivelse, og preview lander den med de rigtige mål."
+  },
+  {
+    "subject": "Kære dig i oktober. Hilsen dig i december",
+    "preview": "Bestil logoæskerne nu. Fristerne falder tidligere, end du tror, og jeg har travlt.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et brev fra modtagerens fremtidige, stressede jeg gør fristen personlig og sjov."
+  },
+  {
+    "subject": "Dit baglokale fortjener ferie",
+    "preview": "Vi opbevarer ordren, og du betaler, efterhånden som du trækker på den. Kassestablen kan flytte ud.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et rum i butikken får følelser, og en lagerservice bliver til en lettelse."
+  },
+  {
+    "subject": "Vores grafikere er pernittengrynede. Heldigvis",
+    "preview": "De tjekker hvert logo, tegner det om, hvis folien kræver det, og sender en korrektur før tryk.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et gammeldags dansk ord og et tørt »heldigvis« gør pedanteri til en kvalitet."
+  },
+  {
+    "subject": "Du poserer. Vi betaler annoncen",
+    "preview": "Vores partnerprogram betaler for annoncer fra din egen profil, med din butik og vores æsker.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "»Poserer« blinker til poser, og arbejdsdelingen i to korte sætninger forklarer hele programmet."
+  },
+  {
+    "subject": "Vi har kigget i alle æskerne. De er tomme 👀",
+    "preview": "Det er meningen. Dine smykker gør sig bedre i dem end vores kontorclips.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En komisk selvfølgelighed får modtageren til at se sine egne smykker i æskerne."
+  },
+  {
+    "subject": "Vi bad tre butikker vise os, hvordan man gør",
+    "preview": "De pakker smukkere end os, og nu har de fået lov at bevise det i nyhedsbrevet.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen gør sig selv til elev, og kunderne bliver mestrene i deres egen case."
+  },
+  {
+    "subject": "Vi lovede ikke at sige, hvem der pakker bedst 🤐",
+    "preview": "Så vi viser bare billederne fra tre butikker og lader dig gætte, hvem vi mener.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nysgerrighed"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et løfte om tavshed er den sikreste måde at få nogen til at åbne."
+  },
+  {
+    "subject": "Skriv en bedre emnelinje end vores 🏆",
+    "preview": "Den bedste kommer med i næste nyhedsbrev, og vinderen får en kasse smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnelinjen udfordrer sig selv, og den selvironi gør konkurrencen let at sige ja til."
+  },
+  {
+    "subject": "Gæt antallet af æsker. Nej, det er ikke 200.000",
+    "preview": "Billedet er fra lageret. Tætteste gæt vinder, og alle andre får vores respekt for forsøget.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen svarer på det første gæt, før det er sagt, og det gør legen sjovere."
+  },
+  {
+    "subject": "Stem på kontorets vildeste julesweater 🎄",
+    "preview": "Kundeservice har stillet op i hver sin. Vinderen bestemmer farven på næste nyhedsbrev.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen stiller sig selv til skue, og det gør afstemningen varm og uhøjtidelig."
+  },
+  {
+    "subject": "Fem looks til en halskæde. Nr. 5 går for vidt",
+    "preview": "Fra ét lag silkepapir til den version, hvor modtageren skal bruge saks, tålmodighed og en ven.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det overdrevne sidste punkt er grunden til at åbne, og de fire andre følger med."
+  },
+  {
+    "subject": "Sådan får en bærepose kunden til at gå langsomt",
+    "preview": "Logoet i øjenhøjde, posen i hånden, og hele gaden kan se, hvor der er blevet handlet.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et skævt løfte om at styre folks gang gør en enkel pointe om synlighed sjov."
+  },
+  {
+    "subject": "Sådan fotograferer du en smykkeæske uden at svede",
+    "preview": "Lys fra siden, låget halvt åbent, og telefonen væk fra spejlet. Resten står i guiden.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et lille glimt af den fælles frustration gør guiden mere indbydende end en tjekliste."
+  },
+  {
+    "subject": "Fem fejl, vi selv har lavet med emballage",
+    "preview": "Blandt andet guldfolie på guldpapir. Lær af os, så du ikke behøver.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen gør grin med sine egne fejl, så rådene aldrig lyder belærende."
+  },
+  {
+    "subject": "»Tidlig solnedgang.« »Nej, den er orange.« 🌅",
+    "preview": "Designerne og lageret er uenige om vores nye farve. Se den på æsker og poser, og afgør det selv.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En overhørt replikveksling gør en ny farve til en diskussion, man vil blande sig i."
+  },
+  {
+    "subject": "Mørkeblå er det nye sort. Sort tager det pænt 🖤",
+    "preview": "Vinterens smykkeæsker og bæreposer i dyb blå med guldfolie. Sort må gerne være med.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En slidt modefrase får en pointe til sidst, og farven bliver en personlighed."
+  },
+  {
+    "subject": "Vi har lavet æsken mindre. Den er ikke fornærmet 🤏",
+    "preview": "En ny mini-størrelse til øreringe og vedhæng, med samme låg og samme gode manerer.",
+    "language": "da",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En æske med følelser gør en ny størrelse til et lille smil."
+  },
+  {
+    "subject": "Den nye smykkepose er mistænkeligt blød 😴",
+    "preview": "Vi har en mistanke om, at nogen på kontoret har sovet på den. Bestil en prøve og mærk selv.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Mistænkeligt« gør en egenskab til en sag, der skal opklares."
+  },
+  {
+    "subject": "Det sværeste ved din første ordre er farven",
+    "preview": "Opstartsomkostninger er der ingen af. Kun cirka 25 foliefarver og en beslutning.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tilbuddet gemmes i preview, mens emnelinjen gør det eneste problem til et luksusproblem."
+  },
+  {
+    "subject": "Prisen er sat ned. Kvaliteten nægter",
+    "preview": "Udvalgte gaveæsker til kampagnepris, i samme pap, med samme låg og samme pasform.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En stædig kvalitet svarer på den tvivl, en rabat ellers skaber."
+  },
+  {
+    "subject": "Vi har lavet for mange cremefarvede æsker 🙈",
+    "preview": "Lageret er fuldt, chefen er nervøs, og prisen er sat ned, til de er væk.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En ærlig, lidt pinlig grund til rabatten er mere troværdig end et »udsalg«."
+  },
+  {
+    "subject": "Vejret i Holstebro: gråt. Guldfolien: upåvirket",
+    "preview": "Et kig ind i produktionen en helt almindelig tirsdag, hvor det eneste, der skinner, er logoerne.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Vejrudsigtens form og jysk gråvejr gør et kig bag kulisserne hjemligt og selvironisk."
+  },
+  {
+    "subject": "En mail uden en eneste æske. Næsten",
+    "preview": "Den handler om de omkring 200 mennesker, der laver dem. Okay, der er én æske til sidst.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et løfte, der brydes i samme åndedrag, gør virksomhedsmailen til en lille joke med varme."
+  },
+  {
+    "subject": "Produkttekster, du kan tage æren for",
+    "preview": "Som forhandler får du billeder og tekster, der er klar til din webshop. Vi siger ingenting.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et medskyldigt blink gør forhandlermateriale til en tjeneste mellem venner."
+  },
+  {
+    "subject": "Det dyreste ord på et trykkeri er »ups«",
+    "preview": "Derfor godkender du en digital korrektur af dit logo, før en eneste æske kommer i pressen.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et lille aforisme om fejl gør korrekturen til en tryghed i stedet for en procedure."
+  },
+  {
+    "subject": "Folie à deux: dit logo og guldfolien",
+    "preview": "Et fransk udtryk for delt galskab. Vi kalder det et godt match, i en af cirka 25 farver.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et dannet ordspil på folie giver emnelinjen et elegant glimt i øjet."
+  },
+  {
+    "subject": "Packaging that's dressed better than we are",
+    "preview": "Carrier bags in nine colours, boxes in plenty more. Our office wardrobe runs to grey.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Selvironi om afsenderens garderobe løfter produktet uden et eneste salgsord."
+  },
+  {
+    "subject": "We've got a British cousin now ☕",
+    "preview": "Westpack and Wrapology are now part of WP Packaging Group. The tea situation is under review.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En venlig kliché om briter gør en virksomhedshandel til familienyt."
+  },
+  {
+    "subject": "Mince pies in the shops. Cut-offs in the diary 🥧",
+    "preview": "Logo orders for Christmas close earlier than you'd think, and every country has its own date.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et genkendeligt tegn på sæsonen sætter fristen i en sammenhæng, alle har set i butikkerne."
+  },
+  {
+    "subject": "Christmas is closer than it appears",
+    "preview": "Logo cut-offs fall earlier than you'd think and differ by country. Yours is inside.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Advarslen fra bilens sidespejl bliver til en frist, man smiler af og alligevel tager alvorligt."
+  },
+  {
+    "subject": "The ring said yes. The box helped 💍",
+    "preview": "Ring boxes small enough for a jacket pocket and steady enough for a nervous hand.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En hel frierihistorie i to sætninger, hvor æsken beskedent tager en birolle."
+  },
+  {
+    "subject": "We've measured the XXL bag. Twice. It's big 📏",
+    "preview": "45 cm across, room for a 15 × 15 cm logo, and woven handles that cope with the lot.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Britisk underdrivelse efter en omhyggelig opmåling gør størrelsen morsom og troværdig."
+  },
+  {
+    "subject": "Proof we're fussy: we send you a proof",
+    "preview": "A designer checks every logo, and you approve a digital proof before anything meets the foil.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordet proof bruges i to betydninger, og ordspillet gør en procedure til et kvalitetsløfte."
+  },
+  {
+    "subject": "48 boxes isn't an order. It's a starter",
+    "preview": "You can order as few as 48 pieces with your logo, so trying a new box is hardly a commitment.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Forret og begyndelse i samme ord gør et lavt minimum til en appetitvækker."
+  },
+  {
+    "subject": "We tried to name the new colour. HR stepped in",
+    "preview": "So officially it's 'warm sand'. See it on jewellery boxes and carrier bags, then name it yourself.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det navn, der ikke måtte bruges, er mere nysgerrighedsvækkende end det, der blev valgt."
+  },
+  {
+    "subject": "Not to brag, but our lids fit",
+    "preview": "A low bar, you'd think. We've still spent seventy-odd years clearing it properly.",
+    "language": "en",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Pral med det mest beskedne gør håndværksstolthed sympatisk i stedet for selvhøjtidelig."
+  },
+  {
+    "subject": "We've run out of words for gold ✨",
+    "preview": "Rose gold, copper, silver and about twenty more foil colours. Pick one before we invent new words.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et ordforråd, der ikke slår til, er en legende måde at sige, at udvalget er stort."
+  },
+  {
+    "subject": "Your cliché is safe with us",
+    "preview": "We keep the plate that prints your logo, so a repeat order needs 4–5 working days in production.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Cliché er både en floskel og en trykplade, og den dobbelte betydning skjuler et konkret løfte."
+  },
+  {
+    "subject": "Boxes and bags: 200,000 a day. Biscuits: fewer",
+    "preview": "A look round production in Holstebro, where the boxes comfortably outnumber the people.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et imponerende tal sat ved siden af et ubetydeligt gør det let at huske og svært at lade være med at åbne."
+  },
+  {
+    "subject": "Valentine's is sorted. Well, the packaging is 💕",
+    "preview": "Pink and cream gift boxes and pouches. The card and the dinner booking are on you.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den hurtige selvkorrektion giver et smil og afgrænser ærligt, hvad mailen kan hjælpe med."
+  },
+  {
+    "subject": "Black Friday, but make it cream",
+    "preview": "Cream, dark blue and terracotta packaging for the one week a year when everything else goes black.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En internetfrase vender sæsonens navn på hovedet og gør en farve til en holdning."
+  },
+  {
+    "subject": "How to wrap a ring so nobody guesses",
+    "preview": "Three tricks with a bigger box, a pouch and some tissue. The proposal is still up to them.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille hemmelighed og et blink til sidst gør en indpakningsguide til noget, man vil dele."
+  },
+  {
+    "subject": "Our customers' shops are prettier than our office",
+    "preview": "So we asked three of them how they display and pack. Our office is taking notes.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen taber sammenligningen med vilje, og kunderne bliver forbilledet."
+  },
+  {
+    "subject": "Caption this box. Seriously 📸",
+    "preview": "The best caption wins. The worst gets pinned to the noticeboard in Holstebro.",
+    "language": "en",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Seriously« gør opfordringen lidt komisk, og straffen for det dårligste bud er det sjoveste."
+  },
+  {
+    "subject": "Stockists: we've done the boring bit",
+    "preview": "Product photos and descriptions, ready for your web shop. You're welcome to take the credit.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ærligheden om, at arbejdet er kedeligt, gør tilbuddet om at overtage det mere tiltrækkende."
+  },
+  {
+    "subject": "This email is about tarnish. Stay with us",
+    "preview": "Our boxes are tarnish-tested in-house, which is less dull than it sounds if you sell silver.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At indrømme, at emnet lyder kedeligt, er præcis det, der får folk til at blive."
+  },
+  {
+    "subject": "Det her er ikke kaffe for de små ☕",
+    "preview": "Vores nye espresso er ristet mørkere end husets blend, til de lange vagter bag baren.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Et dansk idiom bliver taget bogstaveligt, og pointen passer præcis til produktet."
+  },
+  {
+    "subject": "Testet af kontorets mest magelige kollega 🛋️",
+    "preview": "Hun har ligget i den nye sofa hele frokostpausen og giver den fem ud af fem puder.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kærlig drillende kollegatest er sjovere og mere troværdig end en produktbeskrivelse."
+  },
+  {
+    "subject": "Papir, der ikke sætter sig i printeren. Næsten",
+    "preview": "Vi har printet 10.000 ark på kontoret for at teste det. Én gang gik det galt, og det var mandag.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forbeholdet til sidst gør løftet ærligt, og preview giver det en genkendelig skyldig."
+  },
+  {
+    "subject": "Nu kommer der boller på suppen 🍲",
+    "preview": "Fra mandag leverer vi også suppe til frokostordninger – med friskbagte boller ved siden af.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nyhed"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Et idiom, der viser sig at være helt bogstaveligt, er en pointe, der kun virker på dansk."
+  },
+  {
+    "subject": "Vin, der passer til alt. Undtagen tandpasta 🍷",
+    "preview": "En tør, frisk hvidvin til fisk, tapas og fredag – bare ikke lige efter tandbørstningen.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En absurd undtagelse punkterer den slidte påstand »passer til alt« og gør den troværdig igen."
+  },
+  {
+    "subject": "Din cykel har sendt os en mail",
+    "preview": "Den beder om et eftersyn før vinteren og spørger, om du kan aflevere den på torsdag.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Cyklen bliver afsender, og en påmindelse om service bliver til en lille bøn."
+  },
+  {
+    "subject": "Garnet filtrer ikke. Vi har prøvet at tvinge det",
+    "preview": "Prøvelappen har været i vaskemaskinen ti gange på 60 grader. Den er stadig blød.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forsøg på at ødelægge produktet beviser kvaliteten med et glimt i øjet."
+  },
+  {
+    "subject": "Te til folk, der siger, de ikke kan lide te",
+    "preview": "Røget, rund og uden det bitre. Indtil videre har den omvendt tre kaffedrikkere på kontoret.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnelinjen henvender sig til skeptikerne, og omvendte kolleger er det sjove bevis."
+  },
+  {
+    "subject": "Vi har læst alle bøgerne. Okay, de fleste",
+    "preview": "Personalets anbefalinger til efterårsferien, skrevet af nogen, der faktisk har læst dem til ende.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ærlig rettelse midt i sætningen gør anbefalingerne mere troværdige, ikke mindre."
+  },
+  {
+    "subject": "Glasuren blev ikke, som vi ville. Den blev bedre",
+    "preview": "Ovnen tog sig et par friheder med vinterens skåle. Vi har besluttet at kalde det kunst.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En uheldig proces fortalt som en heldig overraskelse gør produktet unikt."
+  },
+  {
+    "subject": "Din hud har ikke bedt om 14 trin",
+    "preview": "Vores nye rutine har tre: rens, serum og creme – og tid til at drikke kaffen, mens den er varm.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spidsen rettes mod branchens overdrivelser, aldrig mod modtageren, og det enkle bliver befriende."
+  },
+  {
+    "subject": "Vi har kigget på et lys i 40 timer. For dig",
+    "preview": "Fire aftener på værkstedet, før vi turde skrive brændetiden på æsken. Det var hyggeligt i starten.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kedeligt testarbejde fortalt helt tørt bliver både sjovt og et bevis på grundighed."
+  },
+  {
+    "subject": "Vi har smagt for meget chokolade. For din skyld",
+    "preview": "Resultatet er julekalenderen med 24 stykker, hvor nummer 17 er vores hemmelige favorit.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et »offer« for modtagerens skyld er selvironisk, og favoritten i preview vækker nysgerrighed."
+  },
+  {
+    "subject": "Planter, der overlever et kontor 🌱",
+    "preview": "Ti planter, der klarer sig med lysstofrør, glemt vanding og mandagsmøder.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kontoret som barskt miljø er en fælles joke, og listen i preview gør den konkret."
+  },
+  {
+    "subject": "Hvor bliver alle kuglepennene af? 🕵️",
+    "preview": "Vi ved det heller ikke. Men en kasse med 50 koster det halve i denne uge.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "spoergsmaal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et af kontorlivets store mysterier åbner for et tilbud, der løser det praktisk."
+  },
+  {
+    "subject": "Vi har testet arbejdsbukserne på lagerchefen",
+    "preview": "Tre måneder, to vaske om ugen og et utal af knæfald. Bukserne holdt. Han klager over knæene.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kollega som forsøgsperson gør en holdbarhedstest til en lille fortælling med pointe."
+  },
+  {
+    "subject": "Ingen to fliser ens. Lagermanden græder lidt",
+    "preview": "Håndlavede fliser i fire glasurer, hvor variationen er pointen. Optællingen er blevet sværere.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Produktets styrke bliver en andens plage, og det får håndværket til at stå tydeligere."
+  },
+  {
+    "subject": "Ja, osten lugter. Nej, det er ikke en fejl 🧀",
+    "preview": "Rødkitten er lagret i otte uger og er nu præcis så stærk, som den skal være til julefrokosten.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmål og svar, før nogen har spurgt, gør en egenskab, der kunne skræmme, til en kvalitet."
+  },
+  {
+    "subject": "Katten har godkendt kradsestolpen. Delvist 🐈",
+    "preview": "Den har brugt den i tre dage. Sofaen er stadig også i brug, men mindre end før.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et ærligt »delvist« er sjovere og mere troværdigt end en ren succeshistorie."
+  },
+  {
+    "subject": "Legetøj, der overlever en treårig. Testet",
+    "preview": "Den nye klodsekasse har været igennem to børnehaver og en hel juleferie. Den står stadig.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den hårdeste tester, alle kender, er det stærkeste og sjoveste kvalitetsbevis."
+  },
+  {
+    "subject": "Vi har hængt billeder op i 30 år. De fleste lige",
+    "preview": "Indramning med museumsglas, klar på 48 timer, og et vaterpas, vi tager meget alvorligt.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Erfaring sagt med et forbehold gør afsenderen sympatisk og løftet troværdigt."
+  },
+  {
+    "subject": "Vi skærer ind til benet 🥩",
+    "preview": "Færre varer på disken, bedre kød i dem og et nyt udskæringskursus for restauranter hver tirsdag.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Et idiom, der er bogstaveligt sandt for en slagter, gør en sortimentsændring til en pointe."
+  },
+  {
+    "subject": "Duften, der fik vores revisor til at smile",
+    "preview": "Bergamot, peber og et strejf af læder. Han har ikke smilet siden sidste momsafregning.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den mest usandsynlige fan giver duften en anbefaling, man husker."
+  },
+  {
+    "subject": "Kan støvlerne klare en vinter mere? Lad os se",
+    "preview": "Nye såler, ny hæl og en omgang fedt. Aflevér dem i denne uge, så er de klar til frosten.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, der behandler støvlerne som en gammel ven, gør reparation til omsorg."
+  },
+  {
+    "subject": "Receptionen ringede. Den savner blomster 💐",
+    "preview": "Fast ugentlig buket til kontorer, skiftet efter sæson. Den første uge får I en vase med.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et rum, der ringer selv, gør et abonnement til en charmerende henvendelse."
+  },
+  {
+    "subject": "Etiketter, der bliver siddende. Vi har prøvet alt",
+    "preview": "Køleskab, opvaskemaskine og en meget utålmodig kollega med lange negle. Etiketten vandt.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille kamp mellem kollega og etiket gør en teknisk egenskab til en historie med en vinder."
+  },
+  {
+    "subject": "Lagkagen bestiller ikke sig selv 🎂",
+    "preview": "Bestil to dage før, så står den klar med navn, lys og præcis det antal stykker, mødet kræver.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En venlig påmindelse forklædt som en joke gør fristen til hjælp."
+  },
+  {
+    "subject": "Firmajulegaven, der ikke ender i skuffen 🎁",
+    "preview": "Gavekurve med ost, kaffe og chokolade, der bliver spist, før nogen når at sige tak.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den fælles erfaring med glemte firmagaver er pointen, og preview viser det modsatte."
+  },
+  {
+    "subject": "Stolen er så god, at mødet blev længere",
+    "preview": "Den nye kontorstol har lændestøtte, armlæn og en tendens til at få folk til at blive siddende.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fordel med en tvivlsom bivirkning gør produktbeskrivelsen sjov at læse."
+  },
+  {
+    "subject": "Kaffemaskinen strejker. Vi forhandler",
+    "preview": "Ring før kl. 10, så er en tekniker hos jer samme dag – inden eftermiddagsdippet rammer.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En maskine i strejke gør en servicegaranti til en lille arbejdsmarkedskomedie."
+  },
+  {
+    "subject": "Hvor meget vejer græskarret? Ikke en anelse 🎃",
+    "preview": "Det står i butikken til fredag. Tætteste gæt vinder en kurv med efterårets æbler.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderen kender heller ikke svaret, og det gør konkurrencen lige for alle."
+  },
+  {
+    "subject": "En kunde har bygget en reol af vores vinkasser",
+    "preview": "Vi blev lidt fornærmede over, at vinen var drukket. Så så vi reolen.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kundehistorie med en lille vending gør casen sjov i stedet for selvrosende."
+  },
+  {
+    "subject": "Vil du sælge sokker, folk faktisk viser frem?",
+    "preview": "Forhandlerpakke med 60 par i 12 mønstre og et lille stativ, der passer ved enhver kasse.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet leger med sokkers ry og sælger samtidig en klar forhandlerpakke."
+  },
+  {
+    "subject": "Sådan dækker du et bord, så svigermor tier 🍽️",
+    "preview": "Fem enkle tricks med stof, lys og tallerkener, der ikke matcher med vilje.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En velkendt familiefigur giver guiden et mål, alle kan grine af."
+  },
+  {
+    "subject": "Vi er flyttet. Skiltet hænger skævt, men vi er der",
+    "preview": "Ny adresse to gader længere nede, samme åbningstider og de samme folk bag disken.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille indrømmelse gør flyttemeddelelsen menneskelig og beroligende."
+  },
+  {
+    "subject": "Påskeæggene er bestilt. Er dine? 🐣",
+    "preview": "Butikker og caféer skal bestille senest om to uger, hvis hylden skal være fyldt til påske.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et kækt spørgsmål vender fristen om til en venskabelig konkurrence."
+  },
+  {
+    "subject": "Vi tager telefonen. Altid. Næsten",
+    "preview": "Kundeservice har nu åbent til 18 på hverdage, og vi lytter faktisk til vores telefonsvarer.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre ord, der gradvist trækker løftet tilbage, gør det ærligt og sjovt."
+  },
+  {
+    "subject": "Rabat på alt, der er orange. Spørg ikke hvorfor 🍊",
+    "preview": "Det er en lang historie om en indkøber og en misforståelse. Urtepotterne er 30 % billigere.",
+    "language": "da",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forbud mod at spørge er den sikreste måde at få folk til at åbne og finde ud af det."
+  },
+  {
+    "subject": "Monday called. It wants a stronger roast ☕",
+    "preview": "Our new dark roast, for offices and cafés getting through the longest day of the week.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Mandagen bliver en kunde, der ringer ind, og produktet bliver svaret på dens klage."
+  },
+  {
+    "subject": "A sofa you'll have to be dragged off",
+    "preview": "Deep seat, feather cushions and a tendency to cancel your plans. Showroom samples now in.",
+    "language": "en",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En overdrevet konsekvens gør komfort til noget, man kan forestille sig i kroppen."
+  },
+  {
+    "subject": "Notebooks short enough to actually finish",
+    "preview": "48 pages, a stitched spine and the rare satisfaction of reaching the last page. Trade packs of 20.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fælles svaghed bliver vendt til en fordel, så alle kan grine med uden at blive ramt."
+  },
+  {
+    "subject": "The sourdough is late. It's sulking",
+    "preview": "Cold kitchen, slow rise. It'll be on your counter by 9 instead of 7 tomorrow, and worth it.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En forsinkelse fortalt som brødets humør gør dårligt nyt til noget, man tilgiver."
+  },
+  {
+    "subject": "This red pairs with cheese, steak and mild regret",
+    "preview": "A Rioja crianza at a trade price that makes the regret considerably milder. Six-bottle cases.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Det tredje punkt i listen er pointen, og preview binder den til prisen."
+  },
+  {
+    "subject": "Every shelf kit has one screw too few. Not ours",
+    "preview": "Our new fixing kits come with spares, because someone always loses one under the sofa.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En universel irritation sat op mod løsningen gør produktet uundværligt."
+  },
+  {
+    "subject": "Our moisturiser makes no promises. Rude, we know",
+    "preview": "No miracle claims, no age-defying anything, just a fragrance-free cream your skin will get on with.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At nægte at love noget i en branche fuld af løfter er både sjovt og troværdigt."
+  },
+  {
+    "subject": "Peonies are here. Briefly, dramatically 💐",
+    "preview": "Three weeks of season, so order for your counters now. They open beautifully and leave fast.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Blomsterne får en divas temperament, og den korte sæson bliver en grund til at handle nu."
+  },
+  {
+    "subject": "Staff picks, now with fewer spoilers",
+    "preview": "Six autumn reads chosen by the team, reviewed without giving away a single ending.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et skjult indrømmet tidligere synd gør listen sjov og lover læseren et bedre forløb."
+  },
+  {
+    "subject": "Your office party needs 200 cups. Ask us how we know",
+    "preview": "Order catering supplies by Friday and we'll deliver the week before. We've seen the alternative.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En antydet katastrofehistorie gør fristen til et råd fra nogen, der har været der."
+  },
+  {
+    "subject": "Guess the jar of buttons. Win the jar 🧵",
+    "preview": "It's on the counter until Saturday. Closest guess takes home every last button.",
+    "language": "en",
+    "mechanisms": [
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den beskedne, lidt absurde præmie er selve charmen ved konkurrencen."
+  },
+  {
+    "subject": "A café asked if our mugs were bulletproof",
+    "preview": "They'd dropped one on a stone floor twice. It survived both. Here's how they use the rest.",
+    "language": "en",
+    "mechanisms": [
+      "humor",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kundens overdrevne spørgsmål er en historie, der viser holdbarheden bedre end en test."
+  }
+]

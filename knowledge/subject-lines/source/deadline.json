@@ -1,0 +1,1733 @@
+[
+  {
+    "subject": "Fristerne falder tidligere, end du tror ⏰",
+    "preview": "Hvert land har sin egen frist for logotryk. Find din, før julehandlen fylder kalenderen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen får både en grund og en handling, så presset føles nyttigt frem for kunstigt."
+  },
+  {
+    "subject": "Logoet skal i trykken, før december gør",
+    "preview": "Et nyt logo tager 7–8 arbejdsdage i produktion. Regn baglæns fra din frist, så holder planen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Produktionstiden er selve begrundelsen, så modtageren kan regne fristen ud selv."
+  },
+  {
+    "subject": "Juleæskerne bestilles ikke i december",
+    "preview": "De bestilles nu, mens der stadig er luft i produktionen til dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Vender forventningen om, hvornår julen begynder, og giver fristen en logisk grund."
+  },
+  {
+    "subject": "»Kan vi nå det før jul?« 🤔",
+    "preview": "Svaret afhænger af dit land, og om logoet er nyt. Alle frister står samlet ét sted.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Citerer det spørgsmål, modtageren selv stiller, og lover svaret inde i mailen."
+  },
+  {
+    "subject": "Nyt logo? Regn 7–8 arbejdsdage baglæns 🧮",
+    "preview": "Det er ren produktionstid. Fragten til dit land kommer oveni, så tjek fristen nu.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret regnestykke gør fristen til modtagerens egen beslutning."
+  },
+  {
+    "subject": "Har vi dit logo i forvejen? Så går det hurtigere",
+    "preview": "Kendte logoer er i produktion på 4–5 arbejdsdage mod 7–8 for et nyt. Det kan redde julen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen bliver mindre skræmmende, fordi modtageren får en hurtigere vej at vide."
+  },
+  {
+    "subject": "Julefristen (den kommer før julestemningen) 🎄",
+    "preview": "Når lysene kommer op i gaden, er logotrykket allerede presset. Find fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "humor"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Parentesen gør fristen menneskelig og forklarer i samme åndedrag, hvorfor den er tidlig."
+  },
+  {
+    "subject": "Dit logo, før køen bliver lang 🔒",
+    "preview": "Op mod jul står flere logoer i produktion på samme tid. Bestilt nu er bestilt før de fleste.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Køen i produktionen er en konkret og troværdig grund til at handle nu frem for senere."
+  },
+  {
+    "subject": "Valentinsæsker bestilles i januar 💌",
+    "preview": "Februar er kort, og et nyt logo skal have 7–8 arbejdsdage i produktion, før salget kan starte.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen forankres i en sæson, modtageren kender, med produktionstiden som grund."
+  },
+  {
+    "subject": "Mors dag er i maj. Logoet er i april.",
+    "preview": "Regn produktionstiden baglæns fra din kampagne, og læg fragten til dit land oveni.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Den parallelle opbygning gør fristen til en tidslinje, man kan se for sig."
+  },
+  {
+    "subject": "Bulkordre til næste år? Start nu",
+    "preview": "Fra 9.600 stk. og op til 40 % rabat, men produktionen tager 7–8 uger. Planlæg derefter.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten er lokkemaden, men produktionstiden er grunden til at handle i dag."
+  },
+  {
+    "subject": "Bestil prøven nu, ikke ugen før ordren",
+    "preview": "Med en prøve i hånden siger du ja med ro i maven. Prøver med logo koster et mindre beløb pr. stk.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen flyttes fra ordren til prøven, hvor modtageren faktisk har tid til at handle."
+  },
+  {
+    "subject": "3 ting, der skal være klar før julefristen",
+    "preview": "Logofil, antal og valg af æske. Resten tjekker vores grafikere, før noget går i produktion.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre konkrete punkter gør en abstrakt frist til en tjekliste, man kan nå."
+  },
+  {
+    "subject": "Hvornår er din julefrist egentlig?",
+    "preview": "Den afhænger af dit land og ligger før selve julehandlen. Vi har samlet dem alle på én side.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at opdage, at de ikke kender svaret."
+  },
+  {
+    "subject": "Første logoordre? Tag den før julefristen",
+    "preview": "Ingen opstartsomkostninger på din første ordre. Fristen for dit land står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et sandt tilbud kobles til en reel frist, så begge dele trækker i samme retning."
+  },
+  {
+    "subject": "Black Friday-poser skal bestilles før Black Friday",
+    "preview": "Lyder indlysende, indtil 7–8 arbejdsdages produktion lægges oveni. Så er det pludselig nu.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det åbenlyse sagt højt får modtageren til at smile og derefter regne efter."
+  },
+  {
+    "subject": "Tid er det eneste, vi ikke kan trykke logo på ⏱️",
+    "preview": "Æsker, poser og folie i ca. 25 farver har vi. Ekstra dage før jul har ingen. Se din frist.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "humor"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En skæv sammenligning gør den velkendte julefrist frisk at læse igen."
+  },
+  {
+    "subject": "Din jul starter i vores produktion 🏭",
+    "preview": "Mens butikken sælger efterår, står produktionen allerede i jul. Se fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem butikkens og produktionens kalender forklarer, hvorfor fristen er tidlig."
+  },
+  {
+    "subject": "Guld, sølv eller rosé? Beslut før fristen ✨",
+    "preview": "Folietryk fås i ca. 25 farver, men valget skal træffes, før produktionen kan begynde.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et lille, lystbetonet valg bliver døren ind til en frist, der ellers føles tung."
+  },
+  {
+    "subject": "Hvis julen skal bære jeres navn",
+    "preview": "Smykkeæsker med logo er det første, kunden ser juleaften. Fristen for logotryk kommer længe før.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Fristen præsenteres som vejen til et øjeblik, modtageren gerne vil eje."
+  },
+  {
+    "subject": "Én frist pr. land. Kend din. 📅",
+    "preview": "Vi sender til mange lande, og fristerne følger fragten, ikke kalenderen. Find den, der gælder dig.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte sætninger gør fristen personlig og forklarer, hvorfor den ikke er ens for alle."
+  },
+  {
+    "subject": "Januarudsalget skal have poser – bestil i december",
+    "preview": "Byttedagene efter jul tømmer posehylden hurtigt. Læg poserne i samme ordre som julens æsker.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen flyttes til en travlhed, modtageren sjældent planlægger for."
+  },
+  {
+    "subject": "Hvor mange æsker sælger du i december?",
+    "preview": "Tæl efter nu. Løber du tør midt i julehandlen, er et nyt logo 7–8 arbejdsdage væk.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at regne selv, og regnestykket viser fristen."
+  },
+  {
+    "subject": "Konfirmationssæsonen starter i vinter",
+    "preview": "Konfirmationssmykker sælges fra marts. Æsker med dit logo bestilles, mens det stadig er vinter.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Paradokset i emnet åbner, og forklaringen gør fristen logisk."
+  },
+  {
+    "subject": "Sidste kald til jul – sagt helt roligt",
+    "preview": "Ingen panik, bare fakta: fristen for dit land, produktionstiden og hvad du skal have klar.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den rolige tone gør, at fristen tages alvorligt i stedet for at blive overset som støj."
+  },
+  {
+    "subject": "Ny serie, gammel frist 🆕",
+    "preview": "Den nye æskeserie kan også få dit logo til jul, hvis den bestilles inden fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Nyheden får en frist med det samme, så interessen bliver til en handling."
+  },
+  {
+    "subject": "Julen tæller i arbejdsdage, ikke i låger",
+    "preview": "Julekalenderen har 24 låger. Dit nye logo skal bruge 7–8 arbejdsdage i produktion. Regn selv.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Julekalenderens låger gør den abstrakte produktionstid konkret og genkendelig."
+  },
+  {
+    "subject": "Tænk på jul. Bare i fem minutter. ☕",
+    "preview": "Det er, hvad det tager at tjekke fristen, vælge æsken og sende logoet. Resten klarer vi.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, overkommeligt krav sænker barrieren for at handle før fristen."
+  },
+  {
+    "subject": "Logo, æske, folie, frist. I den rækkefølge.",
+    "preview": "Sådan når du julens logotryk uden at skulle ringe og spørge, om det stadig kan nås.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den nøgne opremsning lover en enkel fremgangsmåde, før fristen gør det svært."
+  },
+  {
+    "subject": "P.S. Julefristen er ikke flyttet",
+    "preview": "Den er stadig tidligere, end mange regner med, og den afhænger af dit land. Her er din.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "P.S.-formen lyder som en venlig påmindelse fra et menneske, ikke som en kampagne."
+  },
+  {
+    "subject": "Før julehandlen: én ting på din liste ✍️",
+    "preview": "Smykkeæsker med logo. Resten af listen kan vente, det kan logotrykket ikke.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen formuleres som en prioritering, så den føles som hjælp i en travl periode."
+  },
+  {
+    "subject": "Gaveæsker med logo, bestilt uden julestress",
+    "preview": "Før fristen vælger du i ro. Tæt på fristen tager du det, der stadig kan nås i tide.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen sælges på ro i stedet for frygt, hvilket passer til en travl modtager."
+  },
+  {
+    "subject": "Indtil fristen kan du stadig vælge alt",
+    "preview": "Alle æsker, alle størrelser og ca. 25 foliefarver. Efter julefristen bliver valget smallere.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen formuleres som tabet af valgmuligheder, ikke som en trussel."
+  },
+  {
+    "subject": "Er dit logo stadig den gamle fil?",
+    "preview": "Send den nyeste nu, så vores grafikere kan nå at gennemgå den, før fristen for dit land falder.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille praktisk spørgsmål åbner for fristen uden at råbe om den."
+  },
+  {
+    "subject": "Smykkeæsker med logo: julens første beslutning 💍",
+    "preview": "Logotryk inkluderet på de fleste smykkeæsker. Det eneste, der haster, er fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At kalde ordren den første beslutning placerer den forrest i modtagerens julekø."
+  },
+  {
+    "subject": "Bæreposer med logo tager også tid 🛍️",
+    "preview": "Poserne bliver tit glemt, til æskerne er bestilt. Læg dem i samme ordre, før fristen falder.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Mailen fanger det, modtageren typisk glemmer, og knytter det til samme frist."
+  },
+  {
+    "subject": "Halloween er forbi. Nu tæller vi til jul 🎃",
+    "preview": "Når græskarrene ryger ud, begynder logotryk til jul at blive presset. Se fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et genkendeligt sæsonskifte bliver startskuddet for en frist, der ellers føles fjern."
+  },
+  {
+    "subject": "Du har tid. Bare ikke så meget, som det føles.",
+    "preview": "Fristen for logotryk til jul afhænger af dit land, og den ligger sjældent der, hvor man tror.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Første sætning beroliger, anden vender det, og den lille uro får mailen åbnet."
+  },
+  {
+    "subject": "Hvor lang tid tager et logo? Svaret er her",
+    "preview": "Fra fil til trykt æske: grafikertjek, digital korrektur og 7–8 arbejdsdage i produktion.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At vise trinene bag produktionstiden gør fristen forståelig i stedet for vilkårlig."
+  },
+  {
+    "subject": "Rolig oktober, travl december 📆",
+    "preview": "Det, du bestiller med logo i dag, er det, du ikke skal jagte senere. Find din frist.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To måneder sat op mod hinanden viser, hvorfor roen skal bruges nu."
+  },
+  {
+    "subject": "Gør julen færdig, før den begynder",
+    "preview": "Æsker, poser og logo bestilt før fristen. Så kan december handle om salg og ikke om indpakning.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen sælges som en færdig jul, ikke som et pres, og det gør den attraktiv."
+  },
+  {
+    "subject": "Afstemningen lukker, før julen åbner 🗳️",
+    "preview": "Din stemme afgør, hvilken gaveæske der vinder. Ét tryk er én stemme, mens der stadig er åbent.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Konkurrencens lukketid er en ægte frist, og den kobles til modtagerens egen indflydelse."
+  },
+  {
+    "subject": "To frister i én mail ⏳",
+    "preview": "Kampagneprisen på gaveæsker slutter søndag. Julefristen for logotryk afhænger af dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ærligheden om to forskellige frister gør begge mere troværdige."
+  },
+  {
+    "subject": "Det her er ikke en panikmail 😌",
+    "preview": "Bare en venlig besked om, at julefristerne for logotryk ligger tidligere, end mange regner med.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At afvise panikken gør fristen mere troværdig og mailen mere sympatisk."
+  },
+  {
+    "subject": "Bulk til foråret bestilles inden jul",
+    "preview": "7–8 ugers produktion på bulkordrer betyder, at forårets æsker skal besluttes nu.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Produktionstiden flytter fristen langt frem, og regnestykket gør det tydeligt hvorfor."
+  },
+  {
+    "subject": "Ikke for at stresse, men… 🎄",
+    "preview": "Logotryk til jul har en frist, og den er nærmere, end kalenderen på væggen lader ane.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "humor"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den afbrudte sætning skaber et smil og en lille spænding, som previewet forløser."
+  },
+  {
+    "subject": "Æskerne kan vente. Logoet kan ikke.",
+    "preview": "Uden logo ligger æskerne på lager. Med logo skal de i produktion først, og dér kommer fristen fra.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem lagervare og logovare forklarer, hvad fristen egentlig handler om."
+  },
+  {
+    "subject": "Tre uger til fristen? Eller tre dage? 🤷",
+    "preview": "Det afhænger af, hvor din butik ligger. Fristerne for logotryk til jul står samlet for alle lande.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det åbne spænd i spørgsmålet gør modtageren nysgerrig på sit eget svar."
+  },
+  {
+    "subject": "Vores grafikere har god tid. Lige nu. ✏️",
+    "preview": "Send logoet i dag, så gennemgår de det i ro, før julens travlhed når produktionen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Menneskene bag logotjekket gør fristen konkret, og pausen i emnet antyder, at det ændrer sig."
+  },
+  {
+    "subject": "Vi har talt dagene for dig 🗓️",
+    "preview": "Produktionstid plus fragt til dit land: din frist for logotryk til jul, regnet ud på forhånd.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At regnestykket er lavet på forhånd, gør fristen let at handle på."
+  },
+  {
+    "subject": "Forårets kollektion skal have æsker først",
+    "preview": "Nye smykker til foråret? Æskerne med dit logo skal i produktion, før kollektionen kan lanceres.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen knyttes til modtagerens egen lancering, ikke til Westpacks kalender."
+  },
+  {
+    "subject": "Fristen før fristen",
+    "preview": "Vil du se en prøve med logo først, skal den bestilles før selve ordren. Regn den med.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den kryptiske gentagelse vækker nysgerrighed, og previewet afslører en frist, de fleste overser."
+  },
+  {
+    "subject": "Jul i oktober lyder tidligt. Det er det ikke.",
+    "preview": "Logotjek, korrektur og produktion tager tid, og den tid skal ligge før fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet modsiger modtagerens indvending, før de selv når at tænke den."
+  },
+  {
+    "subject": "Én mail, én frist, ét logo",
+    "preview": "Det er alt, du skal forholde dig til i dag: hvornår skal dit logo i produktion for at nå julen?",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tal"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rytmen i de tre korte led lover en mail, der er hurtig at handle på."
+  },
+  {
+    "subject": "Julegaven starter med æsken. Æsken starter nu. 🎁",
+    "preview": "Kunden ser æsken, før de ser smykket. Bestil med logo inden fristen for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Gentagelsen bygger en kæde fra gaven tilbage til ordren, så fristen føles naturlig."
+  },
+  {
+    "subject": "Ingen opstartsomkostninger – men stadig en frist",
+    "preview": "Din første ordre er uden opstartsomkostninger. Julens logotryk har en frist for hvert land.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tilbuddet åbner, og forbeholdet i emnet gør det ærligt og troværdigt."
+  },
+  {
+    "subject": "Den ene julemail, du bør læse grundigt",
+    "preview": "Den handler kun om én ting: hvornår dit logo skal i produktion for at nå julehandlen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "nysgerrighed"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At udpege mailen som den vigtige blandt mange får den til at skille sig ud i en fuld indbakke."
+  },
+  {
+    "subject": "Your Christmas cut-off is earlier than Christmas",
+    "preview": "Each country has its own. Find yours before the production queue gets any longer.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det selvfølgelige sagt med et twist får modtageren til at tjekke sin egen frist."
+  },
+  {
+    "subject": "New logo? Count back 7–8 working days",
+    "preview": "That's production alone. Shipping to your country comes on top, so check your cut-off now.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et regnestykke, modtageren selv kan lave, gør fristen konkret."
+  },
+  {
+    "subject": "Already printed with us? You've got a head start",
+    "preview": "Logos we already hold go into production in 4–5 working days, against 7–8 for a new one.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Eksisterende kunder får at vide, at de har en fordel, før fristen bliver nævnt."
+  },
+  {
+    "subject": "Black Friday bags are a planning job ⚡",
+    "preview": "Logo bags need production time, and Black Friday won't move to suit it. Plan backwards.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen omdøbes til planlægning, hvilket gør den professionel i stedet for panisk."
+  },
+  {
+    "subject": "Gift boxes, minus the December scramble",
+    "preview": "Order with your logo before your country's cut-off, and choose calmly rather than in a hurry.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet sælger fraværet af stress, og previewet viser, hvad det kræver."
+  },
+  {
+    "subject": "The one deadline your Christmas hangs on",
+    "preview": "It isn't the same in every country, and it comes before the December rush. Find yours.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "nysgerrighed"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At kalde den én frist gør den vigtig og antyder, at resten kan vente."
+  },
+  {
+    "subject": "Logo first, then Christmas. Not the other way round.",
+    "preview": "Production needs its working days before your season can start. Here's your country's cut-off.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den omvendte rækkefølge i emnet minder om, at julen afhænger af en ordre, der ligger før."
+  },
+  {
+    "subject": "Quick one about your Christmas boxes 📦",
+    "preview": "If they're carrying your logo this year, the order needs to go in before your country's cut-off.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den uformelle start lyder som en kollega, der kigger forbi, ikke som en kampagne."
+  },
+  {
+    "subject": "Mother's Day is in spring. Your logo order isn't.",
+    "preview": "Work back from your launch: proof, 7–8 working days of production, then shipping on top.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Sæsonen og ordren adskilles, så modtageren ser, at fristen ligger en sæson tidligere."
+  },
+  {
+    "subject": "Valentine's boxes are a January decision 💌",
+    "preview": "February is short, and a new logo needs its proof and production days before sales begin.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen omtales som en beslutning i en bestemt måned, hvilket gør den håndgribelig."
+  },
+  {
+    "subject": "Bulk for spring? Start the clock now",
+    "preview": "Bulk orders run 7–8 weeks in production, from 9,600 pieces and up to 40% off.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten lokker, men den lange produktionstid er grunden til at handle nu."
+  },
+  {
+    "subject": "Order your sample before you need it",
+    "preview": "A logo sample costs a little, saves a lot of second-guessing, and needs its own lead time.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet flytter fristen frem til prøven, hvor modtageren stadig har tid."
+  },
+  {
+    "subject": "Not a panic email. Just a cut-off.",
+    "preview": "Christmas logo print closes earlier in some countries than others. Here's where yours lands.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At afvise panikken på forhånd gør beskeden mere troværdig."
+  },
+  {
+    "subject": "First logo order? No start-up costs, one deadline",
+    "preview": "Your first order comes with no start-up costs. Christmas production still has a cut-off per country.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tilbud og frist står side om side, så det ene giver det andet vægt."
+  },
+  {
+    "subject": "Your logo, our queue, your cut-off",
+    "preview": "How a Christmas order moves: designer check, digital proof, production. Each step takes time.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte led viser processen, og previewet forklarer, hvor tiden går."
+  },
+  {
+    "subject": "Tick-tock, says the printing press 🎄",
+    "preview": "It isn't being dramatic. New logos need 7–8 working days, and cut-offs vary by country.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "humor"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En personificeret maskine gør fristen legende, mens previewet holder fast i fakta."
+  },
+  {
+    "subject": "Hold on – when does your country's cut-off fall?",
+    "preview": "Not the same as your neighbour's. Shipping times differ, so Christmas deadlines do too.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet stopper modtageren midt i skimningen og får dem til at tvivle på deres egen dato."
+  },
+  {
+    "subject": "Voting closes Sunday. Your favourite box needs you",
+    "preview": "One tap, one vote, and the winner is revealed afterwards. Miss Sunday and you'll only see who won.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Konkurrencens lukketid er en ægte frist, og appellen gør den personlig."
+  },
+  {
+    "subject": "Julekaffen ristes én gang. Forudbestil nu ☕",
+    "preview": "Vi rister efter antal forudbestillinger, så når listen lukker søndag, er der ikke mere.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Begrænsningen har en ægte grund, én ristning, så fristen virker fair og ikke opstillet."
+  },
+  {
+    "subject": "Sofaer til jul bestilles i oktober 🛋️",
+    "preview": "Hver sofa syes efter mål på værkstedet, og det tager seks uger. Vi har talt baglæns for dig.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den overraskende måned i emnet får sin forklaring i håndværket bag."
+  },
+  {
+    "subject": "Kalendere til næste år: sidste ordrerunde",
+    "preview": "Trykkeriet tager én samlet ordre mere før nytår. Bestillinger efter fredag går til marts.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen styres af trykkeriets kapacitet, og konsekvensen er sagt præcist."
+  },
+  {
+    "subject": "Mors dag-buketterne er snart bundet op 💐",
+    "preview": "Vi binder kun det antal, vi har blomster til. Reserver din, så ligger den til dig lørdag morgen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen kommer af en fysisk grænse, blomsterne, og belønningen er konkret."
+  },
+  {
+    "subject": "Forudsalget lukker ved midnat 🍷",
+    "preview": "Prisen gælder kun for vin, der er bestilt, før containeren bookes. Derefter er det listepris.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten har en logisk udløbsgrund, containeren, så den føles ægte."
+  },
+  {
+    "subject": "Påskebrød til caféen? Bestil inden tirsdag",
+    "preview": "Vi planlægger mel og ovntid ugen før, så bestillinger efter tirsdag kan vi ikke love.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer kunden direkte, og ovntiden forklarer, hvorfor tirsdag er grænsen."
+  },
+  {
+    "subject": "Personalet i nyt tøj til påske?",
+    "preview": "Broderiet af jeres logo tager to uger, så bestillingen skal ind nu, hvis det skal nås.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet viser målet, og previewet viser vejen og fristen."
+  },
+  {
+    "subject": "Brændingen er fuld i næste uge 🔥",
+    "preview": "Ovnen tager kun så mange stykker ad gangen. Bestillinger efter torsdag kommer med i næste brænding.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kig ind i værkstedet gør fristen til en fysisk virkelighed frem for et salgstrick."
+  },
+  {
+    "subject": "Forårseftersyn: book før første solskinsdag",
+    "preview": "Når solen kommer, vil halvdelen af byen have cyklen ordnet samme uge. Lige nu er der ledige tider.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Fristen er ikke en dato men et vejrskifte, alle kan genkende."
+  },
+  {
+    "subject": "Signerede eksemplarer – kun til fredag",
+    "preview": "Forfatteren signerer de forudbestilte bøger på fredag. Bestiller du senere, får du en usigneret.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den signerede bog er en reel fordel med en reel grænse, og konsekvensen er tydelig."
+  },
+  {
+    "subject": "Skal butikken dufte af jul, er det nu",
+    "preview": "Vores juleduft støbes i én omgang i november. Forhandlere kan reservere frem til søndag.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Sanseindtrykket i emnet trækker, og produktionen i én omgang begrunder fristen."
+  },
+  {
+    "subject": "Første høst er landet. Tre dages forsalg 🍵",
+    "preview": "Forhandlere bestiller først, før teen går i den åbne webshop på mandag.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandlerens forspring er tidsbegrænset, og det er hele grunden til at åbne nu."
+  },
+  {
+    "subject": "Gasflasker til påske? Bestil inden onsdag",
+    "preview": "Leverandøren kører ud én gang før helligdagene, og din bestilling skal med på den tur.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En enkelt leveringstur er en forståelig grund, der gør fristen ufravigelig."
+  },
+  {
+    "subject": "Udsalget slutter søndag. Størrelserne før. 👟",
+    "preview": "De sidste par i 38 og 39 plejer at forsvinde lørdag formiddag. Bare så du ved det.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Den egentlige frist er tidligere end den officielle, og det er en nyttig hemmelighed."
+  },
+  {
+    "subject": "Fredagene i december er næsten væk",
+    "preview": "Torsdage og lørdage har vi stadig. Fredagene går først, og der er tre tilbage.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Knaphed på netop den mest eftertragtede dag gør fristen konkret og troværdig."
+  },
+  {
+    "subject": "Restbudget på kontorposten?",
+    "preview": "Bestil inden fredag, så kommer fakturaen med på årets regnskab, og budgettet bliver brugt.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er bundet til modtagerens eget regnskabsår, ikke til leverandørens salg."
+  },
+  {
+    "subject": "Visitkort til messen? Torsdag er sidste trykdag",
+    "preview": "Messen er om halvanden uge, og tryk og skæring tager tre dage. Derfor stopper vi torsdag.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen regnes baglæns fra modtagerens egen begivenhed, så den giver mening med det samme."
+  },
+  {
+    "subject": "Vi lukker for sommeren om en uge ☀️",
+    "preview": "Bestil isen til sommerfesten senest fredag. Derefter er vi på stranden til august.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ærligheden om ferien gør fristen menneskelig og let at acceptere."
+  },
+  {
+    "subject": "Første frost kommer. Pillerne skal komme før.",
+    "preview": "Bestillingerne stiger, så snart termometeret falder. Bestilt nu kører med næste uges bil.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Det gentagne verbum binder vejret og ordren sammen i én rytme."
+  },
+  {
+    "subject": "Påskeliljerne skal bestilles, før de blomstrer 🌼",
+    "preview": "Vi sætter dem i drivhuset efter antal ordrer. Det, vi ikke har sat, kan vi ikke sælge til påske.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Naturens tidsplan er den mest troværdige frist, der findes."
+  },
+  {
+    "subject": "Earlybird-prisen udløber søndag 🐦",
+    "preview": "Bagefter koster workshoppen 400 kr. mere. Pladserne er de samme, prisen er ikke.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den præcise merpris gør fristen målbar, og den sidste sætning gør den skarp."
+  },
+  {
+    "subject": "Juletræer til butikken: én tur tilbage 🎄",
+    "preview": "Vi kører ud med træer på torsdag. Herefter må de hentes på pladsen.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er en konkret tur med en konkret konsekvens, ikke et diffust pres."
+  },
+  {
+    "subject": "Påskeæg støbt i hånden, og kun 400 af dem 🥚",
+    "preview": "Når de er bestilt, lukker vi listen, også selvom det er tidligt. Håndværk kan ikke skaleres.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Antallet er begrundet i håndværket, så knapheden føles ægte."
+  },
+  {
+    "subject": "Julekortfotos skal tages i november 📸",
+    "preview": "Kortene skal trykkes og sendes, og trykkeriet skal bruge en uge. Book en fototid nu.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen rykkes frem af alle de trin, modtageren ikke tænker på."
+  },
+  {
+    "subject": "Tider før jul: 11 tilbage",
+    "preview": "Vi har talt dem i morges. Book nu, hvis håret skal sidde til julefrokosten.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist, lille tal er mere troværdigt end ordet få."
+  },
+  {
+    "subject": "Gavekort kan købes, til vi lukker for jul",
+    "preview": "Bagefter holder kassen ferie til januar. De digitale kan stadig nå ud som en mail juleaften.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er butikkens egen juleferie, og previewet giver en udvej i stedet for panik."
+  },
+  {
+    "subject": "Varmepumpen skal ind før frosten",
+    "preview": "Montørerne er booket tre uger frem, og ventetiden vokser, så snart det bliver koldt.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Vejret er grunden, og montørernes kalender gør den målbar."
+  },
+  {
+    "subject": "Udstillingen lukker om fem dage 🖼️",
+    "preview": "Værkerne går tilbage til kunstneren bagefter. Reserver dit, før det bliver pakket ned.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er udstillingens naturlige afslutning, og tabet er konkret."
+  },
+  {
+    "subject": "Strikkede julegaver starter i oktober 🧶",
+    "preview": "En sweater tager de fleste seks uger. Regn selv efter, og find garnet i dag.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtageren regner fristen ud selv, så den føles som deres egen opdagelse."
+  },
+  {
+    "subject": "Konkurrencen slutter i aften kl. 20",
+    "preview": "Én kommentar under opslaget er nok. Vinderen trækkes i morgen og får en kurv med årets høst.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist klokkeslæt og en lille indsats gør det let at nå at deltage."
+  },
+  {
+    "subject": "Ny forhandler? Ansøg før årsskiftet",
+    "preview": "Forårskataloget går i tryk i januar. Nye forhandlere efter nytår kommer først med til efteråret.",
+    "language": "da",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kataloget er en reel grund, og konsekvensen er en hel sæson."
+  },
+  {
+    "subject": "Hun bestilte julechokoladen i august",
+    "preview": "Ejeren af en lille delikatesse fortæller, hvad sidste års udsolgte december lærte hende.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En person og en tidlig handling vækker nysgerrighed på grunden bag."
+  },
+  {
+    "subject": "Hvad en tømrer lærte af en for sen bestilling",
+    "preview": "Han ventede til november med at bestille vinduer. Resten af historien er grunden til denne mail.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En andens fejl er en blød måde at minde om en frist uden at pege på modtageren."
+  },
+  {
+    "subject": "Sådan planlægger en vinbutik julen baglæns",
+    "preview": "Fra sidste bestilling hos importøren til første smagning i butikken: en tidslinje, du kan låne.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen leveres som et værktøj, modtageren kan bruge i sin egen forretning."
+  },
+  {
+    "subject": "Introprisen holder til søndag 🏷️",
+    "preview": "Den nye kollektion af hørduge koster 20 % mindre den første uge, mens vi ser, hvad der sælger.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "tilbud"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Introprisen har en ærlig grund, at teste kollektionen, og derfor en troværdig udløbsdag."
+  },
+  {
+    "subject": "Black Friday varer én dag hos os. Med vilje.",
+    "preview": "Ingen Black Week og ingen forlængelse. Rabatten gælder fra midnat til midnat, og så er den væk.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "At holde fristen kort, når alle andre forlænger, gør den troværdig."
+  },
+  {
+    "subject": "Lageret holder status. Bestil inden torsdag",
+    "preview": "Vi tæller hver eneste kasse mellem jul og nytår, så ordrer efter torsdag sendes først i januar.",
+    "language": "da",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Statustællingen er en kedelig, men ægte grund, og det er netop det, der overbeviser."
+  },
+  {
+    "subject": "Diaries for next year: one print run left",
+    "preview": "We reprint once before January. Stockists who order after Friday wait until spring.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "forhandler",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Én trykning til er en klar kapacitetsgrænse med en tydelig konsekvens."
+  },
+  {
+    "subject": "Christmas turkeys are ordered, not found 🦃",
+    "preview": "Our farm raises exactly as many as are ordered by the end of the month. After that, it's chicken.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Emnet retter en vane, og previewets sidste ord gør konsekvensen sjov."
+  },
+  {
+    "subject": "Framed by Christmas means dropped off this week",
+    "preview": "Each frame is cut and joined by hand, and our framer's diary fills up from mid-November.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen regnes baglæns fra julen og begrundes i håndarbejdet."
+  },
+  {
+    "subject": "Wedding suit? Measure now, wear in June 🤵",
+    "preview": "Two fittings and eight weeks of tailoring sit between today and the aisle.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den korte tidslinje i emnet gør det lange forløb overskueligt."
+  },
+  {
+    "subject": "Stockists: the Christmas container books Friday",
+    "preview": "Anything on your order by then sails with it. Anything after joins the January shipment.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Containeren er en fysisk frist, som ingen kan forhandle med."
+  },
+  {
+    "subject": "Bulbs go in before the frost. So should your order 🌷",
+    "preview": "Tulips need cold soil to flower in spring, so they need to be in the ground within weeks.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Naturens frist overføres til ordren, så presset kommer fra haven, ikke fra butikken."
+  },
+  {
+    "subject": "The 20% ends at midnight. Quietly.",
+    "preview": "No countdown timers and no extension next week. Just the price going back to normal tomorrow.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det ene stille ord gør fristen elegant i stedet for skrigende."
+  },
+  {
+    "subject": "Christmas cheese boards: orders close Thursday 🧀",
+    "preview": "Some of the cheeses on them need ten more days in our cellar, so Thursday is the real limit.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "bag_kulisserne"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modningstiden er en konkret grund, der gør fristen både troværdig og appetitlig."
+  },
+  {
+    "subject": "Entries close tonight at eight",
+    "preview": "One photo of your shop window is all it takes. The winner gets a year of window dressing.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist tidspunkt og en lille indsats giver lyst til at nå det."
+  },
+  {
+    "subject": "What a missed cut-off cost one bakery",
+    "preview": "Not money, as it turned out. Read what the owner changed about her ordering afterwards.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnet lover en konsekvens, og previewet vender den, så nysgerrigheden vokser."
+  },
+  {
+    "subject": "Stand bookings close when the floor plan prints",
+    "preview": "That's Friday. After that, late exhibitors are listed online only, not in the printed guide.",
+    "language": "en",
+    "mechanisms": [
+      "deadline"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er bundet til en konkret begivenhed, trykningen, med en konkret konsekvens."
+  },
+  {
+    "subject": "Your till update needs to land before Black Friday",
+    "preview": "We freeze all changes the week before. Book a slot now and we'll test yours with time to spare.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen begrundes i en fastfrysning, som beskytter modtagerens travleste dag."
+  },
+  {
+    "subject": "Honestly, we'd rather you ordered now 🥖",
+    "preview": "December is when our bakers work nights. Orders in by Friday get baked on the day shift.",
+    "language": "en",
+    "mechanisms": [
+      "deadline",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den ærlige afsender gør fristen til en tjeneste mellem mennesker."
+  }
+]

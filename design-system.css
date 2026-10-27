@@ -5811,3 +5811,276 @@ input[type="file"] {
 
 .sat-rules-input .wp-input { max-width: 96px; }
 .sat-rules-input small { font-size: var(--wp-text-2xs); color: var(--wp-text-subtle); }
+
+
+/* ---------------------------------------------------------------------------
+   Subject lines
+
+   Built from the system's tokens and primitives, like the Canva Localizer.
+   The shapes that did not exist yet are the template picker, the brief, the
+   inbox preview on each suggestion and the A/B test card. Status is carried by
+   a shape and a word on every badge, never by colour alone.
+   --------------------------------------------------------------------------- */
+
+.subject-template-search { max-width: 360px; margin-bottom: var(--wp-space-3); }
+
+.subject-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--wp-space-2);
+}
+
+.subject-template-card {
+  display: grid;
+  gap: 2px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  text-align: left;
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  color: var(--wp-text);
+  cursor: pointer;
+}
+
+.subject-template-card:hover { background: var(--wp-surface-hover); }
+
+.subject-template-card.is-selected {
+  border-color: var(--wp-brand-border);
+  background: var(--wp-brand-surface);
+  box-shadow: inset 3px 0 0 var(--wp-brand);
+}
+
+.subject-template-name { font-size: var(--wp-text-sm); font-weight: var(--wp-weight-semibold); overflow-wrap: anywhere; }
+.subject-template-meta { font-size: var(--wp-text-xs); color: var(--wp-text-muted); }
+
+.subject-brief { display: grid; gap: var(--wp-space-5); }
+.subject-brief h5 { margin: 0 0 var(--wp-space-2); font-size: var(--wp-text-sm); font-weight: var(--wp-weight-semibold); }
+.subject-brief h6 { margin: var(--wp-space-4) 0 var(--wp-space-2); font-size: var(--wp-text-xs); font-weight: var(--wp-weight-semibold); color: var(--wp-text-muted); text-transform: uppercase; letter-spacing: var(--wp-tracking-caps); }
+.subject-brief p { margin: var(--wp-space-1) 0; }
+
+.subject-brief-core h4 {
+  margin: var(--wp-space-1) 0 var(--wp-space-2);
+  font-size: var(--wp-text-lg);
+  line-height: var(--wp-leading-snug);
+}
+
+.subject-chip-row { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); }
+
+.subject-brief-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--wp-space-3);
+  margin: 0;
+  padding: var(--wp-space-3);
+  background: var(--wp-surface-subtle);
+  border: 1px solid var(--wp-border-subtle);
+  border-radius: var(--wp-radius-md);
+}
+
+.subject-brief-facts dt { font-size: var(--wp-text-xs); color: var(--wp-text-muted); }
+.subject-brief-facts dd { margin: 2px 0 0; font-size: var(--wp-text-sm); }
+
+.subject-brief-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--wp-space-5);
+}
+
+.subject-brief-list,
+.subject-hook-list,
+.subject-reason-list,
+.subject-send-list,
+.subject-family-list,
+.subject-pattern-list,
+.subject-rule-list,
+.subject-favourite-list,
+.subject-issue-list,
+.subject-layer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.subject-brief-list li,
+.subject-reason-list li,
+.subject-family-list li { padding: 3px 0; font-size: var(--wp-text-sm); }
+
+.subject-hook-list li { display: grid; gap: 2px; padding: var(--wp-space-2) 0; border-bottom: 1px solid var(--wp-border-subtle); font-size: var(--wp-text-sm); }
+.subject-hook-list q { color: var(--wp-text-muted); font-size: var(--wp-text-xs); }
+.subject-reason-list { margin-top: var(--wp-space-3); }
+.subject-reason-list li.is-avoid { color: var(--wp-warning-text); }
+
+.subject-must-not .subject-brief-list li::before { content: "✕ "; color: var(--wp-danger-text); }
+
+.subject-mechanism-grid { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); }
+
+.subject-mechanism-chip {
+  height: var(--wp-control-height-sm);
+  padding: 0 var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-surface);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  cursor: pointer;
+}
+
+.subject-mechanism-chip:hover { background: var(--wp-surface-hover); }
+.subject-mechanism-chip.is-selected { border-color: var(--wp-brand-border); background: var(--wp-brand-surface); color: var(--wp-brand-strong); font-weight: var(--wp-weight-semibold); }
+.subject-mechanism-chip.is-avoided:not(.is-selected) { border-style: dashed; color: var(--wp-text-muted); }
+
+.subject-evidence {
+  padding: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-subtle);
+}
+
+.subject-send { display: flex; justify-content: space-between; gap: var(--wp-space-3); padding: var(--wp-space-2) 0; border-bottom: 1px solid var(--wp-border-subtle); }
+.subject-send > div:first-child { display: grid; gap: 2px; min-width: 0; font-size: var(--wp-text-sm); }
+.subject-send span,
+.subject-send small,
+.subject-muted { color: var(--wp-text-muted); }
+.subject-send-badges { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); align-items: start; justify-content: flex-end; }
+
+.subject-ab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: var(--wp-space-3); }
+
+.subject-ab-test {
+  display: grid;
+  gap: var(--wp-space-2);
+  margin-bottom: var(--wp-space-2);
+  padding: var(--wp-space-3);
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+}
+
+.subject-ab-test header { display: flex; justify-content: space-between; gap: var(--wp-space-3); align-items: start; }
+.subject-ab-test header > div { display: grid; gap: 2px; font-size: var(--wp-text-sm); }
+.subject-ab-test header span { font-size: var(--wp-text-xs); color: var(--wp-text-muted); }
+
+.subject-ab-arm {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: var(--wp-space-2) var(--wp-space-3);
+  align-items: start;
+  padding: var(--wp-space-2);
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-surface-subtle);
+}
+
+.subject-ab-arm.is-winner { box-shadow: inset 3px 0 0 var(--wp-success); }
+.subject-ab-arm > .wp-badge { grid-column: 2 / -1; justify-self: start; }
+.subject-ab-letter { font-weight: var(--wp-weight-bold); color: var(--wp-text-muted); }
+.subject-ab-copy { display: grid; gap: 2px; font-size: var(--wp-text-sm); min-width: 0; }
+.subject-ab-copy span { color: var(--wp-text-muted); font-size: var(--wp-text-xs); }
+.subject-ab-figures { display: grid; gap: 1px; font-size: var(--wp-text-xs); color: var(--wp-text-muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.subject-candidate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--wp-space-3);
+}
+
+.subject-candidate {
+  display: grid;
+  gap: var(--wp-space-2);
+  align-content: start;
+  padding: var(--wp-space-4);
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+}
+
+.subject-candidate.is-block { border-color: var(--wp-danger-border); background: var(--wp-surface-subtle); }
+.subject-candidate.is-warn { border-color: var(--wp-warning-border); }
+.subject-candidate-head { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); }
+
+/* One inbox row, drawn the way a phone draws it: sender, subject, then the preheader in grey.
+   Whatever iPhone Mail would cut is faded after the cut rather than hidden. */
+.subject-inbox {
+  display: grid;
+  gap: 1px;
+  padding: var(--wp-space-2) var(--wp-space-3);
+  border: 1px solid var(--wp-border-subtle);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-subtle);
+  font-size: var(--wp-text-sm);
+}
+
+.subject-inbox-sender { font-weight: var(--wp-weight-bold); }
+.subject-inbox-subject { font-weight: var(--wp-weight-semibold); overflow-wrap: anywhere; }
+.subject-inbox-cut { color: var(--wp-text-subtle); font-weight: var(--wp-weight-regular); }
+.subject-inbox-cut::before { content: "…"; padding: 0 2px; color: var(--wp-text-muted); }
+.subject-inbox-preview { color: var(--wp-text-muted); overflow-wrap: anywhere; }
+
+.subject-candidate-metrics { margin: 0; font-size: var(--wp-text-xs); color: var(--wp-text-muted); font-variant-numeric: tabular-nums; }
+.subject-candidate-why { margin: 0; font-size: var(--wp-text-sm); color: var(--wp-text-secondary); }
+.subject-candidate-evidence { margin: 0; font-size: var(--wp-text-xs); color: var(--wp-text-muted); overflow-wrap: anywhere; }
+
+.subject-issue-list li { padding: 2px 0; font-size: var(--wp-text-xs); }
+.subject-issue-list li.is-block { color: var(--wp-danger-text); }
+.subject-issue-list li.is-block::before { content: "■ "; }
+.subject-issue-list li.is-warn { color: var(--wp-warning-text); }
+.subject-issue-list li.is-warn::before { content: "▲ "; }
+
+.subject-candidate-actions { display: flex; flex-wrap: wrap; gap: var(--wp-space-1); }
+.subject-strategy { margin-bottom: var(--wp-space-3); }
+
+.subject-examples { margin-top: var(--wp-space-4); font-size: var(--wp-text-sm); }
+.subject-examples ul { margin: var(--wp-space-2) 0 0; padding-left: var(--wp-space-4); }
+.subject-examples li { padding: 2px 0; }
+
+.subject-layer-list { display: grid; gap: var(--wp-space-3); margin-bottom: var(--wp-space-3); }
+.subject-layer-list li { display: grid; grid-template-columns: 24px 1fr; gap: var(--wp-space-2); font-size: var(--wp-text-sm); }
+.subject-layer-list p { margin: 2px 0; }
+
+.subject-layer-step {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-brand-surface);
+  color: var(--wp-brand-strong);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-bold);
+}
+
+.subject-favourite-list li,
+.subject-pattern-list li,
+.subject-rule-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-2) 0;
+  border-bottom: 1px solid var(--wp-border-subtle);
+}
+
+.subject-favourite-list li > div,
+.subject-pattern-list li > div { display: grid; gap: 2px; min-width: 0; font-size: var(--wp-text-sm); }
+.subject-favourite-list span,
+.subject-favourite-list small,
+.subject-pattern-list span,
+.subject-pattern-list small { color: var(--wp-text-muted); font-size: var(--wp-text-xs); }
+.subject-pattern-list li.is-banned { opacity: 0.55; }
+
+.subject-rule-list li { justify-content: flex-start; align-items: start; }
+.subject-rule-list p { margin: 2px 0 0; font-size: var(--wp-text-sm); color: var(--wp-text-secondary); }
+
+.subject-bank > .wp-tabs { margin-bottom: var(--wp-space-4); }
+.subject-bank-toolbar { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: var(--wp-space-3); align-items: end; margin-bottom: var(--wp-space-3); }
+.subject-bank-toolbar .field { min-width: 160px; }
+.subject-history-table td { vertical-align: top; font-variant-numeric: tabular-nums; }
+.subject-history-table td:nth-child(2) { min-width: 280px; }
+.subject-feature-table td { font-variant-numeric: tabular-nums; }
+
+.subject-import { display: grid; gap: var(--wp-space-3); max-width: 720px; margin-bottom: var(--wp-space-6); }
+.subject-import p { margin: 0; }
+
+@media (max-width: 720px) {
+  .subject-ab-grid,
+  .subject-candidate-grid { grid-template-columns: minmax(0, 1fr); }
+  .subject-ab-arm { grid-template-columns: 20px minmax(0, 1fr); }
+  .subject-ab-figures { grid-column: 2; text-align: left; }
+}

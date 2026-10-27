@@ -1,0 +1,1733 @@
+[
+  {
+    "subject": "Ca. 25 foliefarver. Én af dem er din.",
+    "preview": "Guld, sølv, rosaguld og resten side om side – så du kan se, hvilken der klæder dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet viser bredden, og den korte efterfølger gør valget personligt."
+  },
+  {
+    "subject": "Fra 1953 til 200.000 æsker og poser om dagen",
+    "preview": "Et kig ind bag portene i Holstebro – og på de hænder, der får tallet til at gå op hver dag.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To tal sat op mod hinanden fortæller en hel virksomhedshistorie på én linje."
+  },
+  {
+    "subject": "7 gaveæsker til de sene julekøb 🎄",
+    "preview": "Udvalgt til den sidste travle uge: hurtige at pakke, flotte at række over disken.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et overskueligt antal møder en situation, modtageren kender fra sin egen butik."
+  },
+  {
+    "subject": "Hvor lille må en logoordre være?",
+    "preview": "Svaret er 48 stk. – også selvom det er første gang, dit navn skal trykkes på en æske.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet gemmes til preview, så spørgsmålet i emnet bliver besvaret i samme åndedrag."
+  },
+  {
+    "subject": "0 kr. i opstart på din første logoordre",
+    "preview": "Standardklichéen følger med første gang – du betaler for æskerne, ikke for at komme i gang.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nul er det stærkeste tal, når det fjerner en udgift, modtageren ellers regner med."
+  },
+  {
+    "subject": "Your new logo, produced in 7–8 working days",
+    "preview": "Printed with us before? Reorders with the same logo go through production in 4–5.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist interval for produktionstiden er mere troværdigt end et løst 'hurtigt'."
+  },
+  {
+    "subject": "Fem prøver. Én beslutning.",
+    "preview": "Bestil op til fem – med eller uden dit logo – og hold dem i hånden, før du bestiller stort.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem fem og én viser, at prøverne er vejen til et sikkert valg."
+  },
+  {
+    "subject": "30.000+ brands har én ting til fælles",
+    "preview": "De pakker det, de sælger, i noget med deres eget navn på. Her er tre måder, det ser ud på.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et stort, sandt tal åbner et hul, og preview lukker det med det samme."
+  },
+  {
+    "subject": "9.600 æsker – og op til 40 % billigere",
+    "preview": "Bulkkøb af de mest solgte smykkeæsker, til dig der allerede ved, hvad der sælger i din butik.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To tal i samme linje viser både forpligtelsen og gevinsten, så modtageren selv kan regne."
+  },
+  {
+    "subject": "2 minutter, 3 spørgsmål, 1 æsketype 👀",
+    "preview": "Svar på tre ting om det, du sælger, og se hvilken slags æske der passer til din butik.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En nedtælling i tre trin gør indsatsen lille og belønningen konkret."
+  },
+  {
+    "subject": "Ørestikker, ring, halskæde: 3 mål at kende",
+    "preview": "Sådan vælger du den indvendige størrelse, så smykket ligger stille og ikke rasler rundt.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre kendte smykketyper og et tal lover en kort oversigt, man kan bruge med det samme."
+  },
+  {
+    "subject": "Sort, brun, mørkeblå – og seks mere 🛍️",
+    "preview": "Luksusbæreposen med vævet hank i alle ni farver, fotograferet side om side.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet kommer til sidst som en pointe, efter at listen har gjort farverne konkrete."
+  },
+  {
+    "subject": "4 størrelser luksuspose. Hvilken er din?",
+    "preview": "Fra lille nok til en ringæske til stor nok til en gaveæske – med logoplads i hver eneste.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, fast antal muligheder gør spørgsmålet let at svare på i hovedet."
+  },
+  {
+    "subject": "3 bønner, 1 bryg, 0 bitterhed ☕",
+    "preview": "Vores nye blend er ristet lyst til filterkaffe – og her er vandtemperaturen, der rammer den.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En nedtælling fra tre til nul giver rytme og lander på den fordel, kunden går efter."
+  },
+  {
+    "subject": "11 stoffer. Vi har siddet i dem alle.",
+    "preview": "Hvilke der holder til børn og hund, og hvilke der bare er smukke – ærligt sorteret.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Tallet gør grundigheden konkret, og den kække vending giver lyst til at læse dommen."
+  },
+  {
+    "subject": "6 varer, der forsvinder fra hylden i august",
+    "preview": "Det, papirhandlere genbestiller først, når skolerne starter – og hvor tidligt de gør det.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille antal varer koblet til en kendt sæson lover en kort, brugbar indkøbsliste."
+  },
+  {
+    "subject": "12 bottles, 3 regions, one long dinner 🍷",
+    "preview": "This month's mixed case is built around one menu – which wine goes with which course is inside.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tallene trapper ned fra kasse til middag og ender i den oplevelse, kunden køber."
+  },
+  {
+    "subject": "1 jumper, 5 ways to wear it",
+    "preview": "Our best-selling knit styled from Monday meeting to Sunday walk, photographed on the team.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forholdet mellem én vare og fem looks lover mere ud af noget, man måske allerede har."
+  },
+  {
+    "subject": "Since 1953. Still in Holstebro.",
+    "preview": "Seventy-three years, one Danish factory and around 200 people who turn board into your boxes.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et årstal alene signalerer stabilitet, og preview gør det til mennesker."
+  },
+  {
+    "subject": "14.000 m² Holstebro. Kom med indenfor 👀",
+    "preview": "Lageret, maskinerne og bordet, hvor dit logo bliver tjekket, før det bliver presset i folie.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret areal gør rundvisningen fysisk og vækker lysten til at se indenfor."
+  },
+  {
+    "subject": "3 smykkebrands, 3 helt forskellige æsker",
+    "preview": "Samme udgangspunkt – en standardæske med logo – og tre måder at gøre den til sin egen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det gentagne tretal sætter lighed og forskel op, så modtageren vil se hvordan."
+  },
+  {
+    "subject": "7–8 arbejdsdage. Tæl baglæns fra jul ⏰",
+    "preview": "Så længe er et nyt logo i produktion – og fristerne for dit land falder tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Produktionstiden giver modtageren et tal at regne med uden at love en bestemt dato."
+  },
+  {
+    "subject": "Dæk, kæde, bremser: 10 minutter før foråret 🚲",
+    "preview": "En tjekliste, du kan klare i indkørslen – og de to ting, du skal lade os tage os af.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre konkrete ting og en kort tidsramme gør opgaven overkommelig."
+  },
+  {
+    "subject": "Our 4 o'clock bake is gone by quarter past",
+    "preview": "So we're adding a second batch at six. Same sourdough, same crust, just more of it.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Klokkeslættet som pointe viser efterspørgslen uden at sige ordet populær."
+  },
+  {
+    "subject": "Your logo on as few as 48 pieces",
+    "preview": "A first run small enough to test a new collection, with the same foil finish as a big one.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lavt minimumsantal fjerner den største tærskel for en første ordre med logo."
+  },
+  {
+    "subject": "6 gaveæsker i finalen. Din stemme tæller 🏁",
+    "preview": "Tryk på den, du helst ville række over disken – vinderen afsløres, når stemmerne er talt.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et fast felt gør afstemningen overskuelig, og ordet finale giver spænding."
+  },
+  {
+    "subject": "Din profil + vores annoncekroner = 1 partnerskab",
+    "preview": "Sådan virker partnerannoncer: vi betaler, de kører fra din konto, og dit brand står forrest.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Regnestykket forklarer hele aftalen, før modtageren har åbnet."
+  },
+  {
+    "subject": "4 nye farver. Vi har allerede en favorit",
+    "preview": "Se dem på ringæsken, vedhængsæsken og halskædeæsken – og gæt, hvilken vi peger på.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Antallet gør nyheden konkret, og den skjulte favorit giver en grund til at kigge."
+  },
+  {
+    "subject": "TrustScore 4.6. Her er 3 af grundene.",
+    "preview": "Udvalgt fra Trustpilot: hvad kunderne skriver om service, kvalitet og det at bestille igen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det rigtige tal plus et lille udvalg gør dokumentationen let at tage stilling til."
+  },
+  {
+    "subject": "2,500 pouches is where bulk starts",
+    "preview": "Bulk is ordered per model, so one style in volume beats five in small runs. Here's how it works.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret tærskeltal fortæller med det samme, om tilbuddet er for modtageren."
+  },
+  {
+    "subject": "40 timers brændetid. Vi har målt efter.",
+    "preview": "Det nye lys i keramikkop, testet på køkkenbordet fra fredag aften til søndag – med noter.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et målt tal plus et 'vi har tjekket' gør påstanden troværdig og lidt kæk."
+  },
+  {
+    "subject": "Ét nøgle garn, tre aftener, én hue 🧶",
+    "preview": "Opskriften er til begyndere, og der er video til de to steder, hvor alle går i stå.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Tre små tal beskriver hele projektet, så modtageren kan se sig selv gøre det."
+  },
+  {
+    "subject": "Hvor mange stole kan stables? Vi nåede til 9",
+    "preview": "Den nye cafestol tåler mere, end vi troede – se testen og de tre farver, den kommer i.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Tallet bruges som slutpointe på en lille test, modtageren gerne vil se."
+  },
+  {
+    "subject": "Rabat i kassen, luksus i posen: 3 greb",
+    "preview": "Sådan pakker du et nedsat køb, så det stadig føles som noget særligt for kunden.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Kontrasten sætter problemet op, og tallet lover en kort, konkret løsning."
+  },
+  {
+    "subject": "Four bag sizes, four logo areas",
+    "preview": "From 60×50 mm on the small luxury bag to 150×150 on the XXL – see what fits your mark.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Konkrete millimetermål gør beslutningen praktisk og viser, at mailen har svaret."
+  },
+  {
+    "subject": "1 farve folie. Sådan får logoet mest ud af den",
+    "preview": "Ingen forløb, ingen skygger: præget giver dybden – og her er, hvad designerne kigger efter.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Begrænsningen siges som et tal og vendes straks til et råd, modtageren kan bruge."
+  },
+  {
+    "subject": "Bestil 9.600. Træk 500 ad gangen.",
+    "preview": "Vi kan lægge din ordre på lager, og du betaler, efterhånden som du trækker æskerne hjem.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To tal viser modellen på én linje: købe stort, tage lidt ad gangen."
+  },
+  {
+    "subject": "Låg, papir, kort: tre sekunder af en unboxing",
+    "preview": "Sådan bygger du de første øjeblikke, når kunden åbner – lag for lag, med det, du har i dag.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre konkrete lag og et kort tidsrum gør oplevelsen til noget, man kan planlægge."
+  },
+  {
+    "subject": "Ring, vedhæng, armbånd – 6 størrelser, 1 stil 💍",
+    "preview": "Hele familien af plastæsker, så kollektionen står ens på hylden fra ørestik til armbånd.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et samlet antal størrelser lover, at hele sortimentet kan pakkes i samme udtryk."
+  },
+  {
+    "subject": "Fristerne for alle lande på 1 side 📅",
+    "preview": "Find dit land, se hvornår ordrer med tryk skal være inde, og regn produktionstiden med.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ét enkelt tal lover, at svaret er samlet og hurtigt at finde."
+  },
+  {
+    "subject": "20 % på alt i keramik – til og med søndag",
+    "preview": "Kopper, skåle og de store fade, der aldrig kommer på udsalg – denne gang er de med.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Procent og slutdag står i emnet, og preview fortæller, hvad der gør rabatten sjælden."
+  },
+  {
+    "subject": "Vi er 9 i butikken nu. Mød nummer 9 👋",
+    "preview": "Hun kommer fra en vinbar i Aarhus og har allerede flyttet rundt på hele hylden med naturvin.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tallet gør en nyansættelse til en lille fortælling med et ansigt."
+  },
+  {
+    "subject": "Én café, 300 kopper om dagen, samme kværn",
+    "preview": "Hvorfor de valgte den – og hvad de ville ønske, de havde vidst, før de købte den første.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et belastningstal fra en rigtig hverdag er stærkere bevis end enhver produktbeskrivelse."
+  },
+  {
+    "subject": "14 kg of cheese. Guess its age, keep it 🧀",
+    "preview": "The closest answer by Friday takes the whole wheel home. Hint: it's older than the shop dog.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et konkret, lidt absurd tal gør præmien håndgribelig og konkurrencen sjov at deltage i."
+  },
+  {
+    "subject": "Stockists: 3 changes to your trade terms",
+    "preview": "Lower minimums on the core range, a new reorder window and one thing that stays exactly the same.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille antal ændringer signalerer, at det er hurtigt at sætte sig ind i."
+  },
+  {
+    "subject": "Påske på 5 hylder: sådan fylder du dem 🐣",
+    "preview": "Fra æg i kurve ved kassen til den store borddækning i vinduet – en plan, hylde for hylde.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et fysisk antal hylder gør sæsonplanen konkret og nem at overføre til egen butik."
+  },
+  {
+    "subject": "Fra 24 til 96: hvorfor minimum skifter",
+    "preview": "Minimum for logotryk afhænger af æsken. Sådan finder du den, der passer til din første ordre.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et interval viser ærligt, at svaret afhænger af valget, og lover forklaringen."
+  },
+  {
+    "subject": "1 værksted, 2 æsker, et helt brand ✨",
+    "preview": "Hvordan en lille guldsmed bruger to standardæsker med logo til at få alt til at hænge sammen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Små tal mod et stort resultat viser, at man ikke behøver et stort sortiment for at virke stor."
+  },
+  {
+    "subject": "Two offices in Asia, one factory in Denmark",
+    "preview": "Where your packaging is made and sourced, and who you are actually talking to when you call.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallene tegner et kort over virksomheden, som modtageren sjældent får at se."
+  },
+  {
+    "subject": "Ribbon, sleeve, tissue: 3 ways to dress one box 🎀",
+    "preview": "Same jewellery box, three finishes for three price points – each one done at the counter.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ét produkt ganget med tre looks lover mere værdi ud af noget, modtageren allerede har."
+  },
+  {
+    "subject": "3 tegn på, at det er tid til juleæskerne ⏳",
+    "preview": "Fristerne for ordrer med tryk falder tidligere, end du tror – og de er ikke ens fra land til land.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tre tegn gør en vag frist til noget, modtageren kan tjekke i sin egen butik."
+  },
+  {
+    "subject": "Top 5: æskerne, der bliver genbestilt mest 🏆",
+    "preview": "Listen er trukket fra ordrerne, ikke fra katalogets forside – og nummer 1 er ikke den, du gætter på.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En rangeret liste lover et hurtigt overblik, og nummer 1 bliver en lille gåde."
+  },
+  {
+    "subject": "14. februar: 3 æsker til ringen i lommen 💌",
+    "preview": "Små nok til en jakkelomme og lavet til at blive åbnet langsomt – udvalgt til Valentins-salget.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Datoen er den samme overalt, og tre æsker gør sæsonen til et konkret valg."
+  },
+  {
+    "subject": "Uden logo: 1 dag. Med nyt logo: 7–8.",
+    "preview": "Hvad der sker i de ekstra arbejdsdage: korrektur, kliché og præg – trin for trin.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To produktionstider stillet op mod hinanden gør forskellen selvforklarende."
+  },
+  {
+    "subject": "Ca. 200 mennesker. Her er 4 af dem.",
+    "preview": "Fra kundeservice til foliepressen: mød nogle af dem, der svarer, når du ringer om dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det store tal zoomes ind til fire ansigter, så virksomheden bliver til mennesker."
+  },
+  {
+    "subject": "Gaveæsken har 12 job ud over julen 🎁",
+    "preview": "Til et sæt, i vinduet, som abonnementsboks – og ni idéer mere, du kan bruge i morgen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et højt antal anvendelser udvider, hvad modtageren tænker, en gaveæske kan."
+  },
+  {
+    "subject": "Partner for 400+ brands – sådan starter det",
+    "preview": "Når emballagen skal designes fra bunden i vores eget designstudie, med én kontaktperson hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet viser, at det skræddersyede samarbejde er afprøvet, ikke et eksperiment."
+  },
+  {
+    "subject": "Nine colours, one woven handle",
+    "preview": "The luxury carrier bag in every shade, from terracotta to cream, with room for your logo in foil.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort og et lille tal sat sammen viser både valgfrihed og et fast kendetegn."
+  },
+  {
+    "subject": "Two numbers to know before Christmas ⏰",
+    "preview": "How long a new logo takes in production, and where to find the order deadline for your country.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At love præcis to tal gør mailen kort og nødvendig på samme tid."
+  },
+  {
+    "subject": "7 small details for a box worth filming 📱",
+    "preview": "Tissue colour, how the lid lifts, where the card sits – each one costs next to nothing to change.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ulige antal små detaljer lover tips, der er lette at gå i gang med."
+  },
+  {
+    "subject": "Den nye æske åbner som en bog 📖",
+    "preview": "Fås i fem farver og tre størrelser, fra ørestikker til den lange halskæde.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tallene ligger i preview, så emnet kan bruge pladsen på billedet af æsken."
+  },
+  {
+    "subject": "Højsæson: 4 ting, der sparer tid ved disken",
+    "preview": "Fra en fast plads til kortene til poser foldet ud på forhånd – små ting, der mærkes i køen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille antal greb koblet til en presset periode lover lettelse, ikke mere arbejde."
+  },
+  {
+    "subject": "Gæt, hvor mange æsker der står på pallen 📦",
+    "preview": "Tættest på vinder 48 æsker med eget logo. Hint: pallen er højere end vores lagerchef.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tallet skjules og bliver selve opgaven, så modtageren allerede gætter i indbakken."
+  },
+  {
+    "subject": "Te i 3, 4 eller 5 minutter? Det smager du 🍵",
+    "preview": "Vi har brygget den samme sencha tre gange og skrevet ned, hvad der sker med sødmen undervejs.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Tre tal som svarmuligheder gør spørgsmålet til en lille test, man vil kende svaret på."
+  },
+  {
+    "subject": "Julelisten: 47 bøger, sorteret efter modtager 📚",
+    "preview": "Til svigerfar, til 10-årige og til hende, der har læst alt – med én linje om hver.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et skævt, præcist tal virker ærligt, og sorteringen lover, at listen er nem at bruge."
+  },
+  {
+    "subject": "Serummet er 98 % vand. Det er pointen.",
+    "preview": "Hvorfor de sidste 2 procent gør hele forskellen – og hvordan du lægger det i den rigtige rækkefølge.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et tal, der lyder som en indrømmelse, vendes til et argument og vækker nysgerrighed."
+  },
+  {
+    "subject": "Telt til 2. Plads til 3, hvis I er gode venner ⛺",
+    "preview": "Vi har slået det nye trekkingtelt op i baghaven og målt efter med tre voksne i soveposer.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "To tal, der ikke stemmer, giver et smil og siger samtidig noget om pladsen."
+  },
+  {
+    "subject": "5 planter til butikken uden sollys 🪴",
+    "preview": "De står pænt i fire uger ved kassen, og den ene skal kun have vand én gang om måneden.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et antal plus en præcis betingelse fortæller modtageren, om listen er til netop dem."
+  },
+  {
+    "subject": "10 år, 3 adresser, samme ovn",
+    "preview": "Tak for alle morgenerne. På lørdag fejrer vi det med kanelsnegle til prisen fra åbningsdagen.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre tal fortæller en hel virksomhedshistorie, og den faste ovn bliver hjertet i den."
+  },
+  {
+    "subject": "Køb 2 notesbøger, få den 3. med navn på",
+    "preview": "Vi præger initialer i guld på omslaget, så den tredje bliver gaven, ingen andre kan købe.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tilbuddet står som et simpelt regnestykke, og preview gør det personlige til gevinsten."
+  },
+  {
+    "subject": "Hun sælger 40 kranse om ugen fra en garage",
+    "preview": "Sådan bruger en lille blomsterbinder vores ståltråd og bånd – og de to, hun aldrig går ned på.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et overraskende tal fra et lille sted gør casen til en historie, man vil høre."
+  },
+  {
+    "subject": "We boiled it 2,000 times. Still whisper-quiet.",
+    "preview": "The new stovetop kettle survived a year in our café kitchen – here's what wore first.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et testtal gør holdbarheden konkret, og ærligheden i preview giver troværdighed."
+  },
+  {
+    "subject": "24 days, 24 candles 🕯️",
+    "preview": "Our advent box lights a different scent each evening – the first eight are revealed inside.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det gentagne tal spejler kalenderen og gør produktet forståeligt på et øjeblik."
+  },
+  {
+    "subject": "The 60-second window display reset",
+    "preview": "Five moves you can make before opening, using only what's already in the stockroom.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kort tidsramme gør tippet så lille, at det føles dumt ikke at prøve det."
+  },
+  {
+    "subject": "Name our new roast, win 52 bags of it ☕",
+    "preview": "One bag a week for a year. Entries close Sunday, and the shortlist goes to a public vote.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et stort, konkret præmietal er mere fristende end ordet 'et års forbrug'."
+  },
+  {
+    "subject": "1 korrektur. Så trykker vi.",
+    "preview": "Du ser dit logo digitalt på æsken og godkender det, før der kommer folie på noget som helst.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et enkelt trin siges som et tal, så processen føles kort og sikker."
+  },
+  {
+    "subject": "4 måder at stille 20 ringe op på disken",
+    "preview": "Fra bakken ved kassen til stativet i vinduet – sådan får hver ring sin plads uden at stjæle fokus.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret antal ringe gør opgaven genkendelig, og de fire måder lover valgmuligheder."
+  },
+  {
+    "subject": "Bryllupssæson: 5 æsker til ringene 🤍",
+    "preview": "Til forlovelsen, til vielsen, til morgengaven – og den ene, der kan rumme begge ringe.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille udvalg knyttet til en bestemt sæson gør mailen relevant for netop de butikker."
+  },
+  {
+    "subject": "Hvordan pakker du 1 smykke på 30 sekunder? ⏱️",
+    "preview": "Silkepapir, æske, pose: en rækkefølge, en ny kollega kan lære på én vagt.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet sætter en konkret tid op, som modtageren straks sammenligner med sin egen."
+  },
+  {
+    "subject": "Westpap, 1953. Westpack, i dag.",
+    "preview": "Navnet skiftede, da vi blev et A/S i 80'erne. Her er historien bag – fortalt fra Holstebro.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et årstal og et gammelt navn åbner en historie, de færreste kunder kender."
+  },
+  {
+    "subject": "Én ting kan du gøre i dag for julen",
+    "preview": "Godkend logoet nu – så går en genbestilling i produktion på 4–5 arbejdsdage, når travlheden kommer.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ét enkelt skridt gør julen overskuelig, og tallet i preview viser gevinsten."
+  },
+  {
+    "subject": "3 vindere får deres logo på 48 æsker 🎉",
+    "preview": "Fortæl os, hvad du sælger, og hvorfor det fortjener en æske med navn på – vi læser dem alle.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To konkrete tal gør præmien og chancen håndgribelige på én gang."
+  },
+  {
+    "subject": "Zero start-up costs on your first logo order",
+    "preview": "The standard cliché is on us the first time, so you only pay for the boxes themselves.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nul er et tal, der fjerner en indvending, før modtageren har nået at tænke den."
+  },
+  {
+    "subject": "30,000+ brands. Here's what three of them did.",
+    "preview": "A jeweller, a concept store and an online brand – and the box each one made its own.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det store tal giver tyngde, og de tre eksempler gør det overskueligt at læse."
+  },
+  {
+    "subject": "3 inserts, 3 jobs 💍",
+    "preview": "Slot, cushion or flat pad: how to pick the one that keeps each piece still and on show.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den korte, gentagne opstilling lover et svar, der kan læses på et halvt minut."
+  },
+  {
+    "subject": "2 nye størrelser, så halskæden kan ligge lige",
+    "preview": "Den lange æske kommer nu i en bredere udgave, så kæde og vedhæng ikke skal bøjes for at passe.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet gør nyheden konkret, og bisætningen siger, hvilket problem den løser."
+  },
+  {
+    "subject": "14 dage til at fortryde – på lagervarer",
+    "preview": "Æsker med dit logo kan ikke sendes retur. Derfor giver det mening at bestille en prøve først.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et klart tal for returretten bygger tillid, og forbeholdet fører naturligt til prøven."
+  },
+  {
+    "subject": "Partnerannoncer i 4 trin",
+    "preview": "Hvem laver indholdet, hvem betaler, og hvad du egentlig siger ja til – før du siger ja.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lavt antal trin gør et ukendt samarbejde overskueligt nok til at åbne."
+  },
+  {
+    "subject": "Den lille luksuspose: 200 × 150 mm 🛍️",
+    "preview": "Vævet hank, plads til en æske eller to – og et logo på 60 × 50 mm på forsiden.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Præcise mål lader modtageren se posen for sig uden et eneste tillægsord."
+  },
+  {
+    "subject": "Rødvin til 89 kr., der smager af 189 🍷",
+    "preview": "Vores indkøber fandt den på en lille vingård i Languedoc – vi har 120 flasker, så er den væk.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To priser sat op mod hinanden lader modtageren selv regne gevinsten ud."
+  },
+  {
+    "subject": "Spisebordet kan forlænges til 12 personer",
+    "preview": "Og samles til fire, når det bare er en tirsdag. Se, hvor de ekstra plader gemmer sig.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ét tal beskriver produktets vigtigste egenskab mere præcist end et adjektiv kan."
+  },
+  {
+    "subject": "Kl. 5.30 tænder vi ovnen. Vil du med? 🥐",
+    "preview": "Vi åbner bageriet for otte morgenfriske gæster i november – kaffe og varme hænder inkluderet.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et tidligt klokkeslæt tegner et billede af håndværket, og invitationen gør det personligt."
+  },
+  {
+    "subject": "Ny prisliste: 3 ting stiger, 11 falder",
+    "preview": "Vi har forhandlet papir og karton om, og det meste af besparelsen sender vi direkte videre.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ærligheden om stigningerne gør tallet for faldene troværdigt."
+  },
+  {
+    "subject": "48 timer tilbage af forsalget ⏳",
+    "preview": "Det nye hørsengetøj kommer først i butikkerne om en måned – du kan sikre dig dit sæt nu.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et timetal føles mere akut end en dato og kræver ingen omregning."
+  },
+  {
+    "subject": "En kunde har haft samme taske i 22 år",
+    "preview": "Hun kom ind med den til reparation i sidste uge. Vi spurgte, om vi måtte fortælle historien.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et langt, præcist tal beviser holdbarhed og åbner samtidig en historie."
+  },
+  {
+    "subject": "Three frames, pay for two 🖼️",
+    "preview": "Mix sizes and finishes as you like – the cheapest one in the basket comes off at checkout.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tilbuddet er et regnestykke, der kan forstås uden at åbne, og preview fjerner tvivlen."
+  },
+  {
+    "subject": "We'll grind it 7 ways. Pick yours.",
+    "preview": "From espresso-fine to cafetière-coarse – tell us how you brew and we'll match the grind.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et antal valgmuligheder gør servicen konkret og inviterer til at vælge."
+  },
+  {
+    "subject": "Year one: 312 orders, 4 broken mugs",
+    "preview": "What running a small pottery shop taught us, and the one thing we'd do differently from day one.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et stort og et lille tal side om side giver selvironi og troværdighed."
+  },
+  {
+    "subject": "Spot the 5 differences, win the armchair 🪑",
+    "preview": "Two photos of our showroom, five small changes. Find them all by Sunday to enter the draw.",
+    "language": "en",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kendt legeformat med et fast antal gør deltagelsen let at forstå."
+  },
+  {
+    "subject": "Fra 1 kvm til hele væggen: 6 hyldeopsætninger",
+    "preview": "Med mål, materialeliste og en tegning til hver, så du kan bygge den samme weekend.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spændet fra lille til stort lover, at der er en løsning til alle størrelser."
+  },
+  {
+    "subject": "5 ting, der får et logo til at stå skarpt ✨",
+    "preview": "Stregtykkelse, mindste skriftstørrelse og luft omkring – det, designerne kigger på først.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ulige antal konkrete punkter lover en tjekliste, man kan holde sit eget logo op imod."
+  },
+  {
+    "subject": "Tre spørgsmål til en guldsmed om emballage",
+    "preview": "Hvad hun ville gøre anderledes i dag, og den ene ting, hun aldrig går på kompromis med.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "personlig"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et fast antal spørgsmål lover et kort interview med en, modtageren kan spejle sig i."
+  },
+  {
+    "subject": "Black Friday på 3 linjer 🖤",
+    "preview": "Hvad der er nedsat, hvor længe det gælder, og hvilke æsker der er flest af på lager.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Midt i sæsonens støj lover et lille tal, at denne mail kan læses på ti sekunder."
+  },
+  {
+    "subject": "1 gaveæske, 2 måder at åbne den på",
+    "preview": "Træk skuffen ud, eller løft låget – samme æske, to helt forskellige øjeblikke for kunden.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Forholdet mellem én æske og to oplevelser gør nyheden konkret og lidt overraskende."
+  },
+  {
+    "subject": "Fil til folie: 5 trin",
+    "preview": "Sådan går dit logo fra vektorfil til præg – og hvor du selv skal sige god for det undervejs.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Bogstavrimet og det lave antal trin gør en ukendt proces overskuelig."
+  },
+  {
+    "subject": "2 kontorer i Asien. Hvorfor egentlig?",
+    "preview": "Hvad vores folk i Kina og Indonesien laver hver dag – og hvad det betyder for æsken, du står med.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret tal plus et ærligt hvorfor gør en organisationsdetalje interessant."
+  },
+  {
+    "subject": "Ét smykke, fire æsker. Hvilken vinder? 👀",
+    "preview": "Vi har fotograferet den samme ring i fire forskellige æsker. Du afgør, hvilken der sælger den bedst.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et fast sammenligningsfelt inviterer modtageren til at dømme selv."
+  },
+  {
+    "subject": "2 frister, du ikke vil opdage for sent ⏰",
+    "preview": "Den for ordrer med tryk og den sidste for afsendelse – find begge for dit land på én side.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At der er to frister er i sig selv en nyhed, og ingen dato i emnet holder den sand i alle lande."
+  },
+  {
+    "subject": "Three ways to keep stock without a stockroom",
+    "preview": "We can hold your order and invoice as you draw it down – plus two other ways to plan for peak.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet lover flere løsninger på et velkendt pladsproblem."
+  },
+  {
+    "subject": "One ring, one box, one question 💍",
+    "preview": "Proposal boxes chosen for how they open – slowly, with the ring facing the right way.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det gentagne 'one' bygger op til øjeblikket, æsken er lavet til."
+  },
+  {
+    "subject": "450 × 350 mm of bag. Use every millimetre.",
+    "preview": "The XXL carrier bag takes a logo up to 150 × 150 mm – here's how to make the most of it.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rå mål i emnet stikker ud i indbakken og gør størrelsen fysisk."
+  },
+  {
+    "subject": "Stem på 1 af 4 farver til næste kollektion 🗳️",
+    "preview": "Vi lytter til resultatet, når næste kollektion skal vælges – og trækker lod om tre prøvepakker.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, fast valg gør det let at deltage og giver modtageren indflydelse."
+  },
+  {
+    "subject": "4 farver, glimmer i de 2 mørke",
+    "preview": "Plastæskerne i sort, mørkeblå, rosa og lyseblå – de to mørke med et fint guldglimmer i plasten.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To tal i en kort linje skaber en lille gåde, som preview løser med det samme."
+  },
+  {
+    "subject": "Silkepapir i 3 lag: guiden til den pæne fold",
+    "preview": "Med fotos af hvert trin og det ene greb, der holder papiret glat i hjørnerne.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist antal lag lover en teknik, ikke bare inspiration."
+  },
+  {
+    "subject": "250 g = 17 kopper. Vi har regnet efter ☕",
+    "preview": "Og drikker du den som os, holder posen præcis en arbejdsuge og en lørdag.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et regnestykke gør en vægt til noget, kunden kan forholde sig til i sin egen hverdag."
+  },
+  {
+    "subject": "Sofaen er 2,10 m. Døren er 80 cm.",
+    "preview": "Sådan kommer den ind alligevel: modulerne skilles ad og samles på stedet på et kvarter.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "To mål, der ikke passer sammen, rejser et problem, som modtageren vil se løst."
+  },
+  {
+    "subject": "Minimumsordren er nu 1 karton – ikke 6",
+    "preview": "Fra 1. marts kan du blande frit på tværs af hele sortimentet. Her er de nye fragtgrænser.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nyhed"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Før-og-efter-tallet viser forandringen så tydeligt, at den ikke behøver forklaring i emnet."
+  },
+  {
+    "subject": "Vind et år med blomster – 12 buketter 💐",
+    "preview": "Én om måneden, bundet efter sæsonen. Del dit bedste billede fra butikken for at være med.",
+    "language": "da",
+    "mechanisms": [
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tallet oversætter 'et år' til noget håndgribeligt, man kan glæde sig til."
+  },
+  {
+    "subject": "Kage til fredag? Bestil senest kl. 12 i morgen 🎂",
+    "preview": "Lagkager, kringler og den med hindbær skal bage natten over – derfor den tidlige frist.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et klokkeslæt er den mest præcise frist, der findes, og preview forklarer hvorfor."
+  },
+  {
+    "subject": "Vi lukker i 2 uger. Her er hvorfor.",
+    "preview": "Butikken får nyt gulv, nye hylder og et værksted bagerst, som du kan kigge ind i.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En overraskende nyhed med et præcist tal skaber et spørgsmål, preview straks besvarer."
+  },
+  {
+    "subject": "Rødvin ved 16 grader, ikke 20",
+    "preview": "Stuetemperatur er en regel fra en tid med kolde stuer. Sådan rammer du det uden termometer.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et tal, der retter en udbredt vane, får modtageren til at tvivle på det, de plejer."
+  },
+  {
+    "subject": "Restauranten bruger 3 kg af vores salt om ugen",
+    "preview": "Køkkenchefen fortæller, hvad han bruger det til – og hvorfor det aldrig står på bordet.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forbrugstal fra en professionel er et stille, men stærkt kvalitetsbevis."
+  },
+  {
+    "subject": "Uge 28: de 5 varer, kunderne spørger efter ☀️",
+    "preview": "Fra solcreme til køletasker – det, en lille købmand ved stranden løber tør for først.",
+    "language": "da",
+    "mechanisms": [
+      "tal",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et ugenummer og et lille antal varer gør sæsonrådet præcist og brugbart."
+  },
+  {
+    "subject": "How to brew at 93°C without a thermometer",
+    "preview": "Boil, wait, pour: the thirty-second rule our baristas use on every pour-over.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist tal signalerer ekspertise, og løftet om at undvære udstyr gør det tilgængeligt."
+  },
+  {
+    "subject": "She orders 600 cards a year from us. Why?",
+    "preview": "A wedding planner on the three things that keep her coming back – and the one she'd change.",
+    "language": "en",
+    "mechanisms": [
+      "tal",
+      "spoergsmaal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et stort tal efterfulgt af hvorfor gør casen til et spørgsmål, man vil have svar på."
+  }
+]

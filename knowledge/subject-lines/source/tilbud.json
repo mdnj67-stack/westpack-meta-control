@@ -1,0 +1,1693 @@
+[
+  {
+    "subject": "-20 % på udvalgte smykkeæsker. Det er det.",
+    "preview": "Ingen kode at huske – prisen er allerede sat ned på de modeller, der er med i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet kommer først, og den tørre afrunding signalerer, at der ikke er nogen hage."
+  },
+  {
+    "subject": "Bæreposer til en femtedel mindre 🛍️",
+    "preview": "Det gælder udvalgte luksusposer med vævet hank, i alle de farver, de findes i.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Procenten omskrives til en brøk, der føles mere håndgribelig end et tal."
+  },
+  {
+    "subject": "15% off selected gift boxes, no code",
+    "preview": "The reduced models are marked in the shop – and they still take your logo in foil.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabat, sortiment og betingelse står i én kort linje, så intet skal gættes."
+  },
+  {
+    "subject": "Op til 40 % ved bulkkøb af smykkeæsker 📦",
+    "preview": "Gælder populære modeller fra 9.600 stk., med dit logo – sådan regner du ud, om det passer dig.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten er stor, og betingelsen står lige bagefter, så modtageren kan vurdere den med det samme."
+  },
+  {
+    "subject": "Køb to poser kaffe, få en tredje ☕",
+    "preview": "Gælder alle enkeltoprindelser, og du vælger selv den tredje – også den dyreste.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et enkelt regnestykke gør fordelen klar, og forhåndsvisningen fjerner den sædvanlige hage."
+  },
+  {
+    "subject": "The oak dining chair, £60 less",
+    "preview": "Same wood, same joinery, same ten-year guarantee – we simply ordered more of them this year.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et beløb er mere konkret end en procent, og forklaringen fjerner mistanken om ringere kvalitet."
+  },
+  {
+    "subject": "Julerabat på gaveæsker – men ikke på alle 🎄",
+    "preview": "Udvalgte gaveæsker i mørke julefarver er sat ned – listen er kort, så du hurtigt kan vælge.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ærligheden om begrænsningen gør tilbuddet mere troværdigt end et udsalg på alt."
+  },
+  {
+    "subject": "Rabatten slutter, når ugen gør",
+    "preview": "-15 % på udvalgte smykkeposer resten af ugen – herefter går prisen tilbage til normal.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Fristen siges som en hverdagsrytme, og rabatten står klart i forhåndsvisningen."
+  },
+  {
+    "subject": "Sofaen, du kiggede på, er 3.000 kr. billigere",
+    "preview": "Samme stof, samme mål, samme levering – prisen gælder, til lageret i den farve er tomt.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "personlig"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten knyttes til noget, modtageren allerede har vist interesse for."
+  },
+  {
+    "subject": "Your first logo order starts at zero set-up",
+    "preview": "No cliché charge on standard logos first time round, so the only cost is the boxes themselves.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges som et nulpunkt, der fjerner frygten for skjulte startomkostninger."
+  },
+  {
+    "subject": "Julevinen er sat ned – mest på hele kasser 🍷",
+    "preview": "Køber du seks, er det 25 % på hver flaske, også hvis du blander rødt og hvidt.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten vokser med mængden, og forhåndsvisningen fjerner den forventede begrænsning."
+  },
+  {
+    "subject": "Fløjlsæskerne til kampagnepris ✨",
+    "preview": "Mørke farver, der står stærkest med guld – udvalgte fløjlsæsker er sat ned en periode.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kampagnepris lyder mere eksklusivt end udsalg og passer til en premium-vare."
+  },
+  {
+    "subject": "A fifth off pouches. Yes, selected ones.",
+    "preview": "Drawstring styles in the colours that sell, reduced for as long as stock lasts.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den tørre tilføjelse foregriber modtagerens spørgsmål og gør tilbuddet troværdigt."
+  },
+  {
+    "subject": "Byt din gamle cykel til 1.500 kr. 🚲",
+    "preview": "Gælder ved køb af en ny elcykel – den gamle går videre til et værksted, der sætter den i stand.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et fast beløb for noget, modtageren allerede ejer, gør fordelen personlig."
+  },
+  {
+    "subject": "Sidste uge med -20 % på udvalgte gaveæsker ⏰",
+    "preview": "Julefristerne falder tidligere end du tror – så rabatten og fristen peger samme vej.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten får et naturligt slutpunkt, som modtageren allerede har i baghovedet."
+  },
+  {
+    "subject": "Mængderabat: stykprisen falder med antallet",
+    "preview": "Sådan læser du prisskalaen i shoppen – og hvor det kan betale sig at runde op til næste trin.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forklarer en fordel, mange overser, og gør den konkret med et værktøj."
+  },
+  {
+    "subject": "Trade price drops 10% at 200 units",
+    "preview": "Mix any notebooks and pens to reach it – one invoice, one delivery, one lower price on the lot.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tærsklen og rabatten står præcist, så forhandleren kan regne med det samme."
+  },
+  {
+    "subject": "Black Friday hos os er en hel uge. Med vilje.",
+    "preview": "-20 % på udvalgte smykkeæsker og poser, så du kan nå at fylde op, før dine egne kunder kommer.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Ugen gør rabatten mindre hektisk og mere brugbar for en butik, der selv skal sælge."
+  },
+  {
+    "subject": "Vinterjakker: -30 % fra i morgen kl. 8 🧥",
+    "preview": "Webshoppen åbner en time før butikken, og alle størrelser er på lager fra start.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist starttidspunkt giver tilbuddet en lille begivenhed omkring sig."
+  },
+  {
+    "subject": "Tre julelooks, alle med rabat på æskerne 🎀",
+    "preview": "Gaveæske, bærepose og foliefarve sat sammen – og de udvalgte æsker i hvert look er sat 15 % ned.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver en bonus til inspirationen frem for selve budskabet."
+  },
+  {
+    "subject": "Selected boxes, 20% off, this week only",
+    "preview": "The reduced models are listed in the email, each with its smallest order quantity beside it.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabat, sortiment og frist står alle tre i emnelinjen uden et eneste ekstra ord."
+  },
+  {
+    "subject": "Fredagsbrød til halv pris efter kl. 17 🥖",
+    "preview": "Det, der er tilbage på hylden, går til halv pris – kom forbi på vej hjem, eller bestil i appen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et fast tidspunkt og en halv pris gør tilbuddet til en vane frem for en undtagelse."
+  },
+  {
+    "subject": "Det, andre butikker genbestiller, er sat ned",
+    "preview": "Udvalgte bestsellere blandt smykkeæskerne har fået kampagnepris i en periode.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten lægges på det, der allerede er populært, så valget føles sikkert."
+  },
+  {
+    "subject": "Your usual tea, 20% off for members 🍵",
+    "preview": "Taken off at checkout when you log in – and the code's in this email if you'd rather not.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "personlig"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tilbuddet føles personligt, og forhåndsvisningen fjerner den lille barriere med login."
+  },
+  {
+    "subject": "Ny smykkeæske, introduktionspris fra start 🆕",
+    "preview": "Den nye smykkeæske er sat ned i lanceringsperioden, i alle farver og størrelser.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Introduktionsprisen giver en grund til at prøve det nye nu frem for senere."
+  },
+  {
+    "subject": "Klip nr. 5 er på os ✂️",
+    "preview": "Få et stempel ved hvert besøg – kortet ligger i appen, så det ikke ender i vaskemaskinen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Belønningen er konkret og nær, og forhåndsvisningen fjerner besværet med papkort."
+  },
+  {
+    "subject": "Valentine's boxes, gently reduced ❤️",
+    "preview": "Selected red and black jewellery boxes at 15% off – they take your logo in rose gold foil too.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den afdæmpede formulering passer til et premium-produkt uden at skjule rabatten."
+  },
+  {
+    "subject": "Fødselsdagsrabat: -15 % på udvalgte æsker 🎂",
+    "preview": "Westpack blev grundlagt i Holstebro i 1953 – det fejrer vi med dem, der pakker smykker hos os.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En anledning gør rabatten naturlig og giver afsenderen en personlig grund til at give den."
+  },
+  {
+    "subject": "Vinterudstyr -25 % – indtil første frostnat ❄️",
+    "preview": "Saltspredere, skovle og isskrabere – rabatten forsvinder den morgen, termometeret viser minus.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Fristen er knyttet til vejret, hvilket gør den både sjov og logisk."
+  },
+  {
+    "subject": "Prisen er sat ned. Kvaliteten er ikke.",
+    "preview": "Udvalgte gaveæsker i kraft og hvid er -20 % – samme pap, samme låg, samme folie.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Kontrasten foregriber frygten for, at en rabat betyder en ringere vare."
+  },
+  {
+    "subject": "Spin the wheel: 10 to 40% off one item 🎡",
+    "preview": "One spin each, the discount waits in your basket for 48 hours – and every spin wins something.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et rabatspænd gør tilbuddet til et lille spil, hvor alle vinder noget."
+  },
+  {
+    "subject": "Kraftposerne er sat ned. Tre størrelser.",
+    "preview": "Lille, mellem og stor til -20 % – og op til 150 × 150 mm logo på den største.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To korte sætninger giver rabatten og afgrænsningen uden et eneste fyldord."
+  },
+  {
+    "subject": "Udvalgte smykkeæsker: 20 % lavere stykpris 💍",
+    "preview": "Rabatten gælder fra mindste antal og op – og stykprisen falder yderligere, jo flere du tager.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Stykpris er det tal, en B2B-indkøber regner i, så rabatten lander rigtigt."
+  },
+  {
+    "subject": "Display trays, 15% off while they're in stock",
+    "preview": "Ring, earring and necklace trays that match our boxes – an easy way to refresh a counter.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabat og betingelse står ærligt side om side, og forhåndsvisningen giver en grund til at handle."
+  },
+  {
+    "subject": "Første kop i december er på huset ☕",
+    "preview": "Vis mailen ved disken én gang i december – vi skænker, du vælger størrelse.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille, konkret gode gør afsenderen sympatisk og giver en grund til at komme forbi."
+  },
+  {
+    "subject": "-20 % i én uge. Fristerne venter ikke.",
+    "preview": "Udvalgte smykkeæsker og bæreposer – og julens frister for logotryk falder tidligere end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To korte påstande sætter både prisen og tidspresset på plads på én gang."
+  },
+  {
+    "subject": "Standing orders, now 8% cheaper",
+    "preview": "Set your weekly bread order once and the discount applies every week, changes included.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fordelen belønner en vane, som forhandleren alligevel har."
+  },
+  {
+    "subject": "Din stemme sætter prisen ned på én æske 🗳️",
+    "preview": "Den gaveæske, flest stemmer på i finalen, sættes ned i en uge – så alle får glæde af den.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver resultatet af modtagerens egen stemme, hvilket giver en grund til at deltage."
+  },
+  {
+    "subject": "Lænestolen er ny. Prisen bliver ikke lavere.",
+    "preview": "Kalveskind eller uld, tre farver – og 2.000 kr. under den pris, den får fra næste måned.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyhed og fordel kobles, så det kan betale sig at være tidligt ude."
+  },
+  {
+    "subject": "Unboxing med silkepapir og folie – og -15 % 📦",
+    "preview": "Fem idéer til, hvad kunden ser, når låget går op – med de udvalgte æsker bag hver idé sat ned.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten gør idéerne lette at prøve, og antallet gør mailen hurtig at vurdere."
+  },
+  {
+    "subject": "A little off the boxes you reorder most",
+    "preview": "Selected jewellery boxes are 15% off this month, in the sizes that move fastest.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "personlig"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den beskedne formulering gør tilbuddet varmt og relevant uden at overdrive."
+  },
+  {
+    "subject": "Løbeskoene fra sidste sæson. Halv pris. 🏃",
+    "preview": "Samme sål, gammel farve – vi skal bruge pladsen til foråret, så de skal ud nu.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forklaringen på rabatten gør den troværdig og fjerner mistanken om fejl."
+  },
+  {
+    "subject": "Nyt logo? Klichéen er med på første ordre",
+    "preview": "Ingen opstartsomkostninger: standardklichéen til dit logo koster ikke noget første gang.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges som svar på det første spørgsmål, en ny logokunde stiller."
+  },
+  {
+    "subject": "TrustScore 4.6 og nul i opstart",
+    "preview": "Læs, hvad andre skriver om folietrykket, og bestil din første logoordre uden udgift til kliché.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Anmeldelsen giver tryghed og fordelen giver anledningen, så de to løfter hinanden."
+  },
+  {
+    "subject": "Floor models go Saturday at 30% off",
+    "preview": "Two sofas, a dining table and six chairs – first come, collected the same weekend.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret tidspunkt og en konkret liste gør tilbuddet til en begivenhed."
+  },
+  {
+    "subject": "Gaveæsker til jul, 20 % under normalpris 🎁",
+    "preview": "Udvalgte modeller i rød, sort og mørkeblå – vist med guld- og sølvfolie, så du ser dem med logo.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten siges uden omsvøb og knyttes til den sæson, modtageren planlægger efter."
+  },
+  {
+    "subject": "Gæt druen og få 20 % på kassen 🍇",
+    "preview": "Smag flasken i butikken lørdag – rammer du druen, er rabatten din resten af dagen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten er belønningen for en lille leg, hvilket gør den sjovere at hente."
+  },
+  {
+    "subject": "Cheaper gift boxes, earlier deadlines 🎄",
+    "preview": "Selected models are 20% off now – and Christmas deadlines arrive earlier than you'd think.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten kobles til en frist, modtageren alligevel skal forholde sig til."
+  },
+  {
+    "subject": "Nye smykkeposer – og en måned med -10 %",
+    "preview": "Vi vil gerne se dem på diskene, så introduktionsprisen gælder alle farver i lanceringen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen siger ærligt, hvorfor der er rabat, hvilket gør den mere troværdig."
+  },
+  {
+    "subject": "Fri fragt fra 1.500 kr. – også på blandede kasser",
+    "preview": "Kuverter, kort og notesbøger tæller sammen, så du ikke skal fylde op med det, du ikke skal bruge.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Betingelsen siges præcist, og forhåndsvisningen fjerner den typiske begrænsning."
+  },
+  {
+    "subject": "Up to 40% off jewellery boxes, bought in bulk",
+    "preview": "From 9,600 pieces per model – worth a look if the same box sits on your counter all year.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den store rabat står først, og forhåndsvisningen hjælper modtageren med at vurdere, om den passer."
+  },
+  {
+    "subject": "Sort fløjl, lavere pris 🖤",
+    "preview": "Udvalgte smykkeæsker i fløjl er -15 % i en periode – de modeller, der står stærkest i et vindue.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Varen beskrives sanseligt først, og rabatten kommer som en diskret afslutning."
+  },
+  {
+    "subject": "Tulipaner i bundter af 20 – til prisen af 15 🌷",
+    "preview": "Hele februar, i alle de farver, gartneren kan levere – og de holder en uge i en kølig stue.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten siges som et regnestykke med blomster, hvilket gør den håndgribelig."
+  },
+  {
+    "subject": "Åbne priser – og lige nu lavere på udvalgte",
+    "preview": "Før- og efterpris står på hver nedsat smykkeæske i shoppen, så du kan regne selv.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gennemsigtigheden gør rabatten troværdig og passer til en B2B-køber, der vil regne selv."
+  },
+  {
+    "subject": "1 kg bags, now £4 cheaper per kilo",
+    "preview": "For cafés and offices that grind a lot – the same beans as the small bags, roasted on the same days.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten siges i den enhed, modtageren faktisk køber i."
+  },
+  {
+    "subject": "Sorte æsker til -20 %. Uhyggeligt. 🎃",
+    "preview": "Udvalgte sorte smykkeæsker er sat ned til Halloween – i kobberfolie, hvis du vil gå hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet giver et smil, men rabatten står klart i selve emnelinjen."
+  },
+  {
+    "subject": "Forlænget: -15 % på udvalgte poser",
+    "preview": "Kampagnen fik én uge mere – og det bliver ved den ene gang.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forlængelsen giver en ny chance, og forhåndsvisningen gør klart, at den ikke kommer igen."
+  },
+  {
+    "subject": "Three counter looks, built from reduced boxes",
+    "preview": "Black and gold, cream and rose gold, navy and silver – each uses selected boxes at 15% off.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Inspirationen sælger rabatten indirekte ved at vise, hvad den kan bruges til."
+  },
+  {
+    "subject": "Stamkunder får 20 % – og du er en af dem",
+    "preview": "Fem køb i år gør dig til stamkunde; rabatten gælder alt undtagen det nye, der kom ind i går.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "personlig"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten gøres personlig og fortjent, hvilket gør den mere værd end et generelt udsalg."
+  },
+  {
+    "subject": "Fra lille til XXL: bæreposer til -15 %",
+    "preview": "Udvalgte luksusposer med vævet hank i alle fire størrelser – fra ringæsken til den store gaveæske.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spændet i størrelser viser, hvor bredt rabatten kan bruges, uden at love rabat på alt."
+  },
+  {
+    "subject": "Beat our quiz, take 15% off your order",
+    "preview": "Five questions about paper weights – get four right and the code unlocks in your basket.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver en præmie, hvilket gør den mere tilfredsstillende at bruge."
+  },
+  {
+    "subject": "Annoncer fra din profil – betalt af os",
+    "preview": "Partnerprogrammet: din butik viser vores emballage i brug, og vi finansierer Meta-annoncerne.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges kontant og først, og forhåndsvisningen forklarer byttehandlen."
+  },
+  {
+    "subject": "Nedsat: 12 smykkeæsker, 4 farver, 1 uge",
+    "preview": "Hver af dem står med før- og efterpris i mailen, så du kan se besparelsen pr. stk. med det samme.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre tal rammer hele tilbuddet ind, så modtageren kan vurdere det på et sekund."
+  },
+  {
+    "subject": "Alt med rød prismærkat: halv pris 🔴",
+    "preview": "Der kom lidt for mange vaffeljern hjem i indkøbet – og så er der også gryder og knivsæt imellem.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En ærlig og lidt selvironisk forklaring gør udsalget sympatisk."
+  },
+  {
+    "subject": "The Christmas edit, now 20% lighter 🎁",
+    "preview": "Selected gift boxes and carrier bags are reduced – and the deadlines land earlier than you'd think.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den bløde ordleg bærer julestemningen, mens forhåndsvisningen afgrænser tilbuddet."
+  },
+  {
+    "subject": "Fri fragt, når ordren runder grænsen",
+    "preview": "Beløbsgrænsen afhænger af dit land og står på fragtsiden – sammen med alt det andet om forsendelse.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges kort, og forhåndsvisningen svarer på det spørgsmål, den rejser."
+  },
+  {
+    "subject": "Restaurantpris på husets vin fra 60 flasker",
+    "preview": "Under det er det almindelig engrospris – over det falder prisen pr. flaske med 12 % på hele ordren.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tærsklen og rabatten står præcist, så indkøberen kan regne efter med det samme."
+  },
+  {
+    "subject": "Ringæsker: 20 % mindre pr. stk. 💍",
+    "preview": "Udvalgte modeller i læderlook og fløjl – samme indsats, samme lukning, bare lavere pris en periode.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kategori og rabat står alene i emnelinjen, hvilket passer til en indkøber, der ved, hvad de mangler."
+  },
+  {
+    "subject": "The January sale, opened a week early for you",
+    "preview": "Up to 40% off floor models and last season's fabrics – the rest of the list goes public next Monday.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhåndsadgang gør rabatten mere værd end selve procenten."
+  },
+  {
+    "subject": "Det betroede valg, nu med -15 % ⭐",
+    "preview": "Betroet af 30.000+ brands – og lige nu er udvalgte smykkeæsker sat ned. Listen står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tryghed og fordel står i hver sin sætning, så ingen af dem drukner."
+  },
+  {
+    "subject": "6 boller, betal for 5",
+    "preview": "Fastelavnsboller hele weekenden, også med vaniljecreme – bestil til kontoret senest fredag.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det klassiske regnestykke er nemt at huske og passer til en hel kontorbestilling."
+  },
+  {
+    "subject": "Gift boxes, marked down, listed by size",
+    "preview": "Small to large, each with its price per piece before and after – 20% off on selected models.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten præsenteres som en overskuelig liste, hvilket passer til en køber, der vil sammenligne."
+  },
+  {
+    "subject": "I morgen koster æskerne det samme som før ⏳",
+    "preview": "I dag er udvalgte modeller stadig -20 % – her er de, sorteret efter størrelse.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Klar frist og klar rabat, sagt uden alarmerende udråbstegn."
+  },
+  {
+    "subject": "Del dit strikkeprojekt, få 15 % på næste garn 🧶",
+    "preview": "Tag os på billedet, så sender vi koden i en besked – også selvom halsedissen ikke blev helt lige.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten er en tak for at deltage, og forhåndsvisningen sænker barren med et smil."
+  },
+  {
+    "subject": "New pouches, launch price for a month",
+    "preview": "Drawstring jewellery pouches in four new shades, 10% off until the end of next month.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden og fordelen hænger sammen, så det kan betale sig at prøve den først."
+  },
+  {
+    "subject": "Æske og pose, der matcher – nu begge nedsat",
+    "preview": "Vi har parret udvalgte gaveæsker med bæreposer i samme farve og sat begge 15 % ned.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver en del af en idé, så den føles som hjælp og ikke kun som et salg."
+  },
+  {
+    "subject": "Vinterservice: 399 kr. i stedet for 599 🚲",
+    "preview": "Bremser, gear, lys og kæde – og vi ringer, hvis vi finder noget, der koster ekstra.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Før- og efterpris i samme linje gør besparelsen umulig at overse."
+  },
+  {
+    "subject": "Displays til forhandlere: -10 % på udvalgte",
+    "preview": "Bakker, buster og ringstativer, der matcher æskerne – så hele disken kan skiftes samlet.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Målgruppen og rabatten står først, så den rette modtager straks ved, at mailen er til dem."
+  },
+  {
+    "subject": "Advent tea: 24 days for the price of 20 🎄",
+    "preview": "One loose-leaf sachet a day – buy two calendars and the second comes in a gift box.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten siges i kalenderens egen logik, så regnestykket er let."
+  },
+  {
+    "subject": "-25 % på æsker med én fejl: farven",
+    "preview": "Udvalgte smykkeæsker i farver, vi ikke producerer igen – samme kvalitet, så længe lageret rækker.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Selvironien forklarer rabatten og fjerner frygten for, at der er noget galt med varen."
+  },
+  {
+    "subject": "Din disk på vores Instagram = -10 % til dig 📸",
+    "preview": "Send et billede af dine æsker i brug – bliver det valgt, får du en kode til udvalgte modeller.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten bytter mod noget, modtageren alligevel gerne viser frem."
+  },
+  {
+    "subject": "Final week for 15% off selected bags",
+    "preview": "Luxury bags with woven handles in all four sizes – the price resets once the week is out.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En enkel frist og et konkret sortiment gør beslutningen let."
+  },
+  {
+    "subject": "Printerpapir: 18 % lavere ved 20 kasser",
+    "preview": "Prisen låses i 12 måneder, så budgettet holder hele året, uanset hvad papirprisen gør.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En præcis rabat ved en præcis mængde passer til en indkøber, der skal planlægge."
+  },
+  {
+    "subject": "Mors dag: udvalgte gaveæsker -15 % 🌸",
+    "preview": "Lyse farver, rosaguldfolie og plads til et smykkesæt – tre looks, der er klar til vinduet.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Anledning og rabat står samlet, så tilbuddet passer ind i en kalender, modtageren kender."
+  },
+  {
+    "subject": "Reviewers' favourite boxes, now reduced",
+    "preview": "The models mentioned most in our Trustpilot reviews – TrustScore 4.6 – are 15% off for a while.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten lægges på varer, andre allerede har rost, hvilket gør valget let."
+  },
+  {
+    "subject": "-30 % på skiudstyr, til lageret er tomt ⛷️",
+    "preview": "Vi tager ikke flere ind i år, så størrelserne forsvinder én ad gangen – de små går først.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er lageret selv, og forhåndsvisningen gør knapheden konkret."
+  },
+  {
+    "subject": "Gaveæsker i kraft, 15 % lettere at sige ja til",
+    "preview": "Kraftæskerne tager dit logo i sort, hvid eller guld – udvalgte modeller er sat ned.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Rabatten siges som en lettelse frem for et tal, hvilket giver tilbuddet en varmere tone."
+  },
+  {
+    "subject": "The shop grinder, at cost, if you stock us",
+    "preview": "Commit to 10 kg a month for a year and the shop grinder is yours at our price, not retail.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fordelen siges som en klar byttehandel, forhandleren kan regne på."
+  },
+  {
+    "subject": "Mængderabat er ikke en hemmelighed",
+    "preview": "Trinene står åbent på hver smykkeæske i shoppen – her er tre af dem regnet ud for dig.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tonen gør en kendt fordel til en invitation frem for en salgstale."
+  },
+  {
+    "subject": "Indret stuen for 10.000 kr. – med rabatten 🛋️",
+    "preview": "Sofa, lampe, tæppe og sofabord fra udsalget, sat sammen af os, så du kan købe det hele på én gang.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et fast budget og en færdig løsning gør rabatten til noget, modtageren kan se for sig derhjemme."
+  },
+  {
+    "subject": "We overdid it: 25% off",
+    "preview": "Selected gift boxes from an over-generous production run – same quality, cleared while stock lasts.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En ærlig grund til rabatten gør den troværdig og lidt sympatisk."
+  },
+  {
+    "subject": "Til dine dyreste smykker – nu til lavere pris",
+    "preview": "Udvalgte smykkeæsker med fløjlsindsats og tungt låg er -20 % i en periode.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Varen knyttes til modtagerens bedste smykker, så rabatten føles som en opgradering."
+  },
+  {
+    "subject": "Shampoo i literflaske – literprisen halveret",
+    "preview": "Til saloner, der vasker meget hår: samme formel som de små flasker, med pumpe til vasken.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten siges i literpris, som er det tal, en salon regner i."
+  },
+  {
+    "subject": "Black Friday: -20 % på udvalgte bæreposer 🛍️",
+    "preview": "Fyld op før din egen travle weekend – i fire størrelser og de farver, der står stærkest med folie.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Anledningen og rabatten står i samme korte linje, så tilbuddet kan læses på et sekund."
+  },
+  {
+    "subject": "Ny bønne. Første pose koster 49 kr.",
+    "preview": "En kenyansk med solbær og rabarber – smag den, før den kommer på kortet til fuld pris.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lav, konkret pris gør det nemt at prøve noget nyt uden risiko."
+  },
+  {
+    "subject": "Tre smykkeposer, tre farver, -15 %",
+    "preview": "Udvalgte smykkeposer med snøre er sat ned i en periode – farverne står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallene giver tilbuddet en rytme, der gør det let at læse."
+  },
+  {
+    "subject": "Any lamp, 25% off, with any sofa",
+    "preview": "Pick the sofa first; the discount appears on the lamp in your basket, no code needed.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Koblingen mellem to køb er sagt så enkelt, at regnestykket er klart med det samme."
+  },
+  {
+    "subject": "Nyt look på disken – til nedsat pris",
+    "preview": "Bakker, æsker og poser i samme farve, hvor de udvalgte er -15 % – så skiftet ikke koster det hele.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten gør en idé, modtageren har gået og overvejet, billigere at føre ud i livet."
+  },
+  {
+    "subject": "Kalenderen fylder. Gaveæskerne er -20 %.",
+    "preview": "Rabatten gælder udvalgte modeller, mens kampagnen kører – og december fylder hurtigt op.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten og den travle kalender sættes side om side, så det giver mening at handle nu."
+  },
+  {
+    "subject": "Blomsterabonnement: første måned halv pris 💐",
+    "preview": "En ny buket hver uge til receptionen; vi henter den gamle og sender én samlet regning.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lav indgangspris fjerner risikoen ved at prøve en fast ordning."
+  },
+  {
+    "subject": "Order big, pay only as you use it",
+    "preview": "Your logo boxes stay in our warehouse and you're invoiced as you draw them down.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges som en enkel regel, der løser et likviditetsproblem."
+  },
+  {
+    "subject": "Champagnen er -20 % til nytår. Ikke længere. 🥂",
+    "preview": "Seks huse, fra det tørre til det bløde – og de sidste kasser bliver ikke billigere, end de er nu.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er en dato, alle kender, og den korte afslutning gør den endelig."
+  },
+  {
+    "subject": "Mørke æsker, lysere priser",
+    "preview": "Udvalgte smykkeæsker i sort, mørkeblå og bordeaux er -15 % – farver, hvor guldfolien lyser op.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet mellem mørkt og lyst fanger øjet, og rabatten står klart i forhåndsvisningen."
+  },
+  {
+    "subject": "Penalhus, kalender, kuglepenne: 50 kr. af ✏️",
+    "preview": "Pakket sammen i én æske, klar til at give – og farverne kan skiftes online.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre konkrete varer og et fast beløb gør tilbuddet hurtigt at forstå."
+  },
+  {
+    "subject": "Svar på én ting, få -10 % på næste ordre",
+    "preview": "Hvilken farve mangler i vores smykkeæsker? Alle svar får en kode til udvalgte modeller.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indsatsen er lille og belønningen konkret, så det føles som en fair byttehandel."
+  },
+  {
+    "subject": "Midnatsudsalg: -40 % fra 22 til 24 🌙",
+    "preview": "To timer, lys i butikken, kaffe ved kassen – og webshoppen følger med, så du kan handle fra sofaen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et snævert tidsvindue gør rabatten til en begivenhed."
+  },
+  {
+    "subject": "Halskædeæsker: den lange model, nu -15 %",
+    "preview": "Plads til en kæde lagt ud i fuld længde, og et låg med plads til dit logo i folie.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten knyttes til én bestemt model, så modtageren ved præcis, hvad der er billigere."
+  },
+  {
+    "subject": "Black boxes for Halloween, a fright cheaper 🎃",
+    "preview": "Selected black jewellery boxes at 15% off, shown with copper and silver foil.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Anledning, farve og rabat står i samme linje, så tilbuddet er klart på et øjeblik."
+  },
+  {
+    "subject": "Kontorstole: -20 % ved 10 stk. eller flere",
+    "preview": "Samme stol, samme garanti – og vi samler dem på stedet, så I kan sidde på dem samme eftermiddag.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten og mængden står præcist, og forhåndsvisningen fjerner arbejdet."
+  },
+  {
+    "subject": "Vi ændrer sortimentet. Du får rabatten.",
+    "preview": "Udvalgte smykkeæsker udgår snart – indtil da er de -25 % i de størrelser, der er tilbage.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forklaringen gør rabatten logisk, og den korte form gør den let at læse."
+  },
+  {
+    "subject": "Medlemmer sparede i snit 280 kr. sidste vinter",
+    "preview": "Medlemskabet koster ikke noget, og medlemsprisen står på hver jakke, støvle og telt ved kassen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et gennemsnitligt beløb fra andre gør fordelen troværdig og konkret."
+  },
+  {
+    "subject": "Til dig, der har bestilt før: -15 % 💌",
+    "preview": "En tak til eksisterende kunder – gælder udvalgte smykkeæsker, og koden står nederst i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "eksklusivitet"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten rettes mod en gruppe, modtageren tilhører, hvilket gør den mere personlig."
+  },
+  {
+    "subject": "Julesylten er klar. Bestil nu og spar 10 %.",
+    "preview": "Forudbestillinger før første søndag i advent får rabatten – og vi pakker den, så den kan fryses.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten belønner at bestille tidligt, hvilket også hjælper afsenderen med at planlægge."
+  },
+  {
+    "subject": "Mandag er prisen tilbage. Indtil da: -20 %",
+    "preview": "Gælder udvalgte bæreposer med vævet hank, i alle fire størrelser og ni farver.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen står først og rabatten sidst, så modtageren læser dem i den rækkefølge, de betyder noget."
+  },
+  {
+    "subject": "Ring boxes in velvet, priced down for now",
+    "preview": "Deep blue, black and burgundy, each with room for your logo in gold or silver foil on the lid.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kategori, materiale og rabat står i én linje, så modtageren straks ved, om det er relevant."
+  },
+  {
+    "subject": "Vinterdæk på – og 200 kr. af regningen ❄️",
+    "preview": "Book et skift inden frosten, så slipper du for køen den morgen, hvor alle opdager, at det er glat.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten kobles til et øjeblik, alle kender, og gør det klogt at handle tidligt."
+  },
+  {
+    "subject": "Fem procent mærker ingen. Det her er tyve. 😉",
+    "preview": "Udvalgte smykkeæsker og poser er -20 % – nok til at kunne mærkes på en logoordre.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Kontrasten til en lille rabat får den rigtige til at føles større."
+  },
+  {
+    "subject": "Rabatkoden gemmer sig i mailen 🔎",
+    "preview": "Find den i et af produktbillederne og få 25 % på kalendere og planlæggere til næste år.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver en lille skattejagt, der får modtageren til at kigge mailen grundigt igennem."
+  },
+  {
+    "subject": "Juleposer i mørke farver, til nedsat pris",
+    "preview": "Sort, mørkeblå og terracotta: udvalgte luksusposer med vævet hank er -15 % lige nu.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Farverne sætter stemningen, og forhåndsvisningen giver tallet."
+  },
+  {
+    "subject": "Anbefal en café – I får begge en pose kaffe",
+    "preview": "Din kode står nederst; når de afgiver første ordre, får I hver et kilo af jeres yndlingsbønne.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En symmetrisk fordel gør det let at dele tilbuddet uden at føle sig som sælger."
+  },
+  {
+    "subject": "Første ordre som forhandler? Ingen opstart.",
+    "preview": "Standardklichéen følger med på første ordre – klichéer til plastposer er dog undtaget.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen siges ærligt med sin undtagelse, hvilket gør den troværdig."
+  },
+  {
+    "subject": "Bogudsalget slutter, når kasserne er tomme 📚",
+    "preview": "Kogebøger, krimier og børnebøger til -25 % – vi pakker ikke flere ud, så hylden bliver kun tyndere.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er synlig på hylden, hvilket gør knapheden ægte og ikke konstrueret."
+  },
+  {
+    "subject": "Psst: bags, 20% off",
+    "preview": "Selected luxury bags with woven handles, in the sizes that take a gift box without a fight.",
+    "language": "en",
+    "mechanisms": [
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det hviskende anslag gør rabatten til en lille fortrolighed frem for et råb."
+  },
+  {
+    "subject": "Øreringsbakken er ny. Prisen er lavere i en måned.",
+    "preview": "Plads til en hel kollektion på én bakke, i farver der matcher dine smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden og fordelen står i hver sin sætning, så begge bliver læst."
+  },
+  {
+    "subject": "Ny kniv, lanceringspris: 499 kr.",
+    "preview": "Japansk stål, 21 cm, slebet i butikken – fra næste måned koster den 699 kr.",
+    "language": "da",
+    "mechanisms": [
+      "tilbud",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Før- og efterprisen gør fordelen ved at være tidligt ude helt konkret."
+  }
+]

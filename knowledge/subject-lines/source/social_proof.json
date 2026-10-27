@@ -1,0 +1,1733 @@
+[
+  {
+    "subject": "Den æske, guldsmedene bliver ved med at bestille",
+    "preview": "Ingen kampagne har skubbet til den. Den bliver bare genbestilt – se hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Genbestillinger er adfærd, ikke reklame, og vejer derfor tungere end vores egen ros."
+  },
+  {
+    "subject": "Hvad lægger de andre i kurven før jul? 🎄",
+    "preview": "Vi har gennemgået efterårets ordrer og fundet de fem æsker og poser, der går igen.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Man svarer på spørgsmålet om kollegernes valg i hovedet, og kun mailen har facit."
+  },
+  {
+    "subject": "Bestsellerlisten. Uden pynt.",
+    "preview": "Sorteret efter antal ordrer – ikke efter, hvad vi selv synes er pænest.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Løftet om rå ordredata frem for egne favoritter giver listen troværdighed."
+  },
+  {
+    "subject": "30.000+ brands. Én ting til fælles.",
+    "preview": "De vil have deres eget navn på emballagen. Se de smykkeæsker, de oftest starter med.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det store, sande tal skaber tillid, og 'én ting til fælles' åbner et hul, som mailen lukker."
+  },
+  {
+    "subject": "Lageret har talt 📦",
+    "preview": "Når de samme hylder bliver tømt igen og igen, er det ikke et tilfælde. Mød efterårets bestsellere.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lageret som vidne gør bestsellerlisten håndgribelig og giver et lille smil."
+  },
+  {
+    "subject": "Genbestilt. Genbestilt. Genbestilt.",
+    "preview": "Tre smykkeæsker, butikkerne kommer tilbage efter – og det, de har til fælles.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gentagelsen viser adfærden i stedet for at beskrive den."
+  },
+  {
+    "subject": "Den stille bestseller",
+    "preview": "Den kommer aldrig på forsiden, men den dukker op i ordre efter ordre. Nu står den forrest.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En overset favorit vækker nysgerrighed, fordi modtageren ikke kender den i forvejen."
+  },
+  {
+    "subject": "TrustScore 4.6 – vi viser også kritikken",
+    "preview": "Anmeldelserne, der fortæller mest om os, også dem, hvor nogen havde et forbehold.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Åbenhed om forbehold gør den samlede dom mere troværdig."
+  },
+  {
+    "subject": "Hvad 30.000+ brands har lært os om logoer",
+    "preview": "Små, store, i guld eller sølv: mønstrene er tydelige. Her er de fem, der går igen.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Erfaring fra mange kunder bliver til råd, modtageren kan bruge i sin egen butik."
+  },
+  {
+    "subject": "Guld, sølv eller kobber? Det vælger butikkerne",
+    "preview": "Vi trykker i omkring 25 foliefarver. Se, hvilke der oftest ender på kundernes æsker.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et valg, modtageren selv står over for, besvaret med det, andre faktisk har valgt."
+  },
+  {
+    "subject": "Bæreposen, der går ud ad døren i flest butikker 🛍️",
+    "preview": "Den med vævet hank er den, kunderne bestiller igen og igen. Se den i alle ni farver.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Billedet af posen på vej ud af butikken gør populariteten synlig."
+  },
+  {
+    "subject": "Sådan pakker andre smykkebutikker julen ind 🎁",
+    "preview": "Fem butikker, fem bud på, hvordan gaveæsken bliver en del af selve gaven.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kollegernes løsninger er inspiration med indbygget tryghed: det er allerede prøvet."
+  },
+  {
+    "subject": "Kig med over skulderen 👀",
+    "preview": "Ingen navne, kun mønstre: det her bestiller smykkebutikker op til højsæsonen.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lov til at kigge med hos andre butikker er en nysgerrighed, få indkøbere kan modstå."
+  },
+  {
+    "subject": "Sådan kom andre butikker i gang med logo",
+    "preview": "Ingen opstartsomkostninger på din første ordre, og du kan bestille helt ned til 48 stk.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres vej ind gør første skridt mindre, og de konkrete vilkår fjerner tvivlen."
+  },
+  {
+    "subject": "Fra Holstebro til 30.000+ brands",
+    "preview": "Det begyndte i 1953 under navnet Westpap. Resten af historien fortæller kunderne bedst selv.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det sande tal giver tyngde, og oprindelseshistorien gør det menneskeligt."
+  },
+  {
+    "subject": "Forhandlerne har bygget hylden for dig",
+    "preview": "Ud fra deres ordrer har vi sat et startsortiment sammen. Brug det, som det er, eller som skabelon.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andre forhandleres erfaring bliver til en færdig beslutning, modtageren kan tage med det samme."
+  },
+  {
+    "subject": "Bestsellerne – nu med rabat",
+    "preview": "Det er de æsker, kunderne alligevel bestiller mest. Denne gang koster de bare mindre.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabat på det, andre allerede har valgt, fjerner risikoen ved at prøve."
+  },
+  {
+    "subject": "De andre er allerede i gang med julen ⏳",
+    "preview": "Fristerne for logotryk falder tidligere, end du tror. Se dem, der gælder for dit land.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Når kollegerne er i gang, føles fristen mere virkelig end en dato alene."
+  },
+  {
+    "subject": "Afstemningen er slut. Vinderen overraskede os 🏆",
+    "preview": "Kunderne har valgt årets gaveæske, og det blev ikke den, vi havde sat pengene på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et resultat afgjort af kunderne, med en overraskelse man vil se med egne øjne."
+  },
+  {
+    "subject": "Ny farve – fordi I blev ved med at spørge 🎨",
+    "preview": "Den er blevet efterspurgt igen og igen i kundeservice. Nu findes den i hele serien.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er kundernes idé, og det gør den mere relevant end en, vi selv har fundet på."
+  },
+  {
+    "subject": "Den nye, der allerede er genbestilt",
+    "preview": "Den har kun ligget i webshoppen kort tid, og de første butikker er allerede tilbage efter flere.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Hurtige genbestillinger beviser, at nyheden fungerer i butikken og ikke kun på billeder."
+  },
+  {
+    "subject": "Hvad skete der, da en guldsmed skiftede æske?",
+    "preview": "Samme smykker, samme butik, ny emballage. Vi har spurgt, hvad kunderne lagde mærke til.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kollegas før og efter, som man gerne vil kende udfaldet af."
+  },
+  {
+    "subject": "En butik i Odense pakker hver ring som en gave",
+    "preview": "Også når kunden har købt den til sig selv. Se, hvorfor de holder fast i det.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En konkret kollega med en tydelig vane gør idéen til noget, man kan kopiere."
+  },
+  {
+    "subject": "Sådan ser en forhandlers bedste hylde ud",
+    "preview": "Tre forhandlere har vist os, hvordan de stiller æskerne op – med placering, skilte og priser.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andre forhandleres opstilling er et bevis, man kan kopiere direkte på egen hylde."
+  },
+  {
+    "subject": "Hvorfor sort altid vinder (næsten)",
+    "preview": "Den sorte smykkeæske ligger stadig øverst. Men to farver er kommet tættere på i år.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Parentesen antyder en udfordrer, og det gør en kendt bestseller til en nyhed."
+  },
+  {
+    "subject": "Vi skriver ikke selv vores anmeldelser 😉",
+    "preview": "Det gør kunderne. TrustScore 4.6 på Trustpilot – læs, hvad der får dem til at skrive.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Benægtelsen giver et smil og flytter æren over på kunderne, hvor den tæller."
+  },
+  {
+    "subject": "Top 10: efterårets mest bestilte gaveæsker",
+    "preview": "Listen er sorteret efter ordrer, og nummer ét er ikke den, de fleste gætter på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En rangeret liste er hurtig at skimme og lover et overraskende svar øverst."
+  },
+  {
+    "subject": "Smykkepose eller æske? Sådan svarer butikkerne",
+    "preview": "Vi har set på, hvad smykkebutikker vælger til de små køb – og hvornår de skifter til æsken.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et dilemma, modtageren kender, løst med det, andre butikker faktisk gør."
+  },
+  {
+    "subject": "Displayet, du har set i andre butikkers vindue",
+    "preview": "Det er ikke tilfældigt, at du kender det. Her er serien, butikkerne bygger vinduet op om.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Genkendelse fra andres vinduer er social proof, modtageren allerede selv har oplevet."
+  },
+  {
+    "subject": "Tre smykkebrands, tre måder at bruge logoet på",
+    "preview": "Diskret i folie, stort på låget eller kun på posen. Se, hvordan de har gjort.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre konkrete eksempler viser bredden og gør det let at finde sit eget."
+  },
+  {
+    "subject": "Du er ikke den første, der spørger om det her",
+    "preview": "Hvor lille må logoet være? Kan det trykkes i to farver? Svarene på det, alle spørger om.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At andre har samme spørgsmål, gør det trygt at stille det og nysgerrigt at læse svaret."
+  },
+  {
+    "subject": "200.000 æsker og poser. Hver dag.",
+    "preview": "Så mange håndterer vi på en almindelig dag. Her er de modeller, der oftest ligger i kasserne.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort, sandt tal viser omfanget, og listen viser, hvad der driver det."
+  },
+  {
+    "subject": "Åbner du butik? Se, hvad andre startede med",
+    "preview": "Fra første smykkeæske til første bærepose: den indkøbsliste, nye butikker typisk lander på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres første indkøb fjerner gætteriet for den, der skal i gang."
+  },
+  {
+    "subject": "Den er hjemme igen 🙌",
+    "preview": "Smykkeæsken var udsolgt længere, end vi brød os om. Nu står hylderne fulde i alle farver.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En udsolgt vare, der vender tilbage, bærer sit eget bevis på popularitet."
+  },
+  {
+    "subject": "Sidste års julefavorit er tilbage 🎄",
+    "preview": "Butikkerne genbestilte den helt ind i december. Nu er den på lager igen i samme farver.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sidste års adfærd er det bedste gæt på i år, og genkendelsen gør beslutningen let."
+  },
+  {
+    "subject": "Hvad guldsmede bestiller i oktober",
+    "preview": "Det er måneden, hvor gaveæskerne tager over. Her er de fem, der går igen i ordrerne.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Måneden gør det aktuelt nu, og kollegernes ordrer gør det relevant."
+  },
+  {
+    "subject": "Smykkeæsker med logo – sådan ser de ud hos andre",
+    "preview": "Fra et diskret monogram til hele navnet i guldfolie. Et galleri med kundernes egne æsker.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rigtige kundeeksempler gør det let at forestille sig sit eget logo på æsken."
+  },
+  {
+    "subject": "Vinderne er trukket – se, hvad de valgte 🎉",
+    "preview": "Tre butikker har vundet gavekort. Her er de æsker og poser, de har brugt dem på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Vindernes valg afslutter konkurrencen og er samtidig en anbefaling fra kolleger."
+  },
+  {
+    "subject": "Nye forhandlere spørger altid om det samme",
+    "preview": "Hvordan præsenterer man det? Hvad skal man tage ind først? Svarene fra dem, der har prøvet.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Erfarne forhandleres svar tager usikkerheden ud af at starte."
+  },
+  {
+    "subject": "Rabatten rammer kundernes favoritter",
+    "preview": "Vi har ikke valgt de tunge lagervarer. Vi har valgt dem, I bestiller mest.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten bliver troværdig, fordi den ligger på det, andre vælger, og ikke på restlager."
+  },
+  {
+    "subject": "Bulkpris på kundernes faste favoritter",
+    "preview": "Populære smykkeæsker fra 9.600 stk. – op til 40 % billigere, når du køber i bulk.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Populariteten gør storkøbet trygt, og de konkrete vilkår gør det let at regne på."
+  },
+  {
+    "subject": "Mange har allerede sendt logoet af sted",
+    "preview": "Julens logo-ordrer er godt i gang. Se fristerne for dit land, før de kommer tæt på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At andre er i gang, gør fristen nærværende uden at nævne en dato."
+  },
+  {
+    "subject": "Grafikernes yndlingslogoer fra i år ✨",
+    "preview": "Vores grafikere tjekker hvert logo før tryk. Her er dem, der fik dem til at stoppe op.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kundernes logoer, set gennem grafikernes øjne, er både bevis og inspiration."
+  },
+  {
+    "subject": "Kunderne har stemt med indkøbskurven 🛒",
+    "preview": "Ingen jury og ingen trendrapport: de æsker og poser, der er bestilt mest til julen indtil nu.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Billedet af ordrer som stemmer gør bestsellerlisten demokratisk og troværdig."
+  },
+  {
+    "subject": "Tænkt til smykker. Brugt til alt muligt",
+    "preview": "Fra små gaver til vareprøver og gavekort: sådan bruger andre butikker gaveæsken.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem formål og brug viser kreativitet hos kolleger, man kan låne fra."
+  },
+  {
+    "subject": "Gæt efterårets mest bestilte æske 🤔",
+    "preview": "Et hint: den er hverken sort eller hvid. Svaret og resten af top 5 venter herinde.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En gætteleg engagerer, før man har åbnet, og svaret findes kun i mailen."
+  },
+  {
+    "subject": "Kun plads til én ny æske på hylden?",
+    "preview": "Så tag den, andre smykkebutikker har genbestilt hele året. Her er den, og hvad den kan.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et valg under begrænsning bliver let, når andre allerede har truffet det."
+  },
+  {
+    "subject": "Året i æsker: det bestilte I mest 📦",
+    "preview": "Smykkeæsker, gaveæsker og bæreposer – årets mest bestilte i hver kategori, samlet ét sted.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et årstilbageblik på kundernes egne valg føles både personligt og nyttigt."
+  },
+  {
+    "subject": "Sådan fik en lille webshop sin egen unboxing",
+    "preview": "Ét logo i én foliefarve og en bærepose i samme tone. Se det færdige resultat.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille kollegas resultat viser, at det kan lade sig gøre i alle størrelser."
+  },
+  {
+    "subject": "Fra køkkenbordet til egen butik – i samme æske",
+    "preview": "En smykkedesigner fortæller, hvordan emballagen har fulgt med hele vejen fra første salg.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En vækstrejse, modtageren kan spejle sig i, med emballagen som rød tråd."
+  },
+  {
+    "subject": "Kundernes egne billeder, uden filter 📸",
+    "preview": "Sådan ser æskerne ud, når de står i butikkerne og ikke i vores studie.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kundernes egne billeder er mere troværdige end produktfotos, fordi de ikke er iscenesat."
+  },
+  {
+    "subject": "Det tester andre butikker, før de bestiller",
+    "preview": "Du kan bestille op til fem prøver online – med eller uden dit logo. Se, hvad andre starter med.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres fremgangsmåde gør prøven til et naturligt første skridt."
+  },
+  {
+    "subject": "Sådan holder større kunder lageret nede",
+    "preview": "Vi kan opbevare din ordre, og du betaler, efterhånden som du trækker på den. Se hvordan.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En løsning, større kolleger bruger, bliver relevant, fordi den løser et kendt problem."
+  },
+  {
+    "subject": "Black Friday: det bestiller butikkerne ind",
+    "preview": "Gaveæsker og poser i store mængder – her er de modeller, der går igen op til den travle weekend.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonens pres og kollegernes valg gør listen til en genvej."
+  },
+  {
+    "subject": "7 ting, vi har lært af kundernes unboxings ✨",
+    "preview": "Fra silkepapir til håndskrevne kort: det, der går igen, når butikkerne virkelig lykkes.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet gør læringen overskuelig, og kilden er andre butikkers praksis."
+  },
+  {
+    "subject": "I har stemt. Vi har bestilt mere hjem 🗳️",
+    "preview": "Gaveæsken, der vandt afstemningen, er nu på lager i alle farver. Jeres valg, vores lager.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kundernes stemmer bliver til handling, og det belønner dem, der deltog."
+  },
+  {
+    "subject": "Reviewed by the people who unpack them",
+    "preview": "TrustScore 4.6 on Trustpilot, written by the shops that open our boxes and put them to work.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Anmelderne er netop dem, der bruger varen, og det gør dommen relevant for modtageren."
+  },
+  {
+    "subject": "Christmas, as ordered by shops like yours 🎄",
+    "preview": "Ten boxes and bags jewellers are ordering for the season, ranked by how often they're picked.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "'Shops like yours' gør listen personlig, og rangeringen gør den hurtig at bruge."
+  },
+  {
+    "subject": "What shops in other countries pick",
+    "preview": "Same range, different countries, surprisingly different favourites. See what sells where.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forskellen mellem markeder vækker nysgerrighed og giver nye idéer til egen hylde."
+  },
+  {
+    "subject": "Logo too detailed? You're in good company",
+    "preview": "Our designers check every logo and redraw it if it wouldn't print well. Here's how that works.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At mange har samme bekymring, gør den tryg at have, og løsningen er konkret."
+  },
+  {
+    "subject": "Nine colours, and shops keep picking two 🛍️",
+    "preview": "Our luxury carrier bag comes in nine colours. See the pair that ends up in most orders.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et sandt antal muligheder og et klart flertal gør valget let for modtageren."
+  },
+  {
+    "subject": "Small first orders are our normal",
+    "preview": "Plenty of brands begin with a few dozen boxes. Here's what that first order usually looks like.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At små starter er normen, fjerner frygten for at være for lille en kunde."
+  },
+  {
+    "subject": "Your customers have probably opened one already 👀",
+    "preview": "With 30,000+ brands packing in our boxes, chances are high. Here's the one they'll recognise.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tanken om, at ens egne kunder allerede kender æsken, gør det store tal personligt."
+  },
+  {
+    "subject": "What a returning customer orders second",
+    "preview": "The first order is a test. The second shows what worked. Here's what shops come back for.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andenordren er det ærligste bevis på, hvad der virker, og det vil man kende."
+  },
+  {
+    "subject": "What jewellers stock up on before Valentine's 💍",
+    "preview": "Ring boxes, small gift bags and the colours shops reach for when February gets busy.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonen er nær, og kollegernes indkøb gør det til en konkret tjekliste."
+  },
+  {
+    "subject": "Why a Leeds jeweller switched to a pouch",
+    "preview": "Small pieces, small margins, big first impressions. Her reasoning is simpler than you'd think.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En genkendelig kollega med en konkret beslutning gør casen let at spejle sig i."
+  },
+  {
+    "subject": "See what everyone else voted for 🗳️",
+    "preview": "The gift box vote closes on Sunday. Here's how the shortlist stands so far.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Stillingen viser, hvad andre mener, og fristen giver en grund til at stemme nu."
+  },
+  {
+    "subject": "Brands that grew with us",
+    "preview": "Some started with one logo order. Meet three who now run their packaging like a collection.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres vækst viser, hvor modtageren selv kan ende, og gør starten mindre."
+  },
+  {
+    "subject": "What our retail partners can't keep on the shelf",
+    "preview": "The products that turn fastest for partners this autumn, ready for your next order.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Hurtig omsætning hos andre forhandlere er det mest relevante bevis for en forhandler."
+  },
+  {
+    "subject": "Meet the bestseller's little sister",
+    "preview": "Same finish as the jewellery box shops reorder most, now in a smaller size for earrings.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Nyheden låner troværdighed fra en kendt bestseller gennem familiebilledet."
+  },
+  {
+    "subject": "Your reorder list just got cheaper 💸",
+    "preview": "The jewellery boxes shops reorder most are on offer this week. Same boxes, smaller invoice.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rabatten rammer det, man alligevel køber, og det gør tilbuddet relevant med det samme."
+  },
+  {
+    "subject": "The Christmas logo rush has started ⏳",
+    "preview": "Logo orders are coming in early. Deadlines fall sooner than you'd think – check your country's.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Andres travlhed gør fristen konkret uden at love en dato, der ikke gælder alle markeder."
+  },
+  {
+    "subject": "Inside the warehouse's busiest aisle",
+    "preview": "Some shelves we refill once a month. This one we refill most days. Here's what's on it.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lagerets travleste hylde er et billede på popularitet, man kan se for sig."
+  },
+  {
+    "subject": "Stolen from other shops (with permission) ✨",
+    "preview": "Six packaging ideas we spotted at customers' counters this year, ready for you to borrow.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Det frække ordvalg giver et smil, og parentesen gør det trygt at kopiere."
+  },
+  {
+    "subject": "How webshops make a posted ring feel like a gift",
+    "preview": "Postal boxes that protect the piece and still open like a present, as chosen by online jewellers.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret problem løst af kolleger i samme situation gør guiden troværdig."
+  },
+  {
+    "subject": "Bønnen, caféerne genbestiller hver uge ☕",
+    "preview": "Husblandingen er ikke den billigste på listen. Den er bare den, der aldrig ryger af menukortet.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ugentlige genbestillinger fra professionelle er et stærkere argument end smagsnoter."
+  },
+  {
+    "subject": "Sofaen, der har stået i flest stuer 🛋️",
+    "preview": "Vi har solgt den i elleve år og ændret den to gange. Begge gange, fordi kunderne bad om det.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lang levetid og kundedrevne ændringer viser, at produktet er formet af brugerne."
+  },
+  {
+    "subject": "Hvad løber skolerne først tør for?",
+    "preview": "Svaret er ikke papir. Vi har kigget på efterårets genbestillinger fra 400 skoler.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Preview'et afviser det oplagte svar, så man må åbne for at få det rigtige."
+  },
+  {
+    "subject": "Stamkundernes kasse til oktober 🍷",
+    "preview": "Seks flasker, som de faste kunder har valgt igen og igen – og 15 % på kassen hele måneden.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Stamkundernes gentagne valg er en anbefaling, og rabatten gør det let at følge den."
+  },
+  {
+    "subject": "Hvad bestiller de andre bagerier til påske?",
+    "preview": "Fra æggeformede forme til gul glasur: de ti varer, der går igen i ordrerne lige nu.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kollegernes ordrer gør sæsonens indkøb til en tjekliste i stedet for et gæt."
+  },
+  {
+    "subject": "Garnet, der blev revet ned på en weekend 🧶",
+    "preview": "Nu er det hjemme igen, og denne gang har vi bestilt dobbelt så meget. Samme farvekort.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et udsalg på rekordtid er bevis nok, og genkomsten giver en ny chance."
+  },
+  {
+    "subject": "Slangen, cykelhandlerne selv monterer",
+    "preview": "Når forhandlerne skifter en slange i eget værksted, er det oftest den her. Nu i kasser à 50.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandlernes eget valg i værkstedet er det stærkeste argument for at tage varen ind."
+  },
+  {
+    "subject": "Valentins: rosen er ikke længere alene 🌹",
+    "preview": "Blomsterbutikkernes forudbestillinger viser et skift. Her er de tre sorter, der tager over.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et brud med den klassiske forventning vækker nysgerrighed, og ordrerne er beviset."
+  },
+  {
+    "subject": "Teen, kunderne køber to af",
+    "preview": "Én til sig selv og én som gave. Det så vi så tit, at vi har lavet en gavepakke ud af det.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En adfærd hos kunderne bliver til et produkt, og det gør det let at slutte sig til."
+  },
+  {
+    "subject": "Det står på badeværelseshylden hos 6.000 af jer",
+    "preview": "Natcremen er vores mest genkøbte produkt. Vi har spurgt hvorfor, og svarene er samlet her.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret tal og et hverdagsbillede gør populariteten håndgribelig."
+  },
+  {
+    "subject": "Det har boghandlerne selv købt med hjem 📚",
+    "preview": "Personalets egne julegaver, valgt af folk, der læser for at leve. Tolv bøger, ingen salgsliste.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Eksperternes private valg vejer tungere end en salgsliste."
+  },
+  {
+    "subject": "Jakken med 900 anmeldelser og én klage 🌧️",
+    "preview": "Klagen handlede om farven. Resten handler om, at den holder tør i regn, sne og slud.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den ene klage gør de mange anmeldelser mere troværdige og giver et smil."
+  },
+  {
+    "subject": "Osten, der er væk hver fredag",
+    "preview": "Den lagrede gouda er udsolgt før weekenden hver uge. Sådan sikrer du dig et stykke denne gang.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ugentligt udsalg er bevis på efterspørgsel og giver en grund til at handle i tide."
+  },
+  {
+    "subject": "Kokkene stemte. Panden vandt. 🍳",
+    "preview": "Vi spurgte 40 restaurantkøkkener, hvad de ikke kan undvære. Én pande gik igen hos dem alle.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Professionelles enstemmige valg er stærkt bevis, sagt i to korte sætninger."
+  },
+  {
+    "subject": "Det, vores egne hunde spiser 🐕",
+    "preview": "Medarbejderne har syv hunde tilsammen. Fem af dem får det samme foder – her er hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Medarbejdernes eget valg er en anbefaling indefra, som føles ærlig."
+  },
+  {
+    "subject": "Det har vuggestuerne slidt op i år 🧸",
+    "preview": "Legetøj, der har overlevet et helt år i en vuggestue, er nok også klar til jeres stue.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Holdbarhed bevist i den hårdeste brug giver et smil og et stærkt argument."
+  },
+  {
+    "subject": "Naboerne har allerede plantet tulipaner 🌷",
+    "preview": "Løgene skal i jorden før frosten. Her er de sorter, haveejerne i området har valgt i år.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Naboernes handling gør sæsonen konkret og giver et venligt skub."
+  },
+  {
+    "subject": "Skjorten, der bliver købt i tre farver",
+    "preview": "Kunderne kommer tilbage efter en ny nuance. Denne uge koster alle syv 25 % mindre.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Genkøb i flere farver beviser tilfredsheden, og rabatten gør det let at tage den næste."
+  },
+  {
+    "subject": "Stolen, HR-afdelingerne genbestiller",
+    "preview": "Når en virksomhed har prøvet én, bestiller den resten af etagen. Se, hvad der får dem til det.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Opfølgende storordrer fra virksomheder er det tydeligste bevis i B2B."
+  },
+  {
+    "subject": "Højsæsonens indkøbsliste, skrevet af 300 køkkener",
+    "preview": "Ti varer, der aldrig må slippe op, når der er fuldt booket. Ordnet efter, hvor tit de bestilles.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mange kollegers samlede erfaring bliver til en liste, man kan bruge med det samme."
+  },
+  {
+    "subject": "Prisfald på stamkundernes favorit",
+    "preview": "Den røde, vi sælger flest kasser af, er sat ned i to uger. Billigere bliver den ikke i år.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabat på det mest populære føles som en sikker handel."
+  },
+  {
+    "subject": "Udsolgt i butikkerne, stadig her online",
+    "preview": "Vores kalender til 2027 er væk fra hylderne de fleste steder. Webshoppen har stadig et parti.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Udsolgt andre steder er bevis på efterspørgsel og en grund til at handle her."
+  },
+  {
+    "subject": "1.400 stemmer senere: årets brød er fundet 🥖",
+    "preview": "Kunderne har valgt, og vinderen kommer i fast sortiment fra næste uge. Andenpladsen overrasker.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mange stemmer gør vinderen troværdig, og andenpladsen giver en ekstra grund til at åbne."
+  },
+  {
+    "subject": "Rødgranerne går først 🎄",
+    "preview": "De flotteste træer er de første, der bliver hentet. Book dit nu, og hent det, når det passer dig.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Andres tidlige valg gør det tydeligt, at ventetid koster de bedste træer."
+  },
+  {
+    "subject": "Sådan bruger andre saloner vores bestillingssystem",
+    "preview": "Faste ugeordrer og en fælles kurv til hele salonen. Fire saloner viser, hvordan de gør.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kolleger, der allerede bruger systemet, viser vejen og gør det lettere at gå i gang."
+  },
+  {
+    "subject": "Lamperne, der sælger bedst hos forhandlerne",
+    "preview": "Forhandlerne har sendt salgstallene. Tre modeller står for det meste af omsætningen.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Andre forhandleres tal er den mest relevante rettesnor for ens eget indkøb."
+  },
+  {
+    "subject": "10.000 kunder. Vi har kendt den første i 20 år 🎂",
+    "preview": "Hun kom ind for at købe en enkelt kop og blev. Nu fejrer vi kunde nummer 10.000 med hende.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et rundt tal får en menneskelig historie, og det gør jubilæet nærværende."
+  },
+  {
+    "subject": "Saven, tømreren aldrig låner ud",
+    "preview": "Han har haft den samme håndsav i 14 år. Vi har spurgt, hvad der gør den værd at passe på.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fagperson, der værner om sit værktøj, er et stærkere bevis end en salgstekst."
+  },
+  {
+    "subject": "Sådan indretter andre den lille altan",
+    "preview": "Seks kunder har sendt billeder af altaner på under fire kvadratmeter. Lån frit af idéerne.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rigtige kunders løsninger på samme problem er inspiration, man stoler på."
+  },
+  {
+    "subject": "Ny praline. 50 stamkunder har allerede smagt",
+    "preview": "De fik den før alle andre og gav deres dom. Her er, hvad de sagde, og hvad vi ændrede bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er afprøvet af rigtige kunder, før den når modtageren."
+  },
+  {
+    "subject": "Mor har allerede fået blomster. Af din søster.",
+    "preview": "Morsdag er på søndag. De buketter, der er bestilt mest, kan stadig nås, hvis du bestiller i dag.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Søskendedrillen giver et smil og et skub, fordi andre allerede har handlet."
+  },
+  {
+    "subject": "Billigst er ikke det, vores kunder vælger",
+    "preview": "Mellemmodellen sælger tre gange så meget som den billigste. Vi har spurgt kunderne hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forventningen om, at det billigste vinder, bliver vendt med kundernes egne valg."
+  },
+  {
+    "subject": "Hvad drikker de andre kontorer til fredagsbar? 🍻",
+    "preview": "Vi har talt kasserne fra 200 erhvervskunder. Øl taber, og det er ikke vin, der vinder.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet er sjovt at gætte på, og preview'et udelukker de oplagte svar."
+  },
+  {
+    "subject": "4,8 ud af 5 fra 2.300 håndværkere",
+    "preview": "Arbejdsbukserne har fået flere anmeldelser end noget andet, vi sælger. De fleste nævner knæene.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mange anmeldelser fra fagfolk giver tyngde, og detaljen om knæene gør det levende."
+  },
+  {
+    "subject": "Det lå under flest juletræer sidste år 🎁",
+    "preview": "Og det var ikke det, vi havde regnet med. Se sidste års mest købte julegaver i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sidste års kundevalg plus en overraskelse gør listen værd at åbne."
+  },
+  {
+    "subject": "Stellet fra restauranterne, nu til hjemmet",
+    "preview": "Tallerkenerne, som restaurantkøkkenerne serverer på, findes nu i et sæt til seks personer.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Professionelles valg løfter et hjemmeprodukt og gør nyheden attraktiv."
+  },
+  {
+    "subject": "Kattene har valgt. Det blev laks 🐟",
+    "preview": "Smagsprøverne er talt op fra 600 hjem. Kylling blev nummer to, og tun var langt efter.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Kattene som jury giver et smil, og tallene gør resultatet troværdigt."
+  },
+  {
+    "subject": "Derfor skiftede 80 kontorer til fast frugt",
+    "preview": "Vi har spurgt erhvervskunderne, hvorfor de droppede løse ordrer og fik en kurv hver tirsdag.",
+    "language": "da",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mange kollegers skifte gør det nemt at følge efter."
+  },
+  {
+    "subject": "The chair our customers buy twice",
+    "preview": "Once for the kitchen, then again for the office upstairs. This week, the second one is half price.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kundernes genkøb er beviset, og rabatten på nummer to følger deres egen adfærd."
+  },
+  {
+    "subject": "Florists are already booking May 💐",
+    "preview": "Wedding season starts in the cold room. These are the stems booked most for the first weekends.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kollegernes tidlige bookinger gør det klart, at sæsonen allerede er i gang."
+  },
+  {
+    "subject": "The blend our stockists reorder first",
+    "preview": "When delis restock, this is the bag they reach for. The trade sheet and a shelf card are inside.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Andre forhandleres genbestillinger viser, hvad der sælger, før man selv har prøvet."
+  },
+  {
+    "subject": "The oven other bakers keep recommending",
+    "preview": "Word of mouth between bakeries put it at the top of our list. We've collected their reasons.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Anbefalinger mellem fagfolk er det stærkeste bevis i B2B."
+  },
+  {
+    "subject": "Your neighbours went for oak",
+    "preview": "This autumn's floor orders in your area lean one way. See the finishes your street has chosen.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Naboernes valg er tæt på og konkret, og det gør det svært ikke at kigge."
+  },
+  {
+    "subject": "Rated 4.8 by 1,900 cyclists 🚲",
+    "preview": "Most reviews mention the same thing: it still feels right after a long day in the saddle.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "tal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tal fra mange brugere og en gentaget detalje gør anmeldelserne konkrete."
+  },
+  {
+    "subject": "Sold out twice. Back for a third time.",
+    "preview": "The linen apron from our spring catalogue is back in stock, in the same four colours.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To udsalg er bevis nok, og rytmen i linjen gør den let at huske."
+  },
+  {
+    "subject": "The notebook stationers keep by the till 📓",
+    "preview": "Not tucked on a shelf, right where customers queue – because it sells itself. Trade prices inside.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Andre forhandleres placering af varen er et praktisk bevis på, at den sælger."
+  },
+  {
+    "subject": "What 300 cafés told us about oat milk",
+    "preview": "Not what we expected. Their answers changed how we pack the cartons and when we deliver.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mange kunders svar og en uventet konsekvens gør det interessant at læse videre."
+  },
+  {
+    "subject": "The gift card everyone ends up buying 🎁",
+    "preview": "When people can't decide, this is where they land. Now in every shop and online.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alle andres valg i tvivlstilfælde gør beslutningen let for modtageren."
+  },
+  {
+    "subject": "Our regulars picked this year's cheese 🧀",
+    "preview": "Twelve regulars, eighteen cheeses, one blind tasting. The winner goes into the Christmas hamper.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "historie"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Stamkunder som jury giver valget troværdighed og en lille fortælling."
+  },
+  {
+    "subject": "The last kiln slots are going fast",
+    "preview": "Pottery studios have booked most of December's firings. A few weekday slots are still open.",
+    "language": "en",
+    "mechanisms": [
+      "social_proof",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Andres bookinger gør knapheden troværdig og giver en reel grund til at handle."
+  }
+]

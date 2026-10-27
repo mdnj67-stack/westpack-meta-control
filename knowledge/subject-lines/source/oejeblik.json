@@ -1,0 +1,1714 @@
+[
+  {
+    "subject": "Januar er stille i butikken. Ikke i hovedet.",
+    "preview": "Det er nu, der er ro til at tænke emballagen igennem for resten af året. Her er et sted at starte.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnet beskriver præcis den følelse, en butiksejer har i januar, og vender den til en mulighed."
+  },
+  {
+    "subject": "Første frostweekend. Første julekunder. 🧣",
+    "preview": "Når det bliver koldt, begynder gavekøbene. Smykkeæsker til dem, der handler tidligt.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gentagelsen af første binder vejrskiftet til den første julehandel, modtageren selv kender."
+  },
+  {
+    "subject": "Black Friday: når æsken skal arbejde hurtigt",
+    "preview": "Kunden har travlt, og der er kø ved kassen. Æsker, der er lette at pakke, betyder mest i dag.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Dagen er kendt, men vinklen er ny: emballagen som arbejdskraft på den travleste dag."
+  },
+  {
+    "subject": "Valentinsdag sælger smykker. Æsken sælger stemningen.",
+    "preview": "Fem gaveidéer til februar, hvor indpakningen er halvdelen af oplevelsen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To parallelle sætninger skiller produkt og følelse ad og giver æsken en rolle."
+  },
+  {
+    "subject": "Mors dag er en smykkedag 💐",
+    "preview": "Datoen skifter fra land til land. Gaven er tit et smykke. Sådan pakker du den, så den huskes.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et kort udsagn giver en kendt dag en ny betydning for netop modtagerens butik."
+  },
+  {
+    "subject": "Sommerferie i butikken? Ikke helt.",
+    "preview": "Turister, bryllupper og sommerfester holder smykkehandlen i gang. Poser og æsker, der følger med.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet modsiger en udbredt antagelse og inviterer til at se sommeren som salgssæson."
+  },
+  {
+    "subject": "Første mandag efter sommerferien ☕",
+    "preview": "Indbakken er fuld, kaffen er varm. Tre ting, der er værd at nå, før efteråret tager fart.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet rammer en dag, alle genkender, og previewet lover noget overskueligt."
+  },
+  {
+    "subject": "Midt i højsæsonen? Læs denne på 30 sekunder",
+    "preview": "Genbestil de æsker, der går hurtigst. Kendte logoer er i produktion på 4–5 arbejdsdage.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At respektere modtagerens travlhed i emnet gør det sandsynligt, at de åbner alligevel."
+  },
+  {
+    "subject": "Den 1. december i en smykkebutik 🎁",
+    "preview": "Første låge, første julekunde, første gaveæske på disken. Sådan ser måneden ud fra kassen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En genkendelig scene fra modtagerens egen hverdag trækker dem ind som i en fortælling."
+  },
+  {
+    "subject": "Efter jul kommer byttedagene",
+    "preview": "Kunderne kommer tilbage med gavekort og pakker. Poser med dit logo gør også dét besøg til et salg.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Øjeblikket er det, de færreste planlægger for, og det giver mailen en grund til at blive læst."
+  },
+  {
+    "subject": "Fredag kl. 16 i en smykkebutik",
+    "preview": "Weekendens gaver bliver købt nu, og i fart. Indpakning, der kan følge med uden at se hurtig ud.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist klokkeslæt placerer modtageren i en situation, de kender fra deres egen butik."
+  },
+  {
+    "subject": "Bryllupssæsonen banker på 💍",
+    "preview": "Vielsesringe, gaver til brudepiger og noget til forældrene. Æsker, der passer til dagen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Sæsonen annonceres som en gæst ved døren, og previewet viser, hvad den bringer med."
+  },
+  {
+    "subject": "Konfirmationsgaver bliver købt i marts 💎",
+    "preview": "Første halskæde, første rigtige øreringe. Gaven skal ligge i noget, der føles voksent.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En kort sandhed om sæsonen åbner, og previewets detaljer gør den rørende konkret."
+  },
+  {
+    "subject": "Studenterhuen kommer på. Gaverne skal pakkes. 🎓",
+    "preview": "Juni er travl med dimissioner og fester. Gaveæsker, der passer til en ung smag og en stor dag.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et billede, alle danskere kender, sætter sæsonen i gang uden et eneste salgsord."
+  },
+  {
+    "subject": "Fjerde kvartal i en smykkebutik, kort fortalt",
+    "preview": "Efterår, Black Friday, jul og byttedage på tolv uger. Hvad emballagen skal kunne i hver fase.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Hele den travle periode samles i ét overblik, som modtageren kan planlægge efter."
+  },
+  {
+    "subject": "Når kunden siger »det er en gave«",
+    "preview": "Den sætning hører smykkebutikker oftest i december. Sådan svarer æsken, før du når det.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En replik fra disken placerer modtageren midt i det øjeblik, emballagen skal leve op til."
+  },
+  {
+    "subject": "Den stille uge mellem jul og nytår",
+    "preview": "Tid til at tælle lager og tænke på næste år. Vi har samlet årets mest genbestilte æsker.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet navngiver en uge, der sjældent bliver talt om, og giver den et formål."
+  },
+  {
+    "subject": "Nyt år, ny emballage? Måske bare et nyt logo.",
+    "preview": "Januar er et godt tidspunkt at se på, om logoet på æskerne følger med, hvor butikken er nu.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet tager den store beslutning og gør den mindre, hvilket sænker barrieren."
+  },
+  {
+    "subject": "Lønningsdag. Kunderne ved det godt. 💰",
+    "preview": "Det er dagen, hvor gaveidéer bliver til køb. Æsker, der gør købet til en lille oplevelse.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En dag, alle kender, bliver set fra kassens side med et glimt i øjet."
+  },
+  {
+    "subject": "Mørkt kl. 16. Vinduet er dit bedste skilt. 🌙",
+    "preview": "Når gaden bliver mørk, lyser butiksvinduet. Displays og bakker, der får smykkerne til at ses udefra.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Årstidens mørke vendes til en fordel, butikken kan bruge med det samme."
+  },
+  {
+    "subject": "Søndagsåbent i december: gør plads ved kassen",
+    "preview": "Ekstra åbningsdage betyder ekstra gaver at pakke. Æsker og poser, der er hurtige at gøre klar.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En konkret ændring i butikkens rytme gør behovet for emballage tydeligt."
+  },
+  {
+    "subject": "Black Friday er overstået. Træk vejret.",
+    "preview": "Næste bølge er julegaverne, og de skal pakkes til en helt anden stemning. Gaveæsker til december.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet anerkender modtagerens træthed, før det peger fremad."
+  },
+  {
+    "subject": "Messesæson: din stand er en butik i fire dage",
+    "preview": "Udstiller du på en smykkemesse? Displays og bakker, der får standen til at ligne din butik.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Messen omdefineres til en midlertidig butik, hvilket gør behovet for displays indlysende."
+  },
+  {
+    "subject": "Halloween er for slik. November er for gaver. 🎃",
+    "preview": "Når græskarret ryger ud, begynder de første julekøb. Gaveæsker til dem, der handler tidligt.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To måneder sat side om side markerer skiftet, butikken mærker hvert år."
+  },
+  {
+    "subject": "Efterårsferie: børnene har fri, butikken har ikke",
+    "preview": "En uge med flere familier i gaden. Poser med logo gør hver handel til en gåtur med dit navn.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Kontrasten mellem fri og ikke-fri sætter ord på butikkens virkelighed i ferien."
+  },
+  {
+    "subject": "Første søndag i advent 🕯️",
+    "preview": "Kranse, kalendere og de første rigtige julekøb. Gaveæsker, der passer til stemningen fra i dag.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnet er blot dagen selv, og det er nok, fordi alle ved, hvad den betyder for handlen."
+  },
+  {
+    "subject": "Fastelavn, påske, mors dag. Foråret har travlt. 🌷",
+    "preview": "Tre gavedage på få måneder. En plan for æsker og poser, der holder hele foråret.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Opremsningen viser, hvor tæt forårets gavedage ligger, før modtageren selv har talt dem."
+  },
+  {
+    "subject": "Anden søndag i advent, og kassen kører",
+    "preview": "Mangler du æsker midt i december? Kendte logoer er i produktion på 4–5 arbejdsdage.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnet møder modtageren midt i travlheden og tilbyder en løsning, ikke en reklame."
+  },
+  {
+    "subject": "Vinduet skal skiftes til jul. Hvornår?",
+    "preview": "Vi har samlet tre displays, der klarer skiftet fra efterår til jul på én aften.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer en beslutning, butikken alligevel står over for, og lover hjælp til den."
+  },
+  {
+    "subject": "Sidste kunde er gået. Nu kan vi tale om æsker. 🍵",
+    "preview": "Lukketid er det bedste tidspunkt at tænke indpakning. Fem minutter, en kop te og tre idéer.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet respekterer arbejdsdagen og vælger bevidst det øjeblik, hvor der er tid."
+  },
+  {
+    "subject": "Stem, mens julestemningen er ny 🗳️",
+    "preview": "Hvilken gaveæske skal være årets? Ét tryk er én stemme, og vinderen afsløres snart.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet på stem og stemning gør opfordringen let og sæsonbestemt."
+  },
+  {
+    "subject": "Jul på din profil – annoncerne betaler vi",
+    "preview": "Gennem vores partnerprogram betaler vi annoncer, der kører fra din egen profil. Sådan kommer du med.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Sæsonen gør tilbuddet aktuelt, og det konkrete løfte gør det værd at åbne."
+  },
+  {
+    "subject": "30.000+ brands, 30.000+ måder at pakke jul på",
+    "preview": "Tre af dem har vi fundet hos smykkebutikker, og de kan alle kopieres med en æske og et logo.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det store tal bliver til variation frem for pral og inviterer til at se, hvad andre gør."
+  },
+  {
+    "subject": "Ny serie, lige til efterårets mørke 🖤",
+    "preview": "Den nye æskeserie er lavet til netop de måneder, hvor gaverne fylder mest på disken.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden får en tid og en stemning, så den føles relevant i stedet for blot ny."
+  },
+  {
+    "subject": "Nyt i januar, når du har tid til at kigge",
+    "preview": "Den rolige måned er den bedste til at se nyhederne igennem uden kunder i døren.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden timer sig til modtagerens rolige måned, så den ikke drukner i travlhed."
+  },
+  {
+    "subject": "Januarpris, mens butikken trækker vejret",
+    "preview": "Udvalgte gaveæsker til nedsat pris i den måned, hvor der er tid til at fylde lageret op.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Prisen bindes til et roligt øjeblik, så den føles som hjælp og ikke som pres."
+  },
+  {
+    "subject": "Sommerpris på poser, mens solen skinner ☀️",
+    "preview": "Turister og sommerfester fylder butikken, og poserne går hurtigere. Udvalgte bæreposer er nedsat nu.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Vejret og prisen hænger sammen i ét billede, der gør tilbuddet sæsonbestemt."
+  },
+  {
+    "subject": "Højsæson hos os betyder højsæson hos dig",
+    "preview": "Når vores produktion summer af julelogoer, er det fordi jeres butikker snart gør det samme.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spejlingen mellem produktionen og butikken gør afsenderen til en del af modtagerens sæson."
+  },
+  {
+    "subject": "73 år i dag. Stadig i Holstebro. 🎂",
+    "preview": "Det startede som Westpap i 1953. I dag er vi betroet af 30.000+ brands.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Jubilæet giver mailen en dag, og stedet giver den rødder og troværdighed."
+  },
+  {
+    "subject": "Prøver bestilles bedst i den stille tid",
+    "preview": "Når der er ro, kan du sammenligne æsker med dit logo i hånden. Prøver med logo koster lidt pr. stk.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rådet knyttes til et tidspunkt, så det bliver til en handling frem for en idé."
+  },
+  {
+    "subject": "Den rolige tid er bulktid",
+    "preview": "Planlægger du næste års volumen nu, er der 7–8 uger til produktionen og op til 40 % at spare.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det korte, sammensatte ord gør den stille periode til en bestemt slags arbejde."
+  },
+  {
+    "subject": "Første julesang i radioen 🎶",
+    "preview": "Det er signalet, kunderne reagerer på. Det er også dit: fristen for logotryk er tættere på.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et genkendeligt sæsontegn bruges som påmindelse, så fristen ikke føles som reklame."
+  },
+  {
+    "subject": "Når bladene falder, falder fristerne også 🍂",
+    "preview": "Logotryk til jul har en frist for hvert land, og den falder længe før den første sne.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet på falder binder sæsonen og fristen sammen i ét billede."
+  },
+  {
+    "subject": "Kø ved kassen? Sådan pakker du hurtigere",
+    "preview": "Fire æsker og poser til december, hvor indpakning skal gå stærkt uden at se hurtig ud.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Problemet er modtagerens eget, og løsningen bliver lovet med det samme."
+  },
+  {
+    "subject": "Weekenden før jul i en smykkebutik",
+    "preview": "Her bliver de sidste gaver købt, og en flot æske lukker handlen. Tre ting at have parat.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet maler en scene, modtageren kender, og previewet gør den brugbar."
+  },
+  {
+    "subject": "Godmorgen, december ❄️",
+    "preview": "Måneden, hvor hver smykkeæske bliver til en gave. Her er, hvad der er værd at have på hylden.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Hilsenen er kort og menneskelig og markerer månedsskiftet som en fælles begivenhed."
+  },
+  {
+    "subject": "Påskeæg er ikke den eneste påskegave 🐣",
+    "preview": "Små smykker sælger også i påsken, og små æsker gør dem til en rigtig gave.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnet udvider en kendt højtid og viser en salgsmulighed, få tænker på."
+  },
+  {
+    "subject": "Fars dag: den oversete gavedag 👔",
+    "preview": "Manchetknapper, kæder og ringe sælger også til fædre. Æsker i mørke farver passer til dagen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "At kalde dagen overset gør den interessant og antyder en mulighed, andre ikke bruger."
+  },
+  {
+    "subject": "Vinterudsalget er i gang. Er poserne?",
+    "preview": "Udsalg betyder flere kunder ad gangen. Bæreposer med logo gør hver af dem til en gående reklame.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det korte modspørgsmål skaber et lille stik af tvivl, som previewet løser."
+  },
+  {
+    "subject": "Sommerro i butikken – og tid til at tænke jul",
+    "preview": "Juli er den eneste måned, hvor julen føles langt væk. Derfor er det nu, den er nem at planlægge.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten mellem sommer og jul gør det overraskende, men logisk, at planlægge nu."
+  },
+  {
+    "subject": "Skolestart i gaden, efterår på hylderne",
+    "preview": "Når familierne er hjemme igen, starter efterårets gavekøb. Æskerne til de næste fire måneder.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To billeder af samme uge viser, at butikkens sæson skifter, mens alle andre tænker skole."
+  },
+  {
+    "subject": "Valentinsdag ligger midt i den stille tid",
+    "preview": "Årets første store gavedag kommer, mens butikken stadig har ro på. Brug den til at gøre det flot.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet peger på en modsætning i kalenderen, som modtageren ikke har tænkt over."
+  },
+  {
+    "subject": "Gavekortsæsonen er også en æskesæson",
+    "preview": "Gavekort bliver til smykker i januar. Pak dem, så de føles som gave nummer to.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet kobler en sæson, butikken kender, med et behov, den sjældent planlægger for."
+  },
+  {
+    "subject": "Nytårsaften er også en smykkeaften ✨",
+    "preview": "Glimmer, festkjoler og øreringe købt i sidste øjeblik. Æsker, der matcher aftenen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En aften, de fleste forbinder med fest, får en ny rolle som salgsdag."
+  },
+  {
+    "subject": "Hvad tænker en kunde, der køber gave i november?",
+    "preview": "At det skal være pænt, og at de helst ikke vil pakke det ind selv. Æsker, der klarer det for dig.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet sætter modtageren i kundens sted og gør behovet tydeligt indefra."
+  },
+  {
+    "subject": "Mellem to sæsoner er der plads til en ny idé",
+    "preview": "Efteråret er solgt, julen er ikke begyndt. To uger, hvor en ny æske kan nå at blive en vane.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Pausen mellem sæsoner bliver gjort til det rigtige øjeblik for noget nyt."
+  },
+  {
+    "subject": "Uge 50 i en smykkebutik 🎄",
+    "preview": "Fyldt butik, korte pauser og gave efter gave over disken. Sådan holder indpakningen tempoet.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et ugenummer, enhver butiksejer kan mærke i kroppen, gør emnet præcist og genkendeligt."
+  },
+  {
+    "subject": "January is quiet. That's the point.",
+    "preview": "The calmest month is the best one for choosing next year's packaging without a queue at the till.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnet vender en svaghed til en fordel med to korte sætninger."
+  },
+  {
+    "subject": "The first cold weekend sells the first gifts 🧣",
+    "preview": "When the temperature drops, Christmas shopping begins. Jewellery boxes for those early customers.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Vejret bliver et salgssignal, som modtageren kan genkende fra sin egen butik."
+  },
+  {
+    "subject": "Black Friday, wrapped properly",
+    "preview": "A busy till still deserves a good bag. Carrier bags with your logo for the busiest day of all.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den korte tilføjelse skiller sig ud fra de mange råbende Black Friday-mails."
+  },
+  {
+    "subject": "Valentine's is a jewellery day 💘",
+    "preview": "And jewellery bought for someone else needs a box worth giving. Ideas for February's counter.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En enkel påstand gør en kendt dag relevant for netop modtagerens branche."
+  },
+  {
+    "subject": "It's Mother's Day somewhere soon",
+    "preview": "The date changes from country to country, the gift rarely does. Boxes that make it feel considered.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "nysgerrighed"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det vage somewhere vækker nysgerrighed og er samtidig ærligt om forskellige datoer."
+  },
+  {
+    "subject": "Back from holiday, back at the counter ☕",
+    "preview": "Three things worth sorting in August, before autumn picks up and Christmas starts to press.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gentagelsen af back fanger den første arbejdsuge og lover noget overskueligt."
+  },
+  {
+    "subject": "Peak season, in one reorder",
+    "preview": "Running low on your best-selling boxes? Logos we already hold are in production in 4–5 working days.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Hele højsæsonens behov komprimeres til én handling, hvilket gør det let at sige ja."
+  },
+  {
+    "subject": "Wedding season has started 💍",
+    "preview": "From the rings to the thank-you gifts for the bridesmaids, each one is handed over in a box.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonen annonceres enkelt, og previewet fylder den med konkrete gaver."
+  },
+  {
+    "subject": "Quiet between Christmas and New Year?",
+    "preview": "Count the stock, then look at what sold. Our year-end list of the boxes worth reordering.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer den stille uge og giver den en opgave."
+  },
+  {
+    "subject": "4pm, and it's already dark outside",
+    "preview": "Your window is now your brightest sign. Displays that make jewellery readable from the street.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et klokkeslæt og et mørke, alle kender, åbner for en idé til butiksvinduet."
+  },
+  {
+    "subject": "Christmas market this weekend? Pack the bags",
+    "preview": "A stall sells fast and wraps faster. Carrier bags with your logo turn a table into a shop.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmål og ordre i ét emne gør det umiddelbart handlingsrettet."
+  },
+  {
+    "subject": "Singles' Day is for treating yourself 💫",
+    "preview": "Jewellery bought for one deserves the same box as a gift. Ideas for 11 November.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En nyere shoppingdag præsenteres fra en vinkel, der gør den relevant for smykker."
+  },
+  {
+    "subject": "Saturday, 11am. The counter's three deep.",
+    "preview": "That's when wrapping has to be quick and still look careful. Gift boxes built for that moment.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et præcist tidspunkt og et billede af køen sætter modtageren midt i scenen."
+  },
+  {
+    "subject": "Vote while the mince pies are still warm 🗳️",
+    "preview": "Which gift box should win this year? One tap is one vote, and the reveal is just around the corner.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et britisk julebillede gør afstemningen hyggelig og tidsbestemt på én gang."
+  },
+  {
+    "subject": "Your shop, our ad budget, this Christmas",
+    "preview": "Through our partner programme, we fund ads run from your own profile. Here's how to join.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte led lover noget konkret og knytter det til sæsonen."
+  },
+  {
+    "subject": "October in our factory looks like December",
+    "preview": "Foil, clichés and box after box carrying other shops' logos. Christmas started here weeks ago.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den forskudte kalender i produktionen giver et kig bag kulisserne og minder om sæsonen."
+  },
+  {
+    "subject": "New season, new box to unwrap",
+    "preview": "Our latest series arrives just as gift-buying picks up. A first look before your customers see it.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden knyttes til sæsonskiftet, så den føles rettidig."
+  },
+  {
+    "subject": "Our Black Friday is for shops, not shoppers",
+    "preview": "A campaign price on selected carrier bags, just before every customer starts leaving with one.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnet vender Black Friday mod modtageren som forretning i stedet for som forbruger."
+  },
+  {
+    "subject": "Første kolde morgen, første vinterkaffe ☕",
+    "preview": "Vi har ristet vinterblandingen, og den har kanel nok til at mærkes uden at tage over.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Vejrskiftet bliver anledningen til nyheden, så den føles timet frem for tilfældig."
+  },
+  {
+    "subject": "Første frost i nat. Skraberne står ved døren.",
+    "preview": "Isskrabere, handsker og frostvæske er rykket frem. Kom forbi, før køen kommer med kulden.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En konkret nyhed om vejret og en konkret detalje i butikken gør mailen nærværende."
+  },
+  {
+    "subject": "Januar: sofaen er blevet testet i to uger",
+    "preview": "Efter juleferien ved alle, hvor godt de sidder. Kom og prøv dem, vi har på gulvet nu.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Emnet bygger på en fælles erfaring fra julen og vender den til et salgsargument."
+  },
+  {
+    "subject": "Sommerferiens bøger skal vælges nu 📚",
+    "preview": "Fem romaner til liggestolen og én til regnvejr i sommerhuset.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ferien er tæt på, og previewets regnvejrsbog giver et smil og en grund til at læse videre."
+  },
+  {
+    "subject": "Skolestart er papirvarebutikkens anden jul",
+    "preview": "Penalhuse, skoletasker og hæfter går først. Her er det, butikkerne plejer at genbestille i august.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Sammenligningen med julen gør det tydeligt, hvor stor uge det er for forhandleren."
+  },
+  {
+    "subject": "Valentinsdag falder på en tirsdag i år 🌹",
+    "preview": "Det betyder, at buketterne bliver købt mandag aften på vej hjem. Vi har åbent til kl. 20.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille kalenderdetalje bliver til praktisk viden, modtageren kan handle på."
+  },
+  {
+    "subject": "Fredag kl. 17, og ingen har tænkt på vinen 🍷",
+    "preview": "Tre flasker til weekendens middag, som du kan hente på vej hjem uden at vælge forkert.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Situationen er så genkendelig, at modtageren føler sig set, før de har åbnet."
+  },
+  {
+    "subject": "Første varme weekend. Haven vågner. 🌱",
+    "preview": "Det er nu, frøene skal i jorden, og vi har sorteret dem efter, hvad der kan sås i april.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den korte sanselige scene sætter stemningen, og previewet gør den praktisk."
+  },
+  {
+    "subject": "Efterårsferie med regn i prognosen",
+    "preview": "Regntøj, skærme og lygter til dem, der cykler alligevel. Og det gør de fleste.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den nøgterne vejrmelding bliver til en anledning med et lille glimt i øjet."
+  },
+  {
+    "subject": "Fastelavnsbollerne er ude af ovnen",
+    "preview": "Tre slags i år, og den med hindbær og lakrids er allerede en favorit i bageriet.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Sæsonvaren annonceres i nutid, så det føles som en nyhed fra bageriet lige nu."
+  },
+  {
+    "subject": "Det er frakkevejr nu. Officielt. 🧥",
+    "preview": "Ti grader og blæst er grænsen. Uldfrakkerne er hængt frem, og der er stadig alle størrelser.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Det skæve officielt gør en vejrmelding til en lille joke og en anledning."
+  },
+  {
+    "subject": "Mandag i januar, og alle har lagt planer",
+    "preview": "Nytårsforsæt holder bedst med selskab. Et hold to gange om ugen gør resten lettere.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnet møder modtageren i nytårsforsættets øjeblik med forståelse i stedet for løftet pegefinger."
+  },
+  {
+    "subject": "Den første rigtige sommerdag ☀️",
+    "preview": "Solen er fremme, og vi har lavet sorbet af rabarber fra haven bag butikken.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Dagen selv er budskabet, og previewets detalje gør nyheden lokal og levende."
+  },
+  {
+    "subject": "Påskefrokosten starter fredag",
+    "preview": "Sild, ost og en snaps til de modige. Kurvene kan hentes fra torsdag.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Højtiden er kendt, og den konkrete kurv gør den let at sige ja til."
+  },
+  {
+    "subject": "August, og kontoret er fuldt igen",
+    "preview": "Efter ferien viser det sig, hvilke stole der knirker. Vi kommer forbi med tre modeller til prøve.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnet beskriver en tilbagevendende virkelighed, som B2B-modtageren genkender med det samme."
+  },
+  {
+    "subject": "Ønskesedlerne bliver skrevet nu ✏️",
+    "preview": "Vi har lavet en liste over det, børnene spørger mest efter i butikken, og det, de glemmer.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnet fanger et præcist øjeblik i familiens jul og lover en liste, der er værd at have."
+  },
+  {
+    "subject": "Skisæsonen starter i hovedet før på bjerget ⛷️",
+    "preview": "Tjek støvlerne nu, mens der er tid til at få dem tilpasset. Vi har åbnet for bookinger.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Emnet beskriver forventningens glæde og gør den til en praktisk anledning."
+  },
+  {
+    "subject": "Sofasæson. Strikkesæson.",
+    "preview": "Mørket kommer tidligere, og pindene kommer frem. Ugens garn er blødt nok til en hel vinter.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "To ord med samme endelse sætter stemningen uden at sige et eneste salgsord."
+  },
+  {
+    "subject": "Halloween: vis os dit græskar 🎃",
+    "preview": "Det mest kreative billede vinder et gavekort på 500 kr. Vi trækker vinderen dagen efter.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Højtiden giver en naturlig opgave, og præmien gør den værd at løse."
+  },
+  {
+    "subject": "Isbutik i november? Mød ejeren 🍦",
+    "preview": "Hun sælger varm kakao, karamel og hjemmebag, når isen er for kold. Og det virker.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Paradokset i emnet vækker nysgerrighed, og en person gør historien levende."
+  },
+  {
+    "subject": "Seks værelser, ingen gæster i januar",
+    "preview": "Sådan fik et lille pensionat ved kysten fyldt februar alligevel. Ejeren fortæller.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret problem i en stille måned trækker modtageren ind i en historie med en løsning."
+  },
+  {
+    "subject": "Hos os er det jul i september",
+    "preview": "Det er nu, vi smager vinterbønnerne til, så de er ristede og hvilede, når du skal bruge dem.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den forskudte kalender bag kulisserne er overraskende og forklarer, hvorfor kvaliteten holder."
+  },
+  {
+    "subject": "Bageriet sover ikke i december",
+    "preview": "Ovnene kører fra kl. 2, og vi har tre ekstra hænder til småkagerne. Mød dem i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Menneskene bag sæsonen gør afsenderen sympatisk og mailen værd at åbne."
+  },
+  {
+    "subject": "Restauranter: menukortet skifter med vejret",
+    "preview": "Når det bliver køligt, sælger rødvinen igen. Efterårets vine til kortet, med priser for jer.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sæsonskiftet præsenteres som en forretningsbeslutning, B2B-modtageren alligevel skal tage."
+  },
+  {
+    "subject": "Advent starter søndag. Kalenderne sælger nu.",
+    "preview": "Butikker, der bestiller i dag, kan stadig nå at få dem på hylden inden weekenden.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Højtiden er tæt på, og fristen følger naturligt af den."
+  },
+  {
+    "subject": "Det regner, så vi sænker prisen 🌧️",
+    "preview": "Så længe det regner i dag, er paraplyer og regntøj 20 % billigere. Ja, vi kigger ud ad vinduet.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Rabatten er bundet til vejret lige nu, hvilket gør den både sjov og tidsbestemt."
+  },
+  {
+    "subject": "Første nattefrost er meldt",
+    "preview": "Det er signalet til vinterdæk. Vi har åbnet for flere tider, så du slipper for at stå i kø.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En vejrmelding bliver til en påmindelse, der føles som service frem for salg."
+  },
+  {
+    "subject": "Black Friday? Vi holder lukket.",
+    "preview": "I stedet har vi de samme priser hele december som resten af året. Det er vores tilbud.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At melde sig ud af dagen skaber kontrast i en indbakke fuld af rabatter."
+  },
+  {
+    "subject": "Det sidste kvarter før lukketid",
+    "preview": "Det er her, kunderne køber det, de har kredset om. Tre måder at hjælpe dem på vej.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist øjeblik i butikkens dag åbner for råd, ejeren kan bruge med det samme."
+  },
+  {
+    "subject": "Søndag aften, og ugen er ikke begyndt",
+    "preview": "Et kvarter med ugens menu, så du slipper for supermarkedet tirsdag kl. 18.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnet fanger den lille uro søndag aften og tilbyder ro i previewet."
+  },
+  {
+    "subject": "Juleølen er tappet 🍺",
+    "preview": "Mørk, krydret og brygget i august, så den har haft tre måneder til at blive god.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Tre ord markerer et årligt øjeblik, som modtageren venter på."
+  },
+  {
+    "subject": "Mors dag er søndag. Indkøbene er lørdag.",
+    "preview": "Friske boller, god marmelade og blomster, der kan stå i vand natten over. Det hele ligger parat.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Forskydningen mellem dagen og forberedelsen gør emnet både sjovt og praktisk."
+  },
+  {
+    "subject": "Hedebølge. Ventilatorerne er tilbage. 🥵",
+    "preview": "Der kom en palle mere i morges, og de stille modeller til soveværelset går hurtigst.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To korte sætninger svarer på et behov, modtageren mærker i samme øjeblik."
+  },
+  {
+    "subject": "Første skoledag i morgen 🎒",
+    "preview": "Madkasser, drikkedunke og navnelapper, der kan stryges på i aften, hvis du skynder dig lidt.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Dagen er så tæt på, at emnet alene skaber handling, og previewet gør den mulig."
+  },
+  {
+    "subject": "Hvad sælger en boghandel dagen efter jul?",
+    "preview": "Ombytninger, gavekort og en overraskende mængde kogebøger. Sådan ser dagen ud bag disken.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet om en bestemt dag vækker nysgerrighed, som kun mailen kan svare på."
+  },
+  {
+    "subject": "Messe i næste uge? Pak tasken nu",
+    "preview": "Visitkort, opladere og en liste over de stande, du faktisk vil nå. Tjeklisten ligger i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den nære begivenhed gør tjeklisten relevant lige nu og ikke en dag."
+  },
+  {
+    "subject": "Kvartalsafslutning. Vi ved det godt.",
+    "preview": "Derfor er denne mail kort: tre rapporter, du kan trække på fem minutter i systemet.",
+    "language": "da",
+    "mechanisms": [
+      "oejeblik",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderen viser forståelse for modtagerens travlhed og lover at fatte sig i korthed."
+  },
+  {
+    "subject": "The first frost is forecast for Thursday",
+    "preview": "Bulbs in by Wednesday, then. We've put the spring mixes at the front of the shop.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En vejrmelding bliver en tidsplan, og previewet gør den konkret."
+  },
+  {
+    "subject": "It's raining, so the soup's on ☔",
+    "preview": "Three new soups this week, and the lentil one comes with bread we baked at five this morning.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Vejret og menuen hænger så naturligt sammen, at emnet føles som en hilsen."
+  },
+  {
+    "subject": "Monday after the clocks go back 🕯️",
+    "preview": "Dark by teatime. Our candles are half price until the evenings stop feeling quite so long.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et præcist skifte i året giver tilbuddet en grund, alle kan mærke."
+  },
+  {
+    "subject": "School's out. Your stockroom isn't.",
+    "preview": "Summer is the quietest month for orders and the best one for planning Christmas lines with us.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Parallellen vender ferien til en arbejdsopgave med et smil."
+  },
+  {
+    "subject": "Pancake Day is Tuesday 🥞",
+    "preview": "Flour, lemons and the good non-stick pan, all on one shelf by the door so you're in and out.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Dagen selv er budskabet, og previewet gør indkøbet hurtigt og nemt."
+  },
+  {
+    "subject": "The last warm weekend, probably",
+    "preview": "We've cut the price on the garden furniture we'd otherwise store until April.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det tøvende probably gør emnet menneskeligt og tilbuddet ærligt."
+  },
+  {
+    "subject": "Dry January, but make it interesting 🍋",
+    "preview": "Six alcohol-free drinks our staff actually reach for, and one we'd honestly skip.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Månedens løfte vendes til en opdagelse, og den ene fravalgte drik vækker nysgerrighed."
+  },
+  {
+    "subject": "When the office comes back in September",
+    "preview": "Desks get claimed, chairs get fought over. Here's what to reorder before the first Monday.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En scene fra efterårets første uge gør behovet indlysende for den, der indkøber."
+  },
+  {
+    "subject": "Bonfire Night needs warm hands 🔥",
+    "preview": "Wool mittens, flasks and thick socks for standing in a field watching fireworks.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "En konkret aften og en konkret følelse gør produkterne nødvendige."
+  },
+  {
+    "subject": "How a seaside café gets through November",
+    "preview": "No tourists, short days, and a soup-and-book evening that now sells out every Thursday.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den stille måned er et problem, alle kender, og historien lover en løsning."
+  },
+  {
+    "subject": "Show us your shop window this December",
+    "preview": "The best-dressed window wins a year's supply of ribbon. Entries close the week before Christmas.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sæsonens vinduer bliver en scene, og præmien passer til opgaven."
+  },
+  {
+    "subject": "Behind the counter on Christmas Eve",
+    "preview": "Our team on the last four hours of the year's busiest day, and what they eat to survive it.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kig bag disken på årets travleste dag er både menneskeligt og nysgerrighedsvækkende."
+  },
+  {
+    "subject": "Christmas jumper day is Friday. Got one? 🎅",
+    "preview": "Thirty left in the shop, mostly in medium and large, and none of them subtle.",
+    "language": "en",
+    "mechanisms": [
+      "oejeblik",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Dagen er tæt på, og spørgsmålet gør den til modtagerens eget problem."
+  }
+]

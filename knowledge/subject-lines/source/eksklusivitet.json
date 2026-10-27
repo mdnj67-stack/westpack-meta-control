@@ -1,0 +1,1719 @@
+[
+  {
+    "subject": "Du ser den, før webshoppen gør 👀",
+    "preview": "Den nye serie går online på mandag. Som abonnent kan du kigge med allerede nu.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et reelt forspring gør det mere værd at åbne nu end at vente på webshoppen."
+  },
+  {
+    "subject": "Vi har ikke vist den til nogen endnu",
+    "preview": "Ikke på Instagram, ikke i webshoppen. Den nye gaveæske har premiere i din indbakke.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At være den første, der ser noget, er en lille status, og hemmeligheden giver lyst til at kigge."
+  },
+  {
+    "subject": "Første kig: fire nye farver 🎨",
+    "preview": "Smykkeæskerne har fået nye farver, og nyhedsbrevet ser dem først. Webshoppen følger efter.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret antal og et forspring gør nyheden hurtig at vurdere og værd at åbne."
+  },
+  {
+    "subject": "Hemmeligheden holder til fredag 🤫",
+    "preview": "Men du må gerne se den nu: bæreposen i et nyt farvesæt, før vi fortæller det til alle andre.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det hviskende tonefald skaber fortrolighed og en følelse af at være indviet."
+  },
+  {
+    "subject": "Har vi dit logo? Så læs her først",
+    "preview": "Med et eksisterende logo er produktionstiden 4–5 arbejdsdage – også på efterårets nye æsker.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Linjen taler kun til eksisterende logokunder og giver dem en fordel, der faktisk er deres."
+  },
+  {
+    "subject": "Black Friday starter tidligere – for dig 🖤",
+    "preview": "Abonnenter får adgang til priserne, før de bliver synlige i webshoppen. Koden står herinde.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tidlig adgang føles personlig, uden at rabatten behøver at være større."
+  },
+  {
+    "subject": "Rabatkoden findes ikke på webshoppen",
+    "preview": "Den står kun i den her mail og gælder på hele gaveæskesortimentet til og med søndag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Når koden kun findes i mailen, er mailen selv grunden til at åbne."
+  },
+  {
+    "subject": "Forhandlere ser kollektionen først",
+    "preview": "Før den kommer i webshoppen, ligger den i dit forhandlermateriale. Her er et første kig.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forhandlerstatus bliver til et konkret forspring, der gør det lettere at planlægge hylden."
+  },
+  {
+    "subject": "Din egen kontaktperson, fra skitse til æske",
+    "preview": "Med Westpack Design Studio får du specialudviklet emballage og én fast kontakt hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Personlig betjening er eksklusivitet, man kan mærke, ikke bare en etiket."
+  },
+  {
+    "subject": "Én julefarve, ét parti",
+    "preview": "Gaveæsken i årets juleton er lavet i én produktion. Når lageret er tomt, kommer den ikke igen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et reelt begrænset parti giver en grund til at handle nu – og virker kun, når det er sandt."
+  },
+  {
+    "subject": "Kun abonnenter kan stemme 🗳️",
+    "preview": "Hjælp os med at vælge næste års gaveæske. Afstemningen er kun sendt til nyhedsbrevet.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indflydelse, som andre ikke får, gør modtageren til en del af beslutningen."
+  },
+  {
+    "subject": "Et gavekort til dem, der læser med 🎁",
+    "preview": "Vi trækker lod om et gavekort til webshoppen blandt nyhedsbrevets læsere. Sådan er du med.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Præmien er forbeholdt læserne, så åbningen er selve adgangsbilletten."
+  },
+  {
+    "subject": "Fristerne kommer til dig, før de kommer online ⏳",
+    "preview": "Julens logofrister for alle markeder, samlet her, inden de bliver lagt på webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Information før alle andre er en praktisk fordel i en travl sæson."
+  },
+  {
+    "subject": "Du hører det først: vi har fået en britisk søster",
+    "preview": "Westpack har købt Wrapology. Hvad det betyder for dig som kunde – og hvad der ikke ændrer sig.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "At høre nyheden fra kilden før alle andre gør modtageren til en del af inderkredsen."
+  },
+  {
+    "subject": "Lookbook før lanceringen ✨",
+    "preview": "Seks måder at sætte den nye smykkeæske i scene – kun for abonnenter, indtil serien er ude.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Inspiration før lancering giver et forspring i butikken, ikke bare et kig."
+  },
+  {
+    "subject": "Du læser casen, før LinkedIn gør",
+    "preview": "Mød smykkebrandet bag vores nye kundecase. Hele historien, før vi deler den offentligt.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det kække sammenstød med LinkedIn gør det at læse først til en lille fordel."
+  },
+  {
+    "subject": "Den farve, vi ikke reklamerer for",
+    "preview": "Den står ikke i kataloget, men den findes på lager. Abonnenter får linket her.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En skjult variant føles som insiderviden og giver nysgerrighed til at klikke."
+  },
+  {
+    "subject": "Kun for forhandlere: julens display 🎄",
+    "preview": "Displaypakken med produkter og skilte er klar til forhandlere og kommer ikke i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et produkt, der kun findes for forhandlere, gør status til en konkret fordel."
+  },
+  {
+    "subject": "Vi betaler annoncerne. Du lægger profilen til",
+    "preview": "Westpack finansierer Meta-annoncer, der kører fra din egen profil. Se, om din butik kan komme med.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Byttehandlen er klar, og udvælgelsen gør partnerskabet attraktivt."
+  },
+  {
+    "subject": "Vi leder efter tre butikker 🔍",
+    "preview": "Til næste runde kundecases. Vi fortæller din historie og viser din emballage frem.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "personlig"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille antal pladser gør invitationen personlig og værd at overveje."
+  },
+  {
+    "subject": "Julen kom tidligt. Men kun i din indbakke 🎄",
+    "preview": "Julens gaveæsker er klar, men ligger ikke i webshoppen endnu. Du kan bestille dem herfra.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Vendingen gør forspringet legende og placerer fordelen hos modtageren."
+  },
+  {
+    "subject": "Det her er ikke til alle",
+    "preview": "Det er til butikker, der bruger mange af samme æske: bulk fra 9.600 stk. og op til 40 % lavere pris.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En ærlig afgrænsning gør tilbuddet eksklusivt uden at være falsk."
+  },
+  {
+    "subject": "Det her gælder kun din første ordre",
+    "preview": "Ingen opstartsomkostninger, og du kan bestille helt ned til 48 stk. med dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelen gælder kun én gang, og det gør den værd at bruge, når man står ved starten."
+  },
+  {
+    "subject": "Til jer, der har været med længe 🤍",
+    "preview": "En tak til kunder med mere end fem år hos os: en fordel, der ikke står nogen andre steder.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "personlig"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Loyalitet belønnet med noget, nye kunder ikke får, føles personligt og ægte."
+  },
+  {
+    "subject": "Prøv den, før den officielt findes",
+    "preview": "Bestil en prøve af den nye smykkeæske nu, med eller uden dit logo. Webshoppen får den om to uger.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Muligheden for at mærke nyheden før alle andre gør forspringet håndgribeligt."
+  },
+  {
+    "subject": "Bag lukkede døre hos et smykkebrand",
+    "preview": "Vi fulgte et smykkebrand gennem en hel lancering, fra skitse til hylde. Du får hele forløbet her.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Adgang til noget, der normalt er privat, gør casen eksklusiv og spændende."
+  },
+  {
+    "subject": "Trendrapporten, vi ikke lægger online",
+    "preview": "Farver, formater og folier, vi ser komme i 2027 – samlet til abonnenter, ikke til Google.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indhold, der bevidst holdes væk fra nettet, føles mere værdifuldt."
+  },
+  {
+    "subject": "Smugkig på Valentins-æskerne 💌",
+    "preview": "De røde gaveæsker til februar kan forudbestilles af abonnenter, før de kommer i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Smugkig lover noget, man egentlig ikke burde se endnu, og det trækker."
+  },
+  {
+    "subject": "Én invitation. Din. ✉️",
+    "preview": "Vi åbner fabrikken i Holstebro for en lille gruppe kunder. Program og tilmelding herinde.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den korte, personlige form gør invitationen eksklusiv – brug den kun ved en reel begivenhed."
+  },
+  {
+    "subject": "Mellem os: lageret har fået noget nyt 🤐",
+    "preview": "Det kommer først i webshoppen efter weekenden. Indtil da er det kun dig og os, der ved det.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Fortroligheden gør modtageren til medvider og nyheden til en hemmelighed."
+  },
+  {
+    "subject": "Kodeordet er 'jul' 🔑",
+    "preview": "Skriv det i kurven, så får du abonnentprisen på julens gaveæsker. Det virker, indtil vi skifter det.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et kodeord gør rabatten til en hemmelighed, man er blevet betroet."
+  },
+  {
+    "subject": "Vil du se den først?",
+    "preview": "Skriv dig op til forhåndsvisningen, så får du den nye serie at se en uge før lanceringen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, de fleste svarer ja til i hovedet, før de har åbnet."
+  },
+  {
+    "subject": "Forhandlervilkår på julens gaveæsker",
+    "preview": "Som forhandler handler du højsæsonens sortiment på dine faste vilkår – før det er i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Vilkår, der kun gælder forhandlere, gør status til en konkret fordel i sæsonen."
+  },
+  {
+    "subject": "En side, Google ikke kan finde",
+    "preview": "Vi har samlet efterårets nyheder på en side uden for menuen. Linket står kun i denne mail.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et skjult sted på nettet føles som en hemmelig dør, kun modtageren har nøglen til."
+  },
+  {
+    "subject": "Dørene åbner kl. 9. For dig kl. 8. ⏰",
+    "preview": "Julesalget på webshoppen åbner en time tidligere for abonnenter. Kurven er klar, når du er.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den konkrete time gør forspringet håndgribeligt og lidt sjovt."
+  },
+  {
+    "subject": "Vi har gemt nogle til jer",
+    "preview": "Sidste års mest efterspurgte julefarve er tilbage i et lille parti. Abonnenter bestiller først.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "social_proof"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At noget er lagt til side til én, føles som en personlig gestus."
+  },
+  {
+    "subject": "Prøvepakken er kun for eksisterende kunder",
+    "preview": "Fem af efterårets nye smykkeæsker i én pakke, så du kan mærke dem, før du bestiller op.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En fordel forbeholdt kunder belønner relationen og gør næste køb trygt."
+  },
+  {
+    "subject": "Du bliver spurgt før alle andre",
+    "preview": "Vi tester en ny æskeform og vil høre, hvad du synes. Svar på fem spørgsmål, og se den først.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At blive spurgt til råds er eksklusivitet, der også smigrer."
+  },
+  {
+    "subject": "Guiden, vi kun giver til kunder",
+    "preview": "Sådan bygger du en disk, der sælger smykker – skrevet til butikker, der allerede har vores æsker.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Viden forbeholdt kunder gør relationen mere værd end selve købet."
+  },
+  {
+    "subject": "Det fortæller vi normalt kun de største kunder",
+    "preview": "Sådan planlægger vi produktionen før højsæsonen, og hvad det betyder for, hvornår du bør bestille.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Insiderviden, der normalt er forbeholdt få, gør mailen værd at gemme."
+  },
+  {
+    "subject": "Den bliver ikke i sortimentet",
+    "preview": "Vi udfaser en af smykkeæskerne. Abonnenter får chancen for at købe resten, før vi siger det højt.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En reel udfasning er sand knaphed, og forspringet gør den til en fordel."
+  },
+  {
+    "subject": "Du må navngive efterårets nye æske 🏷️",
+    "preview": "Kun abonnenter kan foreslå. Det vindende navn kommer til at stå i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At få sit forslag på et rigtigt produkt er en eksklusiv form for anerkendelse."
+  },
+  {
+    "subject": "En plads i vores næste annonce",
+    "preview": "Vi vælger én butik blandt abonnenterne, hvis emballage bliver vist frem i næste kampagne.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Udvælgelse til noget synligt er en præmie, der giver status i sig selv."
+  },
+  {
+    "subject": "Den er så ny, at den ikke har et varenummer",
+    "preview": "Men du kan se den og skrive dig op. Abonnenter er de første, der får lov.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Overdrivelsen giver et smil og gør det tydeligt, hvor tidligt modtageren er med."
+  },
+  {
+    "subject": "Et kig ind hos en af vores ældste kunder",
+    "preview": "En guldsmed, der har pakket i vores æsker i generationer, viser os butikken. Kun i nyhedsbrevet.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indhold, der kun findes i nyhedsbrevet, belønner dem, der læser med."
+  },
+  {
+    "subject": "Abonnentpris på 10 smykkeæsker",
+    "preview": "Ti modeller, en pris kun for nyhedsbrevet, og den gælder til søndag. Ingen kode nødvendig.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret antal og en klar afgrænsning gør fordelen let at vurdere."
+  },
+  {
+    "subject": "Den her mail er din rabatkode 💌",
+    "preview": "Brug knappen herinde, så ligger abonnentprisen allerede i kurven, når du lander i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Mailen selv bliver adgangen, så der er ingen grund til at gemme den til senere."
+  },
+  {
+    "subject": "Du står på gæstelisten til torsdag 🎟️",
+    "preview": "Vores grafikere går live og svarer på spørgsmål om logotryk. Kun for kunder – tilmeld dig herinde.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gæstelisten gør en webinar-invitation til noget, man allerede er udvalgt til."
+  },
+  {
+    "subject": "Udvalgt efter det, du plejer at bestille",
+    "preview": "Nyhederne, der passer til de æsker, du allerede har i butikken. Listen er lavet til dig.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Personlig udvælgelse gør nyhederne relevante og føles som service, ikke reklame."
+  },
+  {
+    "subject": "Tre butikker fik lov at prøve den først",
+    "preview": "Vi sendte den nye smykkeæske ud til tre butikker før lanceringen. Her er, hvad de fandt ud af.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At andre fik den først, gør modtageren nysgerrig på dommen og lyst til at være den næste."
+  },
+  {
+    "subject": "Ny forhandlerprisliste – ikke til offentligheden",
+    "preview": "Den nye prisliste er klar. Den sendes kun til forhandlere og ligger ikke på webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et dokument, der kun deles med få, gør modtagerens rolle tydelig og værdifuld."
+  },
+  {
+    "subject": "To looks, du kun ser i den her mail",
+    "preview": "Vi har stylet den nye gaveæske til jul på to måder, som ikke kommer på Instagram.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indhold, der kun findes ét sted, giver et lille, konkret forspring."
+  },
+  {
+    "subject": "Forsalget lukker, før julen åbner",
+    "preview": "Abonnentprisen på julens gaveæsker gælder kun i forsalget, og forsalget slutter søndag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet gør fristen let at huske, og prisen er kun for abonnenter."
+  },
+  {
+    "subject": "Før de andre: julekataloget 📖",
+    "preview": "Gaveæsker, smykkeæsker og bæreposer til højsæsonen, sendt til abonnenter en uge tidligere.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kataloget før alle andre giver ro til at planlægge sæsonen."
+  },
+  {
+    "subject": "Spoiler til abonnenter: forårets farver 🌷",
+    "preview": "Vi plejer ikke at vise farverne et halvt år før. Men du står på listen, så her er de.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et brud med vanen gør det tydeligt, at modtageren får noget særligt."
+  },
+  {
+    "subject": "Sælg den, før den er i webshoppen",
+    "preview": "Forhandlere kan tage den nye smykkeæske ind nu og stå med den på hylden, mens den stadig er ny.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forspringet bliver til en salgsfordel i forhandlerens egen butik."
+  },
+  {
+    "subject": "Not on the website. Yet.",
+    "preview": "Our new gift box range lives only in this email until Thursday. Take a look before anyone else.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lille 'Yet' lover et forspring, som kun mailen giver."
+  },
+  {
+    "subject": "Early access, no strings 🔑",
+    "preview": "Christmas gift boxes and bags are open to subscribers now. Everyone else waits until next week.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Tidlig adgang uden betingelser er en ren fordel og let at sige ja til."
+  },
+  {
+    "subject": "Retail partners: your autumn preview",
+    "preview": "Product photos and copy for the new range, a week before launch, so your shop can go first.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forspringet bliver til en konkret salgsfordel for forhandlerens egen butik."
+  },
+  {
+    "subject": "Before it hits Instagram ✨",
+    "preview": "Shots of the new gift box, styled for a jeweller's counter. Subscribers see them first.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At se billederne før det offentlige feed giver en følelse af at være foran."
+  },
+  {
+    "subject": "Be the first shop with it",
+    "preview": "Order the new ring box before it goes public and have it on your counter while it still feels new.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Eksklusiviteten bliver til en fordel for butikken: at være først over for egne kunder."
+  },
+  {
+    "subject": "Stock kept for you, paid as you go",
+    "preview": "We'll store your order and you pay as you draw it down. Made for shops that reorder the same box.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En service tilpasset faste kunder føles reserveret til dem."
+  },
+  {
+    "subject": "A few shops will shape next year's range",
+    "preview": "Join a small customer panel, see prototypes early and tell us what to change before it's made.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indflydelse og tidlig adgang i ét gør invitationen svær at sige nej til."
+  },
+  {
+    "subject": "Midnight, and the subscriber price goes 🕛",
+    "preview": "The presale on Christmas gift boxes closes tonight. Tomorrow it's the normal webshop price.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En præcis, reel frist på en eksklusiv pris giver en klar grund til at handle i dag."
+  },
+  {
+    "subject": "Locked until Friday 🔒",
+    "preview": "The new pouch range sits behind a password on the webshop. The password is in this email.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Låsen gør adgangen konkret, og nøglen ligger kun i mailen."
+  },
+  {
+    "subject": "Early Black Friday, quietly",
+    "preview": "Subscriber prices on gift boxes and bags start a day early. No banner, no countdown.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den stille tone gør fordelen fortrolig i stedet for skrigende."
+  },
+  {
+    "subject": "This code won't work for anyone else 🔐",
+    "preview": "It's tied to your account and takes the subscriber price off your next order of jewellery boxes.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig kode er eksklusivitet, man ikke kan dele, og derfor værd at bruge."
+  },
+  {
+    "subject": "The packaging brief one brand let us share",
+    "preview": "These usually stay between us and the customer. This one, with their permission, is yours to read.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et dokument, der normalt er fortroligt, gør casen til insiderviden."
+  },
+  {
+    "subject": "Subscribers pick next year's colour 🗳️",
+    "preview": "Three shades, one vote each, and the winner goes into production. The poll is only in this email.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Indflydelse på et rigtigt produkt, forbeholdt abonnenter, gør afstemningen værd at åbne."
+  },
+  {
+    "subject": "A limited run, honestly limited",
+    "preview": "One production run of the anniversary box and no plans for a second. Subscribers see it first.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "At sige 'ærligt' om knapheden afvæbner skepsis over for falsk knaphed."
+  },
+  {
+    "subject": "First to print in our new foil",
+    "preview": "We've added a foil colour. Logo customers can use it on their next order before it's listed.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En nyhed, der først gælder eksisterende kunder, belønner relationen."
+  },
+  {
+    "subject": "Win the first box off the line 🏆",
+    "preview": "One subscriber gets the very first finished box from the new series, with their own logo on it.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Præmien er unik i sig selv, og konkurrencen er kun for abonnenter."
+  },
+  {
+    "subject": "The early list closes on Sunday",
+    "preview": "Sign up by Sunday to see the Christmas range first and order before it goes public.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristen gælder adgangen til forspringet og gør tilmeldingen aktuel."
+  },
+  {
+    "subject": "Back for one run, for subscribers only",
+    "preview": "A jewellery box we retired last year, made again in a single batch and sold through this email.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En udgået favorit, der vender kortvarigt tilbage, er ægte knaphed med genkendelse."
+  },
+  {
+    "subject": "Inside the foil room, cameras allowed once 🎥",
+    "preview": "We don't usually film the print floor. This time we did, and the footage is for subscribers only.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Adgang til et sted, der normalt er lukket, gør indholdet eksklusivt og nysgerrigt."
+  },
+  {
+    "subject": "Årets første høst – kun til abonnenter ☕",
+    "preview": "300 poser fra gården i Etiopien, vi har købt hos i seks år. Abonnenter kan bestille fra i dag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et reelt, lille parti og en lang relation gør adgangen værd at bruge."
+  },
+  {
+    "subject": "Udsalget åbner i aften. For klubben.",
+    "preview": "Medlemmer kan handle fra kl. 18 i aften. Alle andre må vente til i morgen kl. 10.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den præcise forskel i tid gør medlemskabet konkret."
+  },
+  {
+    "subject": "Kun for forhandlere: kalendere til 2027",
+    "preview": "Forhandlere kan bestille næste års kalendere nu, en måned før de kommer i vores webshop.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandlerens forspring betyder varer på hylden, før kunderne leder efter dem."
+  },
+  {
+    "subject": "Vi fik 60 flasker. Du kan få seks. 🍷",
+    "preview": "Allokeringen fra Bourgogne er landet, og den går kun til vinklubben. Max seks pr. medlem.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Konkrete, små tal gør knapheden troværdig og adgangen personlig."
+  },
+  {
+    "subject": "Forudbestil fastelavnsbollerne før skiltet",
+    "preview": "Abonnenter kan bestille fra i dag. Skiltet i vinduet kommer først op på mandag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At komme før skiltet i vinduet er et lille, lokalt forspring."
+  },
+  {
+    "subject": "Farven, vi kun farver én gang 🧶",
+    "preview": "Håndfarvet i én gryde, 40 fed i alt. Når de er strikket op, kommer den ikke igen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Håndværket forklarer knapheden, så den føles ægte og ikke konstrueret."
+  },
+  {
+    "subject": "Signerede eksemplarer, kun via nyhedsbrevet ✍️",
+    "preview": "Forfatteren har signeret 80 bøger til os. De bliver ikke sat på hylden i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et begrænset, signeret oplag er klassisk eksklusivitet med en klar grund."
+  },
+  {
+    "subject": "Ventelisten åbner. Kun for én dag.",
+    "preview": "Næste brænding har plads til 30 krus. Skriv dig op i dag, så tager vi dig i rækkefølge.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Både pladsen og fristen er reelle, og det gør handlingen presserende."
+  },
+  {
+    "subject": "Fadøllet, der ikke kommer på flaske 🍺",
+    "preview": "Vinterbryggen fås kun på fad i baren – og i 2-liters dunke til abonnenter denne weekend.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et produkt, der normalt kun findes ét sted, bliver eksklusivt for abonnenter."
+  },
+  {
+    "subject": "Du kommer ind ad bagdøren",
+    "preview": "Forsalget af vinterjakkerne starter for medlemmer i dag. Butikken åbner for alle på lørdag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "humor"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Billedet af bagdøren gør forspringet sjovt og lidt forbudt."
+  },
+  {
+    "subject": "Prøv det nye serum, før det har et navn",
+    "preview": "Vi sender 200 prøver til abonnenter. Bagefter stemmer I om, hvad det skal hedde.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At prøve noget, der endnu ikke har et navn, er så tidligt, man kan komme."
+  },
+  {
+    "subject": "Køkkencheferne får prisen først",
+    "preview": "Den nye sæsons fiskepriser sendes til faste restaurantkunder, før de ligger på webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forspring på prisen er en konkret fordel for den professionelle køber."
+  },
+  {
+    "subject": "Pæonerne kommer. Du får første bud 🌸",
+    "preview": "Det første parti fra Holland er lille. Abonnenter kan forudbestille, før vi melder ud i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sæsonens korte vindue og et lille parti gør førsteretten værdifuld."
+  },
+  {
+    "subject": "Testkørsel før lanceringen 🚲",
+    "preview": "Ti medlemmer får lov at låne den nye ladcykel en weekend, før den kommer i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Få pladser og tidlig adgang gør tilbuddet attraktivt og konkret."
+  },
+  {
+    "subject": "Julekalenderen er udsolgt. Undtagen her. 🎄",
+    "preview": "Vi har holdt 100 kalendere tilbage til nyhedsbrevet. Når de er solgt, er der ikke flere.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Udsolgt overalt undtagen ét sted er en kontrast, der gør åbningen oplagt."
+  },
+  {
+    "subject": "Din kundekonto har fået en ny fane",
+    "preview": "Faste kunder kan nu se lagerstatus og nettopriser, før vi lægger dem i det åbne katalog.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En funktion forbeholdt faste kunder gør relationen mere værd."
+  },
+  {
+    "subject": "Fredag aften er butikken kun jeres 🕯️",
+    "preview": "Vi lukker for alle andre og holder åbent for kundeklubben med vin og 20 % på alt.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Hele butikken for sig selv er en invitation, der føles som en fest."
+  },
+  {
+    "subject": "Osten, vi gemmer til stamkunderne 🧀",
+    "preview": "Der er kun 12 hjul lagret comté i år. Halvdelen er sat til side til jer, der handler her fast.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Noget lagt til side til faste kunder belønner loyalitet med reel knaphed."
+  },
+  {
+    "subject": "Saloner får de nye nuancer først",
+    "preview": "Ti nye hårfarver sendes til faste salonkunder som prøvesæt, en måned før de kommer i kataloget.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Professionelle får forspring, så de kan tilbyde nyheden til egne kunder først."
+  },
+  {
+    "subject": "Børnene har ikke set den endnu 🤫",
+    "preview": "Den nye klodsserie er først i butikken i december. Abonnenter kan reservere én nu og gemme den.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Hemmeligheden for børnene gør forspringet sjovt og praktisk."
+  },
+  {
+    "subject": "Vi åbner køkkenet for 12 gæster",
+    "preview": "En aften med kokken bag vores pastasaucer. Kun for abonnenter – først til mølle.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et lille, konkret antal pladser gør invitationen eksklusiv."
+  },
+  {
+    "subject": "Weekendens udsalg har én regel: medlemskort",
+    "preview": "Klubmedlemmer får 30 % på sidste års telte lørdag og søndag. Mandag åbner vi for alle.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den ene regel gør adgangen klar og medlemskabet værd at have."
+  },
+  {
+    "subject": "Forsalget lukker i morgen kl. 12",
+    "preview": "Derefter er vinterens dyner kun til fuld pris, og forsalget kommer først igen næste år.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En præcis, reel frist på en eksklusiv pris gør det let at handle nu."
+  },
+  {
+    "subject": "Udstillingen åbner for dig en dag før",
+    "preview": "Fernisering for vores kunder torsdag. Værkerne kan reserveres, før dørene åbner for alle andre.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Førsteret til at reservere er en konkret fordel, ikke bare en fest."
+  },
+  {
+    "subject": "Caféen, der fik vores bønner før alle andre",
+    "preview": "Hvorfor vi valgte en lille café i Aalborg til at teste den nye ristning – og hvad de opdagede.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Historien om en udvalgt kunde gør eksklusiviteten levende og nysgerrig."
+  },
+  {
+    "subject": "Tømrere med konto får skruerne først",
+    "preview": "Den nye skruetype er på lager nu, men kommer først på hylden i butikken i næste uge.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forspring for faste kunder, som giver en praktisk fordel på pladsen."
+  },
+  {
+    "subject": "Sjældne roser, få planter 🌹",
+    "preview": "Vi har fået 25 af en gammel engelsk rosensort, der sjældent sælges. Abonnenter kan bestille først.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sjældenhed og et lille antal gør førsteretten værd at bruge."
+  },
+  {
+    "subject": "Du er allerede med i lodtrækningen 🎉",
+    "preview": "Vi trækker en vinder af et gavekort på 2.000 kr. blandt klubmedlemmerne på søndag.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At være med uden at gøre noget føles som en gave og belønner medlemskabet."
+  },
+  {
+    "subject": "Dit design kan blive næste års krus 🏆",
+    "preview": "Kun abonnenter kan sende forslag ind. Vinderen bliver produceret i 200 stk. med sit navn i bunden.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Chancen for at se sit eget design produceret er en eksklusiv præmie."
+  },
+  {
+    "subject": "Den her konkurrence er ikke på Facebook",
+    "preview": "Ingen likes, ingen delinger. Svar på ét spørgsmål i mailen, og vær med om en kurv fra Sønderjylland.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Fraværet af det sædvanlige gør konkurrencen eksklusiv for læserne."
+  },
+  {
+    "subject": "Forhandlermødet er lukket. Referatet er dit",
+    "preview": "Det, vi fortalte de største forhandlere om næste års sortiment – nu samlet til dig.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Adgang til et lukket rums indhold giver en følelse af at være inde."
+  },
+  {
+    "subject": "Nyt mærke. Kun ti butikker i Danmark.",
+    "preview": "Vi har fået eneret på et svensk keramikmærke og vælger de første forhandlere nu. Sådan søger du.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille antal forhandlere gør adgangen til en reel konkurrencefordel."
+  },
+  {
+    "subject": "Opskriften, der ikke står på posen",
+    "preview": "Bageren har skrevet sin egen version af rugbrødet til nyhedsbrevet. Den deler vi ikke andre steder.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Indhold, der kun findes i mailen, belønner dem, der læser med."
+  },
+  {
+    "subject": "Stylistens notesbog, kun til kunder",
+    "preview": "Fem rum, vi har indrettet i år, med mål og farvekoder. Normalt ligger den i en mappe på kontoret.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "bag_kulisserne"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et kig i en professionels private noter er inspiration med insiderværdi."
+  },
+  {
+    "subject": "Faste kunder springer køen over",
+    "preview": "Fra i dag har faste værkstedskunder en reserveret tid hver tirsdag. Ingen ventetid, ingen booking.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et privilegium, der sparer tid, er eksklusivitet med praktisk værdi."
+  },
+  {
+    "subject": "Du hører det her, før avisen gør",
+    "preview": "Vi flytter butikken til større lokaler i foråret. Her er, hvad det betyder for dig som kunde.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At få nyheden før offentligheden gør modtageren til en del af inderkredsen."
+  },
+  {
+    "subject": "Vi laver den kun i november",
+    "preview": "Julemarcipanen bliver lavet i én omgang om året. Abonnenter kan bestille, før vi åbner for butikken.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Én årlig produktion er ægte knaphed, og forspringet gør den til en fordel."
+  },
+  {
+    "subject": "Ikke engang vores mor har smagt den 🌶️",
+    "preview": "Den nye chiliolie er klar, og du er blandt de første 500, der får lov at prøve den.",
+    "language": "da",
+    "mechanisms": [
+      "eksklusivitet",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Overdrivelsen giver et smil og understreger, hvor tidligt modtageren er med."
+  },
+  {
+    "subject": "Members first, everyone else on Friday 🛋️",
+    "preview": "The autumn sofa range opens to club members tonight, with first pick of the fabrics.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den klare rækkefølge gør medlemskabets fordel konkret."
+  },
+  {
+    "subject": "A tea we can only buy once a year 🍵",
+    "preview": "The spring flush from one Darjeeling estate sells out at source. Subscribers get first order.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Knapheden har en ægte årsag, og det gør førsteretten troværdig."
+  },
+  {
+    "subject": "Stockists get the new scents first",
+    "preview": "Shops that carry our candles can order the winter scents two weeks before they go online.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandlerens forspring betyder salg, før kunderne kan købe andre steder."
+  },
+  {
+    "subject": "Your private sale code is inside",
+    "preview": "It works on the website for two days and only on your account. Knitwear, coats and boots.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig kode gør rabatten privat og værd at bruge."
+  },
+  {
+    "subject": "We're opening early. Just for you.",
+    "preview": "Subscribers can collect hot cross buns from 7am on Good Friday, an hour before the queue starts.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et forspring i tid er let at forstå og føles personligt."
+  },
+  {
+    "subject": "Ten seats at the roaster's table ☕",
+    "preview": "A cupping evening with our head roaster. Ten places, subscribers only, first come first served.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Få pladser og adgang til en ekspert gør invitationen eksklusiv."
+  },
+  {
+    "subject": "Club prices end with the weekend",
+    "preview": "After Sunday, the winter coats go back to full price and the club discount closes until spring.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En reel frist på en eksklusiv fordel gør handlingen presserende."
+  },
+  {
+    "subject": "Not in shops, not online. Just here.",
+    "preview": "A limited print of the autumn tote, made for subscribers only. 150 of them, numbered.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Udelukkelsen af de sædvanlige kanaler gør mailen til det eneste sted."
+  },
+  {
+    "subject": "Win a morning in our workshop",
+    "preview": "One subscriber and a friend spend a morning with our leather cutters and leave with a bag they made.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En oplevelse, man ikke kan købe, er den mest eksklusive præmie."
+  },
+  {
+    "subject": "Meet the customer who tested it first",
+    "preview": "A garden centre in Kent had the new planters for a month before launch. Here's what they found.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Historien om en udvalgt kunde gør den tidlige adgang levende."
+  },
+  {
+    "subject": "400 bars, then the pot's empty 🧼",
+    "preview": "Our winter soap is one run only. Subscribers can reserve theirs before it goes on the shelf.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet",
+      "deadline"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et ærligt, fast antal og ingen genopfyldning er knaphed, man kan tro på."
+  },
+  {
+    "subject": "Stockists only: a private showing",
+    "preview": "A morning with the new range for retailers who carry us, a week before the trade fair. Book a slot.",
+    "language": "en",
+    "mechanisms": [
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lukket visning før messen giver forhandlere et forspring på resten af branchen."
+  }
+]

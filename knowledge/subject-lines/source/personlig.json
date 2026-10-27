@@ -1,0 +1,1726 @@
+[
+  {
+    "subject": "Jeg har en yndlingsæske. Undskyld.",
+    "preview": "Man må nok ikke have favoritter blandt flere hundrede smykkeæsker. Men se lige den her.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille, selvironisk indrømmelse gør produktanbefalingen menneskelig og svær at ignorere."
+  },
+  {
+    "subject": "Ida her – jeg tog fejl om sort 🖤",
+    "preview": "Jeg troede, sorte æsker var for tunge til sommerens smykker. Så så jeg dem med guldfolie.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En afsender, der indrømmer en fejl, vækker nysgerrighed efter, hvad der fik hende til at skifte mening."
+  },
+  {
+    "subject": "Min mor pakkede gaver ind med lineal",
+    "preview": "Det har jeg arvet. Derfor er jeg nok lidt for glad for æsker med helt skarpe kanter.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lille familiehistorie giver afsenderen en grund til sin smag, før produktet nævnes."
+  },
+  {
+    "subject": "I går aftes øvede jeg mig i at pakke ind 🎀",
+    "preview": "Tre gaver, to ruller tape og én erkendelse: en god gaveæske slår papiret hver gang.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En selvironisk hverdagshistorie bærer pointen om gaveæsker, uden at det lyder som salg."
+  },
+  {
+    "subject": "Det spørgsmål får jeg oftest i telefonen ☎️",
+    "preview": "Kan I trykke et logo med skygge? Svaret er nej – men vores grafikere har en løsning.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Erfaring fra kundeservice gør et teknisk svar personligt og troværdigt."
+  },
+  {
+    "subject": "Jette fra Westpack: min mening om indlæg",
+    "preview": "Skum, pude eller slids? Det afgør, hvordan smykket ligger, når låget går op. Her er min rangering.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et navn og en holdning i emnelinjen lover en mening frem for en produktliste."
+  },
+  {
+    "subject": "Jeg ville ønske, flere vidste det her om logotryk",
+    "preview": "Vores grafikere tegner dit logo om uden beregning, hvis det ikke står skarpt nok i folie.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens lille frustration gør en servicefordel til noget, der føles som en delt hemmelighed."
+  },
+  {
+    "subject": "Undskyld, jeg skriver om jul i oktober 🎄",
+    "preview": "Men fristerne for logotryk falder tidligere, end man tror, og jeg vil hellere være for tidligt ude.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En undskyldning på forhånd afvæbner modtageren og gør fristen til et venligt råd."
+  },
+  {
+    "subject": "Jeg ryddede op i prøverne og fandt fem perler",
+    "preview": "Æsker, jeg havde glemt, hvor gode var. Nu ligger de øverst i bunken – og her i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En hverdagsscene fra kontoret gør et produktudvalg håndplukket i stedet for katalog."
+  },
+  {
+    "subject": "Jeg er lidt forelsket i en bærepose 🤍",
+    "preview": "Cremehvid, vævet hank og plads til et logo på op til 15 × 15 cm i XXL. Hold mig tilbage.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En overdreven følelse for et hverdagsprodukt får modtageren til at smile og åbne."
+  },
+  {
+    "subject": "Det bedste, jeg har set på en disk i år",
+    "preview": "Det var ikke smykket, men displayet under det. Butikken har sagt ja til, at jeg viser det frem.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig superlativ åbner et hul, som preview'et kun lukker halvt."
+  },
+  {
+    "subject": "Tre ting, jeg ville gøre før december",
+    "preview": "Bestil æskerne tidligt, tjek logoet nu, og find ud af, hvem der pakker ind. Den sidste er sværest.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et personligt råd i tre punkter føles som en kollega, der tænker med."
+  },
+  {
+    "subject": "Ny favoritfarve. Jeg er helt solgt 💛",
+    "preview": "Den kom ind på lageret i sidste uge, og jeg har allerede taget et par æsker med hjem.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En nyhed fortalt som personlig begejstring lyder mindre som en pressemeddelelse."
+  },
+  {
+    "subject": "Jeg fik et spørgsmål, jeg ikke kunne svare på",
+    "preview": "Hvorfor vælger nogen pose frem for æske? Så jeg spurgte kollegaerne, og svarene står her.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At indrømme ikke at vide alt gør afsenderen troværdig og spørgsmålet interessant."
+  },
+  {
+    "subject": "Må jeg blære mig lidt? 🙈",
+    "preview": "Betroet af 30.000+ brands. Jeg ved godt, det er pral, men jeg bliver stadig lidt stolt.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen indrømmer at prale, og det gør tallet sympatisk i stedet for anmassende."
+  },
+  {
+    "subject": "Jeg var nede i produktionen i går",
+    "preview": "Lugten af pap og lyden af maskinerne. Jeg tog billeder med, så du kan se det hele.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En medarbejder, der tager modtageren med ned i produktionen, gør fabrikken nærværende."
+  },
+  {
+    "subject": "Min kollega på lageret er uenig med mig",
+    "preview": "Han siger, æsken sælger smykket. Jeg siger, det er posen. Du afgør det i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille intern uenighed inviterer modtageren til at tage parti."
+  },
+  {
+    "subject": "Et råd, der ikke handler om at købe mere",
+    "preview": "Kig på, hvor æskerne står i butikken. Én lille flytning kan mærkes ved kassen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen lover noget uden salgsintention, og det sænker paraderne."
+  },
+  {
+    "subject": "Hvorfor jeg holder af tallet 48",
+    "preview": "Helt ned til 48 stk. kan du bestille med dit logo. Perfekt, hvis du lige vil prøve først.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et tal som kærlighedserklæring gør en minimumsordre til noget, afsenderen brænder for."
+  },
+  {
+    "subject": "Jeg indrømmer det: jeg dømmer gaver på æsken 🎁",
+    "preview": "Før jeg ser, hvad der er i den. Jeg tror ikke, jeg er den eneste – og det kan din butik bruge.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lidt pinlig indrømmelse er genkendelig, og preview'et vender den til en fordel for butikken."
+  },
+  {
+    "subject": "Det her bliver kort, det lover jeg",
+    "preview": "Ingen opstartsomkostninger på din første ordre med logo. Det var det hele. God dag.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et løfte om kortfattethed bliver selv grunden til at åbne."
+  },
+  {
+    "subject": "Gavebånd? Dem kan jeg ikke lade være",
+    "preview": "Ser jeg en æske uden, får jeg lyst til at binde et. Fem farver, der klæder smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lille personlig mani gør et tilbehør til noget, man får lyst til at prøve."
+  },
+  {
+    "subject": "Jeg prøvede at lave en æske selv 🙃",
+    "preview": "Det gik ikke godt. Til gengæld forstår jeg nu, hvorfor kollegaerne i produktionen er så stolte.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille fiasko fortalt med selvironi gør håndværket i produktionen synligt."
+  },
+  {
+    "subject": "Sådan ville jeg bruge 9.600 æsker",
+    "preview": "Bulkprisen starter der på de mest populære smykkeæsker. Jeg har lavet en plan for et helt år.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort tal med en personlig plan gør bulkkøb konkret i stedet for abstrakt."
+  },
+  {
+    "subject": "Matte overflader. Jeg har en mening.",
+    "preview": "Guldfolie står skarpere på dem, synes jeg. Her er fem, jeg selv ville vælge til ringe.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kort, kantet holdning til en detalje signalerer smag og ekspertise."
+  },
+  {
+    "subject": "Vores grafikere gav mig fire regler",
+    "preview": "Om hvad der gør et logo skarpt i folie. Jeg giver dem videre, ord for ord.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Viden fra kollegaer, bragt videre af afsenderen, føles som insiderviden."
+  },
+  {
+    "subject": "Lad mig være ærlig om december",
+    "preview": "Det bliver også travlt her hos os. Derfor skriver jeg nu, mens der stadig er luft i kalenderen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "oejeblik"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En indrømmelse om egen travlhed gør påmindelsen solidarisk i stedet for presset."
+  },
+  {
+    "subject": "Den mindste pose er min favorit 👜",
+    "preview": "200 × 150 mm, vævet hank og plads til et logo på 6 × 5 cm. Perfekt til en enkelt æske.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En overraskende favorit vækker nysgerrighed, og preview'et leverer de konkrete mål."
+  },
+  {
+    "subject": "Skrevet fra et lager fuldt af æsker",
+    "preview": "Jeg forstår godt, hvis du ikke har plads til dem selv. Vi kan opbevare din ordre for dig.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens omgivelser bliver en naturlig vej ind til en praktisk service."
+  },
+  {
+    "subject": "Okay, jeg er lidt nørdet med folie ✨",
+    "preview": "Rosaguld på sort, sølv på mørkeblå, kobber på creme. Mine favoritkombinationer står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En indrømmet nørdethed gør farvekombinationer til personlige anbefalinger."
+  },
+  {
+    "subject": "Ærligt? Jeg bryder mig ikke om ordet Black Friday",
+    "preview": "Men jeg kan godt lide, når gaveæskerne er klar, før køen er det. Her er min liste.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lille modstand mod sæsonen gør afsenderen ærlig og budskabet mere troværdigt."
+  },
+  {
+    "subject": "Årets mest praktiske tip, fra Jette 💡",
+    "preview": "Bestil gaveæsker i to størrelser, ikke fem. Så går indpakningen hurtigere.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En navngiven afsender, der lover ét tip, gør mailen let at sige ja til."
+  },
+  {
+    "subject": "Jeg blev overrasket over vores egen historie",
+    "preview": "Westpack hed Westpap, da det hele startede i Holstebro i 1953. Resten vidste jeg heller ikke.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En medarbejder, der selv lærer noget, inviterer modtageren med på opdagelsen."
+  },
+  {
+    "subject": "Alle smykkeposerne på række – og tre vindere",
+    "preview": "Jeg valgte dem, jeg selv ville bruge til en vielsesring, et armbånd og en reparation.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et personligt udvalg gør et bredt sortiment overskueligt og konkret."
+  },
+  {
+    "subject": "Det med prøverne, kort fortalt",
+    "preview": "De koster lidt, og det skal du vide på forhånd. Til gengæld kan du bestille op til fem online.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En afsender, der siger det kedelige først, vinder tillid til resten."
+  },
+  {
+    "subject": "Der sidder en hemmelighed i låget 🤫",
+    "preview": "En magnet, du ikke kan se. Jeg elsker lyden, når æsken lukker – og det kommer du også til.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig hemmelighed om et produkt åbner et hul, som preview'et lukker med en lyd."
+  },
+  {
+    "subject": "Jeg glæder mig til at se jeres juledisk 📸",
+    "preview": "Send et billede, når æskerne står klar. Den mest julede disk vinder et sæt bæreposer med logo.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens forventning gør konkurrencen til en invitation i stedet for et krav."
+  },
+  {
+    "subject": "Jeg er ikke designer, men jeg har en holdning",
+    "preview": "Et logo i én farve slår næsten altid et i fem. Og folietryk er heldigvis enig med mig.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En indrømmet amatørstatus gør holdningen sympatisk og pointen let at huske."
+  },
+  {
+    "subject": "Tjeklisten, jeg selv bruger før højsæsonen",
+    "preview": "Logo klar? Antal regnet ud? Lageret talt op? Ti minutter nu sparer dig for ræs senere.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens eget værktøj, delt åbent, gør forberedelsen let at gå i gang med."
+  },
+  {
+    "subject": "Jeg tror, vi har lavet den perfekte gaveæske",
+    "preview": "Jeg siger det sjældent så højt. Men jeg har stået med den i hånden i fem minutter nu.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En stor påstand, som afsenderen selv tøver med, virker mere troværdig end et superlativ i tredje person."
+  },
+  {
+    "subject": "Jeg tog en æske med hjem til min søster",
+    "preview": "Hun åbnede den helt langsomt. Det er præcis den reaktion, dine kunder skal have.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille familiescene viser effekten af en god æske bedre end en produktbeskrivelse."
+  },
+  {
+    "subject": "Mit bedste tip, hvis du har en webshop",
+    "preview": "Læg noget i pakken, der ikke stod i ordren. Det må gerne være småt – men pak det pænt.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et målrettet tip fra en person rammer webshops præcist og føles som et kollegialt råd."
+  },
+  {
+    "subject": "Det er min skyld, hvis du ikke kan lide farverne 🎨",
+    "preview": "Jeg fik lov at vælge årets nye nuancer. Jeg tror nu, du kommer til at kunne lide dem.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen tager ansvaret på sig på forhånd, og det gør nyheden personlig og lidt fræk."
+  },
+  {
+    "subject": "Sagt lige ud: kunden ser posen først",
+    "preview": "Før æsken, før smykket. Jeg ville bruge mindst lige så lang tid på at vælge den.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kontant holdning fra en navngiven afsender flytter fokus til et produkt, der ofte står i skyggen."
+  },
+  {
+    "subject": "Den her passer i en brevsprække. Jeg jublede. 📬",
+    "preview": "Lav højde, fast indlæg, og den åbner stadig, som en smykkeæske skal.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens begejstring gør en praktisk egenskab til en lille opdagelse."
+  },
+  {
+    "subject": "Jeg spurgte vores designere om én ting",
+    "preview": "Hvad gør en æske helt jeres egen? Svaret handler om en tom skitseblok og én fast kontakt.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen stiller spørgsmålet på modtagerens vegne og bringer svaret med tilbage."
+  },
+  {
+    "subject": "Hjælp mig med at finde et navn",
+    "preview": "Vores nye bæreposefarve har ikke fået et endnu. Det bedste forslag bliver farvens navn i webshoppen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig bøn om hjælp gør konkurrencen til noget, modtageren har lyst til at blande sig i."
+  },
+  {
+    "subject": "Ida her – en tak, der har været undervejs længe",
+    "preview": "For hver ordre, hvert logo og hvert opkald i år. Uden jer var her ret stille i Holstebro.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig tak uden salgsbudskab bygger relation, og preview'et gør den konkret."
+  },
+  {
+    "subject": "Jeg kunne ikke vente til næste uge 🙌",
+    "preview": "Den nye serie kom på lager i morges, og jeg ville vise dig den, før kataloget er færdigt.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderens utålmodighed smitter og gør nyheden til noget, man får først."
+  },
+  {
+    "subject": "Til jeres bedste stamkunder har jeg en idé",
+    "preview": "En lille gaveæske med jeres logo, når de handler for tiende gang. Den bliver husket.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen tænker med på butikkens kunder, ikke kun på egne produkter."
+  },
+  {
+    "subject": "Jeg holder øje med kalenderen for jer ⏳",
+    "preview": "Fristerne for logotryk kommer snigende. Jeg siger til i god tid, så du ikke behøver at huske dem.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen påtager sig at huske for modtageren, og det gør fristen tryg i stedet for stressende."
+  },
+  {
+    "subject": "Jeg leder efter butikker, der vil sælge æsker",
+    "preview": "Vores forhandlerprogram er til dig, der også vil tilbyde emballage til dine egne kunder.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En person, der leder efter nogen, gør et B2B-program til en invitation."
+  },
+  {
+    "subject": "Jeg vil rigtig gerne vise jeres butik frem 📣",
+    "preview": "Vi betaler annoncerne, og de kører fra jeres egen profil. Sig til, hvis det lyder som jer.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig lyst til at fremhæve kunden gør partnerprogrammet til en kompliment."
+  },
+  {
+    "subject": "Frokostpausen gik med at læse anmeldelser ⭐",
+    "preview": "TrustScore 4.6. Jeg har valgt et par stykker, der siger det bedre, end jeg selv kan.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En hverdagsscene gør anmeldelserne til noget, afsenderen selv er glad for, ikke en reklame."
+  },
+  {
+    "subject": "Min lille ordbog til logotryk",
+    "preview": "Kliché, folietryk, indlæg og korrektur. Ti ord, der gør det lettere at bestille med logo.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et personligt hjælpemiddel gør et fagligt emne tilgængeligt og nyttigt."
+  },
+  {
+    "subject": "Undervurderet: den brune budgetpose",
+    "preview": "Jeg holder meget af kraftpapir, og min favorit er den mellemstore til et par gaveæsker.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig erklæring om et beskedent produkt giver det en status, katalogteksten ikke kan."
+  },
+  {
+    "subject": "Ida here, with one thing I'd do this week",
+    "preview": "Check your logo file now. If it won't print cleanly in foil, our designers redraw it at no charge.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En navngiven afsender med ét konkret råd gør mailen let at åbne og let at handle på."
+  },
+  {
+    "subject": "I rang our factory with a silly question ☎️",
+    "preview": "How heavy should a lid be? Nobody laughed. They explained exactly why weight reads as quality.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderens lille pinlighed åbner døren til produktionens viden."
+  },
+  {
+    "subject": "Confession: I notice the bag before the shop 🛍️",
+    "preview": "Probably an occupational hazard. The luxury carrier bags I'd choose, in nine colours.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En selvironisk tilståelse gør bæreposen til noget, afsenderen selv lægger mærke til."
+  },
+  {
+    "subject": "The box on my desk used to hold a ring",
+    "preview": "Now it holds paperclips. That's the whole case for a box worth keeping.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille genstand på afsenderens skrivebord bærer hele argumentet for en æske, der bliver gemt."
+  },
+  {
+    "subject": "Writing from the sample room, tea in hand ☕",
+    "preview": "Five boxes on the table and a strong opinion about which one wins. You can disagree.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En scene fra afsenderens hverdag og en lovet holdning gør udvalget nysgerrigt."
+  },
+  {
+    "subject": "Meet the people who make my job easy",
+    "preview": "Our graphic designers check every logo before it goes near foil. I asked for their best tip.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen giver æren videre til kollegaerne og bringer et tip med tilbage."
+  },
+  {
+    "subject": "Honestly? Pouches are underrated",
+    "preview": "They slip into a parcel, sit nicely in the hand and still feel like a present. My three picks.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kort, ærlig holdning løfter et produkt, modtageren måske ikke har overvejet."
+  },
+  {
+    "subject": "I'd rather nag you now than in December ⏰",
+    "preview": "Logo print deadlines arrive earlier than you'd think. Consider this my friendly early nudge.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen indrømmer at mase, og det gør fristen venlig i stedet for truende."
+  },
+  {
+    "subject": "The best unboxing I saw this year 🎁",
+    "preview": "A small studio, a handwritten card and one of our boxes. They said I could share it.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig superlativ om en kundes øjeblik gør casen til en historie."
+  },
+  {
+    "subject": "I tried to wrap a necklace without a box 🙈",
+    "preview": "It did not go well. The three boxes that would have saved my evening are inside.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En lille selvironisk fiasko gør produktet til den oplagte redning."
+  },
+  {
+    "subject": "Can I show you something new? ✨",
+    "preview": "It arrived this morning and I've already rearranged my desk around it. Our new gift box.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et personligt spørgsmål og en begejstret afsender gør nyheden til noget, man får vist."
+  },
+  {
+    "subject": "I asked our studio what they'd make from scratch",
+    "preview": "Westpack Design Studio starts from a blank page, with one named contact the whole way.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen stiller drømmespørgsmålet på kundens vegne og viser, hvem der kan svare."
+  },
+  {
+    "subject": "My honest advice on your first logo order",
+    "preview": "Start with 48. Live with them on your counter for a week, then order the rest.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lavmælt råd fra en person, der ikke presser på, gør den lille ordre til en god start."
+  },
+  {
+    "subject": "Top of my Christmas list: boxes 🎄",
+    "preview": "Not presents – boxes. The order I'd build if I ran a jewellery shop this season.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En personlig juleliste med et twist gør en bestillingsguide til noget, man vil læse."
+  },
+  {
+    "subject": "I'm looking for shops to feature",
+    "preview": "We fund partnership ads that run from your own profile. Tell me if your shop's up for it.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En afsender, der leder efter nogen, gør partnerprogrammet til en invitation."
+  },
+  {
+    "subject": "Black Friday makes me nervous. Here's why.",
+    "preview": "Not the sales – the queues. Flat-pack gift boxes take up no room until the moment you need them.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderens nervøsitet spejler modtagerens egen og leder direkte til en løsning."
+  },
+  {
+    "subject": "Pick my next desk box for me",
+    "preview": "Three finalists, one vote each. I'll live with whatever you choose until spring.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen giver modtageren magt over noget personligt, og det er svært at lade være."
+  },
+  {
+    "subject": "I'll admit it: I love a tidy stockroom",
+    "preview": "Which is why I like that we can store your order, and you pay as you draw it down.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille personlig vane bliver en naturlig indgang til en praktisk service."
+  },
+  {
+    "subject": "If I opened a shop tomorrow, I'd start here",
+    "preview": "With the bag, not the box. It walks out of the door and down the street with your name on it.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et hypotetisk personligt valg giver modtageren en klar prioritet at tage stilling til."
+  },
+  {
+    "subject": "40 kaffer smagt. Én vandt. ☕",
+    "preview": "Den er fra et lille kooperativ i Rwanda og smager af solbær. Vi har kun 60 kilo.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen smagning gør udvælgelsen troværdig, og den lille mængde gør den eftertragtet."
+  },
+  {
+    "subject": "Jeg har siddet i alle vores sofaer i dag",
+    "preview": "Og jeg har en klar vinder til lange søndage. Den er ikke den dyreste.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ejer, der selv har testet, åbner et hul, som kun mailen lukker."
+  },
+  {
+    "subject": "Sidste uge gik ikke, som den skulle",
+    "preview": "Vores leveringer var to dage forsinkede. Her er, hvad jeg har lavet om, så det ikke sker igen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En åben indrømmelse fra en navngiven afsender bygger mere tillid end en standardbesked."
+  },
+  {
+    "subject": "Tre måneder og en del smør senere 🥐",
+    "preview": "Min surdejscroissant er endelig, som den skal være. Fra i morgen ligger den i disken.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et glimt af arbejdet bag produktet gør nyheden til en lille sejr, man vil smage."
+  },
+  {
+    "subject": "Jeg plejer ikke at have favoritter, men",
+    "preview": "Ranunkler i abrikos. De holder ti dage i vasen, og de kom ind i morges.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En afbrudt sætning skaber et hul, og preview'et lukker det med en konkret blomst."
+  },
+  {
+    "subject": "Skeptisk? Det var jeg også 🍷",
+    "preview": "Portugisisk hvidvin til vintermad lød forkert, indtil jeg smagte den til torsk med brunet smør.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Afsenderen deler modtagerens tvivl og vender den selv, hvilket gør anbefalingen troværdig."
+  },
+  {
+    "subject": "Min egen cykel er i stykker. Igen. 🚲",
+    "preview": "Derfor ved jeg præcis, hvor irriterende det er. Vi har udvidet åbningstiden på værkstedet.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ejerens egen uheld gør en servicenyhed solidarisk og sjov."
+  },
+  {
+    "subject": "Tredje gang lykkedes sweateren 🧶",
+    "preview": "Første gang for stram, anden gang forkert garn. Nu har jeg skrevet opskriften ned til jer.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "Et ordsprog og en ærlig historie om fejlslag gør opskriften fortjent."
+  },
+  {
+    "subject": "Seks kopper te om dagen, i fast rækkefølge",
+    "preview": "Morgen, formiddag, frokost og resten. Her er min liste – og hvorfor den sidste er uden koffein.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig vane med et tal gør sortimentet til en dag i afsenderens liv."
+  },
+  {
+    "subject": "Testet af en hund, der ødelægger alt 🐶",
+    "preview": "Tre stykker legetøj overlevede en hel uge. Dem har vi nu bestilt hjem i større antal.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ejerens egen hund som testpanel er både sjov og mere overbevisende end en produkttekst."
+  },
+  {
+    "subject": "Den kostede mig en nats søvn 📚",
+    "preview": "Den nye krimi, jeg ikke kunne lægge fra mig. Den er i butikken fra torsdag.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En klage, der i virkeligheden er ros, gør bogen uimodståelig."
+  },
+  {
+    "subject": "Halvdelen af ovnen røg ud i går",
+    "preview": "Glasuren løb. Det, der overlevede, er det smukkeste, jeg har lavet. 14 kopper i webshoppen nu.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ærlig fiasko gør de få overlevende til noget sjældent."
+  },
+  {
+    "subject": "Jeg sov i det nye telt i stormvejr",
+    "preview": "Det holdt. Det gjorde mine nerver ikke. Hele historien og teltet står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen test gør produktpåstanden til en oplevelse."
+  },
+  {
+    "subject": "Min fødselsdag, jeres rabat 🎂",
+    "preview": "Jeg fylder 50 på fredag, så alle børnesko er 20 % ned hele weekenden.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig anledning gør rabatten til en fejring frem for et udsalg."
+  },
+  {
+    "subject": "Et år med den samme creme",
+    "preview": "Uden at skifte og uden at blande. Her er, hvad min hud gjorde – og hvorfor jeg nu bruger to.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et personligt langtidsforsøg giver et råd, der bygger på erfaring frem for reklame."
+  },
+  {
+    "subject": "Jeg tog en uge i et storkøkken",
+    "preview": "For at forstå, hvorfor knivene bliver sløve midt i servicen. Nu har vi en slibeordning til jer.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens indsats for at forstå kunden gør den nye service troværdig."
+  },
+  {
+    "subject": "Jeg sidder på den stol, jeg sælger",
+    "preview": "Otte timer om dagen i to år. Min ryg har en mening om den, og den er positiv.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderen bruger selv produktet og lader kroppen tale for det."
+  },
+  {
+    "subject": "Et forslag til jeres vinkort",
+    "preview": "Én hvidvin under 100 kr. pr. flaske, der kan stå på kortet til 450. Jeg har smagt den selv.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En personlig anbefaling med konkrete tal taler direkte til restaurantens bundlinje."
+  },
+  {
+    "subject": "Isenkræmmere i Jylland: jeg har plads til tre",
+    "preview": "Til vores emaljekander. Forhandlere får display, startpakke og en fast kontaktperson – mig.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En person, der leder efter nogen, gør et forhandlerprogram til en invitation."
+  },
+  {
+    "subject": "Vis mig din altan 📸",
+    "preview": "Send et billede af den i blomst. Den smukkeste vinder en buket hver uge i en måned.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kort, personlig opfordring gør konkurrencen til en samtale."
+  },
+  {
+    "subject": "En af jer skal have den her cykel",
+    "preview": "Gæt, hvor mange kilometer jeg har kørt i år, og vær med i lodtrækningen om den.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien og gættet er begge knyttet til afsenderen, så konkurrencen føles personlig."
+  },
+  {
+    "subject": "I går fik jeg lov at se et hjemmekontor i et skab",
+    "preview": "En kunde byggede det hele på 80 centimeter. Jeg tog billeder, og hun sagde god for det.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et personligt besøg gør kundecasen til en oplevelse frem for en reference."
+  },
+  {
+    "subject": "Det, jeg lærte af en caféejer i Vejle",
+    "preview": "Hun har kun én kaffe på menuen og sælger mere end nogen anden, vi leverer til. Her er hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Afsenderen sætter sig i elevens sted, og det gør kundens metode værd at læse."
+  },
+  {
+    "subject": "I dag har jeg ristet kaffe i 20 år 🎉",
+    "preview": "Det startede i en garage med en brugt rister. Tak, fordi I er blevet ved med at drikke med.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig milepæl deler stoltheden med kunderne uden at sælge noget."
+  },
+  {
+    "subject": "Mikkel er bedre end mig. Mød ham.",
+    "preview": "Han har repareret cykler i 15 år og kan høre en løs eger på ti meter.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ejeren træder ydmygt til side og præsenterer en kollega, og det gør butikken menneskelig."
+  },
+  {
+    "subject": "Min julemenu, i vin 🎄",
+    "preview": "Seks flasker fra sild til risalamande, og ingen af dem koster over 200 kr.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "En personlig menu gør et sæsonudvalg til et færdigt svar, modtageren kan bruge direkte."
+  },
+  {
+    "subject": "Den her tube tager jeg altid med på ski",
+    "preview": "Den har reddet mine læber på fem bjergtoppe. Nu fås den i rejsestørrelse.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen rejsevane gør et lille produkt til et uundværligt et."
+  },
+  {
+    "subject": "Ja, jeg glemte regntøjet første skoledag 🎒",
+    "preview": "Det gør vi alle. Derfor har vi samlet alt til skolestart på én side, i alle størrelser.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En indrømmelse, alle forældre kender, gør sæsonsiden til en hjælpende hånd."
+  },
+  {
+    "subject": "Torsdag er min grænse for buketter",
+    "preview": "Bestiller I senere, kan jeg ikke nå at binde dem alle sammen i hånden til fredag.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen forklares med afsenderens egne hænder, så den føles reel og ikke kunstig."
+  },
+  {
+    "subject": "Julekaffen ristes kun én gang",
+    "preview": "Jeg lukker for bestillinger, når sækkene er tomme. Lige nu er der to tilbage.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "frist",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig garanti for knaphed gør fristen konkret og troværdig."
+  },
+  {
+    "subject": "Kaffen er på mig, hvis du tager to bøger",
+    "preview": "Hele lørdagen, ved disken. Det er ikke et stort tilbud, men det er et hyggeligt et.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille, personligt tilbud sagt ærligt virker mere end en stor procentsats."
+  },
+  {
+    "subject": "Vintergarnet skal ud – jeg har brug for pladsen",
+    "preview": "Forårsfarverne er på vej. Alt vintergarn er 25 % ned, så længe der er nøgler.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ærlig grund til rabatten gør udsalget forståeligt og troværdigt."
+  },
+  {
+    "subject": "I har spurgt længe. Nu kører vi om lørdagen",
+    "preview": "Fra næste uge kører vi også ud lørdag formiddag. Tak, fordi I blev ved med at spørge.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderen viser, at kundernes ønsker er blevet hørt, og det gør nyheden personlig."
+  },
+  {
+    "subject": "En ekstra ovn, kun til restauranter",
+    "preview": "Specialglasur i mindst 40 stk. Jeg tegner skitsen selv og ringer, før vi brænder.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens personlige involvering gør en B2B-service til håndværk."
+  },
+  {
+    "subject": "Mine visne tulipaner ryger ikke ud 🌷",
+    "preview": "Tre måder at give en buket en uge mere. Den sidste har jeg fra min mor.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig vane og et arvet tip gør guiden varm og troværdig."
+  },
+  {
+    "subject": "Syv gange har jeg flyttet rundt på stuen",
+    "preview": "Nu ved jeg, hvor sofaen skal stå. Fem regler, der virker i små rum.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egne forsøg gør reglerne til hårdt tilkæmpet erfaring."
+  },
+  {
+    "subject": "Jeg skriver stadig breve i hånden ✉️",
+    "preview": "Derfor har jeg valgt vores tykkeste papir og en fyldepen, der ikke klatter.",
+    "language": "da",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig vane gør et nicheprodukt til en livsstil, modtageren kan dele."
+  },
+  {
+    "subject": "Ny adresse, 200 meter længere nede ad gaden",
+    "preview": "Nyt hjørne, samme te. Kom forbi på lørdag – jeg har bagt, og døren står åben.",
+    "language": "da",
+    "mechanisms": [
+      "personlig",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En praktisk nyhed fortalt som en invitation fra ejeren selv."
+  },
+  {
+    "subject": "I drank a terrible coffee today",
+    "preview": "It reminded me why we roast in small batches. This week's lot is the best we've had all year.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En dårlig oplevelse fortalt af ejeren selv gør kvaliteten i eget produkt mærkbar."
+  },
+  {
+    "subject": "My staff picks are getting out of hand 📚",
+    "preview": "Twelve books this month. I tried to cut the list to five and lost the argument.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En lille intern kamp gør anbefalingerne levende og personlige."
+  },
+  {
+    "subject": "First time I've ever stocked this flower 🌸",
+    "preview": "Chocolate cosmos – it really does smell of cocoa. Four buckets, and that's the lot.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Afsenderens egen nyfundne begejstring og en lille mængde gør nyheden sjælden."
+  },
+  {
+    "subject": "I'm keeping one bottle back for myself 🍷",
+    "preview": "There are 23 left of this Rioja. The rest are yours at last year's price.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "eksklusivitet"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen lyst til produktet er det stærkeste argument for tilbuddet."
+  },
+  {
+    "subject": "I need your orders by Wednesday 🛋️",
+    "preview": "Our upholsterer is away for three weeks after that, and I don't want your sofa stuck in limbo.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Fristen får en menneskelig grund, så den føles ærlig og ikke som pres."
+  },
+  {
+    "subject": "From today, it's me you call",
+    "preview": "Orders, returns, odd questions about envelope sizes – it all comes straight to me now.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En navngiven kontaktperson gør en serviceændring til et personligt løfte."
+  },
+  {
+    "subject": "My cat rejected every bed we stock 🐈",
+    "preview": "Except one. It's on the shelf now, and she's asleep in the display model.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ejerens kræsne kat er et sjovt og overbevisende testpanel."
+  },
+  {
+    "subject": "60km to work, every day. I asked him why.",
+    "preview": "One of our regulars, all year round. His answer was about the saddle, and it changed what we stock.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret tal og et personligt spørgsmål gør kundecasen til en historie."
+  },
+  {
+    "subject": "Our kiln broke. I nearly cried.",
+    "preview": "It's fixed now, but the backlog isn't. Here's when your mugs will actually be ready.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En ærlig, følelsesladet indrømmelse gør en forsinkelse forståelig."
+  },
+  {
+    "subject": "I'd love our tea on your counter 🍵",
+    "preview": "Stockists get a counter display, a fixed margin and me on the phone when stock runs low.",
+    "language": "en",
+    "mechanisms": [
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et personligt ønske gør et forhandlertilbud til en invitation med et ansigt på."
+  },
+  {
+    "subject": "I swore I'd never sell Christmas jumpers 🎄",
+    "preview": "Then a supplier made one in merino, with no reindeer at all. Three colours, small batch.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Afsenderen bryder sit eget løfte, og det gør produktet til en undtagelse værd at se."
+  },
+  {
+    "subject": "I tested this on my mum first 🧴",
+    "preview": "She's the toughest critic I know. The new hand cream passed – just, she says.",
+    "language": "en",
+    "mechanisms": [
+      "personlig",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En personlig testperson med skarp tunge gør nyheden sjov og troværdig."
+  }
+]

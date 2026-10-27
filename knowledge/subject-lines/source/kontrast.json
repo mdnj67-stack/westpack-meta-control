@@ -1,0 +1,1742 @@
+[
+  {
+    "subject": "Billigere end kæden. Gemt i længere tid",
+    "preview": "Æsken står på natbordet, længe efter kvitteringen er smidt ud. Sådan vælger du den rigtige.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Pris og levetid peger hver sin vej, og den skævhed er hele pointen om æskens værdi."
+  },
+  {
+    "subject": "48 stk. med dit logo. Ikke 4.800",
+    "preview": "Du behøver ikke et lager for at have din egen emballage. Sådan fungerer små ordrer med logo.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lille tal sat op mod det store, man frygtede, sænker tærsklen på et øjeblik."
+  },
+  {
+    "subject": "Sort udenpå. Guld, når den åbnes 🖤",
+    "preview": "Logoet i guldfolie inde i låget og en helt ren yderside. Et look, der først viser sig i hånden.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To flader af samme æske står i modsætning, og overraskelsen ligger i åbningen."
+  },
+  {
+    "subject": "Vores dyreste kaffe ser billigst ud",
+    "preview": "Brun pose, håndskrevet etiket og intet guld. Det er med vilje, og smagen er grunden.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Pris og udseende modsiger hinanden, og man vil vide, hvorfor butikken gør det med vilje."
+  },
+  {
+    "subject": "Small box. Long memory.",
+    "preview": "The jewellery gets worn; the box gets kept. Which is why the inside of the lid deserves your logo.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det fysisk lille sat mod det følelsesmæssigt store gør æskens rolle tydelig i to ord."
+  },
+  {
+    "subject": "Det føles tidligt. Det er det ikke ⏰",
+    "preview": "Et nyt logo tager 7–8 arbejdsdage i produktion, og julefristerne falder tidligere end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen modsiger modtagerens egen fornemmelse og giver straks grunden i preview."
+  },
+  {
+    "subject": "Det mindste rum i huset fik det største budget",
+    "preview": "Et gæstetoilet på to kvadratmeter, tre materialer og én modig farve. Se resultatet.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Størrelse og budget står omvendt af det forventede, og man vil se, om det var det værd."
+  },
+  {
+    "subject": "200.000 om dagen. Hvert logo set af et menneske",
+    "preview": "Maskinerne klarer mængden. En grafiker klarer detaljen, før noget som helst bliver trykt.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Industriel skala og personlig omhu står side om side og gør begge mere troværdige."
+  },
+  {
+    "subject": "Rosen visner. Æsken bliver 🌹",
+    "preview": "Til valentinsdag sælger dine kunder et øjeblik. Emballagen er den del, der står tilbage bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det forgængelige og det varige sat over for hinanden giver æsken en rolle i sæsonen."
+  },
+  {
+    "subject": "Our best paper is having a cheap week",
+    "preview": "Our heaviest writing paper is a third off until Sunday, because the new stock arrives on Monday.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Dyrt og billigt i samme linje skaber en lille gnist, som preview forklarer med en rabat."
+  },
+  {
+    "subject": "Kun én farve. Omkring 25 at vælge imellem",
+    "preview": "Folie kan hverken lave toninger eller fotos. Til gengæld kan den noget, tryk ikke kan: glimte.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Begrænsningen og valgfriheden står side om side og gør teknikken let at forstå."
+  },
+  {
+    "subject": "Ny ovn. Gammel surdej 🍞",
+    "preview": "Vi har skiftet den 40 år gamle ovn ud. Surdejen fra 1987 flyttede med, og den har det fint.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyt og gammelt i fire ord fortæller, at noget ændrer sig, mens det vigtigste bliver."
+  },
+  {
+    "subject": "A small Danish town. 30,000+ brands.",
+    "preview": "Westpack began in Holstebro in 1953. How a small-town packaging firm ended up on counters worldwide.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lille udgangspunkt og den store rækkevidde gør historien overraskende og troværdig."
+  },
+  {
+    "subject": "Køb 9.600. Tag 500 ad gangen",
+    "preview": "Bulkpris på populære smykkeæsker, og vi opbevarer resten, til du har brug for det.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det store indkøb og den lille portion fjerner den indvending, man ellers ville have mod bulk."
+  },
+  {
+    "subject": "Sød nok til børn. Stærk nok til far 🍫",
+    "preview": "Den nye bar har chili i bunden og karamel i toppen. Den første bid snyder dig.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "To publikummer, der normalt vil have hver sin chokolade, mødes i ét produkt."
+  },
+  {
+    "subject": "Jo mindre logo, jo dyrere look",
+    "preview": "Et lille logo i hjørnet af låget kan få en sort æske til at virke mere eksklusiv. Seks eksempler.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Reglen vender den intuitive tanke om, at større logo giver mere synlighed."
+  },
+  {
+    "subject": "He came in for a bell. He left with a plan. 🚲",
+    "preview": "A retired postman, a route along the coast and a bike we hadn't sold in two years. His story.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det lille ærinde og den store beslutning står over for hinanden og trækker historien frem."
+  },
+  {
+    "subject": "Fylder ingenting. Gør alligevel indtryk",
+    "preview": "Smykkeposer til webshoppen, til gaven og til kunden, der vil have det enkelt. Se hele udvalget.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lille fysisk omfang og stor effekt er en modsætning, der forklarer produktet uden at nævne det."
+  },
+  {
+    "subject": "Vores billeder er pæne. Jeres er bedre",
+    "preview": "Et udpluk af æsker, som de ser ud hos kunderne: på disken, i vinduet og på pakkebordet.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen giver modtagerne ret over sig selv, og det gør kundernes billeder til hovedsagen."
+  },
+  {
+    "subject": "Second time round, your logo is quicker",
+    "preview": "A new logo needs 7–8 working days in production. One we've printed before needs 4–5.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det, der er ens, og det, der ændrer sig, står i to korte sætninger, så fordelen er åbenlys."
+  },
+  {
+    "subject": "Græskar til suppe. Græskar til trappen 🎃",
+    "preview": "De ligner hinanden, men kun den ene smager af noget. Vi har sat skilte på, så ingen tager fejl.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To brug af samme ting sat side om side giver et smil og et praktisk råd i sæsonen."
+  },
+  {
+    "subject": "Den rolige uge i oktober redder december 🎄",
+    "preview": "Det, du ordner nu, mens der er ro, er det, der redder højsæsonen. En tjekliste til emballagen.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To måneder med modsat stemning viser, hvorfor handlingen hører til i den rolige."
+  },
+  {
+    "subject": "Klassisk mod modig – kun én kommer på forsiden 🗳️",
+    "preview": "Den klassiske eller den modige? Stem, og se om du er enig med resten af kunderne.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To mod én gør afstemningen til en duel, man har lyst til at blande sig i."
+  },
+  {
+    "subject": "Smoked tea, over ice? Bear with us",
+    "preview": "It sounds wrong until you taste it. The new lapsang is in tins from this Friday, with a recipe card.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Røg og is lyder forkert sammen, og netop derfor vil man vide, hvordan det smager."
+  },
+  {
+    "subject": "Grundlagt i 1953. Stadig ikke færdig",
+    "preview": "Over 70 år med æsker, og vi justerer stadig. Her er tre ting, der er nye i år.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Høj alder og ufærdighed modsiger hinanden og gør en gammel virksomhed nysgerrig at læse om."
+  },
+  {
+    "subject": "Vi svarer hurtigt og trykker langsomt",
+    "preview": "Vi svarer på din fil inden for en time. Derefter tager vi os god tid, og det kan ses på papiret.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fart og langsomhed i samme ydelse viser, hvor leverandøren bruger sin tid med vilje."
+  },
+  {
+    "subject": "Samme æske. To helt forskellige gaver 🎁",
+    "preview": "Med silkepapir bliver den romantisk. Med et sort bånd bliver den en firmagave. Se forvandlingen.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Én genstand med to udtryk viser, hvor lidt der skal til, og lover en før-og-efter."
+  },
+  {
+    "subject": "Bought in your shop. Seen all over town 🛍️",
+    "preview": "A carrier bag keeps working long after the till closes. Nine colours to choose from.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lille sted for købet og den store scene bagefter gør posen til en reklame."
+  },
+  {
+    "subject": "Den billigste drue gav vores dyreste vin",
+    "preview": "Vinbonden lader den hænge tre uger længere end naboerne. Det kan smages i hver eneste flaske.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Råvarens pris og vinens pris står omvendt, og forklaringen er en historie om tid."
+  },
+  {
+    "subject": "Den tykkeste bog vinder. Den tyndeste også 📚",
+    "preview": "Gæt sidetallet på de to bøger i vinduet. Tættest på begge vinder et års læsning hos os.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To modsatte vindere i én konkurrence lyder umuligt, og preview løser gåden."
+  },
+  {
+    "subject": "Tiny distillery, enormous queue",
+    "preview": "Saturday's open day sold out in an hour. We've added a second date, and it's nearly gone as well.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "eksklusivitet"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det lille sted og den store efterspørgsel gør knapheden konkret og lidt komisk."
+  },
+  {
+    "subject": "Lad være med at bestille 1.000 æsker",
+    "preview": "Bestil én først. Sådan virker prøver med og uden logo, og hvad de koster.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En leverandør, der fraråder et stort køb, vender forventningen og vinder tillid."
+  },
+  {
+    "subject": "Hvorfor bliver den lydløse æske husket?",
+    "preview": "Magneten sidder skjult i låget, så der hverken er knap eller lås. Kun et blødt klik.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En egenskab, der lyder som fravær, bliver stillet som en styrke, og man vil høre hvorfor."
+  },
+  {
+    "subject": "Det modigste valg er den lyse æske 🎨",
+    "preview": "Når disken er fuld af sort, er det den lyse æske med farvet folie, man husker. Fem kombinationer.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det forventet sikre valg bliver kaldt det modige, og den omvending vil man have forklaret."
+  },
+  {
+    "subject": "Black Friday, without the discount",
+    "preview": "Not every jeweller wants to cut prices. Five ways packaging can make the week feel special instead.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den dag, alle forbinder med rabat, bliver præsenteret uden, og det er en lettelse for mange."
+  },
+  {
+    "subject": "Stolen er 60 år gammel. Stoffet er fra i går",
+    "preview": "Vi har betrukket designklassikeren med uld fra et lille væveri i Herning. Den står i vinduet nu.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alder og nyhed i samme genstand gør en klassiker interessant igen."
+  },
+  {
+    "subject": "Dit første logo koster ikke det, du tror",
+    "preview": "Ingen opstartsomkostninger på din første ordre. Hvad det dækker, og hvilke produkter det gælder.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen vender en frygt for opstartsprisen og lader preview give den konkrete fordel."
+  },
+  {
+    "subject": "Nu i samme gruppe – og stadig hver for sig 🤝",
+    "preview": "Vi er gået sammen med et britisk emballagebrand, men begge fortsætter som før. Hvad det betyder.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sammen og adskilt i én sætning svarer på det spørgsmål, kunden ellers ville stille."
+  },
+  {
+    "subject": "The worst kiln day of the year made our bestseller",
+    "preview": "A crack in the glaze, a customer who loved it anyway, and a mug we now make wrong on purpose.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den dårligste dag og det bedste resultat hænger sammen, og man vil vide hvordan."
+  },
+  {
+    "subject": "Fra køkkenbordet til 40 forhandlere",
+    "preview": "Lysestøberen startede med tre forme og en gryde. I dag står hendes lys i butikker i fire lande.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det beskedne udgangspunkt og den store rækkevidde fortæller en hel historie i én linje."
+  },
+  {
+    "subject": "24 måneder gammel og billigere end en ung gouda 🧀",
+    "preview": "Vi rydder plads til ny lagring, så de ældste oste er sat ned hele weekenden. Smag, før du køber.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Alder plejer at koste ekstra, så en gammel ost til lav pris stopper øjet og fører til tilbuddet."
+  },
+  {
+    "subject": "Det bedste, en æske kan gøre for sølv, er ingenting",
+    "preview": "Vores æsker testes for anløbning og indeholder intet, der fremskynder den. Sådan foregår testen.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "At gøre ingenting lyder som en mangel, men viser sig at være den vigtigste egenskab."
+  },
+  {
+    "subject": "The box is plain. The moment isn't. 💍",
+    "preview": "A clean, quiet ring box leaves all the drama to the jewellery. Our simplest designs, side by side.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det enkle produkt og det store øjeblik står i kontrast og gør enkelheden til en fordel."
+  },
+  {
+    "subject": "Vi har lukket butikken for at gå en tur ⛰️",
+    "preview": "Hele holdet tester vinterens støvler på Hærvejen fredag. Lørdag er vi tilbage med en ærlig rapport.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lukket butik lyder som dårligt nyt, indtil grunden viser sig at være selve produktet."
+  },
+  {
+    "subject": "Det er ikke fragten, der tager tid ⏰",
+    "preview": "Det er produktionen. Nyt logo: 7–8 arbejdsdage. Kendt logo: 4–5. Planlæg efter det, så er du foran.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen afviser den oplagte forklaring og flytter fokus til det, der faktisk afgør fristen."
+  },
+  {
+    "subject": "Indersiden tæller mere end ydersiden",
+    "preview": "Kunden ser låget i to sekunder og indersiden, hver gang smykket tages op. Sådan vælger du indlæg.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En kendt talemåde bliver bogstavelig og vender fokus fra æskens låg til dens indhold."
+  },
+  {
+    "subject": "Our new cream does less. On purpose.",
+    "preview": "Four ingredients instead of nineteen, and a jar you can actually open with wet hands.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En nyhed, der lover mindre i stedet for mere, bryder med alt, kategorien plejer at sige."
+  },
+  {
+    "subject": "Ny farve. Ikke sort, men næsten ✨",
+    "preview": "En dyb nuance, der skifter med lyset og får både guld og sølv til at stå skarpere. Se den i dagslys.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En farve beskrevet ved det, den næsten er, gør nyheden konkret og alligevel hemmelig."
+  },
+  {
+    "subject": "Den bedste kop kaffe kommer fra den billigste kværn",
+    "preview": "Næsten. Vores barista viser, hvorfor indstillingen betyder mere end prisen, og hvor du skal skrue.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Påstanden går imod al sund fornuft, og preview's 'næsten' gør den ærlig og nysgerrig."
+  },
+  {
+    "subject": "Kan en ringæske fylde et helt billede? 🏆",
+    "preview": "Vis os din flotteste opstilling med en af vores mindste æsker. Det bedste billede vinder.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet stiller noget lille op mod noget stort og gør konkurrencen til en udfordring."
+  },
+  {
+    "subject": "Gradients look great on screen. Foil disagrees.",
+    "preview": "Our graphic designers check every logo before printing, and redraw it if it won't hold up in foil.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Skærm og folie bliver to parter, der er uenige, og det gør en teknisk regel let at huske."
+  },
+  {
+    "subject": "Julestjernen er ude. Amaryllis er inde 🎄",
+    "preview": "Vi har ikke én eneste julestjerne i år, men 400 løg i alle farver. Kom og se vinduet.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "At droppe sæsonens selvfølge er så usædvanligt, at man vil se, hvad der kom i stedet."
+  },
+  {
+    "subject": "Butikken lukker. Posen arbejder videre 🛍️",
+    "preview": "En bæreposes logo bliver set i bussen, på kontoret og i køkkenet. Fire størrelser og ni farver.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Når butikken holder fri, er posen stadig i gang, og den modsætning sælger produktet."
+  },
+  {
+    "subject": "Egen fabrik i Danmark, partnere i hele verden",
+    "preview": "Nogle æsker laves i Holstebro, andre hos partnere i Europa og Asien. Hvorfor, og hvem der følger op.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lokale og det globale står side om side og svarer på et spørgsmål, mange kunder har."
+  },
+  {
+    "subject": "Our toughest shelf just got a soft price",
+    "preview": "Rated for 300 kilos per shelf and a quarter off until stock runs out. Trade accounts only.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Hård og blød om samme vare er en lille gnist, der gør et prisnedslag værd at læse."
+  },
+  {
+    "subject": "Uhyggeligt pæne æsker til en uhyggelig uge 🎃",
+    "preview": "Sort, orange og et strejf af guldfolie. Sådan klæder du disken på til Halloween uden udklædning.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Ordspillet bruger 'uhyggeligt' i to betydninger og overlever næppe en oversættelse."
+  },
+  {
+    "subject": "We fix more bikes than we sell 🔧",
+    "preview": "And we're perfectly happy with that. Book a winter service before the first frost does its worst.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En butik, der indrømmer, at salget ikke er hovedsagen, vender forventningen og bygger tillid."
+  },
+  {
+    "subject": "Can a plain box feel expensive?",
+    "preview": "Yes, if one detail does all the talking. Six boxes where a single line of foil carries the look.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet sætter to tilsyneladende modsætninger op og lover, at de kan forenes."
+  },
+  {
+    "subject": "Is i november? Ja, og den smager af brunkager 🍦",
+    "preview": "Årets julevariant kommer i butikken på mandag, med knas fra rigtige småkager i hver skefuld.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et sommerprodukt i en vintermåned lyder forkert, og svaret gør det til en julenyhed."
+  },
+  {
+    "subject": "TrustScore 4.6 – og vi læser de kritiske først",
+    "preview": "De gode anmeldelser varmer, men det er de kritiske, der har flyttet noget hos os. Tre eksempler.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En stærk score parret med fokus på kritik gør afsenderen mere troværdig end ros alene."
+  },
+  {
+    "subject": "Mindre på lager, mere på hylden",
+    "preview": "Med ugentlig genopfyldning kan du føre hele serien uden at fylde baglokalet. Sådan fungerer det.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "To ting, forhandleren tror hænger sammen, bliver skilt ad, og det er hele tilbuddet."
+  },
+  {
+    "subject": "Du er afsenderen. Vi står for regningen",
+    "preview": "Partnerannoncer kører fra din egen profil, og vi betaler. Sådan bliver din butik en del af det.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Du og vi deler rollerne modsat det forventede og forklarer et partnerskab på en linje."
+  },
+  {
+    "subject": "Hvad en æske og et håndtryk har til fælles",
+    "preview": "Begge bliver bedømt på et sekund og siger noget om afsenderen. Sådan vælger du den rigtige.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To ting, der ikke burde kunne sammenlignes, får en fælles pointe, man vil have bekræftet."
+  },
+  {
+    "subject": "Betal, når du bruger dem – ikke når du køber dem",
+    "preview": "Vi kan opbevare din ordre, så du betaler, efterhånden som du trækker på den. Sådan sætter du det op.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rækkefølgen køb-så-betal bliver vendt, og den omvending er hele ydelsen."
+  },
+  {
+    "subject": "Brand new, and it already looks like an heirloom ✨",
+    "preview": "Cloth cover, crisp edges and a soft insert. Our newest box, photographed in plain daylight.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det splinternye og det arvede mødes i én sætning og beskriver kvalitet uden superlativer."
+  },
+  {
+    "subject": "Mørke vægge får små rum til at virke større",
+    "preview": "Det lyder forkert, men skyggerne visker hjørnerne ud. Vi viser det i en etværelses på Frederiksberg.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rådet går imod den regel, alle har lært, og derfor vil man se beviset."
+  },
+  {
+    "subject": "Juleræset starter, før julen gør ⏰",
+    "preview": "Med nyt logo skal du regne med 7–8 arbejdsdage i produktion. Fristerne falder tidligere end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Højtiden og travlheden bliver skilt ad i tid, og afstanden er præcis fristens pointe."
+  },
+  {
+    "subject": "Den forkerte måde at binde en sløjfe på 🎀",
+    "preview": "Den hænger skævt med vilje og får en almindelig gaveæske til at se håndlavet ud. Video i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "At sælge den 'forkerte' metode vender forventningen til en guide og vækker lyst til at se den."
+  },
+  {
+    "subject": "Your calendar says June. Our press says now.",
+    "preview": "Summer wedding stationery needs proofs signed this month. Here's the timetable, week by week.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kunden og leverandøren læser to forskellige ure, og forskellen er fristen."
+  },
+  {
+    "subject": "Kagen, der er grim med vilje 🍰",
+    "preview": "Revnet top, ujævn kant og den bedste smag i disken. Bageren nægter at pynte den.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et bageri, der kalder sit eget produkt grimt, bryder med alt, man forventer af en reklame."
+  },
+  {
+    "subject": "To kunder, samme æske, intet ens",
+    "preview": "Samme smykkeæske i fem butikker og fem helt forskellige udtryk. Se, hvad logo og folie kan gøre.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det identiske udgangspunkt og de forskellige resultater viser, hvor meget valgene betyder."
+  },
+  {
+    "subject": "B2B, men med priserne synlige for alle",
+    "preview": "Du behøver ikke ringe efter et tilbud for at vide, hvad en æske koster. Derfor gør vi det sådan.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En B2B-leverandør, der opfører sig som en butik, bryder et mønster, indkøbere kender."
+  },
+  {
+    "subject": "Selv den lille pose har plads til et stort logo",
+    "preview": "På den lille luksuspose kan logoet fylde op til 100 × 80 mm. Se, hvordan det tager sig ud.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lille og stor i samme linje fjerner en antagelse og gives straks et præcist mål."
+  },
+  {
+    "subject": "Off the shelf, or drawn from scratch?",
+    "preview": "Stock boxes with your logo, or a fully bespoke design with one named contact from sketch to finish.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "To yderpunkter stillet som et valg får modtageren til at placere sig selv, før de åbner."
+  },
+  {
+    "subject": "Kedeligt ord, stor besparelse: bulk",
+    "preview": "Op til 40 % på populære smykkeæsker fra 9.600 stk., og vi kan opbevare dem for dig.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen indrømmer, at ordet er kedeligt, og lader besparelsen være det spændende."
+  },
+  {
+    "subject": "Vi sætter prisen ned på vores bedste vin 🍷",
+    "preview": "Ikke fordi den sælger dårligt, men fordi den nye årgang er på vej. 12 flasker er tilbage.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Rabat plejer at ramme de svage varer, så en rabat på den bedste vækker mistanke og interesse."
+  },
+  {
+    "subject": "Når dagene bliver korte, skal disken lyse 🕯️",
+    "preview": "Lyse æsker, varm folie og displays, der fanger lyset. Sådan klæder du disken på til vinteren.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Mørket udenfor og lyset på disken står over for hinanden og giver sæsonen en opgave."
+  },
+  {
+    "subject": "She killed every plant we sold her. Then she won a prize",
+    "preview": "Six cacti, one patient gardener and a village show in July. The comeback of the year.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den værst tænkelige kunde bliver vinderen, og det spring kræver hele historien."
+  },
+  {
+    "subject": "Ny i sortimentet, men du kender den allerede",
+    "preview": "Bestselleren har fået en ny farve. Samme mål og samme indlæg, men en helt anden stemning på disken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ny og kendt på samme tid gør nyheden tryg at købe og stadig værd at se."
+  },
+  {
+    "subject": "Vi blev mindre for at blive bedre",
+    "preview": "Vi har skåret sortimentet fra 22 til 9 kaffer. Her er dem, der blev, og hvorfor de andre røg.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "At skrumpe som strategi går imod vækstsproget, og man vil vide, hvad der blev tilbage."
+  },
+  {
+    "subject": "Den hurtigste opstilling vinder – ikke den flotteste 📸",
+    "preview": "Sæt disken op på fem minutter med vores æsker, tag et billede og send det. Den mest snedige vinder.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Konkurrencen vender det forventede kriterium og gør det let for alle at være med."
+  },
+  {
+    "subject": "Mismatched on purpose 🧦",
+    "preview": "Each pair in the new range is two different socks that belong together. Your left foot will approve.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fejl gjort til idé er kort, sjov og præcis nok til at beskrive hele produktet."
+  },
+  {
+    "subject": "Den dyreste farve er ikke guld",
+    "preview": "På en dybblå æske ser sølvfolie mere eksklusiv ud end guld. Seks kombinationer, der overrasker.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Påstanden udfordrer det selvfølgelige valg og lover et alternativ, man kan se."
+  },
+  {
+    "subject": "Vores mindste forhandler sælger mest pr. m²",
+    "preview": "En butik på 30 kvadratmeter i Ribe har slået alle de store. Her er de tre ting, de gør anderledes.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den mindste som den bedste vender forventningen og giver andre forhandlere noget at lære."
+  },
+  {
+    "subject": "Jo større ordre, jo færre mennesker at tale med",
+    "preview": "Til de største kunder: eget designstudie, lager i EU og Asien og én fast kontakt fra start til slut.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Normalt betyder størrelse mere bureaukrati, så det omvendte løfte skiller sig ud."
+  },
+  {
+    "subject": "A stocking filler that steals the evening 🎄",
+    "preview": "Earrings, a charm, a single ring. How the right box makes the smallest gift the one people remember.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Den beskedne gave og den store virkning står i kontrast, og æsken er forklaringen."
+  },
+  {
+    "subject": "We sell raincoats. We're praying for rain",
+    "preview": "Until it comes, bring your old jacket in on Saturday and we'll test the seams for leaks, no charge.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En butik, der ønsker sig dårligt vejr, er en selvironisk vending, der fører til en service."
+  },
+  {
+    "subject": "Dit logo er ikke for svært. Det skal bare oversættes 🎨",
+    "preview": "Skygger og toninger kan ikke trykkes i folie. Vores grafikere tegner det om, så det stadig er dit.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnelinjen afviser en bekymring og erstatter den med et billede, der gør processen forståelig."
+  },
+  {
+    "subject": "Buy the sequel, get the first book cheap",
+    "preview": "For everyone who skipped book one: it's half price with the new release until the end of the month.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tilbuddet går i den modsatte rækkefølge af det sædvanlige og rammer dem, der er kommet bagud."
+  },
+  {
+    "subject": "Fabrikken larmer. Æskerne lukker lydløst 🏭",
+    "preview": "Folieprægere, skæremaskiner og trucks hele dagen, og alligevel ender det i et blødt klik.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Larm og stilhed i samme linje forbinder produktionen med den oplevelse, kunden kender."
+  },
+  {
+    "subject": "Til mor, der siger, hun ikke vil have noget",
+    "preview": "Vi har bundet en lille buket, der ligner, at den er plukket i haven. Den koster under en hundredlap.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Det, mor siger, og det, hun mener, er en genkendelig modsætning, buketten løser."
+  },
+  {
+    "subject": "Den bedste sælger i butikken siger ingenting",
+    "preview": "Et godt display gør halvdelen af arbejdet, før du har sagt goddag. Bakker og displays til disken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En sælger uden ord lyder umuligt, og preview afslører, at det er displayet."
+  },
+  {
+    "subject": "Den, der taber, vinder 🎲",
+    "preview": "Vores brætspilsaften slutter med en præmie til sidstepladsen. Tilmelding i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et paradoks på fire ord gør konkurrencen sjov og sænker tærsklen for at deltage."
+  },
+  {
+    "subject": "Det, man ikke ser, sælger det, man ser",
+    "preview": "Indlægget holder smykket præcis, hvor lyset rammer. Fire typer, og hvornår du vælger hvilken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det usynlige og det synlige bytter rolle, og indlægget bliver pludselig hovedpersonen."
+  },
+  {
+    "subject": "Din første ordre: ingen opstart, fuld korrektur",
+    "preview": "En grafiker tjekker dit logo, og du godkender en digital prøve, før noget som helst bliver trykt.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ingen omkostning og fuld omhu står side om side og fjerner frygten for, at billigt betyder sjusket."
+  },
+  {
+    "subject": "Black is the new black 🖤",
+    "preview": "Trends come and go; the black jewellery box never quite leaves. Five ways to make yours feel new.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "En kendt modefrase bliver vendt om sig selv og gør en klassiker til en pointe."
+  },
+  {
+    "subject": "En sort te, der smager lyst 🫖",
+    "preview": "Den nye høst fra Darjeeling er let som en hvid te og rund som en morgente. Smag den i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Farven og smagen modsiger hinanden, og den modsigelse er præcis det, der gør teen ny."
+  },
+  {
+    "subject": "Vi har både hjerte og regnemaskine med",
+    "preview": "Ansvar, pålidelighed, fællesskab og forretningssans er vores fire værdier. Sådan mærker du dem.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Følelse og kalkule i samme sætning lyder modstridende, men beskriver en leverandør, man kan regne med."
+  },
+  {
+    "subject": "Lidt ridset, meget billigere 🛋️",
+    "preview": "Fire udstillingsmodeller med små skrammer sælges til halv pris. Skrammerne kan du se på billederne.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En fejl stillet åbent frem ved siden af prisen gør tilbuddet ærligt og lidt sjovt."
+  },
+  {
+    "subject": "Alle sætter ned. Du kan pakke op",
+    "preview": "Når alle konkurrerer på pris, kan emballagen være dit argument. Fem ideer til Black Friday-ugen.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "To modsatte verber om samme uge gør emballagen til et alternativ til rabatten."
+  },
+  {
+    "subject": "Gammelt håndværk, splinterny gaveæske 🎁",
+    "preview": "Den nye gaveæske er lige kommet ud af produktionen, og vi har pakket de første op til dig.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lang historie og helt ny vare i samme linje gør nyheden både troværdig og frisk."
+  },
+  {
+    "subject": "Vi holder lukket om lørdagen – for din skyld",
+    "preview": "Færre åbningstimer, mere tid til ordrer, reparationer og selve håndværket. Her er den nye uge.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Mindre åbent lyder som dårligere service, indtil grunden vender det til en fordel."
+  },
+  {
+    "subject": "30.000+ brands, og ikke to æsker er ens",
+    "preview": "Vi har samlet æsker fra kunder i mange brancher og lande. Det mest overraskende er forskellene.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort fællesskab og stor forskellighed står side om side og gør plads til modtagerens eget udtryk."
+  },
+  {
+    "subject": "Dækskiftet tager ti minutter. Snakken tager længere",
+    "preview": "For vi vil vide, hvor du kører, og hvad du har med. Book tid på værkstedet direkte her.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den korte opgave og den lange samtale viser, hvad butikken i virkeligheden sælger."
+  },
+  {
+    "subject": "Én jul, mange forskellige frister ⏰",
+    "preview": "Fristen afhænger af dit land, og af om dit logo er nyt. Find din og regn baglæns fra den.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Én fælles højtid med mange forskellige datoer får modtageren til at tjekke sin egen."
+  },
+  {
+    "subject": "The pouch: tiny, flat and never an afterthought",
+    "preview": "Jewellery pouches for webshop orders, gifts and customers who travel light. The whole range inside.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Små, beskedne egenskaber sat op mod en stor ambition gør det lille produkt vigtigt."
+  },
+  {
+    "subject": "An award-winning webshop for people who buy by the hundred",
+    "preview": "Open prices and logo orders online. The B2B store that won a Danish e-commerce award in 2021.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Butikkens lethed og storkøberens behov mødes, og prisen gør påstanden troværdig."
+  },
+  {
+    "subject": "The more boxes you buy, the less room you need",
+    "preview": "Bulk prices from 9,600 jewellery boxes, and we can hold the stock while you draw on it as you sell.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Mere køb og mindre plads modsiger hinanden, indtil lagerservicen forklarer det."
+  },
+  {
+    "subject": "Plain boxes come back. Printed ones stay.",
+    "preview": "Standard products can be returned within 14 days; anything with your logo can't. Two checks first.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To slags æsker med modsat regel gør en kedelig returpolitik let at huske."
+  },
+  {
+    "subject": "Silkepapir koster næsten ingenting. Det ser ikke sådan ud 🎀",
+    "preview": "Et ark i den rigtige farve, foldet rigtigt, løfter en hel gaveæske. Tre foldninger på video.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Pris og udtryk står omvendt, og guiden lover at vise, hvordan man udnytter det."
+  },
+  {
+    "subject": "Udenpå skal den tåle posten. Indeni en forventning 📦",
+    "preview": "Forsendelsesemballage, der beskytter, og en æske indeni, der gør åbningen værd at filme.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det robuste og det følsomme lag står over for hinanden og beskriver to opgaver i én pakke."
+  },
+  {
+    "subject": "Bryllupssæson: ét ja, mange æsker 💍",
+    "preview": "Forlovelsesring, morgengave og gaver til forlovere. Æsker til hele sæsonen, fra første til sidste.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Ét enkelt øjeblik og de mange gaver omkring det viser, hvor stor sæsonen er for en smykkebutik."
+  },
+  {
+    "subject": "Vi kunne ikke blive enige. Nu er det din tur 🗳️",
+    "preview": "To nye foliefarver og et kontor delt i to lejre. Stem på den, der skal med i næste kampagne.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "personlig"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En intern uenighed gør modtageren til den, der afgør sagen, og det er svært at lade ligge."
+  },
+  {
+    "subject": "Forhandler og kunde på samme tid",
+    "preview": "Som forhandler køber du til dig selv og sælger videre. Sådan passer programmet til begge roller.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To roller, der normalt er adskilt, mødes hos modtageren, og mailen viser, hvordan det fungerer."
+  },
+  {
+    "subject": "Nyt logo, nul opstart",
+    "preview": "Ingen opstartsomkostninger på din første ordre, og logotryk inkluderet på de fleste smykkeæsker.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det nye og det, der ikke koster, står i fire ord og fjerner den største tærskel."
+  },
+  {
+    "subject": "Håndlavet ser bedst ud på lige rækker",
+    "preview": "Vores keramik står med samme afstand på hylden, og så ligner de små skævheder pludselig en idé.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det uregelmæssige og det stramme forstærker hinanden, og rådet er let at overføre."
+  },
+  {
+    "subject": "Mens byen fryser, står ovnen klar kl. 6 ❄️",
+    "preview": "Fra første frost åbner vi tidligere, og kaffen er gratis til dem, der kommer i mørke.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Kulden udenfor og varmen i bageriet står over for hinanden og gør butikken til et lyspunkt."
+  },
+  {
+    "subject": "Den yngste kunde i år var 7. Den ældste 94",
+    "preview": "De købte den samme fyldepen. Hvorfor, og hvad de skrev først, står i månedens nyhedsbrev.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afstanden mellem to aldre skaber spænding, og fællesnævneren gemmes til mailen."
+  },
+  {
+    "subject": "Et lys, der dufter mest, når det er slukket",
+    "preview": "Voksen er blandet med cedertræ, så rummet dufter længe efter, du har pustet ud. Ny serie i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lys, der virker bedst slukket, er et paradoks, man vil have forklaret."
+  },
+  {
+    "subject": "Vi sælger hellere lidt til dig – og ofte",
+    "preview": "Vi har regnet på det: forhandlere, der bestiller hver anden uge, sælger flere varer til fuld pris.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En leverandør, der fraråder den store ordre, vender forventningen og vinder forhandlerens tillid."
+  },
+  {
+    "subject": "Altankassen mod villahaven: hvem vinder? 🌻",
+    "preview": "Sommerkonkurrencen har to klasser. Send et billede inden søndag, og lad naboerne stemme.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "David mod Goliat i haveformat gør konkurrencen til en kamp, man vil følge."
+  },
+  {
+    "subject": "Den nye hammer vejer mindre og slår hårdere",
+    "preview": "Hovedet er flyttet 2 cm frem, så kraften sidder, hvor den skal. Prøv den på klodsen i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "kontrast",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lettere og stærkere modsiger hinanden, og forklaringen er konkret nok til at være troværdig."
+  },
+  {
+    "subject": "The emptiest wall in the shop sells the most",
+    "preview": "One print, one shelf and plenty of white. Why breathing room makes customers stop and look.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tom og bedst sælgende modsiger hinanden og lover en indretningsregel, man kan bruge."
+  },
+  {
+    "subject": "The least scary costume in town wins 🎃",
+    "preview": "Come in dressed as something utterly ordinary on the 31st. Most convincing accountant wins a prize.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En Halloween-konkurrence om det mindst uhyggelige vender sæsonens regel på hovedet."
+  },
+  {
+    "subject": "Our strongest coffee is our gentlest ☕",
+    "preview": "Dark roast, low acidity and none of the bite you'd expect. Why regulars order it at four o'clock.",
+    "language": "en",
+    "mechanisms": [
+      "kontrast",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Stærk og mild om samme kaffe er en modsigelse, der lover en smagsoplevelse uden for det vante."
+  }
+]

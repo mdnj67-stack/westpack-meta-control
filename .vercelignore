@@ -36,6 +36,11 @@ tmp-*.png
 tmp-*.mp4
 test-results/
 
+# Local-mode stores of the subject line generator. Production keeps them in Blob; the local copies
+# hold every account's send figures and must never be served as static files.
+data/klaviyo-subject-line-history.json
+data/klaviyo-subject-line-team.json
+
 # Not needed at runtime.
 tests/
 .claude/

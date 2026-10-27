@@ -374,6 +374,12 @@ async function run() {
     || `templates=${Number(klaviyoLive.json?.templateCount || 0)}`;
   results.push(`PASS  GET /api/klaviyo/templates?country=DK -> ${klaviyoLive.status} (${klaviyoLive.durationMs}ms) :: ${klaviyoSummary}`);
 
+  // Read-only: what the subject line generator's three layers hold. No model call, no Klaviyo call.
+  const subjectLines = await request("/api/klaviyo/subject-lines?action=status", { timeoutMs: 20000 });
+  assert(subjectLines.status === 200, `GET /api/klaviyo/subject-lines?action=status returned ${subjectLines.status}`);
+  assert(Array.isArray(subjectLines.json?.rules) && subjectLines.json.rules.length, "Subject line status is missing the rules");
+  results.push(`PASS  GET /api/klaviyo/subject-lines?action=status -> ${subjectLines.status} (${subjectLines.durationMs}ms) :: sends=${Number(subjectLines.json?.history?.sends || 0)}, bank=${Number(subjectLines.json?.bank?.authored || 0)}, rules=${subjectLines.json.rules.length}`);
+
   if (systemHealth.json?.integrations?.klaviyo?.configured && Array.isArray(klaviyoLive.json?.templates) && klaviyoLive.json.templates.length) {
     const sourceTemplate = klaviyoLive.json.templates[0];
 

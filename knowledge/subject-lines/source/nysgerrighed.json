@@ -1,0 +1,1742 @@
+[
+  {
+    "subject": "Den her æske gemmer på noget 🤫",
+    "preview": "Du ser det ikke, før låget går i – så hører du det. Vi har filmet forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et skjult træk ved et fysisk produkt vækker lyst til at se, hvad det er."
+  },
+  {
+    "subject": "Det her sker med dit logo, før vi trykker",
+    "preview": "Et trin, de fleste aldrig hører om – og grunden til, at folien står skarpt bagefter.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren vil vide, hvad der sker med netop deres eget logo, og svaret ligger i mailen."
+  },
+  {
+    "subject": "Hvorfor tester vi æsker for noget, man ikke kan se?",
+    "preview": "Det handler om sølv, et halvt år i en skuffe – og hvad en æske selv kan afgive.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål om noget usynligt skaber et hul, som kun forklaringen lukker."
+  },
+  {
+    "subject": "Vi smed 40 kilo kaffe ud i tirsdags",
+    "preview": "Ikke fordi der var noget galt med bønnerne. Historien om ristning nummer 312.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En overraskende handling uden forklaring får læseren til at åbne for at forstå hvorfor."
+  },
+  {
+    "subject": "What your customer sees in the first two seconds",
+    "preview": "We paused an unboxing at the two-second mark. Here's what's in frame – and what isn't.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et frosset øjeblik lover et konkret blik på noget, modtageren aldrig selv har set så nøje."
+  },
+  {
+    "subject": "Gæt, hvilken foliefarve der passer til dit logo 🎨",
+    "preview": "Der er omkring 25 at vælge imellem. En lille test i mailen peger på din på et minut.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et gæt om modtagerens eget logo er personligt nok til, at svaret skal ses."
+  },
+  {
+    "subject": "Sofaen, ingen ville have – indtil vi flyttede den",
+    "preview": "Samme pris, samme stof. Forskellen var tre meter, en lampe og et tæppe.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En lille fortælling med en uforklaret vending skaber et hul, som mailen lukker."
+  },
+  {
+    "subject": "Æskerne står her stadig – og det er meningen",
+    "preview": "Vi kan lagre din ordre, og du betaler, efterhånden som du trækker på den. Sådan virker det.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Noget, der lyder som en fejl, viser sig at være en service, og det vil man forstå."
+  },
+  {
+    "subject": "Åbn den langsomt 🎁",
+    "preview": "Den nye gaveæske er bygget til netop det sekund. Se den åbne sig i slowmotion.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En opfordring uden genstand får modtageren til at spørge: åbne hvad?"
+  },
+  {
+    "subject": "The notebook our buyers keep stealing",
+    "preview": "It isn't the bestseller and it isn't new. Here's why it keeps vanishing from the sample table.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et lille tyveri fra indkøberne selv er et uventet bevis, man vil kende baggrunden for."
+  },
+  {
+    "subject": "Den mindste æske i sortimentet har et problem",
+    "preview": "Den er så lille, at logoet skal tænkes om. Tre måder at løse det på, med eksempler.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et problem uden løsning i emnelinjen kræver et klik for at få svaret."
+  },
+  {
+    "subject": "Det, kunderne ikke ved om vores morgenbrød 🥐",
+    "preview": "Dejen starter dagen før, de fleste tror. Turen fra mel til morgenbord, time for time.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Løftet om noget skjult i noget hverdagsagtigt gør det velkendte interessant igen."
+  },
+  {
+    "subject": "Why 48 is our favourite number 📦",
+    "preview": "Order as few as 48 pieces with your logo. That changes who can have branded boxes, and when.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et tal uden kontekst vækker undren, og forklaringen er et konkret argument."
+  },
+  {
+    "subject": "Den flaske skulle aldrig have stået på hylden",
+    "preview": "En fejltrykt etiket, en vinbonde der nægtede at kassere den – og nu vores mest solgte rødvin.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En indrømmelse om noget, der burde være fejlet, lover en historie med en pointe."
+  },
+  {
+    "subject": "Kig under låget 👀",
+    "preview": "Den side af æsken, kun din kunde ser – og hvorfor nogle lægger logoet netop dér.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En kort, fysisk opfordring peger på et sted, man sjældent tænker over, og mailen viser det."
+  },
+  {
+    "subject": "Vi ved godt, hvad du gør med æsken bagefter",
+    "preview": "Du gemmer den. Det gør dine kunder også, og derfor betyder indersiden mere end man tror.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Afsenderen påstår at kende en lille vane hos modtageren, og man vil se, om det passer."
+  },
+  {
+    "subject": "We tasted 60 teas. One stayed.",
+    "preview": "It arrived with no label and a handwritten note from the grower. It's in this month's box.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Udvælgelsen er tydelig, men vinderen er skjult, så man åbner for at møde den."
+  },
+  {
+    "subject": "Den ene ting, du skal tjekke i korrekturen",
+    "preview": "Det er ikke stavningen. Vi viser, hvor på den digitale prøve det typisk gemmer sig.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Én navngiven, men ukendt ting er nem at åbne for og direkte brugbar."
+  },
+  {
+    "subject": "Buketten, vi næsten ikke turde sælge 💐",
+    "preview": "Tidsler, vejkantsgræs og én enkelt pæon. Den var udsolgt før frokost.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En butik, der indrømmer tvivl, gør produktet mere interessant end en ren lancering."
+  },
+  {
+    "subject": "Our flattest box has a job you wouldn't guess",
+    "preview": "It's built for one particular place, and it isn't a shop counter. Here's where it earns its keep.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et produkt med en skjult rolle får modtageren til at gætte, og gættet skal tjekkes."
+  },
+  {
+    "subject": "Det første, din kunde rører ved",
+    "preview": "Det er ikke smykket. Hvorfor overfladen på æsken fylder mere i hånden, end man skulle tro.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen udelader svaret på et sanseligt øjeblik, modtageren kender, men ikke har tænkt over."
+  },
+  {
+    "subject": "Den cykel kom tilbage tre gange",
+    "preview": "Ikke fordi den var i stykker. Kunden ville bare vise os, hvor den havde været.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Gentagne returneringer lyder som et problem, så vendingen i mailen føles som en gave."
+  },
+  {
+    "subject": "Vi har fået ny familie i England 🤝",
+    "preview": "Et britisk emballagefirma er kommet med i gruppen. Hvad det ændrer for dig – og hvad ikke.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En personlig formulering om en forretningsnyhed gør, at man vil vide, hvem det er."
+  },
+  {
+    "subject": "This candle smells like a place we can't name 🕯️",
+    "preview": "Twelve testers guessed. Nobody got it. The answer is printed under the lid.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En gåde om en duft, som selv testerne ikke løste, inviterer modtageren til at gætte med."
+  },
+  {
+    "subject": "Hvorfor din julefrist ikke er den, du tror ⏰",
+    "preview": "Det er produktionstiden, der flytter den – og den er længere for et nyt logo end for et kendt.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tvivl om en dato, man troede man kendte, er et stærkt motiv til at åbne."
+  },
+  {
+    "subject": "Kuglepennen, der overlevede tre indkøbschefer",
+    "preview": "Samme model siden 2009. Vi har spurgt, hvorfor ingen tør tage den ud af kataloget.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En uanselig vare med en overraskende sejhed lover en forklaring, man ikke kan gætte."
+  },
+  {
+    "subject": "Lige før du bestiller 500 æsker …",
+    "preview": "… så bestil én. Sådan fungerer prøver med og uden logo, og hvad de koster.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En afbrudt sætning får hjernen til at ville høre resten, og preview gør det kun halvt."
+  },
+  {
+    "subject": "Three brands, one question about the box",
+    "preview": "They sell very different jewellery and landed on the same answer. See which, and why.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, som andre allerede har besvaret, giver lyst til at sammenligne med sit eget svar."
+  },
+  {
+    "subject": "Der ligger en ost under disken. Spørg efter den 🧀",
+    "preview": "Den kommer ikke i vinduet. Men spørger du ved kassen, skærer vi et stykke til dig.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Noget skjult, som kun de indviede kender til, lokker mere end en vare på hylden."
+  },
+  {
+    "subject": "Det her logo kunne ikke trykkes 🙈",
+    "preview": "Skygger, gradienter og et foto. Se, hvad vores grafiker gjorde, før det kom i folie.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et anonymt problem med en lykkelig udgang lærer modtageren noget om eget logo."
+  },
+  {
+    "subject": "We sold the display chair. By accident.",
+    "preview": "A customer sat down, asked the price and paid before anyone checked the tag.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et uheld i butikken er en lille historie, man vil have slutningen på."
+  },
+  {
+    "subject": "Hvad sker der med prisen ved 9.600 stk.?",
+    "preview": "Populære smykkeæsker i bulk. Vi har stillet regnestykket op ved siden af en almindelig ordre.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist antal og et åbent spørgsmål om prisen gør, at man vil se regnestykket."
+  },
+  {
+    "subject": "Den gave, der bliver pakket op to gange 🎄",
+    "preview": "Først æsken, så smykket. Fem måder at gøre det første øjeblik lige så stort som det andet.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille gåde om julegaven får modtageren til at tænke over noget, de aldrig har set sådan."
+  },
+  {
+    "subject": "Én af jer har læst mere end os 📚",
+    "preview": "Læseudfordringen er slut. Vinderen nåede 41 bøger, og præmien er valgt med omhu.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Hver deltager kan være vinderen, så alle har en grund til at åbne."
+  },
+  {
+    "subject": "The other way to sell our boxes",
+    "preview": "Some shops don't just buy our packaging, they sell it on. Here's how the reseller programme works.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Antydningen af en ukendt mulighed i et kendt forhold får forhandleren til at læse videre."
+  },
+  {
+    "subject": "Stemmerne er talt. Næsten 🗳️",
+    "preview": "Det står lige mellem to gaveæsker. Afgør det med ét klik, før vi offentliggør vinderen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Det lille 'næsten' åbner et hul, som kun modtagerens egen stemme kan lukke."
+  },
+  {
+    "subject": "Vi har talt lageret. Det gik ikke godt",
+    "preview": "For mange spisebordsstole og for lidt plads. Derfor er 14 modeller sat ned frem til fredag.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En selvironisk indrømmelse lyder som en historie, men ender i en konkret rabat."
+  },
+  {
+    "subject": "Vi vil gerne låne din Instagram",
+    "preview": "Vi betaler annoncen, du er afsender, og dine æsker spiller hovedrollen. Sådan virker det.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En uventet anmodning fra en leverandør får modtageren til at åbne for at se betingelserne."
+  },
+  {
+    "subject": "The bottle we're saving for New Year's Eve 🥂",
+    "preview": "It isn't champagne and it isn't French. We'll tell you what it is, and keep six aside for you.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Butikkens eget valg til årets sidste aften er skjult, og det nægter at være det oplagte."
+  },
+  {
+    "subject": "Ny farve. Den har ikke noget navn endnu",
+    "preview": "Et sted mellem sand og grå, og den får guldfolie til at se dyrere ud. Hjælp os med at døbe den.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En nyhed uden navn er ufærdig, og modtageren bliver inviteret til at gøre den færdig."
+  },
+  {
+    "subject": "Ordren kom frem. Men hvem pakkede den?",
+    "preview": "Mød de fire på lageret, der står for 1.200 pakker om dagen, og deres faste regel om hjørner.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Emnelinjen flytter blikket fra varen til menneskene bag, som modtageren aldrig ser."
+  },
+  {
+    "subject": "Det hed vi, før vi hed Westpack",
+    "preview": "Navnet fik en ny endelse, da firmaet blev et A/S. Historien begynder i Holstebro i 1953.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et gammelt navn, som de fleste kunder ikke kender, er en lille hemmelighed, man vil høre."
+  },
+  {
+    "subject": "What's on the counter before the box?",
+    "preview": "Displays and trays do the selling before a box is ever opened. Six counters, six set-ups.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet flytter fokus til et øjeblik før købet, som modtageren sjældent tænker over."
+  },
+  {
+    "subject": "Det, du ikke betaler for på din første ordre",
+    "preview": "Ingen opstartsomkostninger. Her er, hvad det dækker i praksis, og hvad det ikke dækker.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen nævner en fordel uden at sige hvilken, så man åbner for at få beløbet."
+  },
+  {
+    "subject": "Vi lavede en fejl med chili. Nu er den en bar 🌶️",
+    "preview": "For meget, sagde halvdelen af butikken. Perfekt, sagde resten. Smag selv på lørdag.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fejl, der blev til et produkt, lover en historie og en smagsprøve på én gang."
+  },
+  {
+    "subject": "Din travleste uge starter ikke om fredagen",
+    "preview": "Den starter, når emballagen skal være på plads. Sådan planlægger du baglæns fra højsæsonen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Påstanden udfordrer en selvfølge, og modtageren vil vide, hvornår den så starter."
+  },
+  {
+    "subject": "She bought one mug. Then she came back for 40.",
+    "preview": "What happened in between involved a wedding, a kiln mishap and one very patient potter.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Springet fra én til 40 er så stort, at man vil have midten af historien."
+  },
+  {
+    "subject": "Vi bad kunderne vise os deres pakkebord 📸",
+    "preview": "Ingen opstilling og ingen stylist. Bare de borde, hvor æskerne faktisk bliver pakket.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kig ind i andre butikkers hverdag er både nysgerrigt og nyttigt at sammenligne med."
+  },
+  {
+    "subject": "Der er en lyd på fabrikken, ingen af os hører",
+    "preview": "Folieprægeren slår hele dagen. Vi optog den og bad nogen udefra gætte, hvad det var.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En sansedetalje fra et sted, modtageren aldrig har været, skaber et konkret hul at lukke."
+  },
+  {
+    "subject": "Den lille skrue, ingen spænder efter 🔧",
+    "preview": "Den sidder på styret, og den står bag de fleste knirk. Vi viser hvor på 30 sekunder.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et lille, navngivet problem lover en hurtig løsning, man selv kan bruge."
+  },
+  {
+    "subject": "Reordering? Your logo is already halfway there ⏳",
+    "preview": "An existing logo needs 4–5 working days in production instead of 7–8. Here's what that buys you.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "'Halvvejs' antyder en fordel, man allerede har, og som man vil forstå før travlheden."
+  },
+  {
+    "subject": "Én vare fylder hele baglokalet. Din favorit?",
+    "preview": "Det er den, du har bestilt tre gange i år, og den er sat ned til og med søndag.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Butikken indrømmer en fejlvurdering, og preview gør den personlig uden at afsløre varen."
+  },
+  {
+    "subject": "Det her billede tog fire sekunder 📸",
+    "preview": "Ingen studie og ingen fotograf. En æske, en vindueskarm og ét trick med lyset. Sådan gør du.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Påstanden om noget nemt og flot vækker lyst til at se både billedet og tricket."
+  },
+  {
+    "subject": "Hvad sker der, når æsken ikke findes endnu?",
+    "preview": "Så begynder den i vores designstudie, med én fast kontakt fra første skitse til færdig ordre.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål om noget, der ikke findes, får modtageren til at tænke på sin egen idé."
+  },
+  {
+    "subject": "These socks have a secret on the sole 🧦",
+    "preview": "You'll only see it when you put your feet up. This month's pair goes out on Monday.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En hemmelighed et sjovt sted gør et hverdagsprodukt til noget, man vil opdage."
+  },
+  {
+    "subject": "Pose eller æske? Det afhænger af én ting",
+    "preview": "Det er hverken prisen eller smykket. Det er, hvor kunden åbner den, og vi viser forskellen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et velkendt valg reduceres til én ukendt faktor, som kun mailen afslører."
+  },
+  {
+    "subject": "200,000 boxes and bags a day. Where do they go?",
+    "preview": "From the factory floor in Denmark to shop counters across Europe: follow one box all the way.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort tal efterfulgt af et enkelt spørgsmål gør skalaen personlig og konkret."
+  },
+  {
+    "subject": "Hvem har byens ældste stueplante? 🪴",
+    "preview": "Vi leder efter den. Send et billede, og vinderen får en ny potte og et besøg af os.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtageren tænker straks på sin egen plante og vil vide, om den kan vinde."
+  },
+  {
+    "subject": "Den del af Westpack, de færreste ser",
+    "preview": "Designstudie, konsignationslager og én fast kontakt. Sådan arbejder vi med de største brands.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "eksklusivitet"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Antydningen af et lukket rum hos en kendt leverandør gør, at man vil kigge ind."
+  },
+  {
+    "subject": "Vi har gemt et uhyre i vinduet 🎃",
+    "preview": "Børnene finder det på to sekunder. De voksne leder stadig. Kom forbi og prøv selv.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En leg, der kan løses på stedet, gør nysgerrigheden til et besøg i butikken."
+  },
+  {
+    "subject": "Tre sekunder før svaret 💍",
+    "preview": "Ringen er valgt. Det er æsken, der bærer spændingen. Til dine kunder, der skal fri i år.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et frosset øjeblik før et frieri er ladet nok til, at man vil se, hvad der fylder det."
+  },
+  {
+    "subject": "The one shelf that sells the rest of the shop",
+    "preview": "It isn't at the front, and it isn't the bestsellers. A short floor plan from our Bristol store.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En påstand om én hylde med stor effekt får butiksejere til at ville finde den hos sig selv."
+  },
+  {
+    "subject": "Hvem gør reklame for dig, når kunden er gået? 🛍️",
+    "preview": "Bæreposen bliver set på gaden, i bussen og i køkkenet. Sådan placerer du logoet, så det huskes.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet får modtageren til at gætte, og svaret er et produkt, de selv har i hånden."
+  },
+  {
+    "subject": "Farve nummer ni",
+    "preview": "Luksusposerne findes i ni farver. Vi parrede dem med folie, og den sidste kombination overraskede.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kort, ufuldstændigt udsagn føles som starten på noget og kræver resten."
+  },
+  {
+    "subject": "What a TrustScore of 4.6 is made of",
+    "preview": "We read our Trustpilot reviews, the glowing and the critical, and sorted out what keeps coming up.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et kendt tal bliver interessant, når man lover at åbne det og vise, hvad det består af."
+  },
+  {
+    "subject": "Glasuren, der aldrig bliver ens to gange",
+    "preview": "Vi har prøvet at styre den i tre år. Nu har vi opgivet, og den er blevet vores yndlingsserie.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et produkt, der ikke kan kontrolleres, lyder både ærligt og unikt, og man vil se det."
+  },
+  {
+    "subject": "Skriv tre linjer, og kunden læser dem to gange 💌",
+    "preview": "En lille seddel under smykket. Syv formuleringer, der føles personlige uden at blive klistrede.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En lille genstand med stor virkning får modtageren til at ville se, hvad der står på den."
+  },
+  {
+    "subject": "Pallet 14 has to go",
+    "preview": "It's the stock you reorder every spring. Take it at trade price before Friday's clear-out.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et nummer uden forklaring lyder internt og konkret, og preview gør det relevant for køberen."
+  },
+  {
+    "subject": "Regn baglæns. Hvor lander du? ⏰",
+    "preview": "Et nyt logo tager 7–8 arbejdsdage i produktion. Fristerne i dit land falder tidligere end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren bliver sat til at regne selv, og resultatet kan kun tjekkes i mailen."
+  },
+  {
+    "subject": "Hvorfor vi aldrig sender te i august",
+    "preview": "Det har noget med varme, fugt og en container i Rotterdam at gøre. Her er hele forklaringen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En uventet regel fra en leverandør får kunden til at ville kende grunden."
+  },
+  {
+    "subject": "Det sker hos os, mens du sover 🌏",
+    "preview": "Kontorerne i Kina og Indonesien starter dagen, før Holstebro vågner. Mød holdet bag materialerne.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Antydningen af arbejde, man ikke ser, gør leverandøren større og mere menneskelig på én gang."
+  },
+  {
+    "subject": "New in. We're not saying which colour yet ✨",
+    "preview": "It works with gold foil and silver alike. The first boxes are in the photo, so look closely.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er bekræftet, men selve farven er holdt tilbage, så man åbner for at se den."
+  },
+  {
+    "subject": "Kunden, der målte stuen med en snor",
+    "preview": "Ingen tommestok, bare en snor med knuder. Vi har hængt den op i butikken, og sofaen passede.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et skævt, konkret billede af en kunde er nok til at ville høre resten af historien."
+  },
+  {
+    "subject": "Hvorfor føles nogle gaveæsker tungere end andre?",
+    "preview": "Det er ikke materialet alene. Vi skar en æske over for at vise, hvad der sidder indeni.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En fornemmelse, alle kender, får en skjult årsag, og mailen viser den bogstaveligt."
+  },
+  {
+    "subject": "Det ene, vi ikke kan tage retur",
+    "preview": "Varer med dit logo kan ikke returneres. Derfor er der to ting, vi altid beder dig tjekke først.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En begrænsning sagt ærligt vækker tillid og lyst til at kende de to tjek."
+  },
+  {
+    "subject": "Our Christmas biscuits have a rule this year 🎄",
+    "preview": "One shape, one spice, and you'll recognise the recipe from somewhere. Guess where.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En regel uden indhold lyder som en lille leg, og preview gør modtageren til gætter."
+  },
+  {
+    "subject": "Vi har stablet noget i receptionen 🎲",
+    "preview": "Gæt, hvor mange smykkeæsker tårnet består af. Den, der rammer tættest, vinder hele stablen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen nævner kun 'noget', og preview forvandler nysgerrigheden til en konkurrence."
+  },
+  {
+    "subject": "Den kommer fra en mark, man ikke må gå på",
+    "preview": "Vinbonden har fredet den. Vi fik 180 flasker, og de første bliver åbnet i butikken i aften.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et forbudt sted giver vinen en historie, før man overhovedet ved, hvad den hedder."
+  },
+  {
+    "subject": "Hvorfor guld ikke altid er det rigtige guld",
+    "preview": "Guld og rosaguld ligner hinanden på en skærm. På en sort æske gør de bestemt ikke.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et tilsyneladende paradoks om et velkendt valg kræver en forklaring."
+  },
+  {
+    "subject": "Your logo in one colour. Still you?",
+    "preview": "Foil prints one colour, with no gradients or shadows. Three logos simplified, before and after.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet rammer modtagerens identitet, og før-og-efter lover et svar at se med egne øjne."
+  },
+  {
+    "subject": "Ristemesteren tager på ferie med en vægt i tasken",
+    "preview": "Hun skal besøge farmen i Huila, hvor sidste års favorit kom fra. Hun har lovet at tage prøver med.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En ferie med et arbejdsredskab i bagagen er en lille modsigelse, man vil have forklaret."
+  },
+  {
+    "subject": "Hvilken pose bærer kunden stadig i januar? 🛍️",
+    "preview": "Det er sjældent den største. Hvad der får kunden til at beholde en pose og bære den igen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at gætte på sin egen pose, og svaret ligger i mailen."
+  },
+  {
+    "subject": "Try this with your next parcel ✏️",
+    "preview": "It takes one pencil, ten seconds and no extra budget. Customers photograph it more than the product.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En opfordring uden indhold lover et lille, billigt trick, man kan bruge med det samme."
+  },
+  {
+    "subject": "30.000 brands og én ting, de alle har gjort",
+    "preview": "Et udpluk fra nystartede smykkebrands til store kæder. Fællesnævneren står på låget.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort tal med én skjult fællesnævner gør modtageren nysgerrig på, om de selv hører til."
+  },
+  {
+    "subject": "Hvad møder kunden, før æsken? 📬",
+    "preview": "Forsendelsesemballagen er webshoppens første indtryk. Fire måder at gøre den til en del af gaven.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet peger på et overset trin i oplevelsen, som modtageren selv kan forbedre."
+  },
+  {
+    "subject": "What's left on the bedside table in March",
+    "preview": "Long after Valentine's, the box is still there. Here's how to make sure it carries your name.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et stille billede fra fremtiden får modtageren til at tænke på, hvad der bliver tilbage."
+  },
+  {
+    "subject": "Efter torsdag bestemmer vi buketten ⏰",
+    "preview": "Bestiller du til mors dag senere, binder vi efter dagens bedste blomster. Det kan blive vildt.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fristen er pakket ind i en lille trussel med glimt i øjet, og man vil vide, hvad den betyder."
+  },
+  {
+    "subject": "Den hedder noget med en by. Gæt hvilken",
+    "preview": "Den nye serie følger traditionen med bynavne. Tre spor, før du scroller ned til svaret.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En gætteleg om navnet gør lanceringen til noget, modtageren selv deltager i."
+  },
+  {
+    "subject": "Hvorfor vi spørger, hvor du cykler hen",
+    "preview": "Det ændrer, hvilket dæk vi anbefaler, og hvad vi ville vælge, hvis det var vores egen cykel.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et spørgsmål, man har fået i butikken, får en uventet begrundelse, man vil høre."
+  },
+  {
+    "subject": "Why some brands order 9,600 boxes at once",
+    "preview": "It isn't about space, as we can hold the stock for you. It's the price per box. The maths is inside.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort, præcist tal rejser spørgsmålet om hvorfor, og preview udelukker det oplagte svar."
+  },
+  {
+    "subject": "Vi er ikke enige om meget. Undtagen den her ✨",
+    "preview": "En æskefarve, en foliefarve og et logo i hjørnet i stedet for midten. Se, hvorfor den virker.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En indrømmet favorit uden navn gør, at man vil se, hvad fagfolkene selv falder for."
+  },
+  {
+    "subject": "Én af etiketterne i disken har en fejl 🧀",
+    "preview": "Find den, skriv den til os, og vind en kurv til fredagsbordet. Den er sværere at se, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En skjult fejl er en indbygget leg, og præmien giver legen et formål."
+  },
+  {
+    "subject": "Cremen har én ingrediens mindre end i går",
+    "preview": "Den dufter anderledes nu, og flere har spurgt hvorfor. Svaret er kortere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En fjernelse i stedet for en tilføjelse er usædvanlig og lægger op til et gæt."
+  },
+  {
+    "subject": "Ny smykkeæske. Kig på hængslet",
+    "preview": "Det er den detalje, vi har brugt længst tid på, og den, du først opdager, når du åbner den.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen peger på én lille del af en nyhed og lader mailen vise, hvorfor netop den."
+  },
+  {
+    "subject": "Dit logo kan være større, end du tror",
+    "preview": "På de største luksusposer er der plads til 150 × 150 mm. Se, hvordan det tager sig ud i praksis.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En antagelse modtageren har om sit eget logo bliver udfordret, og svaret er synligt i mailen."
+  },
+  {
+    "subject": "Den travleste person i butikken i december 🎄",
+    "preview": "Det er den, der står ved gaveindpakningen. Fem ting, der gør jobbet hurtigere og pænere.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren tænker på sin egen butik og vil se, om gættet om den travleste passer."
+  },
+  {
+    "subject": "Et tal, der starter med 4",
+    "preview": "Op til 40 % på populære smykkeæsker, når du køber fra 9.600 stk. ad gangen. Regnestykket er her.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et halvt afsløret tal er en lille gåde, som preview løser, mens mailen viser beløbet."
+  },
+  {
+    "subject": "Vil du være vores næste kundehistorie?",
+    "preview": "Vi viser butikker, der bruger emballagen godt. Sådan kommer din med og hvad du får ud af det.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Invitationen gør modtageren til hovedperson og lader betingelserne vente i mailen."
+  },
+  {
+    "subject": "Vores fjerde værdi er ikke den, du tror",
+    "preview": "Ansvar, pålidelighed, fællesskab – og en fjerde, der sjældent står på en leverandørs liste.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et tomt felt i en ellers forudsigelig liste er præcis det, man vil se udfyldt."
+  },
+  {
+    "subject": "Bånd om æsken? Prøv nummer fire 🎀",
+    "preview": "Fem knuder, fra den klassiske sløjfe til en, der kun tager tre sekunder. Video i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En anbefaling af et nummer i en liste, man ikke har set, kræver at man åbner listen."
+  },
+  {
+    "subject": "Hvad står i vinduet, når butikken er lukket?",
+    "preview": "Udstillingen arbejder hele natten. Seks displays og bakker, der sælger, selvom ingen er der.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet får modtageren til at se sit eget vindue for sig, før mailen giver ideerne."
+  },
+  {
+    "subject": "Har du tjekket fristen for dit land?",
+    "preview": "Fristerne falder tidligere end du tror, og de er forskellige fra marked til marked. Find din her.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ja/nej-spørgsmål, de fleste må svare nej til, giver en konkret grund til at åbne."
+  },
+  {
+    "subject": "Vi har gemt noget fra din sidste ordre",
+    "preview": "Klichéen med dit logo. Derfor tager en genbestilling kun 4–5 arbejdsdage i produktion.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Noget personligt, der er gemt til modtageren, vækker nysgerrighed og ender i en fordel."
+  },
+  {
+    "subject": "Den kom ud af prøveproduktionen i går",
+    "preview": "Vi har ikke engang taget ordentlige billeder endnu. Her er de første, taget på bordet ved maskinen.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Noget helt nyt og uperfekt føles som et kig, man egentlig ikke burde have fået."
+  },
+  {
+    "subject": "14.000 m². Vi har gået dem alle igennem",
+    "preview": "Fra papirrullerne til den sidste æske i kassen: en rundtur på fabrikken på tre minutter.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et stort, konkret mål gør rundturen håndgribelig, og man vil se, hvad der fylder den."
+  },
+  {
+    "subject": "The part of the box your customer touches last",
+    "preview": "It isn't the lid. It's what the jewellery rests on, and it decides how the piece looks in a photo.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen beskriver en del uden at navngive den, så modtageren gætter og vil tjekke."
+  },
+  {
+    "subject": "The Christmas question we can't answer for you 🎄",
+    "preview": "Only you know your busiest week. We know how long production takes. Work back from there.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "deadline"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En afsender, der indrømmer, hvad den ikke ved, gør modtageren nysgerrig på resten."
+  },
+  {
+    "subject": "We wrapped the same box ten ways 🎀",
+    "preview": "Ribbon, tissue, a sticker, nothing at all. Number seven took ten seconds and looks the dearest.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Ti versioner af det samme lover en sammenligning, og preview udpeger en vinder uden at vise den."
+  },
+  {
+    "subject": "A conversation we'd like to have with your buyer",
+    "preview": "If you sell packaging on, there is a programme built for exactly that. What it covers, and who for.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen antyder en samtale, der ikke har fundet sted endnu, og man vil vide om hvad."
+  },
+  {
+    "subject": "Den nye blend smager af noget fra barndommen ☕",
+    "preview": "Ikke chokolade og ikke karamel. Tættere på noget, du fik hos din mormor. Gæt i butikken.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En smag beskrevet gennem et minde gør produktet personligt og svært at lade være med at gætte på."
+  },
+  {
+    "subject": "Det, indretningsarkitekter gør først i et tomt rum",
+    "preview": "Det er ikke at male, og det koster ingenting. Vi viser det i en lejlighed på Nørrebro.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fagfolks første træk er insiderviden, og preview udelukker det oplagte svar."
+  },
+  {
+    "subject": "Der er en fejl i kataloget. Den er til din fordel",
+    "preview": "Side 34 har stadig den gamle pris på kuverter. Vi holder den til udgangen af måneden.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En indrømmet fejl, der gavner modtageren, er både ærlig og umulig at ignorere."
+  },
+  {
+    "subject": "Hver fredag kommer den samme mand kl. 6.58",
+    "preview": "Han køber altid det samme. I sidste uge spurgte vi endelig hvorfor, og svaret gjorde os stille.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist klokkeslæt og en gentagen vane bygger en lille gåde, som kun historien løser."
+  },
+  {
+    "subject": "Vinen, vi drikker, når familien er gået hjem 🍷",
+    "preview": "Den skal ikke imponere nogen, bare smage godt efter tre dage med and. Vi har 60 flasker.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Personalets eget valg til et genkendeligt øjeblik er mere interessant end en anbefaling."
+  },
+  {
+    "subject": "Hvorfor koster den her vase det dobbelte?",
+    "preview": "Den ligner sin lillebror. Men stil dem side om side i lyset, og forskellen er svær at glemme.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et prisspørgsmål, mange stiller i butikken, får en forklaring, man vil se med egne øjne."
+  },
+  {
+    "subject": "Kan børnene løse det, de voksne ikke kunne? 🧩",
+    "preview": "Påskegåden hænger i vinduet. Første barn med den rigtige løsning vælger et legetøj fra hylden.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En udfordring mellem børn og voksne gør konkurrencen til en familiesnak, før den er åbnet."
+  },
+  {
+    "subject": "Én ledig maskintid i næste uge. Hvem tager den?",
+    "preview": "Den går til den første, der sender en trykklar fil. Resten af måneden er fuldt booket.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "eksklusivitet"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Én enkelt ledig plads er konkret knaphed, og preview siger, hvad der skal til."
+  },
+  {
+    "subject": "Vi har fået 40.000 nye kolleger 🐝",
+    "preview": "De arbejder uden løn, stikker en gang imellem og bor på taget over butikken.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "humor"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et absurd stort tal om ansættelser kræver en forklaring, og emojien giver et lille hint."
+  },
+  {
+    "subject": "Det spørgsmål, vores bedste forhandlere stiller først",
+    "preview": "Det handler ikke om pris. Det handler om, hvad der sker, når en vare er udsolgt i en travl uge.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandleren vil vide, om de stiller de rigtige spørgsmål, og preview udelukker det oplagte."
+  },
+  {
+    "subject": "We over-ordered the good tape 📦",
+    "preview": "The kind that doesn't split on the roll. 30% off by the case until the storeroom has a floor again.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "'Det gode' antyder, at der findes en dårlig, og at butikken ved forskellen."
+  },
+  {
+    "subject": "The book we'll be wrapping all December",
+    "preview": "It isn't a bestseller yet. By the end of chapter two, you'll know exactly who it's for.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Personalets forudsigelse holder titlen tilbage og gør modtageren til en, der får den først."
+  },
+  {
+    "subject": "We changed suppliers. Here's the honest reason",
+    "preview": "It wasn't price. It was a phone call on a Sunday night, and what happened after it.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Løftet om ærlighed om en forretningsbeslutning er sjældent nok til at blive åbnet."
+  },
+  {
+    "subject": "A question for anyone who stocks our chairs",
+    "preview": "Which one do customers sit in first? Answer in one click, and we'll send you what everyone said.",
+    "language": "en",
+    "mechanisms": [
+      "nysgerrighed",
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forhandleren får lov at bidrage og belønnes med alles svar, som de er nysgerrige på."
+  },
+  {
+    "subject": "Vi leder efter den flotteste disk 🏆",
+    "preview": "Send et billede af din disk med vores æsker. Vinderen bliver forsiden på næste nyhedsbrev.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "social_proof"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren tænker straks på sin egen disk, og præmien er synlighed frem for rabat."
+  },
+  {
+    "subject": "Flyt telefonen 20 cm, og æsken ser dyrere ud 📷",
+    "preview": "Det er ikke ovenfra. Vi tog den samme æske fra seks vinkler, og én skilte sig klart ud.",
+    "language": "da",
+    "mechanisms": [
+      "nysgerrighed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En konkret gevinst uden at sige hvordan gør, at man åbner for at se vinklen."
+  }
+]

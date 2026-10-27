@@ -161,7 +161,20 @@ export function createKlaviyoTemplateDomain({
     }
   }
 
+  // A Klaviyo template has no subject line; that lives on the campaign. Without a chosen one the
+  // rollout translates the template's *name* as the subject. The Subject lines screen hands its
+  // chosen pair over for one template, and it applies only while that template is the source.
+  function applyChosenSubjectLine(template) {
+    const chosen = appState.klaviyoTemplateSubjectOverride;
+    if (!chosen?.templateId || chosen.templateId !== template?.id || chosen.account !== template?.account) return template;
+    return { ...template, subject: chosen.subject, previewText: chosen.preview || "", subjectSource: "subject_lines" };
+  }
+
   function getSelectedKlaviyoTemplate() {
+    return applyChosenSubjectLine(resolveSelectedKlaviyoTemplate());
+  }
+
+  function resolveSelectedKlaviyoTemplate() {
     ensureKlaviyoTemplateSelections();
     const scoped = getKlaviyoSourceTemplates(appState.klaviyoTemplateSourceAccount);
     if (!scoped.length && appState.klaviyoTemplateLiveAccount === appState.klaviyoTemplateSourceAccount) {

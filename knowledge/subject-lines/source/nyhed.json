@@ -1,0 +1,1748 @@
+[
+  {
+    "subject": "Nå. Så kom den 📦",
+    "preview": "Den nye serie smykkeæsker landede på lageret i morges. Her er de første billeder.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et tørt, mundret »Nå« lyder som en kollega, der ikke kan holde nyheden for sig selv."
+  },
+  {
+    "subject": "Samme æske. Ny farve. Helt andet smykke",
+    "preview": "Vi har lagt den samme guldring i begge – se, hvad farven gør ved den.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte sætninger lader nyheden vise sin effekt i stedet for at beskrive sig selv."
+  },
+  {
+    "subject": "Bæreposen har fået en storebror: XXL 🛍️",
+    "preview": "45 cm bred, plads til et logo på op til 15 × 15 cm og stadig med vævede hanke.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "»Storebror« gør en ny størrelse til en figur, og preview leverer målene bagefter."
+  },
+  {
+    "subject": "Fra i dag kan vi gemme dine æsker for dig",
+    "preview": "Bestil hele partiet, lad det stå på vores lager, og træk på det, efterhånden som du sælger.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Fra i dag« gør en serviceændring til noget, der sker nu, og preview viser gevinsten."
+  },
+  {
+    "subject": "Det nye ved smykkeæsken er det, du ikke ser",
+    "preview": "Den er testet for anløbning hos os selv, så æsken ikke er grunden til, at sølvet mister glansen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er gemt i emnelinjen, så man åbner for at finde ud af, hvad der er ændret."
+  },
+  {
+    "subject": "Terracotta.",
+    "preview": "Den nyeste af de ni farver på luksusbæreposerne – og den sværeste at fotografere.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Ét ord med punktum står som en afsløring og lader preview fortælle, at det er nyt."
+  },
+  {
+    "subject": "Nyt i sortimentet, og det er ikke en æske",
+    "preview": "Displays til disken, så smykket har et sted at stå, før det bliver solgt.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Forventningen om endnu en æske bliver vendt, og det gør nyheden overraskende."
+  },
+  {
+    "subject": "Har du mærket de nye smykkeæsker endnu?",
+    "preview": "Overfladen kan ikke mærkes gennem en skærm, så bestil en prøve – med eller uden dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet beder om en sans, mailen ikke kan levere, og gør prøven til det naturlige næste skridt."
+  },
+  {
+    "subject": "Før: sort. Nu: sort, mørkeblå og creme",
+    "preview": "Samme bæreposer, flere farver at matche butikken med – stillet op side om side.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Før/nu-opstillingen viser forskellen i ét blik, uden et eneste salgsord."
+  },
+  {
+    "subject": "Ny serie. Ingen pressefotos endnu 📸",
+    "preview": "Kun de billeder, vi selv tog på lageret i går, med det lys, der nu engang var.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fraværet af pæne billeder beviser, at man ser det, før det er gjort klar til alle andre."
+  },
+  {
+    "subject": "Westpack har fået britisk familie",
+    "preview": "Vi har købt Wrapology og dannet WP Packaging Group. Her er, hvad det betyder for dig.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En virksomhedshandel fortalt som en familienyhed bliver noget, man har lyst til at høre mere om."
+  },
+  {
+    "subject": "Dit logo i kobber? Guld? Sølv? ✨",
+    "preview": "Vores nye farvekort viser alle cirka 25 foliefarver på rigtige æsker, ikke på en skærm.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre hurtige spørgsmål sætter modtagerens eget logo i spil, før nyheden overhovedet er nævnt."
+  },
+  {
+    "subject": "Tre nyheder, der passer i en håndflade",
+    "preview": "En ny smykkepose, en mindre æske og en ringbakke – alle tre i samme farve.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et antal plus et billede af størrelsen gør tre små nyheder konkrete og hurtige at overskue."
+  },
+  {
+    "subject": "Årets julefrister er ude ⏰",
+    "preview": "Én side med fristen for hvert land – og din falder måske tidligere, end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fristerne behandles som nyt stof, og preview gør det personligt uden at nævne en dato."
+  },
+  {
+    "subject": "Først farverne, så fristen ⏳",
+    "preview": "Vinterens nye æsker og poser er på lager. Logofristen for dit land står nederst i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rækkefølgen lover det sjove først og gemmer det nødvendige til sidst, ligesom mailen."
+  },
+  {
+    "subject": "Nyt partnerprogram: din profil, vores budget",
+    "preview": "Vi betaler for annoncer, der kører fra din egen profil og viser din butik med vores æsker.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fordelingen »din – vores« forklarer hele aftalen på fire ord."
+  },
+  {
+    "subject": "Skal din butik være vores næste kundecase?",
+    "preview": "Vi leder efter butikker, der vil vise, hvordan de pakker – vi står for resten.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet gør modtageren til hovedperson i det nye i stedet for til publikum."
+  },
+  {
+    "subject": "Nu i bulk: smykkeposer fra 2.500 stk.",
+    "preview": "Til dig, der pakker mange af de samme, så posen aldrig er det, der slipper op først.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et præcist tal sorterer modtagerne selv: de, der pakker i den mængde, ved straks, det er til dem."
+  },
+  {
+    "subject": "Din faste smykkeæske har skiftet tøj 👗",
+    "preview": "Samme mål, samme indlæg, samme kvalitet – bare i tre nye farver til efteråret.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Nyheden knyttes til den æske, kunden allerede kender, så den føles som deres egen."
+  },
+  {
+    "subject": "Den nye gaveæske lyder dyr, når den lukker",
+    "preview": "Vi har optaget lyden. Skru op, og hør forskellen på et låg, der klapper, og et, der glider i.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et uventet sanseindtryk gør en ny æske til noget, man vil opleve, ikke bare se."
+  },
+  {
+    "subject": "Før nogen andre: vinterens farver ❄️",
+    "preview": "Kun nyhedsbrevet får dem at se i dag – webshoppen følger efter i morgen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et døgns forspring gør nyheden til et privilegium for dem, der åbner."
+  },
+  {
+    "subject": "Nye smykker på vej? Æskerne er klar",
+    "preview": "Vi har fyldt lageret med efterårets farver, så emballagen kan matche kollektionen fra start.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden kobles til modtagerens egen lancering, så den kommer på det rigtige tidspunkt."
+  },
+  {
+    "subject": "Fem ting, der er nye hos Westpack i år",
+    "preview": "Den største er et søsterselskab i Storbritannien. Den mindste kan du have i hånden.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Preview spænder fra stort til småt og får listen til at virke værd at læse til ende."
+  },
+  {
+    "subject": "Kom med ind på lageret, mens kasserne åbnes",
+    "preview": "Billeder fra Holstebro: de nye gaveæsker, set af dem, der pakker dem hver dag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Invitationen indenfor gør modtageren til vidne, mens nyheden stadig er rå."
+  },
+  {
+    "subject": "Dit logo på låget – helt ned til 48 stk.",
+    "preview": "Så kan en ny butik eller en lille kollektion også få sit eget navn på smykkeæsken.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Det lave antal er nyheden, og preview viser, hvem den åbner døren for."
+  },
+  {
+    "subject": "Den nye farve hedder ikke »beige«",
+    "preview": "Vi kalder den creme, og når du ser den ved siden af guldfolie, forstår du hvorfor.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En benægtelse vækker nysgerrighed på det rigtige navn og på, hvorfor det betyder noget."
+  },
+  {
+    "subject": "6 nye måder at pakke en halskæde på",
+    "preview": "Fra den enkle æske med ét lag silkepapir til gaveæsken med to lag og et bånd.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tallet lover en overskuelig dosis nyt, og preview viser spændet fra enkelt til festligt."
+  },
+  {
+    "subject": "Sådan ser en smykkegave ud i december 🎁",
+    "preview": "Fire nye looks med æsker, poser og silkepapir – og præcis, hvad hvert look består af.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen maler et billede af sæsonen, og preview lover en indkøbsliste bag hvert look."
+  },
+  {
+    "subject": "Foliefarver, forklaret af dem, der trykker dem",
+    "preview": "Ny guide fra trykkeriet: hvilke farver der løfter hvilke æsker, og hvilke der forsvinder.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen er håndværkeren selv, og det giver den nye guide autoritet."
+  },
+  {
+    "subject": "Vi har fotograferet alle bæreposerne igen",
+    "preview": "I rigtige hænder og i rigtigt lys, så du kan se de ni farver uden for studiet.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er ikke produktet, men en ny måde at se det på, og det gør gamle varer aktuelle igen."
+  },
+  {
+    "subject": "Den ligger mellem rosa og terracotta. Navn? 🎨",
+    "preview": "Vores nye farve har stadig intet navn, og dit forslag kan ende på etiketten.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren ser farven for sig og har et navn klar, før de har åbnet."
+  },
+  {
+    "subject": "Tre nye butikker, én og samme æske",
+    "preview": "En guldsmed, en concept store og en webshop viser, hvad de hver især har gjort med den.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "kundecase",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Samme æske i tre hænder viser, hvor meget en nyhed kan bøjes, før modtageren selv prøver."
+  },
+  {
+    "subject": "En ny smykkebutik åbnede i weekenden 💍",
+    "preview": "Se, hvordan de valgte deres første emballage – fra prøveæske til færdig hylde.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En frisk begivenhed med en begyndelse og en slutning trækker mere end en case med overskrift."
+  },
+  {
+    "subject": "Nyt materiale til dig, der forhandler os",
+    "preview": "Produktbilleder og tekster til din webshop, klar til at hente og bruge med det samme.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Emnelinjen udpeger modtageren præcist, og preview siger, hvad der er klar til brug."
+  },
+  {
+    "subject": "Tænker du i tusinder? Så er der nyt",
+    "preview": "Bulkkøb af de mest populære smykkeæsker: fra 9.600 stk., op til 40 % rabat, 7–8 ugers produktion.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet frasorterer de små købere og taler direkte til dem, tilbuddet er skrevet til."
+  },
+  {
+    "subject": "Nyt logo, ny butik, ingen opstartsomkostninger",
+    "preview": "Gælder din første ordre: grafikerne tjekker logoet, og du godkender en korrektur, før vi trykker.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rytmen i tre led bygger op til fordelen, og nyheden er kundens egen nye start."
+  },
+  {
+    "subject": "Har du fået nyt logo? Så har vi en plan",
+    "preview": "Grafikerne tjekker det, tegner det om, hvis folien kræver det, og viser dig korrekturen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er modtagerens egen, og mailen møder den med en rolig plan i tre trin."
+  },
+  {
+    "subject": "Spoiler: julen er mørkeblå i år 🎄",
+    "preview": "Vinterens smykkeæsker og bæreposer i dyb blå, med guldfolie og ét enkelt bånd.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "»Spoiler« lover en afsløring, og farven giver straks et billede af sæsonen."
+  },
+  {
+    "subject": "Vi har givet din yndlingsæske en lillesøster",
+    "preview": "Samme udtryk i en mindre størrelse – til øreringe, vedhæng og det, der fylder lidt.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En ny størrelse præsenteres som familie til noget, modtageren allerede holder af."
+  },
+  {
+    "subject": "Ringene har fået en ny plads at stå",
+    "preview": "En ny bakke til montren, så kunden ser hele kollektionen, uden at du tager noget frem.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden fortælles fra smykkernes side, og preview viser, hvad det sparer i butikken."
+  },
+  {
+    "subject": "De nye julegaveæsker, ved siden af sidste års",
+    "preview": "Samme vinkel, samme lys – så du kan se præcis, hvad der er ændret, og hvad vi har beholdt.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En direkte sammenligning gør det nye målbart i stedet for bare påstået."
+  },
+  {
+    "subject": "Nyt fra produktionen i Holstebro",
+    "preview": "Vi har filmet, hvordan flad pap bliver til en færdig æske med logo i folie. Fire minutter.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et konkret sted og en kort film gør virksomhedsnyt til noget, man faktisk vil se."
+  },
+  {
+    "subject": "Fra blyantsstreg til smykkeæske",
+    "preview": "Den nye serie startede på et stykke papir i vores Design Studio. Her er hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Rejsen fra skitse til produkt giver nyheden en historie, før den får en pris."
+  },
+  {
+    "subject": "Den er her: æsken til to ringe 💍",
+    "preview": "Til forlovelsesringe, venskabsringe og alle andre par, der ikke skal skilles ad.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Produktet beskrives ved det, det bruges til, og preview giver det en følelse."
+  },
+  {
+    "subject": "Stem på næste sæsons farve 🗳️",
+    "preview": "Tre farver er klar til prøveproduktion. Kun én kommer på lager, og du vælger hvilken.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Modtageren får indflydelse på en nyhed, der endnu ikke findes, og det er svært at sige nej til."
+  },
+  {
+    "subject": "Lageret har fået nye naboer 🎁",
+    "preview": "Gaveæsker i fire nye størrelser står nu side om side med dem, du plejer at bestille.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Æskerne får liv som naboer, og nyheden placeres lige ved siden af det velkendte."
+  },
+  {
+    "subject": "Nu kan hele butikken matche 🛍️",
+    "preview": "Smykkeæsker, smykkeposer og bæreposer i samme nye farve, så gaven ser planlagt ud fra disk til dør.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden sælges på helheden, ikke på den enkelte vare."
+  },
+  {
+    "subject": "Én farve udgår. Tre nye kommer ind",
+    "preview": "Har du en favorit i den udgående farve, er det nu, du skal fylde op.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et farvel og et goddag i samme linje giver både nyhed og en grund til at handle nu."
+  },
+  {
+    "subject": "Den har været hemmelig siden foråret 🤫",
+    "preview": "Internt har vi kaldt den »projekt K« hele sommeren. I dag får den sit rigtige navn.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En hemmelighed, der endelig må fortælles, er nyhed med indbygget spænding."
+  },
+  {
+    "subject": "Vores nyeste kollega er en foliefarve 🥂",
+    "preview": "Den hedder champagne, og på trykkeriet siger de, at den får guld til at se tungt ud.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "En farve præsenteret som ny kollega giver nyheden et smil og en personlighed."
+  },
+  {
+    "subject": "Mørkebrun: roligere end sort, varmere end grå",
+    "preview": "Luksusbæreposen i en ny farve, vist med guldfolie og med sølv – vi kunne ikke vælge.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden placeres mellem to farver, man kender, så den kan ses for sig uden billede."
+  },
+  {
+    "subject": "Den nye farve, testet mod guld, sølv og perler",
+    "preview": "Tre fotos, samme æske, tre slags smykker – så du kan se, om den passer til din kollektion.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden testes mod modtagerens egne varer, så spørgsmålet »passer den til mig?« er besvaret."
+  },
+  {
+    "subject": "Vi har lavet en æske til den ring, der skal gemmes",
+    "preview": "Lille nok til en jakkelomme, stiv nok til at klare turen derhen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Emnelinjen antyder et frieri uden at sige det, og preview gør produktet til en del af historien."
+  },
+  {
+    "subject": "Ny sæson i butikken? Start med bæreposen",
+    "preview": "Det er den, folk bærer ned ad gaden. Efterårets nye farver ligger samlet ét sted.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et klart råd om, hvor man skal begynde, gør nyheden til en handling i stedet for en meddelelse."
+  },
+  {
+    "subject": "Den nye smykkeæske, set fra kundens side 👀",
+    "preview": "Vi har filmet den, som din kunde ser den: låget, der går op, og smykket, der kommer frem.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Perspektivskiftet gør nyheden relevant for butikken: sådan oplever dine kunder den."
+  },
+  {
+    "subject": "We opened the first box before you did 👀",
+    "preview": "The new range, photographed on an office desk on a Tuesday morning. No retouching.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et ærligt førstehåndsindtryk føles mere nyt end et poleret lanceringsbillede."
+  },
+  {
+    "subject": "Westpack and Wrapology: one group, two names",
+    "preview": "We've formed WP Packaging Group. Both brands carry on as you know them – here's what it means.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Den korte formel forklarer en stor nyhed og beroliger samtidig om det, der ikke ændrer sig."
+  },
+  {
+    "subject": "Meet the carrier bag that fits a shoebox 👟",
+    "preview": "Our XXL luxury bag: 45 cm wide, woven handles, nine colours and room for a big logo.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et uventet sammenligningsobjekt gør størrelsen til et billede i stedet for et mål."
+  },
+  {
+    "subject": "You can now order up to five samples online",
+    "preview": "With or without your logo, so you can hold the box before you commit to a full run.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden siges præcist med antal, og preview forklarer, hvorfor den er værd at bruge."
+  },
+  {
+    "subject": "New to Westpack? Your first logo order starts here",
+    "preview": "No start-up costs on your first order, a designer checks your logo and you approve a proof.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden er modtagerens egen første gang, og preview fjerner tre bekymringer på én linje."
+  },
+  {
+    "subject": "Something blue for the wedding season 💍",
+    "preview": "Dark blue jewellery boxes and pouches, for engagement rings and the gifts that follow.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Et kendt bryllupsudtryk får den nye farve til at passe præcist til sæsonen."
+  },
+  {
+    "subject": "The new pouch is softer than the photos suggest",
+    "preview": "So we filmed it instead: thirty seconds, one hand, no music.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Afsenderen indrømmer, at billedet ikke slår til, og det gør nyheden mere troværdig."
+  },
+  {
+    "subject": "We changed one thing. You'll notice it",
+    "preview": "Same jewellery box, same sizes – the lining is new, and silver looks rather better on it.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Én ting« gør ændringen lille nok til at være troværdig og stor nok til at ville se den."
+  },
+  {
+    "subject": "Fresh off the line in Holstebro",
+    "preview": "Deep blue, cream and grey boxes with gold foil, photographed the day they were made.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Et konkret sted og et produktionsbillede gør sæsonens farver friske på en håndgribelig måde."
+  },
+  {
+    "subject": "Fancy starring in an ad we pay for? 🎬",
+    "preview": "Our new partner programme runs Partnership Ads from your own profile, with your shop and our boxes.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Spørgsmålet gør et B2B-program til en invitation, og preview forklarer, hvordan det virker."
+  },
+  {
+    "subject": "Winter unboxing, styled four ways ✨",
+    "preview": "Boxes, pouches and tissue in this season's colours, with a full shopping list under each look.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, præcist antal looks lover inspiration, man kan nå at bruge i denne sæson."
+  },
+  {
+    "subject": "From blank box to branded in one season",
+    "preview": "How a new jewellery brand chose its first packaging: samples, foil colour, the lot.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En før-og-efter-bue i emnelinjen lover en historie, modtageren kan spejle sig i."
+  },
+  {
+    "subject": "Guess the new colour, win the first box 🎁",
+    "preview": "Here's one corner. Reply with a guess – the first right answer gets the first box we make.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden holdes delvist skjult, så selve konkurrencen er at åbne og kigge."
+  },
+  {
+    "subject": "Bespoke, with one name from sketch to shelf",
+    "preview": "Westpack Design Studio now takes on fully custom packaging, with a single contact the whole way.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "service",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Ét navn« gør en ny service personlig og lover ro i et ellers langt forløb."
+  },
+  {
+    "subject": "The first gold foil of the season just ran 🎄",
+    "preview": "Our print room has done its first Christmas run. Here's gold on deep blue, straight off the press.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonens første tryk er en lille begivenhed, og det gør julen konkret uden en dato."
+  },
+  {
+    "subject": "Long necklace? There's finally a box for that",
+    "preview": "Room for the chain at full length, so it doesn't have to be coiled up before anyone's seen it.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden løser et problem, modtageren genkender med det samme."
+  },
+  {
+    "subject": "Before we say anything, look at the corners",
+    "preview": "The new jewellery boxes are wrapped so cleanly you'll want to check the photos twice.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En instruks om, hvor man skal kigge, gør en lille detalje til selve nyheden."
+  },
+  {
+    "subject": "Now in stock: Valentine's in pink and cream 💕",
+    "preview": "Gift boxes, pouches and carrier bags that match, gathered on one page so the look is one order.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sæsonen og farverne står i emnelinjen, og preview gør det let at handle på dem."
+  },
+  {
+    "subject": "We've been busy in the foil room 🎨",
+    "preview": "Rose gold, copper, silver and about twenty more – every shade now shown on a real box.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "service",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et glimt ind i trykkeriet gør et nyt farvekort til noget, der er lavet med hænder."
+  },
+  {
+    "subject": "This year's Christmas cut-offs, country by country",
+    "preview": "Logo orders close earlier than plain stock, and the dates differ by market – find yours here.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "»Land for land« lover modtageren deres egen frist i stedet for en fælles dato."
+  },
+  {
+    "subject": "Den nye bønne smager af syltede blommer ☕",
+    "preview": "Vores første kaffe fra Rwanda er ristet, pakket og klar til din kaffebar fra mandag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En præcis smagsnote gør nyheden til noget, man næsten kan smage gennem skærmen."
+  },
+  {
+    "subject": "Sofaen findes nu i en farve, vi kalder søndag",
+    "preview": "En dyb, støvet okker, der ser lige så godt ud med tæppe som uden.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et stemningsnavn i stedet for et farvenavn får modtageren til at åbne for at se farven."
+  },
+  {
+    "subject": "Notesbøgerne har fået en lomme 📓",
+    "preview": "En lille fold i bagpapiret til kvitteringer, visitkort og den seddel, man ikke må tabe.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille, konkret forbedring føles mere ny end en hel ny kollektion."
+  },
+  {
+    "subject": "Fra i morgen ligger der en ny på pladen 🥐",
+    "preview": "Rugcroissant med brunt smør. Vi bager den kun til caféer, der bestiller dagen før.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "»En ny« uden navn holder spændingen, til preview afslører, hvad der kommer ud af ovnen."
+  },
+  {
+    "subject": "Tre nye flasker, og den ene er orange 🍷",
+    "preview": "Orangevin fra Slovenien, en let rød til fisk og en riesling, der næsten ikke er sød.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det ene skæve element i en liste af tre er det, der får folk til at åbne."
+  },
+  {
+    "subject": "Værkstedet holder nu åbent til 20 om torsdagen",
+    "preview": "Aflevér cyklen på vej hjem fra arbejde, og hent den lappet næste morgen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ny åbningstid bliver relevant, når preview viser, hvordan den passer ind i modtagerens dag."
+  },
+  {
+    "subject": "Garnet, I spurgte efter, er landet 🧶",
+    "preview": "Alpaka i tolv farver, og vi har strikket en prøvelap i hver, så du kan mærke forskel.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "social_proof"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er et svar på kundernes egne ønsker, og det gør den til deres."
+  },
+  {
+    "subject": "Ny te: den smager af sommerhus",
+    "preview": "Røget sort te med en anelse enebær. Bedst efter en lang gåtur i regnvejr.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "En smag beskrevet som et sted vækker en erindring, før produktet overhovedet er nævnt."
+  },
+  {
+    "subject": "Vi har flyttet krimierne. Med vilje",
+    "preview": "De står nu ved kassen, ved siden af chokoladen. Resten af den nye indretning ser du her.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "humor"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et tørt »med vilje« gør en ommøblering til en lille fortælling med glimt i øjet."
+  },
+  {
+    "subject": "Ovnen er åbnet. Her er, hvad den gav 🔥",
+    "preview": "Vinterens kopper og skåle, med en glasur der aldrig bliver helt ens – og kun 40 af hver.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Øjeblikket, hvor ovnen åbnes, gør nyheden til et resultat, ingen kendte på forhånd."
+  },
+  {
+    "subject": "Den nye ansigtscreme dufter af ingenting",
+    "preview": "Ingen parfume og ingen æteriske olier – vi har brugt et år på at fjerne det, huden ikke skal bruge.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er et fravær, og det skiller sig ud i en kategori, hvor alt ellers dufter."
+  },
+  {
+    "subject": "Vinterens første lys er støbt 🕯️",
+    "preview": "Bivoks med en snert kanel. Vi har lavet 300, og kun forhandlere ser dem i denne uge.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "»Første« og et lille oplag gør sæsonnyheden til noget, man skal være tidligt ude efter."
+  },
+  {
+    "subject": "Ny plade: mørk chokolade med salt fra Læsø",
+    "preview": "Vi har smagt os frem i tre måneder. Den fjerde version blev den rigtige.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et konkret oprindelsessted i emnelinjen og processen i preview giver nyheden vægt."
+  },
+  {
+    "subject": "Forårets planter kan forudbestilles fra i dag 🌱",
+    "preview": "Prislisten til gartnere og blomsterhandlere er klar, med tre sorter vi aldrig har haft før.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forudbestilling gør sæsonen til en nyhed, man kan handle på før alle andre."
+  },
+  {
+    "subject": "Din sidste ordre ligger klar til at blive gentaget",
+    "preview": "Genbestilling er nu én knap, så kuglepenne og printerpapir ikke tager en hel formiddag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden vises gennem modtagerens egen ordre i stedet for som en ny funktion."
+  },
+  {
+    "subject": "Nu med en lomme til tommestokken",
+    "preview": "Den nye arbejdsbuks har den lomme, håndværkerne bad om, og knæpuder der kan tages ud.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Én præcis detalje fra modtagerens arbejdsdag gør nyheden genkendelig med det samme."
+  },
+  {
+    "subject": "Den nye flise ser våd ud, også når den er tør",
+    "preview": "Glaseret terrakotta i fire farver, der fanger lyset som en gade efter regn.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et paradoks i emnelinjen skaber et billede, som preview gør poetisk."
+  },
+  {
+    "subject": "Hvorfor står der en ny kasse ved disken?",
+    "preview": "Den er fuld af små værktøjer under 50 kr. – det, folk glemmer, at de mangler.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Spørgsmålet beskriver noget, de faste kunder kan have set, og gør dem nysgerrige på svaret."
+  },
+  {
+    "subject": "Osten, vi har ventet 18 måneder på 🧀",
+    "preview": "Lagret i kælderen, vendt hver uge, og skåret for første gang i morges.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "bag_kulisserne"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Ventetiden gør nyheden fortjent, og »første gang« gør den frisk."
+  },
+  {
+    "subject": "Hundekagerne er tilbage. Opskriften er ny 🐶",
+    "preview": "Mindre sukker, mere lever, og hundene på kontoret har godkendt dem enstemmigt.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det velkendte og det nye i to korte sætninger beroliger og vækker interesse på én gang."
+  },
+  {
+    "subject": "Den nye bamse har allerede et navn",
+    "preview": "Han hedder Kvist, han er strikket i uld, og børnene i butikken har testet ham grundigt.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et navn gør produktet til en figur, og en figur vil man gerne møde."
+  },
+  {
+    "subject": "Vi rammer nu ind på 48 timer",
+    "preview": "Aflevér billedet mandag, så kan det hænge på væggen onsdag – med museumsglas, hvis du vil.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et konkret tidsløfte er nyheden, og preview oversætter det til ugedage."
+  },
+  {
+    "subject": "Den nye kniv skal kun slibes én gang om året",
+    "preview": "Japansk stål, skaft i oliventræ og en æg, der holder, til næste sommer er forbi.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden beskrives ved det, man slipper for, og det er mere overbevisende end en materialeliste."
+  },
+  {
+    "subject": "Den nye duft hedder Første Frost ❄️",
+    "preview": "Cedertræ, kold luft og en smule appelsin. Den kommer i butikkerne om to uger, hos os i dag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Et stemningsfuldt navn og et forspring på to uger gør sæsonnyheden eksklusiv."
+  },
+  {
+    "subject": "Den nye fadøl er klar til jeres haner 🍺",
+    "preview": "En let pilsner på 4,2 %, brygget til at holde hele aftenen. Fustager fra næste uge.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden placeres direkte i modtagerens bar, og preview giver fakta i én sætning."
+  },
+  {
+    "subject": "Vi kan nu farve dine sko om. Næsten alle",
+    "preview": "Fra sort til cognac eller den anden vej – vis os parret, så siger vi, om læderet kan.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Forbeholdet »næsten alle« gør nyheden ærlig og får folk til at tjekke, om deres par kan."
+  },
+  {
+    "subject": "Fra næste uge kommer buketten til kontoret",
+    "preview": "En fast buket hver mandag, skiftet efter sæson, så receptionen altid har noget levende.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ny service fortalt som et fast, hyggeligt øjeblik i ugen frem for som et abonnement."
+  },
+  {
+    "subject": "Det nye hæve-sænkebord kan ikke høres",
+    "preview": "Motoren er så stille, at ingen i mødelokalet opdager det. Vi har målt efter – og lyttet.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er en enkelt, overraskende egenskab, der gør produktet nemt at forestille sig."
+  },
+  {
+    "subject": "Den nye opskrift kan strikkes på en weekend",
+    "preview": "En raglansweater i tykt garn, gratis til alle, der har købt garn hos os i år.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et tidsrum, man kan overskue, gør den nye opskrift til et projekt, man kan se sig selv i gang med."
+  },
+  {
+    "subject": "Ny elcykel på 14 kilo. Ja, med batteri",
+    "preview": "Den letteste, vi nogensinde har haft i butikken – kom og løft den selv.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "»Ja, med batteri« svarer på modtagerens tvivl, før den er tænkt."
+  },
+  {
+    "subject": "Ny is i frysedisken: koldskål med kammerjunker",
+    "preview": "Kun i juni og juli, og kun til kiosker, der bestiller inden fredag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "hoej",
+    "why": "En smag, alle danskere forbinder med sommer, gør nyheden til et øjeblik."
+  },
+  {
+    "subject": "Nye stel er hængt op. Kom og prøv dem på 👓",
+    "preview": "Tyve stel fra et lille værksted i Norditalien, som ikke sælges andre steder i byen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "eksklusivitet"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er fysisk og ligger lige her, og preview giver en grund til at komme forbi."
+  },
+  {
+    "subject": "Ny forhandlerpakke: 20 nøgler, 4 farver, 1 skilt",
+    "preview": "Til butikker, der vil prøve garnet af uden at fylde en hel væg.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre tal fortæller hele pakken, så forhandleren kan vurdere den på et sekund."
+  },
+  {
+    "subject": "En café har gjort noget nyt med vores bønner",
+    "preview": "Espresso-tonic med vores nye etiopier. Vi spurgte, om vi måtte dele opskriften. Det måtte vi.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden kommer fra en kunde, ikke fra afsenderen, og det gør den mere troværdig."
+  },
+  {
+    "subject": "Gæt, hvad der er i den nye kage 🎂",
+    "preview": "Tre ingredienser, ét gæt hver. De tre første, der rammer rigtigt, får en hel kage på lørdag.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "nysgerrighed"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er selve gåden, og konkurrencen gør det sjovt at åbne for at få et hint."
+  },
+  {
+    "subject": "Nyt i år: julekortene kan få navnetryk ✉️",
+    "preview": "Fristen for tryk falder en uge før fristen for blanke kort, og begge står i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden og fristen hænger sammen, så den ene giver grunden til at læse den anden."
+  },
+  {
+    "subject": "Ny forhandler? Den første kasse er på os",
+    "preview": "Seks flasker fra vores nye producent, når du åbner en forhandlerkonto denne måned.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "To nyheder mødes: en ny kunde og en ny producent, og tilbuddet binder dem sammen."
+  },
+  {
+    "subject": "Den nye stol har en introduktionspris",
+    "preview": "Den gælder de første 30 stole, og vi har allerede solgt otte til os selv.",
+    "language": "da",
+    "mechanisms": [
+      "nyhed",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egne køb er den mest ærlige anbefaling af en nyhed."
+  },
+  {
+    "subject": "Our new decaf doesn't taste like an apology ☕",
+    "preview": "Swiss water process, beans from Colombia, and a body that holds its own in a flat white.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "humor"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Nyheden fortælles som et opgør med en fordom, kunderne selv har."
+  },
+  {
+    "subject": "The armchair now comes in rust",
+    "preview": "Same frame, same feather cushions, in a corduroy that looks better the more it's sat in.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En kort, rolig konstatering lader farven tale, og preview giver den tekstur."
+  },
+  {
+    "subject": "Your order history has a new search box",
+    "preview": "Find that one envelope you bought in March without ten minutes of scrolling.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille funktion får værdi, når preview viser den irritation, den fjerner."
+  },
+  {
+    "subject": "We're baking on Sundays now 🥐",
+    "preview": "Sourdough and cardamom buns from 7am, for cafés that never quite got used to Monday's bread.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En ny ugedag er en nyhed, man straks kan placere i sin egen kalender."
+  },
+  {
+    "subject": "Just landed: a red you can chill",
+    "preview": "Light and juicy, from a grower in the Loire, and best straight from the fridge door.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En rødvin, der skal køles, bryder en regel, og det er det, der gør den ny."
+  },
+  {
+    "subject": "The tea we drank all winter is finally stocked",
+    "preview": "Smoky, a bit malty and good with milk. Trade packs are available from this week.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afsenderens egen begejstring gør nyheden til en anbefaling fra en ven."
+  },
+  {
+    "subject": "New in the catalogue: screws sorted by job 🔩",
+    "preview": "Kitchen, decking, plasterboard – one box each, so nobody stands in aisle six guessing.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden er en ny logik, og preview tegner det problem, den løser."
+  },
+  {
+    "subject": "Same serum, new bottle, one less drip",
+    "preview": "The pump stops when you do, so the last tenth of the bottle actually gets used.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "kontrast"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tre korte led viser, at kun det, der var et problem, er blevet ændret."
+  },
+  {
+    "subject": "This week's flowers came in a day early 💐",
+    "preview": "Ranunculus in peach and dusty pink. Order by noon if you want them for the weekend.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille overraskelse i leverancen gør ugens varer til en nyhed med kort holdbarhed."
+  },
+  {
+    "subject": "The poetry section has moved upstairs",
+    "preview": "Next to the window seat and the good lamp, which is where it should have been all along.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En lille ændring i butikken bliver til en invitation, fordi preview beskriver stedet."
+  },
+  {
+    "subject": "Name our new biscuit 🍪",
+    "preview": "It's ginger, it's very crunchy, and right now it's called 'Test Batch 4'.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "humor"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Det kedelige arbejdsnavn i preview gør det næsten nødvendigt at komme med et bedre."
+  },
+  {
+    "subject": "Stockists: the new trade portal is open",
+    "preview": "Live stock levels, your own prices and reorders in one place. Log in with your usual email.",
+    "language": "en",
+    "mechanisms": [
+      "nyhed",
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Modtagergruppen står forrest, og preview siger præcist, hvad portalen kan."
+  }
+]

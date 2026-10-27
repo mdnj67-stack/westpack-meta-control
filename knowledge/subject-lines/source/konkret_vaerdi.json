@@ -1,0 +1,1699 @@
+[
+  {
+    "subject": "48 stk. med dit logo. Mere skal der ikke til.",
+    "preview": "Til butikken, der vil se sit navn i folie uden at fylde baglokalet op.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gør den lave mindstegrænse til selve budskabet, så modtageren straks ved, hvad de kan bestille."
+  },
+  {
+    "subject": "Sådan ser dit logo ud, før vi trykker det",
+    "preview": "En digital korrektur først – og vores grafikere retter logoet til, hvis folien kræver det.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fjerner risikoen ved et første logokøb ved at vise, hvad modtageren godkender, før der trykkes."
+  },
+  {
+    "subject": "Your logo, checked by a designer first",
+    "preview": "If a line would blur in foil, we redraw it before production – then send you a digital proof.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret tryghed i processen frem for en generel kvalitetsfrase."
+  },
+  {
+    "subject": "Bryg en bedre filterkop i morgen tidlig ☕",
+    "preview": "Tre justeringer af kværnen, der gør mere end en ny bønne – med vores målinger for hver af dem.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en mærkbar forbedring, modtageren kan afprøve allerede næste morgen."
+  },
+  {
+    "subject": "Rosaguld ude, fløjl inde",
+    "preview": "Den nye smykkeæske set fra alle sider – og hvordan dit logo står i folie på den.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "To konkrete materialer i to korte sætninger lader modtageren se æsken, før de åbner."
+  },
+  {
+    "subject": "The sofa that fits through a 70 cm door",
+    "preview": "It arrives in three parts and assembles in twenty minutes – every measurement is in the email.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Løser et konkret problem, som netop den modtager kender fra sin egen opgang."
+  },
+  {
+    "subject": "Din logofrist til jul – på ét minut ⏰",
+    "preview": "Fristerne falder tidligere end du tror, så vi har samlet dem for hvert land på én side.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover modtageren præcis den ene oplysning, de mangler, og hvor hurtigt de får den."
+  },
+  {
+    "subject": "Et komplet hyldekoncept til 60 cm væg",
+    "preview": "Varer, skiltning og placering er valgt for dig – du stiller det op og sætter prisen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Beskriver det færdige resultat så præcist, at forhandleren kan se det for sig i egen butik."
+  },
+  {
+    "subject": "Fem måder at pakke én ring på 💍",
+    "preview": "Fra den lille klassiker til æsken med indsats i to lag – alle vist med logo på låget.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Et lille, konkret løfte om valgmuligheder, som en smykkebutik kan bruge med det samme."
+  },
+  {
+    "subject": "Around 25 foil colours – which is yours?",
+    "preview": "Metallic gold, silver and rose gold sit beside the quieter shades, each shown on a real box.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "spoergsmaal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gør et valg håndgribeligt og inviterer modtageren til at forestille sig sit eget logo."
+  },
+  {
+    "subject": "Vinen til julefrokosten, valgt for dig 🍷",
+    "preview": "Seks flasker under 150 kr., hver med en sætning om, hvad den skal stå ved siden af.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Sparer modtageren for valget og lover en konkret, prissat løsning til en kendt situation."
+  },
+  {
+    "subject": "Én æske, tre butikker, tre helt forskellige looks",
+    "preview": "Samme smykkeæske med tre logoer og tre foliefarver – så du kan se, hvad din egen kan blive.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Viser modtageren, hvad de selv kan få ud af produktet, gennem andres eksempler."
+  },
+  {
+    "subject": "Reorder last month's flour in two clicks",
+    "preview": "Your previous order is saved on your account, quantities and all – change one line or none.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en målbar tidsbesparelse på en opgave, modtageren gentager hver måned."
+  },
+  {
+    "subject": "Lagerplads hos os. Betaling, når du trækker.",
+    "preview": "Vi gemmer din logoordre og sender i takt med, at du bruger af den – baglokalet forbliver dit.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Sætter to konkrete fordele op side om side, så modtageren straks ser, hvad de slipper for."
+  },
+  {
+    "subject": "Én kontaktperson fra skitse til færdig æske",
+    "preview": "Westpack Design Studio tegner din egen emballage, og du taler med det samme menneske hele vejen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "personlig"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret arbejdsform frem for en abstrakt servicefrase."
+  },
+  {
+    "subject": "Dry feet, sorted 🥾",
+    "preview": "The two boots our staff actually wear in the rain, and the socks that make them work.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Lover løsningen på et konkret sæsonproblem i få ord og med et glimt i øjet."
+  },
+  {
+    "subject": "Gaven er pakket, før kunden har betalt 🎁",
+    "preview": "Gaveæsker, der er klar på et øjeblik – så køen ved kassen bevæger sig, også i december.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Maler den konkrete gevinst i julehandlen som et øjeblik ved disken."
+  },
+  {
+    "subject": "Klar til at køre igen på 48 timer",
+    "preview": "Indlevér cyklen mandag, så har du den onsdag – med en liste over alt, vi har skiftet.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et præcist tidsløfte fortæller modtageren nøjagtig, hvad de får."
+  },
+  {
+    "subject": "Bæreposer i fire størrelser – med mål",
+    "preview": "Fra den lille, der rummer en ringæske, til XXL, der tager en hel gaveæske – med logofelt på hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover den konkrete information, en indkøber faktisk skal bruge for at vælge."
+  },
+  {
+    "subject": "Production times, per logo, on one page",
+    "preview": "New logo or one we already hold – both are listed, so you can plan back from your busiest week.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et planlægningsværktøj frem for en alarm, hvilket passer til en travl indkøber."
+  },
+  {
+    "subject": "Garderoben til efteråret, i 9 dele 🍂",
+    "preview": "Alt kan kombineres med alt, og det hele koster mindre end én designerfrakke.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Afgrænser værdien til et konkret og overskueligt antal, der kan købes på én gang."
+  },
+  {
+    "subject": "Vi betaler annoncen. Du er afsenderen.",
+    "preview": "Som partner kører din butik Meta-annoncer fra din egen profil – og Westpack finansierer dem.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Siger fordelen ved partnerskabet så konkret, at den kan forstås på et sekund."
+  },
+  {
+    "subject": "Stem på én æske – vind den med dit logo 🗳️",
+    "preview": "Tre gaveæsker i finalen. Ét klik er én stemme, og én vinder får sin favorit med eget logo.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Præmien er konkret og personlig, så modtageren ved præcis, hvad der står på spil."
+  },
+  {
+    "subject": "Win a year of loose-leaf, one tin a month",
+    "preview": "Tell us which blend got you through last winter – we'll draw a winner on the first Friday.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien beskrives så præcist, at modtageren kan mærke den, før de deltager."
+  },
+  {
+    "subject": "Folie, der står skarpt: tre logo-regler",
+    "preview": "Én farve, ingen skygger, ingen fotos – og hvorfor det giver det pæneste tryk på en æske.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Giver modtageren konkrete regler, de kan holde deres eget logo op imod."
+  },
+  {
+    "subject": "Spisebordet kan nu fås i 240 cm",
+    "preview": "Samme ben, samme eg, plads til to stole mere – og prisen starter stadig under 10.000 kr.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Nyheden siges som én konkret måling, modtageren kan holde op mod sin egen stue."
+  },
+  {
+    "subject": "Ny pose. Samme logo. Fire nye farver. 🎨",
+    "preview": "Smykkeposen findes nu i fire nye nuancer – vist med folie i guld, sølv og rosaguld på hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte sætninger fortæller præcis, hvad der er nyt, og hvad der ikke ændrer sig."
+  },
+  {
+    "subject": "TrustScore 4.6 – read the reviews first",
+    "preview": "Buyers on foil quality, proofs and the boxes themselves, before you place your own order.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover modtageren den uafhængige vurdering, de alligevel ville lede efter, inden de køber."
+  },
+  {
+    "subject": "Buketten til mors dag, bestilt på 2 minutter 💐",
+    "preview": "Vælg farve og størrelse, så binder vi den om morgenen og ringer, når den er klar.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fortæller både hvad og hvor hurtigt, så beslutningen føles let."
+  },
+  {
+    "subject": "Bestil en prøve med dit logo, før du vælger",
+    "preview": "Se folien i hånden og mærk låget – op til fem prøver online, så du kan sammenligne.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover modtageren den sikkerhed, der skal til for at tage beslutningen."
+  },
+  {
+    "subject": "Your shelf, restocked at last year's price",
+    "preview": "Prices held on the 40 notebooks you reorder most – listed in the email by product line.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Siger præcis, hvad modtageren sparer, og på hvilke varer."
+  },
+  {
+    "subject": "Låget op, ringen frem. Fem æsker, der kan det.",
+    "preview": "Indsatser, der løfter smykket op mod lyset – og plads til dit logo i folie på låget.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Beskriver præcis det øjeblik, æsken skal skabe for butikkens egen kunde."
+  },
+  {
+    "subject": "Ingen opstartsomkostninger på din første ordre",
+    "preview": "Standardklichéen til dit logo følger med – du betaler for æskerne, ikke for at komme i gang.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fjerner den største barriere for et første logokøb i én sætning."
+  },
+  {
+    "subject": "Three gift wraps that need no ribbon 🎀",
+    "preview": "Lids, sleeves and bands that do the dressing up, so the till stays quick in December.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lover en praktisk genvej, som en travl butik kan mærke værdien af med det samme."
+  },
+  {
+    "subject": "Hvilken bønne til hvilken kværn – på én side",
+    "preview": "Et skema over vores otte kaffer, med malingsgrad til espresso, stempelkande og filter.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover et opslagsværk, modtageren kan hænge op og bruge igen og igen."
+  },
+  {
+    "subject": "Betroet af 30.000+ brands – se hvad de vælger",
+    "preview": "De smykkeæsker, der oftest bestilles med logo, samlet ét sted med mindsteantal ved hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Bruger andres valg som en genvej til modtagerens eget."
+  },
+  {
+    "subject": "We'll carry it upstairs. All four flights.",
+    "preview": "Delivery to any floor is now part of the price on every sofa and wardrobe over £800.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Lover en konkret ekstra ydelse og gør den levende med en detalje."
+  },
+  {
+    "subject": "Sort æske, kobberfolie, ingen tricks 🎃",
+    "preview": "Tre Halloween-udgaver af en sort smykkeæske med dit logo i kobber – bestil dem, som de står.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "humor"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Viser et konkret sæsonlook, modtageren kan bestille med eget logo."
+  },
+  {
+    "subject": "Forhandlerpris fra 24 stk. – og fri retur",
+    "preview": "Bestil en kasse af hver notesbog, sælg det, der går, og send resten tilbage inden for 60 dage.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Siger handelsvilkårene præcist, så forhandleren selv kan regne risikoen ud."
+  },
+  {
+    "subject": "Anløbstestet hos os – før sølvet ligger i den",
+    "preview": "Hvad vi tester for, og hvorfor det betyder noget for sølv, der skal ligge i æsken i månedsvis.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover svaret på en bekymring, som enhver sølvforhandler har, men sjældent spørger om."
+  },
+  {
+    "subject": "Carrier bags with the logo area measured",
+    "preview": "Small, large, XL and XXL – each with its standard and maximum print size, so artwork fits.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover præcis den måling, en designer skal bruge, før logoet sendes afsted."
+  },
+  {
+    "subject": "Rødvin til fisk? Her er de tre, der kan",
+    "preview": "Lette, kølige og med mere syre end du tror – og hvad de koster pr. flaske hos os.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Svarer på et konkret dilemma og lover tre brugbare svar."
+  },
+  {
+    "subject": "Mindre logo, mere luksus: sådan placerer du det",
+    "preview": "Hvor på låget, hvor stort og i hvilken folie – vist på samme smykkeæske i fire udgaver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret designbeslutning, der løfter modtagerens eget udtryk."
+  },
+  {
+    "subject": "Vi vil gerne vise din butik frem 📸",
+    "preview": "Som partner bliver din butik vist som case hos os – og vi finansierer annoncer fra din egen profil.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "personlig"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret synlighed, som en mindre butik ellers selv skulle betale for."
+  },
+  {
+    "subject": "Name our winter blend, drink it free for a year",
+    "preview": "Three tasting notes, one empty label – the best name goes on the bag and the winner's doorstep.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En konkret og vedvarende præmie gør deltagelsen let at sige ja til."
+  },
+  {
+    "subject": "Nyt logo: 7–8 arbejdsdage i produktion",
+    "preview": "Har vi dit logo i forvejen, er det 4–5 – regn baglæns fra din travleste uge, før du bestiller.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Giver modtageren de præcise tal at planlægge ud fra, uden at love en leveringsdato."
+  },
+  {
+    "subject": "Skovlen, der klarer indkørslen på 10 minutter ❄️",
+    "preview": "Bred, let og med et skaft, der passer til din højde – vi har målt tre modeller op mod hinanden.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret tidsløfte knytter produktet til en opgave, modtageren kender."
+  },
+  {
+    "subject": "Order 48 with your logo, not 480",
+    "preview": "Small runs are normal here – handy for a new collection, a pop-up or a first test of a design.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Kontrasten til et urealistisk stort tal gør det lave mindsteantal konkret."
+  },
+  {
+    "subject": "Gaveæsken findes nu i tre nye mål",
+    "preview": "Den mindste rummer et par øreringe, den største et helt sæt – og alle tager dit logo i folie.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden beskrives ud fra, hvad der kan ligge i æsken, ikke ud fra varenumre."
+  },
+  {
+    "subject": "Én aften, én hue 🧶",
+    "preview": "Opskriften er gratis, garnet ligger i ét bundt, og du har den på inden sengetid.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover et færdigt resultat inden for en tidsramme, modtageren selv kan se for sig."
+  },
+  {
+    "subject": "Præmien: 96 smykkeæsker med dit logo 🏆",
+    "preview": "Fortæl os, hvilken æske din butik ikke kan undvære, og vær med i lodtrækningen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Præmien nævnes som et konkret antal med modtagerens eget logo, så værdien er til at tage og føle på."
+  },
+  {
+    "subject": "Lights that last the whole commute home",
+    "preview": "Twelve hours on one charge, bright enough for unlit lanes, and they clip on without tools.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en konkret ydeevne, der matcher modtagerens hverdag."
+  },
+  {
+    "subject": "Åbne priser. Også selvom vi er B2B.",
+    "preview": "Se prisen pr. stk. på hver smykkeæske i shoppen, før du har talt med nogen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en gennemsigtighed, B2B-købere ellers ofte må spørge sig frem til."
+  },
+  {
+    "subject": "Den lille pose, der passer i enhver taske",
+    "preview": "Smykkeposer med snøre, til kunden der vil have sit køb med uden en æske i lommen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Beskriver en konkret situation hos butikkens kunde, som produktet løser."
+  },
+  {
+    "subject": "Christmas gift boxes, shown with your logo 🎄",
+    "preview": "Deep colours, heavier lids, gold or silver foil – six boxes styled as your counter could look.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lader modtageren se sit eget julelook, før de har besluttet noget."
+  },
+  {
+    "subject": "Vi måler kontoret op, før I bestiller",
+    "preview": "En konsulent kommer forbi, tegner planen og sender et tilbud med tre løsninger inden for budgettet.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en konkret ydelse, der fjerner modtagerens risiko for at købe forkert."
+  },
+  {
+    "subject": "Fra låg til smykke på fire sekunder ✨",
+    "preview": "Fem æsker, filmet i én optagelse hver, så du kan se, hvordan de åbner – og lukker igen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret oplevelse, modtageren kan se, før de bestiller."
+  },
+  {
+    "subject": "Én tjekliste til julen – fra logo til hylde ✅",
+    "preview": "Hvad skal bestilles først, hvad kan vente, og hvorfor fristerne falder tidligere end du tror.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "frist",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et konkret redskab, der gør en presset periode overskuelig."
+  },
+  {
+    "subject": "Your Christmas biscuits, sorted by Friday",
+    "preview": "Pick the tins online today and collect them warm on the morning you choose.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover, at en konkret opgave er løst inden en bestemt dag."
+  },
+  {
+    "subject": "Sådan bliver dit logo til folie – trin for trin",
+    "preview": "Fra korrektur til kliché til tryk, med billeder fra produktionen og hvor lang tid hvert trin tager.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret forklaring af en proces, modtageren betaler for, men aldrig ser."
+  },
+  {
+    "subject": "Display, skilte og 20 varer: din butik i butikken",
+    "preview": "Alt, du skal bruge for at sælge vores te fra disken, i én kasse med en opstillingsguide.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Opremser præcis, hvad forhandleren får, så pakken er nem at vurdere."
+  },
+  {
+    "subject": "Become a partner: we fund the Meta ads",
+    "preview": "They run from your shop's own profile, with your products and your packaging in the picture.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Siger den konkrete fordel ved partnerskabet først og forklarer formen bagefter."
+  },
+  {
+    "subject": "Dit logo på natbordet 🌙",
+    "preview": "Smykkeæsker, der bliver stående derhjemme – med dit logo i folie, hver gang låget går op.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lover en konkret effekt for modtagerens brand længe efter salget."
+  },
+  {
+    "subject": "Ny saks, 30 % lettere end den gamle ✂️",
+    "preview": "Testet af tolv frisører i en uge – og hvad de sagde om håndleddet fredag aften.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et målbart tal gør forbedringen konkret for den, der står med saksen hele dagen."
+  },
+  {
+    "subject": "First order? The cliché's on us.",
+    "preview": "Standard clichés for your logo are included first time round, so you pay for the boxes only.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Siger fordelen i en uformel vending, så den lyder som en hjælp og ikke som et salgsargument."
+  },
+  {
+    "subject": "Hvilken foliefarve passer til hvilken æske?",
+    "preview": "En tabel over æskefarverne og de foliefarver, der står stærkest på hver – til print eller skærm.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "spoergsmaal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et konkret opslagsværktøj til en beslutning, mange tager på mavefornemmelse."
+  },
+  {
+    "subject": "Opfind ugens latte og få den opkaldt efter dig ☕",
+    "preview": "Send din opskrift senest søndag – vinderen får navnet på tavlen og kaffen gratis hele december.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien er konkret og lidt forfængelig, hvilket gør den svær at sige nej til."
+  },
+  {
+    "subject": "Valentins: røde æsker, sølvfolie, dit logo ❤️",
+    "preview": "Seks kombinationer til februars travleste smykkeweekend, så du kan vælge med det samme.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Looket skrives op som tre konkrete ingredienser, så modtageren kan se det for sig."
+  },
+  {
+    "subject": "A small hallway, made to look twice the size",
+    "preview": "Mirror height, bench depth and one lamp – the measurements we used, so you can copy them at home.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover et synligt resultat og de præcise mål, der skal til."
+  },
+  {
+    "subject": "Fortrudt? Standardvarer kan returneres i 14 dage",
+    "preview": "Gælder alt uden tryk – varer med dit logo laves til dig og kan derfor ikke sendes retur.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Fortæller præcis, hvad der gælder, så modtageren kan bestille uden at tvivle."
+  },
+  {
+    "subject": "Hvad skriver kunderne om folietrykket? 🔍",
+    "preview": "Anmeldelser om tryk, korrektur og æskernes finish, samlet fra de seneste tolv måneder.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "spoergsmaal"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et sorteret overblik over netop det, en førstegangskøber er usikker på."
+  },
+  {
+    "subject": "New pouch sizes, with what fits in each",
+    "preview": "A pair of studs, a chain, a full bracelet stack – matched to the pouch that holds it without slack.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gør nyheden brugbar ved at oversætte mål til de smykker, butikken sælger."
+  },
+  {
+    "subject": "Løbesko til mørket, testet på asfalt kl. 6 🏃",
+    "preview": "Fire modeller med refleks hele vejen rundt, og hvilken der holdt længst på en våd novembermorgen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Den konkrete testsituation gør løftet troværdigt og nærværende."
+  },
+  {
+    "subject": "Lager i EU og Asien til dine store mængder",
+    "preview": "Key accounts kan få konsignationslager tæt på sig – og trække fra hylden, når behovet opstår.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Beskriver en konkret logistikfordel, der taler direkte til en stor kundes hverdag."
+  },
+  {
+    "subject": "Ni farver, der bærer dit logo 🛍️",
+    "preview": "Bæreposen fra sort og mørkeblå til terracotta og rosa – hver farve vist med logo i guld og sølv.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "hoej",
+    "why": "Lover hele paletten på én gang, så modtageren kan vælge uden at klikke rundt."
+  },
+  {
+    "subject": "Notebooks that lie flat. All 14 of them.",
+    "preview": "Lay-flat binding across the range, from the A6 pocket book to the A4 planner.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Én konkret egenskab sagt kort, så indkøberen ved præcis, hvad der er ændret."
+  },
+  {
+    "subject": "Del din unboxing, vind 100 bæreposer med logo",
+    "preview": "Tag et billede af en kunde med din pose eller æske – det bedste vinder poser med dit eget logo.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "En konkret præmie med modtagerens eget logo gør konkurrencen relevant for forretningen."
+  },
+  {
+    "subject": "Smagekasse til restauranter: 6 vine, 1 faktura",
+    "preview": "Prøv vinene på personalet først, og bestil kun dem, der skal på kortet – fragten betaler vi.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en enkel og risikofri måde at vælge på for en travl indkøber."
+  },
+  {
+    "subject": "Tre ting, kunden mærker, før smykket ses",
+    "preview": "Lågets modstand, indsatsens fløjl og logoets placering – og hvordan du vælger rigtigt i hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "inspiration",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Gør en vag fornemmelse af kvalitet til tre konkrete valg, modtageren selv kan træffe."
+  },
+  {
+    "subject": "Bulk buying, explained on one page",
+    "preview": "From 9,600 pieces of a popular jewellery box, up to 40% off – and when it makes sense for you.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en kort, konkret forklaring på en mulighed, mange ikke ved findes."
+  },
+  {
+    "subject": "Friske blomster i receptionen hver mandag 🌷",
+    "preview": "Vi skifter buketten, tager den gamle med og sender én samlet regning om måneden.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Beskriver hele aftalen så konkret, at modtageren kan sige ja uden flere spørgsmål."
+  },
+  {
+    "subject": "Æsken åbner som en skuffe. Det er det nye.",
+    "preview": "En smykkeæske med skuffe-åbning, i fire farver og med plads til dit logo på toppen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Siger nyheden som den ene konkrete detalje, der gør den anderledes."
+  },
+  {
+    "subject": "Display og bakker til hele disken, i ét sæt",
+    "preview": "Ringstativer, buster og bakker i samme farve, så vinduet hænger sammen fra ende til ende.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et samlet resultat frem for enkeltvarer og sparer modtageren for at matche selv."
+  },
+  {
+    "subject": "Roasted Monday. In your cup by Thursday.",
+    "preview": "A subscription that ships the week it's roasted, with tasting notes for whoever does the brewing.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Tidsløftet er så konkret, at modtageren kan mærke friskheden."
+  },
+  {
+    "subject": "Hvad du skal have på lager før Black Friday 🛒",
+    "preview": "Bæreposer, gaveæsker og smykkeæsker i de mængder, en travl weekend kræver – som én liste.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en færdig indkøbsliste til et øjeblik, modtageren allerede tænker på."
+  },
+  {
+    "subject": "Børnegaver under 300 kr., sorteret efter alder 🧸",
+    "preview": "Fra 2 til 12 år, med ét forslag til den, der har alt, og ét til den, der er nem at glæde.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Pris og alder gør det præcist, hvem listen er til, og hvad den sparer modtageren for."
+  },
+  {
+    "subject": "Your logo on six boxes. Pick a favourite.",
+    "preview": "One sample logo in gold, silver and rose gold foil, on light lids and dark ones.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "inspiration",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover modtageren et visuelt valg, der føles som deres eget."
+  },
+  {
+    "subject": "Din travleste uge, regnet baglæns 📅",
+    "preview": "Produktionstiden for nyt og kendt logo sat op mod december, så du ved, hvornår du skal bestille.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Omsætter produktionstid til modtagerens egen kalender i et konkret regnestykke."
+  },
+  {
+    "subject": "Melet, der giver sprødere skorpe ved 230 grader",
+    "preview": "Proteinindhold, vandmængde og hævetid – opskriften, vi bager efter, ligger i mailen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En præcis temperatur gør løftet troværdigt for en fagperson."
+  },
+  {
+    "subject": "Din egen æske, tegnet fra bunden 📐",
+    "preview": "Form, farve og materiale valgt sammen med dig – til brands, der vil have noget, ingen andre har.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "eksklusivitet"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover modtageren noget, ingen andre har: deres helt egen emballage."
+  },
+  {
+    "subject": "Win the armchair from our window",
+    "preview": "The rust velvet one everyone asks about – tell us where it would go in your home to enter.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien er en bestemt, genkendelig genstand, ikke et abstrakt gavekort."
+  },
+  {
+    "subject": "Sådan bruger andre butikker bæreposen som skilt",
+    "preview": "Fem eksempler på poser, der bæres gennem byen med logoet udad – med mål på hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Viser en konkret forretningsværdi ved et produkt, mange kun ser som en udgift."
+  },
+  {
+    "subject": "Forsendelsesæsker, der passer til smykkeæsken",
+    "preview": "Mål på hver, så du kan sende en webordre uden fyld, raslen eller en for stor kasse.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret pasform, der løser et problem ved webshoppens pakkebord."
+  },
+  {
+    "subject": "Hvad 9.600 æsker koster pr. stk. 📦",
+    "preview": "Bulkprisen side om side med en almindelig ordre – på de populære smykkeæsker, med dit logo.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "tilbud",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et konkret regnestykke, så modtageren selv kan se besparelsen."
+  },
+  {
+    "subject": "Abonnement: samme kaffe, 15 % lavere pris ☕",
+    "preview": "Vælg bønne og interval én gang – du kan springe en levering over med et klik.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Siger præcis, hvad man sparer, og fjerner frygten for at blive bundet."
+  },
+  {
+    "subject": "Mother's Day packaging, styled in five minutes 🌸",
+    "preview": "Soft pinks, cream lids and a rose gold logo – three looks you can order exactly as shown.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et færdigt sæsonlook, så modtageren slipper for at sætte det sammen selv."
+  },
+  {
+    "subject": "Vi har åbent søndag – med kaffe og opmåling 🛋️",
+    "preview": "Tag målene på stuen med, så tegner en af os tre opstillinger med de møbler, der passer.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en konkret ydelse knyttet til et konkret tidspunkt."
+  },
+  {
+    "subject": "Tre spørgsmål. Én vinder. 250 poser med logo.",
+    "preview": "Svar på tre ting om din butiks emballage, og vær med i lodtrækningen om bæreposer i din farve.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre korte sætninger og en konkret præmie gør indsatsen lille og gevinsten tydelig."
+  },
+  {
+    "subject": "Skolestart: listen over det, der sælger først ✏️",
+    "preview": "Tyve varer, der plejer at være væk fra hylderne i august, og hvor mange vi foreslår at starte med.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "oejeblik"
+    ],
+    "campaignType": "saeson",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en prioriteret liste, der sparer forhandleren for at gætte."
+  },
+  {
+    "subject": "Et kort i låget gør mere end en sløjfe 💌",
+    "preview": "Sådan bruger du låget til en hilsen, en plejeguide eller dit Instagram-navn – med tre eksempler.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "varm",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en enkel idé med konkrete eksempler, modtageren kan bruge i morgen."
+  },
+  {
+    "subject": "A smoky black tea for the darkest afternoons",
+    "preview": "Pine-smoked leaves from a single garden, strong enough for milk and gentle enough without.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en præcis smagsoplevelse til et bestemt øjeblik."
+  },
+  {
+    "subject": "Fem prøver på disken, før du vælger én",
+    "preview": "Bestil op til fem smykkeæsker som prøve, med eller uden dit logo, og læg dem ved siden af hinanden.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "service",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret måde at træffe valget på i modtagerens egne omgivelser."
+  },
+  {
+    "subject": "Gæt vægten på cyklen, og kør hjem på den 🚲",
+    "preview": "Den står i vinduet hele ugen – skriv dit gæt på et kort ved kassen eller svar på mailen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien er konkret og synlig, og deltagelsen er lige så enkel som et gæt."
+  },
+  {
+    "subject": "Kraftposen med plads til et stort logo 🛍️",
+    "preview": "Op til 150 × 150 mm tryk på den store model – nok til et logo, der ses fra den anden side af gaden.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret, målbar fordel, der taler til butikkens synlighed."
+  },
+  {
+    "subject": "Four new lid colours, each shown in foil 🎨",
+    "preview": "Each new shade photographed with gold, silver and rose gold, so you see the pairing first.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover det billede, modtageren mangler for at kunne vælge mellem nye farver."
+  },
+  {
+    "subject": "Størrelsesguiden, der halverede vores returer",
+    "preview": "Tre mål, du tager med et målebånd derhjemme – og en kunde fortæller, hvordan det gik.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret resultat gør værktøjet værd at åbne for den, der har prøvet at ramme forkert."
+  },
+  {
+    "subject": "400+ brands har en fast aftale. Sådan ser den ud.",
+    "preview": "Lager i EU og Asien, specialdesign og træk efter behov – det kan en key account-aftale rumme.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et konkret indblik i, hvad en større aftale faktisk indeholder."
+  },
+  {
+    "subject": "Sommerens is, nu i liter til fryseren 🍦",
+    "preview": "Tag de tre mest solgte smage med hjem i bøtter med låg, der kan stå hele vinteren.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "legende",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover modtageren noget, de allerede kan lide, i en ny og praktisk form."
+  },
+  {
+    "subject": "Juleæsker i mørkeblå, bordeaux og sort ✨",
+    "preview": "Hver vist med guld- eller sølvfolie og en matchende bærepose, så julelooket hænger sammen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "saeson",
+    "tone": "premium",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Tre farver nævnt ved navn lader modtageren se julen i sin egen butik."
+  },
+  {
+    "subject": "Stock our planners, keep a 45% margin",
+    "preview": "Wholesale price, suggested retail and a counter display that holds 24 – all in the trade pack.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "forhandler",
+    "tone": "saglig",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Siger forhandlerens fortjeneste som et tal, hvilket er det første, de vil vide."
+  },
+  {
+    "subject": "Æske eller pose: et skema efter smykkets pris",
+    "preview": "Hvornår kunden forventer en æske, og hvornår en pose er nok – sat op efter prisniveau.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "guide"
+    ],
+    "campaignType": "inspiration",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret beslutningsregel, der passer til modtagerens eget sortiment."
+  },
+  {
+    "subject": "Book klipning, mens du venter på bussen ✂️",
+    "preview": "Ny app: vælg frisør, tid og behandling på under et minut – og få en sms, når stolen er klar.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Lover en konkret tidsbesparelse placeret i en hverdagssituation."
+  },
+  {
+    "subject": "Nye bakker til ringe, der kan stables",
+    "preview": "Lag på lag i skuffen om natten, på disken om dagen – i fire farver, der matcher æskerne.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "nyhed"
+    ],
+    "campaignType": "produktnyhed",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Nyheden siges gennem den konkrete fordel i butikkens hverdag."
+  },
+  {
+    "subject": "How one café halved its candle bill",
+    "preview": "They switched to our long-burning tins in October – the sums, and what the regulars noticed.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "social_proof"
+    ],
+    "campaignType": "kundecase",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Et konkret resultat hos en genkendelig kunde gør løftet troværdigt."
+  },
+  {
+    "subject": "Ét tryk, én farve – derfor står det skarpt",
+    "preview": "Hvad varmprægning med folie kan, hvad den ikke kan, og hvordan dit logo får mest ud af den.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "bag_kulisserne"
+    ],
+    "campaignType": "virksomhed",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Vender en begrænsning til en konkret fordel, modtageren forstår."
+  },
+  {
+    "subject": "Seks flasker til prisen af fem – udvalgt af os 🍷",
+    "preview": "Tre røde, to hvide og en mousserende til vinteren, med en note om maden til hver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tilbud"
+    ],
+    "campaignType": "tilbud",
+    "tone": "premium",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fordelen siges som en enkel regel, og pakken som et konkret indhold."
+  },
+  {
+    "subject": "Tre smykkeæsker, der dækker ring, kæde og ørering",
+    "preview": "Vil du kun have tre modeller på lager, er det dem her – med mindsteantal og foliemuligheder.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "tal"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "direkte",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover et forenklet sortiment, der dækker behovet med færrest mulige varer."
+  },
+  {
+    "subject": "Twelve at Christmas, four by Boxing Day 🪑",
+    "preview": "An extending table that seats twelve and slides back to four, with chairs that stack beside it.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "saeson",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "middel",
+    "why": "Lover en konkret løsning på et problem, der kun findes én gang om året."
+  },
+  {
+    "subject": "Logoet først, julen bagefter 🎄",
+    "preview": "Send logoet nu, så ligger korrekturen klar, når du ved, hvor mange æsker julen kræver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "deadline"
+    ],
+    "campaignType": "frist",
+    "tone": "legende",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Lover, at én lille handling nu fjerner en flaskehals senere."
+  },
+  {
+    "subject": "Vind en kringle hver fredag i december",
+    "preview": "Skriv, hvem på kontoret der fortjener den mest – vi vælger en historie hver uge og cykler den ud.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "konkurrence",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Præmien er konkret, gentagen og nem at forestille sig på bordet."
+  },
+  {
+    "subject": "Fra korrektur til disk: én ordre, fulgt hele vejen",
+    "preview": "En smykkebutiks første logoordre, vist trin for trin med billeder – så du ved, hvad du siger ja til.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "historie"
+    ],
+    "campaignType": "kundecase",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover at vise hele forløbet, så en førstegangskøber kan se sig selv i det."
+  },
+  {
+    "subject": "Kuglepennen, der holder et helt regnskabsår",
+    "preview": "4 km streg pr. patron – og logoet står skarpt efter et år i en jakkelomme.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "kaek",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "En konkret holdbarhed gør en hverdagsvare værd at tænke over."
+  },
+  {
+    "subject": "Faktura? Selvfølgelig. 🧾",
+    "preview": "Kort, PayPal og bankoverførsel virker også – men fakturaen gør det let for bogholderen.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "service",
+    "tone": "kaek",
+    "context": "westpack",
+    "translationRisk": "middel",
+    "why": "Siger en konkret, praktisk fordel, der taler til den, der skal godkende købet."
+  },
+  {
+    "subject": "Gift boxes that fold flat until you need them",
+    "preview": "Store a season's worth in one drawer, fold one up at the till in seconds, logo already on.",
+    "language": "en",
+    "mechanisms": [
+      "konkret_vaerdi"
+    ],
+    "campaignType": "produktfokus",
+    "tone": "saglig",
+    "context": "westpack",
+    "translationRisk": "lav",
+    "why": "Lover en konkret pladsbesparelse, som en lille butik mærker hver dag."
+  },
+  {
+    "subject": "Sælg vores kaffe uden at købe en kværn",
+    "preview": "Vi låner dig kværn og display, så længe posen står på hylden – og kommer forbi med smagsprøver.",
+    "language": "da",
+    "mechanisms": [
+      "konkret_vaerdi",
+      "kontrast"
+    ],
+    "campaignType": "forhandler",
+    "tone": "varm",
+    "context": "generisk",
+    "translationRisk": "lav",
+    "why": "Fjerner forhandlerens største udgift med én konkret sætning."
+  }
+]
