@@ -24,6 +24,9 @@
   .photo { position: absolute; inset: 0; background-repeat: no-repeat; }
   .wp { position: absolute; top: 48px; right: 48px; background: #fff; border-radius: 14px; padding: 11px 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
   .wp img { height: 38px; display: block; }
+  .wp.with-flag { display: flex; align-items: center; gap: 12px; }
+  .wp.with-flag i { width: 1px; align-self: stretch; background: #E3E3E3; }
+  .wp img.flag { height: 26px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08); }
 
   .panel { position: absolute; left: 48px; right: 48px; bottom: 48px; height: 420px; background: var(--ivory); border-radius: 28px; box-shadow: 0 22px 60px rgba(30, 24, 18, .16); padding: 0 56px; }
   .foot { position: absolute; left: 56px; right: 56px; bottom: 38px; display: flex; align-items: center; gap: 16px; padding-top: 22px; border-top: 1px solid var(--line); }
@@ -95,7 +98,7 @@
     const id = `c${i + 1}`;
     if (card.kind === "hero") {
       return `<section class="card hero" id="${id}">${photo(card.photo)}
-        <div class="wp"><img src="assets/westpack-logo.svg" alt=""></div>
+        <div class="wp${card.flag ? " with-flag" : ""}"><img src="assets/westpack-logo.svg" alt="">${card.flag ? `<i></i><img class="flag" src="assets/flag-${card.flag}.svg" alt="">` : ""}</div>
         <div class="panel">
           <h1>${card.headline.map(esc).join("<br>")}</h1>
           <div class="sub">${esc(card.sub)} <b>→</b></div>

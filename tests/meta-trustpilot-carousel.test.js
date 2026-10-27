@@ -131,6 +131,24 @@ test("a reviewer who names their country can carry its flag on the card and in t
   assert.ok(T.resolveSpec(spec).errors.some((e) => /two-letter country code/.test(e)));
 });
 
+test("the month is left out unless a spec asks for it, and the review count always stays", () => {
+  const us = T.resolveSpec(JSON.parse(fs.readFileSync(path.join(DIR, "specs", "en-us-jewelry-2026-10.json"), "utf8")));
+  assert.equal(us.cards[0].rating, "TrustScore 4.6 · 2,796 reviews");
+  assert.match(us.meta.primaryText, /TrustScore 4\.6 from 2,796 reviews\.\n/);
+  assert.doesNotMatch(JSON.stringify(us), /October|2026\)/);
+  assert.equal(T.resolveSpec(FR_SPEC).cards[0].rating, `TrustScore 4,6 · 2${NB}796 avis · octobre 2026`);
+});
+
+test("a market flag on card 1 sits in the Westpack badge, and is validated", () => {
+  const us = T.resolveSpec(JSON.parse(fs.readFileSync(path.join(DIR, "specs", "en-us-jewelry-2026-10.json"), "utf8")));
+  assert.equal(us.cards[0].flag, "us");
+  assert.equal(T.resolveSpec(FR_SPEC).cards[0].flag, null);
+  const bad = JSON.parse(JSON.stringify(FR_SPEC));
+  bad.hero.flag = "USA";
+  assert.ok(T.resolveSpec(bad).errors.some((e) => /hero\.flag/.test(e)));
+  assert.match(fs.readFileSync(path.join(DIR, "carousel.html"), "utf8"), /class="wp\$\{card\.flag \? " with-flag"/);
+});
+
 test("French typography keeps punctuation on its word's line without touching the characters", () => {
   assert.equal(T.typographicSpaces("du rendu !"), `du rendu${NB}!`);
   assert.equal(T.typographicSpaces("Et surtout : au"), `Et surtout${NB}: au`);

@@ -80,7 +80,13 @@ sprog, billeder, anmeldelser og TrustScore. Første version er den franske karru
   Thomsen" i en amerikansk annonce. Vælg hellere nye og stærke anmeldelser end gamle, der tilfældigvis nævner landet.
   Eksporten har ikke anmelderens land, så forbindelsen findes i anmelderens egne ord: en by, en stat, "American
   customer", LLC. Se `specs/en-us-jewelry-2026-10.json`.
-- **Tallet står altid med ordet "TrustScore"**, antal anmeldelser og måned. Trustpilots logo er med på hvert kort.
+- **Tallet står altid med ordet "TrustScore" og antal anmeldelser.** Trustpilot kræver dato eller antal. Måneden er
+  udeladt som standard, så annoncen ikke ser gammel ud efter et par måneder (den franske AD24 har den stadig,
+  `"showMonth": true`). `asOf` i spec'en skal stadig angive, hvornår tallene er læst. Tjek TrustScore og antal, før en
+  ny version laves, og hvis en annonce har kørt i flere måneder. Trustpilots logo er med på hvert kort.
+- **Et landeflag** hører til på første kort i Westpack-mærket (`"hero": { "flag": "us" }`), aldrig ved produktoverskriften.
+  Et flag ved produktet kan læses som "Made in USA". Et flag ved en enkelt anmelder (`"flag"` på citatet) kun, hvis alle
+  citater har ét, og kun når anmelderen selv har skrevet landet.
 - **"Excellent"** (Hervorragend, Eccezionale …) er Trustpilots ord for 4,3 og derover. Under det skal `trustpilot.label`
   være Trustpilots eget ord.
 - **Ingen sammenligning** med andre virksomheders score, og **ikke kun 5-stjernede** anmeldelser på en måde, der vildleder.

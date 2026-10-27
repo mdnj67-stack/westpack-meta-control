@@ -6,7 +6,9 @@
  * It also holds the rules the user set for review ads (2026-10-27), as checks rather than advice:
  * - a quote is the customer's own words, unchanged; `verifyQuotes` finds each one in the Trustpilot export
  * - an excerpt starts where a sentence starts, so no letter is re-cased to make it look like one
- * - the score always carries the word "TrustScore", a review count and the month it was read
+ * - the score always carries the word "TrustScore" and the review count. Trustpilot asks for a date stamp or a
+ *   count; the month is left out unless the spec sets trustpilot.showMonth (the user, 2026-10-27: no month in the
+ *   ad, so it does not date). trustpilot.asOf still records when the figures were read.
  * - "Excellent" (and its translations) is Trustpilot's word for 4.3 and up only
  * - a private person is shown as first name and initial (`display`), never by full name; a place is added only
  *   when the reviewer names it themselves. `author` stays the Trustpilot name, which the check matches on.
@@ -117,12 +119,19 @@
       month: /^\d{4}-\d{2}$/.test(String(tp.asOf || "")) ? formatMonth(tp.asOf, L.intl) : "",
       label
     };
-    const rating = fill(L.hero.rating, values);
+    // Without the month, its separator and brackets go with it: "… · {month}" and " ({month})".
+    const withMonth = (t) => (tp.showMonth ? String(t) : String(t).replace(/\s*·\s*\{month\}/g, "").replace(/\s*\(\{month\}\)/g, ""));
+    const rating = fill(withMonth(L.hero.rating), values);
     if (!/TrustScore/.test(rating)) errors.push('the rating line must say "TrustScore" (Trustpilot\'s rule)');
 
     const cards = [];
+    // A market flag on card 1 sits in the Westpack badge - "Westpack for the US" - and never beside the product
+    // headline, where it would read as a made-in claim.
+    const heroFlag = s.hero && s.hero.flag;
+    if (heroFlag !== undefined && !/^[a-z]{2}$/.test(String(heroFlag))) errors.push('hero.flag must be a two-letter country code, e.g. "us"');
     cards.push({
       kind: "hero",
+      flag: /^[a-z]{2}$/.test(String(heroFlag || "")) ? heroFlag : null,
       photo: normalizePhoto(s.hero && s.hero.photo, "hero", errors),
       headline: [].concat(L.hero.headline),
       sub: L.hero.sub,
@@ -170,7 +179,7 @@
       return { name: fill(L.cardText.quote, { stars: card.starCount }), description: card.author + flag };
     });
 
-    const primaryText = fill([].concat(L.primaryText).join("\n"), values);
+    const primaryText = fill(withMonth([].concat(L.primaryText).join("\n")), values);
 
     return {
       errors,

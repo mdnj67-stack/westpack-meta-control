@@ -1,6 +1,6 @@
 {
   "id": "en-us-jewelry-2026-10",
-  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach (US - AD07). The user's rule (27/10): one card with a clear US link, the rest names an American can relate to - not a name like 'Jens Thomsen'. Tony Boskovich writes 'as an American customer' in his review, so his card carries the US flag. Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
+  "note": "US version, replacing US - AD04 Customer logos in BA - US - Reach (US - AD07). The user's rule (27/10): one card with a clear US link, the rest names an American can relate to - not a name like 'Jens Thomsen'. Tony Boskovich writes 'as an American customer' in his review, and the US flag sits in the Westpack badge on card 1 (the user: one general flag, not one reviewer flagged). Private persons shown by first name and initial. Checked against the English Trustpilot export of 27/10.",
   "locale": "en-us",
   "trustpilot": {
     "score": 4.6,
@@ -11,14 +11,14 @@
     "photo": {
       "src": "photos/kundelogo-02.jpg",
       "y": -600
-    }
+    },
+    "flag": "us"
   },
   "quotes": [
     {
       "text": "I have used Westpack since I began my small business. They have been helpful and quick to respond to questions, and have always delivered a superb product.",
       "author": "Tony Boskovich",
       "display": "Tony B.",
-      "flag": "us",
       "date": "2025-07-12",
       "stars": 5,
       "photo": {

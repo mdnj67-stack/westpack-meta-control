@@ -2,7 +2,7 @@
   "id": "fr-ecrins-2026-10",
   "note": "The French carousel approved 2026-10-27 (PH - AD26 in the Placeholder bank). Quotes checked word for word against the Trustpilot Business export of 27/10.",
   "locale": "fr",
-  "trustpilot": { "score": 4.6, "reviews": 2796, "asOf": "2026-10" },
+  "trustpilot": { "score": 4.6, "reviews": 2796, "asOf": "2026-10", "showMonth": true },
   "hero": { "photo": { "src": "photos/kundelogo-02.jpg", "y": -600 } },
   "quotes": [
     {
