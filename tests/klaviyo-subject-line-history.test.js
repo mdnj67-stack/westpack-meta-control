@@ -214,6 +214,48 @@ test("a sync reads Klaviyo through pagination, splits A/B arms and leaves bot cl
   assert.ok(calls.every((call) => call.method === "GET" || call.url.includes("metric-aggregates")), "read-only towards Klaviyo");
 });
 
+test("a nightly sync lists only campaigns changed since the last one, and the full list weekly", async (t) => {
+  const urls = [];
+  const original = global.fetch;
+  t.after(() => { global.fetch = original; });
+  global.fetch = async (url, options = {}) => {
+    urls.push(String(url));
+    const json = (payload) => ({ ok: true, status: 200, json: async () => payload });
+    if (String(url).includes("/api/campaigns/")) {
+      return json({ data: [campaign("C9", "W44: Ny", "2026-10-26T11:45:00+00:00", ["M9"])], included: [message("M9", "W44", "Ny emnelinje", "Ny preheader", "2026-10-26T11:45:00+00:00")], links: {} });
+    }
+    if (String(url).includes("/api/metrics/")) {
+      return json({ data: ["Received Email", "Opened Email", "Clicked Email"].map((name, index) => ({ id: `m${index}`, attributes: { name, integration: { key: "klaviyo" } } })) });
+    }
+    return json({ data: { attributes: { data: [] } }, links: {} });
+  };
+  const storedRow = { id: "M1", campaignId: "C1", campaignName: "W17", label: "", subject: "Gammel emnelinje", previewText: "", fromLabel: "", sentAt: "2023-04-26T08:00:00+00:00", abTest: false };
+  const existing = {
+    markets: {
+      DK: {
+        version: HISTORY_VERSION,
+        country: "DK",
+        syncedAt: "2026-10-26T04:50:00.000Z",
+        fullListAt: "2026-10-24T04:50:00.000Z",
+        messages: [storedRow],
+        engagementByYear: { 2023: { "C1|": [500, 300, 5] }, 2024: {}, 2025: {}, 2026: {} }
+      }
+    }
+  };
+  const now = new Date("2026-10-27T04:50:00Z");
+  const { snapshot } = await syncSubjectLineHistory({ markets: [{ country: "DK", privateKey: "pk" }], existing, revision: "2024-10-15", now });
+  const listUrl = urls.find((url) => url.includes("/api/campaigns/"));
+  assert.match(decodeURIComponent(listUrl), /greater-than\(updated_at,2026-10-23T04:50:00\)/, "three days of overlap before the last sync");
+  assert.deepEqual(snapshot.markets.DK.messages.map((row) => row.id), ["M9", "M1"], "merged over the stored rows");
+  assert.equal(snapshot.markets.DK.fullListAt, "2026-10-24T04:50:00.000Z");
+  assert.equal(urls.filter((url) => url.includes("metric-aggregates")).length, 3, "only the current year re-read");
+
+  urls.length = 0;
+  const weekLater = await syncSubjectLineHistory({ markets: [{ country: "DK", privateKey: "pk" }], existing: snapshot, revision: "2024-10-15", now: new Date("2026-11-01T04:50:00Z") });
+  assert.doesNotMatch(decodeURIComponent(urls.find((url) => url.includes("/api/campaigns/"))), /updated_at/, "the full list is re-read once a week");
+  assert.equal(weekLater.snapshot.markets.DK.fullListAt, "2026-11-01T04:50:00.000Z");
+});
+
 test("insights pick the house voice, the evidence and the sender label from the history", () => {
   const snapshot = {
     markets: {

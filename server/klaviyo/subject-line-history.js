@@ -76,8 +76,13 @@ async function klaviyoFetch(url, { headers, method = "GET", body } = {}) {
   throw new Error("Klaviyo request failed after retries.");
 }
 
-async function fetchSentCampaigns(headers) {
-  let next = "https://a.klaviyo.com/api/campaigns/?filter=and(equals(messages.channel,'email'),equals(status,'Sent'))"
+// Listing every sent campaign is what a sync spends its time on: ~7,000 campaigns a page of 100 at a
+// time, with their messages. On 2026-10-27 a sync that only needed the current year's figures still
+// took 181 seconds in production for that reason. So a nightly sync lists only what changed since
+// the last one (a campaign is updated when it is sent), and the whole list is re-read once a week.
+async function fetchSentCampaigns(headers, { updatedSince = "" } = {}) {
+  const since = updatedSince ? `,greater-than(updated_at,${encodeURIComponent(updatedSince.slice(0, 19))})` : "";
+  let next = `https://a.klaviyo.com/api/campaigns/?filter=and(equals(messages.channel,'email'),equals(status,'Sent')${since})`
     + "&sort=-created_at&include=campaign-messages"
     + "&fields[campaign]=name,send_time,send_strategy"
     + "&fields[campaign-message]=label,content,send_times";
@@ -208,13 +213,29 @@ function resolveYearsToFetch(rows, existingMarket, now) {
   return all.filter((year) => !stored[year] || year === current || (year === current - 1 && now.getUTCMonth() === 0));
 }
 
+const FULL_LIST_EVERY_MS = 7 * 86_400_000;
+const INCREMENTAL_OVERLAP_MS = 3 * 86_400_000;
+
+// A fresh list replaces the stored one; an incremental list is merged over it by message id.
+function mergeMessageRows(stored = [], fresh = []) {
+  const byId = new Map(stored.map((row) => [row.id, row]));
+  for (const row of fresh) byId.set(row.id, row);
+  return [...byId.values()].sort((left, right) => right.sentAt.localeCompare(left.sentAt));
+}
+
 async function syncMarketHistory({ market, existingMarket = null, revision, now = new Date() }) {
   const country = String(market.country || "").trim().toUpperCase();
   const headers = buildHeaders(String(market.privateKey || "").trim(), revision);
   const jsonHeaders = buildHeaders(String(market.privateKey || "").trim(), revision, true);
-  const { campaigns, messages } = await fetchSentCampaigns(headers);
-  const rows = buildMessageRows(campaigns, messages);
-  const engagementByYear = existingMarket?.version === HISTORY_VERSION ? { ...(existingMarket.engagementByYear || {}) } : {};
+  const current = existingMarket?.version === HISTORY_VERSION ? existingMarket : null;
+  const fullListDue = !current?.fullListAt || now.getTime() - Date.parse(current.fullListAt) >= FULL_LIST_EVERY_MS;
+  const updatedSince = fullListDue || !current?.syncedAt
+    ? ""
+    : new Date(Date.parse(current.syncedAt) - INCREMENTAL_OVERLAP_MS).toISOString();
+  const { campaigns, messages } = await fetchSentCampaigns(headers, { updatedSince });
+  const fresh = buildMessageRows(campaigns, messages);
+  const rows = updatedSince ? mergeMessageRows(current.messages || [], fresh) : fresh;
+  const engagementByYear = current ? { ...(current.engagementByYear || {}) } : {};
 
   if (rows.length) {
     const metricIds = await findEngagementMetricIds(headers);
@@ -228,6 +249,7 @@ async function syncMarketHistory({ market, existingMarket = null, revision, now 
     country,
     language: LANGUAGE_BY_MARKET[country] || "",
     syncedAt: now.toISOString(),
+    fullListAt: updatedSince ? current.fullListAt : now.toISOString(),
     messages: rows,
     engagementByYear
   };
@@ -689,6 +711,7 @@ module.exports = {
   buildMarketEntries,
   buildMessageRows,
   familyKeyForCampaign,
+  mergeMessageRows,
   resolveYearsToFetch,
   summarizeAbFamilies,
   summarizeHistorySnapshot,

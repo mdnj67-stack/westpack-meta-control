@@ -994,9 +994,12 @@ history / bank / team / sync_history), `src/klaviyo-subject-lines.js`, `server/k
   Clicked per arm. A third dimension `Bot Click` removes link scanners. Three calls per year per
   account. Klaviyo exposes **no** machine-open (Apple MPP) dimension - "Apple Privacy Open",
   "Machine Open" etc. are all refused.
-- Full sync of all 18 accounts: ~180 s with five accounts in parallel (DK alone ~80 s). Afterwards
-  only the current year is re-read. The route starts no new market after 120 s, so the first sync in
-  production takes two calls; the nightly cron (04:50 UTC) one.
+- Listing every sent campaign with its messages is what a sync spends its time on, not the
+  aggregates. The first production sync (2026-10-27) took two calls, 199 s and 181 s - and the second
+  re-read every account although only the current year's figures were needed. So a sync now lists
+  only campaigns `updated_at` since the last one (three days' overlap) and merges them over the
+  stored rows; the full list is re-read once a week (`fullListAt`). Only the current year's
+  aggregates are re-read (plus last year in January). The route starts no new market after 120 s.
 
 ### How the figures may be read
 
