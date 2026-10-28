@@ -8,7 +8,7 @@ import {
   initCanvaLocalizer,
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
-import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261027-subjectlines5";
+import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261028-subjectlines6";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,

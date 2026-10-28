@@ -176,6 +176,8 @@ async function runAction(label, fn) {
   const timer = window.setInterval(() => {
     const busy = byId("subject-lines-busy");
     if (busy && state.busy) busy.textContent = `${state.busy} · ${Math.round((Date.now() - started) / 1000)} s`;
+    const elapsed = document.querySelector("[data-subject-elapsed]");
+    if (elapsed && state.run) elapsed.textContent = formatElapsed(state.run.startedAt);
   }, 1000);
   try {
     await fn();
@@ -611,17 +613,32 @@ function renderCandidate(candidate) {
     </article>`;
 }
 
+// Quality over speed (the user, 2026-10-27): two writers draft, an editor chooses and sharpens.
+// Three minutes is fine if it reads as work, so the screen names each stage and counts the time.
 const RUN_STAGES = {
-  read: ["Reading the email", "Checking it against Westpack's own sends and the rules"],
-  write: ["Writing the lines", "Usually half a minute: the brief, the house voice, the bank and the rules"]
+  read: ["Read", "Reading the email", () => "Checking it against Westpack's own sends and the rules."],
+  write: ["Draft", "Two writers are drafting", (count) => `Each writes ${count} pairs from the brief, the house voice, the playbook and the bank. About a minute.`],
+  edit: ["Edit", "The editor is choosing the best", (count) => `Reads the email again, keeps the strongest ${count}, sharpens them and drops the rest. About a minute and a half.`]
 };
 
+function formatElapsed(startedAt) {
+  const seconds = Math.max(0, Math.round((Date.now() - (startedAt || Date.now())) / 1000));
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
 function renderProgress() {
-  const [title, detail] = RUN_STAGES[state.run?.stage] || RUN_STAGES.write;
+  const stage = RUN_STAGES[state.run?.stage] ? state.run.stage : "write";
+  const [, title, detail] = RUN_STAGES[stage];
+  const order = Object.keys(RUN_STAGES).filter((key) => key !== "read" || state.run?.read);
+  const current = order.indexOf(stage);
   return `
     <div class="subject-progress" aria-live="polite">
       <span class="wp-spinner"></span>
-      <div><strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span></div>
+      <div>
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(detail(state.count))}</span>
+        <ol class="subject-progress-steps">${order.map((key, index) => `<li class="${index < current ? "is-done" : index === current ? "is-current" : ""}">${escapeHtml(RUN_STAGES[key][0])}</li>`).join("")}<li class="subject-progress-elapsed" data-subject-elapsed>${formatElapsed(state.run?.startedAt)}</li></ol>
+      </div>
     </div>
     <div class="subject-inbox is-loading" aria-hidden="true">${Array.from({ length: 5 }, () => '<div class="subject-row-skeleton"><span class="wp-skeleton wp-skeleton-text"></span><span class="wp-skeleton wp-skeleton-text"></span></div>').join("")}</div>`;
 }
@@ -1051,27 +1068,57 @@ async function analyse() {
   state.restoredAt = "";
 }
 
+// The writers and the editor run as background jobs at OpenAI; this asks how they are doing until
+// they are done. A dropped poll or two is a network blip, not a failed run.
+const POLL_INTERVAL_MS = 4000;
+const POLL_LIMIT_MS = 15 * 60_000;
+
+async function waitForJobs(kind, jobs = [], context = {}) {
+  const startedAt = Date.now();
+  let misses = 0;
+  for (;;) {
+    await new Promise((resolve) => window.setTimeout(resolve, POLL_INTERVAL_MS));
+    try {
+      const result = await callSubjectLines("poll", { method: "POST", body: { ...context, kind, jobs } });
+      if (result.done) return result;
+      misses = 0;
+    } catch (error) {
+      misses += 1;
+      if (misses >= 3 || /Session expired/.test(error?.message || "")) throw error;
+    }
+    if (Date.now() - startedAt > POLL_LIMIT_MS) throw new Error("Still not finished after 15 minutes. Try again in a moment.");
+  }
+}
+
 async function generate({ again = false } = {}) {
   if (again) state.attempt += 1;
   state.note = String(byId("subject-lines-note")?.value ?? state.note).trim();
-  const payload = await callSubjectLines("generate", {
-    method: "POST",
-    body: {
-      country: SOURCE_ACCOUNT,
-      templateId: state.selectedTemplateId,
-      analysis: selectedAnalysis(),
-      note: state.note,
-      count: state.count,
-      attempt: state.attempt,
-      avoid: again ? state.shown : []
-    }
-  });
+  const request = {
+    country: SOURCE_ACCOUNT,
+    templateId: state.selectedTemplateId,
+    analysis: selectedAnalysis(),
+    note: state.note,
+    count: state.count,
+    avoid: again ? state.shown : []
+  };
+  const writing = await callSubjectLines("generate", { method: "POST", body: { ...request, attempt: state.attempt } });
+  const drafted = await waitForJobs("write", writing.jobs, { ...request, examples: writing.examples || [] });
+  if (state.run) state.run = { ...state.run, stage: "edit" };
+  renderFlow();
+  // If the editor does not finish, the drafts are still good lines - shown, and said to be unedited.
+  let payload = drafted;
+  try {
+    const editing = await callSubjectLines("edit", { method: "POST", body: { ...request, drafts: drafted.candidates || [] } });
+    payload = await waitForJobs("edit", editing.jobs, { ...request, drafts: drafted.candidates || [] });
+  } catch (error) {
+    setFeedback(`The editor did not finish (${error?.message || "no answer"}), so these are the two writers' drafts, unedited. Write new ones to try again.`, "is-warning");
+  }
   state.candidates = payload.candidates || [];
   state.picks = payload.picks || [];
   state.abTest = payload.abTest || null;
   state.strategyNote = "";
-  state.examples = payload.examples || [];
-  state.senderLabel = payload.senderLabel || state.senderLabel;
+  state.examples = writing.examples || [];
+  state.senderLabel = payload.senderLabel || writing.senderLabel || state.senderLabel;
   state.shown = [...new Set([...state.shown, ...state.candidates.map((candidate) => candidate.subject)])];
   state.editing = "";
   state.open = "";
@@ -1084,13 +1131,15 @@ async function generate({ again = false } = {}) {
 // One run: read the email (unless it has been read), then write. The results step shows what is
 // happening at each stage, so a minute of writing reads as work rather than a hang.
 async function readAndWrite({ reread = false, again = false } = {}) {
-  if (!state.analysis || reread) {
-    state.run = { stage: "read" };
+  const startedAt = Date.now();
+  const read = !state.analysis || reread;
+  if (read) {
+    state.run = { stage: "read", read, startedAt };
     syncStatusLine();
     renderFlow();
     await analyse();
   }
-  state.run = { stage: "write" };
+  state.run = { stage: "write", read, startedAt };
   state.note = String(byId("subject-lines-note")?.value ?? state.note).trim();
   syncStatusLine();
   renderFlow();

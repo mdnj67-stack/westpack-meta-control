@@ -35,8 +35,13 @@ const {
   DEFAULT_CANDIDATE_COUNT,
   analyseCampaign,
   extractEmailText,
+  buildEditingRequest,
+  buildWritingRequest,
   finalizeCandidates,
-  generateSubjectLines,
+  readEditing,
+  readStructured,
+  readWriting,
+  startStructured,
   previewInMarkets,
   resolvePicks,
   tagImportedLines
@@ -67,6 +72,16 @@ const TAG_LIMIT_MANUAL = 600;
 const TAG_TIME_BUDGET_MS = 150_000;
 
 const templateCache = new Map();
+// Writing is two writers on medium reasoning and then an editor on high: in a blind comparison on
+// three live campaigns (2026-10-28) it ranked first overall, ahead of one writer on high and well
+// ahead of one on low. Both run as OpenAI background jobs the screen polls, because the editor
+// sometimes needs longer than a function's 300 seconds - and the user would rather wait than get
+// weaker lines (see startStructured).
+const WRITERS = 2;
+const WRITER_EFFORT = "medium";
+const EDITOR_EFFORT = "high";
+const MAX_DRAFTS = 60;
+const JOB_ID = /^resp_[A-Za-z0-9_-]{8,}$/;
 let historyCache = { at: 0, snapshot: null };
 let tagsCache = { at: 0, tags: null };
 
@@ -230,26 +245,67 @@ async function handleAnalyse(req, res, config, body) {
   });
 }
 
+// What every step of a writing run needs to know about it. The browser sends it with each request,
+// so no step depends on another having run on the same server.
+function readBrief(body = {}) {
+  return {
+    country: String(body.country || "DK").toUpperCase(),
+    templateId: String(body.templateId || "").trim(),
+    analysis: body.analysis && typeof body.analysis === "object" ? body.analysis : null,
+    count: Number(body.count) || DEFAULT_CANDIDATE_COUNT,
+    note: String(body.note || "").slice(0, 600),
+    avoid: Array.isArray(body.avoid) ? body.avoid.map(String).slice(0, 200) : []
+  };
+}
+
+function readDrafts(list) {
+  return (Array.isArray(list) ? list : []).slice(0, MAX_DRAFTS)
+    .map((draft) => ({
+      subject: String(draft?.subject || "").slice(0, 200),
+      preview: String(draft?.preview || "").slice(0, 300),
+      mechanism: String(draft?.mechanism || ""),
+      secondaryMechanism: String(draft?.secondaryMechanism || ""),
+      translationRisk: String(draft?.translationRisk || ""),
+      translationNote: String(draft?.translationNote || "").slice(0, 300),
+      rationale: String(draft?.rationale || "").slice(0, 400),
+      evidence: (Array.isArray(draft?.evidence) ? draft.evidence : []).filter((item) => item?.id).map(({ id, kind, label }) => ({ id: String(id), kind: String(kind || ""), label: String(label || "") }))
+    }))
+    .filter((draft) => draft.subject);
+}
+
+// Only what describing a cited bank line needs.
+function readExamples(list) {
+  return (Array.isArray(list) ? list : []).slice(0, 100)
+    .filter((entry) => entry?.id)
+    .map((entry) => ({ id: String(entry.id), subject: String(entry.subject || ""), source: String(entry.source || ""), sender: String(entry.sender || "") }));
+}
+
+async function readContext(config, brief) {
+  const [template, snapshot] = await Promise.all([fetchTemplate(config, brief.country, brief.templateId), readHistory()]);
+  return { template, insights: buildHistoryInsights(snapshot, { country: brief.country, focusText: focusTextFor(template, brief.analysis) }) };
+}
+
+// Starts the two writers and answers at once; the screen polls for them.
 async function handleGenerate(req, res, config, body) {
-  const country = String(body.country || "DK").toUpperCase();
-  const templateId = String(body.templateId || "").trim();
-  const analysis = body.analysis && typeof body.analysis === "object" ? body.analysis : null;
-  if (!templateId || !analysis) return sendJson(res, 400, { error: "Analyse the campaign before generating." });
-  const [template, snapshot, team, tags] = await Promise.all([fetchTemplate(config, country, templateId), readHistory(), readTeam(), readTags()]);
-  const insights = { ...buildHistoryInsights(snapshot, { country, focusText: focusTextFor(template, analysis) }), ...evidenceFor(snapshot, tags, team, country) };
+  const brief = readBrief(body);
+  if (!brief.templateId || !brief.analysis) return sendJson(res, 400, { error: "Analyse the campaign before generating." });
+  const { templateId, analysis } = brief;
+  const [template, snapshot, team, tags] = await Promise.all([fetchTemplate(config, brief.country, templateId), readHistory(), readTeam(), readTags()]);
+  const insights = { ...buildHistoryInsights(snapshot, { country: brief.country, focusText: focusTextFor(template, analysis) }), ...evidenceFor(snapshot, tags, team, brief.country) };
   const attempt = Math.max(0, Number(body.attempt) || 0);
   const relevance = await relevanceToBrief(config, { bank: loadPatternBank(), analysis, extra: team.imported });
-  const examples = selectBankExamples({
+  // Two writers, each shown different lines from the bank, so the editor has two takes to choose
+  // from rather than one take twice. "Write new ones" moves both on to lines not shown before.
+  const exampleSets = Array.from({ length: WRITERS }, (_, writer) => selectBankExamples({
     imported: team.imported,
     banned: team.banned,
     analysis,
     limit: 24,
-    seed: `${templateId}:${attempt}`,
+    seed: `${templateId}:${attempt}:${writer}`,
     relevance,
-    attempt
-  });
-  const { candidates, picks, abTest, model } = await generateSubjectLines({
-    config,
+    attempt: attempt * WRITERS + writer
+  }));
+  const started = await Promise.allSettled(exampleSets.map((examples) => startStructured(config, buildWritingRequest({
     templateName: template.name,
     emailText: template.emailText,
     analysis,
@@ -257,18 +313,94 @@ async function handleGenerate(req, res, config, body) {
     examples,
     favourites: team.favourites,
     banned: team.banned,
-    avoid: Array.isArray(body.avoid) ? body.avoid.map(String) : [],
-    note: String(body.note || "").slice(0, 600),
-    count: Number(body.count) || DEFAULT_CANDIDATE_COUNT
-  });
-  const finalized = finalizeCandidates(candidates, { emailText: template.emailText, pastSubjects: insights.pastSubjects, examples, abTests: insights.abLessons });
+    avoid: brief.avoid,
+    note: brief.note,
+    count: brief.count,
+    reasoningEffort: WRITER_EFFORT
+  }))));
+  const jobs = started.filter((item) => item.status === "fulfilled").map((item) => item.value.id);
+  if (!jobs.length) throw started[0].reason;
+  const examples = [...new Map(exampleSets.flat().map((entry) => [entry.id, entry])).values()];
   sendJson(res, 200, {
-    ...resolvePicks({ picks, abTest, candidates: finalized }),
-    candidates: finalized,
+    stage: "writing",
+    jobs,
     examples: examples.map(({ id, subject, preview, mechanisms, campaignType, language, source, sender, why }) => ({ id, subject, preview, mechanisms, campaignType, language, source, sender, why })),
     senderLabel: insights.senderLabel,
-    retrieval: relevance ? "semantic" : "tags",
-    model
+    retrieval: relevance ? "semantic" : "tags"
+  });
+}
+
+// Starts the editor over the writers' drafts.
+async function handleEdit(req, res, config, body) {
+  const brief = readBrief(body);
+  const drafts = readDrafts(body.drafts);
+  if (!brief.templateId || !brief.analysis || !drafts.length) return sendJson(res, 400, { error: "Nothing to edit: write the drafts first." });
+  const [{ template, insights }, team] = await Promise.all([readContext(config, brief), readTeam()]);
+  // The rules' verdict on each draft is worked out here again, not taken from the browser.
+  const checked = finalizeCandidates(drafts, { emailText: template.emailText, pastSubjects: insights.pastSubjects, abTests: insights.abLessons })
+    .map((candidate) => ({ ...candidate, evidence: drafts[Number(candidate.id.slice(1)) - 1].evidence }));
+  const job = await startStructured(config, buildEditingRequest({
+    templateName: template.name,
+    emailText: template.emailText,
+    analysis: brief.analysis,
+    insights,
+    drafts: checked,
+    banned: team.banned,
+    avoid: brief.avoid,
+    note: brief.note,
+    count: brief.count,
+    reasoningEffort: EDITOR_EFFORT
+  }));
+  sendJson(res, 200, { stage: "editing", jobs: [job.id] });
+}
+
+// The screen asks every few seconds. While a job runs this is two quick reads from OpenAI; only a
+// finished job reads the template and the history to check its lines against the rules.
+async function handlePoll(req, res, config, body) {
+  const kind = body.kind === "edit" ? "edit" : "write";
+  const jobs = (Array.isArray(body.jobs) ? body.jobs : []).map(String).filter((id) => JOB_ID.test(id)).slice(0, WRITERS);
+  const brief = readBrief(body);
+  if (!jobs.length || !brief.templateId || !brief.analysis) return sendJson(res, 400, { error: "Nothing to wait for." });
+  const states = await Promise.all(jobs.map((id) => readStructured(config, id)));
+  if (states.some((state) => state.pending)) return sendJson(res, 200, { done: false, statuses: states.map((state) => state.status) });
+  const { template, insights } = await readContext(config, brief);
+
+  if (kind === "write") {
+    // One writer failing still leaves the editor a full set of drafts to work from.
+    const written = states.filter((state) => state.status === "completed").map((state) => ({ ...readWriting(state.parsed), model: state.model }));
+    if (!written.length) throw new Error(states[0].error || "The writers did not finish.");
+    const drafts = finalizeCandidates(written.flatMap((item) => item.candidates), { emailText: template.emailText, pastSubjects: insights.pastSubjects, examples: readExamples(body.examples), abTests: insights.abLessons });
+    // The first writer's numbering is the first stretch of the combined list, so its picks still
+    // point at its own lines. They are what the screen shows if the editor does not finish.
+    return sendJson(res, 200, {
+      done: true,
+      ...resolvePicks({ picks: written[0].picks, abTest: written[0].abTest, candidates: drafts }),
+      candidates: drafts,
+      writers: written.length,
+      senderLabel: insights.senderLabel,
+      model: written[0].model
+    });
+  }
+
+  const [state] = states;
+  if (state.failed) throw new Error(state.error);
+  const drafts = readDrafts(body.drafts);
+  const edited = readEditing(state.parsed, drafts);
+  const finalized = finalizeCandidates(edited.candidates, { emailText: template.emailText, pastSubjects: insights.pastSubjects, abTests: insights.abLessons });
+  // A cited bank line keeps the label its draft already carried.
+  const draftEvidence = new Map(drafts.flatMap((draft) => draft.evidence).map((item) => [item.id, item]));
+  for (const candidate of finalized) {
+    const raw = edited.candidates[Number(candidate.id.slice(1)) - 1];
+    const carried = (raw?.evidence || []).map((id) => draftEvidence.get(id)).filter(Boolean);
+    candidate.evidence = [...new Map([...candidate.evidence, ...carried].map((item) => [item.id, item])).values()];
+  }
+  sendJson(res, 200, {
+    done: true,
+    ...resolvePicks({ picks: edited.picks, abTest: edited.abTest, candidates: finalized }),
+    candidates: finalized,
+    draftCount: drafts.length,
+    senderLabel: insights.senderLabel,
+    model: state.model
   });
 }
 
@@ -482,6 +614,8 @@ module.exports = async function handler(req, res) {
     const body = await readJsonBody(req);
     if (action === "analyse") return await handleAnalyse(req, res, config, body);
     if (action === "generate") return await handleGenerate(req, res, config, body);
+    if (action === "edit") return await handleEdit(req, res, config, body);
+    if (action === "poll") return await handlePoll(req, res, config, body);
     if (action === "check") return await handleCheck(req, res, config, body);
     if (action === "team") return await handleTeam(req, res, config, body);
     if (action === "sync_history") return await handleSync(req, res, config);
@@ -492,3 +626,6 @@ module.exports = async function handler(req, res) {
     sendJson(res, Number(error?.statusCode) || 500, { error: error?.message || "Subject line request failed." });
   }
 };
+
+// For offline comparisons of the writing pipeline; not an API.
+module.exports.__internals = { evidenceFor, fetchTemplate, focusTextFor, readHistory, readTags, readTeam };

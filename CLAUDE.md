@@ -1078,8 +1078,9 @@ functionality - not more analysis on screen. So:
 - **The writer's three picks and an A/B pair come first** (`picks`/`abTest` in the schema,
   `resolvePicks` swaps a pick that breaks a rule for the next line that passes), then the rest as
   inbox rows. Default 12 lines; "Write new ones" adds more without repeats.
-- **Writing reasons on "low".** Same brief, examples and email: medium 68 s, low 30 s, all twelve
-  passing the rules both times and no visible loss. Click to lines is ~45 s in the browser.
+- **Quality over speed** (the user, 2026-10-27: "Jeg er ligeglad med hvor lang tid det tager hvis
+  outputtet er derefter"). Writing used to reason on "low" for a 45 s click-to-lines; that is
+  superseded by the pipeline below. Click to lines is now ~3 minutes, shown as stages with a clock.
 - **Only real problems mark a line.** Length (42-60 characters) and a series name are notes on the
   line's detail (`NOTE`), not "check"; over 60 characters still warns.
 - The statistics moved to the bank's last tab ("Statistics"); the bank opens on Westpack's sends.
@@ -1118,11 +1119,46 @@ almost nothing. The user asked how the generator gets *all* of that knowledge. T
     `build-playbook.js`.
 - Tests: `tests/klaviyo-subject-line-knowledge.test.js`.
 
+### Two writers, an editor, no ceiling (2026-10-28)
+
+Chosen by a blind comparison on three live DK campaigns (W45 Lux, W46 Under luppen, W45 Grand
+Prix), four pipelines with the same brief, email and evidence: A one writer on low (what shipped
+before), B one writer on high, C two writers on medium (each shown different bank lines) and an
+editor on high, D two writers on low and the editor. A judge on gpt-5.6 high ranked the four
+under shuffled letters, twice per campaign, checking every claim against the email; a separate
+blind human read agreed on the two campaigns it covered. Mean rank over eight judgements: **C 2.00**,
+B 2.13, D 2.50, A 3.38. C won two campaigns outright and was never last on average; B won Lux (the
+"117 gram / Oxford" angle) but came last on Grand Prix, where it and A left 3-5 lines breaking the
+rules while both editor pipelines delivered twelve clean ones. The margin between C and B is small;
+the margin over A is not. The scripts and results are not in the repo; rerun a comparison like it
+before changing the pipeline again.
+
+- **The writers and the editor run as OpenAI background jobs** (`background: true`,
+  `startStructured`/`readStructured`), and the screen polls `?action=poll` every 4 s. The editor
+  on high ran past 280 s in three of nine calls during the comparison, so inside one Vercel
+  function (300 s) it failed a third of the time. A pending poll is two cheap reads from OpenAI;
+  only a finished job reads the template and history to run the rules.
+- Actions: `generate` starts the two writers and answers at once (`jobs`, `examples`); `poll` with
+  `kind: "write"` returns the drafts, finalised and checked; `edit` starts the editor over them;
+  `poll` with `kind: "edit"` returns the final set. Every request carries the brief, so no step
+  depends on another having run on the same server instance.
+- **No silent weaker model.** `requestStructured` takes `fallbackOnTimeout`; writing and editing pass
+  false, so a slow strong model fails openly instead of handing over gpt-4.1 lines. Only an
+  unavailable model moves on to the next one.
+- The rules' verdict on each draft is recomputed on the server before the editor sees it; the
+  editor is told a draft marked RULES must be fixed or dropped. If one writer fails the other's
+  drafts still go to the editor. If the editor fails, the screen shows the drafts and says plainly
+  that they are unedited.
+- The judge does not know the sender label, so it flagged "Jette" as invented. DK's label really is
+  "Jette fra Westpack" (`senderLabel`, the most common recent `from_label`). Give a future judge the
+  sender.
+- Tests: `tests/klaviyo-subject-line-quality.test.js`.
+
 ### Other decisions
 
 - The analysis runs on the default model (`OPENAI_MODEL`, ~10 s); writing runs on
-  `CONTENT_AGENT_MODEL` (gpt-5.6) on low reasoning. The strong model ran past 130 s on the
-  analysis alone.
+  `CONTENT_AGENT_MODEL` (gpt-5.6) - see above. The strong model ran past 130 s on the analysis
+  alone, and the analysis was not part of the comparison.
 - A full page load of the app also loads the Meta dashboard snapshot, so browser tests of this
   screen spend Meta quota too - test with one page load, or with fixtures injected into
   `__subjectLinesInternals.state` (see `tmp/playwright-runner/subject-lines-design.js`).
@@ -1140,7 +1176,7 @@ almost nothing. The user asked how the generator gets *all* of that knowledge. T
   **name** as the subject. "Use in Duplicate & translate" sets `appState.klaviyoTemplateSubjectOverride`
   for that one template, so the rollout translates the chosen pair into every market.
 - Read-only towards Klaviyo; the only POST is the metric-aggregates query.
-- Tests: `tests/klaviyo-subject-line-{rules,history,bank,generator,knowledge}.test.js`,
+- Tests: `tests/klaviyo-subject-line-{rules,history,bank,generator,knowledge,quality}.test.js`,
   `tests/klaviyo-subject-lines-ui.test.js`.
 
 ## Model JSON output can carry NUL characters

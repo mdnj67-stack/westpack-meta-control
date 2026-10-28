@@ -84,8 +84,9 @@ function resolveModels(config = {}, { writing = false } = {}) {
 }
 
 // When the preferred model is unavailable on the key or times out, the other one still produces a
-// usable answer rather than an error.
-async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false, temperature = null, timeoutMs = REQUEST_TIMEOUT_MS }) {
+// usable answer rather than an error. Writing passes fallbackOnTimeout: false - the user would
+// rather wait for the strong model than be handed weaker lines without being told.
+async function requestStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false, temperature = null, timeoutMs = REQUEST_TIMEOUT_MS, fallbackOnTimeout = true }) {
   if (!config.openAiApiKey) throw new Error("OPENAI_API_KEY is not configured.");
   let lastError = null;
   for (const model of resolveModels(config, { writing })) {
@@ -117,7 +118,7 @@ async function requestStructured(config, { input, schemaName, schema, reasoningE
     } catch (error) {
       if (error?.name === "AbortError") lastError = new Error(`OpenAI request exceeded ${timeoutMs / 1000} seconds.`);
       else lastError = error;
-      if (error?.name !== "AbortError" && !/model/i.test(String(error?.message || ""))) throw lastError;
+      if (error?.name === "AbortError" ? !fallbackOnTimeout : !/model/i.test(String(error?.message || ""))) throw lastError;
     } finally {
       clearTimeout(timer);
     }
@@ -382,7 +383,9 @@ function describeBankExample(entry) {
   return `[${entry.id}] ${entry.mechanisms.join("+")} · ${entry.campaignType} · ${entry.language}: "${entry.subject}" / "${entry.preview}" (${origin}${entry.why ? ` - ${entry.why}` : ""})`;
 }
 
-async function generateSubjectLines({ config, templateName = "", emailText = "", analysis = {}, insights = {}, examples = [], favourites = [], banned = [], avoid = [], note = "", count = DEFAULT_CANDIDATE_COUNT, reasoningEffort = "" }) {
+// The writer's request, built apart from sending it, so the same prompt runs in one call
+// (generateSubjectLines) or as a background job the screen polls (startStructured).
+function buildWritingRequest({ templateName = "", emailText = "", analysis = {}, insights = {}, examples = [], favourites = [], banned = [], avoid = [], note = "", count = DEFAULT_CANDIDATE_COUNT, reasoningEffort = "" }) {
   const total = Math.max(6, Math.min(30, Number(count) || DEFAULT_CANDIDATE_COUNT));
   const input = [
     {
@@ -447,22 +450,146 @@ async function generateSubjectLines({ config, templateName = "", emailText = "",
       }]
     }
   ];
-  // Writing reasons on "low". Measured 2026-10-27 on one brief, the same examples and email: medium
-  // took 68 seconds and low 30, with all twelve lines passing the rules both times and no loss a
-  // reader would notice. Half a minute is what makes one click from campaign to lines feel immediate.
-  const { parsed, model } = await requestStructured(config, {
-    input,
-    schemaName: "westpack_subject_line_candidates",
-    schema: buildCandidateSchema(total),
-    reasoningEffort: reasoningEffort || "low",
-    writing: true
-  });
+  return { input, schemaName: "westpack_subject_line_candidates", schema: buildCandidateSchema(total), reasoningEffort: reasoningEffort || "medium", writing: true };
+}
+
+function readWriting(parsed) {
   return {
     candidates: Array.isArray(parsed?.candidates) ? parsed.candidates : [],
     picks: Array.isArray(parsed?.picks) ? parsed.picks : [],
-    abTest: parsed?.abTest || null,
-    model
+    abTest: parsed?.abTest || null
   };
+}
+
+async function generateSubjectLines({ config, timeoutMs, ...brief }) {
+  const { parsed, model } = await requestStructured(config, { ...buildWritingRequest(brief), fallbackOnTimeout: false, ...(timeoutMs ? { timeoutMs } : {}) });
+  return { ...readWriting(parsed), model };
+}
+
+// The editor: several writers' drafts in, the best of them out. It reads the email itself, keeps
+// the strongest pairs, sharpens the ones a better word would lift, drops the weak and the
+// repetitive, and picks. Drafts arrive with the rules' verdict on each, so a pair that broke a rule
+// is fixed or dropped rather than passed on. Its output goes through the same rules again.
+function buildEditingRequest({ templateName = "", emailText = "", analysis = {}, insights = {}, drafts = [], banned = [], avoid = [], note = "", count = DEFAULT_CANDIDATE_COUNT, reasoningEffort = "high" }) {
+  const total = Math.max(6, Math.min(30, Number(count) || DEFAULT_CANDIDATE_COUNT));
+  const describeDraft = (draft, index) => {
+    const issues = (draft.issues || []).map((issue) => `${issue.label}${issue.message ? `: ${issue.message}` : ""}`).join("; ");
+    return `${index + 1}. "${draft.subject}" / "${draft.preview}" - ${draft.mechanism}${draft.secondaryMechanism ? `+${draft.secondaryMechanism}` : ""}, translation risk ${draft.translationRisk}${issues ? ` - RULES: ${issues}` : ""}${draft.rationale ? ` - writer: ${draft.rationale}` : ""}`;
+  };
+  const input = [
+    {
+      role: "system",
+      content: [{
+        type: "input_text",
+        text: [
+          "You are Westpack's senior email editor. Several copywriters have drafted subject line + preheader pairs for one Danish campaign email. Your job is the final set: the best the drafts allow, made better.",
+          "The readers are owners and buyers at shops and brands that package what they sell - jewellery businesses at the core - deciding in a second, between customers, whether this email from their packaging supplier is worth opening. Sender name in the inbox: " + (insights.senderLabel || "Westpack") + ".",
+          "",
+          "How to edit:",
+          "- Read the email first. Every offer, number, product and fact in a pair must be in the email; fix or drop any pair that claims more. Respect the brief's mustNotPromise.",
+          "- Judge each draft as the reader would see it in the inbox: does the subject earn the open in its first 30 characters, is it concrete, does the preheader complete it rather than repeat it, does it sound like a person rather than a campaign?",
+          "- Keep a strong draft as it is. Sharpen one that a better word, a tighter order or a truer preheader would lift. Drop the weak, the generic and the near-duplicates. Write a new pair only where the drafts leave an obvious gap.",
+          "- A draft marked RULES broke a rule: fix it or drop it.",
+          `- Deliver exactly ${total} pairs, in Danish, over at least six mechanisms and at most three per mechanism, with at least four at translationRisk lav. Subject 41 characters or fewer where possible, never over 60; preheader 40-90 characters.`,
+          "- Keep the writers' mechanism, translationRisk and translationNote where the pair is theirs; set them honestly where you changed it. rationale: one Danish sentence on why this pair gets this email opened. evidence: copy the draft's evidence ids if any, else empty. Never put an id in the rationale.",
+          "- picks: the three pairs you would send, best first, by their number in your list (1 = the first pair). why: one short Danish sentence each, for a busy marketer.",
+          "- abTest: the two pairs you would A/B test against each other - both strong, on different mechanisms, so the result teaches something. why: one short Danish sentence.",
+          "",
+          "Westpack's house voice is warm, concrete and a little cheeky. Energy comes from desire for the product and from the reader's own situation, never from belittling the reader's shop or packaging.",
+          "",
+          buildRulesPromptBlock(),
+          "",
+          buildWestpackKnowledgePromptBlock({ sourceTexts: [templateName, emailText], channel: "klaviyo", keepSourceClaims: true }),
+          "",
+          taxonomyBlock()
+        ].join("\n")
+      }]
+    },
+    {
+      role: "user",
+      content: [{
+        type: "input_text",
+        text: [
+          `Campaign template: ${templateName || "(unnamed)"}`,
+          "",
+          "The brief:",
+          JSON.stringify(analysis, null, 1),
+          "",
+          "The email, as text:",
+          emailText.slice(0, PROMPT_EMAIL_TEXT_LIMIT),
+          "",
+          "Recent Westpack subject lines, for the voice (newest first):",
+          ...(insights.voiceSamples || []).slice(0, 15).map((entry) => `- "${entry.subject}"${entry.previewText ? ` / "${entry.previewText}"` : ""}`),
+          ...(banned.length ? ["", "The team has banned these patterns or phrases - nothing like them may survive:", ...banned.slice(0, 20).map((item) => `- ${item.subject || item.phrase}${item.reason ? ` (${item.reason})` : ""}`)] : []),
+          ...(avoid.length ? ["", "Already shown to the operator for this email - the set must not repeat them:", ...avoid.slice(0, 40).map((subject) => `- "${subject}"`)] : []),
+          ...(note ? ["", `Operator's note: ${note}`] : []),
+          "",
+          `The drafts (${drafts.length}):`,
+          ...drafts.map(describeDraft)
+        ].join("\n")
+      }]
+    }
+  ];
+  return { input, schemaName: "westpack_subject_line_edit", schema: buildCandidateSchema(total), reasoningEffort, writing: true };
+}
+
+// Evidence ids the editor copied must point at something a draft cited.
+function readEditing(parsed, drafts = []) {
+  const cited = new Set(drafts.flatMap((draft) => (draft.evidence || []).map((item) => item.id || item)));
+  return {
+    candidates: (Array.isArray(parsed?.candidates) ? parsed.candidates : []).map((candidate) => ({ ...candidate, evidence: (candidate.evidence || []).filter((id) => cited.has(id)) })),
+    picks: Array.isArray(parsed?.picks) ? parsed.picks : [],
+    abTest: parsed?.abTest || null
+  };
+}
+
+async function editSubjectLines({ config, timeoutMs, ...brief }) {
+  const { parsed, model } = await requestStructured(config, { ...buildEditingRequest(brief), fallbackOnTimeout: false, ...(timeoutMs ? { timeoutMs } : {}) });
+  return { ...readEditing(parsed, brief.drafts), model };
+}
+
+// Background jobs. A writer or the editor on high reasoning sometimes runs past the function's 300
+// seconds (three of nine editor calls on 2026-10-28), so the screen's runs go to OpenAI as
+// background responses and the screen polls for them: no ceiling, and a long run is never cut
+// short or handed to a weaker model. Only an unavailable model moves on to the next one.
+async function startStructured(config, { input, schemaName, schema, reasoningEffort = "", writing = false }) {
+  if (!config.openAiApiKey) throw new Error("OPENAI_API_KEY is not configured.");
+  let lastError = null;
+  for (const model of resolveModels(config, { writing })) {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.openAiApiKey}` },
+      body: JSON.stringify({
+        model,
+        input,
+        background: true,
+        text: { format: { type: "json_schema", name: schemaName, schema } },
+        ...(reasoningEffort && /^gpt-5/i.test(model) ? { reasoning: { effort: reasoningEffort } } : {})
+      })
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (response.ok && payload.id) return { id: payload.id, model };
+    const message = payload?.error?.message || `OpenAI request failed (${response.status}).`;
+    lastError = new Error(message);
+    if (!(/model/i.test(message) && [400, 403, 404].includes(response.status))) throw lastError;
+  }
+  throw lastError || new Error("OpenAI request failed.");
+}
+
+const PENDING_STATUSES = new Set(["queued", "in_progress"]);
+
+async function readStructured(config, id) {
+  const response = await fetch(`https://api.openai.com/v1/responses/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${config.openAiApiKey}` }
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error?.message || `OpenAI response ${id} could not be read (${response.status}).`);
+  if (PENDING_STATUSES.has(payload.status)) return { status: payload.status, pending: true };
+  if (payload.status !== "completed") {
+    const reason = payload?.error?.message || payload?.incomplete_details?.reason || payload.status;
+    return { status: payload.status, failed: true, error: `The model did not finish (${reason}).` };
+  }
+  return { status: "completed", parsed: JSON.parse(extractJsonText(payload)), model: payload.model || "" };
 }
 
 // The writer's picks refer to its own numbering, which is the candidates' ids (c1, c2, ...) before
@@ -745,6 +872,13 @@ module.exports = {
   extractEmailText,
   finalizeCandidates,
   generateSubjectLines,
+  editSubjectLines,
+  buildWritingRequest,
+  buildEditingRequest,
+  readWriting,
+  readEditing,
+  startStructured,
+  readStructured,
   PREVIEW_LANGUAGES,
   previewInMarkets,
   requestStructured,

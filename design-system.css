@@ -6165,6 +6165,21 @@ input[type="file"] {
 
 .subject-progress > div { display: grid; gap: 2px; }
 .subject-progress span:not(.wp-spinner) { color: var(--wp-text-muted); font-size: var(--wp-text-xs); }
+.subject-progress-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2);
+  margin: var(--wp-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+.subject-progress-steps li + li::before { content: "→"; margin-right: var(--wp-space-2); color: var(--wp-border-strong); }
+.subject-progress-steps .is-done { color: var(--wp-text-muted); text-decoration: line-through; text-decoration-color: var(--wp-border-strong); }
+.subject-progress-steps .is-current { color: var(--wp-text); font-weight: 600; }
+.subject-progress-steps .subject-progress-elapsed { margin-left: auto; font-variant-numeric: tabular-nums; }
+.subject-progress-steps .subject-progress-elapsed::before { content: none; }
 .subject-row-skeleton { display: grid; gap: 6px; padding: var(--wp-space-3) var(--wp-space-4); border-bottom: 1px solid var(--wp-border-subtle); }
 .subject-row-skeleton:last-child { border-bottom: 0; }
 .subject-row-skeleton .wp-skeleton-text:first-child { width: 42%; }
