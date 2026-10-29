@@ -1347,6 +1347,15 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   shrank for the keyboard): the scene is flat at rest (`--tilt: none`, no `will-change`; the desktop tilt brings
   its own `perspective()`), the frame's width no longer transitions, and after a resize settles the print layer
   is nudged one pixel for one frame. Check the phone's typing and result states whenever this area changes.
+- **Checked in three engines** (`tmp/playwright-runner` now has WebKit and Firefox too): Chromium and Firefox draw
+  the print within 0.06% of the measured quad. Playwright's WebKit for Windows paints matrix3d without its
+  perspective (no compositing), so the page measures one corner on load and falls back to the centre-matched
+  affine transform when it is off (worst corner 2.6% instead of 13%); real Safari composites 3D transforms and was
+  not available to test. Two filter rules came out of WebKit and hold everywhere: every foil step runs on opaque
+  images and the glyph shape is cut out once at the end (an arithmetic sum adds alpha, and WebKit gives the
+  specular highlight alpha 1, which thickened and greyed every letter), and the metal gradient is
+  `userSpaceOnUse` sized from the fitted text box (WebKit painted an objectBoundingBox gradient on text in its
+  first, darkest stop). Fixing the edges brightened thin strokes in Chrome too, so the exposures were re-matched.
 - The light follows the pointer to the point on the lid under it (inverse homography); the loupe and the phone's
   floating preview are clones of the scene that reuse the same filter ids, so one light drives all three. An
   uploaded logo becomes a one-colour mask in the browser and is never sent anywhere.

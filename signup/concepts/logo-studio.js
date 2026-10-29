@@ -20,12 +20,12 @@
   // relative to the print area's mean.
   // lids:begin - measured by tools/signup/lid-geometry.js refine; do not edit by hand
   const LIDS = {
-    seville: {"quad":[[52.3,-0.19],[117.34,49.9],[38.79,106.44],[-29.94,42.83]],"aspect":1,"print":{"cx":0.55,"cy":0.51,"w":0.6,"h":0.6},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":0.78,"pigment":0.81},"light":[[1.116,1.145,1.116,1.09,1.098,1.09,1.09,1.116,1.09,1.168,1.194,1.194],[1.168,1.116,1.09,1.09,1.09,1.087,1.087,1.064,1.09,1.142,1.168,1.142],[1.116,1.113,1.113,1.09,1.09,1.064,1.061,1.061,1.038,1.038,1.116,1.142],[1.116,1.113,1.09,1.087,1.064,1.064,1.038,1.058,1.032,0.983,0.986,0.986],[1.09,1.09,1.069,1.061,1.038,1.035,1.027,1.025,1,0.957,0.934,0.986],[1.061,1.061,1.061,1.058,1.032,1.032,1.022,0.98,0.954,0.957,0.958,0.986],[1.038,1.038,1.035,1.024,0.986,0.986,0.96,0.947,0.931,0.957,0.978,1.013],[1.038,1.035,1.012,0.986,0.96,0.934,0.908,0.908,0.934,0.958,0.986,0.986],[1.012,0.986,0.986,0.96,0.934,0.882,0.882,0.908,0.934,0.96,1.012,1.038],[1.038,0.986,0.973,0.947,0.905,0.879,0.879,0.908,0.934,0.986,1.038,1.038],[1.02,1.038,0.96,0.908,0.879,0.879,0.905,0.931,0.96,0.986,1.012,1.012],[1.038,1.038,0.986,0.934,0.856,0.856,0.908,0.934,0.986,0.986,0.986,0.986]]},
-    london: {"quad":[[53,-6.64],[113.56,43.04],[41.89,106.19],[-19.64,34.88]],"aspect":1,"print":{"cx":0.51,"cy":0.49,"w":0.66,"h":0.66},"tone":"light","foil":"silver","grain":null,"exposure":{"metal":0.82,"pigment":0.81},"light":[[0.997,1.005,1.006,1.011,1.018,1.017,1.011,1.01,1.009,1.01,1.01,1.011],[0.995,0.999,1.006,1.013,1.017,1.017,1.018,1.012,1.007,1.007,1.01,1.011],[0.995,1,1.008,1.014,1.014,1.019,1.019,1.019,1.009,1.004,1.004,1.009],[0.992,1.001,1.004,1.008,1.014,1.019,1.016,1.015,1.015,1.008,1.004,1.004],[0.992,0.998,1.002,1.005,1.011,1.011,1.008,1.009,1.01,1.012,1.007,1.002],[0.99,0.997,1.003,1.004,1.007,1.007,1.003,1.003,1.006,1.005,1.009,1.002],[0.989,0.995,0.999,0.999,1.002,0.999,0.999,1,1.006,1.006,1.003,0.995],[0.975,0.99,0.995,0.994,0.994,0.995,0.996,0.998,1.002,1.002,0.998,0.991],[0.965,0.976,0.99,0.987,0.986,0.991,0.991,0.995,0.998,0.995,0.986,0.986],[0.956,0.963,0.976,0.982,0.985,0.988,0.99,0.991,0.991,0.986,0.982,0.982],[0.953,0.955,0.958,0.967,0.976,0.976,0.982,0.982,0.98,0.975,0.971,0.972],[0.953,0.952,0.952,0.954,0.958,0.967,0.976,0.973,0.967,0.967,0.971,0.971]]},
-    torino: {"quad":[[6.92,62.03],[60.28,33],[99.25,66.26],[42.58,100.87]],"aspect":1,"print":{"cx":0.5,"cy":0.47,"w":0.78,"h":0.7},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":1.05,"pigment":0.85},"light":[[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.005,1.005,1.005,1.002,1.011,1.018,1.013,0.999,0.967,0.953,0.938,0.992],[1.028,1.028,1.034,1.025,1.018,1.019,1.013,0.999,0.967,0.944,0.924,0.968],[1.042,1.042,1.061,1.038,1.034,1.034,1.028,1.005,0.98,0.953,0.924,0.951],[1.032,1.032,1.055,1.047,1.048,1.047,1.032,1.018,1.003,0.974,0.924,0.949],[1.018,1.018,1.032,1.047,1.047,1.038,1.032,1.018,1.003,0.974,0.924,0.924],[1.009,1.009,1.011,1.024,1.015,1.015,1.001,1.001,0.993,0.96,0.928,0.928],[0.996,0.996,1.001,1.001,1.002,0.992,0.992,0.988,0.972,0.945,0.932,0.932],[0.986,0.986,0.977,0.988,0.988,0.992,0.988,0.977,0.959,0.944,0.944,0.944],[0.988,0.988,0.986,0.996,1.011,1.015,1.009,1.001,0.986,0.959,0.959,0.959],[0.988,1.044,1.044,0.996,1.011,1.073,1.009,1.001,0.986,0.959,0.959,0.959]]},
-    seoul: {"quad":[[7.07,25.85],[62.33,3.98],[105.19,42.52],[44.25,66.14]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"mid","foil":"white","grain":"structured","exposure":{"metal":0.85,"pigment":0.82},"light":[[1.001,1.037,1.041,1.044,1.048,1.05,1.052,1.054,1.053,1.043,1.025,0.976],[0.936,0.982,0.988,0.993,0.993,0.993,0.999,0.999,1.004,1.004,1.004,0.972],[0.932,0.982,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,0.971],[0.932,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,0.986],[0.933,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.009],[0.941,0.993,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.01,1.01,0.998],[0.952,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.983],[0.96,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.98],[0.962,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.993,0.995,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.988,0.993,0.994,0.998,0.998,1.004,1.004,1.005,1.01,1.01,0.982],[0.962,0.988,0.988,0.988,0.987,0.982,0.979,0.976,0.981,0.982,0.991,0.988]]},
+    seville: {"quad":[[52.3,-0.19],[117.34,49.9],[38.79,106.44],[-29.94,42.83]],"aspect":1,"print":{"cx":0.55,"cy":0.51,"w":0.6,"h":0.6},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":0.62,"pigment":0.81},"light":[[1.116,1.145,1.116,1.09,1.098,1.09,1.09,1.116,1.09,1.168,1.194,1.194],[1.168,1.116,1.09,1.09,1.09,1.087,1.087,1.064,1.09,1.142,1.168,1.142],[1.116,1.113,1.113,1.09,1.09,1.064,1.061,1.061,1.038,1.038,1.116,1.142],[1.116,1.113,1.09,1.087,1.064,1.064,1.038,1.058,1.032,0.983,0.986,0.986],[1.09,1.09,1.069,1.061,1.038,1.035,1.027,1.025,1,0.957,0.934,0.986],[1.061,1.061,1.061,1.058,1.032,1.032,1.022,0.98,0.954,0.957,0.958,0.986],[1.038,1.038,1.035,1.024,0.986,0.986,0.96,0.947,0.931,0.957,0.978,1.013],[1.038,1.035,1.012,0.986,0.96,0.934,0.908,0.908,0.934,0.958,0.986,0.986],[1.012,0.986,0.986,0.96,0.934,0.882,0.882,0.908,0.934,0.96,1.012,1.038],[1.038,0.986,0.973,0.947,0.905,0.879,0.879,0.908,0.934,0.986,1.038,1.038],[1.02,1.038,0.96,0.908,0.879,0.879,0.905,0.931,0.96,0.986,1.012,1.012],[1.038,1.038,0.986,0.934,0.856,0.856,0.908,0.934,0.986,0.986,0.986,0.986]]},
+    london: {"quad":[[53,-6.64],[113.56,43.04],[41.89,106.19],[-19.64,34.88]],"aspect":1,"print":{"cx":0.51,"cy":0.49,"w":0.66,"h":0.66},"tone":"light","foil":"silver","grain":null,"exposure":{"metal":0.7,"pigment":0.81},"light":[[0.997,1.005,1.006,1.011,1.018,1.017,1.011,1.01,1.009,1.01,1.01,1.011],[0.995,0.999,1.006,1.013,1.017,1.017,1.018,1.012,1.007,1.007,1.01,1.011],[0.995,1,1.008,1.014,1.014,1.019,1.019,1.019,1.009,1.004,1.004,1.009],[0.992,1.001,1.004,1.008,1.014,1.019,1.016,1.015,1.015,1.008,1.004,1.004],[0.992,0.998,1.002,1.005,1.011,1.011,1.008,1.009,1.01,1.012,1.007,1.002],[0.99,0.997,1.003,1.004,1.007,1.007,1.003,1.003,1.006,1.005,1.009,1.002],[0.989,0.995,0.999,0.999,1.002,0.999,0.999,1,1.006,1.006,1.003,0.995],[0.975,0.99,0.995,0.994,0.994,0.995,0.996,0.998,1.002,1.002,0.998,0.991],[0.965,0.976,0.99,0.987,0.986,0.991,0.991,0.995,0.998,0.995,0.986,0.986],[0.956,0.963,0.976,0.982,0.985,0.988,0.99,0.991,0.991,0.986,0.982,0.982],[0.953,0.955,0.958,0.967,0.976,0.976,0.982,0.982,0.98,0.975,0.971,0.972],[0.953,0.952,0.952,0.954,0.958,0.967,0.976,0.973,0.967,0.967,0.971,0.971]]},
+    torino: {"quad":[[6.92,62.03],[60.28,33],[99.25,66.26],[42.58,100.87]],"aspect":1,"print":{"cx":0.5,"cy":0.47,"w":0.78,"h":0.7},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":0.89,"pigment":0.85},"light":[[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.005,1.005,1.005,1.002,1.011,1.018,1.013,0.999,0.967,0.953,0.938,0.992],[1.028,1.028,1.034,1.025,1.018,1.019,1.013,0.999,0.967,0.944,0.924,0.968],[1.042,1.042,1.061,1.038,1.034,1.034,1.028,1.005,0.98,0.953,0.924,0.951],[1.032,1.032,1.055,1.047,1.048,1.047,1.032,1.018,1.003,0.974,0.924,0.949],[1.018,1.018,1.032,1.047,1.047,1.038,1.032,1.018,1.003,0.974,0.924,0.924],[1.009,1.009,1.011,1.024,1.015,1.015,1.001,1.001,0.993,0.96,0.928,0.928],[0.996,0.996,1.001,1.001,1.002,0.992,0.992,0.988,0.972,0.945,0.932,0.932],[0.986,0.986,0.977,0.988,0.988,0.992,0.988,0.977,0.959,0.944,0.944,0.944],[0.988,0.988,0.986,0.996,1.011,1.015,1.009,1.001,0.986,0.959,0.959,0.959],[0.988,1.044,1.044,0.996,1.011,1.073,1.009,1.001,0.986,0.959,0.959,0.959]]},
+    seoul: {"quad":[[7.07,25.85],[62.33,3.98],[105.19,42.52],[44.25,66.14]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"mid","foil":"white","grain":"structured","exposure":{"metal":0.85,"pigment":0.87},"light":[[1.001,1.037,1.041,1.044,1.048,1.05,1.052,1.054,1.053,1.043,1.025,0.976],[0.936,0.982,0.988,0.993,0.993,0.993,0.999,0.999,1.004,1.004,1.004,0.972],[0.932,0.982,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,0.971],[0.932,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,0.986],[0.933,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.009],[0.941,0.993,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.01,1.01,0.998],[0.952,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.983],[0.96,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.98],[0.962,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.993,0.995,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.988,0.993,0.994,0.998,0.998,1.004,1.004,1.005,1.01,1.01,0.982],[0.962,0.988,0.988,0.988,0.987,0.982,0.979,0.976,0.981,0.982,0.991,0.988]]},
     madrid: {"quad":[[16.07,2.78],[79.11,7.94],[78.21,74.25],[25.3,65]],"aspect":0.963,"print":{"cx":0.5,"cy":0.47,"w":0.72,"h":0.62},"tone":"mid","foil":"oldrose","grain":"velour","exposure":{"metal":0.9,"pigment":1.1},"light":[[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.991],[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.999],[1.005,1.005,1.042,1.038,1.026,1.009,1.006,1.001,1.001,1.001,1.014,1.022],[1.007,1.007,1.047,1.042,1.026,1.014,1.009,1.001,1.001,1.009,1.018,1.022],[1,1,1.039,1.034,1.022,1.009,1.007,1.001,1.001,1.001,1.009,1.015],[0.992,0.992,1.03,1.026,1.018,1.009,1.001,1.001,1.001,1.001,1.001,1.001],[0.983,0.983,1.018,1.018,1.009,1.001,0.999,0.994,0.993,0.993,0.993,0.993],[0.974,0.974,1.009,1.009,1.002,0.999,0.992,0.987,0.983,0.983,0.981,0.974],[0.967,0.967,1.002,1.002,0.995,0.992,0.984,0.981,0.976,0.973,0.967,0.966],[0.959,0.959,0.994,0.992,0.987,0.983,0.976,0.973,0.966,0.965,0.957,0.956],[0.951,0.951,0.983,0.983,0.976,0.973,0.966,0.965,0.957,0.953,0.946,0.94],[0.951,0.943,0.975,0.975,0.972,0.965,0.957,0.953,0.949,0.945,0.94,0.932]]},
-    frankfurt: {"quad":[[15.66,49.64],[59.93,18.34],[96.12,58.69],[50.84,92.64]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"light","foil":"gold","grain":"linen","exposure":{"metal":0.6,"pigment":0.9},"light":[[0.976,0.989,0.985,0.981,0.978,0.976,0.973,0.972,0.971,0.97,0.971,0.959],[0.995,1.009,1.006,1.003,0.999,0.998,0.994,0.99,0.99,0.99,0.988,0.97],[0.995,1.009,1.007,1.003,1.001,0.999,0.997,0.994,0.993,0.992,0.991,0.97],[0.993,1.009,1.007,1.005,1.001,1,0.998,0.994,0.994,0.992,0.992,0.97],[0.992,1.009,1.007,1.005,1.004,1,1,0.996,0.996,0.996,0.992,0.97],[0.989,1.007,1.007,1.005,1.004,1,1,1,0.996,0.996,0.992,0.972],[0.989,1.008,1.007,1.005,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.989,1.008,1.004,1.003,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.99,1.008,1.004,1.003,1.003,1.001,0.999,0.996,0.996,0.996,0.996,0.974],[0.99,1.008,1.006,1.004,1.002,1.001,1,0.999,0.999,0.996,0.996,0.974],[0.993,1.008,1.006,1.005,1.002,1.002,1.001,0.999,0.999,0.999,0.996,0.977],[0.983,0.994,0.991,0.991,0.991,0.989,0.989,0.989,0.989,0.986,0.985,0.963]]},
+    frankfurt: {"quad":[[15.66,49.64],[59.93,18.34],[96.12,58.69],[50.84,92.64]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"light","foil":"gold","grain":"linen","exposure":{"metal":0.5,"pigment":0.9},"light":[[0.976,0.989,0.985,0.981,0.978,0.976,0.973,0.972,0.971,0.97,0.971,0.959],[0.995,1.009,1.006,1.003,0.999,0.998,0.994,0.99,0.99,0.99,0.988,0.97],[0.995,1.009,1.007,1.003,1.001,0.999,0.997,0.994,0.993,0.992,0.991,0.97],[0.993,1.009,1.007,1.005,1.001,1,0.998,0.994,0.994,0.992,0.992,0.97],[0.992,1.009,1.007,1.005,1.004,1,1,0.996,0.996,0.996,0.992,0.97],[0.989,1.007,1.007,1.005,1.004,1,1,1,0.996,0.996,0.992,0.972],[0.989,1.008,1.007,1.005,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.989,1.008,1.004,1.003,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.99,1.008,1.004,1.003,1.003,1.001,0.999,0.996,0.996,0.996,0.996,0.974],[0.99,1.008,1.006,1.004,1.002,1.001,1,0.999,0.999,0.996,0.996,0.974],[0.993,1.008,1.006,1.005,1.002,1.002,1.001,0.999,0.999,0.999,0.996,0.977],[0.983,0.994,0.991,0.991,0.991,0.989,0.989,0.989,0.989,0.986,0.985,0.963]]},
   };
   // lids:end
   const BOX_ORDER = ["seville", "london", "torino", "seoul", "madrid", "frankfurt"];
@@ -89,12 +89,20 @@
     const m = homography(q);
     return `matrix3d(${[m.a / w, m.d / w, 0, m.g / w, m.b / h, m.e / h, 0, m.h / h, 0, 0, 1, 0, m.c, m.f, 0, 1].map((n) => +n.toPrecision(10)).join(",")})`;
   }
-  // where the print sits for a lid: the element's size on the plate and its transform
+  // the closest flat (affine) stand-in for homography m: exact at the print's centre and in its slope there, so
+  // what a flat transform cannot follow is spread round the edges instead of piled into one corner
+  function affineMatrix(m, w, h) {
+    const W = m.g * 0.5 + m.h * 0.5 + 1, x = (m.a * 0.5 + m.b * 0.5 + m.c) / W, y = (m.d * 0.5 + m.e * 0.5 + m.f) / W;
+    const xu = (m.a - m.g * x) / W, xv = (m.b - m.h * x) / W, yu = (m.d - m.g * y) / W, yv = (m.e - m.h * y) / W;
+    return `matrix(${[xu / w, yu / w, xv / h, yv / h, x - 0.5 * xu - 0.5 * xv, y - 0.5 * yu - 0.5 * yv].map((n) => +n.toPrecision(10)).join(",")})`;
+  }
+  // where the print sits for a lid: the element's size on the plate and its transform (and the flat stand-in for
+  // an engine that draws matrix3d without its perspective)
   function placement(lid) {
     const q = printQuad(lid);
     const w = Math.max(120, Math.round(Math.hypot(q[1][0] - q[0][0], q[1][1] - q[0][1])));
     const h = Math.round((w * vbHeight(lid)) / VBW);
-    return { q, w, h, transform: matrix3d(q, w, h), centre: project(homography(lid.quad), lid.print.cx, lid.print.cy) };
+    return { q, w, h, transform: matrix3d(q, w, h), affine: affineMatrix(homography(q), w, h), centre: project(homography(lid.quad), lid.print.cx, lid.print.cy) };
   }
 
   // the measured light across the print area as an image the filter can multiply by: grey 0.5 is the area's mean.
@@ -115,7 +123,10 @@
    * the lid or the foil changes. lite (the thumbnails) draws the foil's colour only, without light or relief.
    */
   function makePrint(uid, lite) {
-    const grad = svgEl("linearGradient", { id: `${uid}-g`, x1: "0", y1: "0", x2: "1", y2: "0.35" });
+    // the metal runs across the print itself: set in print units from its measured box (sweep()), because WebKit
+    // does not spread an objectBoundingBox gradient across text and painted every letter in the first, darkest stop
+    const grad = svgEl("linearGradient", { id: `${uid}-g`, gradientUnits: "userSpaceOnUse", x1: 0, y1: 0, x2: VBW, y2: 0 });
+    const sweep = (x, y, w, h) => { grad.setAttribute("x1", x); grad.setAttribute("y1", y); grad.setAttribute("x2", x + w); grad.setAttribute("y2", y + 0.35 * h); };
     const filter = svgEl("filter", { id: `${uid}-f`, filterUnits: "userSpaceOnUse", primitiveUnits: "userSpaceOnUse", "color-interpolation-filters": "sRGB" });
     const maskImg = svgEl("image", { preserveAspectRatio: "xMidYMid meet" });
     const mask = svgEl("mask", { id: `${uid}-m`, maskUnits: "userSpaceOnUse", x: 0, y: 0 }, [maskImg]);
@@ -138,7 +149,9 @@
       // the filter works on the print area plus the margin the light was measured over
       const mx = VBW * LIGHT_MARGIN, my = vbH * LIGHT_MARGIN;
       Object.entries({ x: -mx, y: -my, width: VBW + 2 * mx, height: vbH + 2 * my }).forEach(([k, v]) => filter.setAttribute(k, v));
-      const add = (tag, attrs, kids) => { const n = svgEl(tag, attrs, kids); filter.appendChild(n); return n; };
+      // every step works in sRGB, set on each one: WebKit does not pass it down from the filter, and in linear light
+      // the neutral grey 0.5 the multiplies rest on becomes 0.21, which darkened its foil by almost half
+      const add = (tag, attrs, kids) => { const n = svgEl(tag, Object.assign({ "color-interpolation-filters": "sRGB" }, attrs), kids); filter.appendChild(n); return n; };
       // the pressed edges, shared by every finish: shadow on the inner upper-left wall, light on the lower-right
       const edges = (dark, lite2) => {
         add("feOffset", { in: "SourceAlpha", dx: 2.6, dy: 3.2, result: "o1" });
@@ -163,11 +176,21 @@
         return;
       }
       const metal = f.kind === "metal";
+      // Every step below works on opaque images and the print's shape is cut out once, at the end. An arithmetic
+      // sum adds alpha as well as colour, and engines disagree on a highlight's alpha (Chrome gives it its brightest
+      // channel, WebKit 1), so adding the highlight to the clipped foil thickened and greyed every letter in WebKit.
+            // how much of the moving highlight is added: the measured real foil allows a glint, not a glare
+      const SPEC_METAL = 0.45, SPEC_PIGMENT = 0.4;
+      const OPAQUE = "1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1";
+      add("feColorMatrix", { in: "SourceGraphic", type: "matrix", values: OPAQUE, result: "foil" });
       add("feGaussianBlur", { in: "SourceAlpha", stdDeviation: 2.6, result: "h" });
       light = svgEl("fePointLight", { x: 300, y: -120, z: 300 });
       add("feSpecularLighting", { in: "h", surfaceScale: 4, specularConstant: metal ? 1.35 : f.spec, specularExponent: metal ? 24 : 34, "lighting-color": f.light || "#ffffff", result: "sp" }, [light]);
-      add("feComposite", { in: "sp", in2: "SourceAlpha", operator: "in", result: "spIn" });
-      add("feComposite", { in: "SourceGraphic", in2: "spIn", operator: "arithmetic", k1: 0, k2: 1, k3: metal ? 1 : 0.8, k4: 0, result: "lit" });
+      add("feColorMatrix", { in: "sp", type: "matrix", values: OPAQUE, result: "spOpaque" });
+      // squared, the opaque highlight is what Chrome added before (colour times its brightest channel), which is
+      // what the foils were calibrated against
+      add("feComponentTransfer", { in: "spOpaque", result: "spec" }, ["R", "G", "B"].map((c) => svgEl(`feFunc${c}`, { type: "gamma", amplitude: 1, exponent: 2, offset: 0 })));
+      add("feComposite", { in: "foil", in2: "spec", operator: "arithmetic", k1: 0, k2: 1, k3: metal ? SPEC_METAL : SPEC_PIGMENT, k4: 0, result: "lit" });
       // the lid's own light: the print is as bright or as shaded as the surface under it. Grey 0.5 is neutral; metal
       // follows it less than pigment, because what a metal shows is mostly the light it reflects
       const follow = metal ? 0.6 : 1;
@@ -193,12 +216,13 @@
         add("feComposite", { in: "shadePulled", in2: "board", operator: "arithmetic", k1: 2, k2: 0, k3: 0, k4: 0, result: "surface" });
         multiplier = "surface";
       }
-      // lit x multiplier keeps the print's own alpha exactly; doubling the colour afterwards (on unpremultiplied
-      // values) makes grey 0.5 neutral. The exposure is how bright Westpack's real foil came out on this lid in this
-      // photo, so the print is as bright as a real one would be beside it
+      // lit x multiplier, then doubled so that grey 0.5 is neutral. The exposure is how bright Westpack's real foil
+      // came out on this lid in this photo, so the print is as bright as a real one would be beside it. Only then is
+      // the print's shape cut out, which keeps its edges exactly as the type draws them
       const exposure = lid.exposure[metal ? "metal" : "pigment"];
       add("feComposite", { in: "lit", in2: multiplier, operator: "arithmetic", k1: 1, k2: 0, k3: 0, k4: 0, result: "litLid" });
-      add("feComponentTransfer", { in: "litLid", result: "onLid" }, ["R", "G", "B"].map((c) => svgEl(`feFunc${c}`, { type: "linear", slope: 2 * exposure, intercept: 0 })));
+      add("feComponentTransfer", { in: "litLid", result: "lifted" }, ["R", "G", "B"].map((c) => svgEl(`feFunc${c}`, { type: "linear", slope: 2 * exposure, intercept: 0 })));
+      add("feComposite", { in: "lifted", in2: "SourceAlpha", operator: "in", result: "onLid" });
       edges(metal ? 0.36 : 0.22, metal ? 0.3 : 0.18);
       add("feMerge", {}, [svgEl("feMergeNode", { in: "onLid" }), svgEl("feMergeNode", { in: "shadow" }), svgEl("feMergeNode", { in: "glow" })]);
     }
@@ -224,7 +248,9 @@
       try {
         const b = text.getBBox();
         if (b.width && b.height) text.setAttribute("font-size", Math.max(24, t.size * Math.min(1.3, (VBW * 0.94) / b.width, (vbH * 0.3) / b.height)).toFixed(1));
-      } catch (e) { /* not laid out yet: the default size stands */ }
+        const fitted = text.getBBox();
+        sweep(fitted.x, fitted.y, fitted.width, fitted.height);
+      } catch (e) { sweep(VBW * 0.1, vbH * 0.4, VBW * 0.8, vbH * 0.2); /* not laid out yet: the default size stands */ }
     }
     function setLogo(url, aspect) {
       text.setAttribute("display", "none"); logo.removeAttribute("display");
@@ -234,6 +260,7 @@
       maskImg.setAttribute("href", url);
       maskImg.setAttribute("x", (VBW - w) / 2); maskImg.setAttribute("y", (vbH - h) / 2);
       maskImg.setAttribute("width", w); maskImg.setAttribute("height", h);
+      sweep((VBW - w) / 2, (vbH - h) / 2, w, h);
     }
     // the light, as a point over the print area: u, v in its own units (0-1 across, 0-1 down), z its height
     function setLight(u, v, z) { if (light) { light.setAttribute("x", (u * VBW).toFixed(0)); light.setAttribute("y", (v * vbH).toFixed(0)); light.setAttribute("z", ((z || 0.3) * VBW).toFixed(0)); } }
@@ -305,7 +332,9 @@
     const zoomBtn = el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", onclick: () => toggleZoom() }, [el("span", { text: copy.zoomIn })]);
     // every thumbnail carries the visitor's name too, so the six read as their own collection
     const thumbPrints = {};
-    const lay = (wrap, lid) => { const p = placement(lid); wrap.style.width = `${p.w}px`; wrap.style.height = `${p.h}px`; wrap.style.transform = p.transform; return p; };
+    // projective: whether this engine draws matrix3d with its perspective; checked once the stage is laid out
+    let projective = true;
+    const lay = (wrap, lid) => { const p = placement(lid); wrap.style.width = `${p.w}px`; wrap.style.height = `${p.h}px`; wrap.style.transform = projective ? p.transform : p.affine; return p; };
     const thumbs = BOX_ORDER.map((id) => {
       const p = (thumbPrints[id] = makePrint(`${uid}-${id}`, true)), wrap = el("div", { class: "ls-print-wrap" }, [p.svg]);
       lay(wrap, LIDS[id]);
@@ -586,6 +615,24 @@
       io.observe(frame);
     }
     place(); fit(); render();
+    // Some engines paint a matrix3d without its perspective when the layer is not composited (WebKit's software
+    // path does): the print then lands as a skewed parallelogram. Measure where the far corner of the print really
+    // is; if it is off, every lid uses the closest flat transform instead, which is right at the centre.
+    requestAnimationFrame(() => {
+      if (!placed || !frame.clientWidth) return;
+      const probe = document.createElement("i");
+      probe.style.cssText = `position:absolute;left:${placed.w - 1}px;top:${placed.h - 1}px;width:2px;height:2px`;
+      printWrap.appendChild(probe);
+      const r = probe.getBoundingClientRect(), f = frame.getBoundingClientRect();
+      probe.remove();
+      const k = f.width / 1000, dx = (r.left + r.right) / 2 - f.left - placed.q[2][0] * k, dy = (r.top + r.bottom) / 2 - f.top - placed.q[2][1] * k;
+      if (Math.hypot(dx, dy) > f.width * 0.015) {
+        projective = false;
+        place();
+        for (const b of thumbs) lay(b.querySelector(".ls-print-wrap"), LIDS[b.dataset.box]);
+        render();
+      }
+    });
     // the fonts arrive after the first paint; measure the name again once they have
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
     setTimeout(sweep, 650);

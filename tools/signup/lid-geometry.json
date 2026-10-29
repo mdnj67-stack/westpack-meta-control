@@ -1,5 +1,5 @@
 {
-  "_": "Rough lid edges in % of each plate (signup/assets/logo/box-<id>-1200.webp), two points on the straight part of each edge. top is the side the letters' tops face, so the print reads from left to right; it follows the direction of Westpack's own demo print on that lid. polarity says which side of the edge is darker (dark-in: the lid side), and picks the right line where two run close together, such as the inner edge of Torino's gold frame. search: how far across the rough line to look (% of the plate); stepPx/minStep loosen the edge test for soft edges. aspect: the surface's width/height where the product is known to be square (westpack.com: 60x60 and 65x65 mm boxes); without it the perspective decides. grain: the material's texture, which the foil follows (structured, linen-look and velour board, as westpack.com names them); null for smooth soft touch and plastic. print: the print area in lid units - centre, width and height - from the site's maximum logo size, 45 x 45 to 50 x 50 mm on a 60-65 mm lid, which is what Westpack's own demo prints use. Seville and London fill their photos and Torino's near corner sits under the caption, so their areas are a little smaller and shifted until a square logo at full size stays inside the photo (tests/signup-lab.test.js checks every corner); Seville's also sits towards the front, because its far edges were measured on the silhouette of the rounded rim and its near edges where the flat top ends. crop: the plate's crop of the original photo [x, y, side] in %, which locates the original photo's centre for the perspective. exposure: how bright foil comes out on this lid in this photo, against the foil's own colour - measured on Westpack's real demo print in the original photo (median of the print's pixels): gold on Seville 108 and on Torino 145 against 150, silver on London 136 against 166, gold on the white Frankfurt lid 98, white on Seoul 213 against 243, old rose on Madrid as drawn, white on black from the Seville and London shoot 198. Lids without a reference for one kind take the nearest from the same shoot. The values were then matched against renders measured the same way (tools/signup/lid-geometry.js has no part in that; it was done by hand on 2026-10-29), on the stroke cores rather than the median, since Westpack's demo lettering is heavier than a typed name. foil: the finish the lid shows first, which is the one its demo print was made in.",
+  "_": "Rough lid edges in % of each plate (signup/assets/logo/box-<id>-1200.webp), two points on the straight part of each edge. top is the side the letters' tops face, so the print reads from left to right; it follows the direction of Westpack's own demo print on that lid. polarity says which side of the edge is darker (dark-in: the lid side), and picks the right line where two run close together, such as the inner edge of Torino's gold frame. search: how far across the rough line to look (% of the plate); stepPx/minStep loosen the edge test for soft edges. aspect: the surface's width/height where the product is known to be square (westpack.com: 60x60 and 65x65 mm boxes); without it the perspective decides. grain: the material's texture, which the foil follows (structured, linen-look and velour board, as westpack.com names them); null for smooth soft touch and plastic. print: the print area in lid units - centre, width and height - from the site's maximum logo size, 45 x 45 to 50 x 50 mm on a 60-65 mm lid, which is what Westpack's own demo prints use. Seville and London fill their photos and Torino's near corner sits under the caption, so their areas are a little smaller and shifted until a square logo at full size stays inside the photo (tests/signup-lab.test.js checks every corner); Seville's also sits towards the front, because its far edges were measured on the silhouette of the rounded rim and its near edges where the flat top ends. crop: the plate's crop of the original photo [x, y, side] in %, which locates the original photo's centre for the perspective. exposure: how bright foil comes out on this lid in this photo, against the foil's own colour - measured on Westpack's real demo print in the original photo (median of the print's pixels): gold on Seville 108 and on Torino 145 against 150, silver on London 136 against 166, gold on the white Frankfurt lid 98, white on Seoul 213 against 243, old rose on Madrid as drawn, white on black from the Seville and London shoot 198. Lids without a reference for one kind take the nearest from the same shoot. The values were then matched against renders measured the same way, and matched again on 2026-10-29 after the filter stopped thickening letter edges (which had darkened thin strokes) (tools/signup/lid-geometry.js has no part in that; it was done by hand on 2026-10-29), on the stroke cores rather than the median, since Westpack's demo lettering is heavier than a typed name. foil: the finish the lid shows first, which is the one its demo print was made in.",
   "lids": {
     "seville": {
       "tone": "dark",
@@ -10,7 +10,7 @@
       "print": {"cx": 0.55, "cy": 0.51, "w": 0.6, "h": 0.6},
       "aspect": 1,
       "grain": null,
-      "exposure": {"metal": 0.78, "pigment": 0.81}
+      "exposure": {"metal": 0.62, "pigment": 0.81}
     },
     "london": {
       "tone": "light",
@@ -22,7 +22,7 @@
       "minStep": 1.2,
       "aspect": 1,
       "grain": null,
-      "exposure": {"metal": 0.82, "pigment": 0.81}
+      "exposure": {"metal": 0.7, "pigment": 0.81}
     },
     "torino": {
       "tone": "dark",
@@ -34,7 +34,7 @@
       "print": {"cx": 0.5, "cy": 0.47, "w": 0.78, "h": 0.7},
       "aspect": 1,
       "grain": null,
-      "exposure": {"metal": 1.05, "pigment": 0.85}
+      "exposure": {"metal": 0.89, "pigment": 0.85}
     },
     "seoul": {
       "tone": "mid",
@@ -45,7 +45,7 @@
       "search": 1.2,
       "aspect": 1,
       "grain": "structured",
-      "exposure": {"metal": 0.85, "pigment": 0.82}
+      "exposure": {"metal": 0.85, "pigment": 0.87}
     },
     "madrid": {
       "tone": "mid",
@@ -69,7 +69,7 @@
       "print": {"cx": 0.5, "cy": 0.5, "w": 0.72, "h": 0.72},
       "aspect": 1,
       "grain": "linen",
-      "exposure": {"metal": 0.6, "pigment": 0.9}
+      "exposure": {"metal": 0.5, "pigment": 0.9}
     }
   }
 }
