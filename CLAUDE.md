@@ -1319,12 +1319,35 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   project does not have - and the user's approval. The Insert popups must be unpublished at the same time.
 - Funnel records go to Vercel Blob under `signup-funnel/` (one file per exposure, compacted per day), never
   Redis. `rules.sanitizeTracking` drops any value containing "@", in the browser and on the server.
-- The logo studio shows six real lids (`LOGO_BOXES` in `tools/signup/build-assets.js`). Their demo print is
+- The logo studio shows six real lids (`LOGO_BOXES` in `tools/signup/build-assets.js`); Frankfurt is the white
+  linen-look lid from Shipping_Smykkeæsker_Reshoot-10, because the black close-up had no edges to measure. Their demo print is
   removed by `tools/signup/clean-plate.html`: thin print morphologically (gold on black needs `print: "light"` -
   closing first swells thick strokes into blocks), thick print (Frankfurt, Seoul, Madrid) by a harmonic fill with
   the lid's own fine grain mirror-tiled back (`detailRadius: 1`; a wider band carries the patch's light and shows
   the tiling). Kategori_Reshoot-36 and -46 contain a "MADE FROM RECYCLED PLASTIC" insert; their crops leave it out.
-- The print is SVG with feSpecularLighting from a light that follows the pointer; the loupe and the phone's
+- **The print is laid on each lid by a homography, measured, not guessed** (2026-10-29, the user: "lige på
+  æskerne ... grundighed fremfor fart"). `tools/signup/lid-geometry.js refine` fits each lid's four edges on its
+  plate (rough lines in `lid-geometry.json`, then the strongest brightness step at 48 points per edge, a line
+  fit and outlier rejection; `polarity` picks the right one of two close lines, e.g. the inside of Torino's gold
+  frame), intersects them into a quad, reads the light across the print area, and writes the `LIDS` block between
+  the `lids:begin`/`lids:end` markers in `logo-studio.js`. The browser lays the print with `matrix3d` inside a
+  1000×1000 "plate" scaled to the frame. `review <dir>` draws the fit for a human; the unit tests check every
+  corner of every print area stays inside the photo.
+- The perspective alone gives the lid's proportions (Torino's square frame measures 0.97, the white Frankfurt lid
+  1.02), but it is ill-conditioned with these long lenses (Seville measured 0.82), so square products are set to
+  1 from the site's dimensions. The print area is the site's *maximum* logo size, which is what Westpack's own
+  demo prints use; Seville, London and Torino are trimmed so a square logo is never cut by the photo or caption.
+- **Foil brightness is calibrated against Westpack's real demo prints in the original photos** (per-lid
+  `exposure` in `lid-geometry.json`): measure the print's pixels in the original the same way as in a render and
+  match on the stroke cores (p10/p90), not the median, because the demo lettering is heavier than a typed name.
+  Madrid's demo print is old rose pigment, so that is its default. All grain is multiplicative around grey 0.5: a
+  soft-light blend with noise turned white foil grey and drained gold of colour. The board's texture is drawn
+  (`GRAINS`), not read from the plates - at that scale the WebP plates hold compression blocks, not board.
+- **Chrome stops drawing a perspective layer after its parent's scale animates** (seen when the phone's frame
+  shrank for the keyboard): the scene is flat at rest (`--tilt: none`, no `will-change`; the desktop tilt brings
+  its own `perspective()`), the frame's width no longer transitions, and after a resize settles the print layer
+  is nudged one pixel for one frame. Check the phone's typing and result states whenever this area changes.
+- The light follows the pointer to the point on the lid under it (inverse homography); the loupe and the phone's
   floating preview are clones of the scene that reuse the same filter ids, so one light drives all three. An
   uploaded logo becomes a one-colour mask in the browser and is never sent anywhere.
 - Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked

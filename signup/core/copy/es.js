@@ -41,7 +41,7 @@
       "torino": "Negro con borde dorado",
       "seoul": "Cartón verde apagado",
       "madrid": "Soft touch marrón claro",
-      "frankfurt": "Cartón negro mate"
+      "frankfurt": "Cartón blanco efecto lino"
     },
     "foilLabel": "Estampado",
     "foil": {

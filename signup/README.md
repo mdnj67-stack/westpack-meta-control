@@ -121,13 +121,22 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 ## Logo-studiet: trykket
 
 - **Seks rigtige låg:** mat sort plast, creme soft touch, sort med guldkant, støvet grøn karton, lysebrun soft touch
-  og mat sort karton (materialer læst i sitets produktdata). Swipe eller thumbnails skifter låg; hvert låg viser sin
+  og hvid karton i hør-look (materialer læst i sitets produktdata). Swipe eller thumbnails skifter låg; hvert låg viser sin
   egen naturlige folie, til den besøgende vælger en.
 - **Folierne er dem, logotryk-siden lister:** guld, sølv, rosaguld, old rose, hvid, sort og blindpræg.
 - **Trykket tegnes som SVG med rigtigt lys:** en spejlende glans fra en lyskilde, der følger musen eller fingeren
   (og driver langsomt af sig selv), fin foliestruktur, og trykket presset ned i overfladen – skygge på den ene
-  indervæg, lys på den anden. Blindpræg er kun relief. Navnet placeres i det gamle demo-tryks vinkel og
-  forkortning og skaleres, så et langt navn aldrig skæres.
+  indervæg, lys på den anden. Blindpræg er kun relief.
+- **Trykket ligger lige på låget:** hvert låg er målt på sit foto (`node tools/signup/lid-geometry.js refine`).
+  Værktøjet finder lågets fire kanter på pixlen og lægger trykket på lågets flade med én perspektivtransformation,
+  så det følger kanterne og forkortes præcis som kameraet så låget. Størrelsen er sitets maksimale logostørrelse
+  (45×45–50×50 mm på et 60–65 mm låg), og et kvadratisk logo i fuld størrelse når aldrig ud over billedet (testet).
+- **Trykket er lige så lyst som rigtig folie på netop det foto:** Westpacks egne demo-tryk blev målt i
+  originalfotoene (fx guld på Seville med median 108, guld på det hvide låg 98, sølv på London 136), og hver folie
+  er kalibreret mod dem. Lågets eget lysfald over trykfladen og – på struktureret, hør- og velourkarton – kartonens
+  struktur går igennem i folien.
+- **Kontrol:** `node tools/signup/lid-geometry.js review <mappe>` tegner de målte kanter, gitteret og en prøvetekst
+  på hvert låg.
 - **Dit eget logo:** PNG, JPG eller SVG gøres til en én-farvet foliemaske i browseren (folie trykkes i én farve).
   Filen forlader aldrig browseren; kun `wp_logo_uploaded: yes` følger med en tilmelding.
 - **Lup** over æsken på desktop, **"Se trykket tæt på"** (zoom) overalt.
@@ -137,10 +146,11 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 ## Billeder
 
 Alle billeder er Westpacks egne fra Asana-biblioteket, behandlet af `node tools/signup/build-assets.js`:
-originalen hentes gennem produktionen, beskæres og komprimeres til WebP (4–56 KB) i `assets/`, og to
-nærbilleder af logotryk (London på creme, Seville på sort) får Westpacks demo-tryk fjernet, så den besøgendes
-navn kan sættes i stedet (`tools/signup/clean-plate.html`): seks låg, de tre med tyndt tryk renset morfologisk, de tre
-med tykt tryk (Frankfurt, Seoul, Madrid) udfyldt harmonisk med lågets egen struktur lagt tilbage. To af kategori-billederne
+originalen hentes gennem produktionen, beskæres og komprimeres til WebP (4–56 KB) i `assets/`, og seks
+låg får Westpacks demo-tryk fjernet, så den besøgendes navn kan sættes i stedet (`tools/signup/clean-plate.html`):
+de tre med tyndt tryk renset morfologisk, de tre med tykt tryk (Frankfurt, Seoul, Madrid) udfyldt harmonisk med
+lågets egen struktur lagt tilbage. Frankfurt er det hvide låg fra "Shipping Smykkeæsker" (Reshoot-10), fordi alle
+fire kanter er synlige der; det sorte nærbillede havde ingen kanter at måle perspektivet på. To af kategori-billederne
 har et indstik med "MADE FROM RECYCLED PLASTIC"; beskæringerne holder det ude, fordi ingen kreativ må vise en miljøpåstand. Intet peger på Asana, hvis links udløber efter timer.
 Kundefotos er fra "Kundebilleder Uge 40" (frigivet til fri brug 2026-10-07); billedet med Deutsche Bank/Equinix
 er udeladt.

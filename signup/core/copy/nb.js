@@ -41,7 +41,7 @@
       "torino": "Svart med gullkant",
       "seoul": "Støvet grønn kartong",
       "madrid": "Lysebrun soft touch",
-      "frankfurt": "Matt svart kartong"
+      "frankfurt": "Hvit kartong med linstruktur"
     },
     "foilLabel": "Folie",
     "foil": {

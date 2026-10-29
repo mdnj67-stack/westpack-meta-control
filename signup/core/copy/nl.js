@@ -41,7 +41,7 @@
       "torino": "Zwart met gouden rand",
       "seoul": "Stoffig groen karton",
       "madrid": "Lichtbruine soft touch",
-      "frankfurt": "Matzwart karton"
+      "frankfurt": "Wit karton met linnenlook"
     },
     "foilLabel": "Folie",
     "foil": {

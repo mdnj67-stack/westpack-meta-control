@@ -4,8 +4,9 @@
  * Asana serves attachments from signed links that expire within hours, so nothing in production may point at
  * Asana. This script reads each original through production (this machine has no Asana token: log in the way
  * smoke-local.js does), crops and compresses it to WebP in signup/assets/, and for the logo studio removes
- * Westpack's demo print from two lid close-ups (tools/signup/clean-plate.html). The assets are then served from
- * the app's own origin with the code that uses them, versioned together.
+ * Westpack's demo print from six lids (tools/signup/clean-plate.html). After rebuilding a lid, run
+ * tools/signup/lid-geometry.js refine: the print's placement is measured on these plates. The assets are then
+ * served from the app's own origin with the code that uses them, versioned together.
  *
  * Every photo is Westpack's own product photography. The customer-logo photos come from "Kundebilleder Uge 40",
  * which the Content Library owner cleared for free use on 2026-10-07; the one showing large corporate brands
@@ -42,7 +43,7 @@ const TASKS = {
 const LOGO_BOXES = [
   { id: "seville", task: "logoTryk", file: "Logo_Tryk_1x1-4.jpg", print: "light", polygons: [[[7, 18.5], [83.75, 15.5], [83.75, 71.25], [37.5, 77], [7, 77]]] },
   { id: "london", task: "logoTryk", file: "Logo_Tryk_1x1-2.jpg", print: "both", polygons: [[[23.75, 10], [76.25, 11.25], [78, 61.25], [42.5, 71.25], [15.5, 68.75], [15, 37.5]]] },
-  { id: "frankfurt", task: "logoTryk", file: "Logo_Tryk_1x1-5.jpg", method: "harmonic", texture: [80, 80, 16, 16], polygons: [[[10, 15], [82, 18], [84, 64], [60, 70], [45, 78], [12, 60]]] },
+  { id: "frankfurt", task: "shipping", file: "Shipping_Smykkeæsker_Reshoot-10.jpg", crop: [47, 28, 53], method: "harmonic", texture: [28, 48, 10, 10], polygons: [[[39, 50], [47, 36.5], [67, 35.5], [74.5, 50], [59, 70.5], [47, 67.5], [39.5, 58]]] },
   { id: "torino", task: "kategori", file: "Kategori_Reshoot-8.jpg", crop: [2, 42, 58], print: "light", polygons: [[[10, 61], [61, 35], [94, 62.5], [40.5, 94.5]]] },
   { id: "seoul", task: "kategori", file: "Kategori_Reshoot-36.jpg", crop: [12, 33, 64], method: "harmonic", texture: [16, 36, 9, 9], detailRadius: 1, polygons: [[[31, 19.5], [52, 13.5], [76, 21], [83, 40], [78, 51], [56, 55], [29, 47]], [[88, 60], [100, 60], [100, 92], [89, 92]]] },
   { id: "madrid", task: "kategori", file: "Kategori_Reshoot-46.jpg", crop: [8, 0, 55], method: "harmonic", texture: [18, 20, 12, 22], polygons: [[[34, 17], [70, 17], [70, 55], [34, 55]]] },

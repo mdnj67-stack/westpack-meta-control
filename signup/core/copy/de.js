@@ -41,7 +41,7 @@
       "torino": "Schwarz mit Goldrand",
       "seoul": "Staubgrüner Karton",
       "madrid": "Hellbraunes Soft Touch",
-      "frankfurt": "Mattschwarzer Karton"
+      "frankfurt": "Weißer Karton in Leinenoptik"
     },
     "foilLabel": "Folie",
     "foil": {

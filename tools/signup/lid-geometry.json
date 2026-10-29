@@ -1,0 +1,75 @@
+{
+  "_": "Rough lid edges in % of each plate (signup/assets/logo/box-<id>-1200.webp), two points on the straight part of each edge. top is the side the letters' tops face, so the print reads from left to right; it follows the direction of Westpack's own demo print on that lid. polarity says which side of the edge is darker (dark-in: the lid side), and picks the right line where two run close together, such as the inner edge of Torino's gold frame. search: how far across the rough line to look (% of the plate); stepPx/minStep loosen the edge test for soft edges. aspect: the surface's width/height where the product is known to be square (westpack.com: 60x60 and 65x65 mm boxes); without it the perspective decides. grain: the material's texture, which the foil follows (structured, linen-look and velour board, as westpack.com names them); null for smooth soft touch and plastic. print: the print area in lid units - centre, width and height - from the site's maximum logo size, 45 x 45 to 50 x 50 mm on a 60-65 mm lid, which is what Westpack's own demo prints use. Seville and London fill their photos and Torino's near corner sits under the caption, so their areas are a little smaller and shifted until a square logo at full size stays inside the photo (tests/signup-lab.test.js checks every corner); Seville's also sits towards the front, because its far edges were measured on the silhouette of the rounded rim and its near edges where the flat top ends. crop: the plate's crop of the original photo [x, y, side] in %, which locates the original photo's centre for the perspective. exposure: how bright foil comes out on this lid in this photo, against the foil's own colour - measured on Westpack's real demo print in the original photo (median of the print's pixels): gold on Seville 108 and on Torino 145 against 150, silver on London 136 against 166, gold on the white Frankfurt lid 98, white on Seoul 213 against 243, old rose on Madrid as drawn, white on black from the Seville and London shoot 198. Lids without a reference for one kind take the nearest from the same shoot. The values were then matched against renders measured the same way (tools/signup/lid-geometry.js has no part in that; it was done by hand on 2026-10-29), on the stroke cores rather than the median, since Westpack's demo lettering is heavier than a typed name. foil: the finish the lid shows first, which is the one its demo print was made in.",
+  "lids": {
+    "seville": {
+      "tone": "dark",
+      "foil": "gold",
+      "crop": [0, 0, 100],
+      "edges": {"top": [[60, 6.5], [90, 27.5]], "right": [[90, 68], [72, 81]], "bottom": [[6, 74.5], [24, 90]], "left": [[10, 21], [40, 5.5]]},
+      "polarity": {"top": "dark-in", "left": "dark-in", "right": "dark-in", "bottom": "dark-in"},
+      "print": {"cx": 0.55, "cy": 0.51, "w": 0.6, "h": 0.6},
+      "aspect": 1,
+      "grain": null,
+      "exposure": {"metal": 0.78, "pigment": 0.81}
+    },
+    "london": {
+      "tone": "light",
+      "foil": "silver",
+      "crop": [0, 0, 100],
+      "edges": {"top": [[70, 6.5], [92, 25]], "right": [[90, 66.5], [65, 88]], "bottom": [[5, 65], [25, 84]], "left": [[10, 18], [32, 6]]},
+      "print": {"cx": 0.51, "cy": 0.49, "w": 0.66, "h": 0.66},
+      "stepPx": 4,
+      "minStep": 1.2,
+      "aspect": 1,
+      "grain": null,
+      "exposure": {"metal": 0.82, "pigment": 0.81}
+    },
+    "torino": {
+      "tone": "dark",
+      "foil": "gold",
+      "crop": [2, 42, 58],
+      "edges": {"top": [[15, 56.4], [50, 37.8]], "right": [[68, 39.3], [92, 59.9]], "bottom": [[90, 71.4], [60, 89.1]], "left": [[10, 67], [32, 91]]},
+      "polarity": {"top": "dark-in", "right": "dark-in", "bottom": "dark-in", "left": "dark-in"},
+      "search": 1.2,
+      "print": {"cx": 0.5, "cy": 0.47, "w": 0.78, "h": 0.7},
+      "aspect": 1,
+      "grain": null,
+      "exposure": {"metal": 1.05, "pigment": 0.85}
+    },
+    "seoul": {
+      "tone": "mid",
+      "foil": "white",
+      "crop": [12, 33, 64],
+      "edges": {"top": [[12, 23.8], [52, 6.6]], "right": [[66, 7.5], [95, 32]], "bottom": [[50, 62.3], [92, 47.6]], "left": [[12, 31.5], [40, 61]]},
+      "print": {"cx": 0.5, "cy": 0.5, "w": 0.72, "h": 0.72},
+      "search": 1.2,
+      "aspect": 1,
+      "grain": "structured",
+      "exposure": {"metal": 0.85, "pigment": 0.82}
+    },
+    "madrid": {
+      "tone": "mid",
+      "foil": "oldrose",
+      "crop": [8, 0, 55],
+      "edges": {"top": [[30, 5.6], [70, 8.1]], "right": [[77.7, 12], [78.6, 55]], "bottom": [[28, 66.3], [74, 74.5]], "left": [[18, 10], [24, 58]]},
+      "print": {"cx": 0.5, "cy": 0.47, "w": 0.72, "h": 0.62},
+      "polarity": {"top": "dark-in", "left": "dark-in", "bottom": "dark-in", "right": "dark-in"},
+      "search": 1.5,
+      "minStep": 1.5,
+      "stepPx": 2.5,
+      "grain": "velour",
+      "exposure": {"metal": 0.9, "pigment": 1.1}
+    },
+    "frankfurt": {
+      "tone": "light",
+      "foil": "gold",
+      "crop": [47, 28, 53],
+      "edges": {"top": [[22, 45.3], [56, 21]], "right": [[64, 22.5], [90, 51.5]], "bottom": [[90, 60], [56, 88]], "left": [[21, 53], [48, 87]]},
+      "polarity": {"top": "light-in", "right": "light-in", "bottom": "light-in", "left": "light-in"},
+      "print": {"cx": 0.5, "cy": 0.5, "w": 0.72, "h": 0.72},
+      "aspect": 1,
+      "grain": "linen",
+      "exposure": {"metal": 0.6, "pigment": 0.9}
+    }
+  }
+}

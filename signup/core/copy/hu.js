@@ -41,7 +41,7 @@
       "torino": "Fekete, aranyszegéllyel",
       "seoul": "Poroszöld karton",
       "madrid": "Világosbarna soft touch",
-      "frankfurt": "Matt fekete karton"
+      "frankfurt": "Fehér, vászonhatású karton"
     },
     "foilLabel": "Fólia",
     "foil": {

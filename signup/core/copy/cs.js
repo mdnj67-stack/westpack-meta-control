@@ -41,7 +41,7 @@
       "torino": "Černá se zlatým lemem",
       "seoul": "Prachově zelený karton",
       "madrid": "Světle hnědý soft touch",
-      "frankfurt": "Matný černý karton"
+      "frankfurt": "Bílý karton se strukturou lnu"
     },
     "foilLabel": "Fólie",
     "foil": {

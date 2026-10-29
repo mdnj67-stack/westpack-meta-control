@@ -41,7 +41,7 @@
       "torino": "Nero con bordo oro",
       "seoul": "Cartoncino verde polvere",
       "madrid": "Soft touch marrone chiaro",
-      "frankfurt": "Cartoncino nero opaco"
+      "frankfurt": "Cartoncino bianco effetto lino"
     },
     "foilLabel": "Foil",
     "foil": {

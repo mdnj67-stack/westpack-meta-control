@@ -41,7 +41,7 @@
       "torino": "Czarne ze złotym obramowaniem",
       "seoul": "Karton w przygaszonej zieleni",
       "madrid": "Jasnobrązowe soft touch",
-      "frankfurt": "Matowy czarny karton"
+      "frankfurt": "Biały karton o fakturze lnu"
     },
     "foilLabel": "Folia",
     "foil": {

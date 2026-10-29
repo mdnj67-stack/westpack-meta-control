@@ -10,16 +10,17 @@
 .ls-frame {
   position: relative; margin: 0; width: min(100%, 50vh, 560px); aspect-ratio: 1 / 1; border-radius: 18px; overflow: hidden;
   background: #0d0d0d; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  touch-action: pan-y; cursor: crosshair; perspective: 900px; user-select: none; -webkit-user-select: none;
+  touch-action: pan-y; cursor: crosshair; user-select: none; -webkit-user-select: none;
 }
-.ls-scene { --tilt: rotateX(0deg) rotateY(0deg); position: absolute; inset: 0; transform: var(--tilt); transform-origin: 50% 50%; transition: transform 380ms var(--wps-ease-out), opacity 220ms ease; will-change: transform; }
+/* flat at rest (--tilt: none); the pointer tilt brings its own perspective() */
+.ls-scene { --tilt: none; position: absolute; inset: 0; transform: var(--tilt); transform-origin: 50% 50%; transition: transform 380ms var(--wps-ease-out), opacity 220ms ease; }
 .ls-scene.is-swapping { opacity: 0.35; }
 .ls-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-.ls-print-wrap {
-  position: absolute; left: var(--x); top: var(--y); width: calc(var(--maxw) * 1%); pointer-events: none;
-  transform: translate(-50%, -50%) rotate(var(--angle)) skewX(var(--skew)) scaleY(var(--sy)); transform-origin: 50% 50%;
-}
-.ls-print { display: block; width: 100%; height: auto; overflow: visible; }
+/* the plate stands in for the photo at 1000 x 1000 and is scaled to the frame (--k, set from the frame's width); the
+   print is laid onto the lid inside it by a matrix3d measured on the photo, so it sits flat on the lid's surface */
+.ls-plate { position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; transform: scale(var(--k, 0.5)); transform-origin: 0 0; pointer-events: none; }
+.ls-print-wrap { position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none; }
+.ls-print { display: block; width: 100%; height: 100%; overflow: visible; }
 .ls.is-placeholder .ls-print { opacity: 0.6; }
 .ls.is-zoomed .ls-scene { transform: scale(2.35); transform-origin: var(--zx) var(--zy); transition: transform 620ms var(--wps-ease-out); }
 .ls-illustration { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 26px 12px 9px; font-size: 10.5px; line-height: 1.35; color: rgba(255, 255, 255, 0.8); background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent); pointer-events: none; transition: opacity 200ms; }
@@ -39,8 +40,9 @@
 .ls-zoom[aria-pressed="true"] { background: var(--wps-gold-hi); color: #1b1a17; border-color: var(--wps-gold-hi); }
 .ls-thumbs { display: flex; gap: 8px; width: min(100%, 50vh, 560px); overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: none; }
 .ls-thumbs::-webkit-scrollbar { display: none; }
-.ls-thumb { flex: none; width: 54px; height: 54px; padding: 0; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: #222; cursor: pointer; opacity: 0.62; transition: opacity 160ms, border-color 160ms, transform 160ms var(--wps-ease-out); }
+.ls-thumb { position: relative; flex: none; width: 54px; height: 54px; padding: 0; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: #222; cursor: pointer; opacity: 0.62; transition: opacity 160ms, border-color 160ms, transform 160ms var(--wps-ease-out); }
 .ls-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ls-thumb .ls-plate { transform: scale(0.05); }
 .ls-thumb:hover { opacity: 0.9; }
 .ls-thumb[aria-pressed="true"] { opacity: 1; border-color: var(--wps-gold-hi); transform: translateY(-2px); }
 .ls-light-hint { margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.58); text-align: center; }
@@ -122,6 +124,7 @@
   transition: opacity 220ms ease, transform 300ms var(--wps-ease-out); pointer-events: none;
 }
 .ls-pip .ls-scene { position: absolute; inset: 0; }
+.ls-pip .ls-photo { width: 100%; height: 100%; }
 .ls.is-pip .ls-pip { opacity: 1; transform: none; }
 @media (max-width: 759px) { .ls-edit .ls-options { padding-right: 104px; } .ls-edit .ls-next { margin-top: 4px; } }
 
@@ -130,12 +133,12 @@
   .ls-frame, .ls-under, .ls-thumbs { width: min(100%, 44vh, 560px); }
   .ls-frame { width: min(100%, 44vh, 560px); }
   .ls-thumb { width: 46px; height: 46px; border-radius: 10px; }
+  .ls-thumb .ls-plate { transform: scale(0.042); }
   .ls-stage { padding-top: 22px; }
   /* typing: the stage sticks to the top and shrinks, so box and field stay above the keyboard */
   .ls.is-typing .ls-stage { position: sticky; top: 0; z-index: 3; padding: 14px 14px 10px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); }
   .ls.is-typing .ls-frame { width: min(100%, 30vh, 270px); }
   .ls.is-typing .ls-thumbs, .ls.is-typing .ls-light-hint, .ls.is-typing .ls-under, .ls.is-typing .ls-illustration, .ls.is-typing .ls-upload-row { display: none; }
-  .ls-frame { transition: width 360ms var(--wps-ease-out); }
   .ls.is-result .ls-stage { padding: 18px 14px 12px; }
   .ls.is-result .ls-frame { width: min(100%, 34vh, 300px); }
   .ls.is-result .ls-thumbs, .ls.is-result .ls-light-hint, .ls.is-result .ls-under { display: none; }

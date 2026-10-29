@@ -41,7 +41,7 @@
       "torino": "Negru cu margine aurie",
       "seoul": "Carton verde prăfuit",
       "madrid": "Maro deschis soft touch",
-      "frankfurt": "Carton negru mat"
+      "frankfurt": "Carton alb cu aspect de in"
     },
     "foilLabel": "Folie",
     "foil": {

@@ -41,7 +41,7 @@
       "torino": "Black with gold trim",
       "seoul": "Dusty green card",
       "madrid": "Light brown soft touch",
-      "frankfurt": "Matte black card"
+      "frankfurt": "White linen-look card"
     },
     "foilLabel": "Foil",
     "foil": {

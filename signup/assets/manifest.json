@@ -265,25 +265,25 @@
     ]
   },
   "logo/box-frankfurt": {
-    "source": "Logo_Tryk_1x1-5.jpg (Asana task 1213025393589646)",
+    "source": "Shipping_Smykkeæsker_Reshoot-10.jpg (Asana task 1215480009202407)",
     "files": [
       {
         "file": "logo/box-frankfurt-1200.webp",
         "width": 1200,
         "height": 1200,
-        "bytes": 15610
+        "bytes": 27064
       },
       {
         "file": "logo/box-frankfurt-720.webp",
         "width": 720,
         "height": 720,
-        "bytes": 6000
+        "bytes": 13224
       },
       {
         "file": "logo/box-frankfurt-160.webp",
         "width": 160,
         "height": 160,
-        "bytes": 700
+        "bytes": 2436
       }
     ]
   },

@@ -41,7 +41,7 @@
       "torino": "Musta kultareunuksella",
       "seoul": "Pölyvihreä kartonki",
       "madrid": "Vaaleanruskea soft touch",
-      "frankfurt": "Musta mattakartonki"
+      "frankfurt": "Valkoinen pellavapintainen kartonki"
     },
     "foilLabel": "Folio",
     "foil": {

@@ -198,3 +198,46 @@ test("every Signup Lab browser file parses", () => {
   const files = ["signup/westpack-signup.js", "signup/core/rules.js", "signup/core/markets.js", ...fs.readdirSync(path.join(ROOT, "signup", "concepts")).filter((f) => f.endsWith(".js")).map((f) => `signup/concepts/${f}`), ...fs.readdirSync(COPY_DIR).map((f) => `signup/core/copy/${f}`)];
   for (const f of files) execFileSync(process.execPath, ["--check", path.join(ROOT, f)]);
 });
+
+// ---- logo studio: the measured lids ----
+const LS_SRC = fs.readFileSync(path.join(ROOT, "signup", "concepts", "logo-studio.js"), "utf8");
+const LIDS = Function(`return (${LS_SRC.slice(LS_SRC.indexOf("// lids:begin"), LS_SRC.indexOf("// lids:end")).replace(/^[^{]*/, "").trim().replace(/;$/, "")});`)();
+// the same homography logo-studio.js and tools/signup/lid-geometry.js use, lifted from the shipped file
+const homography = Function(`${LS_SRC.slice(LS_SRC.indexOf("  function homography(q)"), LS_SRC.indexOf("  function project("))}; return homography;`)();
+const project = (m, u, v) => { const w = m.g * u + m.h * v + 1; return [(m.a * u + m.b * v + m.c) / w, (m.d * u + m.e * v + m.f) / w]; };
+
+test("logo studio: every lid is measured, lit and named in every language", () => {
+  const order = JSON.parse(LS_SRC.match(/const BOX_ORDER = (\[[^\]]*\])/)[1]);
+  assert.deepEqual(order.slice().sort(), Object.keys(LIDS).sort());
+  for (const lang of fs.readdirSync(COPY_DIR).map((f) => f.replace(/\.js$/, ""))) {
+    assert.deepEqual(Object.keys(loadCopy(lang)["logo-studio"].boxes).sort(), order.slice().sort(), `${lang} names every lid`);
+  }
+  for (const [id, l] of Object.entries(LIDS)) {
+    assert.equal(l.quad.length, 4, `${id} quad`);
+    assert.ok(l.aspect > 0.7 && l.aspect < 1.4, `${id} aspect ${l.aspect}`);
+    assert.equal(l.light.length, 12, `${id} light rows`); assert.ok(l.light.every((r) => r.length === 12), `${id} light columns`);
+    assert.ok(l.light.flat().every((f) => f > 0.6 && f < 1.5), `${id} light stays a gentle shading`);
+    assert.ok(l.exposure.metal > 0.3 && l.exposure.metal <= 1.5 && l.exposure.pigment > 0.3 && l.exposure.pigment <= 1.5, `${id} exposure`);
+    assert.ok(LS_SRC.includes(`    ${l.foil}: { kind:`), `${id} opens in a foil that exists`);
+    assert.ok(l.grain === null || /^(structured|linen|velour)$/.test(l.grain), `${id} grain`);
+  }
+});
+
+test("logo studio: the homography lays the unit square exactly on each lid, and the print area inside the photo", () => {
+  for (const [id, l] of Object.entries(LIDS)) {
+    const m = homography(l.quad);
+    [[0, 0], [1, 0], [1, 1], [0, 1]].forEach(([u, v], i) => {
+      const [x, y] = project(m, u, v);
+      assert.ok(Math.abs(x - l.quad[i][0]) < 1e-6 && Math.abs(y - l.quad[i][1]) < 1e-6, `${id} corner ${i}`);
+    });
+    const p = l.print;
+    assert.ok(p.cx - p.w / 2 >= 0 && p.cx + p.w / 2 <= 1 && p.cy - p.h / 2 >= 0 && p.cy + p.h / 2 <= 1, `${id} print area on the lid`);
+    // the whole print area is in the photo and above the caption, so a square logo at full size is never cut off
+    for (const [a, b] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      const [x, y] = project(m, p.cx + (a * p.w) / 2, p.cy + (b * p.h) / 2);
+      assert.ok(x > 1 && x < 99 && y > 1 && y < 91, `${id} print corner at ${x.toFixed(1)}, ${y.toFixed(1)} is in the photo, above the caption`);
+    }
+    // the lid surface is convex and the projection never folds over (w stays positive on the lid)
+    for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 1], [0.5, 0.5]]) assert.ok(m.g * u + m.h * v + 1 > 0, `${id} w at ${u},${v}`);
+  }
+});

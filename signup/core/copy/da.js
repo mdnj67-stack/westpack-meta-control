@@ -26,7 +26,7 @@
     namePlaceholder: "fx Atelier Nord",
     defaultName: "Dit brand",
     boxLabel: "Æske",
-    boxes: { seville: "Mat sort plast", london: "Creme soft touch", torino: "Sort med guldkant", seoul: "Støvet grøn karton", madrid: "Lysebrun soft touch", frankfurt: "Mat sort karton" },
+    boxes: { seville: "Mat sort plast", london: "Creme soft touch", torino: "Sort med guldkant", seoul: "Støvet grøn karton", madrid: "Lysebrun soft touch", frankfurt: "Hvid hør-look karton" },
     foilLabel: "Folie",
     foil: { gold: "Guld", silver: "Sølv", rose: "Rosaguld", oldrose: "Old rose", white: "Hvid", black: "Sort", deboss: "Blindpræg" },
     typeLabel: "Skrift",

@@ -41,7 +41,7 @@
       "torino": "Noir avec bordure dorée",
       "seoul": "Carton vert grisé",
       "madrid": "Brun clair au toucher doux",
-      "frankfurt": "Carton noir mat"
+      "frankfurt": "Carton blanc effet lin"
     },
     "foilLabel": "Marquage",
     "foil": {

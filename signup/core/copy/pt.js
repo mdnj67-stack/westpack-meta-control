@@ -41,7 +41,7 @@
       "torino": "Preto com rebordo dourado",
       "seoul": "Cartão verde esbatido",
       "madrid": "Castanho-claro, toque suave",
-      "frankfurt": "Cartão preto mate"
+      "frankfurt": "Cartão branco efeito linho"
     },
     "foilLabel": "Foil",
     "foil": {
