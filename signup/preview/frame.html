@@ -22,8 +22,8 @@
 <div class="bar">Free shipping on orders above the threshold · Logo print on jewellery boxes</div>
 <header><b>WESTPACK</b><nav><span>Jewellery Boxes</span><span>Displays</span><span>Gift Packaging</span><span>Bags</span><span>Logo Printing</span></nav></header>
 <picture>
-  <source media="(max-width: 700px)" srcset="shots/store-mobile.webp">
-  <img class="shot" src="shots/store-desktop.webp" alt="">
+  <source media="(max-width: 700px)" srcset="/signup/preview/shots/store-mobile.webp">
+  <img class="shot" src="/signup/preview/shots/store-desktop.webp" alt="">
 </picture>
 <div class="filler"></div>
 <script>
@@ -32,7 +32,7 @@
     var q = new URLSearchParams(location.search);
     if (q.get("reset") === "1") { try { localStorage.removeItem("wps:v1"); sessionStorage.removeItem("wps:session:v1"); } catch (e) {} }
     var s = document.createElement("script");
-    s.src = "../westpack-signup.js?v=" + Date.now();
+    s.src = "/signup/westpack-signup.js?v=" + Date.now();
     s.async = true;
     s.dataset.mode = "preview";
     s.dataset.market = q.get("market") || "dkk_dk_den";

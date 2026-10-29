@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Signup Lab preview</title>
-<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="stylesheet" href="/signup/assets/fonts/fonts.css">
 <style>
   :root { --green: #34453F; --deep: #1c2723; --paper: #F5F1EA; --ink: #171614; --muted: #7B766D; --line: rgba(23,22,20,.12); --gold: #C9A465; }
   * { box-sizing: border-box; }
@@ -100,7 +100,7 @@
     <span class="badge" id="badge"></span>
   </main>
 </div>
-<script src="../core/markets.js"></script>
+<script src="/signup/core/markets.js"></script>
 <script>
   (function () {
     var M = window.WestpackSignupMarkets.MARKETS;
@@ -144,7 +144,7 @@
       var p = new URLSearchParams({ market: state.market, concept: state.concept, open: state.open, reset: "1", track: location.origin + "/api/signup/track" });
       if (state.submit !== "test") p.set("dry", "1");
       if (state.submit === "doi") p.set("doi", "1");
-      document.getElementById("frame").src = "frame.html?" + p;
+      document.getElementById("frame").src = "/signup/preview/frame.html?" + p;
       log.textContent = ""; line("viser " + state.concept + " · " + M[state.market].market + " · " + state.device);
     }
     window.addEventListener("resize", fit);
