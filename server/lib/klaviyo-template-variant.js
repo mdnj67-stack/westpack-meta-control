@@ -37,6 +37,37 @@ function marksNoTranslate(markup = "") {
   return /\stranslate\s*=\s*["']?no\b/i.test(markup) || /\sclass\s*=\s*["'][^"']*\bnotranslate\b/i.test(markup);
 }
 
+// Some copy lives in attributes: alt text is what Outlook shows while images are blocked, which is
+// its default for most senders, and aria-label and title are what a screen reader says. Left in
+// markup they reached every market in Danish, so they travel as fragments like any other text and
+// go back escaped for the quote that delimits them.
+const TRANSLATABLE_ATTRIBUTES = /(\s(?:alt|title|aria-label)\s*=\s*)(?:"([^"]*)"|'([^']*)')/gi;
+
+function pushMarkup(tokens, segments, markup, translatable) {
+  if (!translatable || !/^<[a-z][^>]*>$/i.test(markup)) {
+    tokens.push({ type: "markup", value: markup });
+    return;
+  }
+  let last = 0;
+  for (const match of markup.matchAll(TRANSLATABLE_ATTRIBUTES)) {
+    const value = match[2] ?? match[3];
+    if (isProtectedTextSegment(value)) continue;
+    const valueStart = match.index + match[1].length + 1;
+    tokens.push({ type: "markup", value: markup.slice(last, valueStart) });
+    tokens.push({ type: "text", value, translatable: true, index: segments.length, quote: match[2] === undefined ? "'" : "\"" });
+    segments.push(value);
+    last = valueStart + value.length;
+  }
+  tokens.push({ type: "markup", value: markup.slice(last) });
+}
+
+function escapeAttributeValue(value, quote) {
+  return String(value)
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .split(quote).join(quote === "\"" ? "&quot;" : "&#39;");
+}
+
 function extractHtmlSegments(html = "") {
   const source = String(html || "");
   const parts = source.split(/(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)/gi);
@@ -48,7 +79,7 @@ function extractHtmlSegments(html = "") {
   for (const part of parts) {
     if (!part) continue;
     if (/^(<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->|<[^>]+>)$/i.test(part)) {
-      tokens.push({ type: "markup", value: part });
+      pushMarkup(tokens, segments, part, !untranslated && !marksNoTranslate(part));
       const tag = readTag(part);
       if (!tag) continue;
       if (untranslated) {
@@ -89,7 +120,8 @@ function rebuildHtml(tokens, rewrittenSegments) {
     if (token.type !== "text" || !token.translatable) return token.value;
     const rewritten = rewrittenSegments[token.index];
     if (typeof rewritten !== "string") return token.value;
-    return restoreEdgeWhitespace(token.value, rewritten);
+    const text = restoreEdgeWhitespace(token.value, rewritten);
+    return token.quote ? escapeAttributeValue(text, token.quote) : text;
   }).join("");
 }
 

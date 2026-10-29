@@ -54,6 +54,35 @@ test("class=\"notranslate\" protects text too, and a void tag inside does not un
   assert.deepEqual(segments, ["æske"]);
 });
 
+test("alt text, aria-label and title are translated, escaped for their quotes, and protected like text", () => {
+  const source = [
+    "<a href=\"{{ organization.url }}oslo.html\" aria-label=\"Se pris på Oslo til ring\" title='Åbn siden'>Se pris</a>",
+    "<img src=\"https://cdn.example/a.jpg\" alt=\"Åben æske med guldring\" width=\"238\">",
+    "<img src=\"https://cdn.example/b.jpg\" alt=\"\">",
+    "<img src=\"https://cdn.example/c.jpg\" alt=\"{{ person.first_name }}\">",
+    "<img translate=\"no\" src=\"https://cdn.example/d.jpg\" alt=\"Logo\">",
+    "<td translate=\"no\"><img src=\"https://cdn.example/e.jpg\" alt=\"Anmeldelse\"></td>"
+  ].join("");
+  const { tokens, segments } = extractHtmlSegments(source);
+  // Empty values, Klaviyo tags and anything under translate="no" stay where they are.
+  assert.deepEqual(segments, ["Se pris på Oslo til ring", "Åbn siden", "Se pris", "Åben æske med guldring"]);
+  const translated = ["Preis für \"Oslo\" ansehen", "Seite <öffnen>", "Preis ansehen", "Offene Box mit Goldring"];
+  assert.equal(
+    rebuildHtml(tokens, translated),
+    source
+      .replace("Se pris på Oslo til ring", "Preis für &quot;Oslo&quot; ansehen")
+      .replace("Åbn siden", "Seite &lt;öffnen&gt;")
+      .replace(">Se pris<", ">Preis ansehen<")
+      .replace("Åben æske med guldring", "Offene Box mit Goldring")
+  );
+});
+
+test("the translate prompt keeps city-named series names as written", () => {
+  const route = require("node:fs").readFileSync(require("node:path").join(__dirname, "..", "api", "openai", "klaviyo-translate-template.js"), "utf8");
+  assert.match(route, /Vienna is never Wien/);
+  assert.match(route, /image alt text and accessible labels/);
+});
+
 const { requestFragmentsById } = require("../server/lib/klaviyo-template-variant");
 
 function fakeTranslator(misbehave) {

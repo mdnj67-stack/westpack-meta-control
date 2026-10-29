@@ -1210,6 +1210,23 @@ are the ones exposed. English almost never trips it, which is why it looks inter
 - `tests/model-json-null-characters.test.js` pins the repair, the escaped-backslash edge case and
   the fact that every parse path and the Klaviyo write path are wired to it.
 
+## What Duplicate & translate actually sends to the model
+
+`extractHtmlSegments` (`server/lib/klaviyo-template-variant.js`) cuts the email into fragments:
+the text between two tags, plus — since 2026-10-29 — the values of `alt`, `title` and
+`aria-label`. Until then every alt text reached every market in Danish, and Outlook shows alt
+text while images are blocked, which is its default for most senders. Writing an email for the
+rollout means writing for these rules:
+
+- **A fragment holding a Klaviyo tag (`{{`, `{%`) is skipped whole.** Fallback copy inside an
+  `{% if %}` therefore needs its own element — `{% else %}<span>Dit navn</span>{% endif %}` — or
+  it ships in Danish everywhere.
+- **`translate="no"` (or `class="notranslate"`) protects an element and its attributes.** Use it
+  on a series name that stands alone (a button, a column head): "Vienna" on its own has no
+  context saying it is a product, and is Wien in German. The prompt also tells the model to keep
+  city-named series names as written inside sentences.
+- Attribute values go back escaped for their own quote character. `tests/klaviyo-translation-integrity.test.js`.
+
 ## What Westpack's own website says — `knowledge/westpack-site/`
 
 Added 2026-09-30. A crawl of the whole UK English store (2,491 products, 322 content and category
