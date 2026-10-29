@@ -12,14 +12,14 @@
     "emailLabel": "Váš e-mail",
     "emailPlaceholder": "jmeno@firma.cz",
     "invalidEmail": "Tenhle e-mail nevypadá úplně správně.",
-    "sending": "Odesíláme…",
+    "sending": "Odesílání…",
     "networkError": "To neprošlo. Zkuste to za chvíli znovu.",
     "signup": "Přihlásit se k newsletteru",
     "noThanks": "Ne, děkuji",
     "promise": [
-      "Nové produkty a nezbytnosti",
+      "Novinky o produktech a nezbytnostech",
       "Užitečné tipy a návody",
-      "Předem o našich vzácných akcích"
+      "Upozornění před vzácnými akcemi"
     ],
     "doiTitle": "Už jen kousek.",
     "doiBody": "Poslali jsme vám e-mail. Klikněte na odkaz a jste na seznamu.",
@@ -30,21 +30,27 @@
     "peekCta": "Vyzkoušet",
     "kicker": "Test fólie",
     "title": "Napište název značky. Dáme ho do zlaté.",
-    "lede": "Hned, na skutečném víčku. Nestojí to nic – ani váš e-mail.",
+    "lede": "Živě, na skutečném víčku. Nestojí to nic – ani váš e-mail.",
     "nameLabel": "Název vaší značky",
-    "namePlaceholder": "např. Atelier North",
+    "namePlaceholder": "např. Atelier Sever",
     "defaultName": "Vaše značka",
-    "lidLabel": "Víčko",
-    "lid": {
-      "black": "Černé",
-      "cream": "Krémové"
+    "boxLabel": "Krabička",
+    "boxes": {
+      "seville": "Matný černý plast",
+      "london": "Krémový soft touch",
+      "torino": "Černá se zlatým lemem",
+      "seoul": "Prachově zelený karton",
+      "madrid": "Světle hnědý soft touch",
+      "frankfurt": "Matný černý karton"
     },
     "foilLabel": "Fólie",
     "foil": {
       "gold": "Zlatá",
       "silver": "Stříbrná",
       "rose": "Růžové zlato",
+      "oldrose": "Starorůžová",
       "white": "Bílá",
+      "black": "Černá",
       "deboss": "Slepotisk"
     },
     "typeLabel": "Písmo",
@@ -53,26 +59,35 @@
       "script": "Psací",
       "clean": "Čisté"
     },
-    "hintLong": "To je pořádná řádka písmen. Logo zmenšíme, aby se na víčko vešlo.",
+    "hintLong": "To je pořádná řádka písmen. Logo upravíme, aby se vešlo na víčko.",
     "hintWestpack": "Dobrá volba. Tenhle název už je ale zabraný.",
-    "disclaimer": "Ukázka na skutečném víčku Westpack. Vaše vlastní logo tiskneme jednou barvou fólie.",
-    "next": "Vypadá to dobře",
-    "resultTitle": "Na krabičce vypadá {name} skvěle.",
+    "disclaimer": "Vizualizace na skutečných víčkách Westpack. Vaše logo se tiskne jednou barvou fólie.",
+    "lightHintMouse": "Přejeďte myší přes krabičku a sledujte, jak fólie chytá světlo.",
+    "lightHintTouch": "Přejeďte prstem přes krabičku a sledujte, jak fólie chytá světlo. Tažením zobrazíte další krabičku.",
+    "zoomIn": "Prohlédnout tisk zblízka",
+    "zoomOut": "Celá krabička",
+    "uploadCta": "Použít vlastní logo",
+    "uploadHint": "PNG, JPG nebo SVG – logo zůstane ve vašem prohlížeči.",
+    "uploadOneColour": "Fólie se tiskne jednou barvou – takhle bude vypadat vaše logo.",
+    "uploadError": "Tenhle soubor se nám nepodařilo přečíst. Zkuste PNG nebo JPG.",
+    "useName": "Použít raději název",
+    "next": "To vypadá dobře",
+    "resultTitle": "{name} krabičce sluší.",
     "resultLede": "Chcete víc podobných nápadů? Ozveme se, až bude něco nového.",
     "proofTitle": "Skuteční zákazníci. Skutečná loga.",
-    "back": "Změnit název",
+    "back": "Upravit název",
     "successTitle": "{name}, jste na seznamu.",
-    "successBody": "Až budeme mít něco, co stojí za otevření, najdete to ve své schránce."
+    "successBody": "Až budeme mít něco, co stojí za otevření, ozveme se e-mailem."
   },
   "swipe-match": {
-    "peek": "Přejeďte si ke svému stylu balení",
+    "peek": "Najděte svůj styl balení tažením",
     "peekCta": "Začít",
     "kicker": "Výběr krabičky",
-    "title": "Srdce, nebo ne?",
-    "lede": "Šest krabiček na šperky. Přejeďte je. My řekneme, co prozradí o vaší značce.",
-    "like": "Beru",
-    "nope": "Neberu",
-    "keysHint": "Fungují i šipky: ← neberu · → beru",
+    "title": "Srdcovka, nebo ne?",
+    "lede": "Šest krabiček. Rozhodněte tažením. My řekneme, co prozradí o vaší značce.",
+    "like": "Ano, prosím",
+    "nope": "Ne, děkuji",
+    "keysHint": "Fungují i šipky: ← ne · → ano",
     "progress": "{n} z {total}",
     "cardNames": {
       "torino": "Torino",
@@ -83,21 +98,21 @@
       "tokyo": "Tokyo"
     },
     "cards": {
-      "torino": "Odklápěcí víčko a zlaté lemování. Klasika, která se neomrzí.",
-      "seoul": "Ultratenká zásuvka v tlumené zelené. Nenápadná – dokud se neotevře.",
-      "madrid": "Povrch Soft Touch zvenku, velur uvnitř a kolem návlek.",
+      "torino": "Odklápěcí víčko a zlatý lem. Klasika, která neomrzí.",
+      "seoul": "Ultratenká zásuvka v prachově zelené. Nenápadná – dokud se neotevře.",
+      "madrid": "Soft touch zvenku, velur uvnitř a kolem návlek.",
       "oslo": "Koženka a velur. Bestseller mezi krabičkami s odklápěcím víčkem.",
-      "monaco": "Dárková krabička, která vypadá jako malá kabelka. Se saténovou stuhou.",
+      "monaco": "Dárková krabička jako malá kabelka. Se saténovou stuhou.",
       "tokyo": "Odnímatelné víčko a spousta místa pro vaše logo."
     },
     "worlds": {
       "noir": {
         "name": "Půlnoc",
-        "line": "Tmavá, ostrá a zlatá. Vaši zákazníci budou krabičku otevírat pomalu."
+        "line": "Tmavá, výrazná a se zlatem. Vaši zákazníci ji budou otevírat pomalu."
       },
       "cocoa": {
         "name": "Kakao",
-        "line": "Teplá a jemná. Taková krabička se nevyhazuje."
+        "line": "Teplá a jemná. Přesně ten typ krabičky, který si lidé nechávají."
       },
       "forest": {
         "name": "Lesní půda",
@@ -105,34 +120,34 @@
       },
       "sand": {
         "name": "Písek",
-        "line": "Světlá, vzdušná a severská. Šperk má celé jeviště pro sebe."
+        "line": "Světlá, vzdušná a severská. Šperk má celé pódium pro sebe."
       }
     },
     "resultKicker": "Váš styl balení",
-    "resultTitle": "Styl {world}: {pct} %.",
-    "resultSecond": "… a styl {world}: {pct} %.",
+    "resultTitle": "Jste z {pct} % {world}.",
+    "resultSecond": "… a z {pct} % {world}.",
     "noneTitle": "Ani jedno srdce? Respekt.",
-    "noneLine": "Ti nejnáročnější staví nejlepší značky. Máme mnohem víc krabiček, než se sem vejde.",
-    "ctaTitle": "Máme posílat novinky ve vašem stylu?",
-    "restart": "Přejet znovu",
+    "noneLine": "Ti nejnáročnější zákazníci budují nejlepší značky. Krabiček máme mnohem víc, než se sem vejde.",
+    "ctaTitle": "Chcete novinky ve svém stylu?",
+    "restart": "Vybrat znovu",
     "seeBoxes": "Prohlédnout krabičky",
-    "successTitle": "Poznamenáno: {world}.",
-    "successBody": "Uvidíme se ve vaší schránce."
+    "successTitle": "Zapsáno: {world}.",
+    "successBody": "Ozveme se e-mailem."
   },
   "pack-and-ship": {
-    "peek": "Máme pro vás zásilku. (Je to newsletter.)",
+    "peek": "Máme pro vás balíček. (Je to newsletter.)",
     "peekCta": "Otevřít",
     "kicker": "Newsletter",
     "title": "Posíláme novinky o balení. Ne šperky. Bohužel.",
     "lede": "Nové krabičky, tipy a návody – a upozornění na naše vzácné akce. Napište adresu, my to zabalíme.",
-    "labelTo": "Pro",
+    "labelTo": "Komu",
     "labelFrom": "Od: Westpack, Holstebro, Dánsko",
     "labelContents": "Obsah: dobré nápady",
-    "signup": "Posílat mi newsletter",
-    "invalidEmail": "Tuhle adresu pošťák nenajde.",
+    "signup": "Poslat mi newsletter",
+    "invalidEmail": "Na tuhle adresu pošťák netrefí.",
     "stamp": "Odesláno",
     "tape": "Westpack",
     "successTitle": "Odesláno.",
-    "successBody": "Ve vaší schránce se objeví, až budeme mít něco, co stojí za otevření."
+    "successBody": "Až budeme mít něco, co stojí za otevření, ozveme se e-mailem."
   }
 };

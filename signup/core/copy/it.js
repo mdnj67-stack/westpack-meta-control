@@ -11,7 +11,7 @@
     "close": "Chiudi",
     "emailLabel": "La tua e-mail",
     "emailPlaceholder": "nome@azienda.it",
-    "invalidEmail": "Questa e-mail non sembra del tutto giusta.",
+    "invalidEmail": "Questa e-mail non sembra corretta.",
     "sending": "Invio…",
     "networkError": "Qualcosa è andato storto. Riprova tra poco.",
     "signup": "Iscriviti alla newsletter",
@@ -19,7 +19,7 @@
     "promise": [
       "Lanci di prodotto e imperdibili",
       "Consigli utili e guide pratiche",
-      "Un avviso sulle nostre rare promozioni"
+      "Un avviso prima delle rare promozioni"
     ],
     "doiTitle": "Ci siamo quasi.",
     "doiBody": "Ti abbiamo inviato un’e-mail. Clicca sul link e sei nella lista.",
@@ -28,51 +28,66 @@
   "logo-studio": {
     "peek": "Come sta il tuo brand in oro?",
     "peekCta": "Prova",
-    "kicker": "La prova della lamina",
+    "kicker": "Il test del foil",
     "title": "Scrivi il nome del tuo brand. Noi lo mettiamo in oro.",
-    "lede": "Dal vivo, su un coperchio vero. Non costa nulla, nemmeno la tua e-mail.",
-    "nameLabel": "Il nome del tuo brand",
+    "lede": "Subito, su un vero coperchio. Non costa nulla, nemmeno la tua e-mail.",
+    "nameLabel": "Nome del tuo brand",
     "namePlaceholder": "es. Atelier Nord",
     "defaultName": "Il tuo brand",
-    "lidLabel": "Coperchio",
-    "lid": {
-      "black": "Nero",
-      "cream": "Crema"
+    "boxLabel": "Astuccio",
+    "boxes": {
+      "seville": "Plastica nera opaca",
+      "london": "Soft touch color crema",
+      "torino": "Nero con bordo oro",
+      "seoul": "Cartoncino verde polvere",
+      "madrid": "Soft touch marrone chiaro",
+      "frankfurt": "Cartoncino nero opaco"
     },
-    "foilLabel": "Lamina",
+    "foilLabel": "Foil",
     "foil": {
       "gold": "Oro",
       "silver": "Argento",
       "rose": "Oro rosa",
+      "oldrose": "Rosa antico",
       "white": "Bianco",
-      "deboss": "Impressione a secco"
+      "black": "Nero",
+      "deboss": "Stampa a secco"
     },
     "typeLabel": "Carattere",
     "type": {
       "classic": "Classico",
       "script": "Corsivo",
-      "clean": "Lineare"
+      "clean": "Pulito"
     },
     "hintLong": "Quante lettere! Il logo viene ridimensionato per adattarsi al coperchio.",
-    "hintWestpack": "Bella scelta. Ma quel nome è già preso.",
-    "disclaimer": "Simulazione su un vero coperchio Westpack. Il tuo logo viene stampato con una lamina monocolore.",
+    "hintWestpack": "Bella scelta. Peccato, questo nome è già preso.",
+    "disclaimer": "Simulazione su veri coperchi Westpack. Il tuo logo viene stampato in un solo colore foil.",
+    "lightHintMouse": "Passa il mouse sull’astuccio e guarda il foil catturare la luce.",
+    "lightHintTouch": "Trascina un dito sull’astuccio e guarda il foil catturare la luce. Scorri per il prossimo astuccio.",
+    "zoomIn": "Stampa da vicino",
+    "zoomOut": "Astuccio intero",
+    "uploadCta": "Usa il tuo logo",
+    "uploadHint": "PNG, JPG o SVG: il tuo logo resta nel browser.",
+    "uploadOneColour": "Il foil si stampa in un solo colore: ecco come sarà il tuo logo.",
+    "uploadError": "Non riusciamo a leggere il file. Prova con un PNG o JPG.",
+    "useName": "Usa il nome",
     "next": "Sta bene",
     "resultTitle": "{name} sta bene su un astuccio.",
     "resultLede": "Vuoi altre idee così? Ti scriviamo quando c’è qualcosa di nuovo.",
     "proofTitle": "Clienti veri. Loghi veri.",
-    "back": "Cambia il nome",
+    "back": "Modifica il nome",
     "successTitle": "{name}, ci sei.",
     "successBody": "La prossima cosa che vale la pena aprire finirà nella tua casella di posta."
   },
   "swipe-match": {
-    "peek": "Trova il tuo stile a colpi di swipe",
+    "peek": "Scorri fino al tuo stile di packaging",
     "peekCta": "Inizia",
-    "kicker": "Match di astucci",
-    "title": "Cuore o passo oltre?",
-    "lede": "Sei astucci. Fai swipe. Noi ti diciamo cosa raccontano del tuo brand.",
+    "kicker": "Match degli astucci",
+    "title": "Cuore o passo?",
+    "lede": "Sei astucci. Scorri. Ti diciamo cosa raccontano del tuo brand.",
     "like": "Cuore",
-    "nope": "Passo oltre",
-    "keysHint": "Vanno anche le frecce: ← passo · → cuore",
+    "nope": "Passo",
+    "keysHint": "Funzionano anche le frecce: ← passo · → cuore",
     "progress": "{n} di {total}",
     "cardNames": {
       "torino": "Torino",
@@ -83,12 +98,12 @@
       "tokyo": "Tokyo"
     },
     "cards": {
-      "torino": "Coperchio incernierato e bordo dorato. Il classico che non stanca mai.",
-      "seoul": "Cassetto ultrasottile in verde polvere. Discreto, finché non si apre.",
-      "madrid": "Soft touch fuori, velluto dentro e una fascia intorno.",
+      "torino": "Coperchio incernierato e bordo oro. Il classico che non stanca mai.",
+      "seoul": "Cassetto ultrapiatto in verde polvere. Discreto, finché non si apre.",
+      "madrid": "Soft touch fuori, velluto dentro e una fascetta tutt’intorno.",
       "oslo": "Similpelle e velluto. Un bestseller tra gli astucci con coperchio incernierato.",
-      "monaco": "Una scatola regalo che sembra una minuscola borsetta. Con nastro in raso.",
-      "tokyo": "Coperchio rimovibile e tanto spazio per il tuo logo."
+      "monaco": "Una scatola regalo che sembra una piccola borsa. Nastro di raso incluso.",
+      "tokyo": "Coperchio da sollevare e tanto spazio per il tuo logo."
     },
     "worlds": {
       "noir": {
@@ -97,11 +112,11 @@
       },
       "cocoa": {
         "name": "Cacao",
-        "line": "Caldo e morbido. Il tipo di astuccio che nessuno butta via."
+        "line": "Caldo e morbido. Il tipo di astuccio che non si butta via."
       },
       "forest": {
         "name": "Sottobosco",
-        "line": "Verde, calmo e ben studiato. Fino all’ultimo nastro."
+        "line": "Verde, tranquillo e ben studiato. Fino al nastro."
       },
       "sand": {
         "name": "Sabbia",
@@ -109,22 +124,22 @@
       }
     },
     "resultKicker": "Il tuo profilo packaging",
-    "resultTitle": "Sei {pct}% {world}.",
-    "resultSecond": "… e {pct}% {world}.",
+    "resultTitle": "Sei {world} al {pct}%.",
+    "resultSecond": "… e {world} al {pct}%.",
     "noneTitle": "Nemmeno un cuore? Rispetto.",
-    "noneLine": "Chi sceglie con cura crea i brand migliori. Abbiamo molti più astucci di quanti ne entrino qui.",
+    "noneLine": "Chi sceglie con cura costruisce i brand migliori. Abbiamo molti più astucci di quanti ne entrino qui.",
     "ctaTitle": "Vuoi novità nel tuo stile?",
-    "restart": "Ricomincia",
+    "restart": "Scorri di nuovo",
     "seeBoxes": "Vedi gli astucci",
     "successTitle": "Segnato: {world}.",
-    "successBody": "Ci vediamo nella tua casella di posta."
+    "successBody": "Ci vediamo nella posta in arrivo."
   },
   "pack-and-ship": {
     "peek": "Abbiamo un pacco per te. (È una newsletter.)",
     "peekCta": "Apri",
     "kicker": "La newsletter",
     "title": "Spediamo novità sul packaging. Non gioielli. Peccato.",
-    "lede": "Nuovi astucci, consigli e guide, più un avviso quando parte una promozione. Scrivi l’indirizzo, al pacchetto pensiamo noi.",
+    "lede": "Nuovi astucci, consigli e guide, più un avviso quando partono le promozioni. Scrivi l’indirizzo, al pacchetto pensiamo noi.",
     "labelTo": "A",
     "labelFrom": "Da: Westpack, Holstebro, Danimarca",
     "labelContents": "Contenuto: buone idee",
@@ -132,7 +147,7 @@
     "invalidEmail": "Il postino non trova questo indirizzo.",
     "stamp": "Spedito",
     "tape": "Westpack",
-    "successTitle": "Spedita.",
+    "successTitle": "Spedito.",
     "successBody": "Finisce nella tua casella di posta quando abbiamo qualcosa che vale la pena aprire."
   }
 };

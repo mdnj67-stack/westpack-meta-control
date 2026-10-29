@@ -51,10 +51,23 @@ function serve() {
       if (c === "logo-studio") {
         await host.locator(".ls-name-input").fill("Atelier Nord");
         await page.waitForTimeout(1200); await shot("2-typed");
-        await host.locator('.ls-chip-lid[data-value="cream"]').click();
-        await host.locator('.ls-chip-foil[data-value="silver"]').click();
+        // as a visitor would tap "done": on a phone the boxes come back once the keyboard closes
+        await host.locator(".ls-name-input").evaluate((n) => n.blur());
+        await page.waitForTimeout(400);
+        await host.locator('.ls-thumb[data-box="london"]').click();
         await host.locator('.ls-chip-type[data-value="script"]').click();
-        await page.waitForTimeout(1200); await shot("3-cream-silver-script");
+        await page.waitForTimeout(1400); await shot("3-cream-silver-script");
+        for (const box of ["torino", "seoul", "madrid", "frankfurt"]) {
+          await host.locator(`.ls-thumb[data-box="${box}"]`).click();
+          await host.locator('.ls-chip-type[data-value="classic"]').click();
+          await page.waitForTimeout(1300); await shot(`3-box-${box}`);
+        }
+        await host.locator('.ls-thumb[data-box="seville"]').click();
+        await host.locator('.ls-chip-foil[data-value="deboss"]').click();
+        await page.waitForTimeout(1300); await shot("3-box-seville-deboss");
+        await host.locator(".ls-zoom").click();
+        await page.waitForTimeout(1300); await shot("3-zoom");
+        await host.locator(".ls-zoom").click();
         await host.locator(".ls-next").click();
         await page.waitForTimeout(1200); await shot("4-result");
       }

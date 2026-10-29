@@ -11,66 +11,81 @@
     "close": "Închide",
     "emailLabel": "E-mailul tău",
     "emailPlaceholder": "nume@firma.ro",
-    "invalidEmail": "Adresa asta de e-mail nu pare corectă.",
+    "invalidEmail": "Adresa asta de e-mail nu pare tocmai corectă.",
     "sending": "Se trimite…",
-    "networkError": "N-a mers. Mai încearcă peste puțin timp.",
+    "networkError": "Nu a mers. Încearcă din nou peste puțin timp.",
     "signup": "Abonează-te la newsletter",
     "noThanks": "Nu, mulțumesc",
     "promise": [
       "Noutăți despre lansări și produse esențiale",
       "Sfaturi utile și ghiduri practice",
-      "Te anunțăm din timp despre promoțiile rare"
+      "Te anunțăm din timp despre rarele noastre promoții"
     ],
-    "doiTitle": "Aproape gata.",
+    "doiTitle": "Mai e puțin.",
     "doiBody": "Ți-am trimis un e-mail. Apasă pe linkul din el și ești pe listă.",
     "peekDismiss": "Nu acum"
   },
   "logo-studio": {
     "peek": "Cum arată brandul tău în auriu?",
     "peekCta": "Încearcă",
-    "kicker": "Testul foliei",
+    "kicker": "Testul cu folie",
     "title": "Scrie numele brandului. Îl punem în auriu.",
     "lede": "Pe loc, pe un capac adevărat. Nu costă nimic – nici măcar e-mailul tău.",
     "nameLabel": "Numele brandului tău",
     "namePlaceholder": "de ex. Atelier Nord",
     "defaultName": "Brandul tău",
-    "lidLabel": "Capac",
-    "lid": {
-      "black": "Negru",
-      "cream": "Crem"
+    "boxLabel": "Cutie",
+    "boxes": {
+      "seville": "Plastic negru mat",
+      "london": "Crem soft touch",
+      "torino": "Negru cu margine aurie",
+      "seoul": "Carton verde prăfuit",
+      "madrid": "Maro deschis soft touch",
+      "frankfurt": "Carton negru mat"
     },
     "foilLabel": "Folie",
     "foil": {
       "gold": "Auriu",
       "silver": "Argintiu",
-      "rose": "Aur roz",
+      "rose": "Auriu roz",
+      "oldrose": "Roz antic",
       "white": "Alb",
-      "deboss": "Timbru sec"
+      "black": "Negru",
+      "deboss": "Presare în adâncime"
     },
-    "typeLabel": "Stilul literelor",
+    "typeLabel": "Stil de scris",
     "type": {
       "classic": "Clasic",
-      "script": "Cursiv",
-      "clean": "Curat"
+      "script": "Caligrafic",
+      "clean": "Simplu"
     },
     "hintLong": "Sunt multe litere. Logo-ul este redimensionat ca să încapă pe capac.",
     "hintWestpack": "Bună alegere. Din păcate, numele e deja luat.",
-    "disclaimer": "Ilustrație pe un capac Westpack adevărat. Logo-ul tău este imprimat într-o singură culoare de folie.",
+    "disclaimer": "Ilustrație pe capace Westpack reale. Logo-ul tău este imprimat într-o singură culoare de folie.",
+    "lightHintMouse": "Mișcă mouse-ul peste cutie și vezi cum folia prinde lumina.",
+    "lightHintTouch": "Treci degetul peste cutie și vezi cum folia prinde lumina. Glisează pentru următoarea cutie.",
+    "zoomIn": "Vezi imprimarea de aproape",
+    "zoomOut": "Vezi toată cutia",
+    "uploadCta": "Folosește logo-ul tău",
+    "uploadHint": "PNG, JPG sau SVG – logo-ul rămâne în browserul tău.",
+    "uploadOneColour": "Folia se imprimă într-o singură culoare – așa va arăta logo-ul tău.",
+    "uploadError": "Nu am putut citi fișierul. Încearcă un PNG sau JPG.",
+    "useName": "Folosește numele",
     "next": "Arată bine",
-    "resultTitle": "{name} arată bine pe o cutie.",
-    "resultLede": "Vrei mai multe idei de genul ăsta? Îți scriem când avem ceva nou.",
+    "resultTitle": "{name} dă bine pe o cutie.",
+    "resultLede": "Vrei mai multe idei de genul ăsta? Îți scriem când apare ceva nou.",
     "proofTitle": "Clienți reali. Logo-uri reale.",
     "back": "Schimbă numele",
     "successTitle": "{name}, ești pe listă.",
-    "successBody": "Când avem ceva care merită deschis, îl găsești în inbox."
+    "successBody": "Când mai avem ceva care merită deschis, îl găsești în inbox."
   },
   "swipe-match": {
-    "peek": "Găsește-ți stilul de ambalaj dintr-un swipe",
-    "peekCta": "Începe",
+    "peek": "Găsește-ți stilul de ambalaj cu un swipe",
+    "peekCta": "Start",
     "kicker": "Potrivire de cutii",
-    "title": "Cu inimă sau pas?",
-    "lede": "Șase cutii. Dă swipe. Îți spunem ce zic despre brandul tău.",
-    "like": "Cu inimă",
+    "title": "Inimă sau pas?",
+    "lede": "Șase cutii. Glisează-le. Îți spunem ce zic despre brandul tău.",
+    "like": "Inimă",
     "nope": "Pas",
     "keysHint": "Merg și săgețile: ← pas · → inimă",
     "progress": "{n} din {total}",
@@ -84,16 +99,16 @@
     },
     "cards": {
       "torino": "Capac cu balama și margine aurie. Clasicul care nu se demodează.",
-      "seoul": "Un sertar ultraplat, verde prăfuit. Discret – până îl deschizi.",
+      "seoul": "Un sertar ultra-subțire, verde prăfuit. Discret – până îl deschizi.",
       "madrid": "Soft touch la exterior, velur la interior și un manșon în jur.",
       "oslo": "Imitație de piele și velur. Un bestseller printre cutiile cu balama.",
-      "monaco": "O cutie cadou care arată ca o poșetă în miniatură. Cu panglică din satin.",
+      "monaco": "O cutie cadou care arată ca o poșetă minusculă. Panglica din satin este inclusă.",
       "tokyo": "Capac detașabil și mult loc pentru logo-ul tău."
     },
     "worlds": {
       "noir": {
         "name": "Miez de noapte",
-        "line": "Întunecat, precis și auriu. Clienții tăi deschid cutia încet."
+        "line": "Întunecat, bine conturat și cu auriu. Clienții tăi deschid cutia încet."
       },
       "cocoa": {
         "name": "Cacao",
@@ -105,18 +120,18 @@
       },
       "sand": {
         "name": "Nisip",
-        "line": "Luminos, aerisit și nordic. Bijuteria are toată scena."
+        "line": "Luminos, aerisit și nordic. Bijuteria primește toată scena."
       }
     },
     "resultKicker": "Profilul ambalajului tău",
-    "resultTitle": "Ești {pct} % {world}.",
-    "resultSecond": "… și {pct} % {world}.",
+    "resultTitle": "Ești {pct}% {world}.",
+    "resultSecond": "… și {pct}% {world}.",
     "noneTitle": "Nicio inimă? Respect.",
-    "noneLine": "Cele mai bune branduri sunt construite de cei mai exigenți. Avem mult mai multe cutii decât încap aici.",
-    "ctaTitle": "Vrei noutăți pe stilul tău?",
-    "restart": "Mai dă un swipe",
+    "noneLine": "Cei mai exigenți cumpărători construiesc cele mai bune branduri. Avem mult mai multe cutii decât încap aici.",
+    "ctaTitle": "Îți trimitem noutăți pe stilul tău?",
+    "restart": "Glisează din nou",
     "seeBoxes": "Vezi cutiile de bijuterii",
-    "successTitle": "Reținut: {world}.",
+    "successTitle": "Am notat: {world}.",
     "successBody": "Ne vedem în inbox."
   },
   "pack-and-ship": {
@@ -124,15 +139,15 @@
     "peekCta": "Deschide",
     "kicker": "Newsletterul",
     "title": "Trimitem noutăți despre ambalaje. Nu bijuterii. Scuze.",
-    "lede": "Cutii noi, sfaturi și ghiduri – plus un semn când avem o promoție. Scrie adresa, noi împachetăm.",
+    "lede": "Cutii noi, sfaturi și ghiduri – plus un semn când avem o promoție. Scrie adresa, noi ne ocupăm de împachetat.",
     "labelTo": "Către",
     "labelFrom": "De la: Westpack, Holstebro, Danemarca",
     "labelContents": "Conținut: idei bune",
     "signup": "Trimite-mi newsletterul",
     "invalidEmail": "Poștașul nu găsește adresa asta.",
-    "stamp": "Expediat",
+    "stamp": "Trimis",
     "tape": "Westpack",
     "successTitle": "Expediat.",
-    "successBody": "Îl găsești în inbox când avem ceva care merită deschis."
+    "successBody": "Ajunge în inbox când avem ceva care merită deschis."
   }
 };

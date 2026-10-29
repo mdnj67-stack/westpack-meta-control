@@ -1319,11 +1319,17 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   project does not have - and the user's approval. The Insert popups must be unpublished at the same time.
 - Funnel records go to Vercel Blob under `signup-funnel/` (one file per exposure, compacted per day), never
   Redis. `rules.sanitizeTracking` drops any value containing "@", in the browser and on the server.
-- The lid photos have Westpack's demo print removed by `tools/signup/clean-plate.html`; gold on black needs
-  `print: "light"` (opening only) - closing first swells thick strokes into blocks.
+- The logo studio shows six real lids (`LOGO_BOXES` in `tools/signup/build-assets.js`). Their demo print is
+  removed by `tools/signup/clean-plate.html`: thin print morphologically (gold on black needs `print: "light"` -
+  closing first swells thick strokes into blocks), thick print (Frankfurt, Seoul, Madrid) by a harmonic fill with
+  the lid's own fine grain mirror-tiled back (`detailRadius: 1`; a wider band carries the patch's light and shows
+  the tiling). Kategori_Reshoot-36 and -46 contain a "MADE FROM RECYCLED PLASTIC" insert; their crops leave it out.
+- The print is SVG with feSpecularLighting from a light that follows the pointer; the loupe and the phone's
+  floating preview are clones of the scene that reuse the same filter ids, so one light drives all three. An
+  uploaded logo becomes a one-colour mask in the browser and is never sent anywhere.
 - Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked
   `needsNativeReview`. No visible text may live in concept code (tested).
-- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (27 browser checks),
+- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (31 browser checks),
   `node tools/signup/screens.js <dir> [concept] [market] --steps`.
 
 ## Agent workflow for this subsystem

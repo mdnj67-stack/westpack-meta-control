@@ -34,17 +34,23 @@
     "nameLabel": "Your brand name",
     "namePlaceholder": "e.g. Atelier North",
     "defaultName": "Your brand",
-    "lidLabel": "Lid",
-    "lid": {
-      "black": "Black",
-      "cream": "Cream"
+    "boxLabel": "Box",
+    "boxes": {
+      "seville": "Matte black plastic",
+      "london": "Cream soft touch",
+      "torino": "Black with gold trim",
+      "seoul": "Dusty green card",
+      "madrid": "Light brown soft touch",
+      "frankfurt": "Matte black card"
     },
     "foilLabel": "Foil",
     "foil": {
       "gold": "Gold",
       "silver": "Silver",
       "rose": "Rose gold",
+      "oldrose": "Old rose",
       "white": "White",
+      "black": "Black",
       "deboss": "Debossed"
     },
     "typeLabel": "Lettering",
@@ -55,7 +61,16 @@
     },
     "hintLong": "That's a lot of letters. The logo is scaled to fit the lid.",
     "hintWestpack": "Good choice. Sadly, that one's taken.",
-    "disclaimer": "Illustration on a real Westpack lid. Your own logo is printed in one foil color.",
+    "disclaimer": "Illustration on real Westpack lids. Your logo is printed in one foil color.",
+    "lightHintMouse": "Move your mouse over the box and watch the foil catch the light.",
+    "lightHintTouch": "Drag a finger over the box and watch the foil catch the light. Swipe for the next box.",
+    "zoomIn": "See the print up close",
+    "zoomOut": "Whole box",
+    "uploadCta": "Use your logo",
+    "uploadHint": "PNG, JPG, or SVG—your logo stays in your browser.",
+    "uploadOneColour": "Foil prints in one color—this is your logo in foil.",
+    "uploadError": "We couldn't read that file. Try a PNG or JPG.",
+    "useName": "Use the name instead",
     "next": "That looks good",
     "resultTitle": "{name} looks good on a box.",
     "resultLede": "Want more ideas like this one? We'll write when there's something new.",
@@ -85,7 +100,7 @@
     "cards": {
       "torino": "Hinged lid, gold trim. The classic that never gets old.",
       "seoul": "An ultra-flat drawer in dusty green. Quiet—until it opens.",
-      "madrid": "Soft touch outside, velour inside and a sleeve around it.",
+      "madrid": "Soft touch outside, velour inside, and a sleeve around it.",
       "oslo": "Leatherette and velour. A bestseller among hinged boxes.",
       "monaco": "A gift box that looks like a tiny handbag. Satin ribbon included.",
       "tokyo": "A lift-off lid and plenty of room for your logo."
@@ -93,7 +108,7 @@
     "worlds": {
       "noir": {
         "name": "Midnight",
-        "line": "Dark, sharp and gold. Your customers open the box slowly."
+        "line": "Dark, sharp, and gold. Your customers open the box slowly."
       },
       "cocoa": {
         "name": "Cocoa",
@@ -101,11 +116,11 @@
       },
       "forest": {
         "name": "Forest floor",
-        "line": "Green, calm and thought through. Right down to the ribbon."
+        "line": "Green, calm, and thought through. Right down to the ribbon."
       },
       "sand": {
         "name": "Sand",
-        "line": "Light, airy and Nordic. The jewelry gets the whole stage."
+        "line": "Light, airy, and Nordic. The jewelry gets the whole stage."
       }
     },
     "resultKicker": "Your packaging profile",
@@ -124,7 +139,7 @@
     "peekCta": "Open",
     "kicker": "The newsletter",
     "title": "We send packaging news. Not jewelry. Sorry.",
-    "lede": "New boxes, tips and guides—and a heads-up when we have a sale. Add your address, and we'll do the packing.",
+    "lede": "New boxes, tips, and guides—plus a heads-up when we have a sale. Enter the address, and we'll do the packing.",
     "labelTo": "To",
     "labelFrom": "From: Westpack, Holstebro, Denmark",
     "labelContents": "Contents: good ideas",
@@ -133,6 +148,6 @@
     "stamp": "Sent",
     "tape": "Westpack",
     "successTitle": "Shipped.",
-    "successBody": "It lands in your inbox whenever we have something worth opening."
+    "successBody": "We'll write when we have something worth opening."
   }
 };

@@ -7,19 +7,19 @@
     "needsNativeReview": true
   },
   "shell": {
-    "dialogLabel": "Boletín de Westpack",
+    "dialogLabel": "Newsletter de Westpack",
     "close": "Cerrar",
     "emailLabel": "Tu email",
     "emailPlaceholder": "nombre@empresa.es",
     "invalidEmail": "Ese email no parece del todo correcto.",
     "sending": "Enviando…",
-    "networkError": "No ha salido. Prueba de nuevo en un momento.",
-    "signup": "Suscríbete al boletín",
+    "networkError": "No ha funcionado. Prueba de nuevo en un momento.",
+    "signup": "Apuntarme al newsletter",
     "noThanks": "No, gracias",
     "promise": [
-      "Lanzamientos e imprescindibles",
-      "Consejos y guías prácticas",
-      "Avisos de promociones puntuales"
+      "Novedades sobre lanzamientos y productos imprescindibles",
+      "Consejos útiles y guías prácticas",
+      "Un aviso cuando haya una de nuestras pocas promociones"
     ],
     "doiTitle": "Ya casi está.",
     "doiBody": "Te hemos enviado un email. Haz clic en el enlace y estarás en la lista.",
@@ -28,24 +28,30 @@
   "logo-studio": {
     "peek": "¿Cómo queda tu marca en dorado?",
     "peekCta": "Pruébalo",
-    "kicker": "La prueba del foil",
+    "kicker": "La prueba de estampado",
     "title": "Escribe el nombre de tu marca. Lo ponemos en dorado.",
-    "lede": "En directo, sobre una tapa real. No cuesta nada, ni siquiera tu email.",
-    "nameLabel": "El nombre de tu marca",
+    "lede": "Al instante, sobre una tapa real. No cuesta nada, ni siquiera tu email.",
+    "nameLabel": "Nombre de tu marca",
     "namePlaceholder": "p. ej., Atelier Norte",
     "defaultName": "Tu marca",
-    "lidLabel": "Tapa",
-    "lid": {
-      "black": "Negra",
-      "cream": "Crema"
+    "boxLabel": "Caja",
+    "boxes": {
+      "seville": "Plástico negro mate",
+      "london": "Soft touch color crema",
+      "torino": "Negro con borde dorado",
+      "seoul": "Cartón verde apagado",
+      "madrid": "Soft touch marrón claro",
+      "frankfurt": "Cartón negro mate"
     },
-    "foilLabel": "Acabado",
+    "foilLabel": "Estampado",
     "foil": {
       "gold": "Dorado",
       "silver": "Plateado",
       "rose": "Oro rosa",
+      "oldrose": "Rosa antiguo",
       "white": "Blanco",
-      "deboss": "Golpe seco"
+      "black": "Negro",
+      "deboss": "Golpe en seco"
     },
     "typeLabel": "Tipografía",
     "type": {
@@ -53,26 +59,35 @@
       "script": "Caligráfica",
       "clean": "Limpia"
     },
-    "hintLong": "Son muchas letras. El logo se ajusta para caber en la tapa.",
-    "hintWestpack": "Buena elección. Pero ese nombre ya está cogido.",
-    "disclaimer": "Ilustración sobre una tapa real de Westpack. Tu propio logo se imprime en un único color de foil.",
-    "next": "Así está bien",
-    "resultTitle": "A {name} le sienta bien una caja.",
-    "resultLede": "¿Quieres más ideas así? Te escribiremos cuando haya algo nuevo.",
+    "hintLong": "Son unas cuantas letras. El logo se ajusta para caber en la tapa.",
+    "hintWestpack": "Buena elección. Pero ese nombre ya está pillado.",
+    "disclaimer": "Simulación sobre tapas Westpack reales. Tu logo se imprime en un solo color de estampado.",
+    "lightHintMouse": "Mueve el ratón sobre la caja y mira cómo el estampado atrapa la luz.",
+    "lightHintTouch": "Desliza un dedo sobre la caja y mira cómo el estampado atrapa la luz. Desliza para ver la siguiente caja.",
+    "zoomIn": "Ver la impresión de cerca",
+    "zoomOut": "Ver la caja entera",
+    "uploadCta": "Usa tu logo",
+    "uploadHint": "PNG, JPG o SVG: tu logo se queda en tu navegador.",
+    "uploadOneColour": "El estampado se imprime en un solo color. Así queda tu logo.",
+    "uploadError": "No hemos podido leer el archivo. Prueba con un PNG o JPG.",
+    "useName": "Usar el nombre",
+    "next": "Así queda bien",
+    "resultTitle": "{name} queda bien en una caja.",
+    "resultLede": "¿Quieres más ideas como esta? Te escribiremos cuando haya algo nuevo.",
     "proofTitle": "Clientes reales. Logos reales.",
     "back": "Cambiar el nombre",
     "successTitle": "{name}, ya estás dentro.",
-    "successBody": "La próxima vez que tengamos algo que merezca la pena abrir, estará en tu bandeja."
+    "successBody": "Cuando tengamos algo que merezca abrirse, te escribiremos."
   },
   "swipe-match": {
-    "peek": "Desliza hasta dar con tu estilo de embalaje",
+    "peek": "Desliza hasta encontrar tu estilo de packaging",
     "peekCta": "Empezar",
     "kicker": "Tu caja ideal",
-    "title": "¿Flechazo o pasas?",
-    "lede": "Seis cajas para joyas. Desliza y te diremos qué cuentan sobre tu marca.",
-    "like": "Me gusta",
+    "title": "¿Te encanta o pasas?",
+    "lede": "Seis cajas. Desliza. Te diremos qué cuentan sobre tu marca.",
+    "like": "Me encanta",
     "nope": "Paso",
-    "keysHint": "También valen las flechas: ← paso · → me gusta",
+    "keysHint": "También puedes usar las flechas: ← paso · → me encanta",
     "progress": "{n} de {total}",
     "cardNames": {
       "torino": "Torino",
@@ -84,20 +99,20 @@
     },
     "cards": {
       "torino": "Tapa con bisagra y borde dorado. El clásico que nunca cansa.",
-      "seoul": "Un cajón ultraplano en verde empolvado. Discreto, hasta que se abre.",
+      "seoul": "Cajón ultraplano en verde apagado. Discreto, hasta que se abre.",
       "madrid": "Soft touch por fuera, terciopelo por dentro y una funda alrededor.",
-      "oslo": "Polipiel y terciopelo. Un éxito de ventas entre las cajas con bisagra.",
-      "monaco": "Una caja de regalo que parece un bolso diminuto. Incluye cinta de satén.",
+      "oslo": "Polipiel y terciopelo. Un superventas entre las cajas con bisagra.",
+      "monaco": "Una caja de regalo que parece un bolsito. Con cinta de satén.",
       "tokyo": "Tapa extraíble y mucho espacio para tu logo."
     },
     "worlds": {
       "noir": {
         "name": "Medianoche",
-        "line": "Oscuro, rotundo y dorado. Tus clientes abren la caja despacio."
+        "line": "Oscuro, preciso y dorado. Tus clientes abren la caja despacio."
       },
       "cocoa": {
         "name": "Cacao",
-        "line": "Cálido y suave. De esas cajas que nadie quiere tirar."
+        "line": "Cálido y suave. De esas cajas que la gente guarda."
       },
       "forest": {
         "name": "Sotobosque",
@@ -108,31 +123,31 @@
         "line": "Claro, ligero y nórdico. La joya se queda con todo el escenario."
       }
     },
-    "resultKicker": "Tu perfil de embalaje",
-    "resultTitle": "Eres un {pct} % {world}.",
-    "resultSecond": "… y un {pct} % {world}.",
-    "noneTitle": "¿Ni un solo flechazo? Respeto.",
-    "noneLine": "Quien más exige construye las mejores marcas. Tenemos muchas más cajas de las que caben aquí.",
-    "ctaTitle": "¿Te enviamos novedades a tu estilo?",
-    "restart": "Volver a deslizar",
-    "seeBoxes": "Ver cajas para joyas",
+    "resultKicker": "Tu perfil de packaging",
+    "resultTitle": "Tu estilo es {pct} % {world}.",
+    "resultSecond": "… y {pct} % {world}.",
+    "noneTitle": "¿Ni un solo corazón? Respeto.",
+    "noneLine": "Quien elige con lupa crea las mejores marcas. Tenemos muchas más cajas de las que caben aquí.",
+    "ctaTitle": "¿Quieres novedades de tu estilo?",
+    "restart": "Deslizar otra vez",
+    "seeBoxes": "Ver las cajas para joyas",
     "successTitle": "Anotado: {world}.",
-    "successBody": "Nos vemos en tu bandeja."
+    "successBody": "Nos vemos en tu bandeja de entrada."
   },
   "pack-and-ship": {
-    "peek": "Tenemos un paquete para ti. (Es un boletín.)",
+    "peek": "Tenemos un paquete para ti. (Es un newsletter).",
     "peekCta": "Abrir",
-    "kicker": "El boletín",
-    "title": "Enviamos novedades de embalaje. Joyas no. Perdona.",
-    "lede": "Cajas nuevas, consejos y guías, y un aviso si hacemos rebajas. Escribe la dirección; nosotros lo empaquetamos.",
+    "kicker": "El newsletter",
+    "title": "Enviamos novedades sobre packaging. Joyas no. Lo sentimos.",
+    "lede": "Nuevas cajas, consejos y guías, y un aviso cuando haya una promoción. Escribe la dirección; nosotros lo empaquetamos.",
     "labelTo": "Para",
     "labelFrom": "De: Westpack, Holstebro, Dinamarca",
     "labelContents": "Contenido: buenas ideas",
-    "signup": "Envíame el boletín",
+    "signup": "Enviadme el newsletter",
     "invalidEmail": "El cartero no encuentra esa dirección.",
     "stamp": "Enviado",
     "tape": "Westpack",
     "successTitle": "Enviado.",
-    "successBody": "Nos vemos en tu bandeja cuando haya algo que merezca la pena abrir."
+    "successBody": "Cuando tengamos algo que merezca abrirse, te escribiremos."
   }
 };

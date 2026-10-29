@@ -9,16 +9,16 @@
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
     "close": "Stäng",
-    "emailLabel": "Din mejl",
+    "emailLabel": "Din e-post",
     "emailPlaceholder": "namn@foretag.se",
-    "invalidEmail": "Den mejladressen ser inte helt rätt ut.",
+    "invalidEmail": "Den e-postadressen ser inte helt rätt ut.",
     "sending": "Skickar…",
     "networkError": "Det gick inte igenom. Försök igen om en stund.",
     "signup": "Prenumerera på nyhetsbrevet",
     "noThanks": "Nej tack",
     "promise": [
-      "Produktnyheter och måsten, direkt",
-      "Tips och guider du har nytta av",
+      "Direkt om produktnyheter och måsten",
+      "Tips och guider du kan använda",
       "Förvarning om våra sällsynta reor"
     ],
     "doiTitle": "Nästan klart.",
@@ -30,46 +30,61 @@
     "peekCta": "Testa",
     "kicker": "Folietestet",
     "title": "Skriv ditt varumärkesnamn. Vi sätter det i guld.",
-    "lede": "Live, på ett riktigt lock. Det kostar inget – inte ens din mejladress.",
+    "lede": "Live, på ett riktigt lock. Det kostar inget – inte ens din e-post.",
     "nameLabel": "Ditt varumärkesnamn",
     "namePlaceholder": "t.ex. Atelier Nord",
     "defaultName": "Ditt varumärke",
-    "lidLabel": "Lock",
-    "lid": {
-      "black": "Svart",
-      "cream": "Creme"
+    "boxLabel": "Ask",
+    "boxes": {
+      "seville": "Mattsvart plast",
+      "london": "Krämfärgad soft touch",
+      "torino": "Svart med guldkant",
+      "seoul": "Dammgrön kartong",
+      "madrid": "Ljusbrun soft touch",
+      "frankfurt": "Mattsvart kartong"
     },
     "foilLabel": "Folie",
     "foil": {
       "gold": "Guld",
       "silver": "Silver",
       "rose": "Roséguld",
+      "oldrose": "Gammalrosa",
       "white": "Vit",
+      "black": "Svart",
       "deboss": "Blindprägling"
     },
-    "typeLabel": "Textstil",
+    "typeLabel": "Typsnitt",
     "type": {
-      "classic": "Klassisk",
-      "script": "Skrivstil",
-      "clean": "Ren"
+      "classic": "Klassiskt",
+      "script": "Snirkligt",
+      "clean": "Rent"
     },
     "hintLong": "Många bokstäver! Logotypen skalas så att den passar på locket.",
-    "hintWestpack": "Bra val. Men det namnet är tyvärr upptaget.",
-    "disclaimer": "Illustration på ett riktigt Westpack-lock. Din egen logotyp trycks i en foliefärg.",
+    "hintWestpack": "Bra val. Tyvärr är det namnet redan taget.",
+    "disclaimer": "Illustration på riktiga Westpack-lock. Din logotyp trycks i en foliefärg.",
+    "lightHintMouse": "För musen över asken och se folien fånga ljuset.",
+    "lightHintTouch": "Dra fingret över asken och se folien fånga ljuset. Svep till nästa ask.",
+    "zoomIn": "Se trycket på nära håll",
+    "zoomOut": "Hela asken",
+    "uploadCta": "Använd din logotyp",
+    "uploadHint": "PNG, JPG eller SVG – din logotyp stannar i din webbläsare.",
+    "uploadOneColour": "Folie trycks i en färg – så här ser din logotyp ut.",
+    "uploadError": "Vi kunde inte läsa filen. Prova en PNG eller JPG.",
+    "useName": "Använd namnet i stället",
     "next": "Det ser bra ut",
-    "resultTitle": "{name} klär en smyckesask.",
-    "resultLede": "Vill du ha fler idéer som den här? Vi skriver när det finns något nytt.",
+    "resultTitle": "{name} klär en ask.",
+    "resultLede": "Vill du ha fler idéer som den här? Vi hör av oss när det finns något nytt.",
     "proofTitle": "Riktiga kunder. Riktiga logotyper.",
     "back": "Ändra namnet",
     "successTitle": "{name}, du är med.",
-    "successBody": "Nästa gång vi har något värt att öppna finns det i din inkorg."
+    "successBody": "Nästa gång vi har något värt att öppna ligger det i din inkorg."
   },
   "swipe-match": {
-    "peek": "Swajpa fram din förpackningsstil",
+    "peek": "Svep fram din förpackningsstil",
     "peekCta": "Starta",
     "kicker": "Askmatchning",
     "title": "Hjärta eller nej tack?",
-    "lede": "Sex askar. Swajpa dem. Vi berättar vad de säger om ditt varumärke.",
+    "lede": "Sex askar. Svep dem. Vi berättar vad de säger om ditt varumärke.",
     "like": "Ja tack",
     "nope": "Nej tack",
     "keysHint": "Piltangenterna funkar också: ← nej · → ja",
@@ -84,9 +99,9 @@
     },
     "cards": {
       "torino": "Gångjärnslock och guldkant. Klassikern som aldrig blir tråkig.",
-      "seoul": "En ultraplatt låda i dovt grönt. Diskret – tills den öppnas.",
-      "madrid": "Soft touch på utsidan, velour på insidan och ett fodral runtom.",
-      "oslo": "Konstläder och velour. En bästsäljare bland askarna med gångjärnslock.",
+      "seoul": "En ultraplatt låda i dammigt grönt. Diskret – tills den öppnas.",
+      "madrid": "Soft touch utanpå, velour inuti och ett omslag runtom.",
+      "oslo": "Konstläder och velour. En bästsäljare bland askar med gångjärnslock.",
       "monaco": "En presentask som ser ut som en liten handväska. Med satinband.",
       "tokyo": "Avtagbart lock och gott om plats för din logotyp."
     },
@@ -112,9 +127,9 @@
     "resultTitle": "Du är {pct} % {world}.",
     "resultSecond": "… och {pct} % {world}.",
     "noneTitle": "Inte ett enda hjärta? Respekt.",
-    "noneLine": "De mest kräsna inköparna bygger de bästa varumärkena. Vi har långt fler askar än vad som ryms här.",
+    "noneLine": "De kräsnaste inköparna bygger de bästa varumärkena. Vi har betydligt fler askar än vad som ryms här.",
     "ctaTitle": "Vill du ha nytt i din stil?",
-    "restart": "Swajpa igen",
+    "restart": "Svep igen",
     "seeBoxes": "Se smyckesaskarna",
     "successTitle": "Noterat: {world}.",
     "successBody": "Vi ses i inkorgen."
@@ -129,10 +144,10 @@
     "labelFrom": "Från: Westpack, Holstebro, Danmark",
     "labelContents": "Innehåll: bra idéer",
     "signup": "Skicka nyhetsbrevet",
-    "invalidEmail": "Den adressen hittar brevbäraren inte.",
+    "invalidEmail": "Brevbäraren hittar inte den adressen.",
     "stamp": "Skickat",
     "tape": "Westpack",
     "successTitle": "Skickat.",
-    "successBody": "Det hamnar i din inkorg när vi har något värt att öppna."
+    "successBody": "När vi har något värt att öppna hamnar det i din inkorg."
   }
 };

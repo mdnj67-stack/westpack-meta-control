@@ -12,14 +12,14 @@
     "emailLabel": "Ihre E-Mail-Adresse",
     "emailPlaceholder": "name@firma.de",
     "invalidEmail": "Diese E-Mail-Adresse sieht nicht ganz richtig aus.",
-    "sending": "Wird gesendet…",
-    "networkError": "Das hat nicht geklappt. Versuchen Sie es noch einmal.",
+    "sending": "Wird gesendet …",
+    "networkError": "Das hat nicht geklappt. Versuchen Sie es gleich noch einmal.",
     "signup": "Newsletter abonnieren",
     "noThanks": "Nein, danke",
     "promise": [
       "Produktneuheiten und Must-haves",
       "Nützliche Tipps und Anleitungen",
-      "Vorab-Info zu seltenen Aktionen"
+      "Vorabinfo zu seltenen Aktionen"
     ],
     "doiTitle": "Fast geschafft.",
     "doiBody": "Wir haben Ihnen eine E-Mail geschickt. Klicken Sie auf den Link darin, dann sind Sie dabei.",
@@ -29,50 +29,65 @@
     "peek": "Wie sieht Ihre Marke in Gold aus?",
     "peekCta": "Ausprobieren",
     "kicker": "Der Folientest",
-    "title": "Tippen Sie Ihren Markennamen ein. Wir setzen ihn in Gold.",
-    "lede": "Live auf einem echten Deckel. Kostet nichts – nicht einmal Ihre E-Mail-Adresse.",
+    "title": "Geben Sie Ihren Markennamen ein. Wir setzen ihn in Gold.",
+    "lede": "Live auf einem echten Deckel. Kostet nichts – nicht mal Ihre E-Mail-Adresse.",
     "nameLabel": "Ihr Markenname",
     "namePlaceholder": "z. B. Atelier Nord",
     "defaultName": "Ihre Marke",
-    "lidLabel": "Deckel",
-    "lid": {
-      "black": "Schwarz",
-      "cream": "Creme"
+    "boxLabel": "Schmuckschachtel",
+    "boxes": {
+      "seville": "Mattschwarzer Kunststoff",
+      "london": "Cremefarbenes Soft Touch",
+      "torino": "Schwarz mit Goldrand",
+      "seoul": "Staubgrüner Karton",
+      "madrid": "Hellbraunes Soft Touch",
+      "frankfurt": "Mattschwarzer Karton"
     },
     "foilLabel": "Folie",
     "foil": {
       "gold": "Gold",
       "silver": "Silber",
       "rose": "Roségold",
+      "oldrose": "Altrosa",
       "white": "Weiß",
+      "black": "Schwarz",
       "deboss": "Blindprägung"
     },
     "typeLabel": "Schrift",
     "type": {
       "classic": "Klassisch",
       "script": "Schreibschrift",
-      "clean": "Schlicht"
+      "clean": "Klar"
     },
-    "hintLong": "Ganz schön viele Buchstaben. Das Logo wird passend zum Deckel skaliert.",
-    "hintWestpack": "Gute Wahl. Der Name ist leider schon vergeben.",
-    "disclaimer": "Illustration auf einem echten Westpack-Deckel. Ihr eigenes Logo wird in einer Folienfarbe gedruckt.",
-    "next": "Das sieht gut aus",
-    "resultTitle": "{name} macht sich gut auf einer Schmuckschachtel.",
-    "resultLede": "Mehr Ideen davon? Wir schreiben Ihnen, wenn es etwas Neues gibt.",
+    "hintLong": "Ganz schön viele Buchstaben. Das Logo wird passend für den Deckel skaliert.",
+    "hintWestpack": "Gute Wahl. Der Name ist leider schon weg.",
+    "disclaimer": "Darstellung auf echten Westpack-Deckeln. Ihr Logo wird in einer Folienfarbe gedruckt.",
+    "lightHintMouse": "Bewegen Sie die Maus über die Schachtel und sehen Sie, wie die Folie das Licht einfängt.",
+    "lightHintTouch": "Ziehen Sie einen Finger über die Schachtel und sehen Sie, wie die Folie das Licht einfängt. Wischen Sie zur nächsten Schachtel.",
+    "zoomIn": "Druck aus der Nähe",
+    "zoomOut": "Ganze Schachtel",
+    "uploadCta": "Eigenes Logo verwenden",
+    "uploadHint": "PNG, JPG oder SVG – Ihr Logo bleibt in Ihrem Browser.",
+    "uploadOneColour": "Folienprägung ist einfarbig – so sieht Ihr Logo aus.",
+    "uploadError": "Diese Datei konnten wir nicht lesen. Versuchen Sie es mit PNG oder JPG.",
+    "useName": "Stattdessen Name nutzen",
+    "next": "Sieht gut aus",
+    "resultTitle": "{name} steht einer Schachtel gut.",
+    "resultLede": "Mehr Ideen wie diese? Wir schreiben Ihnen, wenn es etwas Neues gibt.",
     "proofTitle": "Echte Kunden. Echte Logos.",
-    "back": "Namen ändern",
+    "back": "Name ändern",
     "successTitle": "{name}, Sie sind dabei.",
-    "successBody": "Wenn wir das nächste Mal etwas haben, das sich zu öffnen lohnt, liegt es in Ihrem Posteingang."
+    "successBody": "Wenn wir wieder etwas haben, das sich zu öffnen lohnt, finden Sie es in Ihrem Postfach."
   },
   "swipe-match": {
     "peek": "Wischen Sie zu Ihrem Verpackungsstil",
     "peekCta": "Starten",
     "kicker": "Schachtel-Match",
-    "title": "Herz oder nein danke?",
-    "lede": "Sechs Schachteln. Wischen Sie. Wir sagen Ihnen, was sie über Ihre Marke verraten.",
-    "like": "Ja, bitte",
-    "nope": "Nein, danke",
-    "keysHint": "Pfeiltasten gehen auch: ← nein · → ja",
+    "title": "Herz oder weiter?",
+    "lede": "Sechs Schmuckschachteln. Wischen Sie. Wir sagen Ihnen, was sie über Ihre Marke verraten.",
+    "like": "Herz",
+    "nope": "Weiter",
+    "keysHint": "Die Pfeiltasten gehen auch: ← weiter · → Herz",
     "progress": "{n} von {total}",
     "cardNames": {
       "torino": "Torino",
@@ -83,12 +98,12 @@
       "tokyo": "Tokyo"
     },
     "cards": {
-      "torino": "Scharnierdeckel und Goldkante. Der Klassiker, der nie langweilig wird.",
-      "seoul": "Ultraflache Schublade in staubigem Grün. Dezent – bis sie geöffnet wird.",
-      "madrid": "Soft-Touch außen, Velours innen und eine Hülle darum.",
-      "oslo": "Kunstleder und Velours. Ein Bestseller unter den Schachteln mit Scharnierdeckel.",
+      "torino": "Klappdeckel und Goldrand. Der Klassiker, der nie langweilt.",
+      "seoul": "Ultraflache Schublade in Staubgrün. Zurückhaltend – bis sie geöffnet wird.",
+      "madrid": "Soft Touch außen, Velours innen und eine Hülle drumherum.",
+      "oslo": "Kunstleder und Velours. Ein Bestseller unter den Schmuckschachteln mit Klappdeckel.",
       "monaco": "Eine Geschenkbox, die wie eine kleine Handtasche aussieht. Mit Satinband.",
-      "tokyo": "Ein Deckel zum Abheben und viel Platz für Ihr Logo."
+      "tokyo": "Ein abnehmbarer Deckel und viel Platz für Ihr Logo."
     },
     "worlds": {
       "noir": {
@@ -109,30 +124,30 @@
       }
     },
     "resultKicker": "Ihr Verpackungsprofil",
-    "resultTitle": "Sie sind zu {pct} % {world}.",
-    "resultSecond": "… und zu {pct} % {world}.",
+    "resultTitle": "Sie sind {pct} % {world}.",
+    "resultSecond": "… und {pct} % {world}.",
     "noneTitle": "Kein einziges Herz? Respekt.",
-    "noneLine": "Anspruchsvolle Einkäufer bauen die besten Marken. Wir haben viel mehr Schachteln, als hier Platz finden.",
-    "ctaTitle": "Neuheiten in Ihrem Stil?",
+    "noneLine": "Wer wählerisch ist, baut die besten Marken. Wir haben mehr Schmuckschachteln, als hier hineinpassen.",
+    "ctaTitle": "Neues passend zu Ihrem Stil?",
     "restart": "Noch einmal wischen",
     "seeBoxes": "Schmuckschachteln ansehen",
     "successTitle": "Notiert: {world}.",
-    "successBody": "Wir sehen uns im Posteingang."
+    "successBody": "Wir lesen uns im Postfach."
   },
   "pack-and-ship": {
     "peek": "Wir haben ein Paket für Sie. (Es ist ein Newsletter.)",
     "peekCta": "Öffnen",
     "kicker": "Der Newsletter",
-    "title": "Wir schicken Neues zu Verpackungen. Keinen Schmuck. Sorry.",
-    "lede": "Neue Schachteln, Tipps und Anleitungen – und Bescheid, wenn wir eine Angebotsaktion haben. Adresse rein, wir packen.",
+    "title": "Wir schicken Neues über Verpackungen. Keinen Schmuck. Sorry.",
+    "lede": "Neue Schachteln, Tipps und Anleitungen – plus Vorabinfo, wenn eine Aktion ansteht. Schreiben Sie die Adresse hin, wir packen ein.",
     "labelTo": "An",
     "labelFrom": "Von: Westpack, Holstebro, Dänemark",
     "labelContents": "Inhalt: gute Ideen",
-    "signup": "Newsletter an mich senden",
+    "signup": "Newsletter an mich",
     "invalidEmail": "Diese Adresse findet die Post nicht.",
-    "stamp": "Verschickt",
+    "stamp": "Abgeschickt",
     "tape": "Westpack",
     "successTitle": "Abgeschickt.",
-    "successBody": "Wenn wir etwas haben, das sich zu öffnen lohnt, landet es in Ihrem Posteingang."
+    "successBody": "Wenn wir etwas haben, das sich zu öffnen lohnt, kommt es in Ihr Postfach."
   }
 };

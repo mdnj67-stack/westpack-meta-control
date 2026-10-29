@@ -44,6 +44,8 @@ function boxBlur(ch, w, h, r) {
     for (let y = 0; y < h; y++) { out[y * w + x] = s / (2 * r + 1); s += tmp[Math.min(h - 1, y + r + 1) * w + x] - tmp[Math.max(0, y - r) * w + x]; } }
   return out;
 }
+// a point is in the print area when it is inside any of the polygons
+function insideAny(x, y, polys) { return polys.some((p) => insidePolygon(x, y, p)); }
 function insidePolygon(x, y, poly) {
   let inside = false;
   for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
@@ -59,6 +61,8 @@ window.cleanPlate = async function (o) {
   const img = await loadImage(o.src);
   const [cx, cy, cw, ch] = o.crop || [0, 0, img.naturalWidth, img.naturalHeight];
   const w = o.size, h = Math.round((o.size * ch) / cw);
+  // polygons may come in % of the (cropped) image, which is how build-assets.js measures them
+  const polys = (o.polygonsPct || []).map((p) => p.map(([x, y]) => [(x / 100) * w, (y / 100) * h])).concat(o.polygon ? [o.polygon] : []);
   const c = document.getElementById("c"); c.width = w; c.height = h;
   const g = c.getContext("2d", { willReadFrequently: true });
   g.imageSmoothingQuality = "high";
@@ -78,14 +82,14 @@ window.cleanPlate = async function (o) {
   const lum = (r, gg, b) => 0.2126 * r + 0.7152 * gg + 0.0722 * b;
   const smooth = boxBlur(chans[1], w, h, 3);
   let s2 = 0, cnt = 0;
-  for (let y = 0; y < h; y += 3) for (let x = 0; x < w; x += 3) { if (o.polygon && insidePolygon(x, y, o.polygon)) continue; const i = y * w + x; const d = chans[1][i] - smooth[i]; s2 += d * d; cnt++; }
+  for (let y = 0; y < h; y += 3) for (let x = 0; x < w; x += 3) { if (polys.length && insideAny(x, y, polys)) continue; const i = y * w + x; const d = chans[1][i] - smooth[i]; s2 += d * d; cnt++; }
   const grain = Math.sqrt(s2 / Math.max(1, cnt));
   // mask: inside the print polygon, where the photo departs from the bare-lid estimate
   // "fill" replaces the whole print area: foil is pressed into the surface, and the recess it leaves shows as a
   // faint relief that no threshold separates from the lid's own shading
   const mask = new Float32Array(n);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    if (o.polygon && !insidePolygon(x, y, o.polygon)) continue;
+    if (polys.length && !insideAny(x, y, polys)) continue;
     const i = y * w + x;
     if (o.fill) { mask[i] = 1; continue; }
     const diff = Math.abs(lum(chans[0][i], chans[1][i], chans[2][i]) - lum(est[0][i], est[1][i], est[2][i]));
@@ -111,6 +115,83 @@ window.cleanPlate = async function (o) {
     outputs.push({ width: oc.width, height: oc.height, webp: oc.toDataURL("image/webp", out.quality || 0.86) });
   }
   return { width: w, height: h, grain: Math.round(grain * 100) / 100, replacedShare: Math.round((replaced / n) * 1000) / 1000, outputs };
+};
+
+/**
+ * Harmonic fill, for print too thick for the morphological estimate (bold letters wider than any sensible window):
+ * the print area is solved as a membrane stretched over its edges, which carries the lid's light smoothly across,
+ * and the lid's own texture is laid back on top - the high-frequency detail of a clean patch of the same lid,
+ * mirror-tiled, so cardboard grain and soft-touch stay themselves instead of turning into a smooth blur.
+ * options: { src, size, crop, polygonsPct, texturePct:[x,y,w,h] in % of the crop, feather, detail, outputs }
+ */
+window.harmonicPlate = async function (o) {
+  const img = await loadImage(o.src);
+  const [cx, cy, cw, ch] = o.crop || [0, 0, img.naturalWidth, img.naturalHeight];
+  const w = o.size, h = Math.round((o.size * ch) / cw);
+  const c = document.getElementById("c"); c.width = w; c.height = h;
+  const g = c.getContext("2d", { willReadFrequently: true });
+  g.imageSmoothingQuality = "high";
+  g.drawImage(img, cx, cy, cw, ch, 0, 0, w, h);
+  const data = g.getImageData(0, 0, w, h), px = data.data, n = w * h;
+  const polys = (o.polygonsPct || []).map((p) => p.map(([x, y]) => [(x / 100) * w, (y / 100) * h]));
+  const chans = [0, 1, 2].map((k) => { const a = new Float32Array(n); for (let i = 0; i < n; i++) a[i] = px[i * 4 + k]; return a; });
+
+  // 1. the membrane, solved on a grid four times coarser and scaled back up
+  const ds = 4, sw = Math.ceil(w / ds), sh = Math.ceil(h / ds);
+  const smask = new Uint8Array(sw * sh);
+  for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) if (insideAny(x * ds + ds / 2, y * ds + ds / 2, polys)) smask[y * sw + x] = 1;
+  const grown = new Uint8Array(smask); // one coarse cell of margin, so the edge values come from clean lid
+  for (let y = 1; y < sh - 1; y++) for (let x = 1; x < sw - 1; x++) if (smask[y * sw + x]) { grown[y * sw + x - 1] = grown[y * sw + x + 1] = grown[(y - 1) * sw + x] = grown[(y + 1) * sw + x] = 1; }
+  const fills = chans.map((a) => {
+    const s = new Float32Array(sw * sh);
+    for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) {
+      let sum = 0, cnt = 0;
+      for (let yy = y * ds; yy < Math.min(h, y * ds + ds); yy++) for (let xx = x * ds; xx < Math.min(w, x * ds + ds); xx++) { sum += a[yy * w + xx]; cnt++; }
+      s[y * sw + x] = sum / cnt;
+    }
+    let edge = 0, ec = 0;
+    for (let i = 0; i < s.length; i++) if (!grown[i]) { edge += s[i]; ec++; }
+    for (let i = 0; i < s.length; i++) if (grown[i]) s[i] = edge / Math.max(1, ec);
+    for (let it = 0; it < 1400; it++) for (let y = 1; y < sh - 1; y++) for (let x = 1; x < sw - 1; x++) {
+      const i = y * sw + x; if (!grown[i]) continue;
+      const avg = (s[i - 1] + s[i + 1] + s[i - sw] + s[i + sw]) / 4;
+      s[i] += 1.9 * (avg - s[i]);
+    }
+    const up = new Float32Array(n);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const fx = Math.min(sw - 1.001, Math.max(0, x / ds - 0.5)), fy = Math.min(sh - 1.001, Math.max(0, y / ds - 0.5));
+      const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
+      const v = (xx, yy) => s[yy * sw + xx];
+      up[y * w + x] = v(x0, y0) * (1 - tx) * (1 - ty) + v(x0 + 1, y0) * tx * (1 - ty) + v(x0, y0 + 1) * (1 - tx) * ty + v(x0 + 1, y0 + 1) * tx * ty;
+    }
+    return up;
+  });
+
+  // 2. the lid's texture: detail of a clean patch, mirror-tiled over the print area
+  const [tx0, ty0, tw, th] = (o.texturePct || [0, 0, 10, 10]).map((v, i) => Math.round((v / 100) * (i % 2 ? h : w)));
+  // only the fine grain travels: a wider band would carry the patch's own light and show its tiling
+  const detail = chans.map((a) => { const b = boxBlur(a, w, h, o.detailRadius || 3); const d = new Float32Array(n); for (let i = 0; i < n; i++) d[i] = a[i] - b[i]; return d; });
+  const mirror = (v, len) => { const m = v % (2 * len); return m < len ? m : 2 * len - 1 - m; };
+
+  // 3. blend in, feathered at the polygon's edge
+  const mask = new Float32Array(n);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (insideAny(x, y, polys)) mask[y * w + x] = 1;
+  const soft = boxBlur(boxBlur(mask, w, h, o.feather || 10), w, h, Math.round((o.feather || 10) / 2));
+  const gain = o.detail == null ? 1 : o.detail;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, m = Math.min(1, soft[i] * 1.15);
+    if (m <= 0) continue;
+    const sx = tx0 + mirror(x, tw), sy = ty0 + mirror(y, th), si = Math.min(n - 1, sy * w + sx);
+    for (let k = 0; k < 3; k++) px[i * 4 + k] = Math.round(px[i * 4 + k] * (1 - m) + (fills[k][i] + detail[k][si] * gain) * m);
+  }
+  g.putImageData(data, 0, 0);
+  const outputs = [];
+  for (const out of o.outputs || [{ width: w, quality: 0.86 }]) {
+    const oc = document.createElement("canvas"); oc.width = out.width; oc.height = Math.round((out.width * h) / w);
+    const og = oc.getContext("2d"); og.imageSmoothingQuality = "high"; og.drawImage(c, 0, 0, oc.width, oc.height);
+    outputs.push({ width: oc.width, height: oc.height, webp: oc.toDataURL("image/webp", out.quality || 0.86) });
+  }
+  return { width: w, height: h, outputs };
 };
 
 // plain resize/crop for photos that need no cleaning

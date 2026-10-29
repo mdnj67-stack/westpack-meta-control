@@ -11,67 +11,82 @@
     "close": "Fermer",
     "emailLabel": "Votre e-mail",
     "emailPlaceholder": "nom@entreprise.fr",
-    "invalidEmail": "Cette adresse e-mail ne semble pas tout à fait juste.",
-    "sending": "Envoi…",
+    "invalidEmail": "Cet e-mail semble un peu bancal.",
+    "sending": "Envoi en cours…",
     "networkError": "Ça n’est pas passé. Réessayez dans un instant.",
-    "signup": "Recevoir la newsletter",
+    "signup": "S’inscrire à la newsletter",
     "noThanks": "Non merci",
     "promise": [
-      "Nouveautés et indispensables, sans détour",
-      "Des astuces et guides vraiment utiles",
-      "Nos rares promotions en avant-première"
+      "Nouveautés produits et indispensables",
+      "Des astuces et guides utiles",
+      "Une alerte avant nos rares promotions"
     ],
-    "doiTitle": "Presque terminé.",
-    "doiBody": "Nous vous avons envoyé un e-mail. Cliquez sur le lien et vous voilà sur la liste.",
+    "doiTitle": "Vous y êtes presque.",
+    "doiBody": "Nous vous avons envoyé un e-mail. Cliquez sur le lien et vous serez sur la liste.",
     "peekDismiss": "Pas maintenant"
   },
   "logo-studio": {
-    "peek": "Votre marque en doré, ça donne quoi",
+    "peek": "À quoi ressemble votre marque en or ?",
     "peekCta": "Essayer",
-    "kicker": "Le test de dorure",
-    "title": "Tapez le nom de votre marque. On l’affiche en doré.",
-    "lede": "En direct, sur un vrai couvercle. Gratuit, sans même demander votre e-mail.",
-    "nameLabel": "Nom de votre marque",
-    "namePlaceholder": "ex. Atelier Nord",
+    "kicker": "Le test de marquage",
+    "title": "Tapez le nom de votre marque. On le passe en or.",
+    "lede": "En direct, sur un vrai couvercle. Ça ne coûte rien, même pas votre e-mail.",
+    "nameLabel": "Le nom de votre marque",
+    "namePlaceholder": "par ex. Atelier Nord",
     "defaultName": "Votre marque",
-    "lidLabel": "Couvercle",
-    "lid": {
-      "black": "Noir",
-      "cream": "Crème"
+    "boxLabel": "Écrin",
+    "boxes": {
+      "seville": "Plastique noir mat",
+      "london": "Crème au toucher doux",
+      "torino": "Noir avec bordure dorée",
+      "seoul": "Carton vert grisé",
+      "madrid": "Brun clair au toucher doux",
+      "frankfurt": "Carton noir mat"
     },
     "foilLabel": "Marquage",
     "foil": {
-      "gold": "Doré",
-      "silver": "Argenté",
+      "gold": "Or",
+      "silver": "Argent",
       "rose": "Or rose",
+      "oldrose": "Vieux rose",
       "white": "Blanc",
+      "black": "Noir",
       "deboss": "Gaufrage à sec"
     },
-    "typeLabel": "Typographie",
+    "typeLabel": "Écriture",
     "type": {
       "classic": "Classique",
       "script": "Manuscrite",
       "clean": "Épurée"
     },
-    "hintLong": "Ça fait beaucoup de lettres. Le logo est redimensionné pour tenir sur le couvercle.",
-    "hintWestpack": "Bon choix. Mais ce nom-là est déjà pris.",
-    "disclaimer": "Illustration sur un vrai couvercle Westpack. Votre propre logo est imprimé dans une seule couleur de marquage.",
+    "hintLong": "Ça fait beaucoup de lettres. Le logo est réduit pour tenir sur le couvercle.",
+    "hintWestpack": "Bon choix. Mais ce nom est déjà pris.",
+    "disclaimer": "Illustration sur de vrais couvercles Westpack. Votre logo est imprimé dans une seule couleur de marquage.",
+    "lightHintMouse": "Passez la souris sur l’écrin et regardez le marquage accrocher la lumière.",
+    "lightHintTouch": "Faites glisser un doigt sur l’écrin et regardez le marquage accrocher la lumière. Balayez pour voir l’écrin suivant.",
+    "zoomIn": "Voir le marquage de près",
+    "zoomOut": "Voir tout l’écrin",
+    "uploadCta": "Utiliser votre logo",
+    "uploadHint": "PNG, JPG ou SVG – votre logo reste dans votre navigateur.",
+    "uploadOneColour": "Le marquage se fait en une couleur. Voici votre logo dans cette version.",
+    "uploadError": "Impossible de lire ce fichier. Essayez un PNG ou un JPG.",
+    "useName": "Utiliser le nom",
     "next": "Ça rend bien",
     "resultTitle": "{name} va bien à un écrin.",
-    "resultLede": "Envie d’autres idées de ce genre. On vous écrit lorsqu’il y a du nouveau.",
+    "resultLede": "Vous voulez d’autres idées dans ce genre ? On vous écrira quand il y aura du nouveau.",
     "proofTitle": "De vrais clients. De vrais logos.",
     "back": "Modifier le nom",
     "successTitle": "{name}, c’est noté.",
-    "successBody": "Quand nous aurons quelque chose qui mérite d’être ouvert, on vous écrira."
+    "successBody": "La prochaine fois qu’on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
   },
   "swipe-match": {
-    "peek": "Swipez vers votre style d’emballage",
+    "peek": "Trouvez votre style d’emballage en swipant",
     "peekCta": "Commencer",
-    "kicker": "Match d’écrins",
-    "title": "Coup de cœur ou non merci",
-    "lede": "Six écrins. Swipez-les. On vous dira ce qu’ils racontent sur votre marque.",
-    "like": "J’adore",
-    "nope": "Non merci",
+    "kicker": "Le match des écrins",
+    "title": "Coup de cœur ou pas pour vous ?",
+    "lede": "Six écrins. Swipez. On vous dira ce qu’ils racontent sur votre marque.",
+    "like": "Coup de cœur",
+    "nope": "Pas pour moi",
     "keysHint": "Les flèches marchent aussi · ← non · → oui",
     "progress": "{n} sur {total}",
     "cardNames": {
@@ -83,21 +98,21 @@
       "tokyo": "Tokyo"
     },
     "cards": {
-      "torino": "Couvercle à charnière et liseré doré. Le classique qui ne lasse jamais.",
-      "seoul": "Un tiroir ultrafin en vert grisé. Discret jusqu’à l’ouverture.",
-      "madrid": "Finition soft touch à l’extérieur, velours à l’intérieur et fourreau autour.",
-      "oslo": "Simili cuir et velours. Un bestseller parmi les écrins à charnière.",
-      "monaco": "Une boîte cadeau qui ressemble à un petit sac à main. Avec son ruban de satin.",
+      "torino": "Couvercle à charnière et bordure dorée. Le classique qui ne vieillit jamais.",
+      "seoul": "Un tiroir ultrafin en vert grisé. Discret, jusqu’à l’ouverture.",
+      "madrid": "Toucher doux à l’extérieur, velours à l’intérieur et fourreau autour.",
+      "oslo": "Similicuir et velours. Un grand favori parmi les écrins à charnière.",
+      "monaco": "Une boîte cadeau qui ressemble à un petit sac à main. Ruban en satin inclus.",
       "tokyo": "Un couvercle amovible et beaucoup de place pour votre logo."
     },
     "worlds": {
       "noir": {
-        "name": "Minuit",
-        "line": "Sombre, précis et doré. Vos clients ouvrent l’écrin lentement."
+        "name": "Nuit noire",
+        "line": "Sombre, net et doré. Vos clients prennent leur temps pour ouvrir l’écrin."
       },
       "cocoa": {
         "name": "Cacao",
-        "line": "Chaud et doux. Le genre de boîte que l’on garde."
+        "line": "Chaud et doux. Le genre d’écrin que l’on garde."
       },
       "forest": {
         "name": "Sous-bois",
@@ -105,34 +120,34 @@
       },
       "sand": {
         "name": "Sable",
-        "line": "Clair, léger et nordique. Toute la lumière est sur le bijou."
+        "line": "Clair, léger et nordique. Le bijou a toute la scène pour lui."
       }
     },
     "resultKicker": "Votre profil d’emballage",
     "resultTitle": "Vous êtes {pct} % {world}.",
     "resultSecond": "… et {pct} % {world}.",
-    "noneTitle": "Aucun coup de cœur. Respect.",
-    "noneLine": "Les clients les plus exigeants bâtissent les meilleures marques. Nous avons bien plus d’écrins que de place ici.",
+    "noneTitle": "Pas un seul cœur. Respect.",
+    "noneLine": "Les goûts les plus exigeants font les meilleures marques. Nous avons bien plus d’écrins que de place ici.",
     "ctaTitle": "Des nouveautés dans votre style",
     "restart": "Swiper à nouveau",
     "seeBoxes": "Voir les écrins",
-    "successTitle": "Noté · {world}.",
-    "successBody": "On se retrouve dans votre boîte mail."
+    "successTitle": "C’est noté · {world}.",
+    "successBody": "À bientôt dans votre boîte mail."
   },
   "pack-and-ship": {
-    "peek": "Un colis pour vous. Bon, c’est une newsletter.",
+    "peek": "On a un colis pour vous. C’est une newsletter.",
     "peekCta": "Ouvrir",
     "kicker": "La newsletter",
-    "title": "On envoie des nouvelles de l’emballage. Pas des bijoux. Désolés.",
-    "lede": "Nouveaux écrins, astuces et guides, plus une alerte pour nos rares promotions. Donnez l’adresse, on emballe.",
-    "labelTo": "Destinataire",
-    "labelFrom": "Expéditeur · Westpack, Holstebro, Danemark",
+    "title": "On vous envoie des nouvelles de l’emballage. Pas des bijoux. Désolés.",
+    "lede": "Nouveaux écrins, astuces et guides, avec une alerte lors de nos rares promotions. Indiquez l’adresse, on emballe.",
+    "labelTo": "Pour",
+    "labelFrom": "De · Westpack, Holstebro, Danemark",
     "labelContents": "Contenu · de bonnes idées",
     "signup": "M’envoyer la newsletter",
-    "invalidEmail": "Cette adresse laisse le facteur perplexe.",
-    "stamp": "Expédié",
+    "invalidEmail": "Le facteur ne trouve pas cette adresse.",
+    "stamp": "Envoyé",
     "tape": "Westpack",
-    "successTitle": "Expédiée.",
-    "successBody": "La suite se passera dans votre boîte mail, avec quelque chose qui mérite d’être ouvert."
+    "successTitle": "C’est parti.",
+    "successBody": "Quand on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
   }
 };

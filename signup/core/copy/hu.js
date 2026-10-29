@@ -7,69 +7,84 @@
     "needsNativeReview": true
   },
   "shell": {
-    "dialogLabel": "Westpack hírlevele",
+    "dialogLabel": "Westpack hírlevél",
     "close": "Bezárás",
     "emailLabel": "E-mail-címed",
     "emailPlaceholder": "nev@ceg.hu",
     "invalidEmail": "Ez az e-mail-cím nem tűnik jónak.",
     "sending": "Küldés…",
-    "networkError": "Ez most nem ment át. Próbáld újra.",
-    "signup": "Feliratkozom",
+    "networkError": "Ez most nem ment át. Próbáld újra egy kicsit később.",
+    "signup": "Feliratkozom a hírlevélre",
     "noThanks": "Köszönöm, nem",
     "promise": [
-      "Termékújdonságok és kedvencek",
+      "Értesítés újdonságokról és kedvencekről",
       "Hasznos tippek és útmutatók",
-      "Jelzés a ritka akciókról"
+      "Szólunk a ritka akciókról"
     ],
     "doiTitle": "Már majdnem kész.",
-    "doiBody": "Küldtünk egy e-mailt. Kattints a benne lévő linkre, és már rajta is vagy a listán.",
+    "doiBody": "Küldtünk egy e-mailt. Kattints a benne lévő linkre, és fel is iratkoztál.",
     "peekDismiss": "Most nem"
   },
   "logo-studio": {
     "peek": "Hogy mutat a márkád aranyban?",
     "peekCta": "Kipróbálom",
     "kicker": "Fóliapróba",
-    "title": "Írd be a márkaneved. Aranyban mutatjuk.",
+    "title": "Írd be a márkád nevét. Aranyba írjuk.",
     "lede": "Élőben, egy valódi fedélen. Semmibe sem kerül – még az e-mail-címedbe sem.",
-    "nameLabel": "A márkaneved",
-    "namePlaceholder": "pl. Atelier Észak",
+    "nameLabel": "A márkád neve",
+    "namePlaceholder": "pl. Atelier Nord",
     "defaultName": "A márkád",
-    "lidLabel": "Fedél",
-    "lid": {
-      "black": "Fekete",
-      "cream": "Krém"
+    "boxLabel": "Doboz",
+    "boxes": {
+      "seville": "Matt fekete műanyag",
+      "london": "Krémszínű soft touch",
+      "torino": "Fekete, aranyszegéllyel",
+      "seoul": "Poroszöld karton",
+      "madrid": "Világosbarna soft touch",
+      "frankfurt": "Matt fekete karton"
     },
     "foilLabel": "Fólia",
     "foil": {
       "gold": "Arany",
       "silver": "Ezüst",
       "rose": "Rozéarany",
+      "oldrose": "Órózsaszín",
       "white": "Fehér",
+      "black": "Fekete",
       "deboss": "Vaknyomás"
     },
-    "typeLabel": "Betűstílus",
+    "typeLabel": "Betűtípus",
     "type": {
       "classic": "Klasszikus",
       "script": "Kézírásos",
       "clean": "Letisztult"
     },
-    "hintLong": "Sok betű! A logót úgy méretezzük, hogy elférjen a fedélen.",
-    "hintWestpack": "Jó választás. De ezt a nevet sajnos már elvitték.",
-    "disclaimer": "Illusztráció egy valódi Westpack-fedélen. A saját logód egy fóliaszínnel kerül rá.",
-    "next": "Ez jól mutat",
-    "resultTitle": "{name} jól mutat egy ékszerdobozon.",
-    "resultLede": "Kérsz még ilyen ötleteket? Írunk, ha lesz valami új.",
+    "hintLong": "Ez jó sok betű. A logót a fedél méretéhez igazítjuk.",
+    "hintWestpack": "Jó választás. Kár, hogy ez a név már foglalt.",
+    "disclaimer": "Illusztráció valódi Westpack-fedeleken. A logódat egyetlen fóliaszínnel nyomtatjuk.",
+    "lightHintMouse": "Mozgasd az egeret a doboz fölött, és nézd, ahogy megcsillan a fólia.",
+    "lightHintTouch": "Húzd végig az ujjad a dobozon, és nézd, ahogy megcsillan a fólia. Lapozz a következő dobozhoz.",
+    "zoomIn": "Nyomat közelről",
+    "zoomOut": "Teljes doboz",
+    "uploadCta": "Saját logót használok",
+    "uploadHint": "PNG, JPG vagy SVG – a logód a böngésződben marad.",
+    "uploadOneColour": "A fóliát egy színnel nyomtatjuk – így mutat a logód.",
+    "uploadError": "Ezt a fájlt nem tudtuk beolvasni. Próbáld meg PNG-vel vagy JPG-vel.",
+    "useName": "Inkább a nevet használom",
+    "next": "Ez jól néz ki",
+    "resultTitle": "{name} jól mutat egy dobozon.",
+    "resultLede": "Jöhet még néhány ilyen ötlet? Írunk, ha lesz valami új.",
     "proofTitle": "Valódi ügyfelek. Valódi logók.",
     "back": "Név módosítása",
     "successTitle": "{name}, rajta vagy a listán.",
-    "successBody": "Írunk, ha lesz valami, amit érdemes kibontani."
+    "successBody": "Ha lesz valami, amit érdemes megnyitni, írunk."
   },
   "swipe-match": {
     "peek": "Találd meg a csomagolási stílusod",
     "peekCta": "Kezdjük",
-    "kicker": "Ékszerdoboz-match",
+    "kicker": "Dobozmatch",
     "title": "Szív vagy passz?",
-    "lede": "Hat ékszerdoboz. Húzd őket jobbra vagy balra. Megmondjuk, mit mesélnek a márkádról.",
+    "lede": "Hat doboz. Húzd el őket. Mi elmondjuk, mit árulnak el a márkádról.",
     "like": "Jöhet",
     "nope": "Passz",
     "keysHint": "A nyilak is működnek: ← passz · → jöhet",
@@ -83,56 +98,56 @@
       "tokyo": "Tokyo"
     },
     "cards": {
-      "torino": "Zsanéros fedél, aranyszegély. A klasszikus, ami sosem unalmas.",
-      "seoul": "Ultralapos, porzöld fiók. Visszafogott – amíg ki nem nyílik.",
-      "madrid": "Kívül soft touch, belül velúr, körülötte egy hüvely.",
-      "oslo": "Műbőr és velúr. Bestseller a zsanéros dobozok között.",
+      "torino": "Zsanéros fedél és aranyszegély. A klasszikus, ami sosem unalmas.",
+      "seoul": "Ultralapos fiók poroszöldben. Visszafogott – amíg ki nem nyitod.",
+      "madrid": "Soft touch kívül, velúr belül, körülötte egy tok.",
+      "oslo": "Műbőr és velúr. A zsanéros dobozok egyik bestsellere.",
       "monaco": "Ajándékdoboz, amely olyan, mint egy apró kézitáska. Szaténszalaggal.",
       "tokyo": "Leemelhető fedél, és bőven van hely a logódnak."
     },
     "worlds": {
       "noir": {
-        "name": "Éjfekete",
-        "line": "Sötét, markáns, arannyal. A vásárlóid lassan nyitják ki a dobozt."
+        "name": "Éjfél",
+        "line": "Sötét, határozott és arany. A vevőid lassan nyitják ki a dobozt."
       },
       "cocoa": {
         "name": "Kakaó",
-        "line": "Meleg és puha. Az a doboz, amit az ember megtart."
+        "line": "Meleg és puha. Az a fajta doboz, amit az ember megtart."
       },
       "forest": {
-        "name": "Erdőtalaj",
-        "line": "Zöld, nyugodt és átgondolt. Egészen a szalagig."
+        "name": "Erdőmély",
+        "line": "Zöld, nyugodt és átgondolt. Egészen az ajándékszalagig."
       },
       "sand": {
         "name": "Homok",
-        "line": "Világos, légies és északi. Az ékszeré az egész színpad."
+        "line": "Világos, légies és északi. Minden reflektorfény az ékszeré."
       }
     },
     "resultKicker": "A csomagolási profilod",
-    "resultTitle": "A stílusod {pct}% {world}.",
+    "resultTitle": "A stílusod: {pct}% {world}.",
     "resultSecond": "… és {pct}% {world}.",
-    "noneTitle": "Egy szív sem? Ezt tiszteljük.",
-    "noneLine": "A válogatósak építik a legjobb márkákat. Sokkal több ékszerdobozunk van, mint amennyi ide befér.",
-    "ctaTitle": "Kérsz újdonságokat a stílusodban?",
-    "restart": "Újra húzom",
+    "noneTitle": "Egy szív sem? Tisztelet.",
+    "noneLine": "Aki válogat, jó márkát épít. És van még jó pár dobozunk, ami ide nem fért be.",
+    "ctaTitle": "Jöhetnek újdonságok a stílusodban?",
+    "restart": "Újra swipolok",
     "seeBoxes": "Ékszerdobozok",
-    "successTitle": "Felírtuk: {world}.",
-    "successBody": "Írunk neked."
+    "successTitle": "Feljegyeztük: {world}.",
+    "successBody": "E-mailben folytatjuk."
   },
   "pack-and-ship": {
-    "peek": "Van egy csomagunk neked. (Egy hírlevél.)",
+    "peek": "Van egy csomagunk neked. (Hírlevél.)",
     "peekCta": "Kinyitom",
     "kicker": "A hírlevél",
-    "title": "Csomagolásról írunk. Ékszerről nem. Bocsi.",
-    "lede": "Új ékszerdobozok, tippek és útmutatók – plusz jelzés a ritka akcióinkról. Írd rá a címet, mi csomagolunk.",
+    "title": "Csomagolásról írunk. Nem ékszerről. Bocsi.",
+    "lede": "Új dobozok, tippek és útmutatók – és szólunk a ritka akciókról. Írd rá a címet, mi csomagolunk.",
     "labelTo": "Címzett",
     "labelFrom": "Feladó: Westpack, Holstebro, Dánia",
     "labelContents": "Tartalom: jó ötletek",
-    "signup": "Kérem a hírlevelet",
+    "signup": "Jöhet a hírlevél",
     "invalidEmail": "Ezt a címet nem találja a postás.",
-    "stamp": "Elküldve",
+    "stamp": "Feladva",
     "tape": "Westpack",
     "successTitle": "Feladva.",
-    "successBody": "Írunk, ha van valami, amit érdemes kibontani."
+    "successBody": "Ha lesz valami, amit érdemes megnyitni, e-mailben küldjük."
   }
 };

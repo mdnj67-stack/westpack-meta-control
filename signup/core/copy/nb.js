@@ -19,32 +19,38 @@
     "promise": [
       "Nytt om produktlanseringer og must-haves",
       "Praktiske tips og guider",
-      "Beskjed når et sjeldent salg er i gang"
+      "Beskjed når vi har et sjeldent salg"
     ],
     "doiTitle": "Nesten i mål.",
-    "doiBody": "Vi har sendt deg en e-post. Klikk på lenken i den, så er du med.",
+    "doiBody": "Vi har sendt deg en e-post. Klikk på lenken i den, så er du på listen.",
     "peekDismiss": "Ikke nå"
   },
   "logo-studio": {
-    "peek": "Hvordan ser merket ditt ut i gull?",
-    "peekCta": "Prøv",
-    "kicker": "Folietesten",
-    "title": "Skriv inn merkenavnet ditt. Vi setter det i gull.",
-    "lede": "Direkte på et ekte lokk. Det koster ingenting – ikke engang e-postadressen din.",
+    "peek": "Hvordan ser merkevaren din ut i gull?",
+    "peekCta": "Prøv selv",
+    "kicker": "Folieprøven",
+    "title": "Skriv merkenavnet ditt. Vi setter det i gull.",
+    "lede": "Se det direkte på et ekte lokk. Det koster ingenting – ikke engang e-postadressen din.",
     "nameLabel": "Merkenavnet ditt",
     "namePlaceholder": "f.eks. Atelier Nord",
-    "defaultName": "Merket ditt",
-    "lidLabel": "Lokk",
-    "lid": {
-      "black": "Svart",
-      "cream": "Krem"
+    "defaultName": "Merkevaren din",
+    "boxLabel": "Smykkeeske",
+    "boxes": {
+      "seville": "Matt svart plast",
+      "london": "Kremfarget soft touch",
+      "torino": "Svart med gullkant",
+      "seoul": "Støvet grønn kartong",
+      "madrid": "Lysebrun soft touch",
+      "frankfurt": "Matt svart kartong"
     },
     "foilLabel": "Folie",
     "foil": {
       "gold": "Gull",
       "silver": "Sølv",
-      "rose": "Rosegull",
+      "rose": "Roségull",
+      "oldrose": "Gammelrosa",
       "white": "Hvit",
+      "black": "Svart",
       "deboss": "Blindpreg"
     },
     "typeLabel": "Skrift",
@@ -55,21 +61,30 @@
     },
     "hintLong": "Det var mange bokstaver! Logoen skaleres så den passer på lokket.",
     "hintWestpack": "Godt valg. Men det navnet er dessverre tatt.",
-    "disclaimer": "Illustrasjon på et ekte Westpack-lokk. Din egen logo trykkes i én foliefarge.",
-    "next": "Det ser bra ut",
+    "disclaimer": "Illustrasjon på ekte Westpack-lokk. Logoen din trykkes i én foliefarge.",
+    "lightHintMouse": "Beveg musen over smykkeesken og se folien fange lyset.",
+    "lightHintTouch": "Dra fingeren over smykkeesken og se folien fange lyset. Swipe til neste smykkeeske.",
+    "zoomIn": "Se trykket på nært hold",
+    "zoomOut": "Se hele smykkeesken",
+    "uploadCta": "Bruk logoen din",
+    "uploadHint": "PNG, JPG eller SVG – logoen din blir i nettleseren.",
+    "uploadOneColour": "Folie trykkes i én farge – slik blir logoen din.",
+    "uploadError": "Vi klarte ikke å lese filen. Prøv en PNG eller JPG.",
+    "useName": "Bruk navnet i stedet",
+    "next": "Dette ser bra ut",
     "resultTitle": "{name} kler en smykkeeske.",
-    "resultLede": "Vil du ha flere ideer som denne? Vi skriver når det er noe nytt.",
+    "resultLede": "Vil du ha flere ideer som denne? Da skriver vi når det er noe nytt.",
     "proofTitle": "Ekte kunder. Ekte logoer.",
     "back": "Endre navnet",
     "successTitle": "{name}, du er med.",
-    "successBody": "Neste gang vi har noe som er verdt å åpne, finner du det i innboksen."
+    "successBody": "Neste gang vi har noe som er verdt å åpne, ligger det i innboksen din."
   },
   "swipe-match": {
     "peek": "Swipe deg frem til emballasjestilen din",
     "peekCta": "Start",
-    "kicker": "Esketreff",
+    "kicker": "Smykkeeske-match",
     "title": "Hjerte eller nei takk?",
-    "lede": "Seks esker. Swipe dem. Vi forteller hva de sier om merket ditt.",
+    "lede": "Seks smykkeesker. Swipe dem. Vi forteller hva de sier om merkevaren din.",
     "like": "Ja takk",
     "nope": "Nei takk",
     "keysHint": "Piltastene virker også: ← nei · → ja",
@@ -84,20 +99,20 @@
     },
     "cards": {
       "torino": "Hengslet lokk og gullkant. Klassikeren som aldri blir kjedelig.",
-      "seoul": "Ultraflat skuff i støvgrønt. Diskré – helt til den åpnes.",
-      "madrid": "Soft touch på utsiden, velur på innsiden og en hylse rundt.",
-      "oslo": "Kunstskinn og velur. En bestselger blant de hengslede.",
-      "monaco": "En gaveeske som ser ut som en liten håndveske. Med satengbånd.",
+      "seoul": "En ultraflat skuff i støvet grønn. Diskré – helt til den åpnes.",
+      "madrid": "Soft touch utenpå, velur inni og et omslag rundt.",
+      "oslo": "Kunstlær og velur. En bestselger blant smykkeeskene med hengslet lokk.",
+      "monaco": "En gaveeske som ser ut som en liten håndveske. Satengbånd følger med.",
       "tokyo": "Lokk som løftes av, og god plass til logoen din."
     },
     "worlds": {
       "noir": {
-        "name": "Nattesvart",
-        "line": "Mørkt, skarpt og med gull. Kundene dine åpner esken sakte."
+        "name": "Midnatt",
+        "line": "Mørkt, skarpt og med gull. Kundene dine åpner smykkeesken sakte."
       },
       "cocoa": {
         "name": "Kakao",
-        "line": "Varmt og mykt. Den typen eske folk tar vare på."
+        "line": "Varmt og mykt. Den typen smykkeeske folk tar vare på."
       },
       "forest": {
         "name": "Skogbunn",
@@ -105,14 +120,14 @@
       },
       "sand": {
         "name": "Sand",
-        "line": "Lyst, lett og nordisk. Smykket får hele scenen."
+        "line": "Lyst, luftig og nordisk. Smykket får hele scenen."
       }
     },
     "resultKicker": "Emballasjeprofilen din",
     "resultTitle": "Du er {pct} % {world}.",
     "resultSecond": "… og {pct} % {world}.",
     "noneTitle": "Ingen hjerter? Respekt.",
-    "noneLine": "Kresne innkjøpere bygger de beste merkene. Vi har langt flere esker enn vi får plass til her.",
+    "noneLine": "De mest kresne innkjøperne bygger de beste merkevarene. Vi har langt flere smykkeesker enn det er plass til her.",
     "ctaTitle": "Skal vi sende deg nytt i din stil?",
     "restart": "Swipe igjen",
     "seeBoxes": "Se smykkeeskene",
@@ -124,15 +139,15 @@
     "peekCta": "Åpne",
     "kicker": "Nyhetsbrevet",
     "title": "Vi sender nytt om emballasje. Ikke smykker. Beklager.",
-    "lede": "Nye esker, tips og guider – og beskjed når vi har salg. Skriv adressen, så pakker vi.",
+    "lede": "Nye smykkeesker, tips og guider – og beskjed når vi har salg. Skriv inn adressen, så pakker vi.",
     "labelTo": "Til",
     "labelFrom": "Fra: Westpack, Holstebro, Danmark",
     "labelContents": "Innhold: gode ideer",
     "signup": "Send meg nyhetsbrevet",
-    "invalidEmail": "Postbudet finner ikke den adressen.",
+    "invalidEmail": "Posten finner ikke den adressen.",
     "stamp": "Sendt",
     "tape": "Westpack",
     "successTitle": "Sendt.",
-    "successBody": "Du finner det i innboksen når vi har noe som er verdt å åpne."
+    "successBody": "Den dukker opp i innboksen når vi har noe som er verdt å åpne."
   }
 };

@@ -133,7 +133,33 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
-  // 7. double opt-in markets get the confirm-your-email message
+  // 7. the logo studio's foil: light follows the mouse, the loupe opens, an uploaded logo becomes a foil mask
+  {
+    const { ctx, p, host } = await page({ viewport: { width: 1440, height: 900 } }, "concept=logo-studio&market=gbp_uk_eng");
+    await p.waitForTimeout(800);
+    const lightX = () => p.evaluate(() => { const l = document.querySelector("#westpack-signup").shadowRoot.querySelector("fePointLight"); return l ? Number(l.getAttribute("x")) : NaN; });
+    const box = await host.locator(".ls-frame").boundingBox();
+    await p.mouse.move(box.x + box.width * 0.1, box.y + box.height * 0.5); await p.waitForTimeout(150);
+    const a = await lightX();
+    await p.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.5); await p.waitForTimeout(150);
+    const b = await lightX();
+    check("foil light follows the mouse", b - a > 600, `light x ${a} -> ${b}`);
+    check("loupe opens over the box on a desktop", await host.locator(".ls-loupe.is-on").count() === 1);
+    // a dark logo on a white background, made in the page so the test needs no fixture file
+    const png = await p.evaluate(() => { const c = document.createElement("canvas"); c.width = 400; c.height = 160; const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, 400, 160); g.fillStyle = "#111"; g.font = "bold 90px Georgia"; g.fillText("Nord", 70, 115); return c.toDataURL("image/png").split(",")[1]; });
+    await host.locator('input[type="file"]').setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: Buffer.from(png, "base64") });
+    await p.waitForTimeout(800);
+    const mode = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const t = r.querySelector(".ls-frame text"), m = r.querySelector(".ls-frame mask image"); return { textHidden: t.getAttribute("display") === "none", maskSet: Boolean(m && (m.getAttribute("href") || "").startsWith("data:image/png")) }; });
+    check("an uploaded logo becomes a one-colour foil mask", mode.textHidden && mode.maskSet, JSON.stringify(mode));
+    await p.screenshot({ path: path.join(outDir, "logo-upload.jpg"), type: "jpeg", quality: 75 });
+    await host.locator('input[type="file"]').setInputFiles({ name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("not an image") });
+    await p.waitForTimeout(400);
+    const hintText = await host.locator(".ls-hint").innerText();
+    check("a file that is not an image gets a plain message", /couldn|PNG/i.test(hintText), hintText);
+    await ctx.close();
+  }
+
+  // 8. double opt-in markets get the confirm-your-email message
   {
     const { ctx, p, host } = await page({ ...devices["iPhone 13"] }, "concept=pack-and-ship&market=eur_eu_ger&doi=1");
     await host.locator(".wps-input").fill("name@firma.de");

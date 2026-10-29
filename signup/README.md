@@ -8,7 +8,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 
 | Oplevelse | Fil | Idé |
 |---|---|---|
-| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn i folie på et rigtigt Westpack-låg, live. Primært koncept. |
+| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg, live, med lys der følger musen/fingeren. Primært koncept. |
 | Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
 
@@ -118,12 +118,30 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 - Ny tekst: ret `da.js`/`en.js` og kør `node tools/signup/transcreate.js` (eller kun `... de,fr`).
 - Ingen synlig tekst står i oplevelsernes kode (testet).
 
+## Logo-studiet: trykket
+
+- **Seks rigtige låg:** mat sort plast, creme soft touch, sort med guldkant, støvet grøn karton, lysebrun soft touch
+  og mat sort karton (materialer læst i sitets produktdata). Swipe eller thumbnails skifter låg; hvert låg viser sin
+  egen naturlige folie, til den besøgende vælger en.
+- **Folierne er dem, logotryk-siden lister:** guld, sølv, rosaguld, old rose, hvid, sort og blindpræg.
+- **Trykket tegnes som SVG med rigtigt lys:** en spejlende glans fra en lyskilde, der følger musen eller fingeren
+  (og driver langsomt af sig selv), fin foliestruktur, og trykket presset ned i overfladen – skygge på den ene
+  indervæg, lys på den anden. Blindpræg er kun relief. Navnet placeres i det gamle demo-tryks vinkel og
+  forkortning og skaleres, så et langt navn aldrig skæres.
+- **Dit eget logo:** PNG, JPG eller SVG gøres til en én-farvet foliemaske i browseren (folie trykkes i én farve).
+  Filen forlader aldrig browseren; kun `wp_logo_uploaded: yes` følger med en tilmelding.
+- **Lup** over æsken på desktop, **"Se trykket tæt på"** (zoom) overalt.
+- **På mobil** sidder navnefeltet lige under æsken; mens man skriver, ligger æsken fast øverst over tastaturet, og
+  når man scroller ned til folierne, svæver en lille levende kopi af æsken i hjørnet.
+
 ## Billeder
 
 Alle billeder er Westpacks egne fra Asana-biblioteket, behandlet af `node tools/signup/build-assets.js`:
 originalen hentes gennem produktionen, beskæres og komprimeres til WebP (4–56 KB) i `assets/`, og to
 nærbilleder af logotryk (London på creme, Seville på sort) får Westpacks demo-tryk fjernet, så den besøgendes
-navn kan sættes i stedet (`tools/signup/clean-plate.html`). Intet peger på Asana, hvis links udløber efter timer.
+navn kan sættes i stedet (`tools/signup/clean-plate.html`): seks låg, de tre med tyndt tryk renset morfologisk, de tre
+med tykt tryk (Frankfurt, Seoul, Madrid) udfyldt harmonisk med lågets egen struktur lagt tilbage. To af kategori-billederne
+har et indstik med "MADE FROM RECYCLED PLASTIC"; beskæringerne holder det ude, fordi ingen kreativ må vise en miljøpåstand. Intet peger på Asana, hvis links udløber efter timer.
 Kundefotos er fra "Kundebilleder Uge 40" (frigivet til fri brug 2026-10-07); billedet med Deutsche Bank/Equinix
 er udeladt.
 
@@ -160,7 +178,7 @@ Verificeret 2026-10-29:
   "Westpack Signup Lab · <oplevelse>", locale, alle profilfelter, `organization` fra Logo-studiet og
   tidslinje-eventet. Testprofilerne er slettet igen.
 - Ugyldig e-mail afvises i browseren uden kald til Klaviyo; dobbeltklik giver ét kald.
-- 27 browser-checks (`tools/signup/qa.js`): 360×640, fem sprog uden vandret overflow, tastatur (fokus inde,
+- 31 browser-checks (`tools/signup/qa.js`), herunder at folielyset følger musen, at luppen åbner, at et uploadet logo bliver en foliemaske, og at en ikke-billedfil får en klar besked: 360×640, fem sprog uden vandret overflow, tastatur (fokus inde,
   Tab bliver i dialogen, Escape lukker), reduceret bevægelse, langsom 3G (åbner stylet efter 5 s), manglende
   billeder, double opt-in-tekst, tracking uden persondata, ingen JavaScript-fejl.
 - 18 unit-tests (`node --test tests/signup-lab.test.js`).

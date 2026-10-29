@@ -217,5 +217,143 @@
         "bytes": 12872
       }
     ]
+  },
+  "logo/box-seville": {
+    "source": "Logo_Tryk_1x1-4.jpg (Asana task 1213025393589646)",
+    "files": [
+      {
+        "file": "logo/box-seville-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 31230
+      },
+      {
+        "file": "logo/box-seville-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 13144
+      },
+      {
+        "file": "logo/box-seville-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 1850
+      }
+    ]
+  },
+  "logo/box-london": {
+    "source": "Logo_Tryk_1x1-2.jpg (Asana task 1213025393589646)",
+    "files": [
+      {
+        "file": "logo/box-london-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 14578
+      },
+      {
+        "file": "logo/box-london-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 6508
+      },
+      {
+        "file": "logo/box-london-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 1336
+      }
+    ]
+  },
+  "logo/box-frankfurt": {
+    "source": "Logo_Tryk_1x1-5.jpg (Asana task 1213025393589646)",
+    "files": [
+      {
+        "file": "logo/box-frankfurt-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 15610
+      },
+      {
+        "file": "logo/box-frankfurt-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 6000
+      },
+      {
+        "file": "logo/box-frankfurt-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 700
+      }
+    ]
+  },
+  "logo/box-torino": {
+    "source": "Kategori_Reshoot-8.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "logo/box-torino-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 66984
+      },
+      {
+        "file": "logo/box-torino-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 27574
+      },
+      {
+        "file": "logo/box-torino-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 4144
+      }
+    ]
+  },
+  "logo/box-seoul": {
+    "source": "Kategori_Reshoot-36.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "logo/box-seoul-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 71986
+      },
+      {
+        "file": "logo/box-seoul-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 22948
+      },
+      {
+        "file": "logo/box-seoul-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 2372
+      }
+    ]
+  },
+  "logo/box-madrid": {
+    "source": "Kategori_Reshoot-46.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "logo/box-madrid-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 55620
+      },
+      {
+        "file": "logo/box-madrid-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 17734
+      },
+      {
+        "file": "logo/box-madrid-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 2698
+      }
+    ]
   }
 }
