@@ -1237,6 +1237,19 @@ copy about Westpack, rather than inventing USPs. Two claims that sound right and
 samples are **not** free (freight, plus a small charge per logo sample), and logo print is
 included only on jewellery boxes. Refresh with the two scripts in `tools/`.
 
+## Kevin ROIberg, the high-season email character — `knowledge/kevin/`
+
+Added 2026-10-29. Kevin is the recurring character in Westpack's Christmas emails (seven DK sends
+2025–2026, each rolled out to 12 markets; four more planned W46–W49 2026). `knowledge/kevin/README.md`
+is the canon, voice, "how crazy" scale, the user's direction on Kevin drafts, formats, what the click
+data says and a recipe; `knowledge/kevin/emails/` holds the full text of every Kevin email and his
+blog whitepaper. Read it before writing a Kevin email. The one-line version: Kevin wraps a real reason
+to click (offer, report behind the click, tool, deadlines) — the 2025 emails that did won, the 2026
+ones that told the whole story in the email lost.
+
+`GET /api/klaviyo/templates?country=XX&messageId=<id>` returns the HTML a **sent** campaign used (the
+template list never shows those); the message id is `id` on a subject-line history row.
+
 ## Asana projects the app can read
 
 `GET /api/campaign/brain?action=asana_tasks&kind=` lists one of three projects, resolved by
