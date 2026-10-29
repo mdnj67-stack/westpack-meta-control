@@ -1,0 +1,138 @@
+/* Westpack Signup Lab - American English. Transcreated from da/en by tools/signup/transcreate.js; needs a native read before going live. */
+(globalThis.WestpackSignupCopy = globalThis.WestpackSignupCopy || {})["en-US"] = {
+  "meta": {
+    "status": "transcreated",
+    "model": "gpt-5.6-sol",
+    "date": "2026-10-29",
+    "needsNativeReview": true
+  },
+  "shell": {
+    "dialogLabel": "Westpack newsletter",
+    "close": "Close",
+    "emailLabel": "Your email",
+    "emailPlaceholder": "name@company.com",
+    "invalidEmail": "That email doesn't look quite right.",
+    "sending": "Sending…",
+    "networkError": "That didn't go through. Try again in a moment.",
+    "signup": "Sign up for the newsletter",
+    "noThanks": "No thanks",
+    "promise": [
+      "Product launches and must-haves",
+      "Practical tips and guides",
+      "A heads-up on our rare sales"
+    ],
+    "doiTitle": "Almost there.",
+    "doiBody": "We've sent you an email. Click the link in it and you're on the list.",
+    "peekDismiss": "Not now"
+  },
+  "logo-studio": {
+    "peek": "What does your brand look like in gold?",
+    "peekCta": "Try it",
+    "kicker": "The foil test",
+    "title": "Type your brand name. We'll put it in gold.",
+    "lede": "Live, on a real lid. It costs nothing—not even your email.",
+    "nameLabel": "Your brand name",
+    "namePlaceholder": "e.g. Atelier North",
+    "defaultName": "Your brand",
+    "lidLabel": "Lid",
+    "lid": {
+      "black": "Black",
+      "cream": "Cream"
+    },
+    "foilLabel": "Foil",
+    "foil": {
+      "gold": "Gold",
+      "silver": "Silver",
+      "rose": "Rose gold",
+      "white": "White",
+      "deboss": "Debossed"
+    },
+    "typeLabel": "Lettering",
+    "type": {
+      "classic": "Classic",
+      "script": "Script",
+      "clean": "Clean"
+    },
+    "hintLong": "That's a lot of letters. The logo is scaled to fit the lid.",
+    "hintWestpack": "Good choice. Sadly, that one's taken.",
+    "disclaimer": "Illustration on a real Westpack lid. Your own logo is printed in one foil color.",
+    "next": "That looks good",
+    "resultTitle": "{name} looks good on a box.",
+    "resultLede": "Want more ideas like this one? We'll write when there's something new.",
+    "proofTitle": "Real customers. Real logos.",
+    "back": "Change the name",
+    "successTitle": "{name}, you're in.",
+    "successBody": "Next time we have something worth opening, it'll be in your inbox."
+  },
+  "swipe-match": {
+    "peek": "Swipe your way to your packaging style",
+    "peekCta": "Start",
+    "kicker": "Box match",
+    "title": "Love it or leave it?",
+    "lede": "Six boxes. Swipe them. We'll tell you what they say about your brand.",
+    "like": "Love it",
+    "nope": "Leave it",
+    "keysHint": "Arrow keys work too: ← leave · → love",
+    "progress": "{n} of {total}",
+    "cardNames": {
+      "torino": "Torino",
+      "seoul": "Seoul",
+      "madrid": "Madrid",
+      "oslo": "Oslo",
+      "monaco": "Monaco gift box",
+      "tokyo": "Tokyo"
+    },
+    "cards": {
+      "torino": "Hinged lid, gold trim. The classic that never gets old.",
+      "seoul": "An ultra-flat drawer in dusty green. Quiet—until it opens.",
+      "madrid": "Soft touch outside, velour inside and a sleeve around it.",
+      "oslo": "Leatherette and velour. A bestseller among hinged boxes.",
+      "monaco": "A gift box that looks like a tiny handbag. Satin ribbon included.",
+      "tokyo": "A lift-off lid and plenty of room for your logo."
+    },
+    "worlds": {
+      "noir": {
+        "name": "Midnight",
+        "line": "Dark, sharp and gold. Your customers open the box slowly."
+      },
+      "cocoa": {
+        "name": "Cocoa",
+        "line": "Warm and soft. The kind of box people keep."
+      },
+      "forest": {
+        "name": "Forest floor",
+        "line": "Green, calm and thought through. Right down to the ribbon."
+      },
+      "sand": {
+        "name": "Sand",
+        "line": "Light, airy and Nordic. The jewelry gets the whole stage."
+      }
+    },
+    "resultKicker": "Your packaging profile",
+    "resultTitle": "You're {pct}% {world}.",
+    "resultSecond": "… and {pct}% {world}.",
+    "noneTitle": "Not one heart? Respect.",
+    "noneLine": "The pickiest buyers build the best brands. We have far more boxes than fit in here.",
+    "ctaTitle": "Want new things in your style?",
+    "restart": "Swipe again",
+    "seeBoxes": "See the jewelry boxes",
+    "successTitle": "Noted: {world}.",
+    "successBody": "See you in your inbox."
+  },
+  "pack-and-ship": {
+    "peek": "We've got a package for you. (It's a newsletter.)",
+    "peekCta": "Open",
+    "kicker": "The newsletter",
+    "title": "We send packaging news. Not jewelry. Sorry.",
+    "lede": "New boxes, tips and guides—and a heads-up when we have a sale. Add your address, and we'll do the packing.",
+    "labelTo": "To",
+    "labelFrom": "From: Westpack, Holstebro, Denmark",
+    "labelContents": "Contents: good ideas",
+    "signup": "Send me the newsletter",
+    "invalidEmail": "The mail carrier can't find that address.",
+    "stamp": "Sent",
+    "tape": "Westpack",
+    "successTitle": "Shipped.",
+    "successBody": "It lands in your inbox whenever we have something worth opening."
+  }
+};

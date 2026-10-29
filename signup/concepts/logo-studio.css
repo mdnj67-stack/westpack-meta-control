@@ -1,0 +1,123 @@
+/* Logo studio. The lid photo keeps its square shape so the print anchor stays put at every size; on a phone it sits
+   in a dark frame at the top of the sheet, on a desktop it fills the left half. */
+/* minmax(0, ...): the customer-photo marquee is max-content wide and would otherwise widen the whole column */
+.ls { display: grid; grid-template-columns: minmax(0, 1fr); }
+.ls-side { min-width: 0; }
+.wps .ls-name-input:focus-visible { outline: none; }
+.ls-stage { position: relative; background: radial-gradient(120% 90% at 50% 40%, #2b3a35 0%, #1a2420 70%); display: grid; place-items: center; padding: 26px 18px 18px; }
+.ls-visual {
+  position: relative; margin: 0; height: min(44vh, calc(100vw - 36px), 420px); aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden;
+  container-type: inline-size; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); background: #0f0f0f;
+}
+.ls-lid-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 220ms ease; }
+.ls-lid-img.is-swapping { opacity: 0.25; }
+.ls-illustration { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 22px 12px 9px; font-size: 10.5px; line-height: 1.35; color: rgba(255, 255, 255, 0.86); background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent); pointer-events: none; }
+[data-tone="light"] .ls-illustration { color: rgba(30, 26, 20, 0.78); background: linear-gradient(to top, rgba(245, 238, 225, 0.85), transparent); }
+
+/* the print: positioned at the demo print's anchor and angle, foreshortened like the lid */
+.ls-print-wrap {
+  position: absolute; left: var(--x); top: var(--y); width: calc(var(--maxw) * 1%); display: flex; justify-content: center; pointer-events: none;
+  transform: translate(-50%, -50%) rotate(var(--angle)) skewX(-7deg) scaleY(0.9); transform-origin: 50% 50%;
+}
+.ls-print { white-space: nowrap; line-height: 1.05; padding: 0.1em 0.05em; font-size: 7.2cqw; transition: opacity 200ms; }
+[data-type="classic"] .ls-print { font-family: "WPS Fraunces", Georgia, serif; font-weight: 520; text-transform: uppercase; letter-spacing: 0.09em; font-size: 6.6cqw; font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 48; }
+[data-type="script"] .ls-print { font-family: "WPS Pinyon Script", "Snell Roundhand", cursive; font-size: 10.5cqw; letter-spacing: 0; padding: 0.2em 0.25em; }
+[data-type="clean"] .ls-print { font-family: "WPS Jost", "Futura", sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: 0.24em; font-size: 5.6cqw; }
+.ls-print.is-placeholder { opacity: 0.62; }
+
+/* foils: a metallic gradient clipped to the letters, sitting slightly below the surface */
+.ls-print { -webkit-background-clip: text; background-clip: text; background-size: 240% 100%; background-position: 30% 0; }
+[data-foil="gold"] .ls-print { color: transparent; background-image: linear-gradient(105deg, #6c5022 0%, #b28b4b 12%, #f2dea4 26%, #c7a35d 38%, #8a6830 52%, #e2c78b 68%, #a47e3c 84%, #efd9a0 100%); }
+[data-foil="silver"] .ls-print { color: transparent; background-image: linear-gradient(105deg, #6f7378 0%, #b9bdc3 14%, #f5f6f8 28%, #a3a7ad 42%, #7c8086 56%, #e6e8eb 72%, #959a9f 88%, #f2f3f5 100%); }
+[data-foil="rose"] .ls-print { color: transparent; background-image: linear-gradient(105deg, #74402f 0%, #c27f66 14%, #f3cbb5 28%, #b4735c 42%, #874c3b 56%, #e8b59d 72%, #9c5d48 88%, #f0c6ae 100%); }
+[data-foil="white"] .ls-print { color: #f4f2ed; background: none; }
+[data-tone="light"][data-foil="white"] .ls-print { color: #fdfcf9; text-shadow: 0 0.6px 0 rgba(120, 100, 70, 0.32); }
+[data-foil="deboss"] .ls-print { background: none; }
+[data-tone="dark"][data-foil="deboss"] .ls-print { color: rgba(255, 255, 255, 0.035); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.16), 0 -1px 0 rgba(0, 0, 0, 0.9); }
+[data-tone="light"][data-foil="deboss"] .ls-print { color: rgba(120, 98, 66, 0.1); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85), 0 -1px 0 rgba(96, 74, 42, 0.32); }
+[data-tone="dark"]:not([data-foil="deboss"]):not([data-foil="white"]) .ls-print { filter: drop-shadow(0 0.8px 0 rgba(0, 0, 0, 0.7)) drop-shadow(0 -0.4px 0 rgba(255, 236, 196, 0.22)); }
+[data-tone="light"]:not([data-foil="deboss"]):not([data-foil="white"]) .ls-print { filter: drop-shadow(0 0.7px 0 rgba(255, 255, 255, 0.75)) drop-shadow(0 -0.5px 0 rgba(84, 64, 36, 0.38)); }
+[data-tone="dark"][data-foil="white"] .ls-print { filter: drop-shadow(0 0.8px 0 rgba(0, 0, 0, 0.75)); }
+
+/* the press: the foil arrives, then catches the light */
+.ls-print.is-pressed { animation: ls-press 900ms var(--wps-ease-out); }
+@keyframes ls-press {
+  0% { transform: scale(1.04); opacity: 0.4; background-position: 95% 0; }
+  35% { transform: scale(0.985); opacity: 1; }
+  100% { transform: scale(1); background-position: 30% 0; }
+}
+.ls-sheen { position: absolute; inset: -20%; pointer-events: none; background: linear-gradient(115deg, transparent 38%, rgba(255, 248, 230, 0.16) 48%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 248, 230, 0.16) 52%, transparent 62%); transform: translateX(-70%); mix-blend-mode: soft-light; }
+.ls-sheen.is-sweeping { animation: ls-sheen 1300ms var(--wps-ease-out); }
+@keyframes ls-sheen { to { transform: translateX(70%); } }
+
+/* ---- side panel ---- */
+.ls-side { padding: 22px 20px 26px; }
+.ls-panel[hidden] { display: none; }
+.ls-name { display: grid; gap: 4px; margin: 2px 0 6px; }
+.ls-name-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--wps-muted); }
+.ls-name-input {
+  width: 100%; height: 56px; padding: 0 2px; border: 0; border-bottom: 2px solid rgba(23, 22, 20, 0.2); background: transparent; border-radius: 0;
+  font-family: var(--wps-display); font-size: 26px; color: var(--wps-ink); outline: none; transition: border-color 160ms;
+  font-variation-settings: "SOFT" 40, "opsz" 48;
+}
+.ls-name-input::placeholder { color: #B6B0A5; }
+.ls-name-input:focus { border-color: var(--wps-green); }
+.ls-hint { margin: 0 0 6px; font-size: 13px; color: var(--wps-green); min-height: 1.2em; font-style: italic; }
+.ls-options { display: grid; gap: 14px; margin: 10px 0 18px; }
+.ls-group { display: grid; gap: 7px; }
+.ls-group-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--wps-muted); }
+.ls-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ls-chip {
+  height: 40px; padding: 0 13px; border-radius: 999px; border: 1.5px solid rgba(23, 22, 20, 0.14); background: #fff; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 550; color: var(--wps-ink);
+  transition: background 160ms, border-color 160ms, color 160ms, transform 120ms var(--wps-ease-out);
+}
+.ls-chip:hover { border-color: rgba(23, 22, 20, 0.32); }
+.ls-chip:active { transform: scale(0.96); }
+.ls-chip[aria-pressed="true"] { background: var(--wps-green); border-color: var(--wps-green); color: #fff; }
+.ls-swatch { width: 18px; height: 18px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+.ls-swatch-gold { background: linear-gradient(135deg, #8a6830, #f2dea4 45%, #b28b4b); }
+.ls-swatch-silver { background: linear-gradient(135deg, #7c8086, #f5f6f8 45%, #a3a7ad); }
+.ls-swatch-rose { background: linear-gradient(135deg, #874c3b, #f3cbb5 45%, #b4735c); }
+.ls-swatch-white { background: #f6f4ef; }
+.ls-swatch-deboss { background: #d9cdb8; box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.8), inset -1px -1px 0 rgba(0, 0, 0, 0.25); }
+.ls-lid-black { background: #161616; }
+.ls-lid-cream { background: #eadfcb; }
+.ls-type-classic { font-family: "WPS Fraunces", Georgia, serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12.5px; }
+.ls-type-script { font-family: "WPS Pinyon Script", cursive; font-size: 19px; font-weight: 400; }
+.ls-type-clean { font-family: "WPS Jost", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px; }
+.ls-next { width: 100%; }
+
+/* ---- result ---- */
+.ls-proof-title { margin: 6px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--wps-muted); }
+.ls-proof { overflow: hidden; margin: 0 -20px 16px; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ls-proof-track { display: flex; gap: 8px; width: max-content; padding: 0 20px; animation: ls-marquee 38s linear infinite; }
+.ls-proof:hover .ls-proof-track { animation-play-state: paused; }
+.ls-proof img { width: 86px; height: 86px; border-radius: 12px; object-fit: cover; display: block; background: var(--wps-paper-2); }
+@keyframes ls-marquee { to { transform: translateX(calc(-50% - 4px)); } }
+.ls-back { margin-top: 6px; }
+.ls-success { padding: 8px 0 4px; outline: none; }
+.ls-success[hidden] { display: none; }
+.ls-success-title { font-size: clamp(30px, 7vw, 44px); }
+.ls.is-result .ls-visual { box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(233, 211, 161, 0.18); }
+/* on a phone the lid shrinks to a keepsake at the top of the result, so the name stays in view above the form */
+.ls-visual { transition: height 520ms var(--wps-ease-out), box-shadow 300ms; }
+.ls-stage { transition: padding 520ms var(--wps-ease-out); }
+@media (max-width: 759px) {
+  .ls.is-result .ls-stage { padding: 20px 18px 14px; }
+  .ls.is-result .ls-visual { height: min(30vh, 260px); }
+  .ls.is-result .ls-illustration { display: none; }
+}
+
+/* ---- tablet and desktop: the lid on the left, everything else on the right ---- */
+@media (min-width: 760px) {
+  .ls { grid-template-columns: minmax(0, 46%) minmax(0, 54%); min-height: 560px; }
+  .ls-stage { padding: 30px; }
+  .ls-visual { height: auto; width: 100%; max-width: 420px; }
+  .ls-side { padding: 44px 40px 34px; max-height: min(88vh, 720px); overflow-y: auto; }
+  .ls-proof { margin: 0 -40px 16px; }
+  .ls-proof-track { padding: 0 40px; }
+  .ls-next { width: auto; }
+}
+.wps[data-reduced="true"] .ls-proof-track { animation: none; }
+.wps[data-reduced="true"] .ls-proof { overflow-x: auto; }

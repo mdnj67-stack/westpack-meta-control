@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- Removes Westpack's demo print from a close-up of a printed lid, so a visitor's own brand name can be set in
+     its place. Driven by build-assets.js through Playwright: window.cleanPlate(options) returns WebP data URLs.
+
+     How: a morphological opening (for print lighter than the lid) or closing (for print darker than it), with a
+     window wider than any stroke, estimates the bare lid under the print. Only pixels that differ from that
+     estimate by more than a threshold, inside the hand-drawn print area, are replaced, and the estimate is given
+     back the lid's own grain, so the untouched surface keeps its real texture and light. -->
+<meta charset="utf-8">
+<canvas id="c"></canvas>
+<script>
+function loadImage(src) {
+  return new Promise((resolve, reject) => { const i = new Image(); i.onload = () => resolve(i); i.onerror = reject; i.src = src; });
+}
+
+// sliding-window min or max over one row/column, O(n) with a monotonic deque
+function slide(src, dst, len, stride, offset, r, isMax) {
+  const q = new Int32Array(len); let head = 0, tail = 0;
+  const v = (i) => src[offset + i * stride];
+  for (let i = 0; i < len + r; i++) {
+    if (i < len) {
+      const x = v(i);
+      while (tail > head && (isMax ? v(q[tail - 1]) <= x : v(q[tail - 1]) >= x)) tail--;
+      q[tail++] = i;
+    }
+    const out = i - r;
+    if (out >= 0) {
+      while (q[head] < out - r) head++;
+      dst[offset + out * stride] = v(q[head]);
+    }
+  }
+}
+function morph(ch, w, h, r, isMax) {
+  const tmp = new Float32Array(ch.length), out = new Float32Array(ch.length);
+  for (let y = 0; y < h; y++) slide(ch, tmp, w, 1, y * w, r, isMax);
+  for (let x = 0; x < w; x++) slide(tmp, out, h, w, x, r, isMax);
+  return out;
+}
+function boxBlur(ch, w, h, r) {
+  const tmp = new Float32Array(ch.length), out = new Float32Array(ch.length);
+  for (let y = 0; y < h; y++) { let s = 0; const o = y * w; for (let x = -r; x <= r; x++) s += ch[o + Math.min(w - 1, Math.max(0, x))];
+    for (let x = 0; x < w; x++) { tmp[o + x] = s / (2 * r + 1); s += ch[o + Math.min(w - 1, x + r + 1)] - ch[o + Math.max(0, x - r)]; } }
+  for (let x = 0; x < w; x++) { let s = 0; for (let y = -r; y <= r; y++) s += tmp[Math.min(h - 1, Math.max(0, y)) * w + x];
+    for (let y = 0; y < h; y++) { out[y * w + x] = s / (2 * r + 1); s += tmp[Math.min(h - 1, y + r + 1) * w + x] - tmp[Math.max(0, y - r) * w + x]; } }
+  return out;
+}
+function insidePolygon(x, y, poly) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+// options: { src, size, crop:[x,y,w,h] in source px, print:"light"|"dark", radius, threshold, polygon:[[x,y],...] in
+// output px, outputs:[{width, quality}] }
+window.cleanPlate = async function (o) {
+  const img = await loadImage(o.src);
+  const [cx, cy, cw, ch] = o.crop || [0, 0, img.naturalWidth, img.naturalHeight];
+  const w = o.size, h = Math.round((o.size * ch) / cw);
+  const c = document.getElementById("c"); c.width = w; c.height = h;
+  const g = c.getContext("2d", { willReadFrequently: true });
+  g.imageSmoothingQuality = "high";
+  g.drawImage(img, cx, cy, cw, ch, 0, 0, w, h);
+  const data = g.getImageData(0, 0, w, h);
+  const px = data.data, n = w * h;
+  const chans = [0, 1, 2].map((k) => { const a = new Float32Array(n); for (let i = 0; i < n; i++) a[i] = px[i * 4 + k]; return a; });
+  // opening removes features lighter than the lid; closing removes darker ones. Metallic foil does both (it
+  // catches the light in one place and reads dark in the next), so "both" closes and then opens.
+  const open = (a) => morph(morph(a, w, h, o.radius, false), w, h, o.radius, true);
+  const close = (a) => morph(morph(a, w, h, o.radius, true), w, h, o.radius, false);
+  const est = chans.map((a) => {
+    const bare = o.print === "light" ? open(a) : o.print === "dark" ? close(a) : open(close(a));
+    return boxBlur(bare, w, h, Math.max(2, Math.round(o.radius / 2)));
+  });
+  // grain: the lid's own high-frequency texture, measured outside the print area
+  const lum = (r, gg, b) => 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+  const smooth = boxBlur(chans[1], w, h, 3);
+  let s2 = 0, cnt = 0;
+  for (let y = 0; y < h; y += 3) for (let x = 0; x < w; x += 3) { if (o.polygon && insidePolygon(x, y, o.polygon)) continue; const i = y * w + x; const d = chans[1][i] - smooth[i]; s2 += d * d; cnt++; }
+  const grain = Math.sqrt(s2 / Math.max(1, cnt));
+  // mask: inside the print polygon, where the photo departs from the bare-lid estimate
+  // "fill" replaces the whole print area: foil is pressed into the surface, and the recess it leaves shows as a
+  // faint relief that no threshold separates from the lid's own shading
+  const mask = new Float32Array(n);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (o.polygon && !insidePolygon(x, y, o.polygon)) continue;
+    const i = y * w + x;
+    if (o.fill) { mask[i] = 1; continue; }
+    const diff = Math.abs(lum(chans[0][i], chans[1][i], chans[2][i]) - lum(est[0][i], est[1][i], est[2][i]));
+    if (diff > o.threshold) mask[i] = 1;
+  }
+  const grown = o.fill ? mask : morph(mask, w, h, o.grow || 3, true);
+  const soft = boxBlur(grown, w, h, o.feather || 2);
+  let seed = 1234567;
+  const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff - 0.5; };
+  let replaced = 0;
+  for (let i = 0; i < n; i++) {
+    const m = Math.min(1, soft[i] * 1.4);
+    if (m <= 0) continue;
+    replaced++;
+    const noise = rand() * grain * 1.6;
+    for (let k = 0; k < 3; k++) px[i * 4 + k] = Math.round(px[i * 4 + k] * (1 - m) + (est[k][i] + noise) * m);
+  }
+  g.putImageData(data, 0, 0);
+  const outputs = [];
+  for (const out of o.outputs || [{ width: w, quality: 0.86 }]) {
+    const oc = document.createElement("canvas"); oc.width = out.width; oc.height = Math.round((out.width * h) / w);
+    const og = oc.getContext("2d"); og.imageSmoothingQuality = "high"; og.drawImage(c, 0, 0, oc.width, oc.height);
+    outputs.push({ width: oc.width, height: oc.height, webp: oc.toDataURL("image/webp", out.quality || 0.86) });
+  }
+  return { width: w, height: h, grain: Math.round(grain * 100) / 100, replacedShare: Math.round((replaced / n) * 1000) / 1000, outputs };
+};
+
+// plain resize/crop for photos that need no cleaning
+window.resizePhoto = async function (o) {
+  const img = await loadImage(o.src);
+  const [cx, cy, cw, ch] = o.crop || [0, 0, img.naturalWidth, img.naturalHeight];
+  const outputs = [];
+  for (const out of o.outputs) {
+    const c = document.createElement("canvas"); c.width = out.width; c.height = Math.round((out.width * ch) / cw);
+    const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.drawImage(img, cx, cy, cw, ch, 0, 0, c.width, c.height);
+    outputs.push({ width: c.width, height: c.height, webp: c.toDataURL("image/webp", out.quality || 0.82) });
+  }
+  return { natural: [img.naturalWidth, img.naturalHeight], outputs };
+};
+</script>

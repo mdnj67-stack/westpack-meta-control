@@ -1,0 +1,153 @@
+/* Westpack Signup Lab - the shell. Lives inside a shadow root, so nothing here touches the store and nothing on
+   the store touches this. Mobile first: a bottom sheet on phones, a centred card from 760px. */
+:host { all: initial; }
+.wps {
+  --wps-green: #34453F;
+  --wps-green-deep: #22302B;
+  --wps-green-soft: #E4EAE6;
+  --wps-paper: #F5F1EA;
+  --wps-paper-2: #ECE6DB;
+  --wps-ink: #171614;
+  --wps-body: #4A4741;
+  --wps-muted: #7B766D;
+  --wps-line: rgba(23, 22, 20, 0.12);
+  --wps-gold: #B8955A;
+  --wps-gold-hi: #E9D3A1;
+  --wps-focus: #C9A465;
+  --wps-error: #A3362B;
+  --wps-display: "WPS Fraunces", "Iowan Old Style", Georgia, serif;
+  --wps-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --wps-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --wps-ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --wps-radius: 22px;
+  font-family: var(--wps-ui);
+  color: var(--wps-ink);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+.wps *, .wps *::before, .wps *::after { box-sizing: border-box; }
+/* zero specificity, so every button class below can set its own colour */
+:where(.wps) :where(button) { font: inherit; color: inherit; }
+.wps-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- overlay and dialog ---------- */
+.wps-overlay {
+  position: fixed; inset: 0; background: rgba(18, 26, 23, 0.52);
+  opacity: 0; pointer-events: none; transition: opacity 360ms var(--wps-ease-out);
+}
+.wps-dialog {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  max-height: min(94dvh, 820px); overflow: hidden auto; overscroll-behavior: contain;
+  background: var(--wps-paper); border-radius: var(--wps-radius) var(--wps-radius) 0 0;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.28);
+  transform: translateY(104%); visibility: hidden;
+  transition: transform 520ms var(--wps-ease-out), visibility 0s linear 520ms;
+  outline: none; -webkit-overflow-scrolling: touch;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.wps-dialog.is-dragging { transition: none; }
+.wps.is-open .wps-overlay { opacity: 1; pointer-events: auto; }
+.wps.is-open .wps-dialog { transform: translateY(0); visibility: visible; transition: transform 560ms var(--wps-ease-out), visibility 0s; }
+.wps-grab { position: sticky; top: 0; z-index: 3; height: 0; }
+.wps-grab::before { content: ""; position: absolute; left: 50%; top: 8px; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: rgba(23, 22, 20, 0.22); }
+.wps-close {
+  position: absolute; top: 12px; right: 12px; z-index: 4; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; border: 0; cursor: pointer;
+  background: rgba(245, 241, 234, 0.86); color: var(--wps-ink); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: transform 160ms var(--wps-ease-out), background 160ms;
+}
+.wps-close:hover { background: #fff; transform: rotate(90deg); }
+.wps-close:active { transform: scale(0.92); }
+.wps-stage { position: relative; }
+
+@media (min-width: 760px) {
+  .wps-dialog {
+    left: 50%; right: auto; top: 50%; bottom: auto; width: min(940px, calc(100vw - 48px)); max-height: min(88vh, 720px);
+    border-radius: var(--wps-radius); box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+    transform: translate(-50%, -46%) scale(0.965); opacity: 0;
+    transition: transform 420ms var(--wps-ease-out), opacity 260ms ease, visibility 0s linear 420ms;
+  }
+  .wps.is-open .wps-dialog { transform: translate(-50%, -50%) scale(1); opacity: 1; transition: transform 520ms var(--wps-ease-out), opacity 300ms ease, visibility 0s; }
+  .wps-grab { display: none; }
+}
+
+/* ---------- peek ---------- */
+.wps-peek {
+  position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-width: 440px;
+  display: flex; align-items: stretch; background: var(--wps-green); color: #fff; border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28); transform: translateY(140%); opacity: 0;
+  transition: transform 520ms var(--wps-ease-out), opacity 260ms ease;
+}
+.wps-peek.is-in { transform: translateY(0); opacity: 1; }
+.wps-peek-main { flex: 1; display: flex; align-items: center; gap: 12px; padding: 12px 6px 12px 12px; background: none; border: 0; text-align: left; cursor: pointer; color: inherit; min-height: 64px; }
+.wps-peek-visual { flex: none; width: 52px; height: 52px; border-radius: 12px; overflow: hidden; background: var(--wps-green-deep); }
+.wps-peek-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wps-peek-text { display: grid; gap: 2px; }
+.wps-peek-line { font-family: var(--wps-display); font-size: 17px; line-height: 1.2; font-variation-settings: "SOFT" 50, "WONK" 1; }
+.wps-peek-cta { font-size: 13px; font-weight: 600; color: var(--wps-gold-hi); letter-spacing: 0.01em; }
+.wps-peek-x { flex: none; width: 44px; border: 0; background: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; display: grid; place-items: center; border-radius: 0 18px 18px 0; }
+.wps-peek-x:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
+@media (min-width: 760px) { .wps-peek { left: 24px; right: auto; width: 400px; } }
+
+/* ---------- typography shared by every experience ---------- */
+.wps-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--wps-green); margin: 0 0 10px; }
+.wps-title { font-family: var(--wps-display); font-weight: 560; font-size: clamp(26px, 6.4vw, 38px); line-height: 1.04; letter-spacing: -0.015em; margin: 0 0 10px; font-variation-settings: "SOFT" 30, "WONK" 0, "opsz" 72; text-wrap: balance; }
+.wps-lede { font-size: 15.5px; color: var(--wps-body); margin: 0 0 18px; text-wrap: pretty; }
+.wps-small { font-size: 12.5px; color: var(--wps-muted); }
+
+/* ---------- the shared signup form ---------- */
+.wps-form { display: grid; gap: 8px; }
+.wps-label { font-size: 13px; font-weight: 600; color: var(--wps-ink); }
+.wps-field { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.wps-input {
+  width: 100%; height: 52px; padding: 0 16px; font: 16px/1 var(--wps-ui); color: var(--wps-ink);
+  background: #fff; border: 1.5px solid rgba(23, 22, 20, 0.18); border-radius: 12px; outline: none;
+  transition: border-color 160ms, box-shadow 160ms;
+}
+.wps-input::placeholder { color: #A39E94; }
+.wps-input:focus { border-color: var(--wps-green); box-shadow: 0 0 0 4px rgba(52, 69, 63, 0.14); }
+.wps-form.has-error .wps-input { border-color: var(--wps-error); box-shadow: 0 0 0 4px rgba(163, 54, 43, 0.12); animation: wps-shake 360ms; }
+.wps-btn {
+  height: 52px; padding: 0 22px; border: 0; border-radius: 12px; cursor: pointer; font-weight: 650; font-size: 15.5px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap;
+  transition: transform 140ms var(--wps-ease-out), background 160ms, box-shadow 160ms;
+}
+.wps-btn-primary { background: var(--wps-green); color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset, 0 8px 22px rgba(52, 69, 63, 0.28); }
+.wps-btn-primary:hover { background: var(--wps-green-deep); }
+.wps-btn-primary:active { transform: scale(0.98); }
+.wps-btn[disabled] { cursor: progress; opacity: 0.86; }
+.wps-form.is-busy .wps-btn-label::after { content: ""; display: inline-block; width: 14px; height: 14px; margin-left: 10px; vertical-align: -2px; border: 2px solid rgba(255, 255, 255, 0.4); border-top-color: #fff; border-radius: 50%; animation: wps-spin 700ms linear infinite; }
+.wps-btn-ghost { background: transparent; color: var(--wps-ink); border: 1.5px solid var(--wps-line); }
+.wps-btn-ghost:hover { border-color: rgba(23, 22, 20, 0.3); background: rgba(255, 255, 255, 0.5); }
+.wps-link { background: none; border: 0; padding: 6px 0; color: var(--wps-muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: 14px; }
+.wps-error { min-height: 0; margin: 0; font-size: 13.5px; color: var(--wps-error); font-weight: 550; }
+.wps-error:empty { display: none; }
+.wps-consent { margin: 2px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--wps-muted); text-wrap: pretty; }
+.wps-consent a { color: inherit; text-underline-offset: 2px; }
+.wps-promise { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--wps-body); }
+.wps-promise li { display: flex; gap: 10px; align-items: baseline; }
+.wps-promise li::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--wps-gold); transform: translateY(-1px); }
+@media (min-width: 480px) { .wps-field { grid-template-columns: 1fr auto; } .wps-form.is-compact .wps-field { grid-template-columns: 1fr; } }
+
+/* ---------- focus: always visible for keyboard users ---------- */
+.wps :focus { outline: none; }
+.wps :focus-visible { outline: 3px solid var(--wps-focus); outline-offset: 3px; border-radius: 10px; }
+.wps .wps-input:focus-visible { outline: none; }
+
+/* ---------- shared motion ---------- */
+@keyframes wps-spin { to { transform: rotate(360deg); } }
+@keyframes wps-shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+@keyframes wps-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.wps-rise { animation: wps-rise 560ms var(--wps-ease-out) both; }
+.wps-rise-2 { animation-delay: 70ms; } .wps-rise-3 { animation-delay: 140ms; } .wps-rise-4 { animation-delay: 210ms; }
+
+/* reduced motion: things still change, but by fading, never by flying */
+.wps[data-reduced="true"] *, .wps[data-reduced="true"] *::before, .wps[data-reduced="true"] *::after {
+  animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 120ms !important; transition-property: opacity, background, color, border-color !important;
+}
+.wps[data-reduced="true"] .wps-dialog { transform: none !important; }
+@media (min-width: 760px) { .wps[data-reduced="true"] .wps-dialog { transform: translate(-50%, -50%) !important; } }
+.wps[data-reduced="true"] .wps-peek { transform: none !important; }

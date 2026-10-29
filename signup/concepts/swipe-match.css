@@ -1,0 +1,87 @@
+/* Swipe match. A card stack you can actually throw: the top card follows the finger, the next two wait behind it. */
+.sm { display: grid; grid-template-columns: minmax(0, 1fr); }
+.sm-head { padding: 26px 20px 0; }
+.sm-head .wps-title { font-size: clamp(28px, 8vw, 40px); }
+.sm-keys { display: none; margin: 0; }
+.sm-play { padding: 4px 20px 22px; display: grid; justify-items: center; }
+/* on a phone the card is sized from the sheet's height, so the like and leave buttons are never below the fold */
+.sm-deck { position: relative; width: min(100%, 330px, max(220px, calc((min(94dvh, 820px) - 330px) * 0.8))); aspect-ratio: 4 / 5; margin: 8px 0 14px; }
+@media (max-height: 700px) and (max-width: 759px) { .sm-head .wps-lede { font-size: 14px; margin-bottom: 8px; } .sm-head { padding-top: 22px; } }
+.sm-card {
+  --pos: 0; --like: 0; --nope: 0;
+  position: absolute; inset: 0; border-radius: 20px; overflow: hidden; background: var(--wps-paper-2);
+  box-shadow: 0 14px 34px rgba(30, 24, 16, 0.22), 0 2px 6px rgba(30, 24, 16, 0.1);
+  transform: translateY(calc(var(--pos) * 12px)) scale(calc(1 - var(--pos) * 0.045));
+  transform-origin: 50% 100%; transition: transform 420ms var(--wps-ease-out), opacity 300ms;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.sm-card:not(.is-top) { pointer-events: none; }
+.sm-card.is-dragging { transition: none; cursor: grabbing; }
+.sm-card.is-gone { visibility: hidden; }
+.sm-card img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.sm-card-text { position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 18px 18px; color: #fff; background: linear-gradient(to top, rgba(14, 12, 10, 0.78), rgba(14, 12, 10, 0.35) 55%, transparent); }
+.sm-card-name { margin: 0 0 4px; font-family: var(--wps-display); font-weight: 560; font-size: 26px; line-height: 1; letter-spacing: -0.01em; }
+.sm-card-line { margin: 0; font-size: 14px; line-height: 1.4; color: rgba(255, 255, 255, 0.9); max-width: 30ch; }
+.sm-stamp {
+  position: absolute; top: 22px; padding: 6px 12px; border: 3px solid currentColor; border-radius: 10px; font-weight: 800; font-size: 18px;
+  letter-spacing: 0.08em; text-transform: uppercase; opacity: 0; pointer-events: none; background: rgba(255, 255, 255, 0.12);
+}
+.sm-stamp-like { left: 18px; color: #2f7d4f; transform: rotate(-12deg); opacity: var(--like); }
+.sm-stamp-nope { right: 18px; color: #b2402f; transform: rotate(12deg); opacity: var(--nope); }
+.sm-card.is-liked .sm-stamp-like, .sm-card.is-noped .sm-stamp-nope { opacity: 1; }
+.sm-card.is-hinting { animation: sm-hint 1300ms var(--wps-ease-out); }
+@keyframes sm-hint { 20% { transform: translateX(-16px) rotate(-3deg); } 50% { transform: translateX(16px) rotate(3deg); } 75% { transform: translateX(-6px) rotate(-1deg); } }
+
+.sm-actions { display: flex; align-items: center; justify-content: center; gap: 22px; width: min(100%, 330px); }
+.sm-btn {
+  width: 64px; height: 64px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; flex: none; background: #fff;
+  box-shadow: 0 10px 24px rgba(30, 24, 16, 0.16), 0 0 0 1px rgba(23, 22, 20, 0.06);
+  transition: transform 160ms var(--wps-ease-out), box-shadow 160ms, background 160ms;
+}
+.sm-btn:hover { transform: translateY(-2px) scale(1.04); }
+.sm-btn:active { transform: scale(0.92); }
+.sm-nope { color: #b2402f; }
+.sm-like { color: #fff; background: var(--wps-green); box-shadow: 0 12px 26px rgba(52, 69, 63, 0.38); }
+.sm-meter { flex: 1; display: grid; justify-items: center; gap: 6px; }
+.sm-dots { display: flex; gap: 6px; }
+.sm-dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(23, 22, 20, 0.16); transition: background 200ms, transform 200ms; }
+.sm-dots span.is-done { background: var(--wps-gold); transform: scale(1.15); }
+.sm-progress { margin: 0; font-size: 12.5px; color: var(--wps-muted); font-variant-numeric: tabular-nums; }
+
+/* ---- result ---- */
+.sm-result[hidden], .sm-head[hidden] { display: none; }
+.sm.is-result .sm-play { display: none; }
+.sm-result { display: grid; grid-template-columns: minmax(0, 1fr); }
+.sm-collage { position: relative; height: 210px; background: radial-gradient(110% 90% at 50% 30%, #2b3a35 0%, #18211e 75%); overflow: hidden; }
+.sm-collage img {
+  position: absolute; top: 34px; left: 50%; width: 118px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); border: 3px solid #fff;
+  transform: translateX(calc(-50% + (var(--i) - 1) * 92px)) rotate(calc((var(--i) - 1) * 8deg)); animation: sm-fan 700ms var(--wps-ease-out) both; animation-delay: calc(var(--i) * 90ms);
+}
+@keyframes sm-fan { from { opacity: 0; transform: translateX(-50%) translateY(40px) rotate(0); } }
+.sm-result-body { padding: 22px 20px 26px; }
+.sm-result-title { font-size: clamp(30px, 8.6vw, 46px); }
+.sm-pct { display: inline-block; min-width: 1.4ch; font-variant-numeric: tabular-nums; color: var(--wps-green); }
+.sm-world-line { margin: 0 0 6px; font-family: var(--wps-display); font-style: italic; font-size: 18px; line-height: 1.35; color: var(--wps-body); }
+.sm-second { margin: 0 0 12px; font-size: 14px; color: var(--wps-muted); }
+.sm-see { display: inline-block; margin: 4px 0 18px; font-weight: 650; font-size: 14.5px; color: var(--wps-green); text-decoration: none; border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+.sm-see:hover { color: var(--wps-green-deep); }
+.sm-cta-title { margin: 6px 0 10px; font-family: var(--wps-display); font-weight: 560; font-size: 21px; line-height: 1.2; }
+
+/* ---- desktop: the deck on a dark stage at the left, the words at the right ---- */
+@media (min-width: 760px) {
+  .sm { grid-template-columns: minmax(0, 48%) minmax(0, 52%); grid-template-areas: "play head"; min-height: 600px; }
+  .sm-play { grid-area: play; align-content: center; padding: 34px 24px; background: radial-gradient(120% 90% at 50% 40%, #2b3a35 0%, #18211e 75%); }
+  .sm-deck { width: 330px; }
+  .sm-play .sm-progress { color: rgba(255, 255, 255, 0.6); }
+  .sm-play .sm-dots span { background: rgba(255, 255, 255, 0.2); }
+  .sm-play .sm-dots span.is-done { background: var(--wps-gold-hi); }
+  .sm-head { grid-area: head; align-self: center; padding: 48px 44px; }
+  .sm-keys { display: block; }
+  .sm.is-result { grid-template-areas: "result result"; }
+  .sm-result { grid-area: result; grid-template-columns: minmax(0, 48%) minmax(0, 52%); }
+  .sm-collage { height: auto; min-height: 600px; }
+  .sm-collage img { top: 50%; width: 150px; transform: translate(calc(-50% + (var(--i) - 1) * 70px), -50%) rotate(calc((var(--i) - 1) * 9deg)); }
+  .sm-result-body { padding: 44px 40px 32px; max-height: min(88vh, 720px); overflow-y: auto; }
+}
+.wps[data-reduced="true"] .sm-collage img { animation: none; }

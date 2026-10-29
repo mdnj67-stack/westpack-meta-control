@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Signup Lab preview</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+  :root { --green: #34453F; --deep: #1c2723; --paper: #F5F1EA; --ink: #171614; --muted: #7B766D; --line: rgba(23,22,20,.12); --gold: #C9A465; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--deep); color: var(--ink); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  .app { display: grid; grid-template-columns: 320px 1fr; height: 100%; }
+  aside { background: var(--paper); padding: 22px 20px; overflow-y: auto; border-right: 1px solid rgba(0,0,0,.2); }
+  h1 { font: 560 26px/1.05 "WPS Fraunces", Georgia, serif; margin: 0 0 4px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 18px; font-size: 13px; }
+  .group { margin: 0 0 16px; }
+  .label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .seg { display: grid; gap: 6px; }
+  .seg button, select { font: inherit; }
+  .opt { text-align: left; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; }
+  .opt b { display: block; font-size: 14px; }
+  .opt span { display: block; color: var(--muted); font-size: 12.5px; }
+  .opt[aria-pressed="true"] { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); background: #fbfaf7; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { padding: 7px 11px; border: 1.5px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; font-size: 13px; }
+  .chip[aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+  select { width: 100%; height: 40px; padding: 0 10px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; }
+  .note { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .primary { width: 100%; height: 44px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-weight: 650; cursor: pointer; margin-top: 4px; }
+  .log { margin-top: 16px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; max-height: 260px; overflow: auto; font: 11.5px/1.45 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; }
+  .log .t { color: var(--muted); }
+  main { position: relative; display: grid; place-items: center; overflow: hidden; }
+  .device { position: relative; background: #fff; border-radius: 34px; box-shadow: 0 0 0 10px #0d1210, 0 30px 80px rgba(0,0,0,.5); overflow: hidden; transform-origin: center center; }
+  .device[data-kind="desktop"] { border-radius: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 30px 80px rgba(0,0,0,.5); }
+  iframe { display: block; border: 0; width: 100%; height: 100%; background: #fff; }
+  .badge { position: absolute; top: 14px; right: 18px; color: rgba(255,255,255,.6); font-size: 12px; }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    aside { max-height: 46vh; }
+    main { min-height: 70vh; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <h1>Signup Lab</h1>
+    <p class="sub">Tre oplevelser til Westpacks nyhedsbrev, kørt på et skærmbillede af butikken præcis som på sitet.</p>
+
+    <div class="group">
+      <span class="label">Oplevelse</span>
+      <div class="seg" id="concepts">
+        <button class="opt" data-v="logo-studio"><b>Logo-studiet</b><span>Dit brandnavn i folie på et rigtigt låg</span></button>
+        <button class="opt" data-v="swipe-match"><b>Æske-match</b><span>Swipe seks æsker, få en emballageprofil</span></button>
+        <button class="opt" data-v="pack-and-ship"><b>Pakket &amp; sendt</b><span>Formularen er oplevelsen: ingen trin før e-mail</span></button>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="label">Marked og sprog</span>
+      <select id="market"></select>
+    </div>
+
+    <div class="group">
+      <span class="label">Enhed</span>
+      <div class="row" id="devices">
+        <button class="chip" data-v="mobile">Mobil</button>
+        <button class="chip" data-v="small">Lille mobil</button>
+        <button class="chip" data-v="tablet">Tablet</button>
+        <button class="chip" data-v="desktop">Desktop</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="label">Sådan åbner den</span>
+      <div class="row" id="opens">
+        <button class="chip" data-v="1">Som dialog</button>
+        <button class="chip" data-v="peek">Som peek-kort</button>
+      </div>
+      <p class="note">På telefoner åbner den aldrig af sig selv: et lille kort glider ind, og oplevelsen åbner først ved tryk.</p>
+    </div>
+
+    <div class="group">
+      <span class="label">Tilmelding</span>
+      <div class="row" id="submits">
+        <button class="chip" data-v="dry">Tør kørsel</button>
+        <button class="chip" data-v="doi">Tør, double opt-in</button>
+        <button class="chip" data-v="test">Rigtig, til TEST-listen</button>
+      </div>
+      <p class="note">"Rigtig" sender til Klaviyo-listen "TEST - Signup Lab (preview only)" i DK-kontoen, aldrig til et rigtigt nyhedsbrev.</p>
+    </div>
+
+    <button class="primary" id="run">Vis igen</button>
+
+    <div class="log" id="log" aria-live="polite"><span class="t">Hændelser og det, tracking sender, vises her.</span></div>
+  </aside>
+  <main>
+    <div class="device" id="device"><iframe id="frame" title="Butiksside med oplevelsen"></iframe></div>
+    <span class="badge" id="badge"></span>
+  </main>
+</div>
+<script src="../core/markets.js"></script>
+<script>
+  (function () {
+    var M = window.WestpackSignupMarkets.MARKETS;
+    var DEVICES = { mobile: [390, 844], small: [360, 640], tablet: [820, 1180], desktop: [1440, 900] };
+    var q = new URLSearchParams(location.search);
+    var state = { concept: q.get("concept") || "logo-studio", market: q.get("market") || "dkk_dk_den", device: q.get("device") || (innerWidth < 860 ? "mobile" : "desktop"), open: q.get("open") || "1", submit: q.get("submit") || "dry" };
+    var sel = document.getElementById("market");
+    Object.keys(M).forEach(function (code) { var o = document.createElement("option"); o.value = code; o.textContent = M[code].market + " · " + M[code].lang + "  (" + code + ")"; sel.appendChild(o); });
+    function bind(id, key) {
+      var root = document.getElementById(id);
+      root.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; state[key] = b.dataset.v; render(true); });
+    }
+    bind("concepts", "concept"); bind("devices", "device"); bind("opens", "open"); bind("submits", "submit");
+    sel.addEventListener("change", function () { state.market = sel.value; render(true); });
+    document.getElementById("run").addEventListener("click", function () { render(true); });
+    var log = document.getElementById("log");
+    function line(text) { var d = document.createElement("div"); d.textContent = new Date().toLocaleTimeString() + "  " + text; log.prepend(d); }
+    window.addEventListener("message", function (e) {
+      var d = e.data || {};
+      if (d.wps === "step") line("trin: " + d.detail.step);
+      if (d.wps === "subscribed") line("TILMELDT (" + (d.detail.dryRun ? "tør kørsel" : "Klaviyo TEST-liste") + ")");
+      if (d.wps === "flush") line("tracking sender:\n" + JSON.stringify(d.payload, null, 1));
+    });
+    function fit() {
+      var dev = document.getElementById("device"), main = dev.parentNode, size = DEVICES[state.device];
+      dev.style.width = size[0] + "px"; dev.style.height = size[1] + "px";
+      var s = Math.min(1, (main.clientWidth - 40) / size[0], (main.clientHeight - 40) / size[1]);
+      dev.style.transform = "scale(" + s + ")";
+      dev.dataset.kind = state.device === "desktop" ? "desktop" : "phone";
+      document.getElementById("badge").textContent = size[0] + "×" + size[1] + (s < 1 ? "  (vist i " + Math.round(s * 100) + " %)" : "");
+    }
+    function render(reload) {
+      ["concepts", "devices", "opens", "submits"].forEach(function (id) {
+        var key = { concepts: "concept", devices: "device", opens: "open", submits: "submit" }[id];
+        document.querySelectorAll("#" + id + " button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === state[key])); });
+      });
+      sel.value = state.market;
+      fit();
+      history.replaceState(null, "", "?" + new URLSearchParams(state));
+      if (!reload) return;
+      var p = new URLSearchParams({ market: state.market, concept: state.concept, open: state.open, reset: "1", track: location.origin + "/api/signup/track" });
+      if (state.submit !== "test") p.set("dry", "1");
+      if (state.submit === "doi") p.set("doi", "1");
+      document.getElementById("frame").src = "frame.html?" + p;
+      log.textContent = ""; line("viser " + state.concept + " · " + M[state.market].market + " · " + state.device);
+    }
+    window.addEventListener("resize", fit);
+    render(true);
+  })();
+</script>
+</body>
+</html>

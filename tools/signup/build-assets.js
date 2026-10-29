@@ -1,0 +1,132 @@
+/**
+ * Builds every image the Signup Lab experiences use, from the originals in the Asana Content Library.
+ *
+ * Asana serves attachments from signed links that expire within hours, so nothing in production may point at
+ * Asana. This script reads each original through production (this machine has no Asana token: log in the way
+ * smoke-local.js does), crops and compresses it to WebP in signup/assets/, and for the logo studio removes
+ * Westpack's demo print from two lid close-ups (tools/signup/clean-plate.html). The assets are then served from
+ * the app's own origin with the code that uses them, versioned together.
+ *
+ * Every photo is Westpack's own product photography. The customer-logo photos come from "Kundebilleder Uge 40",
+ * which the Content Library owner cleared for free use on 2026-10-07; the one showing large corporate brands
+ * (Kundelogo-06) is left out on purpose.
+ *
+ * Usage: node tools/signup/build-assets.js [--only=<asset id prefix>]
+ */
+const fs = require("fs");
+const path = require("path");
+const url = require("url");
+
+const ROOT = path.resolve(__dirname, "..", "..");
+const OUT = path.join(ROOT, "signup", "assets");
+const CACHE = path.join(ROOT, "tmp", "signup-asset-cache");
+const BASE = "https://project-4fcxa.vercel.app";
+const { chromium } = require(path.join(ROOT, "tmp", "playwright-runner", "node_modules", "playwright"));
+
+const TASKS = {
+  logoTryk: "1213025393589646",
+  kategori: "1215353150870805",
+  monaco: "1212902028979353",
+  tokyo: "1212391491407872",
+  shipping: "1215480009202407",
+  kundelogo40: "1219060017061930",
+};
+
+// polygon points are in a 400 px square preview of the original and scaled to the working size
+const scale = (pts, f) => pts.map(([x, y]) => [x * f, y * f]);
+const ASSETS = [
+  // logo studio: the two lids, demo print removed
+  { id: "logo/lid-cream", task: "logoTryk", file: "Logo_Tryk_1x1-2.jpg", op: "clean", print: "both", radius: 22, size: 1600,
+    polygon: [[95, 40], [305, 45], [312, 245], [170, 285], [62, 275], [60, 150]], widths: [1200, 720] },
+  // gold on black is lighter than the lid, so an opening alone removes it; closing first would swell the thick
+  // strokes into blocks that the opening can no longer take out
+  { id: "logo/lid-black", task: "logoTryk", file: "Logo_Tryk_1x1-4.jpg", op: "clean", print: "light", radius: 22, size: 1600,
+    polygon: [[28, 74], [335, 62], [335, 285], [150, 308], [28, 308]], widths: [1200, 720] },
+  // logo studio: real customers' logos, square
+  ...["02", "04", "05", "14", "20", "03"].map((n) => ({ id: `logo/proof-${n}`, task: "kundelogo40", file: `Kundelogo-${n}.jpg`, op: "resize", aspect: 1, widths: [360] })),
+  // swipe match: one card per box, 4:5
+  { id: "swipe/torino", task: "kategori", file: "Kategori_Reshoot-9.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  { id: "swipe/seoul", task: "kategori", file: "Kategori_Reshoot-32.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  { id: "swipe/madrid", task: "kategori", file: "Kategori_Reshoot-23.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  { id: "swipe/oslo", task: "kategori", file: "Kategori_Reshoot-27.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  { id: "swipe/monaco", task: "monaco", file: "Monaco_eco_1x1-05.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  { id: "swipe/tokyo", task: "tokyo", file: "Tokyo_Ny_Farve_1x1-13.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
+  // pack & ship: the open mailer with jewellery boxes
+  { id: "ship/mailer", task: "shipping", file: "Shipping_Smykkeæsker_Reshoot-13.jpg", op: "resize", aspect: 1, widths: [1200, 720] },
+];
+
+function readEnv() {
+  const env = {};
+  for (const f of [".env.local", ".env.production", ".vercel.live.env"]) {
+    try {
+      for (const line of fs.readFileSync(path.join(ROOT, f), "utf8").split(/\r?\n/)) {
+        const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+        if (m) env[m[1]] = m[2].replace(/^(["'])(.*)\1$/, "$2");
+      }
+    } catch (e) { /* missing env file */ }
+  }
+  return env;
+}
+
+async function login() {
+  const env = readEnv();
+  const r = await fetch(`${BASE}/api/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password: process.env.AUTH_PASSWORD || env.AUTH_PASSWORD }) });
+  if (!r.ok) throw new Error(`production login failed (${r.status})`);
+  return r.headers.get("set-cookie")?.split(";", 1)[0] || "";
+}
+
+async function original(cookie, taskKey, file, attachmentsByTask) {
+  const cached = path.join(CACHE, taskKey, file);
+  if (fs.existsSync(cached)) return cached;
+  if (!attachmentsByTask[taskKey]) {
+    const r = await fetch(`${BASE}/api/campaign/brain?action=asana_task&taskGid=${TASKS[taskKey]}`, { headers: { cookie } });
+    const j = await r.json();
+    attachmentsByTask[taskKey] = j.attachments || j.task?.attachments || [];
+  }
+  const a = attachmentsByTask[taskKey].find((x) => x.name === file);
+  if (!a) throw new Error(`${file} is not attached to Asana task ${TASKS[taskKey]}`);
+  const r = await fetch(a.downloadUrl);
+  if (!r.ok) throw new Error(`${file}: download ${r.status}`);
+  fs.mkdirSync(path.dirname(cached), { recursive: true });
+  fs.writeFileSync(cached, Buffer.from(await r.arrayBuffer()));
+  return cached;
+}
+
+(async () => {
+  const only = (process.argv.find((a) => a.startsWith("--only=")) || "").slice(7);
+  const cookie = await login();
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(url.pathToFileURL(path.join(__dirname, "clean-plate.html")).href);
+  const attachments = {};
+  const manifest = {};
+  for (const a of ASSETS.filter((x) => !only || x.id.startsWith(only))) {
+    const file = await original(cookie, a.task, a.file, attachments);
+    // a data URL keeps the canvas untainted; a file:// image would make getImageData refuse
+    const src = "data:image/jpeg;base64," + fs.readFileSync(file).toString("base64");
+    const dims = await page.evaluate((s) => new Promise((res) => { const i = new Image(); i.onload = () => res([i.naturalWidth, i.naturalHeight]); i.src = s; }), src);
+    let crop = [0, 0, dims[0], dims[1]];
+    if (a.aspect) {
+      const [w, h] = dims; const want = a.aspect;
+      if (w / h > want) { const cw = Math.round(h * want); crop = [Math.round((w - cw) / 2 + (a.shiftX || 0) * w), 0, cw, h]; }
+      else { const ch = Math.round(w / want); crop = [0, Math.round((h - ch) / 2), w, ch]; }
+    }
+    const outputs = a.widths.map((width) => ({ width, quality: a.op === "clean" ? 0.86 : 0.8 }));
+    const result = a.op === "clean"
+      ? await page.evaluate((o) => window.cleanPlate(o), { src, size: a.size, crop, print: a.print, radius: a.radius, threshold: 8, fill: true, feather: 18, polygon: scale(a.polygon, a.size / 400), outputs })
+      : await page.evaluate((o) => window.resizePhoto(o), { src, crop, outputs });
+    manifest[a.id] = { source: `${a.file} (Asana task ${TASKS[a.task]})`, files: [] };
+    for (const o of result.outputs) {
+      const rel = `${a.id}-${o.width}.webp`;
+      const dest = path.join(OUT, rel);
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      fs.writeFileSync(dest, Buffer.from(o.webp.split(",")[1], "base64"));
+      manifest[a.id].files.push({ file: rel, width: o.width, height: o.height, bytes: fs.statSync(dest).size });
+    }
+    console.log(`${a.id}: ${manifest[a.id].files.map((f) => `${f.width}px ${Math.round(f.bytes / 1024)}KB`).join(", ")}`);
+  }
+  await browser.close();
+  const mfPath = path.join(OUT, "manifest.json");
+  const previous = fs.existsSync(mfPath) ? JSON.parse(fs.readFileSync(mfPath, "utf8")) : {};
+  fs.writeFileSync(mfPath, JSON.stringify(Object.assign(previous, manifest), null, 2));
+})().catch((e) => { console.error(e.message); process.exit(1); });

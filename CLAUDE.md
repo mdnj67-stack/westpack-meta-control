@@ -1296,6 +1296,36 @@ README (Danish, for the marketing team) holds the workflow and rules.
   jewellery-box carousels.
 - `tests/meta-trustpilot-carousel.test.js` pins the French text to what AD26 carries.
 
+## Signup Lab - the store's newsletter signup, built outside Klaviyo's form builder
+
+Added 2026-10-29 from the user's brief "Reinvent email signup for Westpack". `signup/` (README.md in Danish
+for the team; CONCEPTS.md has the ten concepts and why three were built): Logo studio (the visitor's brand
+name foil-printed on a real lid), Swipe match (six real boxes, a packaging profile) and Pack & ship (the email
+field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, loaded by one script tag.
+
+- **Why not Klaviyo forms:** the forms API and the custom HTML block run no JavaScript, strip `<input>`,
+  `<svg>`, `<style>` and inline styles, and a button can only go to the *next* step (verified against the
+  OpenAPI spec and Klaviyo's help pages 2026-10-28). Swipe, live text on a photo and per-step tracking need code.
+- **Signups use Klaviyo's client subscription API** with each market's public key and newsletter list
+  (`signup/core/markets.js`), `custom_source` "Westpack Signup Lab · <concept>", and the store's own consent
+  sentence stored on the profile. The runtime does not need klaviyo.js, which the stores lost on 2026-10-26.
+- **Klaviyo's bot protection suppresses repeated automated signups** after accepting them with 202
+  ("Manually Suppressed from Email Marketing", `method: BOT_PROTECTION`), seen on the 4th+ test signup within
+  minutes from one machine. The browser cannot see it, so `/api/signup/track?action=confirmed` reconciles
+  submitted vs confirmed vs bot-blocked per market. Space out e2e runs, and delete test profiles afterwards
+  (`tools/signup/klaviyo-e2e.js` does) - a SUBSCRIBED test profile can land in a consent segment.
+- Tests and the preview subscribe only to `WUDjfX` "TEST - Signup Lab (preview only)" in the DK account.
+- **Not live:** going live needs the script line on the store (GTM or the Magento theme) - access this
+  project does not have - and the user's approval. The Insert popups must be unpublished at the same time.
+- Funnel records go to Vercel Blob under `signup-funnel/` (one file per exposure, compacted per day), never
+  Redis. `rules.sanitizeTracking` drops any value containing "@", in the browser and on the server.
+- The lid photos have Westpack's demo print removed by `tools/signup/clean-plate.html`; gold on black needs
+  `print: "light"` (opening only) - closing first swells thick strokes into blocks.
+- Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked
+  `needsNativeReview`. No visible text may live in concept code (tested).
+- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (27 browser checks),
+  `node tools/signup/screens.js <dir> [concept] [market] --steps`.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

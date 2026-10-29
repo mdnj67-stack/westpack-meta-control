@@ -1,0 +1,221 @@
+{
+  "logo/lid-cream": {
+    "source": "Logo_Tryk_1x1-2.jpg (Asana task 1213025393589646)",
+    "files": [
+      {
+        "file": "logo/lid-cream-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 14584
+      },
+      {
+        "file": "logo/lid-cream-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 6506
+      }
+    ]
+  },
+  "logo/lid-black": {
+    "source": "Logo_Tryk_1x1-4.jpg (Asana task 1213025393589646)",
+    "files": [
+      {
+        "file": "logo/lid-black-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 31198
+      },
+      {
+        "file": "logo/lid-black-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 13132
+      }
+    ]
+  },
+  "logo/proof-02": {
+    "source": "Kundelogo-02.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-02-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 5916
+      }
+    ]
+  },
+  "logo/proof-04": {
+    "source": "Kundelogo-04.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-04-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 4686
+      }
+    ]
+  },
+  "logo/proof-05": {
+    "source": "Kundelogo-05.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-05-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 7300
+      }
+    ]
+  },
+  "logo/proof-14": {
+    "source": "Kundelogo-14.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-14-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 8956
+      }
+    ]
+  },
+  "logo/proof-20": {
+    "source": "Kundelogo-20.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-20-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 6008
+      }
+    ]
+  },
+  "logo/proof-03": {
+    "source": "Kundelogo-03.jpg (Asana task 1219060017061930)",
+    "files": [
+      {
+        "file": "logo/proof-03-360.webp",
+        "width": 360,
+        "height": 360,
+        "bytes": 3628
+      }
+    ]
+  },
+  "swipe/torino": {
+    "source": "Kategori_Reshoot-9.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "swipe/torino-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 20134
+      },
+      {
+        "file": "swipe/torino-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 11234
+      }
+    ]
+  },
+  "swipe/seoul": {
+    "source": "Kategori_Reshoot-32.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "swipe/seoul-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 32474
+      },
+      {
+        "file": "swipe/seoul-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 15054
+      }
+    ]
+  },
+  "swipe/madrid": {
+    "source": "Kategori_Reshoot-23.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "swipe/madrid-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 56296
+      },
+      {
+        "file": "swipe/madrid-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 26452
+      }
+    ]
+  },
+  "swipe/oslo": {
+    "source": "Kategori_Reshoot-27.jpg (Asana task 1215353150870805)",
+    "files": [
+      {
+        "file": "swipe/oslo-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 29728
+      },
+      {
+        "file": "swipe/oslo-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 13446
+      }
+    ]
+  },
+  "swipe/monaco": {
+    "source": "Monaco_eco_1x1-05.jpg (Asana task 1212902028979353)",
+    "files": [
+      {
+        "file": "swipe/monaco-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 39868
+      },
+      {
+        "file": "swipe/monaco-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 16728
+      }
+    ]
+  },
+  "swipe/tokyo": {
+    "source": "Tokyo_Ny_Farve_1x1-13.jpg (Asana task 1212391491407872)",
+    "files": [
+      {
+        "file": "swipe/tokyo-900.webp",
+        "width": 900,
+        "height": 1125,
+        "bytes": 57478
+      },
+      {
+        "file": "swipe/tokyo-600.webp",
+        "width": 600,
+        "height": 750,
+        "bytes": 26864
+      }
+    ]
+  },
+  "ship/mailer": {
+    "source": "Shipping_Smykkeæsker_Reshoot-13.jpg (Asana task 1215480009202407)",
+    "files": [
+      {
+        "file": "ship/mailer-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 31002
+      },
+      {
+        "file": "ship/mailer-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 12872
+      }
+    ]
+  }
+}
