@@ -57,3 +57,19 @@ test("organization=1 returns the account's website URL, which {{ organization.ur
   assert.equal(calls[0].url, "https://a.klaviyo.com/api/accounts/");
   assert.equal(calls[0].auth, "Klaviyo-API-Key pk_test_uk", "it reads the market's own account");
 });
+
+test("messageId returns the template a sent campaign message used, which the template list never shows", async () => {
+  const calls = [];
+  global.fetch = async (url, options = {}) => {
+    calls.push({ url: String(url), auth: options.headers?.Authorization });
+    const payload = { data: { type: "template", id: "TmPl01", attributes: { name: "W41 Adventskalender", editor_type: "SYSTEM_DRAGGABLE", html: "<p>Kevin</p>", text: "Kevin", created: "2025-10-08T09:00:00+00:00", updated: "2025-10-09T07:00:00+00:00" } } };
+    return { ok: true, status: 200, headers: { get: () => null }, json: async () => payload, text: async () => JSON.stringify(payload) };
+  };
+  const result = await callRoute({ country: "UK", messageId: "01K6ABC" });
+  assert.equal(result.status, 200);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "https://a.klaviyo.com/api/campaign-messages/01K6ABC/template/");
+  assert.equal(result.payload.template.id, "TmPl01");
+  assert.equal(result.payload.template.html, "<p>Kevin</p>");
+  assert.equal(result.payload.template.name, "W41 Adventskalender");
+});

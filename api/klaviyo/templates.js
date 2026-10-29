@@ -181,6 +181,31 @@ module.exports = async function handler(req, res) {
       return;
     }
 
+    // A sent campaign's email is a template that never appears in the template list, so it can only
+    // be reached through its campaign message (the message id is `id` on a subject-line history row).
+    const messageId = String(req.query?.messageId || "").trim();
+    if (messageId) {
+      const payload = await klaviyoRequest(
+        `https://a.klaviyo.com/api/campaign-messages/${encodeURIComponent(messageId)}/template/`,
+        headers
+      );
+      const attributes = payload?.data?.attributes || {};
+      sendJson(res, 200, {
+        country,
+        messageId,
+        template: {
+          id: String(payload?.data?.id || ""),
+          name: String(attributes.name || ""),
+          editorType: String(attributes.editor_type || ""),
+          created: String(attributes.created || ""),
+          updated: String(attributes.updated || ""),
+          html: String(attributes.html || ""),
+          text: String(attributes.text || "")
+        }
+      });
+      return;
+    }
+
     const listCacheKey = `templates:${country}`;
     const detailCacheKey = templateId ? `template-detail:${country}:${templateId}` : "";
     let templates = [];
