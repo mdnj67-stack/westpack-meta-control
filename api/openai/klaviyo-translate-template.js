@@ -13,6 +13,7 @@ const {
   requestFragmentsById
 } = require("../../server/lib/klaviyo-template-variant");
 const { parseModelJson } = require("../../server/lib/model-json");
+const { formOfAddressRule } = require("../../server/lib/form-of-address");
 
 function containsHtml(value = "") {
   return /<[^>]+>/.test(String(value || ""));
@@ -58,6 +59,7 @@ function buildPlainPrompt(input, glossaryBlock, westpackKnowledgeBlock) {
             "Translate the campaign faithfully into the target language without changing structure, hierarchy, message order, CTA logic or commercial intent.",
             "Do not add, remove or invent content. Do not improve, shorten or rewrite strategically.",
             "Only make the wording natural and correct for the target language and country.",
+            formOfAddressRule(input?.targetLanguage),
             "Preserve merge tags, unsubscribe tags, tracked URLs, dynamic placeholders and any technical Klaviyo syntax exactly as written.",
             "Keep every amount, price and currency exactly as written, including the symbol and its position (250€ stays 250€). Never convert currency.",
             "If a glossary term matches, you must use the glossary translation.",
@@ -109,6 +111,7 @@ function buildHtmlPrompt(input, fragmentLines, glossaryBlock, westpackKnowledgeB
             "Westpack's product series are named after cities (Oslo, Vienna, Berlin, Monaco, Rome, Paris, Madrid, Stockholm and others). A series name stays exactly as written, also when it stands alone: Vienna is never Wien or Vienne, Berlin is never Berlino.",
             "Do not change order. Do not merge fragments. Do not split fragments. Do not invent content.",
             "Keep the commercial meaning identical. Only translate wording.",
+            formOfAddressRule(input?.targetLanguage),
             "Translate human-readable header and footer copy too, including browser-view links, navigation labels, slogans, disclaimers and unsubscribe text.",
             "Do not leave layout copy in the source language unless it is a company name, physical address, phone number, email address, legal identifier or raw URL.",
             "Preserve placeholders, merge tags, unsubscribe tags, tracked URLs and technical syntax exactly if any appear inside a fragment.",
@@ -297,6 +300,8 @@ module.exports = async (req, res) => {
     sendJson(res, 500, { error: error.message || "Klaviyo template translation failed." });
   }
 };
+module.exports.__internals = { buildHtmlPrompt, buildPlainPrompt };
+
 function localizeWestpackUrls(content = "", targetCountry = "") {
   return rewriteWestpackSnippetUrls(
     rewriteWestpackProductFeedUrls(content, targetCountry),
