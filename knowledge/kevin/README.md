@@ -102,7 +102,7 @@ der hedder **Bertha** og har sin egen Slack-kanal.
 | 7. okt. 2026 | W41 Touchpoint Density Report | "Kevin's Ho-Ho-Highly Scientific Touchpoint Density Report™", rapport 04 | Adventskalender |
 | 21. okt. 2026 | W43 Adventskalender (sidste chance) | "Kevin og de fire æsker" – juleeventyr i fire kapitler; løber gennem sne i én gummistøvle til din butiksdør | Adventskalender |
 | 9. nov. 2026 | W46 Jule sortimentet → **"Kevins juleæske-hotline"** | *Bygget 29. okt.* Tredje mail om juleæsker på en måned, så Kevin konkluderer, at folk har spørgsmål, og åbner en hotline. Ingen har ringet; han har selv ringet 212 gange (og talt med sig selv). Rensdyret i refleksvest har headset og tager nattevagten. Mailen *er* telefonmenuen: hver rigtig tast er et rigtigt næste skridt, jokertasterne er "optaget". Køen tæller den forkerte vej. Ventemusik: *Last Christmas* og *All I Want for Christmas Is You* samtidig. Tast 5: Kevin springer op af en æske på en fjeder. (En første version, "Kevin på månen", blev afvist: brugerens "fuldstændig på månen" betød *dumt*, ikke rummet.) | Smykkeæsker med færdige julemotiver fra logomodulet |
-| 13. nov. 2026 | W46: Kevins æske lommeregner | *Planlagt, ingen brief i Asana endnu* | ? |
+| 13. nov. 2026 | W46: Kevins æske lommeregner → **tv-shop** | *Bygget 29. okt.* (brief: "fri fortolkning … vold dumt og maksimalt gennemført"). Kevin sælger sin egen opfindelse, **The Boxulator 3000™**: 2,4 m høj, 20 smykkeæsker som taster, regner kun i æsker, ingen minus-tast (»Subtraction is not a growth mindset.«), ingen sluk-knap, displayet løber over til »E« (»Enough is never enough«). Kevin spiller alle roller: sort-hvid "før"-mand under en æskelavine, vært, forklædt tilfreds kunde, Dr. K. ROIberg i kittel; printeren i kantinen giver også en udtalelse. Vendingen: lommeregneren er gratis, fordi den ikke findes – men hver produktside har en rigtig ("Vælg antal", mængderabat, i alt), og den kan trække fra. Kevins juleformel på en kvittering, rettet af Team Westpack | Smykkeæsker: produktsidens mængderabat, ordrehistorik, 4–5 hverdage med eksisterende logo, julefrister |
 | 18. nov. 2026 | W47: Kevins Emergency Packaging | *Planlagt, ingen brief* | (formentlig fortrykt jul / lagervarer) |
 | 27. nov. 2026 | W48: World Record Friday | *Planlagt*: Westpack-rekordforsøg i stedet for Black Friday; listen har "Flest gange Kevin kan sige 'touchpoint density' uden at blive bedt om at stoppe" | ? |
 | 2. dec. 2026 | W49: Kevins store stress beregning | *Planlagt*: "En anordning der real time kan se stress niveau på kunder. Derfor bestillingstider" | Jule-deadlines |
@@ -381,6 +381,13 @@ sig selv.**
 | Hotline-GIF: Kevin med headset og en juleæske med telefonledning for øret, rensdyr i refleksvest med headset, telefonerne ringer (W46) | `https://cdn.klaviyomail.com/company/VRPp5S/images/d3dea45c-b9dc-4628-87fe-1bfa418f51d6.gif` |
 | Split-screen-GIF: Kevin ringer til Kevin, de taler på skift og i munden på hinanden (W46) | `https://cdn.klaviyomail.com/company/VRPp5S/images/d8953f1c-7809-4c75-93dd-7d6c520273e6.gif` |
 | Trold-i-æske-GIF: Kevin springer op af en mørkegrøn Merry Christmas-æske på en fjeder, på baggrund #17352a (W46) | `https://cdn.klaviyomail.com/company/VRPp5S/images/28a159bd-fac2-4a96-ac93-0555a1fbbff5.gif` |
+| Tv-shop-GIF: Kevin præsenterer The Boxulator (2,4 m lommeregner med smykkeæsker som taster), displayet tæller op til "E" (W46 lommeregner) | `https://cdn.klaviyomail.com/company/VRPp5S/images/41afe0bd-3be2-41fc-80a4-ebb3404e8b4b.gif` |
+| The Boxulator alene på hvid sokkel mod blå baggrund, displayet tænder (GIF) | `https://cdn.klaviyomail.com/company/VRPp5S/images/cd7fbe4f-4952-4eb1-9bce-d3f0efcef0a3.gif` |
+| Sort-hvid tv-shop-"før": Kevin i en lavine af æsker med rygende lommeregner, rødt kryds males over (GIF) | `https://cdn.klaviyomail.com/company/VRPp5S/images/be203f3b-bfaa-4125-813b-557de750fe2b.gif` |
+| Kevins hoved på roterende gule stråler, rystende af begejstring, baggrund #07135e (GIF) | `https://cdn.klaviyomail.com/company/VRPp5S/images/bc0cb28c-8af7-4bfd-a1e7-9869c0e24aea.gif` |
+| Kevin forklædt med plastiknæse, buskede bryn og overskæg, tommel op (kundeudtalelse) | `https://cdn.klaviyomail.com/company/VRPp5S/images/df384117-4b7c-481b-8357-81a52d1ddf0d.jpeg` |
+| Kevin i laboratoriekittel med sikkerhedsbriller på nissehuen og en æske i en pincet | `https://cdn.klaviyomail.com/company/VRPp5S/images/494b4c13-d33d-44c0-84e1-f71584a491d9.jpeg` |
+| Printeren i kantinen med nissehue og en uendelig papirstrimmel | `https://cdn.klaviyomail.com/company/VRPp5S/images/7ee5b757-3d83-4c88-9404-fe6dbbed9b0a.jpeg` |
 | Ringende rød telefon, kø-display (tæller 47 → 999), ventemusik med to højttalere (W46, tegnet) | `…/0d13871b-3acc-4336-8358-adc913f5ed53.gif`, `…/87ed143c-da93-4d6d-8524-1cdbd8f08fe7.gif`, `…/bbdced78-e6bb-4b33-8c7f-158301bbb9a8.gif` (samme sti som ovenfor) |
 | Kevin på månen / i rumkapsel / æske i månestøv (W46, afvist koncept, ubrugt) | `…/5cebaf71-2700-475b-86e7-fb0f1672ece1.jpeg`, `…/63414b71-ea2b-4778-9e93-08df7c69e497.jpeg`, `…/e4c735ab-5c1b-42e1-81af-f27fee2570cf.jpeg` |
 
@@ -439,9 +446,9 @@ Asana har fire Kevin-opgaver på 3 uger, efter tre i oktober. Det er 7 Kevin-mai
 uger i 2025. Varier formatet og giv hver af dem sin egen grund til at klikke.
 
 - **W46 Kevins æske lommeregner (13/11)**: et værktøj er en ægte grund til at klikke – læg regnestykket
-  bag knappen. Der findes ingen æske-lommeregner på sitet i dag (UK-crawlet), så enten bygges
-  "lommeregneren" i selve mailen (fx hvor meget mersalg fire æsker giver), eller den skal laves. Opfind
-  ikke et værktøj, der ikke findes.
+  bag knappen. Opfind ikke et værktøj, der ikke findes. *Løst 29. okt.:* der findes faktisk en – hver
+  smykkeæske-side har "Vælg antal" med pris pr. stk., "Mængderabat fra 96 stk" og i alt (London, Boston,
+  Vienna og Tokyo læst live). Kevins lommeregner er fup og siger det; produktsidens er klikket.
 - **W47 Kevins Emergency Packaging (18/11)**: nødudgangen fra eventyret ("Redningsplanken": fortrykt,
   springer trykprocessen over). Fortrykt jul + lagervarer der afsendes inden for 24 timer på hverdage.
   Det var også kernen i 2025's bedste Kevin-mail.
