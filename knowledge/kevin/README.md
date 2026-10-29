@@ -101,6 +101,7 @@ der hedder **Bertha** og har sin egen Slack-kanal.
 | 1. okt. 2026 | W40 Find Kevin | "Kevin dukkede op uden varsel." Dagbog med klokkeslæt. Skattejagt: han har gemt sig blandt standardlogoerne på sitet, gavekort på 250 € | Konkurrence |
 | 7. okt. 2026 | W41 Touchpoint Density Report | "Kevin's Ho-Ho-Highly Scientific Touchpoint Density Report™", rapport 04 | Adventskalender |
 | 21. okt. 2026 | W43 Adventskalender (sidste chance) | "Kevin og de fire æsker" – juleeventyr i fire kapitler; løber gennem sne i én gummistøvle til din butiksdør | Adventskalender |
+| 9. nov. 2026 | W46 Jule sortimentet → **"Kevin på månen"** | *Bygget 29. okt.* Mailen siger højt, at det er tredje mail om juleæsker på en måned; Kevins diagnose er "Earth is message-saturated", så han bygger en raket af 600 kabelbindere med guldfolie som varmeskjold, lander efter 384.400 km ("the last mile") og planter en smykkeæske, hvor flaget skulle stå. "That's one small box for a shop – one giant leap for Q4." Bliver på månen, til juleæskerne er bestilt | Smykkeæsker med færdige julemotiver fra logomodulet |
 | 13. nov. 2026 | W46: Kevins æske lommeregner | *Planlagt, ingen brief i Asana endnu* | ? |
 | 18. nov. 2026 | W47: Kevins Emergency Packaging | *Planlagt, ingen brief* | (formentlig fortrykt jul / lagervarer) |
 | 27. nov. 2026 | W48: World Record Friday | *Planlagt*: Westpack-rekordforsøg i stedet for Black Friday; listen har "Flest gange Kevin kan sige 'touchpoint density' uden at blive bedt om at stoppe" | ? |
@@ -377,7 +378,16 @@ sig selv.**
 | Eventyr-GIF: den frosne sø, snemand med slips, rensdyr i vest | `https://cdn.klaviyomail.com/company/VRPp5S/images/20a113f5-3475-4304-a345-426851886256.gif` |
 | Eventyr-GIF: Kevin banker på butiksdøren | `https://cdn.klaviyomail.com/company/VRPp5S/images/4798ac4b-59ec-4850-82eb-70a9f06ba4d3.gif` |
 | Mias adventskalender-video (thumbnail) | `https://cdn.klaviyomail.com/company/VRPp5S/images/b09350a6-54ea-4cf1-8022-28bdcfd06bbe.jpeg` → `https://vimeo.com/1113169899` |
+| Kevin på månen holder en salviegrøn juleæske over hovedet, flag med træmotiv (W46, genereret) | `https://cdn.klaviyomail.com/company/VRPp5S/images/5cebaf71-2700-475b-86e7-fb0f1672ece1.jpeg` |
+| Kevin svæver på hovedet i en rumkapsel blandt juleæsker (W46, genereret) | `https://cdn.klaviyomail.com/company/VRPp5S/images/63414b71-ea2b-4778-9e93-08df7c69e497.jpeg` |
+| Mørkegrøn "Merry Christmas"-æske i månestøv ved et støvleaftryk (W46, genereret) | `https://cdn.klaviyomail.com/company/VRPp5S/images/e4c735ab-5c1b-42e1-81af-f27fee2570cf.jpeg` |
 
+- **Nye Kevin-scener kan genereres** med OpenAI's billed-edit (`/v1/images/edits`, `gpt-image-1.5`,
+  `input_fidelity: "high"`) med det runde portræt og astronaut-Kevin som referencer plus teamets rigtige
+  produktfotos. Det holdt ansigtet og æskerne genkendelige (W46, 29. okt. 2026). To ting at styre i prompten:
+  modellen finder på vrøvletekst på æsker i baggrunden – kræv at kun én æske har tekst, kopieret bogstav for
+  bogstav fra referencen – og bed om ingen anden tekst i billedet. Astronaut-Kevin har briller; portrættet
+  har ikke, og portrættet er kanon.
 - **Stregtegning af Kevin** (1024×1536, sort på hvid, nissehue og slips) ligger i Asana Content Library,
   opgaven "Kevin" i sektionen "Grafik / GIF" (gid 1219210467255371). Det er formentlig ham, der var
   gemt blandt standardlogoerne i Find Kevin. Asana-links udløber; host billedet i Klaviyo før brug.
