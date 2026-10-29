@@ -31,7 +31,7 @@
   .log { margin-top: 16px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; max-height: 260px; overflow: auto; font: 11.5px/1.45 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; }
   .log .t { color: var(--muted); }
   main { position: relative; display: grid; place-items: center; overflow: hidden; }
-  .device { position: relative; background: #fff; border-radius: 34px; box-shadow: 0 0 0 10px #0d1210, 0 30px 80px rgba(0,0,0,.5); overflow: hidden; transform-origin: center center; }
+  .device { position: absolute; left: 50%; top: 50%; background: #fff; border-radius: 34px; box-shadow: 0 0 0 10px #0d1210, 0 30px 80px rgba(0,0,0,.5); overflow: hidden; transform-origin: center center; }
   .device[data-kind="desktop"] { border-radius: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 30px 80px rgba(0,0,0,.5); }
   iframe { display: block; border: 0; width: 100%; height: 100%; background: #fff; }
   .badge { position: absolute; top: 14px; right: 18px; color: rgba(255,255,255,.6); font-size: 12px; }
@@ -128,7 +128,7 @@
       var dev = document.getElementById("device"), main = dev.parentNode, size = DEVICES[state.device];
       dev.style.width = size[0] + "px"; dev.style.height = size[1] + "px";
       var s = Math.min(1, (main.clientWidth - 40) / size[0], (main.clientHeight - 40) / size[1]);
-      dev.style.transform = "scale(" + s + ")";
+      dev.style.transform = "translate(-50%, -50%) scale(" + s + ")";
       dev.dataset.kind = state.device === "desktop" ? "desktop" : "phone";
       document.getElementById("badge").textContent = size[0] + "×" + size[1] + (s < 1 ? "  (vist i " + Math.round(s * 100) + " %)" : "");
     }
