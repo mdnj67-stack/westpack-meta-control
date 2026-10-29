@@ -14,6 +14,11 @@
  * Plain script: module.exports in Node (tests), globalThis.WestpackSignupMarkets in the browser.
  */
 (function (root) {
+  // The master switch. Off, the script on the stores does nothing at all - so the store's tag can go in before launch
+  // - except on a page opened with ?wps=preview (westpack-signup.js). Going live is setting this to true and deploying,
+  // in the same minutes as The Insert popups are unpublished (node tools/signup/go-live.js; see IMPLEMENTERING.md).
+  const LIVE = false;
+
   const privacy = (code) => `https://www.westpack.com/${code}/westpack-gdpr`;
   const store = (code) => `https://www.westpack.com/${code}/`;
 
@@ -128,7 +133,7 @@
   // purpose in the DK account (2026-10-28), single opt-in, with no flow attached.
   const TEST_TARGET = { companyId: "VRPp5S", listId: "WUDjfX", name: "TEST - Signup Lab (preview only)" };
 
-  const api = { MARKETS, TEST_TARGET };
+  const api = { LIVE, MARKETS, TEST_TARGET };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.WestpackSignupMarkets = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

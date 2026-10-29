@@ -57,8 +57,11 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
-  // 2. long languages on a phone
-  for (const [market, lang] of [["eur_eu_fin", "fi"], ["eur_eu_hun", "hu"], ["pln_pl_pol", "pl"], ["eur_eu_por", "pt"]]) for (const c of concepts) {
+  // 2. every store language on a phone (one store per language)
+  const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
+  const byLang = {};
+  for (const [code, m] of Object.entries(MARKETS)) if (!byLang[m.lang] && m.lang !== "da") byLang[m.lang] = code;
+  for (const [lang, market] of Object.entries(byLang)) for (const c of concepts) {
     const { ctx, p } = await page({ ...devices["iPhone 13"] }, `concept=${c}&market=${market}`);
     const o = await overflow(p);
     check(`${lang} ${c}: no sideways overflow`, o.sw <= o.cw + 1, `${o.sw}/${o.cw}px`);

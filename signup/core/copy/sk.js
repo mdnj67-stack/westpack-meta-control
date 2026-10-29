@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpacku",
@@ -50,8 +51,7 @@
       "rose": "Ružové zlato",
       "oldrose": "Staroružová",
       "white": "Biela",
-      "black": "Čierna",
-      "deboss": "Slepotlač"
+      "black": "Čierna"
     },
     "typeLabel": "Písmo",
     "type": {
@@ -68,7 +68,7 @@
     "zoomOut": "Celá krabička",
     "uploadCta": "Použiť vlastné logo",
     "uploadHint": "PNG, JPG alebo SVG – vaše logo zostane vo vašom prehliadači.",
-    "uploadOneColour": "Fólia sa tlačí jednou farbou – takto bude vyzerať vaše logo.",
+    "uploadOneColour": "Pri razbe sa používa jedna farba fólie – takto bude vyzerať vaše logo.",
     "uploadError": "Tento súbor sa nám nepodarilo načítať. Skúste PNG alebo JPG.",
     "useName": "Použiť radšej názov",
     "next": "Vyzerá to dobre",
@@ -99,8 +99,8 @@
     },
     "cards": {
       "torino": "Odklápacie veko a zlatý lem. Klasika, ktorá nestarne.",
-      "seoul": "Ultratenká zásuvka v tlmenej zelenej. Nenápadná – kým sa neotvorí.",
-      "madrid": "Soft touch zvonka, velúr zvnútra a návlek navrchu.",
+      "seoul": "Ultraplochá zásuvka v tlmenej zelenej. Nenápadná – kým sa neotvorí.",
+      "madrid": "Soft touch zvonka, velúr zvnútra a návlek okolo krabičky.",
       "oslo": "Koženka a velúr. Bestseller medzi krabičkami s odklápacím vekom.",
       "monaco": "Darčeková krabička, ktorá vyzerá ako malá kabelka. So saténovou stuhou.",
       "tokyo": "Odnímateľné veko a veľa miesta na vaše logo."

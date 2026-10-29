@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -17,7 +18,7 @@
     "signup": "Prenumerera på nyhetsbrevet",
     "noThanks": "Nej tack",
     "promise": [
-      "Direkt om produktnyheter och måsten",
+      "Produktlanseringar och måsten",
       "Tips och guider du kan använda",
       "Förvarning om våra sällsynta reor"
     ],
@@ -50,8 +51,7 @@
       "rose": "Roséguld",
       "oldrose": "Gammalrosa",
       "white": "Vit",
-      "black": "Svart",
-      "deboss": "Blindprägling"
+      "black": "Svart"
     },
     "typeLabel": "Typsnitt",
     "type": {
@@ -68,7 +68,7 @@
     "zoomOut": "Hela asken",
     "uploadCta": "Använd din logotyp",
     "uploadHint": "PNG, JPG eller SVG – din logotyp stannar i din webbläsare.",
-    "uploadOneColour": "Folie trycks i en färg – så här ser din logotyp ut.",
+    "uploadOneColour": "Folietryck görs i en enda färg – så här ser din folietryckta logotyp ut.",
     "uploadError": "Vi kunde inte läsa filen. Prova en PNG eller JPG.",
     "useName": "Använd namnet i stället",
     "next": "Det ser bra ut",
@@ -99,8 +99,8 @@
     },
     "cards": {
       "torino": "Gångjärnslock och guldkant. Klassikern som aldrig blir tråkig.",
-      "seoul": "En ultraplatt låda i dammigt grönt. Diskret – tills den öppnas.",
-      "madrid": "Soft touch utanpå, velour inuti och ett omslag runtom.",
+      "seoul": "En ultraplatt utdragslåda i dammgrönt. Diskret – tills den öppnas.",
+      "madrid": "Soft touch utanpå, velour inuti och en hylsa runtom.",
       "oslo": "Konstläder och velour. En bästsäljare bland askar med gångjärnslock.",
       "monaco": "En presentask som ser ut som en liten handväska. Med satinband.",
       "tokyo": "Avtagbart lock och gott om plats för din logotyp."

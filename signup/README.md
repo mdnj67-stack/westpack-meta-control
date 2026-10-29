@@ -4,6 +4,8 @@ Tre tilmeldingsoplevelser til Westpacks nyhedsbrev, bygget som ét system, der k
 script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10-28/29.
 
 - **Preview (desktop og mobil):** https://project-4fcxa.vercel.app/signup/preview/
+- **På en rigtig butik:** `https://www.westpack.com/dkk_dk_den/?wps=preview` (når tagget er sat ind)
+- **Implementering:** [`IMPLEMENTERING.md`](IMPLEMENTERING.md) – tagget, at tænde, at rulle tilbage
 - **Koncepter og valg:** [`CONCEPTS.md`](CONCEPTS.md)
 
 | Oplevelse | Fil | Idé |
@@ -18,6 +20,9 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 <script src="https://project-4fcxa.vercel.app/signup/westpack-signup.js" async></script>
 ```
 
+0. **Hovedkontakten** er `LIVE` i `core/markets.js`. Står den på `false`, gør tagget på butikken intet – undtagen
+   når adressen har `?wps=preview` (eller `?wps=<oplevelse>`): så åbner oplevelsen med det samme i testtilstand
+   (tilmelding kun til testlisten). Sådan kan tagget sættes ind før lanceringen og tjekkes på den rigtige butik.
 1. `westpack-signup.js` læser butikskoden i stien (`/eur_eu_ger/...` → DE) og henter `core/markets.js`,
    `core/rules.js` og kun det ene sprog, der skal bruges (`core/copy/de.js`).
 2. `core/rules.js` afgør, om den besøgende må se noget (se "Hvem ser hvad"), og tildeler én af de tre
@@ -45,7 +50,9 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 | `preview/` | Preview-miljøet og en butiksside at køre det på |
 | `../api/signup/track.js`, `../server/signup/` | Tracking-endpoint, lager og afstemning mod Klaviyo |
 | `../tools/signup/` | Asset-pipeline, skrifter, transcreation, skærmbilleder, QA og Klaviyo-e2e |
-| `../tests/signup-lab.test.js` | 18 unit-tests |
+| `../tests/signup-lab.test.js` | 22 unit-tests |
+| `../tools/signup/go-live.js` | Status, og Klaviyo-halvdelen af at tænde: sluk/genudgiv The Insert-popupperne |
+| `../tools/signup/store-check.js` | Kører det hele på de 18 rigtige butikker som en besøgende og tjekker det |
 
 ## Hvem ser hvad, og hvornår
 
@@ -123,10 +130,10 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 - **Seks rigtige låg:** mat sort plast, creme soft touch, sort med guldkant, støvet grøn karton, lysebrun soft touch
   og hvid karton i hør-look (materialer læst i sitets produktdata). Swipe eller thumbnails skifter låg; hvert låg viser sin
   egen naturlige folie, til den besøgende vælger en.
-- **Folierne er dem, logotryk-siden lister:** guld, sølv, rosaguld, old rose, hvid, sort og blindpræg.
+- **Folierne er dem, logotryk-siden lister:** guld, sølv, rosaguld, old rose, hvid og sort. Blindpræg er taget ud (2026-10-29).
 - **Trykket tegnes som SVG med rigtigt lys:** en spejlende glans fra en lyskilde, der følger musen eller fingeren
   (og driver langsomt af sig selv), fin foliestruktur, og trykket presset ned i overfladen – skygge på den ene
-  indervæg, lys på den anden. Blindpræg er kun relief.
+  indervæg, lys på den anden.
 - **Trykket ligger lige på låget:** hvert låg er målt på sit foto (`node tools/signup/lid-geometry.js refine`).
   Værktøjet finder lågets fire kanter på pixlen og lægger trykket på lågets flade med én perspektivtransformation,
   så det følger kanterne og forkortes præcis som kameraet så låget. Størrelsen er sitets maksimale logostørrelse
@@ -165,20 +172,27 @@ som IP-baseret. Rigtige mennesker, der tilmelder sig én gang, forventes at gå 
 de første dage**: `?action=confirmed` viser bekræftede og bot-blokerede pr. oplevelse. Er bot-andelen for rigtig
 trafik ikke tæt på nul, skal Klaviyo support kontaktes, før testen fortsætter.
 
-## Til produktion – implementeringsplan
+## Til produktion
 
-1. **Godkendelse fra dig** (briefen: publicering til live trafik kræver godkendelse).
-2. **Læs sprogene** for de markeder, der skal med først. Forslag: DK, UK, EU, US (master) + DE, FR, IT, NL.
-   Slå de øvrige fra med `enabled: false`, til de er læst.
-3. **Én linje på butikken** (se øverst), på alle sider i alle butikker – via Google Tag Manager (Custom HTML-tag,
-   udløst på alle sider) eller i Magento-temaets footer. **Det kræver den adgang, vi ikke har**: den, der
-   administrerer webshoppen eller dens Tag Manager. Linjen tilføjer kun; intet eksisterende ændres.
-4. **Samtidig: sluk The Insert-popupperne i Klaviyo** (US, DE, NL, SE, FI, PL, SK, IT, UK, EU, FR m.fl.), ellers
-   får besøgende to popups. Det kan gøres via Klaviyos API (`form-unpublish-jobs`).
-5. **Første uge:** følg `?action=report` og `?action=confirmed` dagligt (bot-andel, fejl, lukninger pr. trin).
-6. **Efter fire uger:** vælg vinder på bekræftede tilmeldinger pr. visning; følg kvaliteten i 90 dage.
+Se [`IMPLEMENTERING.md`](IMPLEMENTERING.md). Kort: ét Custom HTML-tag i Tag Manager GTM-5QRXWTJ (alle 18
+butikker), som kan sættes ind nu, fordi det intet gør, før `LIVE` står på `true`; at tænde er `LIVE = true`,
+deploy og `node tools/signup/go-live.js unpublish --apply` i de samme minutter. Rul tilbage med `LIVE = false` og
+`go-live.js republish --apply`.
 
-Rul tilbage ved at fjerne linjen (eller sætte `enabled: false` for alle markeder og deploye).
+## Butikstjek (2026-10-29)
+
+`node tools/signup/store-check.js <mappe> --simulate-live` på alle 18 butikker, desktop, og `--mobile` på DK, UK, US,
+DE, FR og PL, med tagget lagt ind som Tag Manager vil gøre det og cookie-banneret besvaret:
+
+- **Kontakten slukket:** tagget er tavst på alle 18.
+- **`?wps=logo-studio`:** åbner på alle 18, med rigtigt marked, butikkens sprog og butikkens egen samtykketekst.
+- **Kontakten tændt** (kun i testbrowseren): dialogen kommer af sig selv på forsiden på desktop, på mobil kommer det
+  lille kort; intet i kurven; ingen JavaScript-fejl fra os.
+- **The Insert-popuppen fra Klaviyo vises i dag på alle butikker.** Det er derfor, den skal slukkes i de samme
+  minutter, som vi tænder (`go-live.js unpublish --apply`).
+
+Samme kommando uden `--simulate-live` tjekker butikkerne efter lanceringen: med `LIVE = true` i produktion
+forventer den, at oplevelsen kommer af sig selv.
 
 ## Verificeret – og hvad der ikke er
 
@@ -188,10 +202,16 @@ Verificeret 2026-10-29:
   "Westpack Signup Lab · <oplevelse>", locale, alle profilfelter, `organization` fra Logo-studiet og
   tidslinje-eventet. Testprofilerne er slettet igen.
 - Ugyldig e-mail afvises i browseren uden kald til Klaviyo; dobbeltklik giver ét kald.
-- 31 browser-checks (`tools/signup/qa.js`), herunder at folielyset følger musen, at luppen åbner, at et uploadet logo bliver en foliemaske, og at en ikke-billedfil får en klar besked: 360×640, fem sprog uden vandret overflow, tastatur (fokus inde,
+- 67 browser-checks (`tools/signup/qa.js`), herunder at folielyset følger musen, at luppen åbner, at et uploadet logo bliver en foliemaske, og at en ikke-billedfil får en klar besked: 360×640, alle 17 sprog uden vandret overflow på mobil, tastatur (fokus inde,
   Tab bliver i dialogen, Escape lukker), reduceret bevægelse, langsom 3G (åbner stylet efter 5 s), manglende
   billeder, double opt-in-tekst, tracking uden persondata, ingen JavaScript-fejl.
-- 18 unit-tests (`node --test tests/signup-lab.test.js`).
+- 22 unit-tests (`node --test tests/signup-lab.test.js`).
+- **På de 18 rigtige butikker** (`tools/signup/store-check.js`, med tagget lagt ind som Tag Manager vil gøre det):
+  tagget er tavst med kontakten slukket, `?wps=preview` åbner på butikkens sprog med dens egen samtykketekst, og
+  med kontakten tændt (kun i testbrowseren) kommer oplevelsen af sig selv på forsiden og aldrig i kurven. Se
+  resultatet i "Butikstjek" nedenfor.
+- **Tre browsermotorer:** Chromium og Firefox tegner trykket inden for 0,06 % af det målte låg. WebKit til Windows
+  tegner perspektivet fladt; siden opdager det og bruger den bedste flade tilnærmelse.
 
 Ikke verificeret:
 - **Live på westpack.com** – kræver script-linjen (adgang mangler).
@@ -200,4 +220,6 @@ Ikke verificeret:
 - **Eksisterende abonnenter:** Klaviyos client-API svarer ens for nye og eksisterende (det kan ikke skelnes i
   browseren); et eksisterende samtykke bevares af Klaviyo. Besøgende fra mails og genkendte besøgende ser
   oplevelsen slet ikke.
-- **De 15 transcreerede sprog** er ikke læst af nogen med sproget som modersmål.
+- **De 15 transcreerede sprog** er korrekturlæst af en uafhængig modelgennemgang (56 rettelser), men ikke læst af
+  nogen med sproget som modersmål.
+- **Safari på en rigtig iPhone.**

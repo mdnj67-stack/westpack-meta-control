@@ -28,7 +28,7 @@
     boxLabel: "Æske",
     boxes: { seville: "Mat sort plast", london: "Creme soft touch", torino: "Sort med guldkant", seoul: "Støvet grøn karton", madrid: "Lysebrun soft touch", frankfurt: "Hvid hør-look karton" },
     foilLabel: "Folie",
-    foil: { gold: "Guld", silver: "Sølv", rose: "Rosaguld", oldrose: "Old rose", white: "Hvid", black: "Sort", deboss: "Blindpræg" },
+    foil: { gold: "Guld", silver: "Sølv", rose: "Rosaguld", oldrose: "Old rose", white: "Hvid", black: "Sort" },
     typeLabel: "Skrift",
     type: { classic: "Klassisk", script: "Skrå", clean: "Ren" },
     hintLong: "Mange bogstaver! Logoet skaleres, så det passer til låget.",

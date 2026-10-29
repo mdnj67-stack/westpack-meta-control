@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter de Westpack",
@@ -50,8 +51,7 @@
       "rose": "Oro rosa",
       "oldrose": "Rosa antiguo",
       "white": "Blanco",
-      "black": "Negro",
-      "deboss": "Golpe en seco"
+      "black": "Negro"
     },
     "typeLabel": "Tipografía",
     "type": {
@@ -61,14 +61,14 @@
     },
     "hintLong": "Son unas cuantas letras. El logo se ajusta para caber en la tapa.",
     "hintWestpack": "Buena elección. Pero ese nombre ya está pillado.",
-    "disclaimer": "Simulación sobre tapas Westpack reales. Tu logo se imprime en un solo color de estampado.",
+    "disclaimer": "Simulación sobre tapas Westpack reales. Tu logo se estampa en caliente en un solo color.",
     "lightHintMouse": "Mueve el ratón sobre la caja y mira cómo el estampado atrapa la luz.",
     "lightHintTouch": "Desliza un dedo sobre la caja y mira cómo el estampado atrapa la luz. Desliza para ver la siguiente caja.",
     "zoomIn": "Ver la impresión de cerca",
     "zoomOut": "Ver la caja entera",
     "uploadCta": "Usa tu logo",
     "uploadHint": "PNG, JPG o SVG: tu logo se queda en tu navegador.",
-    "uploadOneColour": "El estampado se imprime en un solo color. Así queda tu logo.",
+    "uploadOneColour": "La estampación en caliente se hace en un solo color. Así queda tu logo.",
     "uploadError": "No hemos podido leer el archivo. Prueba con un PNG o JPG.",
     "useName": "Usar el nombre",
     "next": "Así queda bien",

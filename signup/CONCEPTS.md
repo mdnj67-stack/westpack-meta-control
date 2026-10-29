@@ -19,7 +19,7 @@ der kommer foran værdien, giver færre tilmeldinger, ikke flere.
 
 | # | Koncept | Interaktion | Kort |
 |---|---|---|---|
-| 1 | **Logo-studiet** ("Folieprøven") | Skab | Skriv dit brandnavn, se det i guld/sølv/rosa/hvid/blindpræg på et rigtigt Westpack-låg – live, lagt lige på låget i dets eget perspektiv. |
+| 1 | **Logo-studiet** ("Folieprøven") | Skab | Skriv dit brandnavn, se det i guld/sølv/rosa/old rose/hvid/sort på et rigtigt Westpack-låg – live, lagt lige på låget i dets eget perspektiv. |
 | 2 | **Æske-match** | Swipe | Tinder for emballage: seks rigtige æsker, hjerte eller nej tak, og ud kommer en emballageprofil i procent. |
 | 3 | **Pakket & sendt** | Formularen *er* oplevelsen | Forsendelsesmærkatet på en rigtig postæske printer din adresse, mens du skriver; tilmelding = stempel, tape, afsendt. |
 | 4 | Æsketypen | Quiz | Tre billedspørgsmål om dit brand, et lidt absurd personlighedsresultat med en rigtig æske. |

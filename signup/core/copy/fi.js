@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -29,7 +30,7 @@
     "peek": "Miltä brändisi näyttää kultaisena?",
     "peekCta": "Kokeile",
     "kicker": "Foliotesti",
-    "title": "Kirjoita brändisi nimi. Me laitamme sen kultaan.",
+    "title": "Kirjoita brändisi nimi. Näet sen kultafoliolla painettuna.",
     "lede": "Livenä, aidolla kannella. Ei maksa mitään – ei edes sähköpostiosoitettasi.",
     "nameLabel": "Brändisi nimi",
     "namePlaceholder": "esim. Atelier North",
@@ -50,8 +51,7 @@
       "rose": "Ruusukulta",
       "oldrose": "Vanha roosa",
       "white": "Valkoinen",
-      "black": "Musta",
-      "deboss": "Sokkopainatus"
+      "black": "Musta"
     },
     "typeLabel": "Kirjaintyyli",
     "type": {
@@ -77,7 +77,7 @@
     "proofTitle": "Oikeita asiakkaita. Oikeita logoja.",
     "back": "Muuta nimeä",
     "successTitle": "{name}, olet listalla.",
-    "successBody": "Sähköpostisi on nyt avaamisen arvoisten juttujen listalla."
+    "successBody": "Kun meillä seuraavan kerran on jotain avaamisen arvoista, löydät sen sähköpostilaatikostasi."
   },
   "swipe-match": {
     "peek": "Pyyhkäise oma pakkaustyylisi esiin",
@@ -148,6 +148,6 @@
     "stamp": "Lähetetty",
     "tape": "Westpack",
     "successTitle": "Lähetetty.",
-    "successBody": "Sähköpostiosoitteesi on nyt avaamisen arvoisten juttujen listalla."
+    "successBody": "Se löytyy sähköpostilaatikostasi, kun meillä on jotain avaamisen arvoista."
   }
 };

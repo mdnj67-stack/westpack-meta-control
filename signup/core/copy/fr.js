@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 7 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -29,7 +30,7 @@
     "peek": "À quoi ressemble votre marque en or ?",
     "peekCta": "Essayer",
     "kicker": "Le test de marquage",
-    "title": "Tapez le nom de votre marque. On le passe en or.",
+    "title": "Tapez le nom de votre marque. On le dore.",
     "lede": "En direct, sur un vrai couvercle. Ça ne coûte rien, même pas votre e-mail.",
     "nameLabel": "Le nom de votre marque",
     "namePlaceholder": "par ex. Atelier Nord",
@@ -50,8 +51,7 @@
       "rose": "Or rose",
       "oldrose": "Vieux rose",
       "white": "Blanc",
-      "black": "Noir",
-      "deboss": "Gaufrage à sec"
+      "black": "Noir"
     },
     "typeLabel": "Écriture",
     "type": {
@@ -61,14 +61,14 @@
     },
     "hintLong": "Ça fait beaucoup de lettres. Le logo est réduit pour tenir sur le couvercle.",
     "hintWestpack": "Bon choix. Mais ce nom est déjà pris.",
-    "disclaimer": "Illustration sur de vrais couvercles Westpack. Votre logo est imprimé dans une seule couleur de marquage.",
+    "disclaimer": "Illustration sur de vrais couvercles Westpack. Votre logo est marqué à chaud en une seule couleur.",
     "lightHintMouse": "Passez la souris sur l’écrin et regardez le marquage accrocher la lumière.",
     "lightHintTouch": "Faites glisser un doigt sur l’écrin et regardez le marquage accrocher la lumière. Balayez pour voir l’écrin suivant.",
     "zoomIn": "Voir le marquage de près",
     "zoomOut": "Voir tout l’écrin",
     "uploadCta": "Utiliser votre logo",
     "uploadHint": "PNG, JPG ou SVG – votre logo reste dans votre navigateur.",
-    "uploadOneColour": "Le marquage se fait en une couleur. Voici votre logo dans cette version.",
+    "uploadOneColour": "Le marquage à chaud se fait en une seule couleur. Voici le rendu de votre logo.",
     "uploadError": "Impossible de lire ce fichier. Essayez un PNG ou un JPG.",
     "useName": "Utiliser le nom",
     "next": "Ça rend bien",
@@ -100,8 +100,8 @@
     "cards": {
       "torino": "Couvercle à charnière et bordure dorée. Le classique qui ne vieillit jamais.",
       "seoul": "Un tiroir ultrafin en vert grisé. Discret, jusqu’à l’ouverture.",
-      "madrid": "Toucher doux à l’extérieur, velours à l’intérieur et fourreau autour.",
-      "oslo": "Similicuir et velours. Un grand favori parmi les écrins à charnière.",
+      "madrid": "Toucher doux à l’extérieur, velours à l’intérieur, le tout entouré d’un fourreau.",
+      "oslo": "Similicuir et velours. Un best-seller parmi les écrins à charnière.",
       "monaco": "Une boîte cadeau qui ressemble à un petit sac à main. Ruban en satin inclus.",
       "tokyo": "Un couvercle amovible et beaucoup de place pour votre logo."
     },
@@ -120,14 +120,14 @@
       },
       "sand": {
         "name": "Sable",
-        "line": "Clair, léger et nordique. Le bijou a toute la scène pour lui."
+        "line": "Clair, léger et nordique. Le bijou est seul en scène."
       }
     },
     "resultKicker": "Votre profil d’emballage",
     "resultTitle": "Vous êtes {pct} % {world}.",
     "resultSecond": "… et {pct} % {world}.",
     "noneTitle": "Pas un seul cœur. Respect.",
-    "noneLine": "Les goûts les plus exigeants font les meilleures marques. Nous avons bien plus d’écrins que de place ici.",
+    "noneLine": "Les acheteurs les plus exigeants bâtissent les meilleures marques. Nous avons bien plus d’écrins que de place ici.",
     "ctaTitle": "Des nouveautés dans votre style",
     "restart": "Swiper à nouveau",
     "seeBoxes": "Voir les écrins",

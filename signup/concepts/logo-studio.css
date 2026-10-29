@@ -86,7 +86,6 @@
 .ls-swatch-oldrose { background: #c4908a; }
 .ls-swatch-white { background: #f5f3ee; }
 .ls-swatch-black { background: radial-gradient(circle at 35% 30%, #5a5a5a, #141414 55%); }
-.ls-swatch-deboss { background: #d9cdb8; box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.85), inset -1px -1px 0 rgba(0, 0, 0, 0.3); }
 .ls-type-classic { font-family: "WPS Fraunces", Georgia, serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12.5px; }
 .ls-type-script { font-family: "WPS Pinyon Script", cursive; font-size: 19px; font-weight: 400; }
 .ls-type-clean { font-family: "WPS Jost", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px; }

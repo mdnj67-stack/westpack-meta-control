@@ -28,7 +28,7 @@
     boxLabel: "Box",
     boxes: { seville: "Matt black plastic", london: "Cream soft touch", torino: "Black with gold trim", seoul: "Dusty green card", madrid: "Light brown soft touch", frankfurt: "White linen-look card" },
     foilLabel: "Foil",
-    foil: { gold: "Gold", silver: "Silver", rose: "Rose gold", oldrose: "Old rose", white: "White", black: "Black", deboss: "Debossed" },
+    foil: { gold: "Gold", silver: "Silver", rose: "Rose gold", oldrose: "Old rose", white: "White", black: "Black" },
     typeLabel: "Lettering",
     type: { classic: "Classic", script: "Script", clean: "Clean" },
     hintLong: "That's a lot of letters. The logo is scaled to fit the lid.",

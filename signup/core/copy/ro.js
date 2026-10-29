@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 10 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -50,8 +51,7 @@
       "rose": "Auriu roz",
       "oldrose": "Roz antic",
       "white": "Alb",
-      "black": "Negru",
-      "deboss": "Presare în adâncime"
+      "black": "Negru"
     },
     "typeLabel": "Stil de scris",
     "type": {
@@ -59,22 +59,22 @@
       "script": "Caligrafic",
       "clean": "Simplu"
     },
-    "hintLong": "Sunt multe litere. Logo-ul este redimensionat ca să încapă pe capac.",
+    "hintLong": "Sunt multe litere. Logoul este redimensionat ca să încapă pe capac.",
     "hintWestpack": "Bună alegere. Din păcate, numele e deja luat.",
-    "disclaimer": "Ilustrație pe capace Westpack reale. Logo-ul tău este imprimat într-o singură culoare de folie.",
+    "disclaimer": "Ilustrație pe capace reale de la Westpack. Logoul tău este imprimat cu folie într-o singură culoare.",
     "lightHintMouse": "Mișcă mouse-ul peste cutie și vezi cum folia prinde lumina.",
     "lightHintTouch": "Treci degetul peste cutie și vezi cum folia prinde lumina. Glisează pentru următoarea cutie.",
     "zoomIn": "Vezi imprimarea de aproape",
     "zoomOut": "Vezi toată cutia",
-    "uploadCta": "Folosește logo-ul tău",
-    "uploadHint": "PNG, JPG sau SVG – logo-ul rămâne în browserul tău.",
-    "uploadOneColour": "Folia se imprimă într-o singură culoare – așa va arăta logo-ul tău.",
+    "uploadCta": "Folosește-ți logoul",
+    "uploadHint": "PNG, JPG sau SVG – logoul rămâne în browserul tău.",
+    "uploadOneColour": "Imprimarea cu folie se face într-o singură culoare – așa va arăta logoul tău.",
     "uploadError": "Nu am putut citi fișierul. Încearcă un PNG sau JPG.",
     "useName": "Folosește numele",
     "next": "Arată bine",
     "resultTitle": "{name} dă bine pe o cutie.",
     "resultLede": "Vrei mai multe idei de genul ăsta? Îți scriem când apare ceva nou.",
-    "proofTitle": "Clienți reali. Logo-uri reale.",
+    "proofTitle": "Clienți reali. Logouri reale.",
     "back": "Schimbă numele",
     "successTitle": "{name}, ești pe listă.",
     "successBody": "Când mai avem ceva care merită deschis, îl găsești în inbox."
@@ -99,11 +99,11 @@
     },
     "cards": {
       "torino": "Capac cu balama și margine aurie. Clasicul care nu se demodează.",
-      "seoul": "Un sertar ultra-subțire, verde prăfuit. Discret – până îl deschizi.",
+      "seoul": "Un sertar ultraplat, verde prăfuit. Discret – până îl deschizi.",
       "madrid": "Soft touch la exterior, velur la interior și un manșon în jur.",
       "oslo": "Imitație de piele și velur. Un bestseller printre cutiile cu balama.",
       "monaco": "O cutie cadou care arată ca o poșetă minusculă. Panglica din satin este inclusă.",
-      "tokyo": "Capac detașabil și mult loc pentru logo-ul tău."
+      "tokyo": "Capac detașabil și mult loc pentru logoul tău."
     },
     "worlds": {
       "noir": {
@@ -120,7 +120,7 @@
       },
       "sand": {
         "name": "Nisip",
-        "line": "Luminos, aerisit și nordic. Bijuteria primește toată scena."
+        "line": "Luminos, aerisit și nordic. Bijuteria e în centrul atenției."
       }
     },
     "resultKicker": "Profilul ambalajului tău",
@@ -139,7 +139,7 @@
     "peekCta": "Deschide",
     "kicker": "Newsletterul",
     "title": "Trimitem noutăți despre ambalaje. Nu bijuterii. Scuze.",
-    "lede": "Cutii noi, sfaturi și ghiduri – plus un semn când avem o promoție. Scrie adresa, noi ne ocupăm de împachetat.",
+    "lede": "Cutii noi, sfaturi și ghiduri – iar când avem o promoție, te anunțăm. Scrie adresa, iar noi ne ocupăm de împachetat.",
     "labelTo": "Către",
     "labelFrom": "De la: Westpack, Holstebro, Danemarca",
     "labelContents": "Conținut: idei bune",

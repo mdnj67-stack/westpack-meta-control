@@ -1315,8 +1315,23 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   submitted vs confirmed vs bot-blocked per market. Space out e2e runs, and delete test profiles afterwards
   (`tools/signup/klaviyo-e2e.js` does) - a SUBSCRIBED test profile can land in a consent segment.
 - Tests and the preview subscribe only to `WUDjfX` "TEST - Signup Lab (preview only)" in the DK account.
-- **Not live:** going live needs the script line on the store (GTM or the Magento theme) - access this
-  project does not have - and the user's approval. The Insert popups must be unpublished at the same time.
+- **Not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
+  the master switch: off, the store tag does nothing except answer `?wps=preview` / `?wps=<concept>`, which opens
+  the experience at once in test mode (test list only) - so the tag can go into GTM before launch and be checked on
+  the real store. All 18 stores use one container, GTM-5QRXWTJ: one Custom HTML tag, All Pages. Launch is
+  `LIVE = true` + deploy and `node tools/signup/go-live.js unpublish --apply` in the same minutes (it touches only
+  forms named "… - Popup - The Insert …" and records them for `republish --apply`); the embeds and the "Always on
+  sale" flyout (sale/outlet pages only, which the Signup Lab avoids) stay. Launch needs the user's go and someone
+  with GTM access.
+- `tools/signup/store-check.js` opens the 18 real storefronts, answers the cookie banner, adds the tag as GTM will
+  and checks: silent with the switch off (or showing with it on), preview opens in the store's language with its
+  consent sentence, never on the cart. `--local` serves this checkout, `--simulate-live` forces the switch on in
+  the test browser only. Use it before and after launch.
+- The 15 transcreated languages had an independent read (`tools/signup/proofread.js`, gpt-5.6 high, findings in
+  `tmp/signup-proofread/`): 56 fixes applied after review, mostly the right local term for hot-foil stamping;
+  suggestions that would replace a store's own newsletter wording were rejected. Still not a native read.
+- Deboss ("Blindpræg") was removed at the user's request (2026-10-29); the foils are gold, silver, rose gold, old
+  rose, white and black.
 - Funnel records go to Vercel Blob under `signup-funnel/` (one file per exposure, compacted per day), never
   Redis. `rules.sanitizeTracking` drops any value containing "@", in the browser and on the server.
 - The logo studio shows six real lids (`LOGO_BOXES` in `tools/signup/build-assets.js`); Frankfurt is the white
@@ -1361,7 +1376,7 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   uploaded logo becomes a one-colour mask in the browser and is never sent anywhere.
 - Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked
   `needsNativeReview`. No visible text may live in concept code (tested).
-- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (31 browser checks),
+- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (67 browser checks, every language),
   `node tools/signup/screens.js <dir> [concept] [market] --steps`.
 
 ## Agent workflow for this subsystem

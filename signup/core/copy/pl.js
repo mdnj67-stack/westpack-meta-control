@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -50,8 +51,7 @@
       "rose": "Różowe złoto",
       "oldrose": "Stary róż",
       "white": "Biała",
-      "black": "Czarna",
-      "deboss": "Tłoczenie ślepe"
+      "black": "Czarna"
     },
     "typeLabel": "Krój pisma",
     "type": {
@@ -68,7 +68,7 @@
     "zoomOut": "Całe pudełko",
     "uploadCta": "Użyj swojego logo",
     "uploadHint": "PNG, JPG lub SVG – Twoje logo zostaje w przeglądarce.",
-    "uploadOneColour": "Folia ma jeden kolor – tak będzie wyglądać Twoje logo.",
+    "uploadOneColour": "Logo tłoczymy folią w jednym kolorze – tak będzie wyglądać Twoje logo.",
     "uploadError": "Nie udało się odczytać pliku. Spróbuj użyć PNG lub JPG.",
     "useName": "Użyj nazwy zamiast logo",
     "next": "Wygląda dobrze",
@@ -124,8 +124,8 @@
       }
     },
     "resultKicker": "Twój profil opakowań",
-    "resultTitle": "Twój wynik: {pct}% {world}.",
-    "resultSecond": "… i {pct}% {world}.",
+    "resultTitle": "Twój wynik: {pct} % {world}.",
+    "resultSecond": "… i {pct} % {world}.",
     "noneTitle": "Ani jednego serca? Szanujemy.",
     "noneLine": "Najbardziej wybredni kupujący tworzą najlepsze marki. Mamy znacznie więcej pudełek, niż da się tu zmieścić.",
     "ctaTitle": "Chcesz nowości w swoim stylu?",

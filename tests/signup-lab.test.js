@@ -241,3 +241,23 @@ test("logo studio: the homography lays the unit square exactly on each lid, and 
     for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 1], [0.5, 0.5]]) assert.ok(m.g * u + m.h * v + 1 > 0, `${id} w at ${u},${v}`);
   }
 });
+
+test("one master switch decides whether the stores run the Signup Lab, and ?wps= previews it on a real store", () => {
+  const { LIVE } = require("../signup/core/markets");
+  assert.equal(typeof LIVE, "boolean");
+  const runtime = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
+  // off: the tag does nothing, except a store preview; a preview is always test mode, so it can only reach the test list
+  assert.match(runtime, /if \(!market \|\| \(!\(M\.LIVE && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);
+  assert.match(runtime, /test: data\.test === "1" \|\| data\.mode === "preview" \|\| Boolean\(storePreview\)/);
+  assert.match(runtime, /get\("wps"\)/);
+  // go-live touches only The Insert popups and needs --apply to touch anything
+  const goLive = fs.readFileSync(path.join(ROOT, "tools", "signup", "go-live.js"), "utf8");
+  assert.ok(goLive.includes("const INSERT = / - Popup - The Insert\\b/;"));
+  assert.match(goLive, /const apply = process\.argv\.includes\("--apply"\);/);
+});
+
+test("logo studio offers the foils the site prints, and no deboss", () => {
+  const foils = Object.keys(loadCopy("da")["logo-studio"].foil);
+  assert.deepEqual(foils, ["gold", "silver", "rose", "oldrose", "white", "black"]);
+  assert.doesNotMatch(LS_SRC, /deboss/);
+});

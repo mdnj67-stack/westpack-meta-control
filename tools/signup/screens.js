@@ -63,8 +63,8 @@ function serve() {
           await page.waitForTimeout(1300); await shot(`3-box-${box}`);
         }
         await host.locator('.ls-thumb[data-box="seville"]').click();
-        await host.locator('.ls-chip-foil[data-value="deboss"]').click();
-        await page.waitForTimeout(1300); await shot("3-box-seville-deboss");
+        await host.locator('.ls-chip-foil[data-value="white"]').click();
+        await page.waitForTimeout(1300); await shot("3-box-seville-white");
         await host.locator(".ls-zoom").click();
         await page.waitForTimeout(1300); await shot("3-zoom");
         await host.locator(".ls-zoom").click();

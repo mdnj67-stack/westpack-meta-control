@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 1 fix(es)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -50,8 +51,7 @@
       "rose": "Roségull",
       "oldrose": "Gammelrosa",
       "white": "Hvit",
-      "black": "Svart",
-      "deboss": "Blindpreg"
+      "black": "Svart"
     },
     "typeLabel": "Skrift",
     "type": {
@@ -68,7 +68,7 @@
     "zoomOut": "Se hele smykkeesken",
     "uploadCta": "Bruk logoen din",
     "uploadHint": "PNG, JPG eller SVG – logoen din blir i nettleseren.",
-    "uploadOneColour": "Folie trykkes i én farge – slik blir logoen din.",
+    "uploadOneColour": "Ved folietrykk brukes én farge – slik blir logoen din.",
     "uploadError": "Vi klarte ikke å lese filen. Prøv en PNG eller JPG.",
     "useName": "Bruk navnet i stedet",
     "next": "Dette ser bra ut",

@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter da Westpack",
@@ -22,7 +23,7 @@
       "Aviso prévio das nossas raras promoções"
     ],
     "doiTitle": "Quase lá.",
-    "doiBody": "Enviámos-lhe um e-mail. Clique no link e fica na lista.",
+    "doiBody": "Enviámos-lhe um e-mail. Clique no link e ficará na lista.",
     "peekDismiss": "Agora não"
   },
   "logo-studio": {
@@ -50,8 +51,7 @@
       "rose": "Ouro rosa",
       "oldrose": "Rosa antigo",
       "white": "Branco",
-      "black": "Preto",
-      "deboss": "Baixo-relevo"
+      "black": "Preto"
     },
     "typeLabel": "Letra",
     "type": {
@@ -61,14 +61,14 @@
     },
     "hintLong": "São muitas letras. O logótipo é ajustado à tampa.",
     "hintWestpack": "Boa escolha. Mas esse nome já tem dono.",
-    "disclaimer": "Ilustração em tampas Westpack reais. O seu logótipo é impresso numa cor de foil.",
+    "disclaimer": "Ilustração em tampas reais da Westpack. O seu logótipo é estampado a quente numa única cor.",
     "lightHintMouse": "Mova o rato sobre a caixa e veja o foil apanhar a luz.",
     "lightHintTouch": "Arraste um dedo sobre a caixa e veja o foil apanhar a luz. Deslize para a caixa seguinte.",
     "zoomIn": "Ver a impressão de perto",
     "zoomOut": "Ver a caixa inteira",
     "uploadCta": "Usar o seu logótipo",
     "uploadHint": "PNG, JPG ou SVG — o seu logótipo fica no seu browser.",
-    "uploadOneColour": "O foil é impresso numa só cor — assim fica o seu logótipo.",
+    "uploadOneColour": "A estampagem a quente é feita numa só cor — assim fica o seu logótipo.",
     "uploadError": "Não conseguimos ler esse ficheiro. Experimente um PNG ou JPG.",
     "useName": "Usar antes o nome",
     "next": "Fica bem",
@@ -101,7 +101,7 @@
       "torino": "Tampa com dobradiça e rebordo dourado. O clássico que nunca cansa.",
       "seoul": "Uma gaveta ultrafina em verde esbatido. Discreta — até abrir.",
       "madrid": "Toque suave no exterior, veludo no interior e uma cinta à volta.",
-      "oslo": "Pele sintética e veludo. Um bestseller entre as caixas com dobradiça.",
+      "oslo": "Pele sintética e veludo. Um best-seller entre as caixas com dobradiça.",
       "monaco": "Uma caixa de presente que parece uma pequena mala. Inclui fita de cetim.",
       "tokyo": "Tampa amovível e muito espaço para o seu logótipo."
     },
@@ -115,7 +115,7 @@
         "line": "Quente e suave. O tipo de caixa que ninguém deita fora."
       },
       "forest": {
-        "name": "Sub-bosque",
+        "name": "Chão da floresta",
         "line": "Verde, sereno e pensado ao pormenor. Até à fita."
       },
       "sand": {

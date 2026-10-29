@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -30,7 +31,7 @@
     "peekCta": "Prova",
     "kicker": "Il test del foil",
     "title": "Scrivi il nome del tuo brand. Noi lo mettiamo in oro.",
-    "lede": "Subito, su un vero coperchio. Non costa nulla, nemmeno la tua e-mail.",
+    "lede": "In tempo reale, su un vero coperchio. Non costa nulla, nemmeno la tua e-mail.",
     "nameLabel": "Nome del tuo brand",
     "namePlaceholder": "es. Atelier Nord",
     "defaultName": "Il tuo brand",
@@ -50,8 +51,7 @@
       "rose": "Oro rosa",
       "oldrose": "Rosa antico",
       "white": "Bianco",
-      "black": "Nero",
-      "deboss": "Stampa a secco"
+      "black": "Nero"
     },
     "typeLabel": "Carattere",
     "type": {
@@ -61,14 +61,14 @@
     },
     "hintLong": "Quante lettere! Il logo viene ridimensionato per adattarsi al coperchio.",
     "hintWestpack": "Bella scelta. Peccato, questo nome è già preso.",
-    "disclaimer": "Simulazione su veri coperchi Westpack. Il tuo logo viene stampato in un solo colore foil.",
+    "disclaimer": "Simulazione su veri coperchi Westpack. Il tuo logo viene stampato a caldo in un solo colore.",
     "lightHintMouse": "Passa il mouse sull’astuccio e guarda il foil catturare la luce.",
-    "lightHintTouch": "Trascina un dito sull’astuccio e guarda il foil catturare la luce. Scorri per il prossimo astuccio.",
+    "lightHintTouch": "Trascina un dito sull’astuccio e guarda come la lamina riflette la luce. Scorri per passare all’astuccio successivo.",
     "zoomIn": "Stampa da vicino",
     "zoomOut": "Astuccio intero",
     "uploadCta": "Usa il tuo logo",
     "uploadHint": "PNG, JPG o SVG: il tuo logo resta nel browser.",
-    "uploadOneColour": "Il foil si stampa in un solo colore: ecco come sarà il tuo logo.",
+    "uploadOneColour": "Il logo viene stampato a caldo in un solo colore: ecco come apparirà.",
     "uploadError": "Non riusciamo a leggere il file. Prova con un PNG o JPG.",
     "useName": "Usa il nome",
     "next": "Sta bene",
@@ -103,7 +103,7 @@
       "madrid": "Soft touch fuori, velluto dentro e una fascetta tutt’intorno.",
       "oslo": "Similpelle e velluto. Un bestseller tra gli astucci con coperchio incernierato.",
       "monaco": "Una scatola regalo che sembra una piccola borsa. Nastro di raso incluso.",
-      "tokyo": "Coperchio da sollevare e tanto spazio per il tuo logo."
+      "tokyo": "Coperchio rimovibile e tanto spazio per il tuo logo."
     },
     "worlds": {
       "noir": {

@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 0 fix(es)"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -50,8 +51,7 @@
       "rose": "Rose gold",
       "oldrose": "Old rose",
       "white": "White",
-      "black": "Black",
-      "deboss": "Debossed"
+      "black": "Black"
     },
     "typeLabel": "Lettering",
     "type": {

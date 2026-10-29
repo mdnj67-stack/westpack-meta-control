@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -29,7 +30,7 @@
     "peek": "Hogy mutat a márkád aranyban?",
     "peekCta": "Kipróbálom",
     "kicker": "Fóliapróba",
-    "title": "Írd be a márkád nevét. Aranyba írjuk.",
+    "title": "Írd be a márkád nevét. Aranyba öltöztetjük.",
     "lede": "Élőben, egy valódi fedélen. Semmibe sem kerül – még az e-mail-címedbe sem.",
     "nameLabel": "A márkád neve",
     "namePlaceholder": "pl. Atelier Nord",
@@ -50,8 +51,7 @@
       "rose": "Rozéarany",
       "oldrose": "Órózsaszín",
       "white": "Fehér",
-      "black": "Fekete",
-      "deboss": "Vaknyomás"
+      "black": "Fekete"
     },
     "typeLabel": "Betűtípus",
     "type": {
@@ -68,7 +68,7 @@
     "zoomOut": "Teljes doboz",
     "uploadCta": "Saját logót használok",
     "uploadHint": "PNG, JPG vagy SVG – a logód a böngésződben marad.",
-    "uploadOneColour": "A fóliát egy színnel nyomtatjuk – így mutat a logód.",
+    "uploadOneColour": "A fóliaprégelés egyszínű – így mutat a logód.",
     "uploadError": "Ezt a fájlt nem tudtuk beolvasni. Próbáld meg PNG-vel vagy JPG-vel.",
     "useName": "Inkább a nevet használom",
     "next": "Ez jól néz ki",

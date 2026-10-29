@@ -4,10 +4,11 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
   },
   "shell": {
-    "dialogLabel": "Westpack Newsletter",
+    "dialogLabel": "Westpack-Newsletter",
     "close": "Schließen",
     "emailLabel": "Ihre E-Mail-Adresse",
     "emailPlaceholder": "name@firma.de",
@@ -50,8 +51,7 @@
       "rose": "Roségold",
       "oldrose": "Altrosa",
       "white": "Weiß",
-      "black": "Schwarz",
-      "deboss": "Blindprägung"
+      "black": "Schwarz"
     },
     "typeLabel": "Schrift",
     "type": {
@@ -94,7 +94,7 @@
       "seoul": "Seoul",
       "madrid": "Madrid",
       "oslo": "Oslo",
-      "monaco": "Monaco Geschenkbox",
+      "monaco": "Monaco-Geschenkbox",
       "tokyo": "Tokyo"
     },
     "cards": {

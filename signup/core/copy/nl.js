@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -17,7 +18,7 @@
     "signup": "Aanmelden voor de nieuwsbrief",
     "noThanks": "Nee, bedankt",
     "promise": [
-      "Direct nieuws over productlanceringen en must-haves",
+      "Directe updates over productlanceringen en must-haves",
       "Handige tips en gidsen voor abonnees",
       "Een seintje bij onze zeldzame acties"
     ],
@@ -50,13 +51,12 @@
       "rose": "Roségoud",
       "oldrose": "Oudroze",
       "white": "Wit",
-      "black": "Zwart",
-      "deboss": "Blinddruk"
+      "black": "Zwart"
     },
     "typeLabel": "Lettertype",
     "type": {
       "classic": "Klassiek",
-      "script": "Schuin",
+      "script": "Schrijfletter",
       "clean": "Strak"
     },
     "hintLong": "Dat zijn flink wat letters. Het logo wordt passend gemaakt voor het deksel.",
@@ -68,7 +68,7 @@
     "zoomOut": "Hele doosje",
     "uploadCta": "Gebruik je logo",
     "uploadHint": "PNG, JPG of SVG – je logo blijft in je browser.",
-    "uploadOneColour": "Folie wordt in één kleur gedrukt – zo ziet je logo eruit.",
+    "uploadOneColour": "Bij foliedruk wordt één kleur gebruikt – zo ziet je logo in folie eruit.",
     "uploadError": "We konden dat bestand niet lezen. Probeer een PNG of JPG.",
     "useName": "Gebruik de naam",
     "next": "Ziet er goed uit",
@@ -85,7 +85,7 @@
     "kicker": "Doosjesmatch",
     "title": "Hartje of weg ermee?",
     "lede": "Zes doosjes. Swipe maar. Wij vertellen wat ze over je merk zeggen.",
-    "like": "Ja graag",
+    "like": "Ja, graag",
     "nope": "Nee, bedankt",
     "keysHint": "De pijltjestoetsen werken ook: ← nee · → ja",
     "progress": "{n} van {total}",
@@ -100,7 +100,7 @@
     "cards": {
       "torino": "Scharnierdeksel en gouden rand. De klassieker die nooit verveelt.",
       "seoul": "Een ultraplatte lade in stoffig groen. Bescheiden – tot hij opengaat.",
-      "madrid": "Soft touch aan de buitenkant, velours aan de binnenkant en een hoes eromheen.",
+      "madrid": "Soft touch aan de buitenkant, velours aan de binnenkant en een sleeve eromheen.",
       "oslo": "Kunstleer en velours. Een bestseller onder de doosjes met scharnierdeksel.",
       "monaco": "Een geschenkdoos die op een klein handtasje lijkt. Met satijnen lint.",
       "tokyo": "Een los deksel en volop ruimte voor je logo."

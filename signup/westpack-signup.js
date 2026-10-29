@@ -20,11 +20,16 @@
   const script = document.currentScript || document.querySelector('script[src*="westpack-signup.js"]');
   const BASE = new URL(".", (script && script.src) || location.href).href;
   const data = (script && script.dataset) || {};
+  // ?wps=preview on any store page (or ?wps=logo-studio, swipe-match, pack-and-ship) opens the experience at once in
+  // test mode: signups go to the test list, tracking is marked test, and it works whether or not the experience is
+  // live. It is how the store's tag is checked on the real store before launch.
+  const storePreview = (() => { try { return new URLSearchParams(location.search).get("wps") || ""; } catch (e) { return ""; } })();
   const OPTS = {
     mode: data.mode === "preview" ? "preview" : "live",
     market: data.market || "",
-    concept: data.concept || "",
-    test: data.test === "1" || data.mode === "preview",
+    concept: data.concept || (storePreview !== "preview" ? storePreview : ""),
+    storePreview: Boolean(storePreview),
+    test: data.test === "1" || data.mode === "preview" || Boolean(storePreview),
     // data-track="" switches tracking off (local tests); no attribute means the app's endpoint
     trackUrl: data.track !== undefined ? data.track : "https://project-4fcxa.vercel.app/api/signup/track",
     autostart: data.autostart !== "0",
@@ -392,7 +397,8 @@
     await Promise.all([loadScript(`${BASE}core/rules.js`), loadScript(`${BASE}core/markets.js`)]);
     R = window.WestpackSignupRules; M = window.WestpackSignupMarkets;
     market = OPTS.market ? M.MARKETS[OPTS.market] : R.resolveMarket(location.pathname, M.MARKETS);
-    if (!market || (!market.enabled && OPTS.mode !== "preview")) return;
+    // M.LIVE is the master switch (core/markets.js): off, the store's tag does nothing but answer ?wps=preview
+    if (!market || (!(M.LIVE && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
     state = R.parseState(local.get(R.STATE_KEY));
     reducedMotion = Boolean(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
     device = R.deviceClass(innerWidth, Boolean(window.matchMedia && matchMedia("(pointer: coarse)").matches));
@@ -404,7 +410,14 @@
     await loadScript(`${BASE}core/copy/${market.lang}.js`);
     COPY = window.WestpackSignupCopy[market.lang];
     emit("ready", { market: market.market, concept });
-    if (OPTS.mode === "preview" || !OPTS.autostart) return;
+    if (OPTS.mode === "preview") return;
+    if (OPTS.storePreview) {
+      // straight to the experience, once the cookie banner has been answered
+      while (consentBannerOpen()) await new Promise((r) => setTimeout(r, 500));
+      open("preview");
+      return;
+    }
+    if (!OPTS.autostart) return;
 
     const identified = await klaviyoIdentified();
     const check = () => R.eligibility(state, {

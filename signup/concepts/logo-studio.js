@@ -38,7 +38,6 @@
     oldrose: { kind: "pigment", color: "#c4908a", spec: 0.35 },
     white: { kind: "pigment", color: "#f3f4f4", spec: 0.3 },
     black: { kind: "pigment", color: "#141414", spec: 1.05 },
-    deboss: { kind: "deboss" },
   };
   // the board's own texture, which hot foil follows where it is pressed in: noise at the scale of the material
   // (print units: the print area is 1000 wide, about 38 mm), and how much of it shows in metal and in pigment
@@ -140,9 +139,8 @@
       const f = FOILS[foilName], lid = LIDS[lidId];
       grad.textContent = "";
       if (f.kind === "metal") f.stops.forEach((c, i) => grad.appendChild(svgEl("stop", { offset: `${(i / (f.stops.length - 1)) * 100}%`, "stop-color": c })));
-      const fill = f.kind === "metal" ? `url(#${uid}-g)` : f.kind === "deboss" ? "#000" : f.color;
+      const fill = f.kind === "metal" ? `url(#${uid}-g)` : f.color;
       text.setAttribute("fill", fill); logo.setAttribute("fill", fill);
-      group.setAttribute("opacity", lite && f.kind === "deboss" ? "0.22" : "1");
       filter.textContent = "";
       light = null;
       if (lite) return;
@@ -167,14 +165,6 @@
         add("feComposite", { in: "lt", in2: "rimBb", operator: "in", result: "gl" });
         add("feComposite", { in: "gl", in2: "SourceAlpha", operator: "in", result: "glow" });
       };
-      if (f.kind === "deboss") {
-        // no foil at all: only the relief the cliché leaves in the surface
-        edges(0.62, 0.42);
-        add("feFlood", { "flood-color": "#000", "flood-opacity": 0.07, result: "tint" });
-        add("feComposite", { in: "tint", in2: "SourceAlpha", operator: "in", result: "floor" });
-        add("feMerge", {}, [svgEl("feMergeNode", { in: "floor" }), svgEl("feMergeNode", { in: "shadow" }), svgEl("feMergeNode", { in: "glow" })]);
-        return;
-      }
       const metal = f.kind === "metal";
       // Every step below works on opaque images and the print's shape is cut out once, at the end. An arithmetic
       // sum adds alpha as well as colour, and engines disagree on a highlight's alpha (Chrome gives it its brightest

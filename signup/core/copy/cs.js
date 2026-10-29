@@ -4,7 +4,8 @@
     "status": "transcreated",
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
-    "needsNativeReview": true
+    "needsNativeReview": true,
+    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -29,7 +30,7 @@
     "peek": "Jak vypadá vaše značka ve zlaté?",
     "peekCta": "Vyzkoušet",
     "kicker": "Test fólie",
-    "title": "Napište název značky. Dáme ho do zlaté.",
+    "title": "Napište název značky. Vyrazíme ho zlatou fólií.",
     "lede": "Živě, na skutečném víčku. Nestojí to nic – ani váš e-mail.",
     "nameLabel": "Název vaší značky",
     "namePlaceholder": "např. Atelier Sever",
@@ -50,8 +51,7 @@
       "rose": "Růžové zlato",
       "oldrose": "Starorůžová",
       "white": "Bílá",
-      "black": "Černá",
-      "deboss": "Slepotisk"
+      "black": "Černá"
     },
     "typeLabel": "Písmo",
     "type": {
@@ -61,14 +61,14 @@
     },
     "hintLong": "To je pořádná řádka písmen. Logo upravíme, aby se vešlo na víčko.",
     "hintWestpack": "Dobrá volba. Tenhle název už je ale zabraný.",
-    "disclaimer": "Vizualizace na skutečných víčkách Westpack. Vaše logo se tiskne jednou barvou fólie.",
+    "disclaimer": "Vizualizace na skutečných víčkách Westpack. Vaše logo se razí fólií v jedné barvě.",
     "lightHintMouse": "Přejeďte myší přes krabičku a sledujte, jak fólie chytá světlo.",
     "lightHintTouch": "Přejeďte prstem přes krabičku a sledujte, jak fólie chytá světlo. Tažením zobrazíte další krabičku.",
     "zoomIn": "Prohlédnout tisk zblízka",
     "zoomOut": "Celá krabička",
     "uploadCta": "Použít vlastní logo",
     "uploadHint": "PNG, JPG nebo SVG – logo zůstane ve vašem prohlížeči.",
-    "uploadOneColour": "Fólie se tiskne jednou barvou – takhle bude vypadat vaše logo.",
+    "uploadOneColour": "Ražba fólií se provádí v jedné barvě – takhle bude vypadat vaše logo.",
     "uploadError": "Tenhle soubor se nám nepodařilo přečíst. Zkuste PNG nebo JPG.",
     "useName": "Použít raději název",
     "next": "To vypadá dobře",
@@ -99,7 +99,7 @@
     },
     "cards": {
       "torino": "Odklápěcí víčko a zlatý lem. Klasika, která neomrzí.",
-      "seoul": "Ultratenká zásuvka v prachově zelené. Nenápadná – dokud se neotevře.",
+      "seoul": "Ultraplochá zásuvka v prachově zelené. Nenápadná – dokud se neotevře.",
       "madrid": "Soft touch zvenku, velur uvnitř a kolem návlek.",
       "oslo": "Koženka a velur. Bestseller mezi krabičkami s odklápěcím víčkem.",
       "monaco": "Dárková krabička jako malá kabelka. Se saténovou stuhou.",
