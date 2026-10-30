@@ -6367,3 +6367,263 @@ body[data-workspace="agents"] .subnav-button.active .wp-nav-icon {
     font-size: var(--wp-text-2xl);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Signup
+
+   The newsletter signup on the webshops: what our own script runs, where it runs, how it does, and the Klaviyo
+   forms beside it. The control comes first because it changes what customers see; every switch states its
+   consequence in words beside it, and anything that reaches live visitors or Klaviyo is confirmed in an alert
+   that lists exactly what will change.
+--------------------------------------------------------------------------- */
+
+/* The rail: Signup is a group of its own, so neither platform group may read as current while it is open. */
+body[data-workspace="signup"] .tab-button.active,
+body[data-workspace="signup"] .subnav-button.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--wp-text-secondary);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+body[data-workspace="signup"] .tab-button.active .wp-nav-icon,
+body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
+  color: var(--wp-text-subtle);
+}
+
+.signup-body {
+  display: grid;
+  /* minmax(0, 1fr): a wide table scrolls in its own wrapper instead of widening the page on a phone */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--wp-space-5);
+}
+
+.signup-body > .wp-section {
+  margin: 0;
+}
+
+.signup-metrics .wp-metric-value.is-text {
+  font-size: var(--wp-text-xl);
+  letter-spacing: 0;
+}
+
+.signup-metrics .wp-metric-foot a {
+  color: var(--wp-brand);
+}
+
+.signup-confirm .signup-plan {
+  margin: var(--wp-space-2) 0;
+  padding-left: var(--wp-space-5);
+}
+
+.signup-confirm p {
+  margin: var(--wp-space-1) 0 var(--wp-space-3);
+}
+
+/* The three experiences, in the order they take their turn. */
+.signup-concepts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--wp-space-4);
+}
+
+.signup-concept {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.signup-concept.is-current {
+  border-color: var(--wp-brand-border);
+  box-shadow: inset 0 0 0 1px var(--wp-brand-border);
+}
+
+.signup-concept-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--wp-surface-sunken);
+}
+
+.signup-concept-body {
+  display: grid;
+  align-content: start;
+  gap: var(--wp-space-2);
+  padding: var(--wp-space-4);
+}
+
+.signup-concept-name {
+  margin: 0;
+  font-size: var(--wp-text-md);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-concept-line {
+  margin: 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-sm);
+}
+
+.signup-concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-1);
+  min-height: 22px;
+}
+
+/* Live and staging, each a row: what it is, its state, the one button that changes it. */
+.signup-switches {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.signup-switch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--wp-space-4);
+  padding: var(--wp-space-3) var(--wp-space-4);
+}
+
+.signup-switch + .signup-switch {
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.signup-switch p {
+  margin: 2px 0 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.signup-table-head,
+.signup-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--wp-space-3);
+  margin: var(--wp-space-4) 0 var(--wp-space-2);
+}
+
+.signup-table-head p {
+  flex: 1 1 280px;
+  margin: 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.signup-toolbar {
+  margin-top: 0;
+}
+
+.signup-filter {
+  flex: 0 1 260px;
+}
+
+.signup-code,
+.signup-window,
+.signup-empty {
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.signup-window {
+  margin: 0;
+}
+
+.signup-toolbar .signup-window {
+  margin-left: auto;
+}
+
+.signup-history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.signup-history li {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-2) var(--wp-space-4);
+  font-size: var(--wp-text-sm);
+}
+
+.signup-history li + li {
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.signup-history time {
+  color: var(--wp-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.signup-splits {
+  display: grid;
+  gap: var(--wp-space-3);
+}
+
+.signup-splits > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--wp-space-2) var(--wp-space-4);
+}
+
+.signup-split-label {
+  min-width: 70px;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+}
+
+.signup-split {
+  font-size: var(--wp-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.signup-total td {
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-preview-frame {
+  display: block;
+  width: 100%;
+  height: max(720px, calc(100vh - 220px));
+  margin-top: var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-sunken);
+}
+
+@media (max-width: 960px) {
+  .signup-concepts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .signup-switch {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .signup-switch .wp-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .signup-history li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .signup-toolbar .signup-window {
+    margin-left: 0;
+  }
+}

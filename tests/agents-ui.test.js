@@ -20,7 +20,7 @@ test("the rail has an Agents group with Overview, Watchdog and Email check", () 
 test("Agents is a workspace of its own: 'not Meta' no longer means Klaviyo", () => {
   const app = read("app.js");
   assert.match(app, /import \{ initAgents, refreshAgentsBadge, showAgentsView \} from "\.\/src\/agents\.js\?v=/);
-  assert.match(app, /appState\.workspace = \["klaviyo", "agents"\]\.includes\(nextWorkspace\) \? nextWorkspace : "meta";/);
+  assert.match(app, /appState\.workspace = \["klaviyo", "agents"(, "signup")?\]\.includes\(nextWorkspace\) \? nextWorkspace : "meta";/);
   assert.match(app, /getElementById\("klaviyo-product-panel"\)\?\.classList\.toggle\("active", isKlaviyo\)/);
   assert.match(app, /getElementById\("agents-product-panel"\)\?\.classList\.toggle\("active", appState\.workspace === "agents"\)/);
   assert.doesNotMatch(app, /if \(!isMeta\) \{\s*renderKlaviyoWorkspace\(\)/);

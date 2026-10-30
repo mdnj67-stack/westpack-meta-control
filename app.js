@@ -10,6 +10,7 @@ import {
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
 import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261028-subjectlines6";
 import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261030-agents1";
+import { initSignupControl, showSignupView } from "./src/signup-control.js?v=20261030-signup1";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -421,6 +422,7 @@ const appState = {
   klaviyoSubscriberRange: 30,
   klaviyoView: "dashboard",
   agentsView: "overview",
+  signupView: "control",
   klaviyoDashboardTab: "general",
   klaviyoLoading: false,
   klaviyoLiveAttempted: false,
@@ -10239,7 +10241,7 @@ async function loadKlaviyoLiveData(options = {}) {
 }
 
 function setWorkspace(nextWorkspace = "meta") {
-  appState.workspace = ["klaviyo", "agents"].includes(nextWorkspace) ? nextWorkspace : "meta";
+  appState.workspace = ["klaviyo", "agents", "signup"].includes(nextWorkspace) ? nextWorkspace : "meta";
   document.body.dataset.workspace = appState.workspace;
 
   document.querySelectorAll(".workspace-tab").forEach((button) => {
@@ -10251,6 +10253,7 @@ function setWorkspace(nextWorkspace = "meta") {
   document.getElementById("meta-product-panel")?.classList.toggle("active", isMeta);
   document.getElementById("klaviyo-product-panel")?.classList.toggle("active", isKlaviyo);
   document.getElementById("agents-product-panel")?.classList.toggle("active", appState.workspace === "agents");
+  document.getElementById("signup-product-panel")?.classList.toggle("active", appState.workspace === "signup");
 
   const metaNav = document.getElementById("meta-nav-list");
   const klaviyoNav = document.getElementById("klaviyo-nav-list");
@@ -10268,6 +10271,10 @@ function setWorkspace(nextWorkspace = "meta") {
 
   if (appState.workspace === "agents") {
     showAgentsView(appState.agentsView);
+  }
+
+  if (appState.workspace === "signup") {
+    showSignupView(appState.signupView);
   }
 
   if (isKlaviyo) {
@@ -13305,6 +13312,13 @@ function attachEvents() {
     });
   });
 
+  document.querySelectorAll("[data-signup-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      appState.signupView = button.dataset.signupView;
+      showSignupView(appState.signupView);
+    });
+  });
+
   // Wired at start-up rather than on first open, so the OAuth callback's "?canva=connected"
   // notice is read and cleared even when the operator lands on another view first. The callback
   // also carries #canva-localizer, so the operator comes back to the page they left.
@@ -13318,6 +13332,7 @@ function attachEvents() {
   // the rollout translates that line into every market instead of the template's name.
   initSubjectLines();
   initAgents();
+  initSignupControl();
   window.addEventListener("westpack-subject-line-use", (event) => {
     const chosen = event.detail || {};
     if (!chosen.templateId || !chosen.subject) return;

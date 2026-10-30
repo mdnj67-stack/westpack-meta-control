@@ -292,6 +292,38 @@ Then a careful read on `CONTENT_AGENT_MODEL` (high, background job, ~60-90 s) ag
 Candidates for the next agents, not built: Asana "Review" creative -> paused ad in Placeholder;
 the Monday Meta status and ad-swap analysis (now local scripts mailed via Outlook) as in-app agents.
 
+## Signup - a menu group of its own (2026-10-30)
+
+Asked for as "et separat ting ind i biblen omkring ... sign up forms, studio osv. særligt det der skal gøre igennem et
+script så vi har noget styring på det". A **fourth workspace** (`body[data-workspace="signup"]`), built like Agents:
+`src/signup-control.js`, `api/signup/control.js` (`?action=`), `server/signup/{control,store-check,klaviyo-forms}.js`,
+the `signup-product-panel` in `index.html`, the Signup section at the end of `design-system.css`.
+Tests: `tests/signup-control.test.js`. Views: Signup Lab (control), Results, Klaviyo forms, Preview.
+
+- **The script on the stores reads what to run from here.** `GET /api/signup/control?action=config` is public, CORS
+  `*`, edge-cached 30 s (`s-maxage=30, stale-while-revalidate=300`), and returns only on/off, the experience and the
+  markets. The runtime gives it 2.5 s; no answer, a non-200 or anything but `v: 1` means `signup/core/markets.js`
+  decides (`LIVE`, `CURRENT`), which keeps live **off**. A failed Blob read answers 503 for the same reason. The
+  document is Blob `signup/control.json`, read from Blob alone (`readSignupControl`), never through the full Redis.
+- **Live and staging are set separately**, each with its own experience, so the next experience can be tested on
+  staging while the current one runs live. Markets are switched per market for live.
+- **Live can only reach a store that carries the tag**, by the last store check (`installedMarkets`). Switching live
+  on with none refuses. Where the Signup Lab then runs, that market's live Insert popups are unpublished (no two
+  popups); where it stops, exactly the popups this page took down are published again (`insert.unpublished`).
+  Popups someone else unpublished are never touched. A market whose popups cannot be read does not go live. The
+  switch is written before the popups change: a minute with two popups loses nobody's signup, a minute with none would.
+  Anything that reaches live visitors or Klaviyo is shown as a dry run (`dryRun: true`) and confirmed first.
+- **The store check** (`store_check`) fetches every store's own page, live and staging, with a browser's headers (see
+  the watchdog's Magento lesson), for the tag (a `data-test` tag does not count) and for Klaviyo's `company_id` inline,
+  plus the ids Tag Manager (GTM-5QRXWTJ) loads on every store. That makes the 26 Oct break visible per market: DK "Own
+  account", EU "Own account, via Tag Manager", the other 16 "EU account only". Staging needs `SIGNUP_STAGING_AUTH`
+  (`user:password`) in Vercel; without it the staging column says "Not checked". It was not set on 2026-10-30 - adding
+  a secret is the user's to do.
+- **Klaviyo forms** lists every form (live, optionally drafts) in the 18 accounts; on 2026-10-30, 106 live.
+- History of changes lives in the document (100 entries). There is no per-person identity (shared password).
+- Local checks: run a copy of `local-static-server.js` on another port if 4173 is someone else's, without
+  `BLOB_READ_WRITE_TOKEN` (local file `data/signup-control.json`), and `tmp/playwright-runner/signup-page-check.js`.
+
 ## Test suite status
 
 As of 2026-10-30, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —

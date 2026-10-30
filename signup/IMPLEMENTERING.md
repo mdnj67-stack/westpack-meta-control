@@ -61,6 +61,11 @@ testlisten "TEST - Signup Lab (preview only)" i DK-kontoen. Uden parameteren ske
 
 ## 2. At tænde
 
+**Fra 2026-10-30 gøres det i biblen:** Signup → Signup Lab. Tryk "Check the stores now", og derefter "Switch live on".
+Siden viser først præcis hvilke The Insert-popups der slukkes (kun i markeder, hvis butik har tagget), og gør det hele
+i ét hug, når du bekræfter. "Switch live off" sætter præcis de samme popups op igen. Markeder slås til og fra i tabellen
+under. Butikkerne har ændringen inden for et minut. Trinene herunder er den manuelle vej, hvis siden ikke kan bruges.
+
 Kør det i den rækkefølge, uden pause imellem:
 
 1. Sæt `const LIVE = true;` i `signup/core/markets.js`, commit og push. Vent til

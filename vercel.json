@@ -28,6 +28,9 @@
     "api/agents.js": {
       "maxDuration": 300,
       "includeFiles": "knowledge/westpack-site/README.md"
+    },
+    "api/signup/control.js": {
+      "maxDuration": 120
     }
   },
   "crons": [

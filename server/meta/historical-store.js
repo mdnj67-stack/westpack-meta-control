@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
-// Eight documents share this module's storage plumbing: the historical creative
+// Nine documents share this module's storage plumbing: the historical creative
 // intelligence Campaign Brain reads, the expansion reach series and the
 // audience saturation table the Meta dashboard renders, the subject line
 // generator's Klaviyo send history, its mechanism tags and team data, and the
-// Agents page's watchdog results and email checks. They are kept under separate keys rather than in one blob,
+// Agents page's watchdog results and email checks, and the Signup page's control of the Signup Lab. They are kept under separate keys rather than in one blob,
 // because each is written by its own job and a shared value would make
 // one job's write clobber the other's.
 const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
@@ -16,6 +16,7 @@ const SUBJECT_TEAM_STORE_KEY = "westpack:klaviyo-subject-line-team:v1";
 const SUBJECT_TAGS_STORE_KEY = "westpack:klaviyo-subject-line-tags:v1";
 const AGENT_WATCHDOG_STORE_KEY = "westpack:agents-watchdog:v1";
 const AGENT_EMAIL_CHECKS_STORE_KEY = "westpack:agents-email-checks:v1";
+const SIGNUP_CONTROL_STORE_KEY = "westpack:signup-control:v1";
 
 const LOCAL_PATHS = {
   [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
@@ -25,7 +26,8 @@ const LOCAL_PATHS = {
   [SUBJECT_TEAM_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-team.json"),
   [SUBJECT_TAGS_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-tags.json"),
   [AGENT_WATCHDOG_STORE_KEY]: path.join(process.cwd(), "data", "agents-watchdog.json"),
-  [AGENT_EMAIL_CHECKS_STORE_KEY]: path.join(process.cwd(), "data", "agents-email-checks.json")
+  [AGENT_EMAIL_CHECKS_STORE_KEY]: path.join(process.cwd(), "data", "agents-email-checks.json"),
+  [SIGNUP_CONTROL_STORE_KEY]: path.join(process.cwd(), "data", "signup-control.json")
 };
 
 const volatileSnapshots = new Map();
@@ -55,7 +57,8 @@ const BLOB_PATHS = {
   [SUBJECT_TEAM_STORE_KEY]: "klaviyo-snapshots/subject-line-team.json",
   [SUBJECT_TAGS_STORE_KEY]: "klaviyo-snapshots/subject-line-tags.json",
   [AGENT_WATCHDOG_STORE_KEY]: "agents/watchdog.json",
-  [AGENT_EMAIL_CHECKS_STORE_KEY]: "agents/email-checks.json"
+  [AGENT_EMAIL_CHECKS_STORE_KEY]: "agents/email-checks.json",
+  [SIGNUP_CONTROL_STORE_KEY]: "signup/control.json"
 };
 
 function getBlobToken() {
@@ -217,6 +220,10 @@ const readAgentWatchdog = () => readSnapshot(AGENT_WATCHDOG_STORE_KEY);
 const writeAgentWatchdog = (snapshot) => writeSnapshot(AGENT_WATCHDOG_STORE_KEY, snapshot);
 const readAgentEmailChecks = () => readSnapshot(AGENT_EMAIL_CHECKS_STORE_KEY);
 const writeAgentEmailChecks = (snapshot) => writeSnapshot(AGENT_EMAIL_CHECKS_STORE_KEY, snapshot);
+// Blob only, never the Redis fallback: the stores read this on every page view (through the CDN), and a full Redis
+// must not slow that down. Absent means "use signup/core/markets.js".
+const readSignupControl = async () => (getHistoricalStoreProfile().mode === "blob" ? blobRead(SIGNUP_CONTROL_STORE_KEY) : readSnapshot(SIGNUP_CONTROL_STORE_KEY));
+const writeSignupControl = (snapshot) => writeSnapshot(SIGNUP_CONTROL_STORE_KEY, snapshot);
 
 module.exports = {
   getHistoricalStoreProfile,
@@ -236,5 +243,7 @@ module.exports = {
   writeAgentWatchdog,
   readAgentEmailChecks,
   writeAgentEmailChecks,
+  readSignupControl,
+  writeSignupControl,
   readNightlySnapshotTimes
 };
