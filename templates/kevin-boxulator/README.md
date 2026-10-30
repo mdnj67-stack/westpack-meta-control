@@ -4,15 +4,25 @@ Et blogindlæg med en lommeregner, der virker, bygget som et spil. Det hører ti
 lommeregner" (udsendes 13/11 2026), og mailen sender folk hertil. Udtrykket er Kevin-klassisk, altså samme stil
 som Kevin-mailene fra 2025: bordeaux, rød kant, creme og Georgia.
 
-> **Status 30/10:** Kun den danske fil, `boxulator-da.html`, er den nye version (v5): 20 hemmeligheder, titler,
-> gummiænder og oplæser. De 15 andre sprog er en gammel version med emojis, som Magento afviser. **Brug dem ikke.**
-> De bliver lavet igen ud fra den danske, når den er godkendt.
+> **Status 30/10:** Kun den danske fil, `boxulator-da.html`, er den nye version: en artikel med spillet
+> (20 hemmeligheder, titler, gummiænder og oplæser) og juleformlen. De 15 andre sprog er en gammel version med
+> emojis, som Magento afviser. **Brug dem ikke.** De bliver lavet igen ud fra den danske, når den er godkendt.
 >
-> **Vil I tilbage til den forrige danske version** (12 hemmeligheder, ingen titler)? Den ligger i
-> `tidligere/boxulator-da-v4.html` og er tagget `boxulator-da-v4` i git. Sæt den ind på samme måde.
+> **Vil I tilbage til en tidligere dansk version?** Sæt den ind på samme måde. De ligger i `tidligere/`:
+> - `boxulator-da-v5.html`: samme spil, uden artikelintro.
+> - `boxulator-da-v4.html`: 12 hemmeligheder og ingen titler. Den er også tagget `boxulator-da-v4` i git.
 
-Spillet er "Udviklet af Kevin · Godkendt af ingen". Under det står juleformlen, "Bygget af Team Westpack · Uden
-Kevin", som regner rigtigt. Kevins version er vrøvl, holdets version er den, man kan bruge.
+Indlægget er bygget som en artikel i tre dele:
+
+1. **Introen** ("Et spil forklædt som en lommeregner") siger det rent ud: det her er et spil. Den har tre trin.
+   - "Skru op for lyden". Knappen **Test lyden** spiller en gummiand og oplæseren, og trykket er også det, der
+     låser lyden op i browseren.
+   - "Find de 20 hemmeligheder".
+   - "Skal du bare bruge et tal?" med et link, der glider ned til juleformlen.
+2. **Spillet**, "Udviklet af Kevin · Godkendt af ingen", med en resultattavle øverst: din titel, æsker regnet og
+   Kevins Q4-mål. Tavlen står over lommeregneren, så man kan se pointene stige, mens man trykker.
+3. **Juleformlen**, "Bygget af Team Westpack · Uden Kevin", som regner rigtigt. Kevins version er vrøvl, holdets
+   version er den, man kan bruge.
 
 ## Lommeregneren
 
@@ -43,7 +53,8 @@ Lyden passer derfor i alle 18 butikker:
 - **Kevin siger ikke noget.** Han kigger op over lommeregneren og holder øje.
 
 Al lyd laves i browseren, så der er ingen lydfiler og ingen rettigheder at tænke på. Højttalerknappen slår den fra.
-Lyden starter ved første tryk, fordi browsere ikke må spille lyd før.
+Lyden starter ved første tryk, fordi browsere ikke må spille lyd før. En iPhone spiller lyden, ligesom den spiller
+video, også når lydløs-knappen er slået til (Safari 16.4 og nyere).
 
 ## 20 hemmeligheder og en titel
 
@@ -114,7 +125,7 @@ Indlægget skal ligge i **alle 18 butikker med samme URL-nøgle**, ellers giver 
 Får du **"Please remove invalid characters"**, ligger der stadig gammel kode med emojis i feltet. Tøm feltet
 helt, og sæt filen ind igen.
 
-Filerne er komprimerede til cirka 61 KB. Page Builder gemmer et HTML Code-element ukodet
+Filerne er komprimerede til cirka 63 KB. Page Builder gemmer et HTML Code-element ukodet
 (`data-decoded="true"` på bloggen), så det er den størrelse, der gemmes. Det er under 64 KB, den mindste grænse
 Magento kan have for et indlæg. I de komprimerede filer har blokken id'et `kb3` og korte klassenavne. De læsbare
 udgaver i `src/` har de lange (`#boxulator`, `bx-…`). Ret altid i `src/`, og lav de komprimerede filer igen.
@@ -158,11 +169,13 @@ butik, siden står i, så de samme filer kan bruges overalt. Lad linksene stå.
 
 ## Afprøvet 30/10 2026
 
-**Den danske v5:** Den komprimerede fil er afprøvet i en gemt kopi af DK's adventskalender-indlæg med
-butikkens eget tema-CSS:
+**Den danske version med artikel:** Den komprimerede fil er afprøvet i en gemt kopi af DK's
+adventskalender-indlæg med butikkens eget tema-CSS:
 
 - Den er spillet helt igennem ved 375 og 1280 px. Alle 20 hemmeligheder blev fundet, og man blev forfremmet hele
   vejen til Kevin. Diplomet blev vist, og der var ingen JavaScript-fejl.
+- "Test lyden" spiller lyd, og "Til juleformlen" lander på formlen. På desktop flugter lommeregneren og
+  hemmelighederne i top og bund.
 - Fremskridt, titel og pynt overlevede en genindlæsning.
 - Et færdigt spil med ni-cifrede tal blev tjekket ved 320, 360, 375 og 414 px: intet stikker ud over kanten.
 - Alle lyde er renderet offline og målt, så ingen er tavse eller langt højere end resten.

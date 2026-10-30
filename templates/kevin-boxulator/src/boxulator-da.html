@@ -15,16 +15,16 @@
 #boxulator .bx-head{text-align:center}
 #boxulator .bx-game .bx-kick{color:var(--soft)}
 #boxulator .bx-head h2{margin-top:6px;font-size:clamp(34px,7vw,56px);color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:8px;overflow-wrap:normal;word-break:normal;hyphens:none}
-#boxulator .bx-sub{margin-top:12px;font-style:italic;color:var(--soft)}
 #boxulator .bx-sound{position:absolute;top:16px;right:16px;z-index:8;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center}
 #boxulator .bx-sound svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #boxulator .bx-sound .bx-spk{fill:#fff}
 #boxulator .bx-sound .bx-mute,#boxulator .bx-sound.is-off .bx-waves{display:none}
 #boxulator .bx-sound.is-off .bx-mute{display:inline}
-#boxulator .bx-onair{display:inline-block;margin-bottom:12px;padding:6px 11px 5px;border:2px solid rgba(211,27,33,.55);border-radius:6px;background:rgba(0,0,0,.22);font:700 11px/1 var(--sans);letter-spacing:2.4px;color:rgba(255,255,255,.3);transition:background .12s,color .12s,box-shadow .12s}
+#boxulator .bx-onair{display:inline-block;margin-bottom:12px;padding:6px 11px 5px;border:2px solid rgba(211,27,33,.55);border-radius:6px;background:rgba(0,0,0,.22);font:700 11px/1 var(--sans);letter-spacing:2.4px;color:rgba(255,255,255,.3)}
 #boxulator .bx-onair.is-live{background:var(--red);border-color:#ff8a8a;color:#fff;box-shadow:0 0 22px rgba(255,70,70,.85),inset 0 0 4px rgba(255,255,255,.6);animation:bx-flicker .9s steps(1) infinite}
 #boxulator .bx-play{display:grid;gap:22px;margin-top:10px}
-@container (min-width:640px){#boxulator .bx-play{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:end}#boxulator .bx-hud .bx-stats{grid-template-columns:1fr}#boxulator .bx-calcwrap{margin:0}}
+@container (min-width:640px){#boxulator .bx-play{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:28px;align-items:stretch}#boxulator .bx-calcwrap{margin:0}#boxulator .bx-hud{margin-top:64px}#boxulator .bx-hud>.bx-card{display:flex;flex-direction:column}#boxulator .bx-badges{flex:1;align-content:space-evenly}}
+@container (min-width:820px){#boxulator .bx-badges{grid-template-columns:repeat(5,1fr);max-width:none}}
 #boxulator .bx-calcwrap{position:relative;width:100%;max-width:400px;margin:0 auto;padding-top:64px}
 #boxulator .bx-peek{position:absolute;top:0;right:24px;z-index:0;width:96px;height:96px;transform:translateY(28px) rotate(8deg);transition:transform .45s cubic-bezier(.3,1.7,.5,1);cursor:pointer}
 #boxulator .bx-peek img{width:96px;height:96px;border:3px solid var(--red);border-radius:50%}
@@ -68,12 +68,11 @@
 #boxulator .bx-timer i{display:block;width:100%;height:100%;background:var(--red)}
 #boxulator .bx-upsell.is-on .bx-timer i{animation:bx-timer 6s linear forwards}
 #boxulator .bx-upsell-note{margin-top:8px;font-size:13px;font-style:italic;color:var(--soft)}
-#boxulator .bx-hud{display:grid;gap:14px;align-content:end}
+#boxulator .bx-hud{display:grid;gap:14px}
 #boxulator .bx-card{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.07)}
-#boxulator .bx-stats{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 #boxulator .bx-label{display:block;font:600 11px/1.3 Poppins,var(--sans);letter-spacing:1.8px;text-transform:uppercase;color:var(--soft)}
-#boxulator .bx-big{display:block;margin-top:4px;font:700 36px/1.15 var(--sans);color:#fff;white-space:nowrap}
-#boxulator .bx-big.is-long{font-size:24px;line-height:1.75}
+#boxulator .bx-big{display:block;margin-top:4px;font:700 30px/1.2 var(--sans);color:#fff;white-space:nowrap}
+#boxulator .bx-big.is-long{font-size:22px;line-height:1.64}
 #boxulator .bx-bar{height:10px;margin-top:10px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}
 #boxulator .bx-bar i{display:block;width:0;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .5s}
 #boxulator .bx-badges-top{display:flex;align-items:baseline;justify-content:space-between}
@@ -116,7 +115,7 @@
 #boxulator .bx-close{font-weight:700;color:var(--bordeaux);text-decoration:underline}
 #boxulator a.bx-btn{display:inline-block;padding:13px 24px;border:3px solid var(--red);border-radius:6px;background:var(--bordeaux);color:#fff!important;text-decoration:none!important;font:700 19px/1.2 var(--sans)}
 #boxulator a.bx-link{font-weight:700;color:var(--bordeaux);text-decoration:underline}
-#boxulator .bx-real{margin-top:34px;padding:30px 28px;border:3px solid var(--red);border-radius:20px;background:var(--cream);text-align:center}
+#boxulator .bx-real{scroll-margin-top:110px;margin-top:34px;padding:30px 28px;border:3px solid var(--red);border-radius:20px;background:var(--cream);text-align:center}
 #boxulator .bx-real h3{margin-top:8px;font-size:clamp(26px,5vw,36px)}
 #boxulator .bx-real>p{margin-top:12px}
 #boxulator .bx-form{display:grid;gap:16px;max-width:420px;margin:22px auto 0;text-align:left}
@@ -144,10 +143,11 @@
 @keyframes bx-flicker{0%,100%{opacity:1}46%{opacity:.78}49%{opacity:1}73%{opacity:.88}}
 #boxulator .bx-ind-x{color:#9c1c22}
 #boxulator .bx-peek:focus-visible,#boxulator .bx-solar:focus-visible,#boxulator .bx-gold:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-#boxulator .bx-rank{display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;max-width:100%;margin-top:14px;padding:7px 16px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(0,0,0,.2)}
-#boxulator .bx-rank .bx-label{font-size:10px}
-#boxulator .bx-rank-n{font:700 16px/1.2 var(--sans);color:var(--gold);white-space:nowrap}
-#boxulator .bx-rank-bar{display:block;width:64px;height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
+#boxulator .bx-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:840px;margin:20px auto 0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(0,0,0,.18);text-align:left}
+#boxulator .bx-board>div{min-width:0;padding:14px 18px}
+#boxulator .bx-board>div+div{border-left:1px solid rgba(255,255,255,.14)}
+#boxulator .bx-rank-n{display:flex;align-items:center;min-height:36px;margin-top:4px;font:700 19px/1.15 var(--sans);color:var(--gold)}
+#boxulator .bx-rank-bar{display:block;height:6px;margin-top:10px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
 #boxulator .bx-rank-bar i{display:block;width:0;height:100%;background:var(--gold);transition:width .6s}
 #boxulator .bx-promo{position:absolute;left:50%;top:40%;z-index:15;width:min(88%,460px);padding:16px 20px 20px;border:3px solid var(--gold);border-radius:14px;background:var(--red);color:#fff;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.5);transform:translate(-50%,-50%);opacity:0;pointer-events:none}
 #boxulator .bx-promo.is-on{animation:bx-stamp 3s cubic-bezier(.3,1.5,.5,1) forwards}
@@ -194,7 +194,22 @@
 @keyframes bx-lights{50%{filter:brightness(.5) hue-rotate(120deg)}}
 @keyframes bx-shine{50%{filter:brightness(1.3)}}
 @keyframes bx-disco{to{filter:hue-rotate(360deg)}}
+#boxulator .bx-intro{max-width:780px;margin:0 auto 34px;text-align:center}
+#boxulator .bx-lede{margin-top:10px;font:400 clamp(20px,2.6vw,26px)/1.4 var(--serif);color:var(--bordeaux)}
+#boxulator .bx-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:26px;text-align:left}
+#boxulator .bx-steps li{display:flex;flex-direction:column;gap:8px;padding:18px 18px 20px;border-top:4px solid var(--red);border-radius:4px 4px 14px 14px;background:var(--cream)}
+#boxulator .bx-step-n{font:700 40px/1 var(--serif);color:var(--red)}
+#boxulator .bx-step{flex:1;display:flex;flex-direction:column;gap:6px}
+#boxulator .bx-steps h3{font-size:19px;line-height:1.25}
+#boxulator .bx-steps p{font-size:15px;line-height:1.5;color:#444}
+#boxulator .bx-test{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:auto;padding:10px 15px;border:2px solid var(--red);border-radius:6px;background:var(--bordeaux);color:#fff;font:700 15px/1 var(--sans)}
+#boxulator .bx-test svg{width:18px;height:18px;fill:#fff}
+#boxulator a.bx-jump{align-self:flex-start;margin-top:auto;font:700 15px/1.3 var(--sans);color:var(--red);text-decoration:underline}
 @media (max-width:600px){
+  #boxulator .bx-intro{margin-bottom:24px}
+  #boxulator .bx-steps{grid-template-columns:1fr;gap:10px;margin-top:20px}
+  #boxulator .bx-steps li{flex-direction:row;gap:14px;padding:14px 16px 16px}
+  #boxulator .bx-step-n{width:24px;font-size:32px}
   #boxulator{font-size:16px}
   #boxulator .bx-game{padding:24px 14px 16px;border-radius:16px}
   #boxulator .bx-sound{top:10px;right:10px}
@@ -207,22 +222,39 @@
   #boxulator .bx-key{min-height:0}
   #boxulator .bx-card{padding:14px}
   #boxulator .bx-badges{gap:8px}
-  #boxulator .bx-big{font-size:30px}
-  #boxulator .bx-big.is-long{font-size:16px;line-height:2.1}
+  #boxulator .bx-board{grid-template-columns:1fr 1fr;margin-top:16px}
+  #boxulator .bx-board>div{padding:11px 14px}
+  #boxulator .bx-board>div:first-child{grid-column:1/-1;border-bottom:1px solid rgba(255,255,255,.14)}
+  #boxulator .bx-board>div:nth-child(2){border-left:0}
+  #boxulator .bx-big{font-size:26px}
+  #boxulator .bx-big.is-long{font-size:16px;line-height:1.95}
   #boxulator .bx-wh{height:130px}
   #boxulator .bx-real{padding:24px 18px}
 }
 @media (prefers-reduced-motion:reduce){#boxulator *{animation:none!important;transition:none!important}#boxulator .bx-promo.is-on{opacity:1;transform:translate(-50%,-50%)}}
 </style>
 
+<header class="bx-intro">
+  <p class="bx-kick">Et spil forklædt som en lommeregner</p>
+  <p class="bx-lede">Kevin har bygget en lommeregner af smykkeæsker. Den regner kun i æsker, runder altid op og vil ikke trække fra. Det er ikke en fejl. Det er et spil.</p>
+  <ol class="bx-steps">
+    <li><b class="bx-step-n">1</b><div class="bx-step"><h3>Skru op for lyden</h3><p>Ingen af tasterne lyder som en lommeregner. Det er hele pointen.</p><button type="button" class="bx-test"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5h4l5-4.5v14l-5-4.5H3z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>Test lyden</button></div></li>
+    <li><b class="bx-step-n">2</b><div class="bx-step"><h3>Find de 20 hemmeligheder</h3><p>Tryk, regn og prøv dig frem. Jo flere du finder, jo højere titel giver Kevin dig, og jo flottere bliver lommeregneren. Finder du alle 20, bliver du Kevin.</p></div></li>
+    <li><b class="bx-step-n">3</b><div class="bx-step"><h3>Skal du bare bruge et tal?</h3><p>Så spring Kevin over. Juleformlen længere nede regner ud, hvor mange æsker du skal bestille før jul.</p><a class="bx-jump" href="#juleformlen">Til juleformlen ↓</a></div></li>
+  </ol>
+</header>
+
 <section class="bx-game">
-  <button type="button" class="bx-sound" aria-pressed="true" aria-label="Lyd til"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="bx-spk" d="M3 9.5h4l5-4.5v14l-5-4.5H3z"/><path class="bx-waves" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="bx-mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
+  <button type="button" class="bx-sound" aria-pressed="true" aria-label="Lyd"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="bx-spk" d="M3 9.5h4l5-4.5v14l-5-4.5H3z"/><path class="bx-waves" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="bx-mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
   <header class="bx-head">
     <span class="bx-onair" translate="no" aria-hidden="true">ON AIR</span>
     <p class="bx-kick">Udviklet af Kevin · Godkendt af ingen</p>
     <h2><span translate="no">The Boxulator 3000™</span></h2>
-    <p class="bx-sub">Kevins æske-lommeregner. 20 hemmeligheder. Find dem.</p>
-    <div class="bx-rank"><span class="bx-label">Din titel</span><b class="bx-rank-n">Praktikant</b><span class="bx-rank-bar"><i></i></span></div>
+    <div class="bx-board">
+      <div><span class="bx-label">Din titel</span><b class="bx-rank-n">Praktikant</b><span class="bx-rank-bar"><i></i></span></div>
+      <div><span class="bx-label">Æsker regnet</span><b class="bx-big bx-score">0</b></div>
+      <div><span class="bx-label">Kevins Q4-mål</span><b class="bx-big bx-target">500</b><div class="bx-bar"><i></i></div></div>
+    </div>
   </header>
 
   <div class="bx-play">
@@ -271,10 +303,6 @@
     </div>
 
     <aside class="bx-hud">
-      <div class="bx-stats">
-        <div class="bx-card"><span class="bx-label">Æsker regnet</span><b class="bx-big bx-score">0</b></div>
-        <div class="bx-card"><span class="bx-label">Kevins Q4-mål</span><b class="bx-big bx-target">500</b><div class="bx-bar"><i></i></div></div>
-      </div>
       <div class="bx-card">
         <div class="bx-badges-top"><span class="bx-label">Hemmeligheder</span><b class="bx-found">0/20</b></div>
         <ol class="bx-badges">
@@ -309,7 +337,7 @@
 
   <div class="bx-final" role="dialog" aria-label="Certified Box Counter">
     <div class="bx-cert">
-      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/bfd8f360-760c-4919-80f5-5f4e7adeae30.gif" width="600" height="600" alt="To Kevins i nissehue kigger frem bag kæmpelommeregneren foran en bordeaux bølge med juleikoner" loading="lazy">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/bfd8f360-760c-4919-80f5-5f4e7adeae30.gif" width="600" height="600" alt="To Kevins i nissehue bag kæmpelommeregneren" loading="lazy">
       <h3><span translate="no">Certified Box Counter™</span></h3>
       <p>Du har fundet alle 20 af Kevins hemmeligheder. Han er rørt. Og lidt bekymret for dig.</p>
       <span class="bx-label">Æsker regnet</span><b class="bx-cert-n">0</b>
@@ -321,7 +349,7 @@
   </div>
 </section>
 
-<section class="bx-real">
+<section class="bx-real" id="juleformlen">
   <p class="bx-kick">Bygget af Team Westpack · Uden Kevin</p>
   <h3>Juleformlen. Den kan trække fra.</h3>
   <p>Hvor mange æsker skal du bestille før jul? Skriv tre tal, så regner den ud, hvad du mangler.</p>
@@ -343,8 +371,6 @@
 </section>
 
 <div class="bx-strings" hidden aria-hidden="true">
-  <span data-k="soundOn">Lyd til</span>
-  <span data-k="soundOff">Lyd fra</span>
   <ul data-list="ranks"><li>Praktikant</li><li>Lagerelev</li><li>Æske-entusiast</li><li>Box Manager</li><li>Regional Box Director</li><li>Chief Box Officer</li><li>Kevin</li></ul>
 </div>
 
@@ -366,8 +392,6 @@
 
   // Every visible word lives in the markup above, so the post translates like any other; none lives here.
   // Nobody in the game speaks a language: the announcer babbles and the rest is sound effects.
-  var S = {};
-  qsa(".bx-strings [data-k]").forEach(function (el) { S[el.getAttribute("data-k")] = el.innerHTML.trim(); });
   var RANKS = qsa('.bx-strings [data-list="ranks"] > li').map(function (el) { return el.innerHTML.trim(); });
   var lang = document.documentElement.lang || undefined;
   var num = function (n, max, group) { try { return Number(n).toLocaleString(lang, { maximumFractionDigits: max === undefined ? 6 : max, useGrouping: !!group }); } catch (e) { return String(n); } };
@@ -419,6 +443,8 @@
     if (!soundOn) return null;
     if (!actx) {
       var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+      // iPhone: play like media does, even with the ringer switch on silent; the game has its own mute button.
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* older Safari */ }
       actx = new AC();
       var comp = actx.createDynamicsCompressor(); master = actx.createGain(); master.gain.value = 0.9;
       master.connect(comp); comp.connect(actx.destination);
@@ -480,7 +506,6 @@
     boing: function () { tone({ f: [[0, 150], [0.5, 270]], dur: 0.55, vol: 0.24, vib: [16, 120, true] }); },
     slideUp: function () { tone({ f: [[0, 320], [0.32, 1500, "lin"]], dur: 0.36, vol: 0.24, vib: [7, 14] }); },
     slideDown: function () { tone({ f: [[0, 1400], [0.4, 260, "lin"]], dur: 0.42, vol: 0.24, vib: [7, 14] }); },
-    pew: function () { tone({ type: "square", f: [[0, 1700], [0.18, 110]], dur: 0.2, vol: 0.15 }); },
     kazoo: function () { tone({ type: "sawtooth", f: [[0, 230], [0.15, 262, "lin"], [0.45, 205, "lin"]], dur: 0.48, vol: 0.6, vib: [6, 9], filter: ["bandpass", [[0, 1100]], 3], am: [34, 0.35, "sine"] }); },
     bonk: function () { tone({ f: [[0, 520], [0.12, 110]], dur: 0.14, vol: 0.32 }); hiss({ type: "highpass", freq: 3000, dur: 0.03, vol: 0.08 }); },
     blop: function () { tone({ f: [[0, 240], [0.07, 980]], dur: 0.09, vol: 0.26 }); },
@@ -489,12 +514,10 @@
     raspberry: function () { tone({ type: "sawtooth", f: [[0, 86], [0.55, 58, "lin"]], dur: 0.58, vol: 0.24, filter: ["lowpass", [[0, 900]], 1], am: [27, 0.85] }); hiss({ freq: 600, q: 0.8, dur: 0.5, vol: 0.05 }); },
     goat: function () { tone({ type: "sawtooth", f: [[0, 430], [0.6, 380, "lin"]], dur: 0.65, att: 0.03, vol: 0.32, vib: [9, 45], filter: ["bandpass", [[0, 900], [0.6, 1250]], 3] }); },
     quack: function () { [0, 0.18].forEach(function (d) { tone({ at: d, type: "sawtooth", f: [[0, 380], [0.12, 260]], dur: 0.13, vol: 0.36, filter: ["bandpass", [[0, 1300], [0.12, 800]], 5] }); }); },
-    chipmunk: function () { for (var i = 0; i < 6; i += 1) tone({ at: i * 0.07, type: "triangle", f: [[0, i % 2 ? 1500 : 1250], [0.05, i % 2 ? 1750 : 1420]], dur: 0.05, vol: 0.11 }); },
     cuckoo: function () { [0, 0.42].forEach(function (d) { tone({ at: d, type: "triangle", f: [[0, 740]], dur: 0.14, hold: 0.08, vol: 0.12 }); tone({ at: d + 0.17, type: "triangle", f: [[0, 587]], dur: 0.24, hold: 0.1, vol: 0.12 }); }); },
     scratch: function () { tone({ type: "sawtooth", f: [[0, 300], [0.08, 900, "lin"], [0.16, 200, "lin"], [0.24, 1100, "lin"], [0.34, 150, "lin"]], dur: 0.36, vol: 0.36, filter: ["bandpass", [[0, 800], [0.08, 2600], [0.16, 600], [0.24, 3000], [0.34, 500]], 2] }); hiss({ freq: 900, to: 3500, q: 1.5, dur: 0.09, vol: 0.22 }); hiss({ at: 0.17, freq: 3500, to: 700, q: 1.5, dur: 0.1, vol: 0.22 }); },
     whoosh: function () { hiss({ freq: 350, to: 4200, q: 1.2, att: 0.16, dur: 0.3, vol: 0.45 }); },
     ding: function () { [[2100, 0.12, 1.4], [5300, 0.04, 0.9], [6900, 0.025, 0.6]].forEach(function (p) { tone({ f: [[0, p[0]]], dur: p[2], att: 0.003, vol: p[1] }); }); },
-    gong: function () { [[92, 0.1], [138, 0.07], [187, 0.06], [263, 0.05], [349, 0.04], [441, 0.03]].forEach(function (p) { tone({ f: [[0, p[0] * 1.02], [2.6, p[0]]], dur: 2.6, att: 0.008, vol: p[1], vib: [4.5, p[0] * 0.006] }); }); hiss({ type: "lowpass", freq: 1200, dur: 0.6, vol: 0.05 }); },
     dundun: function () { [[0, 0.22, 196], [0.3, 0.22, 196], [0.6, 1.4, 155.56]].forEach(function (n) { [1, 2.003, 0.5].forEach(function (m, i) { tone({ at: n[0], type: "sawtooth", f: [[0, n[2] * m]], dur: n[1], hold: n[1] * 0.5, att: 0.02, vol: [0.07, 0.035, 0.055][i], vib: n[1] > 1 ? [5, 3] : null, filter: ["lowpass", [[0, 700], [0.08, 2000], [n[1], 500]], 2] }); }); }); },
     airhorn: function () { [[0, 0.16], [0.2, 0.09], [0.33, 0.6]].forEach(function (p) { [466, 470, 554, 559].forEach(function (fr) { tone({ at: p[0], type: "sawtooth", f: [[0, fr]], dur: p[1], hold: p[1] * 0.7, att: 0.015, vol: 0.05, filter: ["lowpass", [[0, 2600]], 0.7] }); }); }); },
     sad: function () { [293.66, 277.18, 261.63, 246.94].forEach(function (fr, i) { var last = i === 3; tone({ at: i * 0.42, type: "sawtooth", f: [[0, fr], [0.35, fr * 0.97, "lin"]], dur: last ? 1.1 : 0.36, att: 0.04, vol: 0.14, vib: last ? [5.5, 6] : null, filter: ["lowpass", [[0, 500], [0.15, 1400], [0.35, 600]], 4] }); }); },
@@ -588,7 +611,7 @@
 
   // Digits are rubber ducks, tuned so a number plays a little tune; now and then something else answers instead.
   var DUCK = [-5, -3, 0, 2, 4, 7, 9, 12, 14, 16];
-  var BROLL = ["honk", "boing", "slideUp", "slideDown", "moo", "goat", "meow", "quack", "kazoo", "raspberry", "chipmunk", "cuckoo", "bonk", "blop", "ding", "pew", "whoosh"], lastB = "";
+  var BROLL = ["honk", "boing", "slideUp", "slideDown", "moo", "goat", "meow", "quack", "kazoo", "raspberry", "cuckoo", "bonk", "blop", "ding", "whoosh"], lastB = "";
   function broll() { var k; do { k = pick(BROLL); } while (k === lastB); lastB = k; SFX[k](); }
   function digitSound(k) { if (Math.random() < 0.7) { SFX.duck(DUCK[+k]); return true; } broll(); return false; }
   var OPSOUND = { "+": "honk", "*": "boing", "/": "slideDown" };
@@ -596,8 +619,18 @@
   soundBtn.addEventListener("click", function () {
     soundOn = !soundOn;
     soundBtn.classList.toggle("is-off", !soundOn);
-    soundBtn.setAttribute("aria-label", soundOn ? S.soundOn : S.soundOff);
     soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+  });
+
+  // "Test lyden" in the introduction. The tap is also what allows the browser to play sound at all.
+  qs(".bx-test").addEventListener("click", function () {
+    if (!soundOn) soundBtn.click();
+    SFX.duck(4); SFX.duck(9, 0.3); setTimeout(SFX.honk, 650); announce("intro", 1.1);
+  });
+  qs(".bx-jump").addEventListener("click", function (e) {
+    var to = qs(".bx-real");
+    if (!to.scrollIntoView) return;
+    e.preventDefault(); to.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
   });
 
   var tick = function (pattern) { try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) { /* not supported */ } };
@@ -900,7 +933,7 @@
     else if (step === 2) { v += 1; mark = "+1"; unlock("safety"); }
     else if (step === 4 && v > 0) { v *= 10; mark = "×10"; }
     else if (step === 0 && v % 100 !== 0) { v = Math.ceil(v / 100) * 100; mark = "↑100"; }
-    if (v > 99999999) { cur = "0"; hold("E", 2400); SFX.airhorn(); SFX.gong(); announce("scream", 0.3); unlock("overflow"); addBoxes(99999999); drop(99999999); return; }
+    if (v > 99999999) { cur = "0"; hold("E", 2400); SFX.airhorn(); announce("scream", 0.3); unlock("overflow"); addBoxes(99999999); drop(99999999); return; }
     // Results in quick succession build a combo that multiplies the boxes, up to five times.
     var now = Date.now(); combo = now - lastEq < 8000 ? combo + 1 : 1; lastEq = now;
     var mult = Math.min(5, combo);
