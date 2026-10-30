@@ -284,6 +284,10 @@ Then a careful read on `CONTENT_AGENT_MODEL` (high, background job, ~60-90 s) ag
 - Kevin emails are told apart: a playful call to action is not a finding.
 - **Restart the local server after changing `server/agents/*`** - the second "fixed" review ran on
   the cached old module and looked exactly like the first.
+- **`.vercelignore`'s bare `README.md` matches a README at any depth.** Until 2026-10-30 that kept
+  `knowledge/westpack-site/README.md` out of the upload, so `includeFiles` bundled nothing and every
+  production review ran on "(not available)" site facts, flagging true claims as unverifiable. It now has
+  a `!` exception; any other README a function needs gets one too.
 
 Candidates for the next agents, not built: Asana "Review" creative -> paused ad in Placeholder;
 the Monday Meta status and ad-swap analysis (now local scripts mailed via Outlook) as in-app agents.
