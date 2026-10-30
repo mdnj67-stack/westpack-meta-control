@@ -5,8 +5,12 @@
  * the browser uses (signup/core/rules.js), so an email address can never be stored here whatever a client sends.
  * Records only count as "live" when they come from a Westpack store; the app's own preview stores "preview".
  *
- * GET ?action=report[&env=live|preview|test][&from=YYYY-MM-DD][&to=YYYY-MM-DD] (logged in): the funnel per
- * experience - exposures, opens, interactions, email focus, submits, signups, closes, steps, devices, markets.
+ * GET ?action=report[&env=live|preview|test][&since=<ISO time>|&from=YYYY-MM-DD][&to=YYYY-MM-DD] (logged in): the
+ * funnel per experience - exposures, opens, interactions, email focus, submits, signups, closes, steps, devices,
+ * markets - plus per market, per Danish day, and the latest signups.
+ *
+ * GET ?action=confirmed[&env=live|test][&since=<ISO time>|&from=YYYY-MM-DD] (logged in): what stuck in Klaviyo -
+ * live reads each market's newsletter list, test reads the TEST list (server/signup/klaviyo-reconcile.js).
  */
 const { getConfig } = require("../../server/lib/config");
 const { requireAuth } = require("../../server/lib/auth");
@@ -65,22 +69,25 @@ module.exports = async function handler(req, res) {
     const config = getConfig();
     if (!requireAuth(req, res, config)) return;
     const q = new URL(req.url, "http://x").searchParams;
+    const date = /^\d{4}-\d{2}-\d{2}$/;
+    const instant = (v) => (Number.isFinite(Date.parse(v || "")) ? new Date(Date.parse(v)).toISOString() : "");
+    const since = instant(q.get("since")) || (date.test(q.get("from") || "") ? `${q.get("from")}T00:00:00Z` : "");
     // what actually stuck in Klaviyo: submitted, confirmed on the list, and taken by Klaviyo's bot protection
     if (q.get("action") === "confirmed") {
-      const { MARKETS } = require("../../signup/core/markets");
+      const { MARKETS, TEST_TARGET } = require("../../signup/core/markets");
       const { reconcile } = require("../../server/signup/klaviyo-reconcile");
-      let accounts = config.klaviyoMarketsJson; if (typeof accounts === "string") accounts = JSON.parse(accounts);
-      const keys = Object.fromEntries((accounts || []).filter((a) => a && a.privateKey).map((a) => [a.country, a.privateKey]));
-      const since = /^\d{4}-\d{2}-\d{2}$/.test(q.get("from") || "") ? `${q.get("from")}T00:00:00Z` : new Date(Date.now() - 14 * 86400000).toISOString().replace(/\.\d+Z$/, "Z");
+      const { accountKeys } = require("../../server/signup/klaviyo-forms");
       const only = (q.get("markets") || "").split(",").filter(Boolean);
       const markets = Object.values(MARKETS).filter((m) => !only.length || only.includes(m.market));
-      try { return sendJson(res, 200, await reconcile(markets, keys, since)); } catch (e) { return sendJson(res, 502, { error: e.message }); }
+      res.setHeader("Cache-Control", "no-store");
+      try {
+        return sendJson(res, 200, await reconcile({ env: q.get("env") === "test" ? "test" : "live", markets, keys: accountKeys(config), testTarget: TEST_TARGET, since: since || new Date(Date.now() - 14 * 86400000).toISOString() }));
+      } catch (e) { return sendJson(res, 502, { error: e.message }); }
     }
     if (q.get("action") !== "report") return sendJson(res, 400, { error: "Unknown action." });
     const env = ["live", "preview", "test"].includes(q.get("env")) ? q.get("env") : "live";
-    const date = /^\d{4}-\d{2}-\d{2}$/;
     try {
-      const out = await report({ env, from: date.test(q.get("from") || "") ? q.get("from") : undefined, to: date.test(q.get("to") || "") ? q.get("to") : undefined });
+      const out = await report({ env, since: since || undefined, to: date.test(q.get("to") || "") ? q.get("to") : undefined });
       res.setHeader("Cache-Control", "no-store");
       return sendJson(res, 200, out);
     } catch (e) { return sendJson(res, 502, { error: e.message }); }

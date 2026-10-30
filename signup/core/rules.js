@@ -137,7 +137,8 @@
   // What may ride along to Klaviyo with a signup. Anything else a concept tries to send is dropped.
   const PROPERTY_WHITELIST = ["wp_signup_concept", "wp_signup_variant", "wp_signup_market", "wp_signup_lang",
     "wp_signup_version", "wp_signup_page_type", "wp_consent_text", "wp_consent_page", "wp_brand_name",
-    "wp_logo_finish", "wp_logo_lid", "wp_logo_type", "wp_logo_uploaded", "wp_style_profile", "wp_style_scores", "wp_liked_boxes"];
+    "wp_logo_finish", "wp_logo_lid", "wp_logo_type", "wp_logo_uploaded", "wp_style_profile", "wp_style_scores", "wp_liked_boxes",
+    "wp_signup_list"];
 
   function cleanProperties(props) {
     const out = {};
@@ -191,7 +192,9 @@
     };
   }
 
-  // A timeline event on the profile, so flows and reports can tell which experience brought someone in.
+  // A timeline event on the profile, so flows and reports can tell which experience brought someone in. It names the
+  // list the signup went to, because test signups land in the DK account too: the app's Signups page tells a live
+  // signup from a test one by it (server/signup/klaviyo-reconcile.js).
   function buildCompletionEvent(o) {
     const target = o.target || o.market;
     return {
@@ -201,7 +204,7 @@
         data: {
           type: "event",
           attributes: {
-            properties: cleanProperties(Object.assign({ wp_signup_concept: o.concept, wp_signup_variant: o.variant || o.concept, wp_signup_market: o.market.market }, o.properties || {})),
+            properties: cleanProperties(Object.assign({}, o.properties || {}, { wp_signup_concept: o.concept, wp_signup_variant: o.variant || o.concept, wp_signup_market: o.market.market, wp_signup_list: target.listId })),
             metric: { data: { type: "metric", attributes: { name: "Signup Lab Subscribed" } } },
             profile: { data: { type: "profile", attributes: { email: normaliseEmail(o.email) } } },
           },

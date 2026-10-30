@@ -6369,15 +6369,16 @@ body[data-workspace="agents"] .subnav-button.active .wp-nav-icon {
 }
 
 /* ---------------------------------------------------------------------------
-   Signup
+   Signup Lab
 
-   The newsletter signup on the webshops: what our own script runs, where it runs, how it does, and the Klaviyo
-   forms beside it. The control comes first because it changes what customers see; every switch states its
-   consequence in words beside it, and anything that reaches live visitors or Klaviyo is confirmed in an alert
-   that lists exactly what will change.
+   Our own newsletter signup on the webshops, run from the app, in three views: Control (what the script runs),
+   Signups (how many come in), Preview. Control leads with the two environments side by side, each saying in words
+   what it does now, the one switch that changes it, and a line proving the stores are served exactly that. Anything
+   that reaches live visitors or Klaviyo is confirmed in an alert that lists exactly what will change.
+   Klaviyo email → Signup forms (Klaviyo's own forms) reuses the toolbar and table rules at the end.
 --------------------------------------------------------------------------- */
 
-/* The rail: Signup is a group of its own, so neither platform group may read as current while it is open. */
+/* The rail: the Signup Lab is a group of its own, so neither platform group may read as current while it is open. */
 body[data-workspace="signup"] .tab-button.active,
 body[data-workspace="signup"] .subnav-button.active {
   background: transparent;
@@ -6403,15 +6404,6 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   margin: 0;
 }
 
-.signup-metrics .wp-metric-value.is-text {
-  font-size: var(--wp-text-xl);
-  letter-spacing: 0;
-}
-
-.signup-metrics .wp-metric-foot a {
-  color: var(--wp-brand);
-}
-
 .signup-confirm .signup-plan {
   margin: var(--wp-space-2) 0;
   padding-left: var(--wp-space-5);
@@ -6421,123 +6413,270 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   margin: var(--wp-space-1) 0 var(--wp-space-3);
 }
 
-/* The three experiences, in the order they take their turn. */
-.signup-concepts {
+/* -- Control: the two environments ------------------------------------------ */
+
+.signup-envs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--wp-space-4);
 }
 
-.signup-concept {
+.signup-env {
   display: grid;
-  grid-template-rows: auto 1fr;
+  align-content: start;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-5);
   border: 1px solid var(--wp-border);
   border-radius: var(--wp-radius-lg);
   background: var(--wp-surface);
-  overflow: hidden;
 }
 
-.signup-concept.is-current {
+/* On is carried by the word in the pill; the brand rule along the top makes it findable at a glance. */
+.signup-env.is-on {
   border-color: var(--wp-brand-border);
-  box-shadow: inset 0 0 0 1px var(--wp-brand-border);
+  box-shadow: inset 0 3px 0 var(--wp-brand);
 }
 
-.signup-concept-image {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  background: var(--wp-surface-sunken);
+.signup-env-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--wp-space-3);
 }
 
-.signup-concept-body {
-  display: grid;
-  align-content: start;
-  gap: var(--wp-space-2);
-  padding: var(--wp-space-4);
-}
-
-.signup-concept-name {
+.signup-env-name {
   margin: 0;
-  font-size: var(--wp-text-md);
+  font-size: var(--wp-text-lg);
   font-weight: var(--wp-weight-semibold);
 }
 
-.signup-concept-line {
-  margin: 0;
-  color: var(--wp-text-muted);
-  font-size: var(--wp-text-sm);
-}
-
-.signup-concept-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--wp-space-1);
-  min-height: 22px;
-}
-
-/* Live and staging, each a row: what it is, its state, the one button that changes it. */
-.signup-switches {
-  border: 1px solid var(--wp-border);
-  border-radius: var(--wp-radius-lg);
-  background: var(--wp-surface);
-}
-
-.signup-switch {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: var(--wp-space-4);
-  padding: var(--wp-space-3) var(--wp-space-4);
-}
-
-.signup-switch + .signup-switch {
-  border-top: 1px solid var(--wp-border-subtle);
-}
-
-.signup-switch p {
+.signup-env-host {
   margin: 2px 0 0;
   color: var(--wp-text-muted);
   font-size: var(--wp-text-xs);
 }
 
-.signup-table-head,
-.signup-toolbar {
+.signup-env-state {
+  flex: 0 0 auto;
+  padding: 4px var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-surface-sunken);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-env-state.is-on {
+  border-color: transparent;
+  background: var(--wp-success-surface);
+  color: var(--wp-success-text);
+}
+
+.signup-env-says {
+  margin: 0;
+  color: var(--wp-text);
+  font-size: var(--wp-text-md);
+  line-height: 1.45;
+}
+
+.signup-env-field {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+
+.signup-env-label {
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  font-weight: var(--wp-weight-medium);
+}
+
+.signup-env .wp-segment,
+.signup-preview-row .wp-segment {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* The experience that runs is the selected option, not a dimmed one: it is disabled only because choosing it again
+   would change nothing. */
+.signup-concept-picker .wp-segment-item.active:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.signup-concept-picker .wp-segment-item:disabled:not(.active) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.signup-served {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.signup-served strong {
+  color: var(--wp-text);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-served.is-ok > span[aria-hidden] {
+  color: var(--wp-success);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-served.is-waiting,
+.signup-served.is-warning {
+  color: var(--wp-warning-text);
+}
+
+.signup-served .wp-spinner {
+  width: 11px;
+  height: 11px;
+  border-width: 2px;
+}
+
+.signup-steps {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: var(--wp-space-3) var(--wp-space-4) var(--wp-space-3) calc(var(--wp-space-4) + 18px);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface-sunken);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+}
+
+.signup-steps strong {
+  color: var(--wp-text);
+}
+
+.signup-steps li.is-done::marker {
+  color: var(--wp-success);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-env-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2);
+  margin-top: var(--wp-space-1);
+}
+
+/* -- Control: markets -------------------------------------------------------- */
+
+.signup-check-head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--wp-space-3);
-  margin: var(--wp-space-4) 0 var(--wp-space-2);
 }
 
-.signup-table-head p {
-  flex: 1 1 280px;
-  margin: 0;
-  color: var(--wp-text-muted);
+.signup-markets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+  gap: var(--wp-space-2);
+}
+
+.signup-market {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: var(--wp-space-3);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-md);
+  background: var(--wp-surface);
+  cursor: pointer;
+}
+
+.signup-market.is-off {
+  background: var(--wp-surface-sunken);
+}
+
+.signup-market.is-running {
+  border-color: var(--wp-brand);
+  box-shadow: inset 0 0 0 1px var(--wp-brand);
+}
+
+.signup-market:focus-within {
+  outline: 2px solid var(--wp-brand);
+  outline-offset: 2px;
+}
+
+.signup-market-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp-space-2);
+}
+
+.signup-market-code {
+  font-size: var(--wp-text-md);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-market-line {
   font-size: var(--wp-text-xs);
 }
 
-.signup-toolbar {
-  margin-top: 0;
-}
-
-.signup-filter {
-  flex: 0 1 260px;
-}
-
-.signup-code,
-.signup-window,
-.signup-empty {
+.signup-market-line.is-muted {
   color: var(--wp-text-muted);
-  font-size: var(--wp-text-xs);
 }
 
-.signup-window {
+/* -- Control: how the script behaves, install, changes ---------------------- */
+
+.signup-rules {
+  display: grid;
   margin: 0;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
 }
 
-.signup-toolbar .signup-window {
-  margin-left: auto;
+.signup-rules > div {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-3) var(--wp-space-4);
+}
+
+.signup-rules > div + div {
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.signup-rules dt {
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-medium);
+}
+
+.signup-rules dd {
+  margin: 0;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+}
+
+.signup-snippet {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface-sunken);
+}
+
+.signup-snippet code {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-family: var(--wp-font-mono);
+  font-size: var(--wp-text-sm);
 }
 
 .signup-history {
@@ -6566,58 +6705,234 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   font-variant-numeric: tabular-nums;
 }
 
-.signup-splits {
-  display: grid;
+/* -- Signups ----------------------------------------------------------------- */
+
+.signup-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--wp-space-3);
 }
 
-.signup-splits > div {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--wp-space-2) var(--wp-space-4);
+.signup-filter {
+  flex: 0 1 260px;
 }
 
-.signup-split-label {
-  min-width: 70px;
+.signup-window,
+.signup-empty {
+  margin: 0;
   color: var(--wp-text-muted);
   font-size: var(--wp-text-xs);
-  font-weight: var(--wp-weight-medium);
 }
 
-.signup-split {
-  font-size: var(--wp-text-sm);
-  font-variant-numeric: tabular-nums;
+.signup-toolbar .signup-window {
+  margin-left: auto;
 }
 
 .signup-total td {
   font-weight: var(--wp-weight-semibold);
 }
 
-.signup-preview-frame {
+.signup-error-cell {
+  color: var(--wp-danger-text);
+  font-size: var(--wp-text-xs);
+}
+
+/* Signed up per day: columns from one baseline, 24px at most, a 4px rounded end, 2px of air between neighbours.
+   Each column's whole height is its hover and focus target. */
+.signup-bars {
+  display: grid;
+  gap: var(--wp-space-2);
+  margin: 0;
+}
+
+.signup-bars-plot {
+  cursor: default;
+}
+
+.signup-bars-cols {
+  position: absolute;
+  inset: 0 52px 0 0;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+
+.signup-bar-slot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding: 0 1px;
+  border-radius: var(--wp-radius-sm);
+}
+
+.signup-bar-slot:hover,
+.signup-bar-slot:focus-visible {
+  background: var(--wp-brand-surface);
+}
+
+.signup-bar {
   display: block;
   width: 100%;
-  height: max(720px, calc(100vh - 220px));
-  margin-top: var(--wp-space-3);
+  max-width: 24px;
+  border-radius: 4px 4px 0 0;
+  background: var(--wp-brand);
+}
+
+/* -- Preview ----------------------------------------------------------------- */
+
+/* The controls and what happens on the left, the device as wide as the page allows on the right. */
+.signup-preview {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--wp-space-4);
+  align-items: start;
+}
+
+.signup-preview-aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--wp-space-3);
+  position: sticky;
+  top: var(--wp-space-4);
+}
+
+.signup-preview-controls,
+.signup-preview-side {
+  display: grid;
+  /* minmax(0, 1fr): a row of buttons wraps instead of widening the column past its card */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--wp-space-4);
+  padding: var(--wp-space-4);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.signup-preview-controls .wp-button-group {
+  flex-wrap: wrap;
+}
+
+.signup-preview-row {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+
+.signup-preview-market {
+  width: 100%;
+}
+
+.signup-preview-note {
+  margin: 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.signup-preview-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 560px;
+  padding: var(--wp-space-6) var(--wp-space-4);
   border: 1px solid var(--wp-border);
   border-radius: var(--wp-radius-lg);
   background: var(--wp-surface-sunken);
 }
 
+/* A phone is drawn with its bezel, a computer with a hairline: an outline, so the frame takes no layout space and the
+   page inside is exactly the device's size. */
+.signup-device {
+  overflow: hidden;
+  border-radius: 28px;
+  outline: 7px solid var(--wp-grey-900);
+  background: var(--wp-surface);
+}
+
+.signup-device[data-kind="computer"] {
+  border-radius: var(--wp-radius-md);
+  outline: 1px solid var(--wp-border-strong);
+}
+
+.signup-device iframe {
+  display: block;
+  border: 0;
+  background: var(--wp-surface);
+  transform-origin: 0 0;
+}
+
+.signup-device-size {
+  position: absolute;
+  top: var(--wp-space-2);
+  right: var(--wp-space-3);
+  color: var(--wp-text-subtle);
+  font-size: var(--wp-text-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.signup-preview-side {
+  gap: var(--wp-space-2);
+}
+
+.signup-preview-side-title {
+  margin: 0;
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-preview-log {
+  display: grid;
+  gap: 6px;
+  max-height: 32vh;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  font-size: var(--wp-text-xs);
+}
+
+.signup-preview-log li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 6px;
+}
+
+.signup-preview-log time {
+  color: var(--wp-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.signup-preview-log li.is-success span {
+  color: var(--wp-success-text);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-preview-log li.is-danger span {
+  color: var(--wp-danger-text);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.signup-preview-log li.is-muted {
+  grid-template-columns: minmax(0, 1fr);
+  color: var(--wp-text-muted);
+}
+
 @media (max-width: 960px) {
-  .signup-concepts {
+  .signup-envs,
+  .signup-preview {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .signup-switch {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .signup-preview-aside {
+    position: static;
   }
 
-  .signup-switch .wp-button {
-    grid-column: 1 / -1;
-    justify-self: start;
+  .signup-preview-stage {
+    min-height: 0;
+    padding: var(--wp-space-4) var(--wp-space-2);
   }
 
+  .signup-rules > div,
   .signup-history li {
     grid-template-columns: minmax(0, 1fr);
     gap: 2px;
@@ -6625,5 +6940,9 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
 
   .signup-toolbar .signup-window {
     margin-left: 0;
+  }
+
+  .signup-snippet {
+    flex-wrap: wrap;
   }
 }

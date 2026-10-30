@@ -10,7 +10,8 @@ import {
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
 import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261028-subjectlines6";
 import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261030-agents1";
-import { initSignupControl, showSignupView } from "./src/signup-control.js?v=20261030-signup1";
+import { initSignupLab, showSignupLabView, signupLabViewFromHash, leaveSignupLab } from "./src/signup-lab.js?v=20261030-signuplab1";
+import { loadKlaviyoSignupForms } from "./src/klaviyo-signup-forms.js?v=20261030-signupforms1";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -49,7 +50,7 @@ import {
 } from "./src/klaviyo-template-domain.js?v=20261027-klaviyotemplatedomain2";
 import {
   createKlaviyoDashboardDomain
-} from "./src/klaviyo-dashboard-domain.js?v=20261027-klaviyodashboarddomain2";
+} from "./src/klaviyo-dashboard-domain.js?v=20261030-klaviyodashboarddomain3";
 import {
   createMetaMasterArtifactDraft,
   createMetaMasterCardDrafts,
@@ -4244,7 +4245,7 @@ function getKlaviyoSourceLabel() {
 }
 
 function setKlaviyoView(nextView = "overview") {
-  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer", "subject_lines"].includes(nextView) ? nextView : "dashboard";
+  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer", "subject_lines", "signup_forms"].includes(nextView) ? nextView : "dashboard";
   appState.klaviyoView = requestedView;
   document.querySelectorAll("[data-klaviyo-view]").forEach((button) => {
     button.classList.toggle("active", button.dataset.klaviyoView === appState.klaviyoView);
@@ -4255,6 +4256,10 @@ function setKlaviyoView(nextView = "overview") {
   document.getElementById("klaviyo-campaign-brain-panel")?.classList.toggle("active", appState.klaviyoView === "campaign_brain");
   document.getElementById("klaviyo-canva-localizer-panel")?.classList.toggle("active", appState.klaviyoView === "canva_localizer");
   document.getElementById("klaviyo-subject-lines-panel")?.classList.toggle("active", appState.klaviyoView === "subject_lines");
+  document.getElementById("klaviyo-signup-forms-panel")?.classList.toggle("active", appState.klaviyoView === "signup_forms");
+  if (appState.klaviyoView === "signup_forms") {
+    loadKlaviyoSignupForms();
+  }
   if (appState.klaviyoView === "subject_lines") {
     loadSubjectLines();
   }
@@ -10274,7 +10279,9 @@ function setWorkspace(nextWorkspace = "meta") {
   }
 
   if (appState.workspace === "signup") {
-    showSignupView(appState.signupView);
+    showSignupLabView(appState.signupView);
+  } else {
+    leaveSignupLab();
   }
 
   if (isKlaviyo) {
@@ -13315,8 +13322,22 @@ function attachEvents() {
   document.querySelectorAll("[data-signup-view]").forEach((button) => {
     button.addEventListener("click", () => {
       appState.signupView = button.dataset.signupView;
-      showSignupView(appState.signupView);
+      showSignupLabView(appState.signupView);
     });
+  });
+
+  // The Signup Lab has an address of its own (#signup-lab, #signup-lab/signups, #signup-lab/preview), so it can be
+  // bookmarked and opened straight. initializeApp opens the workspace set here.
+  const signupLabView = signupLabViewFromHash(window.location.hash);
+  if (signupLabView) {
+    appState.workspace = "signup";
+    appState.signupView = signupLabView;
+  }
+  window.addEventListener("hashchange", () => {
+    const view = signupLabViewFromHash(window.location.hash);
+    if (!view) return;
+    appState.signupView = view;
+    setWorkspace("signup");
   });
 
   // Wired at start-up rather than on first open, so the OAuth callback's "?canva=connected"
@@ -13332,7 +13353,7 @@ function attachEvents() {
   // the rollout translates that line into every market instead of the template's name.
   initSubjectLines();
   initAgents();
-  initSignupControl();
+  initSignupLab();
   window.addEventListener("westpack-subject-line-use", (event) => {
     const chosen = event.detail || {};
     if (!chosen.templateId || !chosen.subject) return;
