@@ -221,10 +221,77 @@ HTTP. Server sources are served statically, but a newly added one can 404 long a
 function itself is live, so the file probe reports failure when the deploy has actually landed.
 Deploys observed here took between one and five minutes to answer on the API.
 
+## Agents — a menu group of its own (2026-10-30)
+
+Asked for after the Content Agent was removed: "en helt ny ting i menuen omkring agenter der kan
+hjælpe mig". The design rule, from the critique that ended the Content Agent: **agents here watch
+and check; they never produce or change anything.** Their value is attention saved - a watchdog
+that says "nothing needs you" is worth more than one more draft to read. Nothing under Agents
+writes to Meta, Klaviyo or the stores; the only write is a mute, in this app's own store.
+
+Files: `api/agents.js` (`?action=` dispatch), `server/agents/watchdog.js`,
+`server/agents/email-check.js`, `src/agents.js`, the `agents-product-panel` in `index.html`, the
+Agents section at the end of `design-system.css`. Data is in Blob (`agents/watchdog.json`,
+`agents/email-checks.json`, via `historical-store.js`), never Redis. Agents is a **third
+workspace** (`body[data-workspace="agents"]`): `setWorkspace` used to treat "not Meta" as Klaviyo,
+which is no longer true - read `isKlaviyo`, not `!isMeta`. Tests: `tests/agents-*.test.js`.
+
+### Watchdog
+
+Vercel cron `7 * * * *` -> `GET /api/agents?action=watchdog_run`, accepted only with
+`Authorization: Bearer $CRON_SECRET` (Vercel sends it; the `x-vercel-cron` header other routes
+trust can be sent by anyone). Hourly: Meta ad account (payment status, spend cap, token), rejected
+ads, Redis `PING`, nightly snapshot ages (Blob `HEAD` -> `last-modified`). Each morning (first run
+after 05:00 UTC) and on "Run every check now": every landing page in a switched-on ad, and the 18
+webshops (200 + `GTM-5QRXWTJ`). About 3-4 Graph calls an hour, `maxRetries: 0`.
+
+- **Only ads someone switched on, in a delivering ad set and campaign.** The account holds 50+
+  paused test ads with issues; without the filter the page is red forever.
+- **Ask the store the way a phone does.** With a bare `Accept: text/html` and UTM parameters the
+  store's Magento throws ("An error has happened during application run") and answers 500; a
+  browser's Accept header gets 200. That one header made the first runs report 47 of 53 landing
+  pages as down. It took an afternoon to find because it looked like a rate limit - check the
+  request before blaming the server.
+- Pages and shops are visited one at a time with a pause, and a failure gets a second look 20 s
+  later; one that recovers is a note, not an alert.
+- Landing page findings worth knowing (2026-10-30): **the store's blog redirects any URL with a
+  query string to itself without it** (no variant keeps it), so every click on a blog-linked ad
+  arrives without fbclid and UTM - 11 pages, 11 ads, grouped as one finding. The IT
+  `jewellery-boxes.html` 301 drops fbclid. AD07 Adventskalender links `eur_eu_eng//blog/...` (a
+  double slash). Advice is always about the ad, never "fix the store".
+- Items have a `key` and a `fingerprint`; a mute holds only while the fingerprint is unchanged.
+  The rail count (`#agents-watchdog-count`) is unmuted alerts + warnings, read once after login.
+
+### Email check
+
+A Klaviyo template (any market) or pasted HTML. Instant checks first: absolute store links (must
+use `{{ organization.url }}`), Asana/signed/data-URI images, missing alt, `<link>` stylesheets
+(Klaviyo strips them), Gmail's 102 KB clip, unsubscribe, copy sharing a fragment with a Klaviyo tag
+(Duplicate & translate skips it), standalone series names without `translate="no"`, Danish left in
+a translated version, DE/FR/PT form of address, and the subject line house rules over the body.
+Then a careful read on `CONTENT_AGENT_MODEL` (high, background job, ~60-90 s) against
+`knowledge/westpack-site/README.md` (bundled via `includeFiles`) and the team's rules.
+
+- **The house's approved wording must pass.** The first runs flagged the locked footer's FSC
+  licence text, the approved "De første anbefalede frister ... falder allerede 10. december – og de
+  er forskellige fra land til land" and "Levering inden jul kan ikke garanteres". The instant
+  checks skip them; the review is told so and `finalizeReview` drops footer findings regardless.
+- **"Not in the site facts" is should-fix, never must-fix** - the README is a summary of the site.
+  Must-fix is for what the site contradicts, a broken rule, or a broken link.
+- Every review finding must quote the email verbatim; a quote not in the text is dropped
+  (`droppedUnverified`). The text is extracted with inline tags removed, not spaced - quote marks in
+  `translate="no"` spans otherwise read as "' ja, Kevin '" and the model reports the spacing.
+- Kevin emails are told apart: a playful call to action is not a finding.
+- **Restart the local server after changing `server/agents/*`** - the second "fixed" review ran on
+  the cached old module and looked exactly like the first.
+
+Candidates for the next agents, not built: Asana "Review" creative -> paused ad in Placeholder;
+the Monday Meta status and ad-swap analysis (now local scripts mailed via Outlook) as in-app agents.
+
 ## Test suite status
 
 As of 2026-10-30, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —
-`node --test tests/` does not work) runs 816 tests: 809 pass and 7 fail, all seven in
+`node --test tests/` does not work) runs 852 tests: 845 pass and 7 fail, all seven in
 `tests/meta-expansion-reach.test.js`. Those seven failed identically before the Content Agent was
 removed and have not been investigated. The count drifts as tests are added — re-run the command
 rather than trusting the number if it looks stale.

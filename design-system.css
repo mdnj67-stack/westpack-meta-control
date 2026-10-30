@@ -3922,6 +3922,14 @@ progress {
   flex: 1 1 420px;
 }
 
+/* On a phone the header is a column, where a flex basis is a height: 420px of it left an
+   empty gap between every page's description and its actions. */
+@media (max-width: 720px) {
+  .topbar-copy {
+    flex: 0 0 auto;
+  }
+}
+
 /* Cards inside cards. A summary panel was a bordered card holding ten bordered tiles,
    each with one label and one value - three frames around a single line of text. They
    are rows separated by rules, which is what they always were. */
@@ -5972,4 +5980,390 @@ input[type="file"] {
   .subject-ab-figure.is-muted { display: none; }
   .subject-sends li { grid-template-columns: minmax(0, 1fr) auto; }
   .subject-sends-date { display: none; }
+}
+
+
+/* ---------------------------------------------------------------------------
+   Agents
+
+   Two agents that read and report: the watchdog and the email check. The page is a list of
+   findings, not a dashboard - each one says what is wrong, where, and what to do, and the
+   severity is a word as well as a colour. Lists are hairline-divided rows inside one bordered
+   block, the same as tables, so a long morning of findings stays scannable.
+--------------------------------------------------------------------------- */
+
+/* The rail: Agents is a third group, so neither platform group may read as current while it
+   is open. */
+body[data-workspace="agents"] .tab-button.active,
+body[data-workspace="agents"] .subnav-button.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--wp-text-secondary);
+  font-weight: var(--wp-weight-medium);
+  box-shadow: none;
+}
+
+body[data-workspace="agents"] .tab-button.active .wp-nav-icon,
+body[data-workspace="agents"] .subnav-button.active .wp-nav-icon {
+  color: var(--wp-text-subtle);
+}
+
+/* A count on a rail item: open findings, nothing else. */
+.wp-nav-item > .wp-nav-count {
+  flex: 0 0 auto;
+  min-width: 18px;
+  margin-left: auto;
+  padding: 0 5px;
+  border: 1px solid var(--wp-warning-border);
+  border-radius: var(--wp-radius-pill);
+  background: var(--wp-warning-surface);
+  color: var(--wp-warning-text);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  line-height: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-nav-item > .wp-nav-count.is-danger {
+  border-color: var(--wp-danger-border);
+  background: var(--wp-danger-surface);
+  color: var(--wp-danger-text);
+}
+
+.agents-body {
+  display: grid;
+  gap: 0;
+}
+
+.agents-run-note {
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  white-space: nowrap;
+}
+
+.agents-metrics {
+  margin-bottom: var(--wp-space-4);
+}
+
+.agents-table .agents-row {
+  cursor: pointer;
+}
+
+.agents-table .agents-row:hover td,
+.agents-table .agents-row:focus-visible td {
+  background: var(--wp-surface-hover);
+}
+
+.agents-table .agents-row:focus-visible {
+  outline: 2px solid var(--wp-brand);
+  outline-offset: -2px;
+}
+
+/* -- Findings: one bordered block, rows divided by hairlines -------------- */
+
+.agents-items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.agents-item {
+  display: grid;
+  gap: var(--wp-space-1);
+  padding: var(--wp-space-3) var(--wp-space-4);
+}
+
+.agents-item + .agents-item {
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.agents-item.is-muted {
+  background: var(--wp-surface-subtle);
+}
+
+.agents-item.is-muted .agents-item-head strong,
+.agents-item.is-muted .agents-item-detail {
+  color: var(--wp-text-muted);
+}
+
+.agents-item-head {
+  display: flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+  min-width: 0;
+}
+
+.agents-item-head strong {
+  min-width: 0;
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.agents-item-source {
+  margin-left: auto;
+  color: var(--wp-text-subtle);
+  font-size: var(--wp-text-2xs);
+  white-space: nowrap;
+}
+
+.agents-item-detail,
+.agents-item-meta,
+.agents-check-description {
+  margin: 0;
+  max-width: 96ch;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  overflow-wrap: anywhere;
+}
+
+.agents-item-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.agents-item-list {
+  margin: var(--wp-space-1) 0 0;
+  padding-left: var(--wp-space-5);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-xs);
+  line-height: var(--wp-leading-normal);
+}
+
+.agents-item-list li {
+  overflow-wrap: anywhere;
+}
+
+/* The words the finding is about, as they stand in the email. */
+.agents-excerpt {
+  margin: var(--wp-space-1) 0 0;
+  padding: var(--wp-space-1) var(--wp-space-3);
+  border-left: 2px solid var(--wp-border-strong);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+  overflow-wrap: anywhere;
+}
+
+.agents-item-fix {
+  display: flex;
+  gap: var(--wp-space-2);
+  margin: 0;
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+}
+
+.agents-item-fix span {
+  flex: 0 0 auto;
+  color: var(--wp-text-subtle);
+  font-size: var(--wp-text-2xs);
+  font-weight: var(--wp-weight-semibold);
+  letter-spacing: var(--wp-tracking-caps);
+  text-transform: uppercase;
+  line-height: 20px;
+}
+
+.agents-mute-form {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2);
+}
+
+.agents-mute-form .wp-input {
+  width: min(360px, 100%);
+  height: var(--wp-control-height-sm);
+}
+
+/* -- The watchdog's checks ------------------------------------------------- */
+
+.agents-checks {
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+  overflow: hidden;
+}
+
+.agents-check + .agents-check {
+  border-top: 1px solid var(--wp-border-subtle);
+}
+
+.agents-check > summary {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--wp-space-3);
+  padding: var(--wp-space-3) var(--wp-space-4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.agents-check > summary::-webkit-details-marker {
+  display: none;
+}
+
+.agents-check > summary:hover {
+  background: var(--wp-surface-hover);
+}
+
+.agents-check-title {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.agents-check-title strong {
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.agents-check-title span {
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  overflow-wrap: anywhere;
+}
+
+.agents-check-meta {
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  white-space: nowrap;
+}
+
+.agents-check-body {
+  display: grid;
+  gap: var(--wp-space-3);
+  padding: 0 var(--wp-space-4) var(--wp-space-4) calc(112px + var(--wp-space-3) + var(--wp-space-4));
+}
+
+/* Items inside a check sit on the check's own surface; a second border would be a box in a box. */
+.agents-check-body .agents-items {
+  border: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--wp-border-subtle);
+  background: transparent;
+}
+
+.agents-check-body .agents-item {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.agents-footnote {
+  margin: var(--wp-space-3) 0 0;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+/* -- The email check ------------------------------------------------------- */
+
+.agents-form {
+  padding: var(--wp-space-4) var(--wp-space-5);
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius-lg);
+  background: var(--wp-surface);
+}
+
+.agents-form-grid {
+  margin-top: var(--wp-space-4);
+}
+
+.agents-span-2 {
+  grid-column: span 2;
+}
+
+.agents-html {
+  min-height: 160px;
+  font-family: var(--wp-font-mono);
+  font-size: var(--wp-text-xs);
+}
+
+.agents-result > .wp-alert {
+  margin-bottom: var(--wp-space-4);
+}
+
+.agents-review-running strong {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wp-space-2);
+}
+
+.agents-review-running #agents-review-clock {
+  font-variant-numeric: tabular-nums;
+}
+
+.agents-group-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--wp-space-2);
+  margin: var(--wp-space-5) 0 var(--wp-space-2);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  font-weight: var(--wp-weight-semibold);
+}
+
+.agents-group-title span {
+  color: var(--wp-text-muted);
+  font-weight: var(--wp-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .agents-check > summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--wp-space-1);
+  }
+
+  .agents-check-meta {
+    white-space: normal;
+  }
+
+  .agents-check-body {
+    padding-left: var(--wp-space-4);
+  }
+
+  .agents-span-2 {
+    grid-column: auto;
+  }
+
+  .agents-item-source {
+    display: none;
+  }
+
+  .agents-form {
+    padding: var(--wp-space-4);
+  }
+
+  /* Four counts read as two pairs on a phone rather than a column the height of the screen. */
+  .agents-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agents-metrics .wp-metric {
+    padding: var(--wp-space-3) var(--wp-space-4);
+  }
+
+  .agents-metrics .wp-metric:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .agents-metrics .wp-metric:nth-child(n + 3) {
+    border-top: 1px solid var(--wp-border-subtle);
+  }
+
+  .agents-metrics .wp-metric-value {
+    font-size: var(--wp-text-2xl);
+  }
 }

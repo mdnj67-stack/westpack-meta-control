@@ -9,6 +9,7 @@ import {
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
 import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261028-subjectlines6";
+import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261030-agents1";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -419,6 +420,7 @@ const appState = {
   klaviyoSubscriberMode: "daily",
   klaviyoSubscriberRange: 30,
   klaviyoView: "dashboard",
+  agentsView: "overview",
   klaviyoDashboardTab: "general",
   klaviyoLoading: false,
   klaviyoLiveAttempted: false,
@@ -871,6 +873,7 @@ function startApp() {
     console.error("[app-start]", error);
     setSyncStatus("Dashboard failed to initialize fully. Safe mode enabled.", "warning");
   }
+  refreshAgentsBadge().catch(() => {});
   authState.bootstrapped = true;
 }
 
@@ -10236,7 +10239,7 @@ async function loadKlaviyoLiveData(options = {}) {
 }
 
 function setWorkspace(nextWorkspace = "meta") {
-  appState.workspace = nextWorkspace === "klaviyo" ? "klaviyo" : "meta";
+  appState.workspace = ["klaviyo", "agents"].includes(nextWorkspace) ? nextWorkspace : "meta";
   document.body.dataset.workspace = appState.workspace;
 
   document.querySelectorAll(".workspace-tab").forEach((button) => {
@@ -10244,13 +10247,15 @@ function setWorkspace(nextWorkspace = "meta") {
   });
 
   const isMeta = appState.workspace === "meta";
+  const isKlaviyo = appState.workspace === "klaviyo";
   document.getElementById("meta-product-panel")?.classList.toggle("active", isMeta);
-  document.getElementById("klaviyo-product-panel")?.classList.toggle("active", !isMeta);
+  document.getElementById("klaviyo-product-panel")?.classList.toggle("active", isKlaviyo);
+  document.getElementById("agents-product-panel")?.classList.toggle("active", appState.workspace === "agents");
 
   const metaNav = document.getElementById("meta-nav-list");
   const klaviyoNav = document.getElementById("klaviyo-nav-list");
   if (metaNav) metaNav.hidden = !isMeta;
-  if (klaviyoNav) klaviyoNav.hidden = isMeta;
+  if (klaviyoNav) klaviyoNav.hidden = !isKlaviyo;
 
   // Both platforms are listed in the rail at the same time, so exactly one item across
   // both groups may read as current. Without this the group you just left keeps a
@@ -10261,7 +10266,11 @@ function setWorkspace(nextWorkspace = "meta") {
     }
   });
 
-  if (!isMeta) {
+  if (appState.workspace === "agents") {
+    showAgentsView(appState.agentsView);
+  }
+
+  if (isKlaviyo) {
     renderKlaviyoWorkspace();
     setKlaviyoView(appState.klaviyoView);
     loadKlaviyoLiveData();
@@ -13289,6 +13298,13 @@ function attachEvents() {
     });
   });
 
+  document.querySelectorAll("[data-agents-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      appState.agentsView = button.dataset.agentsView;
+      showAgentsView(appState.agentsView);
+    });
+  });
+
   // Wired at start-up rather than on first open, so the OAuth callback's "?canva=connected"
   // notice is read and cleared even when the operator lands on another view first. The callback
   // also carries #canva-localizer, so the operator comes back to the page they left.
@@ -13301,6 +13317,7 @@ function attachEvents() {
   // The Subject lines screen hands a chosen pair to Duplicate & translate for one DK template, so
   // the rollout translates that line into every market instead of the template's name.
   initSubjectLines();
+  initAgents();
   window.addEventListener("westpack-subject-line-use", (event) => {
     const chosen = event.detail || {};
     if (!chosen.templateId || !chosen.subject) return;

@@ -1,10 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
-// Six snapshots share this module's storage plumbing: the historical creative
-// intelligence the Content Agent reads, the expansion reach series and the
-// audience saturation table the Meta dashboard renders, and the subject line
-// generator's Klaviyo send history, its mechanism tags and team data. They are kept under separate keys rather than in one blob,
+// Eight documents share this module's storage plumbing: the historical creative
+// intelligence Campaign Brain reads, the expansion reach series and the
+// audience saturation table the Meta dashboard renders, the subject line
+// generator's Klaviyo send history, its mechanism tags and team data, and the
+// Agents page's watchdog results and email checks. They are kept under separate keys rather than in one blob,
 // because each is written by its own job and a shared value would make
 // one job's write clobber the other's.
 const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
@@ -13,6 +14,8 @@ const SATURATION_STORE_KEY = "westpack:meta-audience-saturation:v1";
 const SUBJECT_HISTORY_STORE_KEY = "westpack:klaviyo-subject-line-history:v1";
 const SUBJECT_TEAM_STORE_KEY = "westpack:klaviyo-subject-line-team:v1";
 const SUBJECT_TAGS_STORE_KEY = "westpack:klaviyo-subject-line-tags:v1";
+const AGENT_WATCHDOG_STORE_KEY = "westpack:agents-watchdog:v1";
+const AGENT_EMAIL_CHECKS_STORE_KEY = "westpack:agents-email-checks:v1";
 
 const LOCAL_PATHS = {
   [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
@@ -20,7 +23,9 @@ const LOCAL_PATHS = {
   [SATURATION_STORE_KEY]: path.join(process.cwd(), "data", "meta-audience-saturation.json"),
   [SUBJECT_HISTORY_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-history.json"),
   [SUBJECT_TEAM_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-team.json"),
-  [SUBJECT_TAGS_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-tags.json")
+  [SUBJECT_TAGS_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-tags.json"),
+  [AGENT_WATCHDOG_STORE_KEY]: path.join(process.cwd(), "data", "agents-watchdog.json"),
+  [AGENT_EMAIL_CHECKS_STORE_KEY]: path.join(process.cwd(), "data", "agents-email-checks.json")
 };
 
 const volatileSnapshots = new Map();
@@ -48,7 +53,9 @@ const BLOB_PATHS = {
   [SATURATION_STORE_KEY]: "meta-snapshots/audience-saturation.json",
   [SUBJECT_HISTORY_STORE_KEY]: "klaviyo-snapshots/subject-line-history.json",
   [SUBJECT_TEAM_STORE_KEY]: "klaviyo-snapshots/subject-line-team.json",
-  [SUBJECT_TAGS_STORE_KEY]: "klaviyo-snapshots/subject-line-tags.json"
+  [SUBJECT_TAGS_STORE_KEY]: "klaviyo-snapshots/subject-line-tags.json",
+  [AGENT_WATCHDOG_STORE_KEY]: "agents/watchdog.json",
+  [AGENT_EMAIL_CHECKS_STORE_KEY]: "agents/email-checks.json"
 };
 
 function getBlobToken() {
@@ -92,6 +99,39 @@ async function blobWrite(storeKey, snapshot) {
     const payload = await response.json().catch(() => ({}));
     throw new Error(payload?.error?.message || `Blob write failed (${response.status}).`);
   }
+}
+
+async function blobLastModified(storeKey) {
+  const response = await fetch(`${blobUrl(storeKey)}?cache=0`, {
+    method: "HEAD",
+    headers: { Authorization: `Bearer ${getBlobToken()}` }
+  });
+  if (response.status === 404) return { exists: false, lastModified: null };
+  if (!response.ok) throw new Error(`Blob read failed (${response.status}).`);
+  const header = response.headers.get("last-modified");
+  const parsed = header ? Date.parse(header) : NaN;
+  return { exists: true, lastModified: Number.isFinite(parsed) ? new Date(parsed).toISOString() : null };
+}
+
+// The nightly jobs whose output the dashboard and the subject line generator read. Each entry
+// says when it was last written, so the watchdog can tell a stale tab from a quiet night.
+async function readNightlySnapshotTimes() {
+  if (getHistoricalStoreProfile().mode !== "blob") return null;
+  const entries = [
+    ["historical_intelligence", HISTORICAL_STORE_KEY],
+    ["expansion_reach", EXPANSION_STORE_KEY],
+    ["audience_saturation", SATURATION_STORE_KEY],
+    ["subject_line_history", SUBJECT_HISTORY_STORE_KEY]
+  ];
+  const results = {};
+  await Promise.all(entries.map(async ([name, storeKey]) => {
+    try {
+      results[name] = await blobLastModified(storeKey);
+    } catch (error) {
+      results[name] = { exists: null, lastModified: null, error: error.message };
+    }
+  }));
+  return results;
 }
 
 function getHistoricalStoreProfile() {
@@ -173,6 +213,10 @@ const readSubjectLineTeam = () => readSnapshot(SUBJECT_TEAM_STORE_KEY);
 const writeSubjectLineTeam = (snapshot) => writeSnapshot(SUBJECT_TEAM_STORE_KEY, snapshot);
 const readSubjectLineTags = () => readSnapshot(SUBJECT_TAGS_STORE_KEY);
 const writeSubjectLineTags = (snapshot) => writeSnapshot(SUBJECT_TAGS_STORE_KEY, snapshot);
+const readAgentWatchdog = () => readSnapshot(AGENT_WATCHDOG_STORE_KEY);
+const writeAgentWatchdog = (snapshot) => writeSnapshot(AGENT_WATCHDOG_STORE_KEY, snapshot);
+const readAgentEmailChecks = () => readSnapshot(AGENT_EMAIL_CHECKS_STORE_KEY);
+const writeAgentEmailChecks = (snapshot) => writeSnapshot(AGENT_EMAIL_CHECKS_STORE_KEY, snapshot);
 
 module.exports = {
   getHistoricalStoreProfile,
@@ -187,5 +231,10 @@ module.exports = {
   readSubjectLineTeam,
   writeSubjectLineTeam,
   readSubjectLineTags,
-  writeSubjectLineTags
+  writeSubjectLineTags,
+  readAgentWatchdog,
+  writeAgentWatchdog,
+  readAgentEmailChecks,
+  writeAgentEmailChecks,
+  readNightlySnapshotTimes
 };

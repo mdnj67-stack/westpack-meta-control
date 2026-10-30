@@ -24,6 +24,10 @@
     "api/klaviyo/subject-lines.js": {
       "maxDuration": 300,
       "includeFiles": "knowledge/subject-lines/pattern-bank.vectors.*"
+    },
+    "api/agents.js": {
+      "maxDuration": 300,
+      "includeFiles": "knowledge/westpack-site/README.md"
     }
   },
   "crons": [
@@ -46,6 +50,10 @@
     {
       "path": "/api/klaviyo/subject-lines?action=sync_history",
       "schedule": "50 4 * * *"
+    },
+    {
+      "path": "/api/agents?action=watchdog_run",
+      "schedule": "7 * * * *"
     }
   ],
   "rewrites": [

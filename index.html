@@ -86,6 +86,27 @@
             </button>
           </div>
         </div>
+
+        <!-- Agents read and report across both platforms, so they get a group of their own rather
+             than a place inside Meta or Klaviyo. -->
+        <div class="wp-nav-group">
+          <p class="wp-nav-group-label" id="wp-nav-label-agents">Agents</p>
+          <div class="agents-nav-list" role="group" aria-labelledby="wp-nav-label-agents">
+            <button class="agents-nav-button wp-nav-item" data-agents-view="overview" data-nav-workspace="agents" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="2.25" width="4.75" height="4.75" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2.25" width="4.75" height="4.75" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="2.25" y="9" width="4.75" height="4.75" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="4.75" height="4.75" rx="1.25" stroke="currentColor" stroke-width="1.5"/></svg>
+              <span>Overview</span>
+            </button>
+            <button class="agents-nav-button wp-nav-item" data-agents-view="watchdog" data-nav-workspace="agents" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.75 13.25 3.9v3.6c0 3.1-2.2 5.6-5.25 6.75C4.95 13.1 2.75 10.6 2.75 7.5V3.9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m5.75 8 1.6 1.6L10.5 6.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Watchdog</span>
+              <span class="wp-nav-count" id="agents-watchdog-count" hidden></span>
+            </button>
+            <button class="agents-nav-button wp-nav-item" data-agents-view="email_check" data-nav-workspace="agents" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="3.25" width="11.5" height="9.5" rx="1.75" stroke="currentColor" stroke-width="1.5"/><path d="m2.75 4.5 5.25 4 5.25-4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              <span>Email check</span>
+            </button>
+          </div>
+        </div>
       </nav>
 
       <!-- Integration health belongs to the workspace, not to whichever screen is open,
@@ -1627,6 +1648,45 @@ Vis tal og forretningscase</textarea>
               </section>
             </aside>
           </div>
+        </section>
+      </section>
+
+      <section class="product-panel wp-page agents-page" id="agents-product-panel">
+        <section class="agents-view" data-agents-panel="overview">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Agents</p>
+              <h2>Overview</h2>
+              <p class="topbar-sub">Agents watch the accounts and check work before it reaches customers. They read and report; they never change a campaign, an ad, a budget or a template.</p>
+            </div>
+          </section>
+          <div class="agents-body" id="agents-overview"></div>
+        </section>
+
+        <section class="agents-view" data-agents-panel="watchdog" hidden>
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Agents</p>
+              <h2>Watchdog</h2>
+              <p class="topbar-sub">Checks every hour that money can be spent and clicks are counted: the ad account, rejected ads, Redis and the nightly jobs - and every morning the landing pages and the 18 webshops.</p>
+            </div>
+            <div class="topbar-actions">
+              <span class="agents-run-note" id="agents-watchdog-run-note"></span>
+              <button class="wp-button" id="agents-watchdog-run" type="button">Run every check now</button>
+            </div>
+          </section>
+          <div class="agents-body" id="agents-watchdog"></div>
+        </section>
+
+        <section class="agents-view" data-agents-panel="email_check" hidden>
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Agents</p>
+              <h2>Email check</h2>
+              <p class="topbar-sub">Check an email before it goes out: the links, images and translation traps a rollout cannot fix by itself, then a careful read of every claim against Westpack's own site and the team's rules.</p>
+            </div>
+          </section>
+          <div class="agents-body" id="agents-email-check"></div>
         </section>
       </section>
     </main>
