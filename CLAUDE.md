@@ -1374,9 +1374,27 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
 - The light follows the pointer to the point on the lid under it (inverse homography); the loupe and the phone's
   floating preview are clones of the scene that reuse the same filter ids, so one light drives all three. An
   uploaded logo becomes a one-colour mask in the browser and is never sent anywhere.
+- **The redesign (2026-10-30, the user: "Jeg bad om at du gik all in på designet")** made the box the whole scene
+  (desktop: a square stage up to 780px with an overlay bar for lid name, zoom and thumbnails), an opening camera push,
+  a "press" on every change, foil coins, type cards set in the visitor's own name and a six-lid collection as the
+  result. Four things it broke once, each now pinned in `tools/signup/qa.js` (69 checks) or fixed at the root:
+  - **The engine probe must run on the scene at rest.** It measures where the print's far corner lands; run during
+    the camera push it read every browser as broken and forced the flat fallback everywhere (2.6% instead of 0.01%).
+    `checkEngine` runs when `is-intro` ends, or at once under reduced motion.
+  - **SVG text letter-spacing is in print units, so it must scale with the font size**, or a long name stays wider
+    than the lid however small it gets. The text also carries `text-rendering="geometricPrecision"`: at a thumbnail's
+    few pixels Chrome's hinted advances made a name fitted at one size overflow at another. A print that is hidden
+    when its name is set (phone thumbnails while typing, the collection before the result) cannot be measured, so
+    `refit()` sizes it once shown.
+  - **Zoomed in, the zoom button is the only way out**: the bar may fade, the button may not lose pointer events.
+  - **The pointer owns the light**: a sweep never starts while the visitor is moving it, and moving it cancels one.
+- **Every asset URL carries `?v=ASSET_VERSION`** (`signup/westpack-signup.js`), because `vercel.json` caches the
+  WebP images for 30 days under unchanged names and the user saw an old image after a rebuild. `build-assets.js`
+  stamps a new version whenever it writes images; the runtime JS and CSS revalidate on every load, so the new
+  version reaches every browser at once.
 - Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked
   `needsNativeReview`. No visible text may live in concept code (tested).
-- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (67 browser checks, every language),
+- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (69 browser checks, every language),
   `node tools/signup/screens.js <dir> [concept] [market] --steps`.
 
 ## Agent workflow for this subsystem

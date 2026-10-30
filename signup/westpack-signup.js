@@ -37,6 +37,10 @@
     dryRun: data.mode === "preview" && data.dry === "1",
   };
 
+  // Images are cached for 30 days (vercel.json), and a rebuilt image keeps its name, so every asset address carries
+  // this version. tools/signup/build-assets.js sets it whenever it writes images.
+  const ASSET_VERSION = "20261030";
+
   // ---------- small utilities ----------
   const now = () => Date.now();
   const loaded = {};
@@ -286,7 +290,7 @@
     return {
       concept, market, lang: market.lang, device, reducedMotion, isTest: OPTS.test, isPreview: OPTS.mode === "preview",
       copy: COPY[concept], shell: COPY.shell, t: fmt, el, svg,
-      asset: (p) => `${BASE}assets/${p}`,
+      asset: (p) => `${BASE}assets/${p}?v=${ASSET_VERSION}`,
       track, signupForm, close, root: shadow, stage: ui.stage, dialog: ui.dialog,
       storeUrl: market.storeUrl,
     };

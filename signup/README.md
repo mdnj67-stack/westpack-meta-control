@@ -150,6 +150,24 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 - **På mobil** sidder navnefeltet lige under æsken; mens man skriver, ligger æsken fast øverst over tastaturet, og
   når man scroller ned til folierne, svæver en lille levende kopi af æsken i hjørnet.
 
+### Designet (2026-10-30)
+
+- **Æsken er hele scenen.** På desktop fylder lågfotoet en kvadratisk scene så stor, som skærmen tillader (op til
+  780 px), med lågets navn, zoom, thumbnails og lys-hint lagt nederst i billedet. Valgene står i et smalt panel ved
+  siden af. På mobil går æsken fra kant til kant.
+- **Åbningen:** kameraet glider ind på låget, og det første tryk sættes.
+- **Trykket sættes, hver gang noget ændres:** et varmt glimt over trykket, folien sætter sig i låget, og lyset glider
+  én gang hen over det, når man holder en pause i skrivningen, skifter folie, skrift eller låg, eller lægger et logo
+  ind. Lyset glider ikke, mens den besøgende selv holder det med musen eller fingeren.
+- **Folierne er metalmønter** (guld, sølv, rosaguld, old rose, hvid, sort), og **skrifterne viser den besøgendes
+  eget navn** sat i hver skrift, skrumpet til kortet i stedet for at blive klippet.
+- **Resultatet er en kollektion:** navnet eller logoet står på alle seks låg på én gang, det valgte markeret, og
+  kortene glider ind et ad gangen.
+- **Et langt navn passer på låget, uanset hvor lille det tegnes.** Bogstavafstanden følger skriftstørrelsen, og et
+  låg, der var skjult, mens navnet blev skrevet (thumbnails på mobil og kollektionen), måles igen, når det vises
+  (`tools/signup/qa.js` tjekker det med et navn på 27 tegn).
+- **Reduceret bevægelse** springer kamera, glimt og lysglid over; trykket står færdigt med det samme.
+
 ## Billeder
 
 Alle billeder er Westpacks egne fra Asana-biblioteket, behandlet af `node tools/signup/build-assets.js`:
@@ -161,6 +179,11 @@ fire kanter er synlige der; det sorte nærbillede havde ingen kanter at måle pe
 har et indstik med "MADE FROM RECYCLED PLASTIC"; beskæringerne holder det ude, fordi ingen kreativ må vise en miljøpåstand. Intet peger på Asana, hvis links udløber efter timer.
 Kundefotos er fra "Kundebilleder Uge 40" (frigivet til fri brug 2026-10-07); billedet med Deutsche Bank/Equinix
 er udeladt.
+
+Billederne caches i 30 dage under samme navn (`vercel.json`), så en browser blev ved med at vise et billede, der var
+blevet erstattet. Derfor bærer hver billedadresse en version (`ASSET_VERSION` i `westpack-signup.js`), og
+`build-assets.js` sætter en ny, hver gang det skriver billeder. Ret den i hånden, hvis du udskifter et billede uden
+scriptet.
 
 ## Klaviyos bot-beskyttelse (vigtigt)
 

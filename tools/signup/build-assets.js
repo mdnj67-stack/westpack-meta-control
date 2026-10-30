@@ -139,6 +139,11 @@ async function original(cookie, taskKey, file, attachmentsByTask) {
     console.log(`${a.id}: ${manifest[a.id].files.map((f) => `${f.width}px ${Math.round(f.bytes / 1024)}KB`).join(", ")}`);
   }
   await browser.close();
+  // a new version in every asset address, so no browser keeps showing an image this run replaced
+  const runtime = path.join(ROOT, "signup", "westpack-signup.js");
+  const stamp = new Date().toISOString().replace(/\D/g, "").slice(0, 12);
+  fs.writeFileSync(runtime, fs.readFileSync(runtime, "utf8").replace(/const ASSET_VERSION = "\w+";/, `const ASSET_VERSION = "${stamp}";`));
+  console.log(`asset version ${stamp}`);
   const mfPath = path.join(OUT, "manifest.json");
   const previous = fs.existsSync(mfPath) ? JSON.parse(fs.readFileSync(mfPath, "utf8")) : {};
   fs.writeFileSync(mfPath, JSON.stringify(Object.assign(previous, manifest), null, 2));

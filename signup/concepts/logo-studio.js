@@ -129,7 +129,9 @@
     const filter = svgEl("filter", { id: `${uid}-f`, filterUnits: "userSpaceOnUse", primitiveUnits: "userSpaceOnUse", "color-interpolation-filters": "sRGB" });
     const maskImg = svgEl("image", { preserveAspectRatio: "xMidYMid meet" });
     const mask = svgEl("mask", { id: `${uid}-m`, maskUnits: "userSpaceOnUse", x: 0, y: 0 }, [maskImg]);
-    const text = svgEl("text", { x: VBW / 2, "text-anchor": "middle", "dominant-baseline": "central" });
+    // geometric precision: at the few pixels a thumbnail draws it, hinted text does not scale with its size, and a
+    // name fitted at one size ran off the lid at the next
+    const text = svgEl("text", { x: VBW / 2, "text-anchor": "middle", "dominant-baseline": "central", "text-rendering": "geometricPrecision" });
     const logo = svgEl("rect", { x: 0, y: 0, width: VBW, mask: `url(#${uid}-m)` });
     const group = svgEl("g", lite ? {} : { filter: `url(#${uid}-f)` }, [text, logo]);
     const svg = svgEl("svg", { class: "ls-print", "aria-hidden": "true", focusable: "false", preserveAspectRatio: "none" }, [svgEl("defs", {}, [grad, filter, mask]), group]);
@@ -228,7 +230,9 @@
       build();
     }
     // a name is set at a size that reads as a logo: a short one grows a little, a long one shrinks to the area,
-    // and none runs taller than about a third of it
+    // and none runs taller than about a third of it. A hidden print has nothing to measure (the collection before the
+    // result, the thumbnails while a phone types), so its name is kept and refit() sizes it once it is shown
+    let unfitted = null;
     function setName(name, type) {
       const t = TYPES[type];
       logo.setAttribute("display", "none"); text.removeAttribute("display");
@@ -237,12 +241,23 @@
       text.setAttribute("font-size", t.size);
       try {
         const b = text.getBBox();
-        if (b.width && b.height) text.setAttribute("font-size", Math.max(24, t.size * Math.min(1.3, (VBW * 0.94) / b.width, (vbH * 0.3) / b.height)).toFixed(1));
+        unfitted = b.width && b.height ? null : [name, type];
+        if (b.width && b.height) {
+          // the spacing is in print units, so it scales with the face: left at full size it kept a long name wider
+          // than the lid however small the letters got
+          const apply = (size) => { text.setAttribute("font-size", size.toFixed(1)); text.setAttribute("letter-spacing", ((t.spacing * size) / t.size).toFixed(2)); return size; };
+          const size = apply(Math.max(24, t.size * Math.min(1.3, (VBW * 0.94) / b.width, (vbH * 0.3) / b.height)));
+          // and measured once more, for whatever an engine still does not scale in proportion
+          const w = text.getBBox().width;
+          if (w > VBW * 0.97) apply(Math.max(24, (size * VBW * 0.94) / w));
+        }
         const fitted = text.getBBox();
         sweep(fitted.x, fitted.y, fitted.width, fitted.height);
-      } catch (e) { sweep(VBW * 0.1, vbH * 0.4, VBW * 0.8, vbH * 0.2); /* not laid out yet: the default size stands */ }
+      } catch (e) { unfitted = [name, type]; sweep(VBW * 0.1, vbH * 0.4, VBW * 0.8, vbH * 0.2); /* not laid out yet: the default size stands */ }
     }
+    function refit() { if (unfitted) setName(...unfitted); }
     function setLogo(url, aspect) {
+      unfitted = null;
       text.setAttribute("display", "none"); logo.removeAttribute("display");
       const fitW = VBW * 0.9, fitH = vbH * 0.78;
       let w = fitW, h = fitW / aspect;
@@ -254,7 +269,7 @@
     }
     // the light, as a point over the print area: u, v in its own units (0-1 across, 0-1 down), z its height
     function setLight(u, v, z) { if (light) { light.setAttribute("x", (u * VBW).toFixed(0)); light.setAttribute("y", (v * vbH).toFixed(0)); light.setAttribute("z", ((z || 0.3) * VBW).toFixed(0)); } }
-    return { svg, set, setName, setLogo, setLight };
+    return { svg, set, setName, setLogo, setLight, refit };
   }
 
   /**
@@ -316,9 +331,13 @@
     // the plate: the photo's 1000 x 1000 stand-in, scaled to the frame, so each lid's transform is a constant
     const plate = el("div", { class: "ls-plate" }, [printWrap]);
     const loupe = el("div", { class: "ls-loupe", "aria-hidden": "true" });
-    const scene = el("div", { class: "ls-scene" }, [photo, plate]);
-    const frame = el("figure", { class: "ls-frame", role: "img" }, [scene, loupe, el("figcaption", { class: "ls-illustration", text: copy.disclaimer })]);
+    // the camera: photo and print move together when it pushes in on opening
+    const cam = el("div", { class: "ls-cam" }, [photo, plate]);
+    // the heat of the press: a warm bloom over the print for a moment each time a name is stamped
+    const heat = el("div", { class: "ls-heat", "aria-hidden": "true" });
+    const scene = el("div", { class: "ls-scene" }, [cam, heat]);
     const hintEl = el("p", { class: "ls-light-hint", "aria-hidden": "true", text: fine ? copy.lightHintMouse : copy.lightHintTouch });
+    const frame = el("figure", { class: "ls-frame", role: "img" }, [scene, loupe, el("figcaption", { class: "ls-illustration", text: copy.disclaimer })]);
     const zoomBtn = el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", onclick: () => toggleZoom() }, [el("span", { text: copy.zoomIn })]);
     // every thumbnail carries the visitor's name too, so the six read as their own collection
     const thumbPrints = {};
@@ -331,7 +350,25 @@
       return el("button", { type: "button", class: "ls-thumb", "data-box": id, "aria-pressed": "false", "aria-label": copy.boxes[id], title: copy.boxes[id], onclick: () => setBox(id, "thumb") }, [el("img", { src: img(id, 160), alt: "", loading: "lazy", decoding: "async", onerror: hide }), el("div", { class: "ls-plate" }, [wrap])]);
     });
     const boxName = el("p", { class: "ls-box-name", "aria-live": "polite" });
-    const stageInner = el("div", { class: "ls-stage-inner" }, [frame, el("div", { class: "ls-under" }, [boxName, zoomBtn]), el("div", { class: "ls-thumbs", role: "group", "aria-label": copy.boxLabel }, thumbs), hintEl]);
+    const under = el("div", { class: "ls-under" }, [boxName, zoomBtn]);
+    const thumbsEl = el("div", { class: "ls-thumbs", role: "group", "aria-label": copy.boxLabel }, thumbs);
+    // on a desktop the lid's name, the zoom and the six lids float over the foot of the photo, so the photo can fill
+    // the whole stage; on a phone they sit under it, where they cover nothing
+    const onPhone = ctx.device !== "desktop";
+    const stageInner = el("div", { class: "ls-stage-inner" }, onPhone ? [frame, under, thumbsEl, hintEl] : [frame]);
+    if (!onPhone) frame.append(el("div", { class: "ls-bar" }, [under, thumbsEl, hintEl]));
+
+    // the reward: the name on all six lids at once, once the visitor is happy with it
+    const tilePrints = {};
+    const tileWraps = {};
+    const tiles = BOX_ORDER.map((id, i) => {
+      const p = (tilePrints[id] = makePrint(`${uid}-c${id}`)), wrap = (tileWraps[id] = el("div", { class: "ls-print-wrap" }, [p.svg]));
+      lay(wrap, LIDS[id]);
+      const tileScene = el("div", { class: "ls-scene" }, [el("img", { class: "ls-photo", alt: "", src: img(id, 720), loading: "lazy", decoding: "async", onerror: hide }), el("div", { class: "ls-plate" }, [wrap])]);
+      return el("figure", { class: "ls-tile", "data-box": id, style: `--i:${i}` }, [el("div", { class: "ls-tile-frame" }, [tileScene]), el("figcaption", { class: "ls-tile-name", text: copy.boxes[id] })]);
+    });
+    const collection = el("div", { class: "ls-collection", "aria-hidden": "true" }, tiles);
+    stageInner.append(collection);
 
     // ---- the controls ----
     const nameId = `${uid}-name`;
@@ -342,11 +379,12 @@
     const hint = el("p", { class: "ls-hint", "aria-live": "polite" });
     const group = (labelText, key, values, labels) => {
       const gid = `${uid}-${key}`;
-      const buttons = values.map((v) => el("button", { type: "button", class: `ls-chip ls-chip-${key}`, "data-value": v, "aria-pressed": "false", onclick: () => setFoilOrType(key, v) }, [
-        key === "foil" ? el("span", { class: `ls-swatch ls-swatch-${v}`, "aria-hidden": "true" }) : null,
-        el("span", { class: key === "type" ? `ls-type-sample ls-type-${v}` : "", text: labels[v] }),
-      ]));
-      return { node: el("div", { class: "ls-group", role: "group", "aria-labelledby": gid }, [el("span", { id: gid, class: "ls-group-label", text: labelText }), el("div", { class: "ls-chips" }, buttons)]), buttons };
+      const buttons = values.map((v) => el("button", { type: "button", class: `ls-chip ls-chip-${key}`, "data-value": v, "aria-pressed": "false", "aria-label": labels[v], onclick: () => setFoilOrType(key, v) },
+        key === "foil"
+          ? [el("span", { class: `ls-coin ls-coin-${v}`, "aria-hidden": "true" }), el("span", { class: "ls-chip-label", "aria-hidden": "true", text: labels[v] })]
+          // each face shows the visitor's own name, so the choice is made on what will be printed
+          : [el("span", { class: `ls-type-sample ls-type-${v}`, "aria-hidden": "true" }), el("span", { class: "ls-chip-label", "aria-hidden": "true", text: labels[v] })]));
+      return { node: el("div", { class: "ls-group", role: "group", "aria-labelledby": gid }, [el("span", { id: gid, class: "ls-group-label", text: labelText }), el("div", { class: `ls-chips ls-chips-${key}` }, buttons)]), buttons };
     };
     const foilGroup = group(copy.foilLabel, "foil", Object.keys(FOILS), copy.foil);
     const typeGroup = group(copy.typeLabel, "type", Object.keys(TYPES), copy.type);
@@ -360,8 +398,7 @@
     ]);
     // on a phone the field sits right under the box, so the first screen is the box and the field, and the box
     // stays in view above the keyboard while the name is typed (see is-typing in the CSS)
-    const onPhone = ctx.device !== "desktop";
-    if (onPhone) stageInner.insertBefore(nameBlock, stageInner.querySelector(".ls-thumbs"));
+    if (onPhone) stageInner.insertBefore(nameBlock, thumbsEl);
     // on a phone a small live copy of the box floats in the corner once the big one has scrolled away, so the
     // foil is never chosen blind
     const pip = onPhone ? el("div", { class: "ls-pip", "aria-hidden": "true" }) : null;
@@ -385,6 +422,8 @@
       properties: () => ({ wp_brand_name: choice.name.trim(), wp_logo_finish: choice.foil, wp_logo_lid: choice.box, wp_logo_type: choice.type, wp_logo_uploaded: choice.logo ? "yes" : "no" }),
       organization: () => choice.name.trim(),
       onSuccess: (r) => showSuccess(r),
+      // the field and the button stacked, so a long button never squeezes the address
+      compact: true,
     });
     const resultPanel = el("div", { class: "ls-panel ls-result", hidden: true }, [
       el("p", { class: "wps-kicker", text: copy.kicker }),
@@ -417,6 +456,7 @@
       const w = frame.clientWidth;
       if (!w) return;
       scene.style.setProperty("--k", (w / 1000).toFixed(5));
+      for (const id of BOX_ORDER) thumbPrints[id].refit();
       clearTimeout(settle);
       settle = setTimeout(() => {
         if (!placed) return;
@@ -424,8 +464,19 @@
         requestAnimationFrame(() => { printWrap.style.width = `${placed.w}px`; });
       }, 140);
     }
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fit) : null;
-    if (ro) ro.observe(frame); else window.addEventListener("resize", fit);
+    // each tile of the collection is its own small scene, scaled like the big one, and nudged like it once laid out
+    let tileSettle = 0;
+    function fitTiles() {
+      for (const tile of tiles) { const f = tile.querySelector(".ls-tile-frame"); if (f.clientWidth) tile.querySelector(".ls-scene").style.setProperty("--k", (f.clientWidth / 1000).toFixed(5)); }
+      for (const id of BOX_ORDER) tilePrints[id].refit();
+      clearTimeout(tileSettle);
+      tileSettle = setTimeout(() => {
+        for (const id of BOX_ORDER) { const w = tileWraps[id], base = parseFloat(w.style.width); w.style.width = `${base + 1}px`; requestAnimationFrame(() => { w.style.width = `${base}px`; }); }
+      }, 900);
+    }
+    const onResize = () => { fit(); fitTiles(); };
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
+    if (ro) { ro.observe(frame); ro.observe(collection); } else window.addEventListener("resize", onResize);
     function render() {
       layout.dataset.foil = choice.foil; layout.dataset.box = choice.box;
       print.set(choice.box, choice.foil);
@@ -442,8 +493,14 @@
       thumbs.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.box === choice.box)));
       if (pip) { pip.textContent = ""; const c = scene.cloneNode(true); c.style.setProperty("--tilt", "none"); c.style.setProperty("--k", ((pip.clientWidth || 108) / 1000).toFixed(5)); pip.appendChild(c); }
       foilGroup.buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.value === choice.foil)));
-      typeGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.type)); b.disabled = Boolean(choice.logo); });
+      typeGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.type)); b.disabled = Boolean(choice.logo); fitSample(b.querySelector(".ls-type-sample"), displayName()); });
       refreshLoupe();
+    }
+    // a name set in a face is shrunk to its card rather than cut off, so every face shows the whole name
+    function fitSample(node, text) {
+      node.textContent = text; node.style.fontSize = "";
+      const room = node.clientWidth - 2, need = node.scrollWidth;
+      if (room > 0 && need > room) node.style.fontSize = `${Math.max(7, (parseFloat(getComputedStyle(node).fontSize) * room) / need).toFixed(1)}px`;
     }
     function setBox(id, how) {
       if (id === choice.box) return;
@@ -454,7 +511,7 @@
       const next = new Image();
       next.onload = next.onerror = () => {
         photo.src = img(id, 720); photo.srcset = `${img(id, 720)} 720w, ${img(id, 1200)} 1200w`;
-        place(); render(); scene.classList.remove("is-swapping"); sweep();
+        place(); render(); scene.classList.remove("is-swapping"); stamp();
       };
       next.src = img(id, ctx.device === "desktop" ? 1200 : 720);
       if (how === "swipe") thumbs.find((b) => b.dataset.box === id).scrollIntoView({ inline: "nearest", block: "nearest" });
@@ -462,7 +519,7 @@
     function setFoilOrType(key, value) {
       if (choice[key] === value) return;
       choice[key] = value; if (key === "foil") foilTouched = true;
-      once(`option_${key}`); render(); sweep();
+      once(`option_${key}`); render(); stamp();
     }
 
     // ---- light: follows the pointer or finger, drifts on its own, and sweeps across on every change ----
@@ -480,7 +537,17 @@
       }
     }
     function schedule() { if (!raf) raf = requestAnimationFrame(frameLight); }
-    function sweep() { if (ctx.reducedMotion) { print.setLight(0.52, -0.45); return; } sweepFrom = performance.now(); sweepUntil = sweepFrom + 950; schedule(); }
+    // the press: the foil goes on hot - a flash of warm light over the print, the foil settling into the lid - and the
+    // light sweeps across it once it has
+    let stampTimer = 0, sweepTimer = 0;
+    function stamp() {
+      if (ctx.reducedMotion) { sweep(); return; }
+      frame.classList.remove("is-stamping"); void frame.offsetWidth; frame.classList.add("is-stamping");
+      clearTimeout(stampTimer); stampTimer = setTimeout(() => frame.classList.remove("is-stamping"), 900);
+      clearTimeout(sweepTimer); sweepTimer = setTimeout(sweep, 240);
+    }
+    // a visitor holding the light themselves keeps it: the sweep is for a scene nobody is touching
+    function sweep() { if (ctx.reducedMotion) { print.setLight(0.52, -0.45); return; } if (interacting) return; sweepFrom = performance.now(); sweepUntil = sweepFrom + 950; schedule(); }
     function lightFromPointer(e) {
       const r = frame.getBoundingClientRect();
       const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
@@ -491,7 +558,7 @@
       if (!ctx.reducedMotion && fine) scene.style.setProperty("--tilt", `perspective(900px) rotateX(${((0.5 - v) * 5).toFixed(2)}deg) rotateY(${((u - 0.5) * 6).toFixed(2)}deg)`);
       moveLoupe(e, u, v);
     }
-    frame.addEventListener("pointermove", (e) => { interacting = true; once("light_moved"); lightFromPointer(e); });
+    frame.addEventListener("pointermove", (e) => { interacting = true; sweepUntil = 0; once("light_moved"); lightFromPointer(e); });
     frame.addEventListener("pointerleave", () => { interacting = false; scene.style.setProperty("--tilt", "none"); loupe.classList.remove("is-on"); schedule(); });
 
     // ---- loupe (mouse) and zoom (touch): the foil up close ----
@@ -506,6 +573,7 @@
     }
     function moveLoupe(e, u, v) {
       if (!fine || !clone || layout.classList.contains("is-zoomed")) return;
+      if (e.target && e.target.closest && e.target.closest(".ls-bar")) { loupe.classList.remove("is-on"); return; }
       const r = frame.getBoundingClientRect(), z = 2.6, R = loupe.offsetWidth / 2 || 85;
       loupe.classList.add("is-on");
       loupe.style.transform = `translate(${u * r.width - R}px, ${v * r.height - R}px)`;
@@ -541,12 +609,12 @@
       const n = choice.name.trim();
       hint.textContent = /^westpack$/i.test(n) ? copy.hintWestpack : n.length > 16 ? copy.hintLong : "";
       clearTimeout(typingTimer);
-      typingTimer = setTimeout(sweep, 380);
+      typingTimer = setTimeout(stamp, 420);
     });
     nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); nameInput.blur(); if (!onPhone) toResult(); } });
     if (onPhone) {
       nameInput.addEventListener("focus", () => { layout.classList.add("is-typing"); ctx.dialog.scrollTo({ top: 0 }); });
-      nameInput.addEventListener("blur", () => { layout.classList.remove("is-typing"); });
+      nameInput.addEventListener("blur", () => { layout.classList.remove("is-typing"); for (const id of BOX_ORDER) thumbPrints[id].refit(); });
     }
     fileInput.addEventListener("change", async () => {
       const file = fileInput.files && fileInput.files[0];
@@ -557,7 +625,7 @@
         ctx.track("logo_uploaded");
         uploadBtn.classList.add("is-active"); useNameBtn.hidden = false;
         hint.textContent = copy.uploadOneColour;
-        render(); sweep();
+        render(); stamp();
       } catch (e) {
         ctx.track("logo_failed");
         hint.textContent = copy.uploadError;
@@ -573,6 +641,14 @@
       ctx.track("result");
       resultTitle.textContent = t(copy.resultTitle, { name: choice.logo && !choice.name.trim() ? copy.defaultName : displayName() });
       layout.classList.add("is-result");
+      for (const id of BOX_ORDER) {
+        const p = tilePrints[id];
+        p.set(id, foilTouched || id === choice.box ? choice.foil : LIDS[id].foil);
+        if (choice.logo) p.setLogo(choice.logo.url, choice.logo.aspect); else p.setName(displayName(), choice.type);
+        p.setLight(0.58, -0.42);
+      }
+      tiles.forEach((tile) => tile.classList.toggle("is-chosen", tile.dataset.box === choice.box));
+      fitTiles();
       if (layout.classList.contains("is-zoomed")) toggleZoom();
       editPanel.hidden = true; resultPanel.hidden = false;
       resultPanel.classList.remove("wps-rise"); void resultPanel.offsetWidth; resultPanel.classList.add("wps-rise");
@@ -607,9 +683,10 @@
     place(); fit(); render();
     // Some engines paint a matrix3d without its perspective when the layer is not composited (WebKit's software
     // path does): the print then lands as a skewed parallelogram. Measure where the far corner of the print really
-    // is; if it is off, every lid uses the closest flat transform instead, which is right at the centre.
-    requestAnimationFrame(() => {
-      if (!placed || !frame.clientWidth) return;
+    // is; if it is off, every lid uses the closest flat transform instead, which is right at the centre. Measured on
+    // the scene at rest - during the camera's push-in every corner is off by design.
+    const checkEngine = () => requestAnimationFrame(() => {
+      if (!placed || !frame.clientWidth || layout.classList.contains("is-zoomed") || layout.classList.contains("is-intro")) return;
       const probe = document.createElement("i");
       probe.style.cssText = `position:absolute;left:${placed.w - 1}px;top:${placed.h - 1}px;width:2px;height:2px`;
       printWrap.appendChild(probe);
@@ -620,14 +697,17 @@
         projective = false;
         place();
         for (const b of thumbs) lay(b.querySelector(".ls-print-wrap"), LIDS[b.dataset.box]);
+        for (const id of BOX_ORDER) lay(tileWraps[id], LIDS[id]);
         render();
       }
     });
     // the fonts arrive after the first paint; measure the name again once they have
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
-    setTimeout(sweep, 650);
+    if (!ctx.reducedMotion) { layout.classList.add("is-intro"); setTimeout(() => { layout.classList.remove("is-intro"); fit(); checkEngine(); }, 1900); }
+    else checkEngine();
+    setTimeout(stamp, ctx.reducedMotion ? 0 : 1000);
     schedule();
-    return { initialFocus: ctx.device === "desktop" ? nameInput : null, destroy() { cancelAnimationFrame(raf); raf = 0; clearTimeout(typingTimer); if (io) io.disconnect(); clearTimeout(settle); if (ro) ro.disconnect(); else window.removeEventListener("resize", fit); } };
+    return { initialFocus: ctx.device === "desktop" ? nameInput : null, destroy() { cancelAnimationFrame(raf); raf = 0; clearTimeout(typingTimer); if (io) io.disconnect(); clearTimeout(settle); clearTimeout(stampTimer); clearTimeout(sweepTimer); clearTimeout(tileSettle); if (ro) ro.disconnect(); else window.removeEventListener("resize", onResize); } };
   }
 
   function peekVisual(ctx) {

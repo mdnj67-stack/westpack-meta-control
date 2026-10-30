@@ -136,10 +136,32 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
+  // 6b. a long name fits every lid it is shown on - also the ones that were hidden while it was typed: a phone's
+  // thumbnails during typing, and the collection until the result
+  {
+    const { ctx, p, host } = await page({ ...devices["iPhone 13"] }, "concept=logo-studio&market=dkk_dk_den");
+    await p.waitForTimeout(1500);
+    await host.locator(".ls-name-input").fill("Smykkehuset Lund Copenhagen");
+    await host.locator(".ls-name-input").blur();
+    await p.waitForTimeout(400);
+    const overflowing = (sel) => p.evaluate((sel) => [...document.querySelector("#westpack-signup").shadowRoot.querySelectorAll(sel)].map((svg) => {
+      const b = svg.querySelector("text").getBBox(), w = svg.viewBox.baseVal.width;
+      return !b.width || b.x < -1 || b.x + b.width > w + 1 ? `${Math.round(b.x)}..${Math.round(b.x + b.width)} of ${w}` : "";
+    }).filter(Boolean), sel);
+    const thumbsOver = await overflowing(".ls-thumb .ls-print");
+    check("a long name fits every thumbnail after typing on a phone", thumbsOver.length === 0, thumbsOver.join(", "));
+    await host.locator(".ls-next").click();
+    await p.waitForTimeout(600);
+    const tilesOver = await overflowing(".ls-tile .ls-print");
+    check("a long name fits every lid in the collection", tilesOver.length === 0, tilesOver.join(", "));
+    await ctx.close();
+  }
+
   // 7. the logo studio's foil: light follows the mouse, the loupe opens, an uploaded logo becomes a foil mask
   {
     const { ctx, p, host } = await page({ viewport: { width: 1440, height: 900 } }, "concept=logo-studio&market=gbp_uk_eng");
-    await p.waitForTimeout(800);
+    // after the opening: the camera push, the first press and its light sweep
+    await p.waitForTimeout(2600);
     const lightX = () => p.evaluate(() => { const l = document.querySelector("#westpack-signup").shadowRoot.querySelector("fePointLight"); return l ? Number(l.getAttribute("x")) : NaN; });
     const box = await host.locator(".ls-frame").boundingBox();
     await p.mouse.move(box.x + box.width * 0.1, box.y + box.height * 0.5); await p.waitForTimeout(150);
