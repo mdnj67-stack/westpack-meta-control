@@ -16,6 +16,9 @@ module.exports = {
   },
   // The locked header's "Inspiration" link; the Norwegian store has no buy-the-whole-look page.
   NO: {
-    "buy-the-whole-look.html": "inspiration"
+    "buy-the-whole-look.html": "inspiration",
+    // The Norwegian store has no christmas.html; its Christmas category ("Jul", same subcategories as the
+    // other stores) answers only on Magento's catalog path. Checked against all 18 stores 2026-10-30.
+    "christmas.html": "catalog/category/view/s/jul/id/809/"
   }
 };

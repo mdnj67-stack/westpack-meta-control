@@ -340,7 +340,8 @@ const klaviyoUrlPathFixes = {
     "jewellery-boxes/bas/amsterdam-eco-jewellery-box.html": "jewellery-boxes/cardboard-jewellery-boxes/amsterdam-eco-jewellery-box.html"
   },
   NO: {
-    "buy-the-whole-look.html": "inspiration"
+    "buy-the-whole-look.html": "inspiration",
+    "christmas.html": "catalog/category/view/s/jul/id/809/"
   }
 };
 
