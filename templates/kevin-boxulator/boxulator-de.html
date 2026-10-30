@@ -1,319 +1,333 @@
 <div class="bx" id="boxulator">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@500;700&display=swap');
-#boxulator p,#boxulator li,#boxulator dd,#boxulator dt,#boxulator figcaption,#boxulator label,#boxulator span,#boxulator strong,#boxulator b{font-size:inherit;line-height:inherit;font-family:inherit;color:inherit;letter-spacing:normal}
-#boxulator strong,#boxulator b{font-weight:700}
-#boxulator h2,#boxulator h3{margin:0;padding:0}
-#boxulator{--blue:#0c1f8f;--deep:#07135e;--yellow:#ffd21f;--red:#e4252d;--ink:#101634;--soft:#d3dbff;--paper:#fbfaf5;--gold:#e6c77d;max-width:760px;margin:0 auto 60px;font-family:Barlow,'Helvetica Neue',Arial,sans-serif;font-size:18px;line-height:1.55;color:var(--ink);text-align:left}
+#boxulator{--bordeaux:#5d272a;--red:#d31b21;--cream:#f8f7f2;--ink:#222222;--muted:#727272;--soft:#f1dede;--gold:#e8cf9a;max-width:980px;margin:0 auto 60px;font-family:Georgia,Times,'Times New Roman',serif;font-size:17px;line-height:1.5;color:var(--ink);text-align:left}
 #boxulator *,#boxulator *::before,#boxulator *::after{box-sizing:border-box}
-#boxulator p,#boxulator h2,#boxulator h3,#boxulator ol,#boxulator ul,#boxulator li,#boxulator table,#boxulator figure,#boxulator dl,#boxulator dd,#boxulator dt{margin:0;padding:0}
+#boxulator p,#boxulator h2,#boxulator h3,#boxulator ol,#boxulator ul,#boxulator li,#boxulator figure{margin:0;padding:0}
+#boxulator p,#boxulator li,#boxulator span,#boxulator strong,#boxulator b,#boxulator label,#boxulator small{font-size:inherit;line-height:inherit;font-family:inherit;color:inherit;letter-spacing:normal}
+#boxulator strong,#boxulator b{font-weight:700}
+#boxulator li{list-style:none}
 #boxulator img{display:block;max-width:100%;height:auto;border:0}
+#boxulator button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #boxulator .bx-strings{display:none!important}
-#boxulator h2,#boxulator h3{font-family:Anton,Impact,'Arial Narrow Bold',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.3px;line-height:1.04;color:var(--ink)}
-#boxulator a{color:inherit}
-#boxulator .bx-kick{font:700 14px/1.3 Barlow,Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase;color:var(--red)}
-#boxulator .bx-q{font-style:italic}
-#boxulator .bx-stage{background:var(--blue);color:#fff;border-radius:18px;padding:34px 28px 30px;position:relative;overflow:hidden}
-#boxulator .bx-stage .bx-kick{color:var(--yellow)}
-#boxulator .bx-stage h2{color:var(--yellow);font-size:clamp(46px,9vw,78px);margin-top:10px}
-#boxulator .bx-lead{margin-top:14px;font-weight:600;font-size:20px;line-height:1.45;color:#fff}
-#boxulator .bx-warn{margin-top:16px;display:inline-block;background:var(--yellow);color:var(--ink);font-weight:700;font-size:15px;line-height:1.35;padding:8px 12px;border-left:6px solid var(--red)}
-#boxulator .bx-hero{margin:24px -28px 0}
-#boxulator .bx-hero img{width:100%}
-#boxulator .bx-calc{max-width:400px;margin:30px auto 0;background:linear-gradient(160deg,#343740,#1c1e24);border-radius:28px;padding:16px 18px 20px;position:relative;outline:none;box-shadow:0 20px 44px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.08)}
-#boxulator .bx-calc:focus-visible{box-shadow:0 0 0 4px var(--yellow),0 20px 44px rgba(0,0,0,.45)}
+#boxulator h2,#boxulator h3{margin:0;padding:0;font-family:Georgia,Times,'Times New Roman',serif;font-weight:700;line-height:1.15;color:var(--bordeaux)}
+#boxulator .bx-kick{font:600 12px/1.4 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase;color:var(--red)}
+#boxulator .bx-game{position:relative;overflow:hidden;container-type:inline-size;border:3px solid var(--red);border-radius:20px;padding:30px 26px 26px;color:#fff;background:radial-gradient(120% 80% at 50% 0%,#73333a 0%,#5d272a 55%,#4a1e21 100%)}
+#boxulator .bx-head{text-align:center}
+#boxulator .bx-game .bx-kick{color:var(--soft)}
+#boxulator .bx-head h2{margin-top:6px;font-size:clamp(34px,7vw,56px);color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:8px}
+#boxulator .bx-sub{margin-top:12px;font-style:italic;color:var(--soft)}
+#boxulator .bx-sound{position:absolute;top:16px;right:16px;z-index:8;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:19px;line-height:1}
+#boxulator .bx-play{display:grid;gap:22px;margin-top:10px}
+@container (min-width:640px){#boxulator .bx-play{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:end}#boxulator .bx-hud .bx-stats{grid-template-columns:1fr}#boxulator .bx-calcwrap{margin:0}}
+#boxulator .bx-calcwrap{position:relative;width:100%;max-width:400px;margin:0 auto;padding-top:64px}
+#boxulator .bx-peek{position:absolute;top:0;right:24px;z-index:0;width:96px;height:96px;transform:translateY(50px) rotate(10deg);transition:transform .45s cubic-bezier(.3,1.7,.5,1);pointer-events:none}
+#boxulator .bx-peek img{width:96px;height:96px;border:3px solid var(--red);border-radius:50%}
+#boxulator .bx-calcwrap.is-peek .bx-peek{transform:translateY(-6px) rotate(-6deg)}
+#boxulator .bx-bubble{position:absolute;top:-4px;right:128px;z-index:7;max-width:min(270px,64%);padding:10px 14px;border:2px solid var(--red);border-radius:14px;background:#fff;color:var(--ink);font:400 15px/1.35 Georgia,Times,serif;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transform:translateY(8px) scale(.9);transform-origin:100% 100%;transition:opacity .2s,transform .25s;pointer-events:none}
+#boxulator .bx-bubble::after{content:"";position:absolute;right:-9px;bottom:14px;border:8px solid transparent;border-left-color:var(--red);border-right:0}
+#boxulator .bx-bubble a{color:var(--red);text-decoration:underline}
+#boxulator .bx-calcwrap.is-talk .bx-bubble{opacity:1;transform:none;pointer-events:auto}
+#boxulator .bx-calc{position:relative;z-index:1;background:linear-gradient(160deg,#343740,#1c1e24);border-radius:28px;padding:16px 18px 20px;outline:none;box-shadow:0 20px 44px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.08)}
+#boxulator .bx-calc:focus-visible{box-shadow:0 0 0 4px var(--gold),0 20px 44px rgba(0,0,0,.45)}
 #boxulator .bx-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#boxulator .bx-brand{font:400 17px/1 Anton,Impact,sans-serif;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
-#boxulator .bx-brand small{display:block;margin-top:4px;font:700 9px/1 'IBM Plex Mono',monospace;letter-spacing:1.6px;color:#8b8f9c}
+#boxulator .bx-brand{font:700 16px/1 Georgia,Times,serif;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
+#boxulator .bx-brand small{display:block;margin-top:5px;font:700 9px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;color:#8b8f9c}
 #boxulator .bx-solar{display:flex;gap:3px;width:44%;height:22px;padding:3px;background:#0d0e12;border-radius:4px}
 #boxulator .bx-solar i{flex:1;border-radius:2px;background:linear-gradient(160deg,#4a3326,#1b120d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
-#boxulator .bx-lcd{margin-top:12px;border:7px solid #121318;border-radius:12px;padding:8px 12px 10px;background:linear-gradient(#c8d4a9,#a7b888);box-shadow:inset 0 3px 8px rgba(0,0,0,.35)}
-#boxulator .bx-lcd-top{display:flex;justify-content:space-between;height:15px;font:700 12px/15px 'IBM Plex Mono',monospace;color:rgba(27,38,17,.8)}
+#boxulator .bx-lcd{position:relative;margin-top:12px;border:7px solid #121318;border-radius:12px;padding:8px 12px 10px;background:linear-gradient(#c8d4a9,#a7b888);box-shadow:inset 0 3px 8px rgba(0,0,0,.35)}
+#boxulator .bx-lcd-top{display:flex;justify-content:space-between;height:15px;font:700 12px/15px 'Courier New',Courier,monospace;color:rgba(27,38,17,.8)}
 #boxulator .bx-lcd svg{display:block;width:100%;height:auto;margin-top:2px}
 #boxulator .bx-seg{fill:rgba(27,38,17,.07)}
 #boxulator .bx-seg.on{fill:#1b2611}
 #boxulator .bx-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
-#boxulator button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent}
-#boxulator .bx-key{position:relative;aspect-ratio:1/1;min-height:52px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:400 clamp(22px,6vw,30px)/1 Anton,Impact,sans-serif;color:var(--gold);text-shadow:0 1px 0 rgba(0,0,0,.35);background:var(--c);box-shadow:0 6px 0 rgba(0,0,0,.5),inset 0 -3px 0 rgba(0,0,0,.18);transition:transform .06s,box-shadow .06s;user-select:none;-webkit-user-select:none}
+#boxulator .bx-key{position:relative;aspect-ratio:1/1;min-height:52px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:700 clamp(22px,6vw,30px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--gold);text-shadow:0 1px 0 rgba(0,0,0,.35);background:var(--c);box-shadow:0 6px 0 rgba(0,0,0,.5),inset 0 -3px 0 rgba(0,0,0,.18);transition:box-shadow .06s;user-select:none;-webkit-user-select:none}
 #boxulator .bx-key::before{content:"";position:absolute;left:-3%;right:-3%;top:0;height:24%;border-radius:7px 7px 3px 3px;background:rgba(255,255,255,.14);box-shadow:0 2px 0 rgba(0,0,0,.25)}
-#boxulator .bx-key:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
-#boxulator .bx-key.is-down,#boxulator .bx-key:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.18)}
+#boxulator .bx-key:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+#boxulator .bx-key.is-down,#boxulator .bx-key:active{translate:0 5px;box-shadow:0 1px 0 rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.18)}
 #boxulator .k-sage{--c:#8fa58a;color:#fff4d6}
 #boxulator .k-green{--c:#1f4a36}
 #boxulator .k-navy{--c:#2b3d6e}
 #boxulator .k-brown{--c:#6a4532}
-#boxulator .k-op{font:700 clamp(28px,7.5vw,38px)/1 Barlow,Arial,sans-serif}
-#boxulator .k-eq{grid-row:span 2;aspect-ratio:auto;--c:#c8102e;color:#fff1c2;font-size:clamp(30px,8vw,42px)}
-#boxulator .k-kevin{--c:#15171c;color:var(--yellow)}
+#boxulator .k-op{font:700 clamp(28px,7.5vw,38px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif}
+#boxulator .k-eq{aspect-ratio:auto;--c:#c8102e;color:#fff1c2;font-size:clamp(30px,8vw,42px)}
+#boxulator .k-kevin{--c:#15171c;color:var(--gold)}
 #boxulator .k-minus{background:linear-gradient(90deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),linear-gradient(0deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),var(--c);color:rgba(230,199,125,.45)}
-#boxulator .bx-bow{position:absolute;top:-9px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:3px;background:#a50e24;z-index:2}
-#boxulator .bx-bow::before,#boxulator .bx-bow::after{content:"";position:absolute;top:-4px;width:20px;height:15px;border:5px solid #d0142f;border-radius:50%/60% 60% 40% 40%;background:transparent}
+#boxulator .bx-bow{position:absolute;top:-9px;left:50%;z-index:2;width:12px;height:12px;margin-left:-6px;border-radius:3px;background:#a50e24}
+#boxulator .bx-bow::before,#boxulator .bx-bow::after{content:"";position:absolute;top:-4px;width:20px;height:15px;border:5px solid #d0142f;border-radius:50%/60% 60% 40% 40%}
 #boxulator .bx-bow::before{right:9px;transform:rotate(-22deg)}
 #boxulator .bx-bow::after{left:9px;transform:rotate(22deg)}
-#boxulator .bx-slot{height:10px;margin:22px 9% 0;background:#07080a;border-radius:6px;box-shadow:inset 0 2px 4px #000}
-#boxulator .bx-paper{max-width:330px;margin:-2px auto 0;background:var(--paper);color:var(--ink);padding:12px 16px 22px;min-height:70px;-webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/14px 100%;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/14px 100%}
-#boxulator .bx-paper-title{font:700 11px/1.3 'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:#6b6f80;text-align:center}
-#boxulator .bx-roll{list-style:none}
-#boxulator .bx-roll li{list-style:none;padding:10px 0 11px;border-bottom:1px dashed #b9bdcc;animation:bx-print .35s ease-out}
-#boxulator .bx-roll li:last-child{border-bottom:0}
-#boxulator .bx-expr{font:500 13px/1.4 'IBM Plex Mono',monospace;color:#596080}
-#boxulator .bx-res{font:700 22px/1.25 'IBM Plex Mono',monospace;color:var(--ink)}
-#boxulator .bx-note{margin-top:3px;font:600 italic 15px/1.35 Barlow,Arial,sans-serif;color:var(--red)}
-#boxulator .bx-note a{color:var(--red);text-decoration:underline}
-#boxulator .bx-empty{padding:12px 0 0;font:500 13px/1.45 'IBM Plex Mono',monospace;color:#7a7f92;text-align:center}
-#boxulator .bx-under{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px;font-size:14px;color:var(--soft)}
-#boxulator .bx-sound{font:700 13px/1 Barlow,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--ink);background:var(--yellow);padding:9px 14px;border-radius:30px}
-#boxulator .bx-glit{position:absolute;width:7px;height:7px;border-radius:1px;pointer-events:none;z-index:5}
+#boxulator .bx-upsell{position:absolute;left:14px;right:14px;top:96px;z-index:5;display:none;padding:18px 16px 16px;border:3px solid var(--red);border-radius:16px;background:rgba(93,39,42,.97);text-align:center}
+#boxulator .bx-upsell.is-on{display:block;animation:bx-pop .3s cubic-bezier(.3,1.6,.5,1)}
+#boxulator .bx-upsell-q{font:700 24px/1.2 Georgia,Times,serif;color:#fff}
+#boxulator .bx-upsell-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+#boxulator .bx-yes{padding:12px 22px;border:3px solid var(--red);border-radius:6px;background:#fff;color:var(--bordeaux);font:700 19px/1 'Helvetica Neue',Helvetica,Arial,sans-serif}
+#boxulator .bx-yes.is-alt{background:var(--red);color:#fff;border-color:#fff}
+#boxulator .bx-timer{height:6px;margin-top:14px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
+#boxulator .bx-timer i{display:block;width:100%;height:100%;background:var(--red)}
+#boxulator .bx-upsell.is-on .bx-timer i{animation:bx-timer 6s linear forwards}
+#boxulator .bx-upsell-note{margin-top:8px;font-size:13px;font-style:italic;color:var(--soft)}
+#boxulator .bx-hud{display:grid;gap:14px;align-content:end}
+#boxulator .bx-card{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.07)}
+#boxulator .bx-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#boxulator .bx-label{display:block;font:600 11px/1.3 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:1.8px;text-transform:uppercase;color:var(--soft)}
+#boxulator .bx-big{display:block;margin-top:4px;font:700 36px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;white-space:nowrap}
+#boxulator .bx-big.is-long{font-size:24px;line-height:1.75}
+#boxulator .bx-bar{height:10px;margin-top:10px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}
+#boxulator .bx-bar i{display:block;width:0;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .5s}
+#boxulator .bx-badges-top{display:flex;align-items:baseline;justify-content:space-between}
+#boxulator .bx-found{font:700 20px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff}
+#boxulator .bx-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:420px;margin:12px auto 0}
+#boxulator .bx-badge{min-width:0;text-align:center}
+#boxulator .bx-badge:nth-child(4n+1){--c:#8fa58a}
+#boxulator .bx-badge:nth-child(4n+2){--c:#1f4a36}
+#boxulator .bx-badge:nth-child(4n+3){--c:#2b3d6e}
+#boxulator .bx-badge:nth-child(4n){--c:#6a4532}
+#boxulator .bx-b-box{position:relative;aspect-ratio:1/1;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--c);box-shadow:0 4px 0 rgba(0,0,0,.35)}
+#boxulator .bx-b-box::before{content:"";position:absolute;left:-4%;right:-4%;top:0;height:26%;border-radius:9px 9px 3px 3px;background:rgba(255,255,255,.16);transform-origin:50% 0;transition:transform .5s}
+#boxulator .bx-b-q{font:700 24px/1 Georgia,Times,serif;color:rgba(255,255,255,.45)}
+#boxulator .bx-b-icon{display:none;font-size:30px;line-height:1}
+#boxulator .bx-b-name,#boxulator .bx-b-hint{margin-top:6px;font-size:11px;line-height:1.2;overflow-wrap:anywhere}
+#boxulator .bx-b-name{display:none;font-weight:700;color:#fff}
+#boxulator .bx-b-hint{font-style:italic;color:var(--soft)}
+#boxulator .bx-badge.is-open .bx-b-box{background:linear-gradient(150deg,#f6dc8c,#c9a24e);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}
+#boxulator .bx-badge.is-open .bx-b-box::before{transform:rotateX(120deg) translateY(-8px)}
+#boxulator .bx-badge.is-open .bx-b-q,#boxulator .bx-badge.is-open .bx-b-hint{display:none}
+#boxulator .bx-badge.is-open .bx-b-icon,#boxulator .bx-badge.is-open .bx-b-name{display:block}
+#boxulator .bx-wh{position:relative;height:150px;margin-top:22px;border:2px solid var(--red);border-radius:14px;background:var(--cream);overflow:hidden}
+#boxulator .bx-wh canvas{position:absolute;inset:0;width:100%;height:100%}
+#boxulator .bx-wh-label{position:absolute;top:10px;left:14px;font:700 11px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;text-transform:uppercase;color:rgba(93,39,42,.6)}
+#boxulator .bx-wh.is-shake{animation:bx-shake .07s linear 10}
+#boxulator .bx-glit{position:absolute;z-index:30;width:7px;height:7px;border-radius:1px;pointer-events:none}
+#boxulator .bx-final{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(74,30,33,.94)}
+#boxulator .bx-final.is-on{display:flex;animation:bx-fade .4s}
+#boxulator .bx-cert{width:100%;max-width:440px;padding:18px 18px 22px;border:3px solid var(--red);border-radius:16px;background:var(--cream);color:var(--ink);text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}
+#boxulator .bx-cert img{border-radius:10px}
+#boxulator .bx-cert h3{margin-top:14px;font-size:clamp(26px,6vw,34px);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:6px}
+#boxulator .bx-cert p{margin-top:8px}
+#boxulator .bx-cert .bx-label{margin-top:12px;color:var(--muted)}
+#boxulator .bx-cert-n{display:block;margin-top:2px;font:700 clamp(26px,7vw,36px)/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;white-space:nowrap;color:var(--red)}
+#boxulator .bx-cert-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:18px}
+#boxulator .bx-close{font-weight:700;color:var(--bordeaux);text-decoration:underline}
+#boxulator a.bx-btn{display:inline-block;padding:13px 24px;border:3px solid var(--red);border-radius:6px;background:var(--bordeaux);color:#fff!important;text-decoration:none!important;font:700 19px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif}
+#boxulator a.bx-link{font-weight:700;color:var(--bordeaux);text-decoration:underline}
+#boxulator .bx-real{margin-top:34px;padding:30px 28px;border:3px solid var(--red);border-radius:20px;background:var(--cream);text-align:center}
+#boxulator .bx-real h3{margin-top:8px;font-size:clamp(26px,5vw,36px)}
+#boxulator .bx-real>p{margin-top:12px}
+#boxulator .bx-form{display:grid;gap:16px;max-width:420px;margin:22px auto 0;text-align:left}
+#boxulator .bx-form label{display:block;font-weight:700;font-size:17px;line-height:1.35;color:var(--bordeaux)}
+#boxulator .bx-form label small{display:block;font-weight:400;font-style:italic;font-size:14px;color:var(--muted)}
+#boxulator .bx-form label small a{color:var(--bordeaux);text-decoration:underline}
+#boxulator input{all:unset;box-sizing:border-box;display:block;width:100%;max-width:240px;margin-top:6px;padding:12px 14px;border:2px solid var(--bordeaux);border-radius:8px;background:#fff;font:700 22px/1.2 'Courier New',Courier,monospace;color:var(--ink)}
+#boxulator input:focus{outline:3px solid var(--red);outline-offset:1px}
+#boxulator .bx-out{max-width:520px;margin:22px auto 0;padding:18px 20px;border:3px solid var(--red);border-radius:10px;background:var(--bordeaux);color:#fff;font-size:20px;font-weight:700;line-height:1.4}
+#boxulator .bx-out strong{margin:0 4px;font:700 40px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;vertical-align:-4px}
+#boxulator .bx-out [hidden]{display:none!important}
+#boxulator .bx-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:24px}
+#boxulator .bx-small{max-width:600px;margin:16px auto 0;font-size:15px;line-height:1.55;font-style:italic;color:#555}
 #boxulator .bx-calc.is-dancing{animation:bx-dance .45s ease-in-out 6}
 #boxulator .bx-calc.is-hot{animation:bx-shake .07s linear 14}
 #boxulator .bx-key.is-wiggle{animation:bx-wiggle .5s ease-in-out}
 #boxulator .bx-lcd.is-blink svg{animation:bx-blink .45s steps(1) 4}
-@keyframes bx-print{from{opacity:0;transform:translateY(-10px)}}
+@keyframes bx-pop{from{transform:scale(.6)}}
+@keyframes bx-fade{from{opacity:0}}
+@keyframes bx-timer{to{width:0}}
 @keyframes bx-dance{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg) translateY(-6px)}50%{transform:rotate(3deg)}75%{transform:rotate(-2deg) translateY(-4px)}}
 @keyframes bx-shake{0%,100%{transform:translate(0)}25%{transform:translate(-4px,1px)}75%{transform:translate(4px,-1px)}}
 @keyframes bx-wiggle{20%{transform:rotate(-14deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(4deg)}}
 @keyframes bx-blink{50%{opacity:0}}
-#boxulator .bx-sec{margin-top:56px}
-#boxulator .bx-sec h3{font-size:clamp(32px,6vw,44px);margin-top:8px}
-#boxulator .bx-sec>p{margin-top:14px}
-#boxulator .bx-steps{margin-top:18px;counter-reset:bx}
-#boxulator .bx-steps li{list-style:none;position:relative;padding:0 0 14px 52px;counter-increment:bx}
-#boxulator .bx-steps li::before{content:counter(bx);position:absolute;left:0;top:-2px;width:36px;height:36px;border-radius:7px;background:var(--blue);color:var(--yellow);font:400 22px/36px Anton,Impact,sans-serif;text-align:center}
-#boxulator .bx-spec{margin-top:20px;display:flex;gap:22px;align-items:flex-start}
-#boxulator .bx-spec figure{flex:0 0 160px}
-#boxulator .bx-spec figure img{border-radius:12px}
-#boxulator .bx-spec figcaption{margin-top:8px;font-size:13px;line-height:1.35;color:#596080}
-#boxulator .bx-spec dl{flex:1;border-top:3px solid var(--ink)}
-#boxulator .bx-spec dl>div{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #d4d7e3}
-#boxulator .bx-spec dt{flex:0 0 42%;font-weight:700}
-#boxulator .bx-spec dd{flex:1}
-#boxulator .bx-bugs{margin-top:16px}
-#boxulator .bx-bugs li{list-style:none;padding:0 0 10px 30px;position:relative}
-#boxulator .bx-bugs li::before{content:"\2716";position:absolute;left:0;top:0;color:var(--red);font-weight:700}
-#boxulator .bx-faq{margin-top:18px}
-#boxulator .bx-faq>div{padding:16px 0;border-top:1px solid #d4d7e3}
-#boxulator .bx-faq dt{font-weight:700;font-size:19px}
-#boxulator .bx-faq dd{margin-top:6px}
-#boxulator .bx-who{display:inline-block;min-width:54px;font:700 12px/1.6 Barlow,Arial,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--red)}
-#boxulator .bx-real{margin-top:60px;background:#fff7d1;border:3px solid var(--ink);border-radius:18px;padding:30px 28px}
-#boxulator .bx-real h3{font-size:clamp(30px,6vw,42px);margin-top:8px}
-#boxulator .bx-real>p{margin-top:12px}
-#boxulator .bx-form{margin-top:22px;display:grid;gap:16px}
-#boxulator .bx-form label{display:block;font-weight:700;font-size:17px;line-height:1.35}
-#boxulator .bx-form label small{display:block;font-weight:500;font-size:14px;color:#596080}
-#boxulator .bx-form label small a{color:var(--ink);text-decoration:underline}
-#boxulator input{all:unset;box-sizing:border-box;display:block;width:100%;max-width:240px;margin-top:6px;padding:12px 14px;background:#fff;border:2px solid var(--ink);border-radius:8px;font:700 22px/1.2 'IBM Plex Mono',monospace;color:var(--ink)}
-#boxulator input:focus{outline:3px solid var(--blue);outline-offset:1px}
-#boxulator .bx-out{margin-top:22px;background:var(--blue);color:#fff;border-radius:12px;padding:18px 20px;font-size:20px;font-weight:600;line-height:1.4}
-#boxulator .bx-out strong{font:400 44px/1 Anton,Impact,sans-serif;color:var(--yellow);vertical-align:-4px;margin:0 4px}
-#boxulator .bx-out [hidden]{display:none!important}
-#boxulator .bx-cta{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
-#boxulator a.bx-btn{display:inline-block;background:var(--yellow);color:var(--ink)!important;text-decoration:none!important;font:400 21px/1.15 Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.5px;padding:15px 24px 13px;border-radius:10px;border-bottom:5px solid #b88f00}
-#boxulator a.bx-link{font-weight:700;color:var(--ink);text-decoration:underline}
-#boxulator .bx-small{margin-top:16px;font-size:15px;line-height:1.5;color:#3c4366}
-#boxulator .bx-sign{margin-top:44px;display:flex;align-items:center;gap:16px;padding-top:22px;border-top:1px solid #d4d7e3}
-#boxulator .bx-sign img{width:76px;height:76px;border-radius:50%;flex:0 0 76px}
-#boxulator .bx-sign b{display:block;font:400 22px/1.1 Anton,Impact,sans-serif;text-transform:uppercase}
-#boxulator .bx-sign p>span{display:block;font-size:14px;line-height:1.4;color:#596080}
-#boxulator .bx-ps{margin-top:20px}
 @media (max-width:600px){
   #boxulator{font-size:16px}
-  #boxulator .bx-stage{padding:26px 18px 24px;border-radius:14px}
-  #boxulator .bx-hero{margin:20px -18px 0}
-  #boxulator .bx-lead{font-size:18px}
+  #boxulator .bx-game{padding:24px 14px 16px;border-radius:16px}
+  #boxulator .bx-sound{top:10px;right:10px}
   #boxulator .bx-calc{padding:14px 14px 18px;border-radius:22px}
   #boxulator .bx-keys{gap:10px}
-  #boxulator .bx-spec{display:block}
-  #boxulator .bx-spec figure{max-width:180px;margin-bottom:16px}
+  #boxulator .bx-card{padding:14px}
+  #boxulator .bx-badges{gap:8px}
+  #boxulator .bx-big{font-size:30px}
+  #boxulator .bx-big.is-long{font-size:20px;line-height:1.65}
+  #boxulator .bx-wh{height:130px}
   #boxulator .bx-real{padding:24px 18px}
 }
 @media (prefers-reduced-motion:reduce){#boxulator *{animation:none!important;transition:none!important}}
 </style>
 
-<section class="bx-stage">
-  <p class="bx-kick">Gesehen im Teleshop · Jetzt in echt</p>
-  <h2><span translate="no">The Boxulator 3000™</span></h2>
-  <p class="bx-lead">Kevins Schachtel-Taschenrechner. In der Mail stand, dass es ihn nicht gibt. Kevin hat’s persönlich genommen. Jetzt gibt’s ihn. Er rechnet nur mit Schachteln, er kann nicht subtrahieren, und man kann ihn immer noch nicht ausschalten.</p>
-  <p class="bx-warn">Warnung vom Team Westpack: Der Taschenrechner funktioniert. Das war so nicht geplant.</p>
-  <figure class="bx-hero"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/41afe0bd-3be2-41fc-80a4-ebb3404e8b4b.gif" width="600" height="400" alt="Kevin mit Weihnachtsmütze präsentiert einen 2,4 Meter hohen Taschenrechner, bei dem jede Taste ein Schmucketui ist, in einem Teleshop-Studio mit gelben Sternen" loading="lazy"></figure>
+<section class="bx-game">
+  <button type="button" class="bx-sound" aria-pressed="true" aria-label="Ton an">🔊</button>
+  <header class="bx-head">
+    <p class="bx-kick">Im Teleshop gesehen · Jetzt in echt</p>
+    <h2><span translate="no">The Boxulator 3000™</span></h2>
+    <p class="bx-sub">Kevins Schachtel-Taschenrechner. 12 Geheimnisse. Finden Sie sie.</p>
+  </header>
 
-  <div class="bx-calc" tabindex="0" role="group" aria-label="The Boxulator 3000">
-    <div class="bx-top">
-      <p class="bx-brand"><span translate="no">Boxulator 3000</span><small translate="no">KEVIN-POWERED</small></p>
-      <div class="bx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="bx-play">
+    <div class="bx-calcwrap">
+      <div class="bx-peek" aria-hidden="true"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/dcbf8c1d-6b47-4c82-850b-d5516e589d7d.png" width="96" height="96" alt=""></div>
+      <p class="bx-bubble" aria-live="polite"></p>
+      <div class="bx-calc" tabindex="0" role="group" aria-label="The Boxulator 3000">
+        <div class="bx-top">
+          <p class="bx-brand"><span translate="no">Boxulator 3000</span><small translate="no">KEVIN-POWERED</small></p>
+          <div class="bx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="bx-lcd">
+          <div class="bx-lcd-top" aria-hidden="true"><span class="bx-ind-op"></span><span class="bx-ind-m"></span></div>
+          <svg class="bx-digits" viewBox="0 0 360 72" aria-hidden="true"></svg>
+          <span class="bx-live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+        </div>
+        <div class="bx-keys">
+          <button type="button" class="bx-key k-sage" data-key="C" aria-label="Leeren">C</button>
+          <button type="button" class="bx-key k-green k-op" data-key="/" aria-label="Teilen">÷</button>
+          <button type="button" class="bx-key k-navy k-op" data-key="*" aria-label="Malnehmen">×</button>
+          <button type="button" class="bx-key k-brown k-op k-minus" data-key="-" aria-label="Minus. Verpackt mit Geschenkband">−<span class="bx-bow" aria-hidden="true"></span></button>
+          <button type="button" class="bx-key k-sage" data-key="7">7</button>
+          <button type="button" class="bx-key k-green" data-key="8">8</button>
+          <button type="button" class="bx-key k-navy" data-key="9">9</button>
+          <button type="button" class="bx-key k-brown k-op" data-key="+" aria-label="Plus">+</button>
+          <button type="button" class="bx-key k-sage" data-key="4">4</button>
+          <button type="button" class="bx-key k-green" data-key="5">5</button>
+          <button type="button" class="bx-key k-navy" data-key="6">6</button>
+          <button type="button" class="bx-key k-brown" data-key="M" aria-label="Speicher">M</button>
+          <button type="button" class="bx-key k-sage" data-key="1">1</button>
+          <button type="button" class="bx-key k-green" data-key="2">2</button>
+          <button type="button" class="bx-key k-navy" data-key="3">3</button>
+          <button type="button" class="bx-key k-op k-eq" data-key="=" aria-label="Ist gleich">=</button>
+          <button type="button" class="bx-key k-sage" data-key="0">0</button>
+          <button type="button" class="bx-key k-green bx-dec" data-key="." aria-label="Komma">,</button>
+          <button type="button" class="bx-key k-kevin" data-key="K" aria-label="Kevin-Taste">K</button>
+        </div>
+        <div class="bx-upsell" role="dialog" aria-label="Kevins Angebot">
+          <p class="bx-upsell-q">Darf es ein paar Schachteln mehr sein?</p>
+          <div class="bx-upsell-row"><button type="button" class="bx-yes" data-yes>Ja</button><button type="button" class="bx-yes is-alt" data-yes>Ja, bitte!</button></div>
+          <div class="bx-timer"><i></i></div>
+          <p class="bx-upsell-note">Kevin nimmt Schweigen als Ja.</p>
+        </div>
+      </div>
     </div>
-    <div class="bx-lcd">
-      <div class="bx-lcd-top" aria-hidden="true"><span class="bx-ind-op"></span><span class="bx-ind-m"></span></div>
-      <svg class="bx-digits" viewBox="0 0 360 72" aria-hidden="true"></svg>
-      <span class="bx-live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+
+    <aside class="bx-hud">
+      <div class="bx-stats">
+        <div class="bx-card"><span class="bx-label">Schachteln gerechnet</span><b class="bx-big bx-score">0</b></div>
+        <div class="bx-card"><span class="bx-label">Kevins Q4-Ziel</span><b class="bx-big bx-target">500</b><div class="bx-bar"><i></i></div></div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-badges-top"><span class="bx-label">Geheimnisse</span><b class="bx-found">0/12</b></div>
+        <ol class="bx-badges">
+          <li class="bx-badge" data-badge="first"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📦</span></div><p class="bx-b-name">Erste Schachtel</p><p class="bx-b-hint">Drücken Sie =</p></li>
+          <li class="bx-badge" data-badge="rounded"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">⬆️</span></div><p class="bx-b-name">Aufgerundet</p><p class="bx-b-hint">Teilen Sie etwas Schräges</p></li>
+          <li class="bx-badge" data-badge="safety"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🦺</span></div><p class="bx-b-name">Extraschachtel</p><p class="bx-b-hint">Weiterrechnen</p></li>
+          <li class="bx-badge" data-badge="minus"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎯</span></div><p class="bx-b-name">Minus-Jäger</p><p class="bx-b-hint">Fangen Sie dreimal Minus</p></li>
+          <li class="bx-badge" data-badge="div0"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎤</span></div><p class="bx-b-name">Mariah-Alarm</p><p class="bx-b-hint">Durch Null teilen</p></li>
+          <li class="bx-badge" data-badge="year"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎂</span></div><p class="bx-b-name">Geboren 1953</p><p class="bx-b-hint">Westpacks Gründungsjahr</p></li>
+          <li class="bx-badge" data-badge="panic"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">✨</span></div><p class="bx-b-name">Glitzer in der Nase</p><p class="bx-b-hint">Ganz schnell drücken</p></li>
+          <li class="bx-badge" data-badge="kevin"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎅</span></div><p class="bx-b-name">Kevin-Fan</p><p class="bx-b-hint">Drücken Sie K fünfmal</p></li>
+          <li class="bx-badge" data-badge="overflow"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">💥</span></div><p class="bx-b-name">Overflow</p><p class="bx-b-hint">Über 99.999.999</p></li>
+          <li class="bx-badge" data-badge="upsell"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🛒</span></div><p class="bx-b-name">Hat Ja gesagt</p><p class="bx-b-hint">Sagen Sie Ja zu Kevin</p></li>
+          <li class="bx-badge" data-badge="goal"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📈</span></div><p class="bx-b-name">Ziel erreicht</p><p class="bx-b-hint">Erreichen Sie Kevins Ziel</p></li>
+          <li class="bx-badge" data-badge="avalanche"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🏔️</span></div><p class="bx-b-name">Lawine</p><p class="bx-b-hint">Lager auffüllen</p></li>
+        </ol>
+      </div>
+    </aside>
+  </div>
+
+  <div class="bx-wh" aria-hidden="true"><canvas></canvas><span class="bx-wh-label" translate="no">North Pole South</span></div>
+
+  <div class="bx-final" role="dialog" aria-label="Certified Box Counter">
+    <div class="bx-cert">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/bfd8f360-760c-4919-80f5-5f4e7adeae30.gif" width="600" height="600" alt="Zwei Kevins mit Weihnachtsmütze schauen hinter einem riesigen Taschenrechner hervor, vor einer bordeauxfarbenen Welle mit Weihnachtsikonen" loading="lazy">
+      <h3><span translate="no">Certified Box Counter™</span></h3>
+      <p>Sie haben alle 12 von Kevins Geheimnissen gefunden. Er ist gerührt. Und ein bisschen besorgt um Sie.</p>
+      <span class="bx-label">Boxen berechnet</span><b class="bx-cert-n">0</b>
+      <div class="bx-cert-row">
+        <a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Bestellen Sie echte Boxen →</a>
+        <button type="button" class="bx-close">Weiter spielen</button>
+      </div>
     </div>
-    <div class="bx-keys">
-      <button type="button" class="bx-key k-sage" data-key="C" aria-label="Löschen">C</button>
-      <button type="button" class="bx-key k-green k-op" data-key="/" aria-label="Teilen">÷</button>
-      <button type="button" class="bx-key k-navy k-op" data-key="*" aria-label="Mal">×</button>
-      <button type="button" class="bx-key k-brown k-op k-minus" data-key="-" aria-label="Minus. In Geschenkband eingewickelt">−<span class="bx-bow" aria-hidden="true"></span></button>
-      <button type="button" class="bx-key k-sage" data-key="7">7</button>
-      <button type="button" class="bx-key k-green" data-key="8">8</button>
-      <button type="button" class="bx-key k-navy" data-key="9">9</button>
-      <button type="button" class="bx-key k-brown k-op" data-key="+" aria-label="Plus">+</button>
-      <button type="button" class="bx-key k-sage" data-key="4">4</button>
-      <button type="button" class="bx-key k-green" data-key="5">5</button>
-      <button type="button" class="bx-key k-navy" data-key="6">6</button>
-      <button type="button" class="bx-key k-brown" data-key="M" aria-label="Speicher">M</button>
-      <button type="button" class="bx-key k-sage" data-key="1">1</button>
-      <button type="button" class="bx-key k-green" data-key="2">2</button>
-      <button type="button" class="bx-key k-navy" data-key="3">3</button>
-      <button type="button" class="bx-key k-op k-eq" data-key="=" aria-label="Ist gleich">=</button>
-      <button type="button" class="bx-key k-sage" data-key="0">0</button>
-      <button type="button" class="bx-key k-green bx-dec" data-key="." aria-label="Komma">,</button>
-      <button type="button" class="bx-key k-kevin" data-key="K" aria-label="Kevin-Taste">K</button>
-    </div>
-    <div class="bx-slot" aria-hidden="true"></div>
   </div>
-  <div class="bx-paper">
-    <p class="bx-paper-title">In der Kantine gedruckt</p>
-    <ol class="bx-roll" aria-live="polite"></ol>
-    <p class="bx-empty">Der Drucker wartet. Seit August.</p>
-  </div>
-  <div class="bx-under">
-    <button type="button" class="bx-sound" aria-pressed="true">Ton: an</button>
-    <span>Drück die Tasten. Oder klick auf den Rechner und nutz die Tastatur.</span>
-  </div>
-</section>
-
-<section class="bx-sec">
-  <p class="bx-kick">Geschrieben von Kevin · Korrigiert von uns</p>
-  <h3>Gebrauchsanleitung</h3>
-  <ol class="bx-steps">
-    <li>Tippe eine Zahl ein. Alle Zahlen sind Schachteln. Auch die, die es nicht sind.</li>
-    <li>Multipliziere, teile und addiere. Nicht subtrahieren. Die Minustaste ist in Geschenkband eingewickelt. <span class="bx-q" translate="no">»Subtraction is not a growth mindset.«</span></li>
-    <li>Drücke =. Das Ergebnis wird immer aufgerundet. <span class="bx-q" translate="no">»You can't sell half a box.«</span></li>
-    <li>Drücke M für Speicher. Kevins ist voll. Deiner ist in deiner Bestellhistorie.</li>
-    <li>Drücke K für einen guten Rat. Es ist kein guter Rat.</li>
-    <li>Teilen durch Null auf eigene Gefahr.</li>
-  </ol>
-</section>
-
-<section class="bx-sec">
-  <p class="bx-kick">Abgesegnet von Dr. K. ROIberg, MBA</p>
-  <h3>Technisches Datenblatt</h3>
-  <div class="bx-spec">
-    <figure><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/494b4c13-d33d-44c0-84e1-f71584a491d9.jpeg" width="320" height="320" alt="Kevin im weißen Laborkittel und mit Schutzbrille hält mit einer Pinzette ein Schmucketui hoch" loading="lazy"><figcaption>Dr. K. ROIberg testet eine Taste. Der Test dauerte 19 Stunden.</figcaption></figure>
-    <dl>
-      <div><dt>Höhe</dt><dd>2,4 Meter</dd></div>
-      <div><dt>Tasten</dt><dd>20 echte Schmucketuis</dd></div>
-      <div><dt>Strom</dt><dd>Alle Weihnachtsbeleuchtungen im Haus, auf die Solarpaneele gerichtet</dd></div>
-      <div><dt>Präzision</dt><dd>± 1 Schachtel. Immer plus.</dd></div>
-      <div><dt>Speicher</dt><dd>Voll</dd></div>
-      <div><dt>Minus-Taste</dt><dd>Eingepackt in Geschenkband</dd></div>
-      <div><dt>Ausschaltknopf</dt><dd>Nicht gefunden</dd></div>
-      <div><dt>Software</dt><dd><span translate="no">Final_FINAL_v73</span></dd></div>
-      <div><dt>Garantie</dt><dd>Kevin steht dafür ein. Genau das macht uns Angst.</dd></div>
-    </dl>
-  </div>
-</section>
-
-<section class="bx-sec">
-  <p class="bx-kick">Wir arbeiten daran</p>
-  <h3>Bekannte Fehler</h3>
-  <ul class="bx-bugs">
-    <li>Kann nicht abziehen. Mit Absicht.</li>
-    <li>Rundet immer auf. Auch mit Absicht.</li>
-    <li>Sagt Hallo, wenn du sie in Ruhe lässt. Nicht mit Absicht. Wir prüfen das.</li>
-    <li>Wird gestresst, wenn du zu schnell drückst. Genau wie Kevin.</li>
-    <li>Summt, wenn du durch Null teilst.</li>
-  </ul>
-</section>
-
-<section class="bx-sec">
-  <p class="bx-kick">Häufig gestellte Fragen</p>
-  <h3>Frag Kevin</h3>
-  <dl class="bx-faq">
-    <div><dt>Kann ich sie kaufen?</dt><dd><span class="bx-who">Kevin</span> <span class="bx-q" translate="no">»Everything is for sale. Except me. And the calculator.«</span><br><span class="bx-who">Wir</span> Nein. Sie ist 2,4 Meter hoch und steht in Besprechungsraum 2. Aber die Schachteln, aus denen sie gebaut ist, kannst du kaufen.</dd></div>
-    <div><dt>Warum kann sie nicht abziehen?</dt><dd><span class="bx-who">Kevin</span> <span class="bx-q" translate="no">»Subtraction is not a growth mindset.«</span><br><span class="bx-who">Wir</span> Wir haben eine gebaut, die das kann. Die steht gleich hier drunter.</dd></div>
-    <div><dt>Ist sie präzise?</dt><dd><span class="bx-who">Kevin</span> <span class="bx-q" translate="no">»To the box.«</span><br><span class="bx-who">Wir</span> Sie liegt innerhalb einer Schachtel. Immer in die gleiche Richtung.</dd></div>
-    <div><dt>Warum gibt es einen Drucker?</dt><dd><span class="bx-who">Wir</span> Der war schon da. Keiner traut sich, ihn auszuschalten.</dd></div>
-  </dl>
 </section>
 
 <section class="bx-real">
   <p class="bx-kick">Gebaut vom Team Westpack · Ohne Kevin</p>
-  <h3>Die Weihnachtsformel. Die kann abziehen.</h3>
-  <p>Wie viele Schachteln musst du vor Weihnachten bestellen? Schreib drei Zahlen, dann rechnet sie aus, was dir fehlt.</p>
+  <h3>Die Weihnachtsformel. Sie kann auch abziehen.</h3>
+  <p>Wie viele Boxen müssen Sie vor Weihnachten bestellen? Geben Sie drei Zahlen ein und er rechnet aus, was noch fehlt.</p>
   <div class="bx-form">
-    <label>Schachteln, die du im letzten Dezember benutzt hast<small>Kannst du dich nicht erinnern? Sieh dir deine <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Bestellhistorie</a>.</small><input type="number" inputmode="numeric" min="0" step="1" class="bx-in-last" placeholder="0"></label>
-    <label>Wie viel mehr willst du dieses Jahr verkaufen? (%)<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-grow" placeholder="10"></label>
-    <label>Schachteln, die du jetzt auf Lager hast<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-stock" placeholder="0"></label>
+    <label>Boxen, die Sie im letzten Dezember verwendet haben<small>Können Sie sich nicht erinnern? Sehen Sie in Ihrer <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Bestellhistorie</a>.</small><input type="number" inputmode="numeric" min="0" step="1" class="bx-in-last" placeholder="0"></label>
+    <label>Wie viel mehr erwarten Sie dieses Jahr zu verkaufen? (%)<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-grow" placeholder="10"></label>
+    <label>Boxen, die Sie jetzt auf Lager haben<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-stock" placeholder="0"></label>
   </div>
   <div class="bx-out" aria-live="polite">
-    <p class="bx-out-empty">Gib deine Zahlen oben ein.</p>
-    <p class="bx-out-need" hidden>Du solltest ungefähr <strong class="bx-out-n">0</strong> Schachteln bestellen.</p>
-    <p class="bx-out-enough" hidden>Du hast genug Schachteln für Weihnachten. Kevin ist tief enttäuscht.</p>
+    <p class="bx-out-empty">Geben Sie Ihre Zahlen oben ein.</p>
+    <p class="bx-out-need" hidden>Sie müssen ungefähr <strong class="bx-out-n">0</strong> Boxen bestellen.</p>
+    <p class="bx-out-enough" hidden>Sie haben genug Boxen für Weihnachten. Kevin ist zutiefst enttäuscht.</p>
   </div>
   <div class="bx-cta">
-    <a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Finde deine Schachtel →</a>
-    <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Bestelle nach aus deiner Bestellhistorie</a>
+    <a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Finden Sie Ihre Box →</a>
+    <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Nachbestellen aus Ihrer Bestellhistorie</a>
   </div>
-  <p class="bx-small">Gib die Anzahl auf der Produktseite ein, dann berechnet sie Stückpreis und Mengenrabatt automatisch. Logodruck ist kostenlos auf Schmucketuis. Haben wir dein Logo, dauert die Produktion 4–5 Werktage bei den meisten Schmucketuis. Die ersten empfohlenen Fristen für Bestellungen mit Druck sind schon am 10. Dezember – und sie sind von Land zu Land unterschiedlich. <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Sieh dir die Fristen für dein Land an</a>.</p>
+  <p class="bx-small">Geben Sie die Anzahl auf der Produktseite ein, dann berechnet er automatisch den Stückpreis und den Mengenrabatt. Logodruck ist auf Schmucketuis gratis. Haben wir Ihr Logo, dauert die Produktion bei den meisten Schmucketuis 4–5 Werktage. Die ersten empfohlenen Fristen für Bestellungen mit Druck sind bereits am 10. Dezember – und sie sind von Land zu Land unterschiedlich. <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Sehen Sie die Fristen für Ihr Land</a>.</p>
 </section>
 
-<div class="bx-sign">
-  <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/dcbf8c1d-6b47-4c82-850b-d5516e589d7d.png" width="76" height="76" alt="Kevin ROIberg mit Weihnachtsmütze und weit aufgerissenen Augen" loading="lazy">
-  <p><b translate="no">Kevin ROIberg</b><span><span translate="no">E.L.F. · Executive Leader of Fulfillment</span><br>Erfinder. TV-Moderator. Beides selbsternannt.</span></p>
-</div>
-<p class="bx-ps"><strong>PS:</strong> Wenn der Taschenrechner dich grüßt, grüß zurück. Er hat niemand sonst.</p>
-
 <div class="bx-strings" hidden aria-hidden="true">
-  <span data-k="unit1">Schachtel</span>
-  <span data-k="unitN">Schachteln</span>
-  <span data-k="rounded">Kevin hat aufgerundet. Man kann keine halbe Schachtel verkaufen.</span>
-  <span data-k="safety">Kevin hat eine Schachtel dazugelegt. <span translate="no">»For safety.«</span></span>
-  <span data-k="minus">Die Minustaste ist eingepackt. <span translate="no">»Subtraction is not a growth mindset.«</span></span>
-  <span data-k="div0">Du hast durch null geteilt. Der Taschenrechner tanzt. Wir haben keine Rechte an Mariah Carey, also summt er <span translate="no">Jingle Bells</span>.</span>
-  <span data-k="overflow">Zu viele Schachteln fürs Display. <span translate="no">»Enough is never enough.«</span></span>
-  <span data-k="panic">Ruhepuls 180. Es glitzert aus der Nase. Bleib ruhig.</span>
-  <span data-k="memory">Kevins Gedächtnis ist voll (72 Tabs). Dein eigenes ist in deiner <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Bestellhistorie</a>.</span>
-  <span data-k="reset">Zurückgesetzt. Kevin nicht.</span>
-  <span data-k="idle">Der Taschenrechner hat dich gegrüßt. Er hat niemanden zum Reden.</span>
-  <span data-k="soundOn">Ton: an</span>
-  <span data-k="soundOff">Ton: aus</span>
+  <span data-k="rounded">Aufgerundet. Man kann keine halbe Box verkaufen.</span>
+  <span data-k="safety">Eine Box extra. Zur Sicherheit. Ich kenne mich.</span>
+  <span data-k="zero">Ich habe eine Null drangehängt. Ich glaube an Sie.</span>
+  <span data-k="hundred">Aufgerundet auf die nächsten Hundert. Ich denke groß für Sie.</span>
+  <span data-k="minus">Sie ist eingepackt. Sie funktioniert nicht. Mit Absicht.</span>
+  <span data-k="minusCaught">Okay. Sie haben es erwischt. Sie funktioniert immer noch nicht.</span>
+  <span data-k="div0">Sie haben durch null geteilt. Jetzt tanzen wir. Wir haben keine Rechte an Mariah Carey.</span>
+  <span data-k="overflow">Das Display kann es nicht darstellen. Ich übrigens auch nicht.</span>
+  <span data-k="panic">Ruhepuls 180. Glitzer kommt aus meiner Nase.</span>
+  <span data-k="memory">Mein Speicher ist voll. 72 Tabs. Ihrer liegt in Ihrer <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Bestellhistorie</a>.</span>
+  <span data-k="reset">Zurückgesetzt. Ich bin es nicht.</span>
+  <span data-k="idle">Hallo? Sind Sie noch da? Ich habe sonst niemanden.</span>
+  <span data-k="goal">Ziel erreicht! Ich habe das Ziel erhöht. Das mache ich immer.</span>
+  <span data-k="upsellYes">Ich wusste, Sie würden Ja sagen. Ich hatte sie schon eingepackt.</span>
+  <span data-k="upsellAuto">Ich nehme das als ein Ja.</span>
+  <span data-k="avalanche">Das Lager ist voll. Absicht. Nicht Absicht.</span>
+  <span data-k="kevinFan">Fünfmal? Ich fühle mich gesehen.</span>
+  <span data-k="soundOn">Ton an</span>
+  <span data-k="soundOff">Ton aus</span>
+  <ul data-list="dodge">
+    <li>Nope.</li>
+    <li>Darauf wird nicht gedruckt.</li>
+    <li>Fast!</li>
+    <li><span translate="no">Subtraction is not a growth mindset.</span></li>
+    <li>Sie ist schneller als Sie.</li>
+  </ul>
   <ul data-list="comments">
-    <li>Überprüft von Kevin. Nur von Kevin.</li>
-    <li>Der Drucker hat geklatscht.</li>
-    <li>Kevin hat die Zahl in Tab 73 eingetragen. Gab’s vorher nicht.</li>
-    <li>Genehmigt. Mit Glitzer unterschrieben. – K</li>
-    <li>Kevin hat die Zahl über die Lautsprecheranlage vorgelesen.</li>
-    <li>Die Kantine wurde informiert.</li>
-    <li>Kevin hat sich die Zahl auf eine Tasse drucken lassen.</li>
-    <li>Kevin sagt, das ist zu wenig. Sagt er immer.</li>
-    <li>Kevin hat sich selber angerufen, um es mitzuteilen.</li>
-    <li>Die Zahl ist auf einer Serviette gespeichert. Speicher voll.</li>
-    <li>Konferenzraum 2 jubelte. Da ist nur Kevin drin.</li>
-    <li>Das ist eine gute Zahl. Kevin hat ein bisschen geweint.</li>
+    <li>Kontrolliert. Von mir. Nur von mir.</li>
+    <li>Der Drucker hat Beifall geklatscht.</li>
+    <li>In Tab 73 eingefügt. Gab es vorher nicht.</li>
+    <li>Genehmigt. Mit Glitzer unterschrieben.</li>
+    <li>Ich habe es über die Lautsprecheranlage vorgelesen.</li>
+    <li>Die Kantine ist informiert.</li>
+    <li>Ich lasse das auf eine Tasse drucken.</li>
+    <li>Zu wenig. Es ist immer zu wenig.</li>
+    <li>Ich rufe mich gleich an und erzähle es mir.</li>
+    <li>Besprechungsraum 2 hat gejubelt. Da bin nur ich drin.</li>
+    <li>Schöne Zahl. Ich habe ein bisschen geweint.</li>
+    <li>Ich habe die Zahl am Empfang gezeigt. Sie sagten <span translate="no">‘</span>ja, Kevin<span translate="no">’</span>. Das machen sie immer.</li>
   </ul>
   <ul data-list="magic">
-    <li data-n="1953">1953. In diesem Jahr wurde Westpack gegründet. Kevin stand auf und klatschte.</li>
-    <li data-n="72">72. So viele Tabs hat Kevins Excel-Datei. Keiner darf sie öffnen.</li>
-    <li data-n="180">180. Kevins Ruhepuls.</li>
-    <li data-n="7">7. Espressos. Bis jetzt heute.</li>
-    <li data-n="48">48. Viele unserer Schmucketuis können ab 48 Stück mit deinem Logo bestellt werden. Das stimmt wirklich.</li>
-    <li data-n="96">96. Hier fängt der Mengenrabatt bei vielen unserer Schmucketuis an. Das ist auch richtig.</li>
-    <li data-n="20">20. Aus so vielen Schmucketuis besteht der Taschenrechner.</li>
-    <li data-n="2.4">2,4. Die Höhe des Rechners in Metern. Er passt nicht in Konferenzraum 2. Er steht in Konferenzraum 2.</li>
-    <li data-n="1987">1987. Das Baujahr des Rechners darin. Kevins erste Liebe.</li>
-    <li data-n="600">600. Kabelbinder, die Kevin mit der Firmenkarte bestellt hat. Keiner weiß warum.</li>
-    <li data-n="0">0 Etuis. Kevin muss sich hinsetzen.</li>
+    <li data-n="1953">1953! Westpacks Gründungsjahr. Ich bin aufgestanden und habe applaudiert.</li>
+    <li data-n="72">72. Tabs in meiner Excel-Tabelle. Sie dürfen sie nicht öffnen.</li>
+    <li data-n="180">180. Mein Ruhepuls.</li>
+    <li data-n="7">7. Espressotassen. Bisher heute.</li>
+    <li data-n="48">48. Viele unserer Schmucketuis können ab 48 Stück mit Ihrem Logo bestellt werden. Das stimmt wirklich.</li>
+    <li data-n="96">96. Hier beginnt unser Mengenrabatt bei vielen unserer Schmucketuis. Auch das stimmt.</li>
+    <li data-n="20">20. Aus so vielen Schmucketuis besteht der Rechner.</li>
+    <li data-n="2.4">2.4. Die Höhe des Rechners in Metern. Er steht in Besprechungsraum 2. Da passt er eigentlich nicht rein.</li>
+    <li data-n="1987">1987. Mein erster Taschenrechner. Meine erste Liebe.</li>
+    <li data-n="600">600. Kabelbinder auf der Firmenkarte. Fragen Sie nicht.</li>
+    <li data-n="0">0 Schachteln?! Ich muss mich kurz setzen.</li>
   </ul>
   <ul data-list="quotes">
-    <li translate="no">»Q4 waits for no one. Except maybe Mariah Carey.«</li>
-    <li translate="no">»If it looks like a gift – it sells like a gift.«</li>
-    <li translate="no">»It's not upselling. It's upserving.«</li>
-    <li translate="no">»If it glows, it grows.«</li>
-    <li translate="no">»SPREADSHEETS ARE A MINDSET.«</li>
-    <li translate="no">»Round up. Always round up.«</li>
-    <li translate="no">»I don't count boxes. Boxes count on me.«</li>
-    <li translate="no">»Every box is a touchpoint. Every touchpoint is a box.«</li>
-    <li translate="no">»Enough is never enough.«</li>
+    <li>Ich habe für Sie einen Reiter in meiner Excel-Tabelle angelegt. Nummer 73. Er ist leer. Ich warte.</li>
+    <li>Ich habe letzte Nacht in Besprechungsraum 2 geschlafen. Der Taschenrechner hat mich warm gehalten.</li>
+    <li>Sie drücken auf meine Tasten wie niemand zuvor. Das bedeutet mir viel.</li>
+    <li>Ich habe Ihr letztes Ergebnis ausgedruckt. Es hängt jetzt an meinem Kühlschrank.</li>
+    <li>Falls Sie jemals Schachteln brauchen, denken Sie an mich. Das tue ich. Die ganze Zeit.</li>
+    <li>Ich habe den Taschenrechner laminiert. Zweimal. Zur Sicherheit.</li>
+    <li>Die Kantine hat gefragt, ob ich Mittagessen will. Ich habe gesagt, ich habe Sie.</li>
+    <li>Ich zähle keine Schafe, wenn ich einschlafen will. Ich zähle Schachteln. Ich habe seit August nicht geschlafen.</li>
   </ul>
 </div>
 
@@ -323,8 +337,9 @@
   var root = document.getElementById("boxulator");
   if (!root || root.getAttribute("data-ready")) return;
   root.setAttribute("data-ready", "1");
-  var qs = function (sel) { return root.querySelector(sel); };
-  var qsa = function (sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); };
+  var qs = function (s) { return root.querySelector(s); };
+  var qsa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
 
   // The post lives in every store with the Danish links in it; point them at the store this page is in.
   var store = (location.pathname.split("/")[1] || "");
@@ -336,13 +351,14 @@
   var S = {};
   qsa(".bx-strings [data-k]").forEach(function (el) { S[el.getAttribute("data-k")] = el.innerHTML.trim(); });
   var list = function (k) { return qsa('.bx-strings [data-list="' + k + '"] > li').map(function (el) { return { html: el.innerHTML.trim(), n: el.getAttribute("data-n") }; }); };
-  var COMMENTS = list("comments"), MAGIC = list("magic"), QUOTES = list("quotes");
+  var COMMENTS = list("comments"), MAGIC = list("magic"), QUOTES = list("quotes"), DODGE = list("dodge");
   var lang = document.documentElement.lang || undefined;
-  var num = function (n, max) { try { return Number(n).toLocaleString(lang, { maximumFractionDigits: max === undefined ? 6 : max, useGrouping: false }); } catch (e) { return String(n); } };
-  var decimal = num(1.5, 1).charAt(1) || ",";
-  var dk = qs(".bx-dec"); if (dk) dk.textContent = decimal;
+  var num = function (n, max, group) { try { return Number(n).toLocaleString(lang, { maximumFractionDigits: max === undefined ? 6 : max, useGrouping: !!group }); } catch (e) { return String(n); } };
+  qs(".bx-dec").textContent = num(1.5, 1).charAt(1) || ",";
+  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var game = qs(".bx-game"), calc = qs(".bx-calc"), wrap = qs(".bx-calcwrap"), bubble = qs(".bx-bubble"), lcd = qs(".bx-lcd");
 
-  // Seven-segment display, eight cells, drawn once and switched segment by segment.
+  // ---------- Seven-segment display: eight cells, drawn once, switched segment by segment ----------
   var SEG = { "0": "abcdef", "1": "bc", "2": "abdeg", "3": "abcdg", "4": "bcfg", "5": "acdfg", "6": "acdefg", "7": "abc", "8": "abcdefg", "9": "abcdfg", "E": "adefg", "F": "aefg", "H": "bcefg", "h": "cefg", "L": "def", "P": "abefg", "o": "cdeg", "n": "ceg", "r": "eg", "t": "defg", "U": "bcdef", "-": "g", " ": "" };
   var svg = qs(".bx-digits"), NS = "http://www.w3.org/2000/svg", cells = [];
   var W = 34, H = 60, T = 7, PITCH = 44, TOP = 6;
@@ -359,10 +375,10 @@
     g.appendChild(dp); svg.appendChild(g);
     cells.push({ segs: segs, dp: dp });
   }
-  var live = qs(".bx-live"), lcd = qs(".bx-lcd"), indOp = qs(".bx-ind-op"), indM = qs(".bx-ind-m");
+  var live = qs(".bx-live"), indOp = qs(".bx-ind-op"), indM = qs(".bx-ind-m");
   function show(text) {
-    var out = [], chars = String(text).split("");
-    chars.forEach(function (ch) { if (ch === "." && out.length) out[out.length - 1].dp = true; else out.push({ ch: ch, dp: false }); });
+    var out = [];
+    String(text).split("").forEach(function (ch) { if (ch === "." && out.length) out[out.length - 1].dp = true; else out.push({ ch: ch, dp: false }); });
     out = out.slice(-8);
     while (out.length < 8) out.unshift({ ch: " ", dp: false });
     out.forEach(function (o, i) {
@@ -379,71 +395,266 @@
     return String(Number(n.toFixed(digits)));
   }
 
-  // Sound: one shared context, created on the first press (browsers allow audio only after a gesture).
-  var actx = null, soundOn = true;
+  // ---------- Sound: every key makes a noise that has nothing to do with a calculator ----------
+  // All synthesised here (Web Audio), so there are no sound files and no rights to clear.
+  var actx = null, master = null, noiseBuf = null, soundOn = true;
   function audio() {
     if (!soundOn) return null;
-    if (!actx) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; actx = new A(); }
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+      actx = new AC();
+      var comp = actx.createDynamicsCompressor(); master = actx.createGain(); master.gain.value = 0.9;
+      master.connect(comp); comp.connect(actx.destination);
+    }
     if (actx.state === "suspended") actx.resume();
     return actx;
   }
-  function tone(freq, start, dur, type, vol) {
-    var a = audio(); if (!a) return;
-    var o = a.createOscillator(), gn = a.createGain(), t = a.currentTime + start;
-    o.type = type || "sine"; o.frequency.value = freq;
-    gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(vol || 0.12, t + 0.01); gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(gn); gn.connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+  function envelope(gn, t, peak, att, dur, hold) {
+    gn.gain.setValueAtTime(0.0001, t);
+    gn.gain.exponentialRampToValueAtTime(peak, t + att);
+    if (hold) gn.gain.setValueAtTime(peak, t + att + hold);
+    gn.gain.exponentialRampToValueAtTime(0.0001, t + att + dur);
   }
-  var sfx = {
-    click: function () { tone(190, 0, 0.07, "triangle", 0.14); tone(95, 0, 0.05, "square", 0.025); },
-    ding: function () { tone(1318.5, 0, 0.3, "sine", 0.1); tone(1760, 0.09, 0.35, "sine", 0.07); },
-    buzz: function () { tone(110, 0, 0.35, "sawtooth", 0.06); tone(116, 0, 0.35, "sawtooth", 0.05); },
-    jingle: function () {
-      var E = 659.25, G = 783.99, C = 523.25, D = 587.33, q = 0.19, t = 0;
-      [[E, 1], [E, 1], [E, 2], [E, 1], [E, 1], [E, 2], [E, 1], [G, 1], [C, 1.5], [D, 0.5], [E, 4]].forEach(function (n) { tone(n[0], t, q * n[1] * 0.95, "square", 0.05); t += q * n[1]; });
-    },
+  function tone(o) {
+    var a = audio(); if (!a) return;
+    var t = a.currentTime + (o.at || 0), dur = o.dur || 0.2, att = o.att || 0.01;
+    var osc = a.createOscillator(), gn = a.createGain(), node = osc, f = o.f || [[0, 440]];
+    osc.type = o.type || "sine";
+    osc.frequency.setValueAtTime(f[0][1], t);
+    for (var i = 1; i < f.length; i += 1) { if (f[i][2] === "lin") osc.frequency.linearRampToValueAtTime(f[i][1], t + f[i][0]); else osc.frequency.exponentialRampToValueAtTime(f[i][1], t + f[i][0]); }
+    if (o.vib) {
+      var lfo = a.createOscillator(), lg = a.createGain(); lfo.frequency.value = o.vib[0]; lg.gain.setValueAtTime(o.vib[1], t);
+      if (o.vib[2]) lg.gain.exponentialRampToValueAtTime(0.01, t + dur);
+      lfo.connect(lg); lg.connect(osc.frequency); lfo.start(t); lfo.stop(t + att + dur + 0.05);
+    }
+    if (o.filter) {
+      var bq = a.createBiquadFilter(), ff = o.filter[1]; bq.type = o.filter[0]; bq.Q.value = o.filter[2] || 1;
+      bq.frequency.setValueAtTime(ff[0][1], t);
+      for (var j = 1; j < ff.length; j += 1) bq.frequency.linearRampToValueAtTime(ff[j][1], t + ff[j][0]);
+      node.connect(bq); node = bq;
+    }
+    if (o.am) {
+      var amg = a.createGain(), mod = a.createOscillator(), modg = a.createGain();
+      mod.type = o.am[2] || "square"; mod.frequency.value = o.am[0]; modg.gain.value = o.am[1]; amg.gain.value = 1 - o.am[1];
+      mod.connect(modg); modg.connect(amg.gain); node.connect(amg); node = amg; mod.start(t); mod.stop(t + att + dur + 0.05);
+    }
+    envelope(gn, t, o.vol || 0.15, att, dur, o.hold);
+    node.connect(gn); gn.connect(master); osc.start(t); osc.stop(t + att + dur + 0.05);
+  }
+  function hiss(o) {
+    var a = audio(); if (!a) return;
+    if (!noiseBuf) { noiseBuf = a.createBuffer(1, a.sampleRate, a.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i += 1) d[i] = Math.random() * 2 - 1; }
+    var t = a.currentTime + (o.at || 0), src = a.createBufferSource(), gn = a.createGain(), bq = a.createBiquadFilter();
+    src.buffer = noiseBuf; src.loop = true; bq.type = o.type || "bandpass"; bq.frequency.value = o.freq || 1000; bq.Q.value = o.q || 1;
+    envelope(gn, t, o.vol || 0.1, 0.005, o.dur || 0.2);
+    src.connect(bq); bq.connect(gn); gn.connect(master); src.start(t); src.stop(t + (o.dur || 0.2) + 0.06);
+  }
+  var SFX = {
+    boing: function () { tone({ f: [[0, 150], [0.5, 270]], dur: 0.55, vol: 0.24, vib: [16, 120, true] }); },
+    slideUp: function () { tone({ f: [[0, 320], [0.32, 1500, "lin"]], dur: 0.36, vol: 0.14, vib: [7, 14] }); },
+    slideDown: function () { tone({ f: [[0, 1400], [0.4, 260, "lin"]], dur: 0.42, vol: 0.14, vib: [7, 14] }); },
+    pew: function () { tone({ type: "square", f: [[0, 1700], [0.18, 110]], dur: 0.2, vol: 0.07 }); },
+    squeak: function () { [0, 0.13].forEach(function (d) { tone({ at: d, type: "triangle", f: [[0, 1300], [0.04, 2100], [0.09, 1500]], dur: 0.09, vol: 0.14 }); }); },
+    kazoo: function () { tone({ type: "sawtooth", f: [[0, 230], [0.15, 262, "lin"], [0.45, 205, "lin"]], dur: 0.48, vol: 0.13, vib: [6, 9], filter: ["bandpass", [[0, 1100]], 3], am: [34, 0.35, "sine"] }); },
+    bonk: function () { tone({ f: [[0, 520], [0.12, 110]], dur: 0.14, vol: 0.32 }); hiss({ type: "highpass", freq: 3000, dur: 0.03, vol: 0.08 }); },
+    blop: function () { tone({ f: [[0, 240], [0.07, 980]], dur: 0.09, vol: 0.26 }); },
+    meow: function () { tone({ type: "sawtooth", f: [[0, 520], [0.18, 700, "lin"], [0.55, 430, "lin"]], dur: 0.58, att: 0.04, vol: 0.17, vib: [5, 8], filter: ["bandpass", [[0, 600], [0.2, 1500], [0.55, 700]], 4] }); },
+    moo: function () { tone({ type: "sawtooth", f: [[0, 120], [0.3, 126, "lin"], [1.0, 92, "lin"]], dur: 1.0, att: 0.08, vol: 0.22, filter: ["lowpass", [[0, 300], [0.35, 900], [1.0, 340]], 6] }); },
+    raspberry: function () { tone({ type: "sawtooth", f: [[0, 86], [0.55, 58, "lin"]], dur: 0.58, vol: 0.24, filter: ["lowpass", [[0, 900]], 1], am: [27, 0.85] }); hiss({ freq: 600, q: 0.8, dur: 0.5, vol: 0.05 }); },
+    goat: function () { tone({ type: "sawtooth", f: [[0, 430], [0.6, 380, "lin"]], dur: 0.65, att: 0.03, vol: 0.15, vib: [9, 45], filter: ["bandpass", [[0, 900], [0.6, 1250]], 3] }); },
+    quack: function () { [0, 0.18].forEach(function (d) { tone({ at: d, type: "sawtooth", f: [[0, 380], [0.12, 260]], dur: 0.13, vol: 0.2, filter: ["bandpass", [[0, 1300], [0.12, 800]], 5] }); }); },
+    chipmunk: function () { for (var i = 0; i < 6; i += 1) tone({ at: i * 0.07, type: "triangle", f: [[0, i % 2 ? 1500 : 1250], [0.05, i % 2 ? 1750 : 1420]], dur: 0.05, vol: 0.11 }); },
+    airhorn: function () { [[0, 0.16], [0.2, 0.09], [0.33, 0.6]].forEach(function (p) { [466, 470, 554, 559].forEach(function (fr) { tone({ at: p[0], type: "sawtooth", f: [[0, fr]], dur: p[1], hold: p[1] * 0.7, att: 0.015, vol: 0.05, filter: ["lowpass", [[0, 2600]], 0.7] }); }); }); },
+    sad: function () { [293.66, 277.18, 261.63, 246.94].forEach(function (fr, i) { var last = i === 3; tone({ at: i * 0.42, type: "sawtooth", f: [[0, fr], [0.35, fr * 0.97, "lin"]], dur: last ? 1.1 : 0.36, att: 0.04, vol: 0.14, vib: last ? [5.5, 6] : null, filter: ["lowpass", [[0, 500], [0.15, 1400], [0.35, 600]], 4] }); }); },
+    rimshot: function () { tone({ f: [[0, 190], [0.12, 120]], dur: 0.14, vol: 0.36 }); tone({ at: 0.14, f: [[0, 150], [0.14, 90]], dur: 0.16, vol: 0.36 }); hiss({ at: 0.36, type: "highpass", freq: 6500, dur: 0.7, vol: 0.12 }); hiss({ at: 0.36, freq: 3500, q: 2, dur: 0.12, vol: 0.12 }); },
+    siren: function () { tone({ type: "triangle", f: [[0, 650], [0.35, 1250, "lin"], [0.7, 650, "lin"], [1.05, 1250, "lin"], [1.4, 650, "lin"]], dur: 1.45, hold: 1.2, vol: 0.12 }); },
+    coin: function () { tone({ type: "square", f: [[0, 988]], dur: 0.08, hold: 0.06, vol: 0.06 }); tone({ at: 0.08, type: "square", f: [[0, 1319]], dur: 0.35, vol: 0.06 }); },
+    kaching: function () { hiss({ freq: 2500, q: 1.5, dur: 0.06, vol: 0.18 }); [2093, 2637, 3136].forEach(function (fr, i) { tone({ at: 0.08 + i * 0.01, f: [[0, fr]], dur: 0.7, vol: 0.07 }); }); },
+    fanfare: function () { [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, i) { tone({ at: i * 0.09, type: "square", f: [[0, fr]], dur: i === 3 ? 0.5 : 0.09, hold: i === 3 ? 0.3 : 0.05, vol: 0.05 }); }); },
+    jingle: function () { var E = 659.25, G = 783.99, C = 523.25, D = 587.33, q = 0.19, t = 0; [[E, 1], [E, 1], [E, 2], [E, 1], [E, 1], [E, 2], [E, 1], [G, 1], [C, 1.5], [D, 0.5], [E, 4]].forEach(function (n) { tone({ at: t, type: "square", f: [[0, n[0]]], dur: q * n[1] * 0.9, vol: 0.05 }); t += q * n[1]; }); },
   };
+  var FUNNY = ["boing", "slideUp", "slideDown", "pew", "squeak", "kazoo", "bonk", "blop", "meow", "moo", "raspberry", "goat", "quack", "chipmunk"], lastFunny = "";
+  function funny() { var k; do { k = pick(FUNNY); } while (k === lastFunny); lastFunny = k; SFX[k](); }
   var soundBtn = qs(".bx-sound");
   soundBtn.addEventListener("click", function () {
     soundOn = !soundOn;
-    soundBtn.innerHTML = soundOn ? S.soundOn : S.soundOff;
+    soundBtn.textContent = soundOn ? "🔊" : "🔇";
+    soundBtn.setAttribute("aria-label", soundOn ? S.soundOn : S.soundOff);
     soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
   });
 
-  // Glitter out of the nose, from the display.
-  var calc = qs(".bx-calc");
-  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function glitter(count) {
-    if (still || !calc.animate) return;
-    var r = lcd.getBoundingClientRect(), base = calc.getBoundingClientRect();
+  // ---------- Kevin, peeking over the calculator ----------
+  var talkTimer = null;
+  function say(html, ms) {
+    bubble.innerHTML = html;
+    wrap.classList.add("is-peek", "is-talk");
+    clearTimeout(talkTimer);
+    talkTimer = setTimeout(function () { wrap.classList.remove("is-talk", "is-peek"); }, ms || 3200);
+  }
+
+  // ---------- Glitter, from anything, across the whole game ----------
+  function glitter(count, from) {
+    if (still || !game.animate) return;
+    var r = (from || lcd).getBoundingClientRect(), base = game.getBoundingClientRect();
     var cx = r.left - base.left + r.width / 2, cy = r.top - base.top + r.height / 2;
-    var colours = ["#e6c77d", "#ffd21f", "#ffffff", "#f3a3b5", "#c9a66b"];
+    var colours = ["#e8cf9a", "#d31b21", "#ffffff", "#f1dede", "#c9a24e", "#8fa58a"];
     for (var i = 0; i < count; i += 1) {
-      var s = document.createElement("span"), ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 170;
+      var s = document.createElement("span"), ang = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 190;
       s.className = "bx-glit"; s.style.left = cx + "px"; s.style.top = cy + "px"; s.style.background = colours[i % colours.length];
-      calc.appendChild(s);
-      s.animate([{ transform: "translate(0,0) rotate(0)", opacity: 1 }, { transform: "translate(" + Math.cos(ang) * dist + "px," + (Math.sin(ang) * dist + 90) + "px) rotate(" + (Math.random() * 720) + "deg)", opacity: 0 }], { duration: 900 + Math.random() * 700, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(s);
+      game.appendChild(s);
+      s.animate([{ transform: "translate(0,0) rotate(0)", opacity: 1 }, { transform: "translate(" + Math.cos(ang) * dist + "px," + (Math.sin(ang) * dist + 100) + "px) rotate(" + Math.random() * 720 + "deg)", opacity: 0 }], { duration: 900 + Math.random() * 800, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(s);
     }
   }
   function anim(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(function () { el.classList.remove(cls); }, 3200); }
 
-  // The receipt printer.
-  var roll = qs(".bx-roll"), empty = qs(".bx-empty");
-  function print(expr, result, note) {
-    empty.style.display = "none";
-    var li = document.createElement("li");
-    li.innerHTML = (expr ? '<p class="bx-expr"></p>' : "") + (result ? '<p class="bx-res"></p>' : "") + (note ? '<p class="bx-note"></p>' : "");
-    if (expr) li.querySelector(".bx-expr").textContent = expr;
-    if (result) li.querySelector(".bx-res").textContent = result;
-    if (note) li.querySelector(".bx-note").innerHTML = note;
-    roll.insertBefore(li, roll.firstChild);
-    while (roll.children.length > 5) roll.removeChild(roll.lastChild);
+  // ---------- Secrets ----------
+  var badges = qsa(".bx-badge"), found = 0, foundEl = qs(".bx-found"), finalEl = qs(".bx-final");
+  function unlock(id) {
+    var b = qs('.bx-badge[data-badge="' + id + '"]');
+    if (!b || b.classList.contains("is-open")) return;
+    b.classList.add("is-open"); found += 1; foundEl.textContent = found + "/" + badges.length;
+    setTimeout(function () { SFX.coin(); glitter(26, b.querySelector(".bx-b-box")); }, 250);
+    if (found === badges.length) setTimeout(finale, 1800);
   }
-  var units = function (n) { return n === 1 ? S.unit1 : S.unitN; };
-  var plain = function (html) { var d = document.createElement("div"); d.innerHTML = html; return d.textContent; };
+  function finale() {
+    qs(".bx-cert-n").textContent = num(score, 0, true);
+    finalEl.classList.add("is-on"); SFX.fanfare(); setTimeout(SFX.airhorn, 600); glitter(90, qs(".bx-cert"));
+  }
+  qs(".bx-close").addEventListener("click", function () { finalEl.classList.remove("is-on"); });
 
-  // The arithmetic. No minus. Results round up, every fourth gets a box "for safety", magic numbers get a line.
-  var acc = null, op = null, cur = "0", fresh = true, equalsCount = 0, presses = [], clears = [], last = Date.now(), busyUntil = 0, lockUntil = 0;
+  // ---------- Boxes counted, and Kevin's Q4 target, which he raises every time it is reached ----------
+  var score = 0, shown = 0, target = 500, raf = 0, scoreEl = qs(".bx-score"), targetEl = qs(".bx-target"), barEl = qs(".bx-bar i");
+  var nice = function (n) { var p = Math.pow(10, Math.floor(Math.log10(Math.max(1, n)))); return Math.ceil(n / p) * p; };
+  function setBig(el, n) { var s = num(n, 0, true); el.textContent = s; el.classList.toggle("is-long", s.length > 7); }
+  function bar() { barEl.style.width = Math.min(100, (score / target) * 100) + "%"; }
+  function addBoxes(n) {
+    n = Math.ceil(n); if (!(n > 0)) return;
+    score += n; bar();
+    cancelAnimationFrame(raf);
+    var from = shown, to = score, t0 = performance.now();
+    (function step(now) { var k = Math.min(1, (now - t0) / 650); shown = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); setBig(scoreEl, shown); if (k < 1) raf = requestAnimationFrame(step); })(t0);
+    if (score >= target) {
+      unlock("goal");
+      var next = nice(score * 3);
+      setTimeout(function () { target = next; setBig(targetEl, target); bar(); SFX.sad(); say(S.goal, 3600); }, 1500);
+    }
+  }
+
+  // ---------- North Pole South: every result rains down as boxes until the pile collapses ----------
+  var wh = qs(".bx-wh"), cv = qs(".bx-wh canvas"), ctx = cv.getContext ? cv.getContext("2d") : null;
+  var BOXC = ["#8fa58a", "#1f4a36", "#2b3d6e", "#6a4532", "#c8102e"];
+  var size = 14, cols = 0, heights = [], settled = [], falling = [], flying = [], WW = 0, HH = 0, dpr = 1, looping = false, crashing = false;
+  function fit() {
+    if (!ctx) return;
+    var r = cv.getBoundingClientRect(); if (!r.width) return;
+    dpr = Math.min(2, window.devicePixelRatio || 1); WW = r.width; HH = r.height;
+    cv.width = Math.round(WW * dpr); cv.height = Math.round(HH * dpr);
+    size = WW < 420 ? 12 : 14;
+    var n = Math.floor(WW / size);
+    if (n !== cols) { cols = n; heights = []; for (var i = 0; i < cols; i += 1) heights.push(0); settled = []; }
+    draw();
+  }
+  function boxAt(b) {
+    var s = size; ctx.save(); ctx.translate(b.x + s / 2, b.y + s / 2); ctx.rotate(b.r || 0);
+    ctx.fillStyle = b.c; ctx.fillRect(-s / 2, -s / 2 + 2, s, s - 2);
+    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.fillRect(-s / 2 - 1, -s / 2, s + 2, 4);
+    ctx.fillStyle = "#d9b45a"; ctx.fillRect(-s * 0.2, 1, s * 0.4, 2);
+    ctx.restore();
+  }
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, WW, HH);
+    ctx.fillStyle = "rgba(93,39,42,.35)"; ctx.fillRect(0, HH - 4, WW, 4);
+    settled.forEach(boxAt); falling.forEach(boxAt); flying.forEach(boxAt);
+  }
+  function frame() {
+    falling = falling.filter(function (b) {
+      b.vy += 0.9; b.y += b.vy;
+      if (b.y < b.ty) return true;
+      b.y = b.ty;
+      if (b.vy > 7) { b.vy = -b.vy * 0.28; return true; }
+      b.r = b.r * 0.3; settled.push(b); return false;
+    });
+    flying = flying.filter(function (b) { b.vy += 0.6; b.x += b.vx; b.y += b.vy; b.r += b.vr; return b.y < HH + 40 && b.x > -40 && b.x < WW + 40; });
+    draw();
+    if (falling.length || flying.length) requestAnimationFrame(frame); else looping = false;
+  }
+  function run() { if (!looping) { looping = true; requestAnimationFrame(frame); } }
+  function spawn() {
+    if (!cols) return;
+    var c = Math.round(cols / 2 + (Math.random() + Math.random() + Math.random() - 1.5) * (cols / 5));
+    c = Math.max(0, Math.min(cols - 1, c));
+    for (var k = 0; k < cols; k += 1) { // slide down the slope, like sand
+      var l = c > 0 && heights[c - 1] < heights[c] - 1, r = c < cols - 1 && heights[c + 1] < heights[c] - 1;
+      if (l && r) c += Math.random() < 0.5 ? -1 : 1; else if (l) c -= 1; else if (r) c += 1; else break;
+    }
+    heights[c] += 1;
+    var b = { x: (WW - cols * size) / 2 + c * size, y: -size - Math.random() * 40, vy: 0, ty: HH - 4 - heights[c] * size, c: BOXC[Math.floor(Math.random() * BOXC.length)], r: (Math.random() - 0.5) * 0.6, vr: 0 };
+    if (still) { b.y = b.ty; settled.push(b); draw(); } else { falling.push(b); run(); }
+    if (!crashing && heights[c] * size > HH - 30) { crashing = true; setTimeout(avalanche, 700); }
+  }
+  function drop(n) {
+    if (!ctx || !(n > 0)) return;
+    var k = n <= 12 ? Math.ceil(n) : Math.min(40, 12 + Math.round(Math.log10(n) * 6));
+    for (var i = 0; i < k; i += 1) setTimeout(spawn, i * 45);
+  }
+  function avalanche() {
+    unlock("avalanche"); say(S.avalanche, 3600);
+    for (var i = 0; i < 6; i += 1) setTimeout(SFX.bonk, i * 90);
+    setTimeout(SFX.raspberry, 650);
+    anim(wh, "is-shake");
+    var all = settled.concat(falling);
+    flying = flying.concat(all.map(function (b) { return { x: b.x, y: b.y, c: b.c, r: b.r, vx: ((b.x - WW / 2) / WW) * 16 + (Math.random() - 0.5) * 6, vy: -4 - Math.random() * 9, vr: (Math.random() - 0.5) * 0.5 }; }));
+    settled = []; falling = []; for (var j = 0; j < cols; j += 1) heights[j] = 0;
+    run(); setTimeout(function () { crashing = false; }, 1500);
+  }
+  var resizeTimer = null;
+  window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(fit, 200); });
+  fit();
+
+  // ---------- Keys: placed explicitly, so the minus key can run away and come back ----------
+  var LAYOUT = { "C": [1, 1], "/": [1, 2], "*": [1, 3], "-": [1, 4], "7": [2, 1], "8": [2, 2], "9": [2, 3], "+": [2, 4], "4": [3, 1], "5": [3, 2], "6": [3, 3], "M": [3, 4], "1": [4, 1], "2": [4, 2], "3": [4, 3], "=": [4, 4], "0": [5, 1], ".": [5, 2], "K": [5, 3] };
+  var keys = qsa(".bx-key"), pos = {};
+  function place(b) { var k = b.getAttribute("data-key"), p = pos[k]; b.style.gridRow = k === "=" ? p[0] + " / span 2" : String(p[0]); b.style.gridColumn = String(p[1]); }
+  keys.forEach(function (b) { var k = b.getAttribute("data-key"); pos[k] = LAYOUT[k].slice(); place(b); });
+  function flip(moves) { // moves: [[el, newPos], ...], each animated from where it was
+    var before = moves.map(function (m) { return m[0].getBoundingClientRect(); });
+    moves.forEach(function (m) { pos[m[0].getAttribute("data-key")] = m[1]; place(m[0]); });
+    if (still || !calc.animate) return;
+    moves.forEach(function (m, i) {
+      var now = m[0].getBoundingClientRect(), dx = before[i].left - now.left, dy = before[i].top - now.top;
+      if (dx || dy) m[0].animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 260, easing: "cubic-bezier(.3,1.5,.5,1)" });
+    });
+  }
+  var minusKey = qs('[data-key="-"]'), restoreTimer = null, catches = 0, skipClick = false;
+  function dodge() {
+    var others = keys.filter(function (b) { var k = b.getAttribute("data-key"); return k !== "-" && k !== "="; });
+    var other = pick(others), a = pos["-"].slice(), b = pos[other.getAttribute("data-key")].slice();
+    flip([[minusKey, b], [other, a]]);
+    SFX.slideUp(); say(pick(DODGE).html, 1500);
+    clearTimeout(restoreTimer); restoreTimer = setTimeout(restore, 3500);
+  }
+  function restore() { flip(keys.map(function (b) { return [b, LAYOUT[b.getAttribute("data-key")].slice()]; })); }
+  minusKey.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse" && Math.random() < 0.7) dodge(); });
+  minusKey.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse" && Math.random() < 0.55) { skipClick = true; dodge(); } });
+
+  // ---------- Kevin's upsell: two buttons, both yes; silence also counts as yes ----------
+  var upsellEl = qs(".bx-upsell"), upsellTimer = null, upsellBase = 0;
+  function upsell(v) {
+    upsellBase = v; upsellEl.classList.add("is-on"); SFX.kaching(); lockUntil = Date.now() + 7000;
+    clearTimeout(upsellTimer); upsellTimer = setTimeout(function () { acceptUpsell(true); }, 6000);
+  }
+  function acceptUpsell(auto) {
+    if (!upsellEl.classList.contains("is-on")) return;
+    clearTimeout(upsellTimer); upsellEl.classList.remove("is-on"); lockUntil = 0;
+    var v = Math.min(99999999, upsellBase * 2);
+    cur = String(v); fresh = true; render(); blink(); SFX.kaching(); setTimeout(SFX.coin, 250);
+    addBoxes(v - upsellBase); drop(v - upsellBase); unlock("upsell"); glitter(34, lcd);
+    say(auto ? S.upsellAuto : S.upsellYes, 3000);
+  }
+  qsa("[data-yes]").forEach(function (b) { b.addEventListener("click", function () { acceptUpsell(false); }); });
+
+  // ---------- The arithmetic. No minus. Kevin interferes. ----------
+  var acc = null, op = null, cur = "0", fresh = true, results = 0, kevins = 0, presses = [], clears = [], last = Date.now(), busyUntil = 0, lockUntil = 0;
   var SYM = { "+": "+", "*": "×", "/": "÷" };
   var val = function (s) { return parseFloat(s) || 0; };
   function compute(a, o, b) { if (o === "+") return a + b; if (o === "*") return a * b; if (o === "/") return b === 0 ? NaN : a / b; return b; }
@@ -453,66 +664,72 @@
   function magicFor(n) { for (var i = 0; i < MAGIC.length; i += 1) if (Math.abs(parseFloat(MAGIC[i].n) - n) < 1e-9) return MAGIC[i].html; return null; }
 
   function equals() {
-    var b = val(cur), raw, expr;
-    if (op && acc !== null) { raw = compute(acc, op, b); expr = num(acc) + " " + SYM[op] + " " + num(b) + " ="; }
-    else { raw = b; expr = num(b) + " ="; }
-    acc = null; op = null; fresh = true;
+    var b = val(cur), raw = op && acc !== null ? compute(acc, op, b) : b;
+    acc = null; op = null; fresh = true; indOp.textContent = "";
     if (isNaN(raw)) {
-      cur = "0"; indOp.textContent = ""; lockUntil = Date.now() + 2600; hold("Err", 2600); anim(calc, "is-dancing"); sfx.jingle(); glitter(30);
-      print(expr, "♪ ♫ ♪", S.div0); return;
+      cur = "0"; lockUntil = Date.now() + 2600; hold("Err", 2600); anim(calc, "is-dancing"); SFX.jingle(); glitter(30, lcd);
+      unlock("div0"); say(S.div0, 3800); return;
     }
-    var magic = magicFor(raw), rounded = Math.ceil(raw - 1e-9), note;
-    if (magic) note = magic;
-    else {
-      equalsCount += 1;
-      if (equalsCount % 4 === 0) { rounded += 1; note = S.safety; }
-      else if (rounded !== raw) note = S.rounded;
-      else note = COMMENTS[(rounded * 7 + equalsCount) % COMMENTS.length].html;
-    }
-    if (rounded > 99999999) { cur = "0"; indOp.textContent = ""; hold("E", 2200); sfx.buzz(); print(expr, "E", S.overflow); return; }
-    cur = magic ? String(raw) : String(rounded);
-    render(); blink(); sfx.ding(); if (magic) glitter(18);
-    print(expr, (magic ? num(raw) : num(rounded, 0)) + " " + plain(units(magic ? raw : rounded)), note);
+    results += 1;
+    if (results === 1) unlock("first");
+    if (raw % 1 !== 0) unlock("rounded");
+    var magic = magicFor(raw), v = Math.ceil(raw - 1e-9), line, step = results % 6;
+    if (magic) { line = magic; v = raw; if (Math.abs(raw - 1953) < 1e-9) unlock("year"); }
+    else if (step === 2) { v += 1; line = S.safety; unlock("safety"); }
+    else if (step === 4 && v > 0) { v *= 10; line = S.zero; }
+    else if (step === 0 && v % 100 !== 0) { v = Math.ceil(v / 100) * 100; line = S.hundred; }
+    else if (raw % 1 !== 0) line = S.rounded;
+    else line = pick(COMMENTS).html;
+    if (v > 99999999) { cur = "0"; hold("E", 2400); SFX.airhorn(); unlock("overflow"); say(S.overflow, 3000); addBoxes(99999999); drop(99999999); return; }
+    cur = String(v); render(); blink(); SFX.rimshot(); glitter(magic ? 24 : 10, lcd);
+    say(line, 3400);
+    addBoxes(v); drop(v);
+    if (!magic && results % 3 === 0) setTimeout(function () { upsell(Math.ceil(v)); }, 1400);
   }
 
   function press(k) {
     var now = Date.now();
     if (now < lockUntil) return;
     last = now;
-    presses.push(now); presses = presses.filter(function (t) { return now - t < 2500; });
-    if (presses.length >= 11 && now > busyUntil + 4000) {
-      presses = []; lockUntil = now + 2400; anim(calc, "is-hot"); glitter(60); hold("hot", 2400); sfx.buzz(); print("", "", S.panic); return;
+    presses.push(now); presses = presses.filter(function (t) { return now - t < 2000; });
+    if (presses.length >= 14 && now > busyUntil + 4000) {
+      presses = []; lockUntil = now + 2400; anim(calc, "is-hot"); glitter(70, lcd); hold("hot", 2400); SFX.siren();
+      unlock("panic"); say(S.panic, 2800); return;
     }
     if (/^[0-9]$/.test(k)) {
-      if (fresh) { cur = k; fresh = false; }
-      else if (cur.replace(".", "").length < 8) cur = cur === "0" ? k : cur + k;
-      sfx.click(); render(); return;
+      if (fresh) { cur = k; fresh = false; } else if (cur.replace(".", "").length < 8) cur = cur === "0" ? k : cur + k;
+      funny(); render(); return;
     }
-    if (k === ".") { if (fresh) { cur = "0."; fresh = false; } else if (cur.indexOf(".") < 0) cur += "."; sfx.click(); render(); return; }
+    if (k === ".") { if (fresh) { cur = "0."; fresh = false; } else if (cur.indexOf(".") < 0) cur += "."; funny(); render(); return; }
     if (k === "+" || k === "*" || k === "/") {
-      if (op && acc !== null && !fresh) {
-        var r = compute(acc, op, val(cur));
-        if (isNaN(r)) { op = null; acc = null; equals(); return; }
-        acc = r;
-      } else acc = val(cur);
-      op = k; fresh = true; sfx.click(); show(forDisplay(acc)); indOp.textContent = SYM[op]; return;
+      if (op && acc !== null && !fresh) { var r = compute(acc, op, val(cur)); if (isNaN(r)) { op = null; acc = null; equals(); return; } acc = r; } else acc = val(cur);
+      op = k; fresh = true; funny(); show(forDisplay(acc)); indOp.textContent = SYM[op]; return;
     }
     if (k === "-") {
-      var mk = qs('[data-key="-"]'); anim(mk, "is-wiggle"); sfx.buzz(); hold("no", 1400); print("", "", S.minus); return;
+      catches += 1; anim(minusKey, "is-wiggle"); SFX.sad(); hold("no", 1300);
+      if (catches >= 3) { unlock("minus"); say(S.minusCaught, 3000); } else say(S.minus, 2400);
+      return;
     }
     if (k === "=") { equals(); return; }
     if (k === "C") {
       clears.push(now); clears = clears.filter(function (t) { return now - t < 1600; });
-      sfx.click(); reset();
-      if (clears.length >= 3) { clears = []; print("", "", S.reset); }
+      funny(); reset();
+      if (clears.length >= 3) { clears = []; say(S.reset, 2400); }
       return;
     }
-    if (k === "M") { sfx.click(); indM.textContent = "M"; hold("FULL", 1600); print("", "", S.memory); return; }
-    if (k === "K") { sfx.ding(); glitter(36); var q = QUOTES[Math.floor(Math.random() * QUOTES.length)]; print("", "", q.html + " – Kevin"); return; }
+    if (k === "M") { funny(); indM.textContent = "M"; hold("FULL", 1600); say(S.memory, 4200); return; }
+    if (k === "K") {
+      kevins += 1; SFX.airhorn(); glitter(40, lcd); say(pick(QUOTES).html, 2800);
+      if (kevins === 5) { unlock("kevin"); setTimeout(function () { say(S.kevinFan, 2600); }, 2900); }
+    }
   }
 
-  qsa(".bx-key").forEach(function (btn) {
-    btn.addEventListener("click", function () { press(btn.getAttribute("data-key")); });
+  keys.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var k = btn.getAttribute("data-key");
+      if (k === "-" && skipClick) { skipClick = false; return; }
+      press(k);
+    });
   });
   var KEYMAP = { "Enter": "=", "=": "=", "+": "+", "*": "*", "x": "*", "X": "*", "/": "/", ":": "/", "-": "-", ",": ".", ".": ".", "Escape": "C", "Delete": "C", "Backspace": "C", "c": "C", "m": "M", "M": "M", "k": "K", "K": "K" };
   calc.addEventListener("keydown", function (e) {
@@ -520,31 +737,30 @@
     var k = /^[0-9]$/.test(e.key) ? e.key : KEYMAP[e.key];
     if (!k) return;
     e.preventDefault();
-    var btn = qs('[data-key="' + (k === "." ? "." : k) + '"]');
+    var btn = qs('[data-key="' + k + '"]');
     if (btn) { btn.classList.add("is-down"); setTimeout(function () { btn.classList.remove("is-down"); }, 110); }
     press(k);
   });
 
-  // Left alone and in view for 25 seconds, it says hello. Once.
+  // Left alone and in view for 25 seconds, Kevin checks you are still there. Once.
   var visible = false, greeted = false;
   if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.6 }).observe(calc);
   setInterval(function () {
-    if (greeted || !visible || Date.now() - last < 25000 || Date.now() < busyUntil) return;
-    greeted = true; hold("HELL0", 3000); print("", "", S.idle);
+    if (greeted || !visible || Date.now() - last < 25000 || Date.now() < lockUntil) return;
+    greeted = true; hold("HELL0", 3000); SFX.chipmunk(); say(S.idle, 3600);
   }, 1000);
 
   render();
 
-  // Team Westpack's formula: the one that subtracts.
+  // ---------- Team Westpack's formula: the one that subtracts ----------
   var inLast = qs(".bx-in-last"), inGrow = qs(".bx-in-grow"), inStock = qs(".bx-in-stock");
   var outEmpty = qs(".bx-out-empty"), outNeed = qs(".bx-out-need"), outEnough = qs(".bx-out-enough"), outN = qs(".bx-out-n");
   function formula() {
     var lastYear = parseFloat(inLast.value), grow = parseFloat(inGrow.value), stock = parseFloat(inStock.value);
     if (!(lastYear > 0)) { outEmpty.hidden = false; outNeed.hidden = true; outEnough.hidden = true; return; }
     var need = Math.ceil(lastYear * (1 + (grow > 0 ? grow : 0) / 100)) - (stock > 0 ? stock : 0);
-    outEmpty.hidden = true;
-    outNeed.hidden = need <= 0; outEnough.hidden = need > 0;
-    outN.textContent = num(Math.max(0, need), 0);
+    outEmpty.hidden = true; outNeed.hidden = need <= 0; outEnough.hidden = need > 0;
+    outN.textContent = num(Math.max(0, need), 0, true);
   }
   [inLast, inGrow, inStock].forEach(function (el) { el.addEventListener("input", formula); });
 })();
