@@ -1467,9 +1467,27 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   WebP images for 30 days under unchanged names and the user saw an old image after a rebuild. `build-assets.js`
   stamps a new version whenever it writes images; the runtime JS and CSS revalidate on every load, so the new
   version reaches every browser at once.
+- **A carrier bag and the logo module's 25 foils** (2026-10-30, the user: "en bærepose med ... farverne på trykkene
+  med dem som rent faktisk lagde i logomodulet ... skal vi jo ikke kunne skrive guld"). The seventh piece, `bag`, is a
+  black XXL luxury bag held by its handles (Content Library "XXL Luxposer", XXL_Gaveposer_New-07); the customer's gold
+  print was removed with the harmonic fill - the morphological clean left a brown ghost on the matte black paper. Its
+  front is measured like a lid: aspect 1.2857 from 450 x 350 mm (the perspective says 1.267), `principal` set in
+  lid-geometry.json because the original is portrait, print area the XXL bag's maximum 150 x 150 mm. Exposure from
+  that removed print: metal 1.3 (cores p90 247 real, 243 rendered), pigment 0.95. `FOIL_TABLE` in logo-studio.js holds
+  metallic 9 / matt 11 / gloss 5 exactly as the module lists them; ids are `<finish>-<colour>`, which is what
+  `wp_logo_finish` now records. Metallic keeps the calibrated metal; gloss is banded mirror stops with a hard glint;
+  matt is flat pigment with a soft sheen that never glints; the transparent foil is a glaze (edges, a faint darkening,
+  the glint) with no colour. The picker shows one finish at a time and keeps the colour across finishes where it can.
+  Headline and teaser say foil, not gold (a test checks every language); copy that said box or lid now says
+  packaging or print. Those strings were written by hand in `tools/signup/copy-foils-2026-10-30.js` - transcreate.js
+  regenerates whole files and would lose the proofread fixes - and each transcreated file says so in
+  `meta.logoStudioUpdate`; they have not been proofread. The collection puts the chosen piece first and largest
+  (desktop: the left half, three rows tall; phone: a full-width 16:9 band), and `fitTiles` shows the band of the
+  square scene round its print. In Playwright's WebKit for Windows a black edge appears while the mouse tilts the
+  scene: the flat 3D path, there before the bag, gone at rest.
 - Copy: `da`/`en` are masters; 15 languages are transcreated (`tools/signup/transcreate.js`) and marked
   `needsNativeReview`. No visible text may live in concept code (tested).
-- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (69 browser checks, every language),
+- Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (83 browser checks, every language),
   `node tools/signup/screens.js <dir> [concept] [market] --steps`.
 
 ## Agent workflow for this subsystem

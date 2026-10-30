@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter de Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Ahora no"
   },
   "logo-studio": {
-    "peek": "¿Cómo queda tu marca en dorado?",
+    "peek": "¿Cómo queda tu marca estampada en caliente?",
     "peekCta": "Pruébalo",
     "kicker": "La prueba de estampado",
-    "title": "Escribe el nombre de tu marca. Lo ponemos en dorado.",
-    "lede": "Al instante, sobre una tapa real. No cuesta nada, ni siquiera tu email.",
+    "title": "Escribe el nombre de tu marca. Lo estampamos en caliente.",
+    "lede": "Al instante, sobre un envase real. No cuesta nada, ni siquiera tu email.",
     "nameLabel": "Nombre de tu marca",
     "namePlaceholder": "p. ej., Atelier Norte",
     "defaultName": "Tu marca",
-    "boxLabel": "Caja",
+    "boxLabel": "Envase",
     "boxes": {
       "seville": "Plástico negro mate",
       "london": "Soft touch color crema",
+      "bag": "Bolsa de lujo negra",
       "torino": "Negro con borde dorado",
       "seoul": "Cartón verde apagado",
       "madrid": "Soft touch marrón claro",
       "frankfurt": "Cartón blanco efecto lino"
     },
     "foilLabel": "Estampado",
-    "foil": {
+    "finish": {
+      "metallic": "Metalizado",
+      "matt": "Mate",
+      "gloss": "Brillo"
+    },
+    "colour": {
       "gold": "Dorado",
       "silver": "Plateado",
-      "rose": "Oro rosa",
-      "oldrose": "Rosa antiguo",
+      "copper": "Cobre",
+      "red": "Rojo",
+      "orange": "Naranja",
+      "pink": "Rosa",
+      "purple": "Morado",
+      "blue": "Azul",
+      "mint": "Menta",
+      "black": "Negro",
       "white": "Blanco",
-      "black": "Negro"
+      "darkblue": "Azul oscuro",
+      "green": "Verde",
+      "oldrose": "Rosa antiguo",
+      "yellow": "Amarillo",
+      "clear": "Transparente",
+      "grey": "Gris",
+      "brown": "Marrón"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Tipografía",
     "type": {
       "classic": "Clásica",
       "script": "Caligráfica",
       "clean": "Limpia"
     },
-    "hintLong": "Son unas cuantas letras. El logo se ajusta para caber en la tapa.",
+    "hintLong": "Son unas cuantas letras. El logo se ajusta para que quepa.",
     "hintWestpack": "Buena elección. Pero ese nombre ya está pillado.",
-    "disclaimer": "Simulación sobre tapas Westpack reales. Tu logo se estampa en caliente en un solo color.",
-    "lightHintMouse": "Mueve el ratón sobre la caja y mira cómo el estampado atrapa la luz.",
-    "lightHintTouch": "Desliza un dedo sobre la caja y mira cómo el estampado atrapa la luz. Desliza para ver la siguiente caja.",
+    "disclaimer": "Simulación sobre envases Westpack reales. Tu logo se estampa en caliente en un solo color.",
+    "lightHintMouse": "Mueve el ratón sobre el estampado y mira cómo atrapa la luz.",
+    "lightHintTouch": "Desliza un dedo sobre el estampado y mira cómo atrapa la luz. Desliza para ver el siguiente.",
     "zoomIn": "Ver la impresión de cerca",
-    "zoomOut": "Ver la caja entera",
+    "zoomOut": "Ver todo",
     "uploadCta": "Usa tu logo",
     "uploadHint": "PNG, JPG o SVG: tu logo se queda en tu navegador.",
     "uploadOneColour": "La estampación en caliente se hace en un solo color. Así queda tu logo.",

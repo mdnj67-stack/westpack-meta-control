@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -27,45 +28,64 @@
     "peekDismiss": "Ei nyt"
   },
   "logo-studio": {
-    "peek": "Miltä brändisi näyttää kultaisena?",
+    "peek": "Miltä brändisi näyttää foliopainettuna?",
     "peekCta": "Kokeile",
     "kicker": "Foliotesti",
-    "title": "Kirjoita brändisi nimi. Näet sen kultafoliolla painettuna.",
-    "lede": "Livenä, aidolla kannella. Ei maksa mitään – ei edes sähköpostiosoitettasi.",
+    "title": "Kirjoita brändisi nimi. Näet sen foliopainettuna.",
+    "lede": "Livenä, aidolla pakkauksella. Ei maksa mitään – ei edes sähköpostiosoitettasi.",
     "nameLabel": "Brändisi nimi",
     "namePlaceholder": "esim. Atelier North",
     "defaultName": "Sinun brändisi",
-    "boxLabel": "Korurasia",
+    "boxLabel": "Pakkaus",
     "boxes": {
       "seville": "Musta mattamuovi",
       "london": "Kermanvärinen soft touch",
+      "bag": "Musta luksuskassi",
       "torino": "Musta kultareunuksella",
       "seoul": "Pölyvihreä kartonki",
       "madrid": "Vaaleanruskea soft touch",
       "frankfurt": "Valkoinen pellavapintainen kartonki"
     },
     "foilLabel": "Folio",
-    "foil": {
+    "finish": {
+      "metallic": "Metallinen",
+      "matt": "Matta",
+      "gloss": "Kiiltävä"
+    },
+    "colour": {
       "gold": "Kulta",
       "silver": "Hopea",
-      "rose": "Ruusukulta",
-      "oldrose": "Vanha roosa",
+      "copper": "Kupari",
+      "red": "Punainen",
+      "orange": "Oranssi",
+      "pink": "Pinkki",
+      "purple": "Violetti",
+      "blue": "Sininen",
+      "mint": "Minttu",
+      "black": "Musta",
       "white": "Valkoinen",
-      "black": "Musta"
+      "darkblue": "Tummansininen",
+      "green": "Vihreä",
+      "oldrose": "Vanha roosa",
+      "yellow": "Keltainen",
+      "clear": "Läpinäkyvä",
+      "grey": "Harmaa",
+      "brown": "Ruskea"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Kirjaintyyli",
     "type": {
       "classic": "Klassinen",
       "script": "Kaunokirjoitus",
       "clean": "Pelkistetty"
     },
-    "hintLong": "Siinäpä monta kirjainta. Logo skaalataan kannelle sopivaksi.",
+    "hintLong": "Siinäpä monta kirjainta. Logo skaalataan sopivaksi.",
     "hintWestpack": "Hyvä valinta. Se nimi vain sattuu olemaan varattu.",
-    "disclaimer": "Havainnekuva aidoilla Westpack-kansilla. Logosi painetaan yhdellä foliovärillä.",
-    "lightHintMouse": "Liikuta hiirtä rasian päällä ja katso, miten folio nappaa valon.",
-    "lightHintTouch": "Vedä sormea rasian päällä ja katso, miten folio nappaa valon. Pyyhkäise seuraavaan rasiaan.",
+    "disclaimer": "Havainnekuva aidoilla Westpack-pakkauksilla. Logosi painetaan yhdellä foliovärillä.",
+    "lightHintMouse": "Liikuta hiirtä painatuksen päällä ja katso, miten folio nappaa valon.",
+    "lightHintTouch": "Vedä sormea painatuksen päällä ja katso, miten folio nappaa valon. Pyyhkäise seuraavaan.",
     "zoomIn": "Katso painatusta läheltä",
-    "zoomOut": "Koko rasia",
+    "zoomOut": "Näytä kaikki",
     "uploadCta": "Käytä omaa logoasi",
     "uploadHint": "PNG, JPG tai SVG – logosi pysyy selaimessasi.",
     "uploadOneColour": "Foliopainatus tehdään yhdellä värillä – tältä logosi näyttää foliossa.",

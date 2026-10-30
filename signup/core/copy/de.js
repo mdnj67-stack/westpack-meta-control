@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpack-Newsletter",
@@ -27,45 +28,64 @@
     "peekDismiss": "Nicht jetzt"
   },
   "logo-studio": {
-    "peek": "Wie sieht Ihre Marke in Gold aus?",
+    "peek": "Wie sieht Ihre Marke in Folie aus?",
     "peekCta": "Ausprobieren",
     "kicker": "Der Folientest",
-    "title": "Geben Sie Ihren Markennamen ein. Wir setzen ihn in Gold.",
-    "lede": "Live auf einem echten Deckel. Kostet nichts – nicht mal Ihre E-Mail-Adresse.",
+    "title": "Geben Sie Ihren Markennamen ein. Wir prägen ihn in Folie.",
+    "lede": "Live auf echter Verpackung. Kostet nichts – nicht mal Ihre E-Mail-Adresse.",
     "nameLabel": "Ihr Markenname",
     "namePlaceholder": "z. B. Atelier Nord",
     "defaultName": "Ihre Marke",
-    "boxLabel": "Schmuckschachtel",
+    "boxLabel": "Verpackung",
     "boxes": {
       "seville": "Mattschwarzer Kunststoff",
       "london": "Cremefarbenes Soft Touch",
+      "bag": "Schwarze Luxus-Tragetasche",
       "torino": "Schwarz mit Goldrand",
       "seoul": "Staubgrüner Karton",
       "madrid": "Hellbraunes Soft Touch",
       "frankfurt": "Weißer Karton in Leinenoptik"
     },
     "foilLabel": "Folie",
-    "foil": {
+    "finish": {
+      "metallic": "Metallic",
+      "matt": "Matt",
+      "gloss": "Glänzend"
+    },
+    "colour": {
       "gold": "Gold",
       "silver": "Silber",
-      "rose": "Roségold",
-      "oldrose": "Altrosa",
+      "copper": "Kupfer",
+      "red": "Rot",
+      "orange": "Orange",
+      "pink": "Pink",
+      "purple": "Lila",
+      "blue": "Blau",
+      "mint": "Mint",
+      "black": "Schwarz",
       "white": "Weiß",
-      "black": "Schwarz"
+      "darkblue": "Dunkelblau",
+      "green": "Grün",
+      "oldrose": "Altrosa",
+      "yellow": "Gelb",
+      "clear": "Transparent",
+      "grey": "Grau",
+      "brown": "Braun"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Schrift",
     "type": {
       "classic": "Klassisch",
       "script": "Schreibschrift",
       "clean": "Klar"
     },
-    "hintLong": "Ganz schön viele Buchstaben. Das Logo wird passend für den Deckel skaliert.",
+    "hintLong": "Ganz schön viele Buchstaben. Das Logo wird passend skaliert.",
     "hintWestpack": "Gute Wahl. Der Name ist leider schon weg.",
-    "disclaimer": "Darstellung auf echten Westpack-Deckeln. Ihr Logo wird in einer Folienfarbe gedruckt.",
-    "lightHintMouse": "Bewegen Sie die Maus über die Schachtel und sehen Sie, wie die Folie das Licht einfängt.",
-    "lightHintTouch": "Ziehen Sie einen Finger über die Schachtel und sehen Sie, wie die Folie das Licht einfängt. Wischen Sie zur nächsten Schachtel.",
+    "disclaimer": "Darstellung auf echten Westpack-Verpackungen. Ihr Logo wird in einer Folienfarbe gedruckt.",
+    "lightHintMouse": "Bewegen Sie die Maus über den Druck und sehen Sie, wie die Folie das Licht einfängt.",
+    "lightHintTouch": "Ziehen Sie einen Finger über den Druck und sehen Sie, wie die Folie das Licht einfängt. Wischen Sie zum nächsten Motiv.",
     "zoomIn": "Druck aus der Nähe",
-    "zoomOut": "Ganze Schachtel",
+    "zoomOut": "Gesamtansicht",
     "uploadCta": "Eigenes Logo verwenden",
     "uploadHint": "PNG, JPG oder SVG – Ihr Logo bleibt in Ihrem Browser.",
     "uploadOneColour": "Folienprägung ist einfarbig – so sieht Ihr Logo aus.",

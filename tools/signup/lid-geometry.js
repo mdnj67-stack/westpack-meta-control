@@ -165,7 +165,8 @@ async function refine() {
     const quad = [intersect(E.top.line, E.left.line), intersect(E.top.line, E.right.line), intersect(E.bottom.line, E.right.line), intersect(E.bottom.line, E.left.line)].map(([x, y]) => [Math.round(x * 100) / 100, Math.round(y * 100) / 100]);
     // the original photo's centre, in % of this plate (a crop [x, y, side] of a square original)
     const crop = spec.crop || [0, 0, 100];
-    const principal = [((50 - crop[0]) / crop[2]) * 100, ((50 - crop[1]) / crop[2]) * 100];
+    // a portrait or landscape original says where its centre is itself: the formula assumes a square one
+    const principal = spec.principal || [((50 - crop[0]) / crop[2]) * 100, ((50 - crop[1]) / crop[2]) * 100];
     const persp = aspectFromPerspective(quad, principal);
     const aspect = spec.aspect || (persp ? Math.round(persp.aspect * 1000) / 1000 : 1);
     debug[id] = { edges: E, rough: spec.edges };

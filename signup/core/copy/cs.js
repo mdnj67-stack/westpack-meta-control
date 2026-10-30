@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Teď ne"
   },
   "logo-studio": {
-    "peek": "Jak vypadá vaše značka ve zlaté?",
+    "peek": "Jak vypadá vaše značka ve fólii?",
     "peekCta": "Vyzkoušet",
     "kicker": "Test fólie",
-    "title": "Napište název značky. Vyrazíme ho zlatou fólií.",
-    "lede": "Živě, na skutečném víčku. Nestojí to nic – ani váš e-mail.",
+    "title": "Napište název značky. Vyrazíme ho fólií.",
+    "lede": "Živě, na skutečném obalu. Nestojí to nic – ani váš e-mail.",
     "nameLabel": "Název vaší značky",
     "namePlaceholder": "např. Atelier Sever",
     "defaultName": "Vaše značka",
-    "boxLabel": "Krabička",
+    "boxLabel": "Obal",
     "boxes": {
       "seville": "Matný černý plast",
       "london": "Krémový soft touch",
+      "bag": "Černá luxusní taška",
       "torino": "Černá se zlatým lemem",
       "seoul": "Prachově zelený karton",
       "madrid": "Světle hnědý soft touch",
       "frankfurt": "Bílý karton se strukturou lnu"
     },
     "foilLabel": "Fólie",
-    "foil": {
+    "finish": {
+      "metallic": "Metalická",
+      "matt": "Matná",
+      "gloss": "Lesklá"
+    },
+    "colour": {
       "gold": "Zlatá",
       "silver": "Stříbrná",
-      "rose": "Růžové zlato",
-      "oldrose": "Starorůžová",
+      "copper": "Měděná",
+      "red": "Červená",
+      "orange": "Oranžová",
+      "pink": "Růžová",
+      "purple": "Fialová",
+      "blue": "Modrá",
+      "mint": "Mátová",
+      "black": "Černá",
       "white": "Bílá",
-      "black": "Černá"
+      "darkblue": "Tmavě modrá",
+      "green": "Zelená",
+      "oldrose": "Starorůžová",
+      "yellow": "Žlutá",
+      "clear": "Průhledná",
+      "grey": "Šedá",
+      "brown": "Hnědá"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Písmo",
     "type": {
       "classic": "Klasické",
       "script": "Psací",
       "clean": "Čisté"
     },
-    "hintLong": "To je pořádná řádka písmen. Logo upravíme, aby se vešlo na víčko.",
+    "hintLong": "To je pořádná řádka písmen. Logo upravíme, aby se vešlo.",
     "hintWestpack": "Dobrá volba. Tenhle název už je ale zabraný.",
-    "disclaimer": "Vizualizace na skutečných víčkách Westpack. Vaše logo se razí fólií v jedné barvě.",
-    "lightHintMouse": "Přejeďte myší přes krabičku a sledujte, jak fólie chytá světlo.",
-    "lightHintTouch": "Přejeďte prstem přes krabičku a sledujte, jak fólie chytá světlo. Tažením zobrazíte další krabičku.",
+    "disclaimer": "Vizualizace na skutečných obalech Westpack. Vaše logo se razí fólií v jedné barvě.",
+    "lightHintMouse": "Přejeďte myší přes potisk a sledujte, jak fólie chytá světlo.",
+    "lightHintTouch": "Přejeďte prstem přes potisk a sledujte, jak fólie chytá světlo. Tažením zobrazíte další.",
     "zoomIn": "Prohlédnout tisk zblízka",
-    "zoomOut": "Celá krabička",
+    "zoomOut": "Celý pohled",
     "uploadCta": "Použít vlastní logo",
     "uploadHint": "PNG, JPG nebo SVG – logo zůstane ve vašem prohlížeči.",
     "uploadOneColour": "Ražba fólií se provádí v jedné barvě – takhle bude vypadat vaše logo.",

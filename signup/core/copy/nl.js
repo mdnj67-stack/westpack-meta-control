@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Niet nu"
   },
   "logo-studio": {
-    "peek": "Hoe ziet je merk eruit in goud?",
+    "peek": "Hoe ziet je merk eruit in folie?",
     "peekCta": "Probeer het",
     "kicker": "De folietest",
-    "title": "Typ je merknaam. Wij zetten hem in goud.",
-    "lede": "Live, op een echt deksel. Kost niets – zelfs je e-mailadres niet.",
+    "title": "Typ je merknaam. Wij drukken hem in folie.",
+    "lede": "Live, op een echte verpakking. Kost niets – zelfs je e-mailadres niet.",
     "nameLabel": "Je merknaam",
     "namePlaceholder": "bijv. Atelier Noord",
     "defaultName": "Je merk",
-    "boxLabel": "Doosje",
+    "boxLabel": "Verpakking",
     "boxes": {
       "seville": "Matzwart kunststof",
       "london": "Crèmekleurige soft touch",
+      "bag": "Zwarte luxe draagtas",
       "torino": "Zwart met gouden rand",
       "seoul": "Stoffig groen karton",
       "madrid": "Lichtbruine soft touch",
       "frankfurt": "Wit karton met linnenlook"
     },
     "foilLabel": "Folie",
-    "foil": {
+    "finish": {
+      "metallic": "Metallic",
+      "matt": "Mat",
+      "gloss": "Glans"
+    },
+    "colour": {
       "gold": "Goud",
       "silver": "Zilver",
-      "rose": "Roségoud",
-      "oldrose": "Oudroze",
+      "copper": "Koper",
+      "red": "Rood",
+      "orange": "Oranje",
+      "pink": "Roze",
+      "purple": "Paars",
+      "blue": "Blauw",
+      "mint": "Mint",
+      "black": "Zwart",
       "white": "Wit",
-      "black": "Zwart"
+      "darkblue": "Donkerblauw",
+      "green": "Groen",
+      "oldrose": "Oudroze",
+      "yellow": "Geel",
+      "clear": "Transparant",
+      "grey": "Grijs",
+      "brown": "Bruin"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Lettertype",
     "type": {
       "classic": "Klassiek",
       "script": "Schrijfletter",
       "clean": "Strak"
     },
-    "hintLong": "Dat zijn flink wat letters. Het logo wordt passend gemaakt voor het deksel.",
+    "hintLong": "Dat zijn flink wat letters. Het logo wordt passend gemaakt.",
     "hintWestpack": "Goede keuze. Helaas is die naam al bezet.",
-    "disclaimer": "Illustratie op echte Westpack-deksels. Je logo wordt in één foliekleur gedrukt.",
-    "lightHintMouse": "Beweeg je muis over het doosje en zie hoe de folie het licht vangt.",
-    "lightHintTouch": "Sleep je vinger over het doosje en zie hoe de folie het licht vangt. Swipe voor het volgende doosje.",
+    "disclaimer": "Illustratie op echte Westpack-verpakkingen. Je logo wordt in één foliekleur gedrukt.",
+    "lightHintMouse": "Beweeg je muis over de opdruk en zie hoe de folie het licht vangt.",
+    "lightHintTouch": "Sleep je vinger over de opdruk en zie hoe de folie het licht vangt. Swipe voor de volgende.",
     "zoomIn": "Bekijk de bedrukking",
-    "zoomOut": "Hele doosje",
+    "zoomOut": "Alles bekijken",
     "uploadCta": "Gebruik je logo",
     "uploadHint": "PNG, JPG of SVG – je logo blijft in je browser.",
     "uploadOneColour": "Bij foliedruk wordt één kleur gebruikt – zo ziet je logo in folie eruit.",

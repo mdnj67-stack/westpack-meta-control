@@ -44,7 +44,7 @@
 
   // Images are cached for 30 days (vercel.json), and a rebuilt image keeps its name, so every asset address carries
   // this version. tools/signup/build-assets.js sets it whenever it writes images.
-  const ASSET_VERSION = "20261030";
+  const ASSET_VERSION = "202610301319";
 
   // ---------- small utilities ----------
   const now = () => Date.now();

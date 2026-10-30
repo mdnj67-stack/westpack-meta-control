@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter da Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Agora não"
   },
   "logo-studio": {
-    "peek": "Como fica a sua marca em dourado?",
+    "peek": "Como fica a sua marca estampada a quente?",
     "peekCta": "Experimente",
     "kicker": "O teste do foil",
-    "title": "Escreva o nome da sua marca. Nós pomo-lo em dourado.",
-    "lede": "Em direto, numa tampa real. Não custa nada — nem sequer o seu e-mail.",
+    "title": "Escreva o nome da sua marca. Nós estampamo-lo a quente.",
+    "lede": "Em direto, numa embalagem real. Não custa nada — nem sequer o seu e-mail.",
     "nameLabel": "O nome da sua marca",
     "namePlaceholder": "por ex., Atelier Norte",
     "defaultName": "A sua marca",
-    "boxLabel": "Caixa",
+    "boxLabel": "Embalagem",
     "boxes": {
       "seville": "Plástico preto mate",
       "london": "Creme, toque suave",
+      "bag": "Saco de luxo preto",
       "torino": "Preto com rebordo dourado",
       "seoul": "Cartão verde esbatido",
       "madrid": "Castanho-claro, toque suave",
       "frankfurt": "Cartão branco efeito linho"
     },
     "foilLabel": "Foil",
-    "foil": {
+    "finish": {
+      "metallic": "Metalizado",
+      "matt": "Mate",
+      "gloss": "Brilhante"
+    },
+    "colour": {
       "gold": "Dourado",
       "silver": "Prateado",
-      "rose": "Ouro rosa",
-      "oldrose": "Rosa antigo",
+      "copper": "Cobre",
+      "red": "Vermelho",
+      "orange": "Laranja",
+      "pink": "Rosa",
+      "purple": "Roxo",
+      "blue": "Azul",
+      "mint": "Menta",
+      "black": "Preto",
       "white": "Branco",
-      "black": "Preto"
+      "darkblue": "Azul-escuro",
+      "green": "Verde",
+      "oldrose": "Rosa antigo",
+      "yellow": "Amarelo",
+      "clear": "Transparente",
+      "grey": "Cinzento",
+      "brown": "Castanho"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Letra",
     "type": {
       "classic": "Clássica",
       "script": "Manuscrita",
       "clean": "Depurada"
     },
-    "hintLong": "São muitas letras. O logótipo é ajustado à tampa.",
+    "hintLong": "São muitas letras. O logótipo é ajustado para caber.",
     "hintWestpack": "Boa escolha. Mas esse nome já tem dono.",
-    "disclaimer": "Ilustração em tampas reais da Westpack. O seu logótipo é estampado a quente numa única cor.",
-    "lightHintMouse": "Mova o rato sobre a caixa e veja o foil apanhar a luz.",
-    "lightHintTouch": "Arraste um dedo sobre a caixa e veja o foil apanhar a luz. Deslize para a caixa seguinte.",
+    "disclaimer": "Ilustração em embalagens reais da Westpack. O seu logótipo é estampado a quente numa única cor.",
+    "lightHintMouse": "Mova o rato sobre a impressão e veja o foil apanhar a luz.",
+    "lightHintTouch": "Arraste um dedo sobre a impressão e veja o foil apanhar a luz. Deslize para a seguinte.",
     "zoomIn": "Ver a impressão de perto",
-    "zoomOut": "Ver a caixa inteira",
+    "zoomOut": "Ver tudo",
     "uploadCta": "Usar o seu logótipo",
     "uploadHint": "PNG, JPG ou SVG — o seu logótipo fica no seu browser.",
     "uploadOneColour": "A estampagem a quente é feita numa só cor — assim fica o seu logótipo.",

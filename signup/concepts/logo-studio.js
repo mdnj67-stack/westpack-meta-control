@@ -1,16 +1,16 @@
 /**
- * Logo studio - "Type your brand name. We'll put it in gold."
+ * Logo studio - "Type your brand name. We'll print it in foil."
  *
- * The visitor's brand name, or their own logo, foil-printed live on six real Westpack lids: close-ups from the
- * Content Library with Westpack's demo print removed (tools/signup/clean-plate.html). Each lid was measured on its
+ * The visitor's brand name, or their own logo, foil-printed live on six real Westpack lids and a carrier bag: photos
+ * from the Content Library with the demo or customer print removed (tools/signup/clean-plate.html), in any of the 25
+ * foils of Westpack's logo-print module - nine metallic, eleven matt, five gloss. Each lid (and the bag's front) was measured on its
  * photo (tools/signup/lid-geometry.js): its four edges found to the pixel, so one homography lays the print flat on
  * the lid's surface - straight along its edges and foreshortened exactly as the camera saw it - at the site's
  * maximum logo size, as Westpack's own demo prints are. Each foil is as bright as Westpack's real foil measured in
  * the same photo. The print is SVG with real lighting: a specular highlight from a light that follows
  * the pointer or finger across the lid, the light and shade the lid itself has in the photo, the board's texture
  * where the material has one, fine foil grain, and the print pressed into the surface (a shadow on one inner wall,
- * light on the other). The foils are the ones the logo-printing page lists. Nothing is asked before the result is
- * shown in full.
+ * light on the other). Nothing is asked before the result is shown in full.
  */
 (function () {
   // Each lid as measured on its photo (tools/signup/lid-geometry.js): quad - the lid surface's corners in % of the
@@ -20,25 +20,80 @@
   // relative to the print area's mean.
   // lids:begin - measured by tools/signup/lid-geometry.js refine; do not edit by hand
   const LIDS = {
-    seville: {"quad":[[52.3,-0.19],[117.34,49.9],[38.79,106.44],[-29.94,42.83]],"aspect":1,"print":{"cx":0.55,"cy":0.51,"w":0.6,"h":0.6},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":0.62,"pigment":0.81},"light":[[1.116,1.145,1.116,1.09,1.098,1.09,1.09,1.116,1.09,1.168,1.194,1.194],[1.168,1.116,1.09,1.09,1.09,1.087,1.087,1.064,1.09,1.142,1.168,1.142],[1.116,1.113,1.113,1.09,1.09,1.064,1.061,1.061,1.038,1.038,1.116,1.142],[1.116,1.113,1.09,1.087,1.064,1.064,1.038,1.058,1.032,0.983,0.986,0.986],[1.09,1.09,1.069,1.061,1.038,1.035,1.027,1.025,1,0.957,0.934,0.986],[1.061,1.061,1.061,1.058,1.032,1.032,1.022,0.98,0.954,0.957,0.958,0.986],[1.038,1.038,1.035,1.024,0.986,0.986,0.96,0.947,0.931,0.957,0.978,1.013],[1.038,1.035,1.012,0.986,0.96,0.934,0.908,0.908,0.934,0.958,0.986,0.986],[1.012,0.986,0.986,0.96,0.934,0.882,0.882,0.908,0.934,0.96,1.012,1.038],[1.038,0.986,0.973,0.947,0.905,0.879,0.879,0.908,0.934,0.986,1.038,1.038],[1.02,1.038,0.96,0.908,0.879,0.879,0.905,0.931,0.96,0.986,1.012,1.012],[1.038,1.038,0.986,0.934,0.856,0.856,0.908,0.934,0.986,0.986,0.986,0.986]]},
-    london: {"quad":[[53,-6.64],[113.56,43.04],[41.89,106.19],[-19.64,34.88]],"aspect":1,"print":{"cx":0.51,"cy":0.49,"w":0.66,"h":0.66},"tone":"light","foil":"silver","grain":null,"exposure":{"metal":0.7,"pigment":0.81},"light":[[0.997,1.005,1.006,1.011,1.018,1.017,1.011,1.01,1.009,1.01,1.01,1.011],[0.995,0.999,1.006,1.013,1.017,1.017,1.018,1.012,1.007,1.007,1.01,1.011],[0.995,1,1.008,1.014,1.014,1.019,1.019,1.019,1.009,1.004,1.004,1.009],[0.992,1.001,1.004,1.008,1.014,1.019,1.016,1.015,1.015,1.008,1.004,1.004],[0.992,0.998,1.002,1.005,1.011,1.011,1.008,1.009,1.01,1.012,1.007,1.002],[0.99,0.997,1.003,1.004,1.007,1.007,1.003,1.003,1.006,1.005,1.009,1.002],[0.989,0.995,0.999,0.999,1.002,0.999,0.999,1,1.006,1.006,1.003,0.995],[0.975,0.99,0.995,0.994,0.994,0.995,0.996,0.998,1.002,1.002,0.998,0.991],[0.965,0.976,0.99,0.987,0.986,0.991,0.991,0.995,0.998,0.995,0.986,0.986],[0.956,0.963,0.976,0.982,0.985,0.988,0.99,0.991,0.991,0.986,0.982,0.982],[0.953,0.955,0.958,0.967,0.976,0.976,0.982,0.982,0.98,0.975,0.971,0.972],[0.953,0.952,0.952,0.954,0.958,0.967,0.976,0.973,0.967,0.967,0.971,0.971]]},
-    torino: {"quad":[[6.92,62.03],[60.28,33],[99.25,66.26],[42.58,100.87]],"aspect":1,"print":{"cx":0.5,"cy":0.47,"w":0.78,"h":0.7},"tone":"dark","foil":"gold","grain":null,"exposure":{"metal":0.89,"pigment":0.85},"light":[[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.005,1.005,1.005,1.002,1.011,1.018,1.013,0.999,0.967,0.953,0.938,0.992],[1.028,1.028,1.034,1.025,1.018,1.019,1.013,0.999,0.967,0.944,0.924,0.968],[1.042,1.042,1.061,1.038,1.034,1.034,1.028,1.005,0.98,0.953,0.924,0.951],[1.032,1.032,1.055,1.047,1.048,1.047,1.032,1.018,1.003,0.974,0.924,0.949],[1.018,1.018,1.032,1.047,1.047,1.038,1.032,1.018,1.003,0.974,0.924,0.924],[1.009,1.009,1.011,1.024,1.015,1.015,1.001,1.001,0.993,0.96,0.928,0.928],[0.996,0.996,1.001,1.001,1.002,0.992,0.992,0.988,0.972,0.945,0.932,0.932],[0.986,0.986,0.977,0.988,0.988,0.992,0.988,0.977,0.959,0.944,0.944,0.944],[0.988,0.988,0.986,0.996,1.011,1.015,1.009,1.001,0.986,0.959,0.959,0.959],[0.988,1.044,1.044,0.996,1.011,1.073,1.009,1.001,0.986,0.959,0.959,0.959]]},
-    seoul: {"quad":[[7.07,25.85],[62.33,3.98],[105.19,42.52],[44.25,66.14]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"mid","foil":"white","grain":"structured","exposure":{"metal":0.85,"pigment":0.87},"light":[[1.001,1.037,1.041,1.044,1.048,1.05,1.052,1.054,1.053,1.043,1.025,0.976],[0.936,0.982,0.988,0.993,0.993,0.993,0.999,0.999,1.004,1.004,1.004,0.972],[0.932,0.982,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,0.971],[0.932,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,0.986],[0.933,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.009],[0.941,0.993,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.01,1.01,0.998],[0.952,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.983],[0.96,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.98],[0.962,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.993,0.995,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.988,0.993,0.994,0.998,0.998,1.004,1.004,1.005,1.01,1.01,0.982],[0.962,0.988,0.988,0.988,0.987,0.982,0.979,0.976,0.981,0.982,0.991,0.988]]},
-    madrid: {"quad":[[16.07,2.78],[79.11,7.94],[78.21,74.25],[25.3,65]],"aspect":0.963,"print":{"cx":0.5,"cy":0.47,"w":0.72,"h":0.62},"tone":"mid","foil":"oldrose","grain":"velour","exposure":{"metal":0.9,"pigment":1.1},"light":[[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.991],[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.999],[1.005,1.005,1.042,1.038,1.026,1.009,1.006,1.001,1.001,1.001,1.014,1.022],[1.007,1.007,1.047,1.042,1.026,1.014,1.009,1.001,1.001,1.009,1.018,1.022],[1,1,1.039,1.034,1.022,1.009,1.007,1.001,1.001,1.001,1.009,1.015],[0.992,0.992,1.03,1.026,1.018,1.009,1.001,1.001,1.001,1.001,1.001,1.001],[0.983,0.983,1.018,1.018,1.009,1.001,0.999,0.994,0.993,0.993,0.993,0.993],[0.974,0.974,1.009,1.009,1.002,0.999,0.992,0.987,0.983,0.983,0.981,0.974],[0.967,0.967,1.002,1.002,0.995,0.992,0.984,0.981,0.976,0.973,0.967,0.966],[0.959,0.959,0.994,0.992,0.987,0.983,0.976,0.973,0.966,0.965,0.957,0.956],[0.951,0.951,0.983,0.983,0.976,0.973,0.966,0.965,0.957,0.953,0.946,0.94],[0.951,0.943,0.975,0.975,0.972,0.965,0.957,0.953,0.949,0.945,0.94,0.932]]},
-    frankfurt: {"quad":[[15.66,49.64],[59.93,18.34],[96.12,58.69],[50.84,92.64]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"light","foil":"gold","grain":"linen","exposure":{"metal":0.5,"pigment":0.9},"light":[[0.976,0.989,0.985,0.981,0.978,0.976,0.973,0.972,0.971,0.97,0.971,0.959],[0.995,1.009,1.006,1.003,0.999,0.998,0.994,0.99,0.99,0.99,0.988,0.97],[0.995,1.009,1.007,1.003,1.001,0.999,0.997,0.994,0.993,0.992,0.991,0.97],[0.993,1.009,1.007,1.005,1.001,1,0.998,0.994,0.994,0.992,0.992,0.97],[0.992,1.009,1.007,1.005,1.004,1,1,0.996,0.996,0.996,0.992,0.97],[0.989,1.007,1.007,1.005,1.004,1,1,1,0.996,0.996,0.992,0.972],[0.989,1.008,1.007,1.005,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.989,1.008,1.004,1.003,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.99,1.008,1.004,1.003,1.003,1.001,0.999,0.996,0.996,0.996,0.996,0.974],[0.99,1.008,1.006,1.004,1.002,1.001,1,0.999,0.999,0.996,0.996,0.974],[0.993,1.008,1.006,1.005,1.002,1.002,1.001,0.999,0.999,0.999,0.996,0.977],[0.983,0.994,0.991,0.991,0.991,0.989,0.989,0.989,0.989,0.986,0.985,0.963]]},
+    seville: {"quad":[[52.3,-0.19],[117.34,49.9],[38.79,106.44],[-29.94,42.83]],"aspect":1,"print":{"cx":0.55,"cy":0.51,"w":0.6,"h":0.6},"tone":"dark","foil":"metallic-gold","grain":null,"exposure":{"metal":0.62,"pigment":0.81},"light":[[1.116,1.145,1.116,1.09,1.098,1.09,1.09,1.116,1.09,1.168,1.194,1.194],[1.168,1.116,1.09,1.09,1.09,1.087,1.087,1.064,1.09,1.142,1.168,1.142],[1.116,1.113,1.113,1.09,1.09,1.064,1.061,1.061,1.038,1.038,1.116,1.142],[1.116,1.113,1.09,1.087,1.064,1.064,1.038,1.058,1.032,0.983,0.986,0.986],[1.09,1.09,1.069,1.061,1.038,1.035,1.027,1.025,1,0.957,0.934,0.986],[1.061,1.061,1.061,1.058,1.032,1.032,1.022,0.98,0.954,0.957,0.958,0.986],[1.038,1.038,1.035,1.024,0.986,0.986,0.96,0.947,0.931,0.957,0.978,1.013],[1.038,1.035,1.012,0.986,0.96,0.934,0.908,0.908,0.934,0.958,0.986,0.986],[1.012,0.986,0.986,0.96,0.934,0.882,0.882,0.908,0.934,0.96,1.012,1.038],[1.038,0.986,0.973,0.947,0.905,0.879,0.879,0.908,0.934,0.986,1.038,1.038],[1.02,1.038,0.96,0.908,0.879,0.879,0.905,0.931,0.96,0.986,1.012,1.012],[1.038,1.038,0.986,0.934,0.856,0.856,0.908,0.934,0.986,0.986,0.986,0.986]]},
+    london: {"quad":[[53,-6.64],[113.56,43.04],[41.89,106.19],[-19.64,34.88]],"aspect":1,"print":{"cx":0.51,"cy":0.49,"w":0.66,"h":0.66},"tone":"light","foil":"metallic-silver","grain":null,"exposure":{"metal":0.7,"pigment":0.81},"light":[[0.997,1.005,1.006,1.011,1.018,1.017,1.011,1.01,1.009,1.01,1.01,1.011],[0.995,0.999,1.006,1.013,1.017,1.017,1.018,1.012,1.007,1.007,1.01,1.011],[0.995,1,1.008,1.014,1.014,1.019,1.019,1.019,1.009,1.004,1.004,1.009],[0.992,1.001,1.004,1.008,1.014,1.019,1.016,1.015,1.015,1.008,1.004,1.004],[0.992,0.998,1.002,1.005,1.011,1.011,1.008,1.009,1.01,1.012,1.007,1.002],[0.99,0.997,1.003,1.004,1.007,1.007,1.003,1.003,1.006,1.005,1.009,1.002],[0.989,0.995,0.999,0.999,1.002,0.999,0.999,1,1.006,1.006,1.003,0.995],[0.975,0.99,0.995,0.994,0.994,0.995,0.996,0.998,1.002,1.002,0.998,0.991],[0.965,0.976,0.99,0.987,0.986,0.991,0.991,0.995,0.998,0.995,0.986,0.986],[0.956,0.963,0.976,0.982,0.985,0.988,0.99,0.991,0.991,0.986,0.982,0.982],[0.953,0.955,0.958,0.967,0.976,0.976,0.982,0.982,0.98,0.975,0.971,0.972],[0.953,0.952,0.952,0.954,0.958,0.967,0.976,0.973,0.967,0.967,0.971,0.971]]},
+    torino: {"quad":[[6.92,62.03],[60.28,33],[99.25,66.26],[42.58,100.87]],"aspect":1,"print":{"cx":0.5,"cy":0.47,"w":0.78,"h":0.7},"tone":"dark","foil":"metallic-gold","grain":null,"exposure":{"metal":0.89,"pigment":0.85},"light":[[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.024,1.024,1.013,1.013,1.024,1.045,1.047,1.038,1.018,1.008,0.995,0.995],[1.005,1.005,1.005,1.002,1.011,1.018,1.013,0.999,0.967,0.953,0.938,0.992],[1.028,1.028,1.034,1.025,1.018,1.019,1.013,0.999,0.967,0.944,0.924,0.968],[1.042,1.042,1.061,1.038,1.034,1.034,1.028,1.005,0.98,0.953,0.924,0.951],[1.032,1.032,1.055,1.047,1.048,1.047,1.032,1.018,1.003,0.974,0.924,0.949],[1.018,1.018,1.032,1.047,1.047,1.038,1.032,1.018,1.003,0.974,0.924,0.924],[1.009,1.009,1.011,1.024,1.015,1.015,1.001,1.001,0.993,0.96,0.928,0.928],[0.996,0.996,1.001,1.001,1.002,0.992,0.992,0.988,0.972,0.945,0.932,0.932],[0.986,0.986,0.977,0.988,0.988,0.992,0.988,0.977,0.959,0.944,0.944,0.944],[0.988,0.988,0.986,0.996,1.011,1.015,1.009,1.001,0.986,0.959,0.959,0.959],[0.988,1.044,1.044,0.996,1.011,1.073,1.009,1.001,0.986,0.959,0.959,0.959]]},
+    seoul: {"quad":[[7.07,25.85],[62.33,3.98],[105.19,42.52],[44.25,66.14]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"mid","foil":"matt-white","grain":"structured","exposure":{"metal":0.85,"pigment":0.87},"light":[[1.001,1.037,1.041,1.044,1.048,1.05,1.052,1.054,1.053,1.043,1.025,0.976],[0.936,0.982,0.988,0.993,0.993,0.993,0.999,0.999,1.004,1.004,1.004,0.972],[0.932,0.982,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,0.971],[0.932,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,0.986],[0.933,0.988,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.009],[0.941,0.993,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.01,1.01,0.998],[0.952,0.993,0.993,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.983],[0.96,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.98],[0.962,0.993,0.998,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.993,0.995,0.998,0.998,0.998,1.004,1.004,1.004,1.01,1.01,0.977],[0.965,0.988,0.993,0.994,0.998,0.998,1.004,1.004,1.005,1.01,1.01,0.982],[0.962,0.988,0.988,0.988,0.987,0.982,0.979,0.976,0.981,0.982,0.991,0.988]]},
+    madrid: {"quad":[[16.07,2.78],[79.11,7.94],[78.21,74.25],[25.3,65]],"aspect":0.963,"print":{"cx":0.5,"cy":0.47,"w":0.72,"h":0.62},"tone":"mid","foil":"matt-oldrose","grain":"velour","exposure":{"metal":0.9,"pigment":1.1},"light":[[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.991],[0.983,0.983,1.014,1.015,1.007,1.001,0.993,0.99,0.985,0.984,0.991,0.999],[1.005,1.005,1.042,1.038,1.026,1.009,1.006,1.001,1.001,1.001,1.014,1.022],[1.007,1.007,1.047,1.042,1.026,1.014,1.009,1.001,1.001,1.009,1.018,1.022],[1,1,1.039,1.034,1.022,1.009,1.007,1.001,1.001,1.001,1.009,1.015],[0.992,0.992,1.03,1.026,1.018,1.009,1.001,1.001,1.001,1.001,1.001,1.001],[0.983,0.983,1.018,1.018,1.009,1.001,0.999,0.994,0.993,0.993,0.993,0.993],[0.974,0.974,1.009,1.009,1.002,0.999,0.992,0.987,0.983,0.983,0.981,0.974],[0.967,0.967,1.002,1.002,0.995,0.992,0.984,0.981,0.976,0.973,0.967,0.966],[0.959,0.959,0.994,0.992,0.987,0.983,0.976,0.973,0.966,0.965,0.957,0.956],[0.951,0.951,0.983,0.983,0.976,0.973,0.966,0.965,0.957,0.953,0.946,0.94],[0.951,0.943,0.975,0.975,0.972,0.965,0.957,0.953,0.949,0.945,0.94,0.932]]},
+    frankfurt: {"quad":[[15.66,49.64],[59.93,18.34],[96.12,58.69],[50.84,92.64]],"aspect":1,"print":{"cx":0.5,"cy":0.5,"w":0.72,"h":0.72},"tone":"light","foil":"metallic-gold","grain":"linen","exposure":{"metal":0.5,"pigment":0.9},"light":[[0.976,0.989,0.985,0.981,0.978,0.976,0.973,0.972,0.971,0.97,0.971,0.959],[0.995,1.009,1.006,1.003,0.999,0.998,0.994,0.99,0.99,0.99,0.988,0.97],[0.995,1.009,1.007,1.003,1.001,0.999,0.997,0.994,0.993,0.992,0.991,0.97],[0.993,1.009,1.007,1.005,1.001,1,0.998,0.994,0.994,0.992,0.992,0.97],[0.992,1.009,1.007,1.005,1.004,1,1,0.996,0.996,0.996,0.992,0.97],[0.989,1.007,1.007,1.005,1.004,1,1,1,0.996,0.996,0.992,0.972],[0.989,1.008,1.007,1.005,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.989,1.008,1.004,1.003,1.004,1,1,0.999,0.996,0.996,0.996,0.974],[0.99,1.008,1.004,1.003,1.003,1.001,0.999,0.996,0.996,0.996,0.996,0.974],[0.99,1.008,1.006,1.004,1.002,1.001,1,0.999,0.999,0.996,0.996,0.974],[0.993,1.008,1.006,1.005,1.002,1.002,1.001,0.999,0.999,0.999,0.996,0.977],[0.983,0.994,0.991,0.991,0.991,0.989,0.989,0.989,0.989,0.986,0.985,0.963]]},
+    bag: {"quad":[[12.9,24.67],[79.68,28.82],[75.39,84.97],[5.63,77.07]],"aspect":1.2857,"print":{"cx":0.5,"cy":0.5,"w":0.333,"h":0.4286},"tone":"dark","foil":"metallic-gold","grain":null,"exposure":{"metal":1.3,"pigment":0.95},"light":[[1.099,1.11,1.118,1.11,1.091,1.073,1.062,1.059,1.055,1.053,1.05,1.054],[1.097,1.103,1.109,1.099,1.082,1.063,1.053,1.045,1.041,1.034,1.032,1.034],[1.09,1.091,1.091,1.082,1.072,1.054,1.041,1.032,1.023,1.016,1.007,1.008],[1.073,1.08,1.073,1.069,1.054,1.042,1.028,1.016,1.006,0.997,0.988,0.988],[1.062,1.062,1.054,1.05,1.041,1.025,1.014,0.999,0.988,0.978,0.969,0.969],[1.045,1.044,1.035,1.034,1.025,1.014,0.998,0.988,0.97,0.96,0.951,0.951],[1.033,1.032,1.025,1.016,1.007,0.998,0.988,0.97,0.96,0.942,0.935,0.932],[1.02,1.016,1.007,1.006,0.997,0.988,0.97,0.961,0.951,0.933,0.924,0.92],[1.006,1.003,0.997,0.989,0.986,0.978,0.961,0.951,0.941,0.924,0.914,0.909],[0.997,0.988,0.986,0.98,0.978,0.969,0.952,0.941,0.932,0.92,0.911,0.898],[0.98,0.978,0.977,0.97,0.969,0.96,0.951,0.933,0.923,0.911,0.901,0.889],[0.97,0.969,0.969,0.969,0.96,0.951,0.938,0.924,0.914,0.901,0.892,0.88]]},
   };
   // lids:end
-  const BOX_ORDER = ["seville", "london", "torino", "seoul", "madrid", "frankfurt"];
-  // the colours the logo-printing page lists, drawn as metal (a gradient that catches light) or as pigment
-  const FOILS = {
-    // gold as saturated as real gold foil photographs: measured on Westpack's demo prints at a median of (131,103,69)
-    gold: { kind: "metal", light: "#ffe2a8", stops: ["#4a3214", "#9a7238", "#e6c27a", "#b58a4a", "#6e4f22", "#d9b46c", "#8f6a33", "#e9c983"] },
-    silver: { kind: "metal", light: "#ffffff", stops: ["#5a5e63", "#adb2b8", "#f8f9fa", "#989da3", "#6d7176", "#e5e8eb", "#888d93", "#f4f5f7"] },
-    rose: { kind: "metal", light: "#fff0e6", stops: ["#683626", "#b8745f", "#f7cfb9", "#a96a53", "#7a4231", "#eab69c", "#91533d", "#f3c8af"] },
-    oldrose: { kind: "pigment", color: "#c4908a", spec: 0.35 },
-    white: { kind: "pigment", color: "#f3f4f4", spec: 0.3 },
-    black: { kind: "pigment", color: "#141414", spec: 1.05 },
+  const BOX_ORDER = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
+
+  // ---- the foils: the 25 of Westpack's logo-print module, by finish ----
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const toHex = (rgb) => `#${rgb.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join("")}`;
+  const mix = (a, b, k) => toHex(hex(a).map((v, i) => v + (hex(b)[i] - v) * k));
+  // a metal's eight stops from its shadow, body and highlight, in the order the measured gold runs: dark, body,
+  // light, and the same three again at other depths, so the gradient crosses the print as bands of reflection
+  const metalStops = (dark, body, light) => [dark, body, light, mix(body, light, 0.42), mix(dark, body, 0.45), mix(body, light, 0.72), mix(dark, body, 0.78), mix(body, light, 0.86)];
+  // a gloss foil is a dark mirror: deep body, hard bright streaks
+  const glossStops = (deep, body, streak) => [deep, body, streak, mix(deep, body, 0.3), deep, mix(body, streak, 0.6), mix(deep, body, 0.5), streak];
+  // Metallic is drawn as metal: a gradient that catches the light. Matt is flat pigment with only a soft sheen, so
+  // the light moves over it without a glint. Gloss is a dark mirror with a sharp glint. The transparent foil is a
+  // clear glaze: a slight darkening, the pressed edges and the highlight, nothing else. The order in each finish
+  // puts the colours most often printed first.
+  const FOIL_TABLE = {
+    metallic: {
+      // gold as saturated as real gold foil photographs: measured on Westpack's demo prints at a median of (131,103,69)
+      gold: { light: "#ffe2a8", stops: ["#4a3214", "#9a7238", "#e6c27a", "#b58a4a", "#6e4f22", "#d9b46c", "#8f6a33", "#e9c983"] },
+      silver: { light: "#ffffff", stops: ["#5a5e63", "#adb2b8", "#f8f9fa", "#989da3", "#6d7176", "#e5e8eb", "#888d93", "#f4f5f7"] },
+      copper: { light: "#fff0e6", stops: ["#683626", "#b8745f", "#f7cfb9", "#a96a53", "#7a4231", "#eab69c", "#91533d", "#f3c8af"] },
+      red: { light: "#ffd6d6", stops: metalStops("#4e050c", "#b5142a", "#ff8f95") },
+      orange: { light: "#ffe8c2", stops: metalStops("#6b3604", "#d9820f", "#ffd387") },
+      pink: { light: "#ffe0f8", stops: metalStops("#5c0f53", "#c73fb4", "#ffb4f0") },
+      purple: { light: "#f0dcff", stops: metalStops("#320848", "#7f22a6", "#d6a2f2") },
+      blue: { light: "#dcefff", stops: metalStops("#082f61", "#1d78cc", "#9ad6ff") },
+      mint: { light: "#dcfff8", stops: metalStops("#044a40", "#14a891", "#9ff0df") },
+    },
+    matt: {
+      black: { color: "#161616", spec: 0.3 },
+      white: { color: "#f3f4f4", spec: 0.22 },
+      darkblue: { color: "#22306e", spec: 0.16 },
+      blue: { color: "#3b8cc8", spec: 0.16 },
+      green: { color: "#3c8c3a", spec: 0.16 },
+      // the old rose Madrid's own demo print was made in
+      oldrose: { color: "#c4908a", spec: 0.2 },
+      orange: { color: "#e3921a", spec: 0.16 },
+      red: { color: "#ee2e1b", spec: 0.16 },
+      purple: { color: "#8a2cc4", spec: 0.16 },
+      yellow: { color: "#f2df1c", spec: 0.16 },
+      clear: { clear: true },
+    },
+    gloss: {
+      black: { light: "#ffffff", stops: glossStops("#050505", "#1c1c1c", "#bdbdbd") },
+      grey: { light: "#ffffff", stops: glossStops("#2a2a2c", "#7b7b80", "#f4f4f6") },
+      brown: { light: "#ffeedd", stops: glossStops("#1a0c04", "#5a3317", "#e7bb8a") },
+      pink: { light: "#fff2ff", stops: glossStops("#6a3074", "#c486d0", "#fff0ff") },
+      mint: { light: "#effffb", stops: glossStops("#05463c", "#1cbfa2", "#d6fff6") },
+    },
   };
+  const FOILS = {};
+  for (const [finish, colours] of Object.entries(FOIL_TABLE)) {
+    for (const [colour, d] of Object.entries(colours)) {
+      FOILS[`${finish}-${colour}`] = Object.assign({ finish, colour, kind: d.clear ? "clear" : finish === "matt" ? "pigment" : finish === "gloss" ? "gloss" : "metal" }, d);
+    }
+  }
+  const FINISHES = Object.keys(FOIL_TABLE);
+  // the swatch each foil gets in the picker, made from the same colours the print is drawn with
+  function coinStyle(f) {
+    const s = f.stops;
+    if (f.kind === "metal") return `background: conic-gradient(from 200deg, ${[s[6], s[7], s[1], mix(s[2], "#ffffff", 0.2), s[4], s[5], s[3], s[6]].join(", ")})`;
+    if (f.kind === "gloss") return `background: linear-gradient(140deg, ${s[0]} 0%, ${s[1]} 18%, ${s[2]} 27%, ${s[0]} 40%, ${s[3]} 58%, ${s[7]} 66%, ${s[4]} 80%, ${s[1]} 100%)`;
+    if (f.kind === "pigment") return `background: radial-gradient(circle at 40% 35%, ${mix(f.color, "#ffffff", 0.14)}, ${f.color} 55%, ${mix(f.color, "#000000", 0.16)})`;
+    return "";
+  }
   // the board's own texture, which hot foil follows where it is pressed in: noise at the scale of the material
   // (print units: the print area is 1000 wide, about 38 mm), and how much of it shows in metal and in pigment
   const GRAINS = {
@@ -140,8 +195,11 @@
     function build() {
       const f = FOILS[foilName], lid = LIDS[lidId];
       grad.textContent = "";
-      if (f.kind === "metal") f.stops.forEach((c, i) => grad.appendChild(svgEl("stop", { offset: `${(i / (f.stops.length - 1)) * 100}%`, "stop-color": c })));
-      const fill = f.kind === "metal" ? `url(#${uid}-g)` : f.color;
+      const banded = f.kind === "metal" || f.kind === "gloss";
+      if (banded) f.stops.forEach((c, i) => grad.appendChild(svgEl("stop", { offset: `${(i / (f.stops.length - 1)) * 100}%`, "stop-color": c })));
+      // the clear foil takes no colour of its own: its filter reads only the print's shape, and a thumbnail, which
+      // has no filter, shows it as a faint glaze
+      const fill = banded ? `url(#${uid}-g)` : f.kind === "clear" ? "rgba(255, 255, 255, 0.3)" : f.color;
       text.setAttribute("fill", fill); logo.setAttribute("fill", fill);
       filter.textContent = "";
       light = null;
@@ -167,22 +225,39 @@
         add("feComposite", { in: "lt", in2: "rimBb", operator: "in", result: "gl" });
         add("feComposite", { in: "gl", in2: "SourceAlpha", operator: "in", result: "glow" });
       };
-      const metal = f.kind === "metal";
+      // the transparent foil: no colour, only the print pressed in, a faint darkening where the foil seals the
+      // surface, and the glint where the light catches its gloss
+      if (f.kind === "clear") {
+        add("feGaussianBlur", { in: "SourceAlpha", stdDeviation: 2.6, result: "h" });
+        light = svgEl("fePointLight", { x: 300, y: -120, z: 300 });
+        add("feSpecularLighting", { in: "h", surfaceScale: 4, specularConstant: 1.5, specularExponent: 40, "lighting-color": "#ffffff", result: "sp" }, [light]);
+        // white whose opacity is the highlight's brightness, cut to the print
+        add("feColorMatrix", { in: "sp", type: "matrix", values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.3 0.59 0.11 0 0", result: "spA" });
+        add("feComposite", { in: "spA", in2: "SourceAlpha", operator: "in", result: "glint" });
+        add("feFlood", { "flood-color": "#000", "flood-opacity": 0.13, result: "tint" });
+        add("feComposite", { in: "tint", in2: "SourceAlpha", operator: "in", result: "glaze" });
+        edges(0.34, 0.3);
+        add("feMerge", {}, ["glaze", "shadow", "glow", "glint"].map((n) => svgEl("feMergeNode", { in: n })));
+        return;
+      }
+      // gloss is drawn with the metal's machinery - a banded fill and the metal's exposure - but a harder glint
+      const metal = f.kind === "metal" || f.kind === "gloss", gloss = f.kind === "gloss";
       // Every step below works on opaque images and the print's shape is cut out once, at the end. An arithmetic
       // sum adds alpha as well as colour, and engines disagree on a highlight's alpha (Chrome gives it its brightest
       // channel, WebKit 1), so adding the highlight to the clipped foil thickened and greyed every letter in WebKit.
-            // how much of the moving highlight is added: the measured real foil allows a glint, not a glare
-      const SPEC_METAL = 0.45, SPEC_PIGMENT = 0.4;
+      // How much of the moving highlight is added: the measured real foil allows a glint, not a glare; a gloss foil a
+      // sharper one, and matt foil only a soft sheen that never glints
+      const SPEC_METAL = 0.45, SPEC_GLOSS = 0.7, SPEC_PIGMENT = 0.4;
       const OPAQUE = "1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1";
       add("feColorMatrix", { in: "SourceGraphic", type: "matrix", values: OPAQUE, result: "foil" });
       add("feGaussianBlur", { in: "SourceAlpha", stdDeviation: 2.6, result: "h" });
       light = svgEl("fePointLight", { x: 300, y: -120, z: 300 });
-      add("feSpecularLighting", { in: "h", surfaceScale: 4, specularConstant: metal ? 1.35 : f.spec, specularExponent: metal ? 24 : 34, "lighting-color": f.light || "#ffffff", result: "sp" }, [light]);
+      add("feSpecularLighting", { in: "h", surfaceScale: 4, specularConstant: gloss ? 2 : metal ? 1.35 : f.spec, specularExponent: gloss ? 70 : metal ? 24 : 10, "lighting-color": f.light || "#ffffff", result: "sp" }, [light]);
       add("feColorMatrix", { in: "sp", type: "matrix", values: OPAQUE, result: "spOpaque" });
       // squared, the opaque highlight is what Chrome added before (colour times its brightest channel), which is
       // what the foils were calibrated against
       add("feComponentTransfer", { in: "spOpaque", result: "spec" }, ["R", "G", "B"].map((c) => svgEl(`feFunc${c}`, { type: "gamma", amplitude: 1, exponent: 2, offset: 0 })));
-      add("feComposite", { in: "foil", in2: "spec", operator: "arithmetic", k1: 0, k2: 1, k3: metal ? SPEC_METAL : SPEC_PIGMENT, k4: 0, result: "lit" });
+      add("feComposite", { in: "foil", in2: "spec", operator: "arithmetic", k1: 0, k2: 1, k3: gloss ? SPEC_GLOSS : metal ? SPEC_METAL : SPEC_PIGMENT, k4: 0, result: "lit" });
       // the lid's own light: the print is as bright or as shaded as the surface under it. Grey 0.5 is neutral; metal
       // follows it less than pigment, because what a metal shows is mostly the light it reflects
       const follow = metal ? 0.6 : 1;
@@ -315,7 +390,7 @@
   function mount(stage, ctx) {
     const { el, copy, t } = ctx;
     const uid = `ls${Math.random().toString(36).slice(2, 7)}`;
-    const choice = { box: "seville", foil: "gold", type: "classic", name: "", logo: null };
+    const choice = { box: BOX_ORDER[0], foil: LIDS[BOX_ORDER[0]].foil, type: "classic", name: "", logo: null };
     let foilTouched = false;
     const firstChange = {};
     const once = (key) => { if (!firstChange[key]) { firstChange[key] = true; ctx.track(key); } };
@@ -379,14 +454,41 @@
     const hint = el("p", { class: "ls-hint", "aria-live": "polite" });
     const group = (labelText, key, values, labels) => {
       const gid = `${uid}-${key}`;
+      // each face shows the visitor's own name, so the choice is made on what will be printed
       const buttons = values.map((v) => el("button", { type: "button", class: `ls-chip ls-chip-${key}`, "data-value": v, "aria-pressed": "false", "aria-label": labels[v], onclick: () => setFoilOrType(key, v) },
-        key === "foil"
-          ? [el("span", { class: `ls-coin ls-coin-${v}`, "aria-hidden": "true" }), el("span", { class: "ls-chip-label", "aria-hidden": "true", text: labels[v] })]
-          // each face shows the visitor's own name, so the choice is made on what will be printed
-          : [el("span", { class: `ls-type-sample ls-type-${v}`, "aria-hidden": "true" }), el("span", { class: "ls-chip-label", "aria-hidden": "true", text: labels[v] })]));
+        [el("span", { class: `ls-type-sample ls-type-${v}`, "aria-hidden": "true" }), el("span", { class: "ls-chip-label", "aria-hidden": "true", text: labels[v] })]));
       return { node: el("div", { class: "ls-group", role: "group", "aria-labelledby": gid }, [el("span", { id: gid, class: "ls-group-label", text: labelText }), el("div", { class: `ls-chips ls-chips-${key}` }, buttons)]), buttons };
     };
-    const foilGroup = group(copy.foilLabel, "foil", Object.keys(FOILS), copy.foil);
+    // the foils as Westpack's logo-print module lists them: a finish, then its colours, and the chosen one named in
+    // words beside the label. Changing the finish keeps the colour where that finish has it (black, mint, pink), so
+    // the print changes at once and stays recognisable; otherwise it takes the finish's first colour
+    // the transparent foil is named alone: it has no colour for a finish to describe
+    const foilName = (id) => {
+      const f = FOILS[id];
+      if (f.kind === "clear") return copy.colour[f.colour];
+      const s = t(copy.foilName, { finish: copy.finish[f.finish].toLocaleLowerCase(), colour: copy.colour[f.colour].toLocaleLowerCase() });
+      return s.charAt(0).toLocaleUpperCase() + s.slice(1);
+    };
+    const foilLabelId = `${uid}-foil`;
+    const foilNow = el("span", { class: "ls-foil-now", "aria-live": "polite" });
+    const finishButtons = FINISHES.map((fin) => el("button", { type: "button", class: "ls-finish", "data-finish": fin, "aria-pressed": "false", onclick: () => setFinish(fin), text: copy.finish[fin] }));
+    const swatches = Object.keys(FOILS).map((id) => el("button", { type: "button", class: "ls-chip ls-chip-foil", "data-value": id, "data-finish": FOILS[id].finish, "aria-pressed": "false", "aria-label": foilName(id), title: foilName(id), onclick: () => setFoilOrType("foil", id) },
+      [el("span", { class: `ls-coin is-${FOILS[id].kind}`, style: coinStyle(FOILS[id]), "aria-hidden": "true" })]));
+    const foilGroup = {
+      node: el("div", { class: "ls-group ls-foils", role: "group", "aria-labelledby": foilLabelId }, [
+        el("div", { class: "ls-foil-head" }, [el("span", { id: foilLabelId, class: "ls-group-label", text: copy.foilLabel }), foilNow]),
+        el("div", { class: "ls-finishes" }, finishButtons),
+        el("div", { class: "ls-chips ls-chips-foil" }, swatches),
+      ]),
+      buttons: swatches,
+    };
+    function setFinish(fin) {
+      const now = FOILS[choice.foil];
+      if (now.finish === fin) return;
+      once("option_finish");
+      const same = `${fin}-${now.colour}`;
+      setFoilOrType("foil", FOILS[same] ? same : `${fin}-${Object.keys(FOIL_TABLE[fin])[0]}`);
+    }
     const typeGroup = group(copy.typeLabel, "type", Object.keys(TYPES), copy.type);
     const nextBtn = el("button", { type: "button", class: "wps-btn wps-btn-primary ls-next", onclick: () => toResult() }, [el("span", { class: "wps-btn-label", text: `${copy.next} →` })]);
 
@@ -467,7 +569,16 @@
     // each tile of the collection is its own small scene, scaled like the big one, and nudged like it once laid out
     let tileSettle = 0;
     function fitTiles() {
-      for (const tile of tiles) { const f = tile.querySelector(".ls-tile-frame"); if (f.clientWidth) tile.querySelector(".ls-scene").style.setProperty("--k", (f.clientWidth / 1000).toFixed(5)); }
+      for (const tile of tiles) {
+        const f = tile.querySelector(".ls-tile-frame"), sc = tile.querySelector(".ls-scene"), w = f.clientWidth, h = f.clientHeight;
+        if (!w || !h) continue;
+        // the scene stays square; a frame that is not (the chosen piece) shows the band of it round the print, as
+        // near the print's centre as the photo allows
+        const S = Math.max(w, h), [cx, cy] = placement(LIDS[tile.dataset.box]).centre;
+        const at = (size, c) => Math.min(0, Math.max(size - S, size / 2 - (c / 100) * S)).toFixed(1);
+        Object.assign(sc.style, { width: `${S}px`, height: `${S}px`, left: `${at(w, cx)}px`, top: `${at(h, cy)}px` });
+        sc.style.setProperty("--k", (S / 1000).toFixed(5));
+      }
       for (const id of BOX_ORDER) tilePrints[id].refit();
       clearTimeout(tileSettle);
       tileSettle = setTimeout(() => {
@@ -489,10 +600,13 @@
       }
       layout.classList.toggle("is-placeholder", !choice.name.trim() && !choice.logo);
       boxName.textContent = copy.boxes[choice.box];
-      frame.setAttribute("aria-label", `${choice.logo ? copy.uploadCta : displayName()} – ${copy.foil[choice.foil]}, ${copy.boxes[choice.box]}`);
+      frame.setAttribute("aria-label", `${choice.logo ? copy.uploadCta : displayName()} – ${foilName(choice.foil)}, ${copy.boxes[choice.box]}`);
       thumbs.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.box === choice.box)));
       if (pip) { pip.textContent = ""; const c = scene.cloneNode(true); c.style.setProperty("--tilt", "none"); c.style.setProperty("--k", ((pip.clientWidth || 108) / 1000).toFixed(5)); pip.appendChild(c); }
-      foilGroup.buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.value === choice.foil)));
+      const finish = FOILS[choice.foil].finish;
+      foilGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.foil)); b.hidden = b.dataset.finish !== finish; });
+      finishButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.finish === finish)));
+      foilNow.textContent = foilName(choice.foil);
       typeGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.type)); b.disabled = Boolean(choice.logo); fitSample(b.querySelector(".ls-type-sample"), displayName()); });
       refreshLoupe();
     }

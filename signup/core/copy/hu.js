@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -27,45 +28,64 @@
     "peekDismiss": "Most nem"
   },
   "logo-studio": {
-    "peek": "Hogy mutat a márkád aranyban?",
+    "peek": "Hogy mutat a márkád fóliaprégeléssel?",
     "peekCta": "Kipróbálom",
     "kicker": "Fóliapróba",
-    "title": "Írd be a márkád nevét. Aranyba öltöztetjük.",
-    "lede": "Élőben, egy valódi fedélen. Semmibe sem kerül – még az e-mail-címedbe sem.",
+    "title": "Írd be a márkád nevét. Fóliával nyomjuk rá.",
+    "lede": "Élőben, valódi csomagoláson. Semmibe sem kerül – még az e-mail-címedbe sem.",
     "nameLabel": "A márkád neve",
     "namePlaceholder": "pl. Atelier Nord",
     "defaultName": "A márkád",
-    "boxLabel": "Doboz",
+    "boxLabel": "Csomagolás",
     "boxes": {
       "seville": "Matt fekete műanyag",
       "london": "Krémszínű soft touch",
+      "bag": "Fekete luxustáska",
       "torino": "Fekete, aranyszegéllyel",
       "seoul": "Poroszöld karton",
       "madrid": "Világosbarna soft touch",
       "frankfurt": "Fehér, vászonhatású karton"
     },
     "foilLabel": "Fólia",
-    "foil": {
+    "finish": {
+      "metallic": "Metál",
+      "matt": "Matt",
+      "gloss": "Fényes"
+    },
+    "colour": {
       "gold": "Arany",
       "silver": "Ezüst",
-      "rose": "Rozéarany",
-      "oldrose": "Órózsaszín",
+      "copper": "Réz",
+      "red": "Piros",
+      "orange": "Narancs",
+      "pink": "Pink",
+      "purple": "Lila",
+      "blue": "Kék",
+      "mint": "Menta",
+      "black": "Fekete",
       "white": "Fehér",
-      "black": "Fekete"
+      "darkblue": "Sötétkék",
+      "green": "Zöld",
+      "oldrose": "Órózsaszín",
+      "yellow": "Sárga",
+      "clear": "Átlátszó",
+      "grey": "Szürke",
+      "brown": "Barna"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Betűtípus",
     "type": {
       "classic": "Klasszikus",
       "script": "Kézírásos",
       "clean": "Letisztult"
     },
-    "hintLong": "Ez jó sok betű. A logót a fedél méretéhez igazítjuk.",
+    "hintLong": "Ez jó sok betű. A logót a mérethez igazítjuk.",
     "hintWestpack": "Jó választás. Kár, hogy ez a név már foglalt.",
-    "disclaimer": "Illusztráció valódi Westpack-fedeleken. A logódat egyetlen fóliaszínnel nyomtatjuk.",
-    "lightHintMouse": "Mozgasd az egeret a doboz fölött, és nézd, ahogy megcsillan a fólia.",
-    "lightHintTouch": "Húzd végig az ujjad a dobozon, és nézd, ahogy megcsillan a fólia. Lapozz a következő dobozhoz.",
+    "disclaimer": "Illusztráció valódi Westpack-csomagolásokon. A logódat egyetlen fóliaszínnel nyomtatjuk.",
+    "lightHintMouse": "Mozgasd az egeret a nyomat fölött, és nézd, ahogy megcsillan a fólia.",
+    "lightHintTouch": "Húzd végig az ujjad a nyomaton, és nézd, ahogy megcsillan a fólia. Lapozz a következőhöz.",
     "zoomIn": "Nyomat közelről",
-    "zoomOut": "Teljes doboz",
+    "zoomOut": "Teljes nézet",
     "uploadCta": "Saját logót használok",
     "uploadHint": "PNG, JPG vagy SVG – a logód a böngésződben marad.",
     "uploadOneColour": "A fóliaprégelés egyszínű – így mutat a logód.",

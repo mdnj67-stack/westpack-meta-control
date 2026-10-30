@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Nie teraz"
   },
   "logo-studio": {
-    "peek": "Jak wygląda Twoja marka w złocie?",
+    "peek": "Jak wygląda Twoja marka w folii?",
     "peekCta": "Sprawdź",
     "kicker": "Próba folii",
-    "title": "Wpisz nazwę marki. Umieścimy ją w złocie.",
-    "lede": "Na żywo, na prawdziwym wieczku. Bez opłat – nawet bez podawania e-maila.",
+    "title": "Wpisz nazwę marki. Wytłoczymy ją folią.",
+    "lede": "Na żywo, na prawdziwym opakowaniu. Bez opłat – nawet bez podawania e-maila.",
     "nameLabel": "Nazwa Twojej marki",
     "namePlaceholder": "np. Atelier Północ",
     "defaultName": "Twoja marka",
-    "boxLabel": "Pudełko",
+    "boxLabel": "Opakowanie",
     "boxes": {
       "seville": "Matowy czarny plastik",
       "london": "Kremowe soft touch",
+      "bag": "Czarna luksusowa torba",
       "torino": "Czarne ze złotym obramowaniem",
       "seoul": "Karton w przygaszonej zieleni",
       "madrid": "Jasnobrązowe soft touch",
       "frankfurt": "Biały karton o fakturze lnu"
     },
     "foilLabel": "Folia",
-    "foil": {
+    "finish": {
+      "metallic": "Metaliczna",
+      "matt": "Matowa",
+      "gloss": "Błyszcząca"
+    },
+    "colour": {
       "gold": "Złota",
       "silver": "Srebrna",
-      "rose": "Różowe złoto",
-      "oldrose": "Stary róż",
+      "copper": "Miedziana",
+      "red": "Czerwona",
+      "orange": "Pomarańczowa",
+      "pink": "Różowa",
+      "purple": "Fioletowa",
+      "blue": "Niebieska",
+      "mint": "Miętowa",
+      "black": "Czarna",
       "white": "Biała",
-      "black": "Czarna"
+      "darkblue": "Granatowa",
+      "green": "Zielona",
+      "oldrose": "Staroróżowa",
+      "yellow": "Żółta",
+      "clear": "Przezroczysta",
+      "grey": "Szara",
+      "brown": "Brązowa"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Krój pisma",
     "type": {
       "classic": "Klasyczny",
       "script": "Odręczny",
       "clean": "Prosty"
     },
-    "hintLong": "Sporo liter! Logo zostanie zmniejszone tak, by zmieściło się na wieczku.",
+    "hintLong": "Sporo liter! Logo zostanie zmniejszone, żeby się zmieściło.",
     "hintWestpack": "Dobry wybór. Niestety ta nazwa jest już zajęta.",
-    "disclaimer": "Wizualizacja na prawdziwych wieczkach Westpack. Twoje logo jest tłoczone folią w jednym kolorze.",
-    "lightHintMouse": "Przesuń mysz nad pudełkiem i zobacz, jak folia łapie światło.",
-    "lightHintTouch": "Przesuń palcem po pudełku i zobacz, jak folia łapie światło. Przesuń dalej, by zobaczyć następne pudełko.",
+    "disclaimer": "Wizualizacja na prawdziwych opakowaniach Westpack. Twoje logo jest tłoczone folią w jednym kolorze.",
+    "lightHintMouse": "Przesuń mysz nad nadrukiem i zobacz, jak folia łapie światło.",
+    "lightHintTouch": "Przesuń palcem po nadruku i zobacz, jak folia łapie światło. Przesuń dalej, by zobaczyć następne.",
     "zoomIn": "Zobacz nadruk z bliska",
-    "zoomOut": "Całe pudełko",
+    "zoomOut": "Całość",
     "uploadCta": "Użyj swojego logo",
     "uploadHint": "PNG, JPG lub SVG – Twoje logo zostaje w przeglądarce.",
     "uploadOneColour": "Logo tłoczymy folią w jednym kolorze – tak będzie wyglądać Twoje logo.",

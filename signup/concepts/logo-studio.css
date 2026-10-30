@@ -1,6 +1,7 @@
 /* Logo studio. The box is the hero: on a desktop the photo fills a square stage edge to edge, with the lid's name,
-   the zoom and the six lids floating over its foot, and a bigger dialog than the other experiences get; on a phone
-   the photo runs the full width of the sheet. "Looks good" turns the stage into the visitor's name on all six lids. */
+   the zoom and the seven pieces (six lids and a carrier bag) floating over its foot, and a bigger dialog than the
+   other experiences get; on a phone the photo runs the full width of the sheet. "Looks good" turns the stage into
+   the visitor's name on all seven, the one they chose largest. */
 .ls { display: grid; grid-template-columns: minmax(0, 1fr); }
 .ls-side { min-width: 0; }
 .wps .ls-name-input:focus-visible { outline: none; }
@@ -75,13 +76,17 @@
 .ls-thumb[aria-pressed="true"] { opacity: 1; border-color: var(--wps-gold-hi); transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4); }
 .ls-light-hint { margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.62); }
 
-/* ---- the collection: the name on all six lids ---- */
+/* ---- the collection: the name on all seven pieces, the chosen one first and largest ---- */
 .ls-collection { display: none; }
 .ls.is-result .ls-collection {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; padding: 14px; align-content: center;
 }
-.ls-tile { margin: 0; display: grid; gap: 6px; animation: ls-tile-in 760ms var(--wps-ease-out) both; animation-delay: calc(var(--i) * 95ms + 80ms); }
+.ls-tile { margin: 0; display: grid; gap: 6px; min-width: 0; animation: ls-tile-in 760ms var(--wps-ease-out) both; animation-delay: calc(var(--i) * 95ms + 80ms); }
 .ls-tile-frame { position: relative; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #0d0d0d; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+/* the chosen piece leads; its frame is not square, and fitTiles() shows the band of the scene round its print */
+.ls-tile.is-chosen { order: -1; grid-column: 1 / -1; animation-delay: 60ms; }
+.ls-tile.is-chosen .ls-tile-frame { aspect-ratio: 16 / 9; }
+.ls-tile .ls-scene { inset: auto; }
 .ls-tile-name { margin: 0; font-family: var(--wps-display); font-style: italic; font-size: 12.5px; line-height: 1.25; color: rgba(255, 255, 255, 0.72); text-align: center; }
 .ls-tile.is-chosen .ls-tile-frame { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--wps-gold-hi); }
 .ls-tile.is-chosen .ls-tile-name { color: var(--wps-gold-hi); }
@@ -115,26 +120,40 @@
 .ls-chip[disabled] { opacity: 0.4; cursor: not-allowed; }
 .ls-chip-label { font-size: 11px; font-weight: 650; letter-spacing: 0.02em; color: var(--wps-muted); white-space: nowrap; }
 
-/* foils: real metal coins */
-.ls-chip-foil { width: 50px; padding: 4px 0 2px; border: 0; background: none; border-radius: 12px; display: grid; justify-items: center; gap: 6px; }
+/* foils: the 25 of the logo-print module. A finish first (a quiet segmented switch), then its colours as small
+   coins, the chosen one named in words beside the label - so 25 colours never stand on screen at once */
+.ls-foil-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-width: 0; }
+.ls-foil-now { font-family: var(--wps-display); font-style: italic; font-size: 15px; color: var(--wps-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ls-finishes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 999px; background: rgba(23, 22, 20, 0.07); }
+.ls-finish {
+  height: 30px; padding: 0 6px; border: 0; border-radius: 999px; background: none; cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 650;
+  color: var(--wps-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 180ms, color 180ms, box-shadow 180ms;
+}
+.ls-finish:hover { color: var(--wps-ink); }
+.ls-finish[aria-pressed="true"] { background: #fff; color: var(--wps-ink); box-shadow: 0 1px 3px rgba(23, 22, 20, 0.16), 0 0 0 1px rgba(23, 22, 20, 0.05); }
+.ls-chip-foil { padding: 4px 0; border: 0; background: none; border-radius: 50%; display: grid; place-items: center; animation: ls-coin-in 320ms var(--wps-ease-out) both; }
+.ls-chip-foil[hidden] { display: none; }
+@keyframes ls-coin-in { from { opacity: 0; transform: translateY(4px) scale(0.9); } to { opacity: 1; transform: none; } }
 .ls-coin {
-  position: relative; width: 38px; height: 38px; border-radius: 50%; display: block;
+  position: relative; width: 32px; height: 32px; border-radius: 50%; display: block;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22), inset 0 -4px 7px rgba(0, 0, 0, 0.22), inset 0 3px 5px rgba(255, 255, 255, 0.45), 0 3px 8px rgba(0, 0, 0, 0.16);
   transition: box-shadow 180ms, transform 200ms var(--wps-ease-out);
 }
+/* metal and gloss catch a point of light; matt only a soft, wide sheen */
 .ls-coin::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.85) 0 5%, rgba(255, 255, 255, 0) 32%); }
-.ls-coin-gold { background: conic-gradient(from 200deg, #8f6a33, #e9c983, #9a7238, #f2dea3, #6e4f22, #d9b46c, #b58a4a, #8f6a33); }
-.ls-coin-silver { background: conic-gradient(from 200deg, #6d7176, #e5e8eb, #888d93, #f8f9fa, #5a5e63, #d6dadd, #989da3, #6d7176); }
-.ls-coin-rose { background: conic-gradient(from 200deg, #91533d, #eab69c, #a96a53, #f7cfb9, #7a4231, #e3a98e, #b8745f, #91533d); }
-.ls-coin-oldrose { background: radial-gradient(circle at 40% 35%, #d9aaa4, #c4908a 55%, #a87570); }
-.ls-coin-white { background: radial-gradient(circle at 40% 35%, #ffffff, #f1efea 55%, #d9d6cf); }
-.ls-coin-black { background: radial-gradient(circle at 38% 30%, #6a6a6a, #1d1d1d 52%, #0b0b0b); }
+.ls-coin.is-pigment { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16), inset 0 -3px 6px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.12); }
+.ls-coin.is-pigment::after { background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%); }
+.ls-coin.is-gloss::after { background: linear-gradient(125deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.75) 38%, rgba(255, 255, 255, 0) 46%), radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.95) 0 4%, rgba(255, 255, 255, 0) 18%); }
+/* the transparent foil: a clear glaze, so the swatch is the paper seen through glass */
+.ls-coin.is-clear { background: repeating-linear-gradient(135deg, #f1ede5 0 4px, #e6e1d7 4px 8px); box-shadow: inset 0 0 0 1px rgba(23, 22, 20, 0.22), inset 0 -4px 7px rgba(23, 22, 20, 0.1), 0 2px 6px rgba(0, 0, 0, 0.1); }
+.ls-coin.is-clear::after { background: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.15) 45%, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.6)); }
 .ls-chip-foil:hover .ls-coin { transform: translateY(-2px); }
 .ls-chip-foil[aria-pressed="true"] .ls-coin { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22), inset 0 -4px 7px rgba(0, 0, 0, 0.22), inset 0 3px 5px rgba(255, 255, 255, 0.45), 0 0 0 3px var(--wps-paper), 0 0 0 5px var(--wps-gold); transform: translateY(-2px); }
-.ls-chip-foil[aria-pressed="true"] .ls-chip-label { color: var(--wps-ink); }
 
+/* six coins a row and room for two rows, so the panel does not jump when the finish changes */
+.ls-chips-foil { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); justify-items: center; align-content: start; gap: 4px 0; min-height: 88px; }
+.ls-foils { gap: 10px; }
 /* type: the visitor's own name, set in each face */
-.ls-chips-foil { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 0; }
 .ls-chips-type { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .ls-chip-type {
   min-width: 0; height: 66px; padding: 8px 10px 7px; border-radius: 14px; border: 1.5px solid rgba(23, 22, 20, 0.12); background: #fff;
@@ -165,8 +184,10 @@
 @media (max-width: 759px) {
   .ls-stage { padding: 0 0 14px; }
   .ls-stage-inner > :not(.ls-frame):not(.ls-collection) { width: calc(100% - 28px); }
-  .ls-thumb { width: 48px; height: 48px; border-radius: 10px; }
-  .ls-thumb .ls-plate { transform: scale(0.044); }
+  /* seven across a 360 px phone without scrolling */
+  .ls-thumbs { gap: 6px; justify-content: center; padding: 2px 0 4px; }
+  .ls-thumb { width: 42px; height: 42px; border-radius: 10px; }
+  .ls-thumb .ls-plate { transform: scale(0.038); }
   .ls-light-hint { text-align: center; }
   /* typing: the stage sticks to the top and the box shrinks, so box and field stay above the keyboard */
   .ls.is-typing .ls-stage { position: sticky; top: 0; z-index: 3; padding: 12px 0 10px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); }
@@ -204,10 +225,22 @@
 @media (max-width: 759px) {
   .ls-edit .ls-options { padding-right: 104px; }
   .ls-edit .ls-next { margin-top: 4px; }
-  /* beside the floating copy of the box there is room for three coins a row, and for the faces as three rows */
-  .ls-chips-foil { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; row-gap: 8px; }
+  /* beside the floating copy of the box the six coins a row get a little smaller, and the faces stack in rows */
+  .ls-coin { width: 29px; height: 29px; }
+  .ls-chips-foil { min-height: 82px; }
+  /* beside the floating box the switch is narrow: a smaller label keeps "Metaliczna" and "Brilhante" whole, and a
+     long foil name takes its own line under the label rather than an ellipsis */
+  .ls-finish { font-size: 11px; padding: 0 2px; letter-spacing: -0.01em; }
+  .ls-foil-head { flex-wrap: wrap; row-gap: 2px; }
+  .ls-foil-now { white-space: normal; font-size: 14px; }
   .ls-chips-type { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .ls-chip-type { height: 48px; grid-template-columns: minmax(0, 1fr) auto; justify-items: start; align-items: center; padding: 0 14px; column-gap: 10px; }
+}
+/* the first iPhone SE and other 320 px phones: a smaller floating box leaves the switch room for its words */
+@media (max-width: 340px) {
+  .ls-pip { width: 84px; height: 84px; }
+  .ls-edit .ls-options { padding-right: 80px; }
+  .ls-finish { font-size: 10.5px; }
 }
 
 /* ---- desktop: a square stage that fills the dialog's height, and a 400 px panel ---- */
@@ -226,6 +259,11 @@
   }
   .ls-thumbs { justify-content: flex-start; padding-top: 4px; }
   .ls.is-result .ls-collection { position: absolute; inset: 0; padding: 34px; gap: 18px 16px; background: radial-gradient(120% 85% at 50% 35%, #26332f 0%, #141c19 62%, #0e1412 100%); z-index: 5; }
+  /* the chosen piece takes the left half, three rows tall; the other six stand two by three beside it */
+  .ls.is-result .ls-collection { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ls-tile.is-chosen { grid-column: 1 / span 2; grid-row: 1 / span 3; grid-template-rows: minmax(0, 1fr) auto; }
+  .ls-tile.is-chosen .ls-tile-frame { aspect-ratio: auto; height: 100%; }
+  .ls-tile.is-chosen .ls-tile-name { font-size: 17px; }
   .ls-tile-name { font-size: 14px; }
   /* the panel's content sits in the middle of the stage's height when it fits, and scrolls from the top when not */
   .ls-side { padding: 40px 36px 28px; height: var(--ls-s); overflow-y: auto; background: var(--wps-paper); display: flex; flex-direction: column; }

@@ -31,6 +31,7 @@ const TASKS = {
   tokyo: "1212391491407872",
   shipping: "1215480009202407",
   kundelogo40: "1219060017061930",
+  xxlBags: "1211894660006807",
 };
 
 // Logo studio boxes: Westpack's demo print removed so the visitor's name can sit in its place. crop is
@@ -47,6 +48,9 @@ const LOGO_BOXES = [
   { id: "torino", task: "kategori", file: "Kategori_Reshoot-8.jpg", crop: [2, 42, 58], print: "light", polygons: [[[10, 61], [61, 35], [94, 62.5], [40.5, 94.5]]] },
   { id: "seoul", task: "kategori", file: "Kategori_Reshoot-36.jpg", crop: [12, 33, 64], method: "harmonic", texture: [16, 36, 9, 9], detailRadius: 1, polygons: [[[31, 19.5], [52, 13.5], [76, 21], [83, 40], [78, 51], [56, 55], [29, 47]], [[88, 60], [100, 60], [100, 92], [89, 92]]] },
   { id: "madrid", task: "kategori", file: "Kategori_Reshoot-46.jpg", crop: [8, 0, 55], method: "harmonic", texture: [18, 20, 12, 22], polygons: [[[34, 17], [70, 17], [70, 55], [34, 55]]] },
+  // the carrier bag: a black XXL luxury bag held by its handles (XXL Luxposer), a customer's gold logo removed. The
+  // original is portrait, so the square crop takes its full width
+  { id: "bag", task: "xxlBags", file: "XXL_Gaveposer_New-07.jpg", crop: [0, 8, 100], method: "harmonic", texture: [20, 60, 10, 8], detailRadius: 1, polygons: [[[33.5, 48.5], [53, 48.5], [53, 58.5], [33.5, 58.5]]] },
 ];
 const ASSETS = [
   ...LOGO_BOXES.map((b) => ({ id: `logo/box-${b.id}`, task: b.task, file: b.file, op: b.method === "harmonic" ? "harmonic" : "clean", print: b.print, texture: b.texture, detailRadius: b.detailRadius, radius: 22, size: 1600, cropPct: b.crop, polygonsPct: b.polygons, widths: [1200, 720, 160] })),

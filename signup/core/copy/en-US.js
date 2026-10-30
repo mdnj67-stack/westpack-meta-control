@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 0 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 0 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -27,45 +28,64 @@
     "peekDismiss": "Not now"
   },
   "logo-studio": {
-    "peek": "What does your brand look like in gold?",
+    "peek": "What does your brand look like in foil?",
     "peekCta": "Try it",
     "kicker": "The foil test",
-    "title": "Type your brand name. We'll put it in gold.",
-    "lede": "Live, on a real lid. It costs nothing—not even your email.",
+    "title": "Type your brand name. We'll print it in foil.",
+    "lede": "Live, on real packaging. It costs nothing—not even your email.",
     "nameLabel": "Your brand name",
     "namePlaceholder": "e.g. Atelier North",
     "defaultName": "Your brand",
-    "boxLabel": "Box",
+    "boxLabel": "Packaging",
     "boxes": {
       "seville": "Matte black plastic",
       "london": "Cream soft touch",
+      "bag": "Black luxury bag",
       "torino": "Black with gold trim",
       "seoul": "Dusty green card",
       "madrid": "Light brown soft touch",
       "frankfurt": "White linen-look card"
     },
     "foilLabel": "Foil",
-    "foil": {
+    "finish": {
+      "metallic": "Metallic",
+      "matt": "Matte",
+      "gloss": "Gloss"
+    },
+    "colour": {
       "gold": "Gold",
       "silver": "Silver",
-      "rose": "Rose gold",
-      "oldrose": "Old rose",
+      "copper": "Copper",
+      "red": "Red",
+      "orange": "Orange",
+      "pink": "Pink",
+      "purple": "Purple",
+      "blue": "Blue",
+      "mint": "Mint",
+      "black": "Black",
       "white": "White",
-      "black": "Black"
+      "darkblue": "Dark blue",
+      "green": "Green",
+      "oldrose": "Old rose",
+      "yellow": "Yellow",
+      "clear": "Transparent",
+      "grey": "Gray",
+      "brown": "Brown"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Lettering",
     "type": {
       "classic": "Classic",
       "script": "Script",
       "clean": "Clean"
     },
-    "hintLong": "That's a lot of letters. The logo is scaled to fit the lid.",
+    "hintLong": "That's a lot of letters. The logo is scaled to fit.",
     "hintWestpack": "Good choice. Sadly, that one's taken.",
-    "disclaimer": "Illustration on real Westpack lids. Your logo is printed in one foil color.",
-    "lightHintMouse": "Move your mouse over the box and watch the foil catch the light.",
-    "lightHintTouch": "Drag a finger over the box and watch the foil catch the light. Swipe for the next box.",
+    "disclaimer": "Illustration on real Westpack packaging. Your logo is printed in one foil color.",
+    "lightHintMouse": "Move your mouse over the print and watch the foil catch the light.",
+    "lightHintTouch": "Drag a finger over the print and watch the foil catch the light. Swipe for the next one.",
     "zoomIn": "See the print up close",
-    "zoomOut": "Whole box",
+    "zoomOut": "See it all",
     "uploadCta": "Use your logo",
     "uploadHint": "PNG, JPG, or SVG—your logo stays in your browser.",
     "uploadOneColour": "Foil prints in one color—this is your logo in foil.",

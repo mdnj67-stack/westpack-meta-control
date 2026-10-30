@@ -216,6 +216,8 @@ const LIDS = Function(`return (${LS_SRC.slice(LS_SRC.indexOf("// lids:begin"), L
 // the same homography logo-studio.js and tools/signup/lid-geometry.js use, lifted from the shipped file
 const homography = Function(`${LS_SRC.slice(LS_SRC.indexOf("  function homography(q)"), LS_SRC.indexOf("  function project("))}; return homography;`)();
 const project = (m, u, v) => { const w = m.g * u + m.h * v + 1; return [(m.a * u + m.b * v + m.c) / w, (m.d * u + m.e * v + m.f) / w]; };
+// the foils, lifted from the shipped file with the helpers that build them
+const FOIL_TABLE = Function(`${LS_SRC.slice(LS_SRC.indexOf("  const hex = "), LS_SRC.indexOf("  const FOILS = {};"))}; return FOIL_TABLE;`)();
 
 test("logo studio: every lid is measured, lit and named in every language", () => {
   const order = JSON.parse(LS_SRC.match(/const BOX_ORDER = (\[[^\]]*\])/)[1]);
@@ -229,7 +231,8 @@ test("logo studio: every lid is measured, lit and named in every language", () =
     assert.equal(l.light.length, 12, `${id} light rows`); assert.ok(l.light.every((r) => r.length === 12), `${id} light columns`);
     assert.ok(l.light.flat().every((f) => f > 0.6 && f < 1.5), `${id} light stays a gentle shading`);
     assert.ok(l.exposure.metal > 0.3 && l.exposure.metal <= 1.5 && l.exposure.pigment > 0.3 && l.exposure.pigment <= 1.5, `${id} exposure`);
-    assert.ok(LS_SRC.includes(`    ${l.foil}: { kind:`), `${id} opens in a foil that exists`);
+    const [finish, colour] = l.foil.split("-");
+    assert.ok(FOIL_TABLE[finish] && FOIL_TABLE[finish][colour], `${id} opens in a foil that exists (${l.foil})`);
     assert.ok(l.grain === null || /^(structured|linen|velour)$/.test(l.grain), `${id} grain`);
   }
 });
@@ -286,8 +289,24 @@ test("the app's Signup page decides whether the stores run the Signup Lab, the f
   assert.match(goLive, /const apply = process\.argv\.includes\("--apply"\);/);
 });
 
-test("logo studio offers the foils the site prints, and no deboss", () => {
-  const foils = Object.keys(loadCopy("da")["logo-studio"].foil);
-  assert.deepEqual(foils, ["gold", "silver", "rose", "oldrose", "white", "black"]);
+test("logo studio offers the 25 foils of Westpack's logo-print module, named in every language, and no deboss", () => {
+  // the module's three finishes and their colours (the user's screenshot of it, 2026-10-30)
+  const want = {
+    metallic: ["blue", "copper", "gold", "mint", "orange", "pink", "purple", "red", "silver"],
+    matt: ["black", "blue", "darkblue", "green", "oldrose", "orange", "purple", "red", "white", "yellow", "clear"],
+    gloss: ["black", "brown", "grey", "mint", "pink"],
+  };
+  assert.deepEqual(Object.keys(FOIL_TABLE), Object.keys(want));
+  for (const [finish, colours] of Object.entries(want)) assert.deepEqual(Object.keys(FOIL_TABLE[finish]).sort(), colours.slice().sort(), finish);
+  const colourKeys = [...new Set(Object.values(want).flat())].sort();
+  for (const lang of fs.readdirSync(COPY_DIR).map((f) => f.replace(/\.js$/, ""))) {
+    const c = loadCopy(lang)["logo-studio"];
+    assert.deepEqual(Object.keys(c.finish).sort(), Object.keys(want).sort(), `${lang} names every finish`);
+    assert.deepEqual(Object.keys(c.colour).sort(), colourKeys, `${lang} names every colour`);
+    assert.match(c.foilName, /\{finish\}/); assert.match(c.foilName, /\{colour\}/);
+    // with 25 colours on offer, neither the headline nor the teaser promises gold
+    const gold = c.colour.gold.toLocaleLowerCase();
+    for (const k of ["title", "peek"]) assert.ok(!c[k].toLocaleLowerCase().includes(gold.slice(0, 4)), `${lang} ${k} names gold: "${c[k]}"`);
+  }
   assert.doesNotMatch(LS_SRC, /deboss/);
 });

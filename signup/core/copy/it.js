@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Non ora"
   },
   "logo-studio": {
-    "peek": "Come sta il tuo brand in oro?",
+    "peek": "Come sta il tuo brand stampato a caldo?",
     "peekCta": "Prova",
     "kicker": "Il test del foil",
-    "title": "Scrivi il nome del tuo brand. Noi lo mettiamo in oro.",
-    "lede": "In tempo reale, su un vero coperchio. Non costa nulla, nemmeno la tua e-mail.",
+    "title": "Scrivi il nome del tuo brand. Noi lo stampiamo a caldo.",
+    "lede": "In tempo reale, su un vero packaging. Non costa nulla, nemmeno la tua e-mail.",
     "nameLabel": "Nome del tuo brand",
     "namePlaceholder": "es. Atelier Nord",
     "defaultName": "Il tuo brand",
-    "boxLabel": "Astuccio",
+    "boxLabel": "Packaging",
     "boxes": {
       "seville": "Plastica nera opaca",
       "london": "Soft touch color crema",
+      "bag": "Shopper di lusso nera",
       "torino": "Nero con bordo oro",
       "seoul": "Cartoncino verde polvere",
       "madrid": "Soft touch marrone chiaro",
       "frankfurt": "Cartoncino bianco effetto lino"
     },
     "foilLabel": "Foil",
-    "foil": {
+    "finish": {
+      "metallic": "Metallizzato",
+      "matt": "Opaco",
+      "gloss": "Lucido"
+    },
+    "colour": {
       "gold": "Oro",
       "silver": "Argento",
-      "rose": "Oro rosa",
-      "oldrose": "Rosa antico",
+      "copper": "Rame",
+      "red": "Rosso",
+      "orange": "Arancione",
+      "pink": "Rosa",
+      "purple": "Viola",
+      "blue": "Blu",
+      "mint": "Menta",
+      "black": "Nero",
       "white": "Bianco",
-      "black": "Nero"
+      "darkblue": "Blu scuro",
+      "green": "Verde",
+      "oldrose": "Rosa antico",
+      "yellow": "Giallo",
+      "clear": "Trasparente",
+      "grey": "Grigio",
+      "brown": "Marrone"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Carattere",
     "type": {
       "classic": "Classico",
       "script": "Corsivo",
       "clean": "Pulito"
     },
-    "hintLong": "Quante lettere! Il logo viene ridimensionato per adattarsi al coperchio.",
+    "hintLong": "Quante lettere! Il logo viene ridimensionato per starci.",
     "hintWestpack": "Bella scelta. Peccato, questo nome è già preso.",
-    "disclaimer": "Simulazione su veri coperchi Westpack. Il tuo logo viene stampato a caldo in un solo colore.",
-    "lightHintMouse": "Passa il mouse sull’astuccio e guarda il foil catturare la luce.",
-    "lightHintTouch": "Trascina un dito sull’astuccio e guarda come la lamina riflette la luce. Scorri per passare all’astuccio successivo.",
+    "disclaimer": "Simulazione su veri packaging Westpack. Il tuo logo viene stampato a caldo in un solo colore.",
+    "lightHintMouse": "Passa il mouse sulla stampa e guarda il foil catturare la luce.",
+    "lightHintTouch": "Trascina un dito sulla stampa e guarda come la lamina riflette la luce. Scorri per passare al successivo.",
     "zoomIn": "Stampa da vicino",
-    "zoomOut": "Astuccio intero",
+    "zoomOut": "Vista intera",
     "uploadCta": "Usa il tuo logo",
     "uploadHint": "PNG, JPG o SVG: il tuo logo resta nel browser.",
     "uploadOneColour": "Il logo viene stampato a caldo in un solo colore: ecco come apparirà.",

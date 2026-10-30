@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 1 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 1 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -27,45 +28,64 @@
     "peekDismiss": "Ikke nå"
   },
   "logo-studio": {
-    "peek": "Hvordan ser merkevaren din ut i gull?",
+    "peek": "Hvordan ser merkevaren din ut i folie?",
     "peekCta": "Prøv selv",
     "kicker": "Folieprøven",
-    "title": "Skriv merkenavnet ditt. Vi setter det i gull.",
-    "lede": "Se det direkte på et ekte lokk. Det koster ingenting – ikke engang e-postadressen din.",
+    "title": "Skriv merkenavnet ditt. Vi trykker det i folie.",
+    "lede": "Se det direkte på ekte emballasje. Det koster ingenting – ikke engang e-postadressen din.",
     "nameLabel": "Merkenavnet ditt",
     "namePlaceholder": "f.eks. Atelier Nord",
     "defaultName": "Merkevaren din",
-    "boxLabel": "Smykkeeske",
+    "boxLabel": "Emballasje",
     "boxes": {
       "seville": "Matt svart plast",
       "london": "Kremfarget soft touch",
+      "bag": "Svart luksuspose",
       "torino": "Svart med gullkant",
       "seoul": "Støvet grønn kartong",
       "madrid": "Lysebrun soft touch",
       "frankfurt": "Hvit kartong med linstruktur"
     },
     "foilLabel": "Folie",
-    "foil": {
+    "finish": {
+      "metallic": "Metallisk",
+      "matt": "Matt",
+      "gloss": "Blank"
+    },
+    "colour": {
       "gold": "Gull",
       "silver": "Sølv",
-      "rose": "Roségull",
-      "oldrose": "Gammelrosa",
+      "copper": "Kobber",
+      "red": "Rød",
+      "orange": "Oransje",
+      "pink": "Rosa",
+      "purple": "Lilla",
+      "blue": "Blå",
+      "mint": "Mint",
+      "black": "Svart",
       "white": "Hvit",
-      "black": "Svart"
+      "darkblue": "Mørkeblå",
+      "green": "Grønn",
+      "oldrose": "Gammelrosa",
+      "yellow": "Gul",
+      "clear": "Gjennomsiktig",
+      "grey": "Grå",
+      "brown": "Brun"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Skrift",
     "type": {
       "classic": "Klassisk",
       "script": "Skråskrift",
       "clean": "Ren"
     },
-    "hintLong": "Det var mange bokstaver! Logoen skaleres så den passer på lokket.",
+    "hintLong": "Det var mange bokstaver! Logoen skaleres så den passer.",
     "hintWestpack": "Godt valg. Men det navnet er dessverre tatt.",
-    "disclaimer": "Illustrasjon på ekte Westpack-lokk. Logoen din trykkes i én foliefarge.",
-    "lightHintMouse": "Beveg musen over smykkeesken og se folien fange lyset.",
-    "lightHintTouch": "Dra fingeren over smykkeesken og se folien fange lyset. Swipe til neste smykkeeske.",
+    "disclaimer": "Illustrasjon på ekte Westpack-emballasje. Logoen din trykkes i én foliefarge.",
+    "lightHintMouse": "Beveg musen over trykket og se folien fange lyset.",
+    "lightHintTouch": "Dra fingeren over trykket og se folien fange lyset. Swipe til neste.",
     "zoomIn": "Se trykket på nært hold",
-    "zoomOut": "Se hele smykkeesken",
+    "zoomOut": "Se alt",
     "uploadCta": "Bruk logoen din",
     "uploadHint": "PNG, JPG eller SVG – logoen din blir i nettleseren.",
     "uploadOneColour": "Ved folietrykk brukes én farge – slik blir logoen din.",

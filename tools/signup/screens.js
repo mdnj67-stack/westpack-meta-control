@@ -57,13 +57,14 @@ function serve() {
         await host.locator('.ls-thumb[data-box="london"]').click();
         await host.locator('.ls-chip-type[data-value="script"]').click();
         await page.waitForTimeout(1400); await shot("3-cream-silver-script");
-        for (const box of ["torino", "seoul", "madrid", "frankfurt"]) {
+        for (const box of ["bag", "torino", "seoul", "madrid", "frankfurt"]) {
           await host.locator(`.ls-thumb[data-box="${box}"]`).click();
           await host.locator('.ls-chip-type[data-value="classic"]').click();
           await page.waitForTimeout(1300); await shot(`3-box-${box}`);
         }
         await host.locator('.ls-thumb[data-box="seville"]').click();
-        await host.locator('.ls-chip-foil[data-value="white"]').click();
+        await host.locator('.ls-finish[data-finish="matt"]').click();
+        await host.locator('.ls-chip-foil[data-value="matt-white"]').click();
         await page.waitForTimeout(1300); await shot("3-box-seville-white");
         await host.locator(".ls-zoom").click();
         await page.waitForTimeout(1300); await shot("3-zoom");

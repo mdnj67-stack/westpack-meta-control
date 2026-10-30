@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 10 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 10 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Nu acum"
   },
   "logo-studio": {
-    "peek": "Cum arată brandul tău în auriu?",
+    "peek": "Cum arată brandul tău imprimat cu folie?",
     "peekCta": "Încearcă",
     "kicker": "Testul cu folie",
-    "title": "Scrie numele brandului. Îl punem în auriu.",
-    "lede": "Pe loc, pe un capac adevărat. Nu costă nimic – nici măcar e-mailul tău.",
+    "title": "Scrie numele brandului. Îl imprimăm cu folie.",
+    "lede": "Pe loc, pe un ambalaj adevărat. Nu costă nimic – nici măcar e-mailul tău.",
     "nameLabel": "Numele brandului tău",
     "namePlaceholder": "de ex. Atelier Nord",
     "defaultName": "Brandul tău",
-    "boxLabel": "Cutie",
+    "boxLabel": "Ambalaj",
     "boxes": {
       "seville": "Plastic negru mat",
       "london": "Crem soft touch",
+      "bag": "Sacoșă de lux neagră",
       "torino": "Negru cu margine aurie",
       "seoul": "Carton verde prăfuit",
       "madrid": "Maro deschis soft touch",
       "frankfurt": "Carton alb cu aspect de in"
     },
     "foilLabel": "Folie",
-    "foil": {
+    "finish": {
+      "metallic": "Metalizat",
+      "matt": "Mat",
+      "gloss": "Lucios"
+    },
+    "colour": {
       "gold": "Auriu",
       "silver": "Argintiu",
-      "rose": "Auriu roz",
-      "oldrose": "Roz antic",
+      "copper": "Arămiu",
+      "red": "Roșu",
+      "orange": "Portocaliu",
+      "pink": "Roz",
+      "purple": "Mov",
+      "blue": "Albastru",
+      "mint": "Mentă",
+      "black": "Negru",
       "white": "Alb",
-      "black": "Negru"
+      "darkblue": "Bleumarin",
+      "green": "Verde",
+      "oldrose": "Roz antic",
+      "yellow": "Galben",
+      "clear": "Transparent",
+      "grey": "Gri",
+      "brown": "Maro"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Stil de scris",
     "type": {
       "classic": "Clasic",
       "script": "Caligrafic",
       "clean": "Simplu"
     },
-    "hintLong": "Sunt multe litere. Logoul este redimensionat ca să încapă pe capac.",
+    "hintLong": "Sunt multe litere. Logoul este redimensionat ca să încapă.",
     "hintWestpack": "Bună alegere. Din păcate, numele e deja luat.",
-    "disclaimer": "Ilustrație pe capace reale de la Westpack. Logoul tău este imprimat cu folie într-o singură culoare.",
-    "lightHintMouse": "Mișcă mouse-ul peste cutie și vezi cum folia prinde lumina.",
-    "lightHintTouch": "Treci degetul peste cutie și vezi cum folia prinde lumina. Glisează pentru următoarea cutie.",
+    "disclaimer": "Ilustrație pe ambalaje reale de la Westpack. Logoul tău este imprimat cu folie într-o singură culoare.",
+    "lightHintMouse": "Mișcă mouse-ul peste imprimeu și vezi cum folia prinde lumina.",
+    "lightHintTouch": "Treci degetul peste imprimeu și vezi cum folia prinde lumina. Glisează pentru următorul.",
     "zoomIn": "Vezi imprimarea de aproape",
-    "zoomOut": "Vezi toată cutia",
+    "zoomOut": "Vezi tot",
     "uploadCta": "Folosește-ți logoul",
     "uploadHint": "PNG, JPG sau SVG – logoul rămâne în browserul tău.",
     "uploadOneColour": "Imprimarea cu folie se face într-o singură culoare – așa va arăta logoul tău.",

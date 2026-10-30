@@ -10,7 +10,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 
 | Oplevelse | Fil | Idé |
 |---|---|---|
-| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg, live, med lys der følger musen/fingeren. Primært koncept. |
+| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 25 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
 | Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
 
@@ -139,10 +139,18 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
 
 ## Logo-studiet: trykket
 
-- **Seks rigtige låg:** mat sort plast, creme soft touch, sort med guldkant, støvet grøn karton, lysebrun soft touch
-  og hvid karton i hør-look (materialer læst i sitets produktdata). Swipe eller thumbnails skifter låg; hvert låg viser sin
-  egen naturlige folie, til den besøgende vælger en.
-- **Folierne er dem, logotryk-siden lister:** guld, sølv, rosaguld, old rose, hvid og sort. Blindpræg er taget ud (2026-10-29).
+- **Seks rigtige låg og en bærepose:** mat sort plast, creme soft touch, sort med guldkant, støvet grøn karton,
+  lysebrun soft touch og hvid karton i hør-look (materialer læst i sitets produktdata), og en sort XXL-luksuspose holdt
+  i hankene (Content Library, "XXL Luxposer", XXL_Gaveposer_New-07, kundens guldtryk fjernet). Posens front er målt
+  som lågene; trykfladen er XXL-posens største logo, 150×150 mm på en 450×350 mm front. Swipe eller thumbnails skifter;
+  hvert stykke viser sin egen naturlige folie, til den besøgende vælger en.
+- **Folierne er de 25 fra Westpacks logomodul** (2026-10-30): metallisk guld, sølv, kobber, rød, orange, pink, lilla,
+  blå og mint; mat sort, hvid, mørkeblå, blå, grøn, gammelrosa, orange, rød, lilla, gul og gennemsigtig; blank sort,
+  grå, brun, pink og mint. Metallisk tegnes som metal, der fanger lyset; mat som flad farve med et blødt skær, der
+  aldrig glimter; blank som et mørkt spejl med et skarpt glimt; gennemsigtig som en klar lak – kun præget, en svag
+  mørkning og glimtet. Vælgeren viser én finish ad gangen (Metallisk · Mat · Blank) og navngiver den valgte folie med
+  ord; skifter man finish, beholdes farven, hvor finishen har den (sort, mint, pink). Overskriften siger "folie", ikke
+  "guld". Blindpræg er taget ud (2026-10-29).
 - **Trykket tegnes som SVG med rigtigt lys:** en spejlende glans fra en lyskilde, der følger musen eller fingeren
   (og driver langsomt af sig selv), fin foliestruktur, og trykket presset ned i overfladen – skygge på den ene
   indervæg, lys på den anden.
@@ -171,9 +179,9 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
 - **Trykket sættes, hver gang noget ændres:** et varmt glimt over trykket, folien sætter sig i låget, og lyset glider
   én gang hen over det, når man holder en pause i skrivningen, skifter folie, skrift eller låg, eller lægger et logo
   ind. Lyset glider ikke, mens den besøgende selv holder det med musen eller fingeren.
-- **Folierne er metalmønter** (guld, sølv, rosaguld, old rose, hvid, sort), og **skrifterne viser den besøgendes
+- **Folierne er mønter tegnet i deres egen finish** (metal, mat, blank, klar), og **skrifterne viser den besøgendes
   eget navn** sat i hver skrift, skrumpet til kortet i stedet for at blive klippet.
-- **Resultatet er en kollektion:** navnet eller logoet står på alle seks låg på én gang, det valgte markeret, og
+- **Resultatet er en kollektion:** navnet eller logoet står på alle syv stykker på én gang – det valgte størst, til venstre på desktop og øverst på mobil – og
   kortene glider ind et ad gangen.
 - **Et langt navn passer på låget, uanset hvor lille det tegnes.** Bogstavafstanden følger skriftstørrelsen, og et
   låg, der var skjult, mens navnet blev skrevet (thumbnails på mobil og kollektionen), måles igen, når det vises

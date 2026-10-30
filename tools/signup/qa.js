@@ -157,6 +157,42 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
+  // 6c. the carrier bag and the 25 foils: the bag is one of the pieces and takes the print; the picker shows one
+  // finish at a time, keeps the colour across finishes where it can, and names the foil in words; the chosen piece
+  // leads the collection, largest, and every print there sits inside its frame
+  for (const opts of [{ viewport: { width: 1440, height: 900 } }, { ...devices["iPhone 13"] }]) {
+    const label = opts.viewport && opts.viewport.width === 1440 ? "desktop" : "phone";
+    const { ctx, p, host } = await page(opts, "concept=logo-studio&market=dkk_dk_den");
+    await p.waitForTimeout(1200);
+    await host.locator(".ls-name-input").fill("Atelier Nord");
+    await host.locator(".ls-name-input").blur();
+    const pieces = await host.locator(".ls-thumb").count();
+    check(`${label}: seven pieces, the carrier bag among them`, pieces === 7 && (await host.locator('.ls-thumb[data-box="bag"]').count()) === 1, `${pieces} thumbnails`);
+    await host.locator('.ls-thumb[data-box="bag"]').click();
+    await p.waitForTimeout(1400);
+    const onBag = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect(); return { inside: t.width > 20 && t.left > f.left && t.right < f.right && t.top > f.top && t.bottom < f.bottom, box: r.querySelector(".ls").dataset.box }; });
+    check(`${label}: the name is printed on the bag`, onBag.inside && onBag.box === "bag", JSON.stringify(onBag));
+    const picker = () => p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; return { finish: [...r.querySelectorAll(".ls-finish")].find((b) => b.getAttribute("aria-pressed") === "true").dataset.finish, shown: [...r.querySelectorAll(".ls-chip-foil")].filter((b) => !b.hidden).length, foil: r.querySelector(".ls").dataset.foil, name: r.querySelector(".ls-foil-now").textContent }; });
+    let s = await picker();
+    check(`${label}: the picker opens on the piece's own finish and shows only its colours`, s.finish === "metallic" && s.shown === 9 && s.foil === "metallic-gold" && s.name === "Metallisk guld", JSON.stringify(s));
+    await host.locator('.ls-finish[data-finish="matt"]').click(); await p.waitForTimeout(300);
+    s = await picker();
+    check(`${label}: matt has eleven colours and gold falls back to its first`, s.shown === 11 && s.foil === "matt-black" && s.name === "Mat sort", JSON.stringify(s));
+    await host.locator('.ls-finish[data-finish="gloss"]').click(); await p.waitForTimeout(300);
+    s = await picker();
+    check(`${label}: black stays black from matt to gloss`, s.shown === 5 && s.foil === "gloss-black" && s.name === "Blank sort", JSON.stringify(s));
+    await host.locator('.ls-finish[data-finish="matt"]').click(); await p.waitForTimeout(200);
+    await host.locator('.ls-chip-foil[data-value="matt-clear"]').click(); await p.waitForTimeout(400);
+    s = await picker();
+    check(`${label}: the transparent foil is named alone`, s.name === "Gennemsigtig", JSON.stringify(s));
+    await host.locator(".ls-next").click();
+    await p.waitForTimeout(1400);
+    const col = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const tiles = [...r.querySelectorAll(".ls-tile")]; const area = (t) => { const b = t.querySelector(".ls-tile-frame").getBoundingClientRect(); return b.width * b.height; }; const chosen = r.querySelector(".ls-tile.is-chosen"); return { chosen: chosen && chosen.dataset.box, largest: chosen && tiles.every((t) => t === chosen || area(t) < area(chosen)), inside: tiles.every((t) => { const f = t.querySelector(".ls-tile-frame").getBoundingClientRect(), b = t.querySelector(".ls-print text").getBoundingClientRect(); return b.width > 2 && b.left >= f.left - 1 && b.right <= f.right + 1 && b.top >= f.top - 1 && b.bottom <= f.bottom + 1; }) }; });
+    check(`${label}: the chosen piece leads the collection, largest, and every print sits in its frame`, col.chosen === "bag" && col.largest && col.inside, JSON.stringify(col));
+    await p.screenshot({ path: path.join(outDir, `bag-collection-${label}.jpg`), type: "jpeg", quality: 75 });
+    await ctx.close();
+  }
+
   // 7. the logo studio's foil: light follows the mouse, the loupe opens, an uploaded logo becomes a foil mask
   {
     const { ctx, p, host } = await page({ viewport: { width: 1440, height: 900 } }, "concept=logo-studio&market=gbp_uk_eng");

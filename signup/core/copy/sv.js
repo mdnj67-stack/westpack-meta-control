@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -27,45 +28,64 @@
     "peekDismiss": "Inte nu"
   },
   "logo-studio": {
-    "peek": "Hur ser ditt varumärke ut i guld?",
+    "peek": "Hur ser ditt varumärke ut i folie?",
     "peekCta": "Testa",
     "kicker": "Folietestet",
-    "title": "Skriv ditt varumärkesnamn. Vi sätter det i guld.",
-    "lede": "Live, på ett riktigt lock. Det kostar inget – inte ens din e-post.",
+    "title": "Skriv ditt varumärkesnamn. Vi trycker det i folie.",
+    "lede": "Live, på en riktig förpackning. Det kostar inget – inte ens din e-post.",
     "nameLabel": "Ditt varumärkesnamn",
     "namePlaceholder": "t.ex. Atelier Nord",
     "defaultName": "Ditt varumärke",
-    "boxLabel": "Ask",
+    "boxLabel": "Förpackning",
     "boxes": {
       "seville": "Mattsvart plast",
       "london": "Krämfärgad soft touch",
+      "bag": "Svart lyxkasse",
       "torino": "Svart med guldkant",
       "seoul": "Dammgrön kartong",
       "madrid": "Ljusbrun soft touch",
       "frankfurt": "Vit kartong med linnestruktur"
     },
     "foilLabel": "Folie",
-    "foil": {
+    "finish": {
+      "metallic": "Metallic",
+      "matt": "Matt",
+      "gloss": "Blank"
+    },
+    "colour": {
       "gold": "Guld",
       "silver": "Silver",
-      "rose": "Roséguld",
-      "oldrose": "Gammalrosa",
+      "copper": "Koppar",
+      "red": "Röd",
+      "orange": "Orange",
+      "pink": "Rosa",
+      "purple": "Lila",
+      "blue": "Blå",
+      "mint": "Mint",
+      "black": "Svart",
       "white": "Vit",
-      "black": "Svart"
+      "darkblue": "Mörkblå",
+      "green": "Grön",
+      "oldrose": "Gammalrosa",
+      "yellow": "Gul",
+      "clear": "Transparent",
+      "grey": "Grå",
+      "brown": "Brun"
     },
+    "foilName": "{finish} {colour}",
     "typeLabel": "Typsnitt",
     "type": {
       "classic": "Klassiskt",
       "script": "Snirkligt",
       "clean": "Rent"
     },
-    "hintLong": "Många bokstäver! Logotypen skalas så att den passar på locket.",
+    "hintLong": "Många bokstäver! Logotypen skalas så att den passar.",
     "hintWestpack": "Bra val. Tyvärr är det namnet redan taget.",
-    "disclaimer": "Illustration på riktiga Westpack-lock. Din logotyp trycks i en foliefärg.",
-    "lightHintMouse": "För musen över asken och se folien fånga ljuset.",
-    "lightHintTouch": "Dra fingret över asken och se folien fånga ljuset. Svep till nästa ask.",
+    "disclaimer": "Illustration på riktiga Westpack-förpackningar. Din logotyp trycks i en foliefärg.",
+    "lightHintMouse": "För musen över trycket och se folien fånga ljuset.",
+    "lightHintTouch": "Dra fingret över trycket och se folien fånga ljuset. Svep till nästa.",
     "zoomIn": "Se trycket på nära håll",
-    "zoomOut": "Hela asken",
+    "zoomOut": "Visa allt",
     "uploadCta": "Använd din logotyp",
     "uploadHint": "PNG, JPG eller SVG – din logotyp stannar i din webbläsare.",
     "uploadOneColour": "Folietryck görs i en enda färg – så här ser din folietryckta logotyp ut.",

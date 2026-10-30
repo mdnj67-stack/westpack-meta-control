@@ -5,7 +5,8 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 7 fix(es)"
+    "proofread": "2026-10-29 gpt-5.6-sol, 7 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -27,45 +28,64 @@
     "peekDismiss": "Pas maintenant"
   },
   "logo-studio": {
-    "peek": "À quoi ressemble votre marque en or ?",
+    "peek": "Votre marque, marquée à chaud. Ça donne quoi ?",
     "peekCta": "Essayer",
     "kicker": "Le test de marquage",
-    "title": "Tapez le nom de votre marque. On le dore.",
-    "lede": "En direct, sur un vrai couvercle. Ça ne coûte rien, même pas votre e-mail.",
+    "title": "Tapez le nom de votre marque. On le marque à chaud.",
+    "lede": "En direct, sur un vrai emballage. Ça ne coûte rien, même pas votre e-mail.",
     "nameLabel": "Le nom de votre marque",
     "namePlaceholder": "par ex. Atelier Nord",
     "defaultName": "Votre marque",
-    "boxLabel": "Écrin",
+    "boxLabel": "Emballage",
     "boxes": {
       "seville": "Plastique noir mat",
       "london": "Crème au toucher doux",
+      "bag": "Sac de luxe noir",
       "torino": "Noir avec bordure dorée",
       "seoul": "Carton vert grisé",
       "madrid": "Brun clair au toucher doux",
       "frankfurt": "Carton blanc effet lin"
     },
     "foilLabel": "Marquage",
-    "foil": {
+    "finish": {
+      "metallic": "Métallisé",
+      "matt": "Mat",
+      "gloss": "Brillant"
+    },
+    "colour": {
       "gold": "Or",
       "silver": "Argent",
-      "rose": "Or rose",
-      "oldrose": "Vieux rose",
+      "copper": "Cuivre",
+      "red": "Rouge",
+      "orange": "Orange",
+      "pink": "Rose",
+      "purple": "Violet",
+      "blue": "Bleu",
+      "mint": "Menthe",
+      "black": "Noir",
       "white": "Blanc",
-      "black": "Noir"
+      "darkblue": "Bleu foncé",
+      "green": "Vert",
+      "oldrose": "Vieux rose",
+      "yellow": "Jaune",
+      "clear": "Transparent",
+      "grey": "Gris",
+      "brown": "Marron"
     },
+    "foilName": "{colour} {finish}",
     "typeLabel": "Écriture",
     "type": {
       "classic": "Classique",
       "script": "Manuscrite",
       "clean": "Épurée"
     },
-    "hintLong": "Ça fait beaucoup de lettres. Le logo est réduit pour tenir sur le couvercle.",
+    "hintLong": "Ça fait beaucoup de lettres. Le logo est réduit pour tenir.",
     "hintWestpack": "Bon choix. Mais ce nom est déjà pris.",
-    "disclaimer": "Illustration sur de vrais couvercles Westpack. Votre logo est marqué à chaud en une seule couleur.",
-    "lightHintMouse": "Passez la souris sur l’écrin et regardez le marquage accrocher la lumière.",
-    "lightHintTouch": "Faites glisser un doigt sur l’écrin et regardez le marquage accrocher la lumière. Balayez pour voir l’écrin suivant.",
+    "disclaimer": "Illustration sur de vrais emballages Westpack. Votre logo est marqué à chaud en une seule couleur.",
+    "lightHintMouse": "Passez la souris sur le marquage et regardez-le accrocher la lumière.",
+    "lightHintTouch": "Faites glisser un doigt sur le marquage et regardez-le accrocher la lumière. Balayez pour voir le suivant.",
     "zoomIn": "Voir le marquage de près",
-    "zoomOut": "Voir tout l’écrin",
+    "zoomOut": "Voir l’ensemble",
     "uploadCta": "Utiliser votre logo",
     "uploadHint": "PNG, JPG ou SVG – votre logo reste dans votre navigateur.",
     "uploadOneColour": "Le marquage à chaud se fait en une seule couleur. Voici le rendu de votre logo.",

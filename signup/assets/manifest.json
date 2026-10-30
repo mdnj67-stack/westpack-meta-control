@@ -355,5 +355,28 @@
         "bytes": 2698
       }
     ]
+  },
+  "logo/box-bag": {
+    "source": "XXL_Gaveposer_New-07.jpg (Asana task 1211894660006807)",
+    "files": [
+      {
+        "file": "logo/box-bag-1200.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 40810
+      },
+      {
+        "file": "logo/box-bag-720.webp",
+        "width": 720,
+        "height": 720,
+        "bytes": 19526
+      },
+      {
+        "file": "logo/box-bag-160.webp",
+        "width": 160,
+        "height": 160,
+        "bytes": 3102
+      }
+    ]
   }
 }
