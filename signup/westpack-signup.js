@@ -23,7 +23,10 @@
   // ?wps=preview on any store page (or ?wps=logo-studio, swipe-match, pack-and-ship) opens the experience at once in
   // test mode: signups go to the test list, tracking is marked test, and it works whether or not the experience is
   // live. It is how the store's tag is checked on the real store before launch.
-  const storePreview = (() => { try { return new URLSearchParams(location.search).get("wps") || ""; } catch (e) { return ""; } })();
+  // ?wps=reset forgets this browser's answers (closed, subscribed, shown this session), so a tester sees it as a new visitor
+  const wps = (() => { try { return new URLSearchParams(location.search).get("wps") || ""; } catch (e) { return ""; } })();
+  const resetAsked = wps === "reset";
+  const storePreview = resetAsked ? "" : wps;
   const OPTS = {
     mode: data.mode === "preview" ? "preview" : "live",
     market: data.market || "",
@@ -401,8 +404,16 @@
     await Promise.all([loadScript(`${BASE}core/rules.js`), loadScript(`${BASE}core/markets.js`)]);
     R = window.WestpackSignupRules; M = window.WestpackSignupMarkets;
     market = OPTS.market ? M.MARKETS[OPTS.market] : R.resolveMarket(location.pathname, M.MARKETS);
+    // a staging store runs as a live one will, but nothing it collects reaches a real list or the live funnel
+    const staging = (M.STAGING_HOSTS || []).includes(location.hostname);
+    if (staging && market) {
+      OPTS.test = true;
+      const here = (u) => String(u).replace("https://www.westpack.com", location.origin);
+      market = Object.assign({}, market, { storeUrl: here(market.storeUrl), privacyUrl: here(market.privacyUrl), boxesUrl: here(market.boxesUrl) });
+    }
+    if (resetAsked) { local.remove(R.STATE_KEY); sess.remove(R.SESSION_KEY); }
     // M.LIVE is the master switch (core/markets.js): off, the store's tag does nothing but answer ?wps=preview
-    if (!market || (!(M.LIVE && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
+    if (!market || (!((M.LIVE || staging) && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
     state = R.parseState(local.get(R.STATE_KEY));
     reducedMotion = Boolean(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
     device = R.deviceClass(innerWidth, Boolean(window.matchMedia && matchMedia("(pointer: coarse)").matches));

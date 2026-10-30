@@ -1353,6 +1353,13 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   forms named "… - Popup - The Insert …" and records them for `republish --apply`); the embeds and the "Always on
   sale" flyout (sale/outlet pages only, which the Signup Lab avoids) stay. Launch needs the user's go and the line
   in Magento.
+- **Staging first** (2026-10-30, the user: "Jeg vil teste det hele på staging først", live dropped for now). Wexo
+  put the line on `westpack-staging.wexohosting.com` (basic auth; ask the user). A host in `STAGING_HOSTS`
+  (`signup/core/markets.js`) runs as live whatever `LIVE` says, but forces test mode: TEST list, `env=test` tracking,
+  store links rewritten to that host. Never put a live store host there - a test pins it. `?wps=reset` (any host)
+  clears the visitor's stored answers. `tmp/playwright-runner/staging-local-check.js` checks it on the real staging
+  store with Klaviyo and the funnel intercepted (Playwright's `httpCredentials` does not cover the browser's own
+  navigations, so it adds the Authorization header by route, on the staging origin only).
 - `tools/signup/store-check.js` opens the 18 real storefronts, answers the cookie banner, adds the tag and checks:
   silent with the switch off (or showing with it on), preview opens in the store's language with its consent
   sentence, never on the cart. `--local` serves this checkout, `--simulate-live` forces the switch on in the test

@@ -242,12 +242,23 @@ test("logo studio: the homography lays the unit square exactly on each lid, and 
   }
 });
 
+test("a staging store runs the Signup Lab whatever the switch says, and can only reach the test list", () => {
+  const { STAGING_HOSTS } = require("../signup/core/markets");
+  assert.ok(STAGING_HOSTS.includes("westpack-staging.wexohosting.com"));
+  // a live store on the staging list would run before launch, against real visitors, on the test list
+  assert.ok(!STAGING_HOSTS.some((h) => /(^|\.)westpack\.[a-z.]+$/.test(h)), "no live store host on the staging list");
+  const runtime = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
+  assert.match(runtime, /const staging = \(M\.STAGING_HOSTS \|\| \[\]\)\.includes\(location\.hostname\);\r?\n    if \(staging && market\) \{\r?\n      OPTS\.test = true;/);
+  // ?wps=reset forgets this browser's answers and is never read as an experience to preview
+  assert.match(runtime, /const storePreview = resetAsked \? "" : wps;/);
+});
+
 test("one master switch decides whether the stores run the Signup Lab, and ?wps= previews it on a real store", () => {
   const { LIVE } = require("../signup/core/markets");
   assert.equal(typeof LIVE, "boolean");
   const runtime = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
   // off: the tag does nothing, except a store preview; a preview is always test mode, so it can only reach the test list
-  assert.match(runtime, /if \(!market \|\| \(!\(M\.LIVE && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);
+  assert.match(runtime, /if \(!market \|\| \(!\(\(M\.LIVE \|\| staging\) && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);
   assert.match(runtime, /test: data\.test === "1" \|\| data\.mode === "preview" \|\| Boolean\(storePreview\)/);
   assert.match(runtime, /get\("wps"\)/);
   // go-live touches only The Insert popups and needs --apply to touch anything

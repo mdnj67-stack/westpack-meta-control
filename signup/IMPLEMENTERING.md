@@ -6,6 +6,21 @@ Alt er bygget, testet og deployet. Der mangler to ting, og ingen af dem kræver 
 2. **At tænde** – én linje her i repoet og et script, der slukker The Insert-popupperne i Klaviyo. Det gør vi
    samme dag, i de samme minutter.
 
+## 0. Staging først
+
+Wexo har sat linjen ind på staging-butikken (`https://westpack-staging.wexohosting.com/`, bag basic auth), og dér
+kører Signup Lab **af sig selv, som den vil på de rigtige butikker**, uanset kontakten nedenfor: dialogen kommer på
+desktop efter en pause eller når musen forlader siden, kortet glider ind på mobilen, og den holder sig fra kurven.
+Forskellene er, at hver tilmelding kun går til testlisten "TEST - Signup Lab (preview only)" i DK-kontoen, at
+tragten registreres som `env=test` (ikke live), og at links bliver på staging. Hosten står i `STAGING_HOSTS` i
+`signup/core/markets.js`.
+
+- **Se den igen:** tilføj `?wps=reset` bag adressen. Så glemmer browseren, at du har lukket den eller tilmeldt dig,
+  og du er en ny besøgende igen.
+- **En bestemt oplevelse:** `?wps=logo-studio`, `?wps=swipe-match` eller `?wps=pack-and-ship` åbner den med det samme.
+- **Tragten fra staging:** `GET /api/signup/track?action=report&env=test&from=<dato>`.
+- Gentagne tilmeldinger fra samme maskine kan blive taget af Klaviyos bot-filter; det er Klaviyo, ikke formen.
+
 ## 1. Tagget i Magento (kræver adgang til Magento-admin)
 
 Linjen, der skal ind:

@@ -133,7 +133,12 @@
   // purpose in the DK account (2026-10-28), single opt-in, with no flow attached.
   const TEST_TARGET = { companyId: "VRPp5S", listId: "WUDjfX", name: "TEST - Signup Lab (preview only)" };
 
-  const api = { LIVE, MARKETS, TEST_TARGET };
+  // Stores where the experience runs by itself whatever LIVE says, exactly as it will on the live stores, except that
+  // every signup goes to TEST_TARGET, tracking is marked test and links stay on that host. Wexo's staging store, behind
+  // basic auth, where the user tests the whole thing before live (2026-10-30).
+  const STAGING_HOSTS = ["westpack-staging.wexohosting.com"];
+
+  const api = { LIVE, MARKETS, TEST_TARGET, STAGING_HOSTS };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.WestpackSignupMarkets = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);
