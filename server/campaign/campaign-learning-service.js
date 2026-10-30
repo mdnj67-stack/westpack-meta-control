@@ -1,4 +1,3 @@
-const { readAgentState } = require("./agent-store");
 const { buildCampaignLearningEffectiveness, buildCampaignPerformanceAttribution, compareCampaignArtifacts, deriveCampaignLearningPatterns, learningFingerprint } = require("./campaign-learning");
 const { getCampaignLearningStoreProfile, moderateCampaignLearningEvent, readCampaignLearningEvents, recordCampaignLearningEvent } = require("./campaign-learning-store");
 
@@ -13,14 +12,12 @@ function learningChannel(type, requested = "") {
 
 async function recordArtifactLearning({ type = "editor_saved", jobId = "", editedArtifact = null, originalArtifact = null, reason = "", channel = "", metadata = {} } = {}) {
   const safeType = ALLOWED_EVENT_TYPES.has(type) ? type : "editor_saved";
-  const state = await readAgentState();
-  const job = state.jobs.find((candidate) => candidate.id === String(jobId || "")) || null;
-  const original = job?.output?.artifactPack || originalArtifact;
+  const original = originalArtifact;
   if (safeType !== "rejected" && safeType !== "performance_snapshot" && (!original?.artifacts || !editedArtifact?.artifacts)) {
     throw new Error("Campaign learning requires both the original AI artifact and the edited studio artifact.");
   }
   const diff = original?.artifacts && editedArtifact?.artifacts ? compareCampaignArtifacts(original, editedArtifact) : null;
-  const campaignName = String(job?.campaignTaskName || metadata?.campaignName || original?.input?.title || editedArtifact?.input?.title || "Untitled campaign");
+  const campaignName = String(metadata?.campaignName || original?.input?.title || editedArtifact?.input?.title || "Untitled campaign");
   const evidenceLevel = safeType === "editor_saved"
     ? "editing_signal"
     : safeType === "rejected"
@@ -38,7 +35,7 @@ async function recordArtifactLearning({ type = "editor_saved", jobId = "", edite
     type: safeType,
     channel: learningChannel(safeType, channel),
     jobId,
-    campaignTaskGid: job?.campaignTaskGid || metadata?.campaignTaskGid || "",
+    campaignTaskGid: metadata?.campaignTaskGid || "",
     campaignName,
     reason,
     evidenceLevel,
@@ -46,9 +43,9 @@ async function recordArtifactLearning({ type = "editor_saved", jobId = "", edite
     diff,
     performance: metadata?.performance || null,
     outcome: {
-      qualityReviews: Array.isArray(job?.qualityIterations) ? job.qualityIterations.length : Number(metadata?.qualityReviews || 0),
-      productionRevisions: Number(job?.revisionCount || job?.checkpoint?.revisionCount || metadata?.productionRevisions || 0),
-      qualityScore: Number(job?.output?.qualityAudit?.score || metadata?.qualityScore || 0)
+      qualityReviews: Number(metadata?.qualityReviews || 0),
+      productionRevisions: Number(metadata?.productionRevisions || 0),
+      qualityScore: Number(metadata?.qualityScore || 0)
     },
     metadata: {
       campaignType: original?.input?.campaignType || metadata?.campaignType || "",

@@ -4,16 +4,14 @@ const fs = require("fs");
 const path = require("path");
 
 // campaign-learning-store.js's local_file mode previously had zero cross-invocation mutual
-// exclusion for data/campaign-learning-events.json — the exact class of bug already fixed once
-// in server/campaign/agent-store.js for data/content-agent-state.json. These tests force
-// local_file mode (no Redis env vars, no VERCEL) and exercise real fs calls against a fresh
-// module instance, mirroring the concurrency assertions in tests/agent-store.test.js.
+// exclusion for data/campaign-learning-events.json. These tests force local_file mode (no Redis
+// env vars, no VERCEL) and exercise real fs calls against a fresh module instance, using the
+// shared lock plumbing in server/campaign/agent-store.js (see tests/agent-store.test.js).
 
 const LEARNING_STORE_PATH = require.resolve("../server/campaign/campaign-learning-store");
 const AGENT_STORE_PATH = require.resolve("../server/campaign/agent-store");
 const LOCAL_EVENTS_PATH = path.join(process.cwd(), "data", "campaign-learning-events.json");
 const LEARNING_LOCK_PATH = path.join(process.cwd(), "data", "campaign-learning-events.lock.json");
-const AGENT_LOCK_PATH = path.join(process.cwd(), "data", "content-agent-state.lock.json");
 
 const REDIS_ENV_KEYS = [
   "VERCEL",
@@ -38,7 +36,7 @@ function forceLocalFileMode() {
 }
 
 function cleanupLocalFiles() {
-  for (const filePath of [LOCAL_EVENTS_PATH, LEARNING_LOCK_PATH, AGENT_LOCK_PATH]) {
+  for (const filePath of [LOCAL_EVENTS_PATH, LEARNING_LOCK_PATH]) {
     try {
       fs.unlinkSync(filePath);
     } catch (error) {
@@ -75,8 +73,8 @@ test("local_file mode: recordCampaignLearningEvent waits out a lock held by anot
     const agentStore = require(AGENT_STORE_PATH);
     await store.replaceCampaignLearningEvents([]);
 
-    // Simulate another process (e.g. a background content-agent job's recordArtifactLearning
-    // call) already mid-write: it holds campaign-learning-store's own lock file directly.
+    // Simulate another process (e.g. a colleague's Studio save calling recordArtifactLearning)
+    // already mid-write: it holds campaign-learning-store's own lock file directly.
     const otherWriterLockId = "other-writer-a";
     assert.equal(agentStore.acquireLocalLock(otherWriterLockId, 5, LEARNING_LOCK_PATH), true);
 
@@ -118,7 +116,7 @@ test("local_file mode: two overlapping recordCampaignLearningEvent calls both su
     const otherWriterLockId = "other-writer-b";
     assert.equal(agentStore.acquireLocalLock(otherWriterLockId, 5, LEARNING_LOCK_PATH), true);
 
-    const recordA = store.recordCampaignLearningEvent({ reason: "content-agent job", fingerprint: "fp-a" });
+    const recordA = store.recordCampaignLearningEvent({ reason: "studio save", fingerprint: "fp-a" });
     const recordB = store.recordCampaignLearningEvent({ reason: "editor autosave", fingerprint: "fp-b" });
 
     await sleep(60);
@@ -162,30 +160,6 @@ test("local_file mode: moderateCampaignLearningEvent does not clobber a write th
     const stillModerated = events.find((item) => item.id === event.id);
     assert.equal(stillModerated.moderationStatus, "approved", "the moderation write must not be lost");
     assert.equal(events.some((item) => item.fingerprint === "fp-concurrent"), true, "the concurrent record write must not be lost either");
-  } finally {
-    cleanupLocalFiles();
-    restoreEnv();
-  }
-});
-
-test("local_file mode: campaign-learning-store's lock is a dedicated file that does not contend with agent-store's own lock", async () => {
-  const restoreEnv = forceLocalFileMode();
-  try {
-    const store = freshLearningStore();
-    const agentStore = require(AGENT_STORE_PATH);
-
-    // Hold agent-store's content-agent-state lock ...
-    assert.equal(await agentStore.acquireAgentLock("agent-holder", 5), true);
-
-    // ... campaign-learning-store must still be able to write immediately: it is not contending
-    // on the same lock file.
-    const result = await store.recordCampaignLearningEvent({ reason: "unrelated subsystem", fingerprint: "fp-isolated" });
-    assert.equal(result.recorded, true);
-
-    assert.equal(fs.existsSync(AGENT_LOCK_PATH), true, "agent-store's lock file must still exist — the write above must not have released it");
-    assert.equal(fs.existsSync(LEARNING_LOCK_PATH), false, "campaign-learning-store must release its own lock file after writing");
-
-    await agentStore.releaseAgentLock("agent-holder");
   } finally {
     cleanupLocalFiles();
     restoreEnv();

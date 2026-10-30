@@ -164,18 +164,12 @@ import {
   requestAuthSession,
   requestCampaignAsanaTask,
   requestCampaignAsanaTasks,
-  requestContentAgentStart,
-  requestContentAgentControl,
-  requestContentAgentStatus,
   requestAssetLibraryLoad,
   requestAssetLibrarySave,
   requestStudioDraftClear,
   requestStudioDraftLoad,
   requestStudioDraftSave,
-  requestContentAgentRetry,
-  requestContentAgentRejectRestart,
   requestCampaignLearningFeedback,
-  requestCampaignLearningModeration,
   requestCampaignArtifacts,
   requestCampaignCarouselSuggestions,
   requestCampaignBrain,
@@ -477,7 +471,6 @@ const appState = {
   campaignAssemblyObject: null,
   campaignAssemblyGeneratedAt: "",
   campaignStudioMode: "asana_combo",
-  campaignManualWorkspaceOpen: false,
   campaignMetaMaster: {
     sourceType: "klaviyo",
     account: "DK",
@@ -500,8 +493,6 @@ const appState = {
     result: null
   },
   campaignStudioActiveView: "meta",
-  campaignStudioReviewJob: null,
-  campaignStudioReviewOpen: false,
   campaignStudioDraftSync: { savedAt: "", error: "", store: null },
   campaignStudioSourceAssets: {
     loading: false,
@@ -516,27 +507,6 @@ const appState = {
   campaignAsanaSelectedContentGid: "",
   campaignAsanaLoaded: false,
   campaignAsanaImporting: false,
-  contentAgent: {
-    loading: false,
-    running: false,
-    loaded: false,
-    error: "",
-    notice: "",
-    direction: "",
-    directorOpen: false,
-    directorInteractionActive: false,
-    directorRenderPending: false,
-    rejectConfirmJobId: "",
-    rejectingJobId: "",
-    controllingJobId: "",
-    learningOpen: false,
-    learningBusyId: "",
-    learningDeleteConfirmId: "",
-    state: null,
-    store: null,
-    policy: null,
-    learning: null
-  },
   campaignBrainResult: null,
   campaignBrainGeneratedAt: "",
   campaignArtifactsLoading: false,
@@ -794,7 +764,6 @@ const authState = {
 
 let dashboardAutoRefreshTimer = null;
 let dashboardAutoRefreshDailyTimer = null;
-let contentAgentPollTimer = null;
 let dashboardRefreshPromise = null;
 let authEventsAttached = false;
 let klaviyoTemplateEventsAttached = false;
@@ -4292,632 +4261,11 @@ function setKlaviyoView(nextView = "overview") {
   }
   if (appState.klaviyoView === "campaign_brain") {
     loadCampaignAsanaWorkspace();
-    loadContentAgentStatus();
     if (appState.campaignStudioMode === "meta_master") loadCampaignMetaMasterTemplates();
   }
   if (appState.klaviyoView === "canva_localizer") {
     loadCanvaLocalizer();
   }
-}
-
-function formatContentAgentTime(value = "") {
-  const parsed = Date.parse(value || "");
-  if (!Number.isFinite(parsed)) return "Not run yet";
-  return new Intl.DateTimeFormat("da-DK", {
-    timeZone: "Europe/Copenhagen",
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date(parsed));
-}
-
-const CAMPAIGN_STUDIO_MIN_SCORE = 70;
-
-function getContentAgentJobQualityScore(job = null) {
-  const iterations = Array.isArray(job?.qualityIterations) ? job.qualityIterations : [];
-  const latestIteration = iterations.at(-1) || {};
-  return Number(
-    job?.output?.qualityAudit?.score
-    ?? latestIteration?.gate?.score
-    ?? latestIteration?.review?.overallScore
-    ?? 0
-  );
-}
-
-function isContentAgentJobStudioEligible(job = null) {
-  return Boolean(
-    job?.output?.artifactPack?.artifacts
-    && ["ready_for_review", "quality_blocked"].includes(job?.state)
-    && getContentAgentJobQualityScore(job) >= CAMPAIGN_STUDIO_MIN_SCORE
-  );
-}
-
-function getContentAgentStateLabel(state = "", job = null) {
-  if (state === "quality_blocked" && isContentAgentJobStudioEligible(job)) return "Studio draft · quality blocked";
-  if (state === "queued" && job?.checkpoint) return "Revision queued";
-  if (state === "failed") {
-    const jobPipelineVersion = Number(String(job?.asanaVersion || "").match(/\|pipeline:(\d+)$/)?.[1] || 0);
-    return jobPipelineVersion === Number(appState.contentAgent?.health?.pipelineVersion || 0) ? "Recovery available" : "Archived failure";
-  }
-  return ({
-    queued: "Queued",
-    analysing: "Analysing",
-    producing: "Producing",
-    quality_review: "Quality review",
-    ready_for_review: "Ready for review",
-    paused: "Paused",
-    quality_blocked: "Quality blocked",
-    dead_letter: "Dead letter",
-    rejected: "Rejected"
-  })[state] || "Waiting";
-}
-
-function getContentAgentFocus(job = null, agent = {}) {
-  if (agent.loading && !job) {
-    return { phase: "SCOUTING", sentence: "Checking Asana for the next brief.", step: 0 };
-  }
-  if (!job) {
-    return { phase: "ON WATCH", sentence: "Waiting for the next campaign.", step: 0 };
-  }
-  if (isContentAgentJobStudioEligible(job)) {
-    if (job.state === "quality_blocked") {
-      return { phase: "STUDIO DRAFT", sentence: `Editable at ${getContentAgentJobQualityScore(job)}/100. Quality blockers remain visible.`, step: 4 };
-    }
-    return { phase: "READY FOR YOU", sentence: "The campaign is ready for your eye.", step: 4 };
-  }
-  if (job.state === "paused") {
-    return { phase: "PAUSED", sentence: "Safely paused by the operator.", step: Math.max(1, Number(job.progress || 0) >= 70 ? 3 : 2) };
-  }
-  const resumeStage = String(job.resumeStage || job.checkpoint?.resumeStage || "").toLowerCase();
-  if (job.state === "quality_review" || resumeStage.includes("quality")) {
-    return { phase: "QUALITY", sentence: "Challenging every creative decision.", step: 3 };
-  }
-  if (resumeStage.includes("revision")) {
-    return { phase: "REFINING", sentence: "Reworking the weakest details.", step: 3 };
-  }
-  if (job.state === "producing" && resumeStage.includes("artifact")) {
-    return { phase: "DESIGNING", sentence: "Building the campaign system.", step: 2 };
-  }
-  if (job.state === "producing") {
-    return { phase: "DIRECTION", sentence: "Shaping the creative direction.", step: 1 };
-  }
-  if (job.state === "analysing") {
-    return { phase: "READING", sentence: "Connecting brief, images and intent.", step: 1 };
-  }
-  if (job.state === "queued") {
-    return { phase: "UP NEXT", sentence: "Preparing the campaign workspace.", step: 0 };
-  }
-  return { phase: "ON WATCH", sentence: "Waiting for the next campaign.", step: 0 };
-}
-
-function renderContentAgentJob(job) {
-  const qualityAudit = job.output?.qualityAudit || null;
-  const iterationCount = Array.isArray(job.qualityIterations) ? job.qualityIterations.length : 0;
-  const gate = qualityAudit?.gate || null;
-  const dimensionFloor = Number(gate?.dimensionFloor || 0);
-  const jobPipelineVersion = Number(String(job.asanaVersion || "").match(/\|pipeline:(\d+)$/)?.[1] || 0);
-  const recoverable = job.state === "failed" && jobPipelineVersion === Number(appState.contentAgent?.health?.pipelineVersion || 0);
-  const rejectConfirm = appState.contentAgent?.rejectConfirmJobId === job.id;
-  const rejecting = appState.contentAgent?.rejectingJobId === job.id;
-  const controlling = appState.contentAgent?.controllingJobId === job.id;
-  const studioEligible = isContentAgentJobStudioEligible(job);
-  const studioScore = getContentAgentJobQualityScore(job);
-  const qualityMeta = qualityAudit
-    ? `${qualityAudit.score || 0}/100 · floor ${dimensionFloor} · ${iterationCount} review${iterationCount === 1 ? "" : "s"}`
-    : "";
-  const stages = [
-    { key: "brief", label: "Brief", done: !["queued"].includes(job.state) || Boolean(job.checkpoint) },
-    { key: "create", label: "Create", done: ["quality_review", "ready_for_review", "quality_blocked"].includes(job.state) || Boolean(job.checkpoint) },
-    { key: "quality", label: "Quality", done: ["ready_for_review", "quality_blocked"].includes(job.state), active: ["quality_review", "queued"].includes(job.state) && Boolean(job.output) },
-    { key: "review", label: "Review", done: job.state === "ready_for_review", active: studioEligible }
-  ];
-  return `
-    <article class="content-agent-job" data-state="${escapeHtml(job.state)}">
-      <div class="content-agent-job-main">
-        <div class="content-agent-job-heading">
-          <span class="content-agent-job-state">${escapeHtml(getContentAgentStateLabel(job.state, job))}</span>
-          <span class="content-agent-job-time">${escapeHtml(formatContentAgentTime(job.updatedAt || job.createdAt))}</span>
-        </div>
-        <strong>${escapeHtml(job.campaignTaskName || "Untitled campaign")}</strong>
-        <p>${escapeHtml(job.error || job.statusMessage || "Waiting for the agent.")}</p>
-        ${qualityMeta ? `<small class="content-agent-quality-meta">Quality Director · ${escapeHtml(qualityMeta)}</small>` : ""}
-        <div class="content-agent-job-flow" aria-label="Production progress">
-          ${stages.map((stage) => `<span class="${stage.done ? "is-done" : ""}${stage.active ? " is-active" : ""}"><i></i>${escapeHtml(stage.label)}</span>`).join("")}
-        </div>
-      </div>
-      <div class="content-agent-job-side">
-        <span>${escapeHtml(job.source === "manual" ? "Priority run" : "Auto-discovered")}</span>
-        <div class="content-agent-progress"><i style="width:${Math.max(0, Math.min(100, Number(job.progress || 0)))}%"></i></div>
-        ${studioEligible ? `${job.state === "ready_for_review" && rejectConfirm ? `<input class="content-agent-reject-reason" data-content-agent-reject-reason="${escapeHtml(job.id)}" type="text" maxlength="600" placeholder="What should the AI learn from this rejection?">` : ""}<div class="content-agent-job-review-actions"><button class="content-agent-job-open" type="button" data-content-agent-open="${escapeHtml(job.id)}">${job.state === "quality_blocked" ? `Open Studio draft · ${studioScore}` : "Review in Studio"} <span>→</span></button>${job.state === "ready_for_review" ? `<button class="content-agent-job-reject${rejectConfirm ? " is-confirming" : ""}" type="button" data-content-agent-reject="${escapeHtml(job.id)}"${rejecting ? " disabled" : ""}>${rejecting ? "Restarting…" : rejectConfirm ? "Confirm restart" : "Reject & restart"}<span>${rejectConfirm ? "↻" : "×"}</span></button>` : ""}</div>` : ""}
-        ${["queued", "analysing", "producing", "quality_review"].includes(job.state) ? `<button class="content-agent-job-control" type="button" data-content-agent-control="pause" data-content-agent-job="${escapeHtml(job.id)}"${controlling ? " disabled" : ""}>${controlling ? "Pausing…" : "Pause"}<span>Ⅱ</span></button>` : ""}
-        ${job.state === "paused" ? `<button class="content-agent-job-control is-resume" type="button" data-content-agent-control="resume" data-content-agent-job="${escapeHtml(job.id)}"${controlling ? " disabled" : ""}>${controlling ? "Resuming…" : "Resume at front"}<span>→</span></button>` : ""}
-        ${recoverable ? `<button class="content-agent-job-retry" type="button" data-content-agent-retry="${escapeHtml(job.id)}">Recover run <span>↻</span></button>` : ""}
-      </div>
-    </article>
-  `;
-}
-
-function isContentAgentDirectorInteractionActive() {
-  const agent = appState.contentAgent || {};
-  if (!agent.directorOpen) return false;
-  const activeElement = document.activeElement;
-  const director = document.querySelector(".content-agent-director.is-open");
-  return Boolean(agent.directorInteractionActive || (director && activeElement && director.contains(activeElement)));
-}
-
-function getCampaignLearningEventLabel(type = "") {
-  return ({
-    editor_saved: "Editor decision",
-    klaviyo_draft_created: "Klaviyo handoff",
-    meta_draft_created: "Meta handoff",
-    rejected: "Human rejection",
-    performance_snapshot: "Performance evidence"
-  })[type] || "Learning signal";
-}
-
-function renderCampaignLearningStudio(agent = {}) {
-  const learning = agent.learning || {};
-  const effectiveness = learning.effectiveness || {};
-  const patterns = Array.isArray(learning.patterns) ? learning.patterns : [];
-  const events = Array.isArray(learning.events) ? learning.events : [];
-  const attributedPerformance = Array.isArray(learning.attributedPerformance) ? learning.attributedPerformance : [];
-  const open = Boolean(agent.learningOpen);
-  const changeDelta = effectiveness.manualChangeDeltaPercent;
-  const trendLabel = !effectiveness.trendReady
-    ? `${Math.max(0, Number(effectiveness.minimumForTrend || 6) - Number(effectiveness.measuredCampaignDecisions || 0))} more decisions needed`
-    : changeDelta < 0 ? `${Math.abs(changeDelta)}% fewer manual changes` : changeDelta > 0 ? `${changeDelta}% more manual changes` : "No change yet";
-  return `
-    <section class="campaign-learning-studio${open ? " is-open" : ""}">
-      <button class="campaign-learning-studio-toggle" type="button" data-learning-toggle aria-expanded="${open ? "true" : "false"}">
-        <span><small>Human learning</small><strong>Learning Studio</strong></span>
-        <span class="campaign-learning-studio-summary"><b>${escapeHtml(String(learning.eventCount || 0))}</b> signals · <b>${escapeHtml(String(learning.patternSummary?.established || 0))}</b> established patterns <i>${open ? "−" : "+"}</i></span>
-      </button>
-      ${open ? `
-        <div class="campaign-learning-studio-body">
-          <div class="campaign-learning-impact-grid">
-            <article><span>Measured decisions</span><strong>${escapeHtml(String(effectiveness.measuredCampaignDecisions || 0))}</strong><small>${escapeHtml(trendLabel)}</small></article>
-            <article><span>Draft handoffs</span><strong>${escapeHtml(String(effectiveness.draftHandoffs || 0))}</strong><small>strong approval evidence</small></article>
-            <article><span>Human rejections</span><strong>${escapeHtml(String(effectiveness.rejections || 0))}</strong><small>negative evidence</small></article>
-            <article><span>Established</span><strong>${escapeHtml(String(learning.patternSummary?.established || 0))}</strong><small>confirmed across 3+ campaigns</small></article>
-          </div>
-          <div class="campaign-learning-columns">
-            <div class="campaign-learning-patterns">
-              <header><span>Repeated preferences</span><small>Only 3+ campaigns become guidance rules</small></header>
-              ${patterns.length ? patterns.slice(0, 12).map((pattern) => `
-                <article data-maturity="${escapeHtml(pattern.maturity || "observed")}">
-                  <div><span>${escapeHtml(pattern.channel || "cross-channel")} · ${escapeHtml(pattern.maturity || "observed")}</span><strong>${escapeHtml(String(pattern.path || "").replace(/^finalSelections\./, ""))}</strong><p>${escapeHtml(pattern.value || "")}</p></div>
-                  <aside><b>${Math.round(Number(pattern.confidence || 0) * 100)}%</b><small>${escapeHtml(String(pattern.campaignCount || 0))} campaigns</small></aside>
-                </article>
-              `).join("") : `<div class="campaign-learning-empty"><strong>No repeated pattern yet</strong><p>The first three consistent campaign decisions will establish one.</p></div>`}
-            </div>
-            <div class="campaign-learning-events">
-              <header><span>Evidence ledger</span><small>Approve, pause or remove individual signals</small></header>
-              ${events.length ? events.map((event) => {
-                const busy = agent.learningBusyId === event.id;
-                const deleteConfirm = agent.learningDeleteConfirmId === event.id;
-                const status = event.moderationStatus || "active";
-                const decisionCount = Number(event.totals?.changed || 0) + Number(event.totals?.added || 0) + Number(event.totals?.removed || 0);
-                return `
-                  <article data-status="${escapeHtml(status)}">
-                    <div class="campaign-learning-event-head"><span>${escapeHtml(getCampaignLearningEventLabel(event.type))}</span><small>${escapeHtml(formatContentAgentTime(event.createdAt))}</small></div>
-                    <strong>${escapeHtml(event.campaignName || "Untitled campaign")}</strong>
-                    <p>${escapeHtml(event.reason || (decisionCount ? `${decisionCount} deliberate studio decisions recorded.` : event.type === "performance_snapshot" ? "Comparable channel results recorded." : "No structural edits recorded."))}</p>
-                    <div class="campaign-learning-event-foot">
-                      <span data-status="${escapeHtml(status)}">${escapeHtml(status)}</span>
-                      <div>
-                        ${status !== "approved" && status !== "disabled" ? `<button type="button" data-learning-operation="approve" data-learning-event="${escapeHtml(event.id)}"${busy ? " disabled" : ""}>Approve</button>` : ""}
-                        ${status === "disabled" ? `<button type="button" data-learning-operation="enable" data-learning-event="${escapeHtml(event.id)}"${busy ? " disabled" : ""}>Enable</button>` : `<button type="button" data-learning-operation="disable" data-learning-event="${escapeHtml(event.id)}"${busy ? " disabled" : ""}>Pause</button>`}
-                        <button class="is-delete" type="button" data-learning-operation="delete" data-learning-event="${escapeHtml(event.id)}"${busy ? " disabled" : ""}>${deleteConfirm ? "Confirm delete" : "Delete"}</button>
-                      </div>
-                    </div>
-                  </article>`;
-              }).join("") : `<div class="campaign-learning-empty"><strong>No evidence yet</strong><p>Save or hand off a reviewed campaign to begin.</p></div>`}
-            </div>
-          </div>
-          ${attributedPerformance.length ? `<div class="campaign-learning-attribution"><header><span>Decision → outcome links</span><small>Directional attribution, not causal proof</small></header><div>${attributedPerformance.slice(0, 6).map((row) => `<article><span>${escapeHtml(row.channel || "channel")}</span><strong>${escapeHtml(row.campaignName || "Campaign")}</strong><p>${escapeHtml(row.cohortPosition || "observed")} cohort · ${row.metrics?.clickRate != null ? `${escapeHtml(String(row.metrics.clickRate))}% click rate` : "performance observed"} · ${escapeHtml(String(row.linkedDecisions?.length || 0))} linked decision${row.linkedDecisions?.length === 1 ? "" : "s"}</p></article>`).join("")}</div></div>` : ""}
-          <p class="campaign-learning-method"><strong>Method:</strong> edits are weak evidence, draft handoffs are strong evidence, rejections are negative evidence, and performance remains associative. Disabled signals never enter a future AI prompt.</p>
-        </div>` : ""}
-    </section>`;
-}
-
-async function moderateCampaignLearning(eventId, operation) {
-  const agent = appState.contentAgent;
-  if (!eventId || agent.learningBusyId) return;
-  if (operation === "delete" && agent.learningDeleteConfirmId !== eventId) {
-    agent.learningDeleteConfirmId = eventId;
-    renderContentAgentConsole({ force: true });
-    window.setTimeout(() => {
-      if (agent.learningDeleteConfirmId === eventId && !agent.learningBusyId) {
-        agent.learningDeleteConfirmId = "";
-        renderContentAgentConsole({ force: true });
-      }
-    }, 7000);
-    return;
-  }
-  agent.learningBusyId = eventId;
-  agent.error = "";
-  renderContentAgentConsole({ force: true });
-  try {
-    const result = await requestCampaignLearningModeration(eventId, operation);
-    agent.learning = result.learning || agent.learning;
-    agent.learningDeleteConfirmId = "";
-  } catch (error) {
-    agent.error = error.message || "Learning signal could not be updated.";
-  } finally {
-    agent.learningBusyId = "";
-    renderContentAgentConsole({ force: true });
-  }
-}
-
-function renderContentAgentConsole({ force = false } = {}) {
-  const node = document.getElementById("content-agent-console");
-  if (!node) return;
-  const agent = appState.contentAgent || {};
-  if (!force && isContentAgentDirectorInteractionActive()) {
-    agent.directorRenderPending = true;
-    return;
-  }
-  agent.directorRenderPending = false;
-  const state = agent.state || {};
-  const health = agent.health || {};
-  const learning = agent.learning || {};
-  const jobs = Array.isArray(state.jobs) ? state.jobs : [];
-  const campaignTasks = appState.campaignAsanaCampaignTasks || [];
-  const selectedCampaign = getSelectedCampaignAsanaTask("campaign") || campaignTasks[0] || null;
-  const matchedContent = findCampaignAsanaContentMatch(selectedCampaign);
-  const activeStates = new Set(["queued", "analysing", "producing", "quality_review"]);
-  const activeJob = jobs
-    .filter((job) => activeStates.has(job.state))
-    .sort((left, right) => {
-      const stateOrder = { quality_review: 0, producing: 1, analysing: 2, queued: 3 };
-      return Number(stateOrder[left.state] ?? 4) - Number(stateOrder[right.state] ?? 4)
-        || Number(right.priority || 0) - Number(left.priority || 0)
-        || Date.parse(left.createdAt || 0) - Date.parse(right.createdAt || 0);
-    })[0] || null;
-  const runningJob = jobs.find((job) => ["analysing", "producing", "quality_review"].includes(job.state)) || null;
-  const readyJob = jobs
-    .filter((job) => isContentAgentJobStudioEligible(job))
-    .sort((left, right) => Date.parse(right.completedAt || right.updatedAt || 0) - Date.parse(left.completedAt || left.updatedAt || 0))[0] || null;
-  const focusJob = activeJob || readyJob;
-  const focus = getContentAgentFocus(focusJob, agent);
-  const progress = Math.max(4, Math.min(100, Number(focusJob?.progress || (focus.step * 25) || 4)));
-  const campaignName = focusJob?.campaignTaskName || selectedCampaign?.name || "Campaign Studio";
-  const isWorking = Boolean(activeJob);
-  const directorOpen = Boolean(agent.directorOpen);
-  const workingCount = jobs.filter((job) => ["analysing", "producing", "quality_review"].includes(job.state)).length;
-  const queuedCount = jobs.filter((job) => job.state === "queued").length;
-  const readyCount = jobs.filter((job) => isContentAgentJobStudioEligible(job)).length;
-  const attentionCount = jobs.filter((job) => ["quality_blocked", "failed", "dead_letter"].includes(job.state)).length;
-  const pausedCount = jobs.filter((job) => job.state === "paused").length;
-  const visibleJobs = [...jobs]
-    .sort((left, right) => {
-      const stateOrder = { quality_review: 0, producing: 0, analysing: 0, queued: 1, paused: 2, ready_for_review: 3, quality_blocked: 4, failed: 4, dead_letter: 4, superseded: 5 };
-      return Number(stateOrder[left.state] ?? 5) - Number(stateOrder[right.state] ?? 5)
-        || Date.parse(right.updatedAt || right.createdAt || 0) - Date.parse(left.updatedAt || left.createdAt || 0);
-    })
-    .slice(0, 8);
-  const progressLabel = focusJob
-    ? `${Math.round(progress)}% complete`
-    : "Standing by";
-  const sourceLabel = focusJob?.source === "manual" ? "Priority run" : focusJob ? "Auto-discovered" : "Always on";
-  const healthStatus = ["healthy", "degraded", "critical"].includes(health.status) ? health.status : "checking";
-  const healthLabel = healthStatus === "healthy" ? "24/7 healthy" : healthStatus === "degraded" ? "24/7 degraded" : healthStatus === "critical" ? "Action required" : "Checking health";
-  const healthAlerts = Array.isArray(health.alerts) ? health.alerts : [];
-  const campaignTitleClass = campaignName.length >= 54
-    ? " is-very-long-title"
-    : campaignName.length >= 34
-      ? " is-long-title"
-      : "";
-
-  node.innerHTML = `
-    <section class="content-agent-focus-stage${isWorking ? " is-working" : ""}" data-content-agent-stage style="--agent-progress:${progress * 3.6}deg">
-      <div class="content-agent-stage-top">
-        <div class="content-agent-wordmark"><i aria-hidden="true"></i><span>CONTENT AGENT</span></div>
-        <div class="content-agent-stage-actions">
-          <button class="content-agent-icon-button" id="content-agent-refresh" type="button" aria-label="Refresh agent" title="Refresh"${agent.loading ? " disabled" : ""}><span aria-hidden="true">↻</span></button>
-          <button class="content-agent-icon-button" id="campaign-manual-workspace-toggle" type="button" aria-label="Open manual studio" title="Open manual studio"><span aria-hidden="true">＋</span></button>
-          <button class="content-agent-direct-button" id="content-agent-direct" type="button"><span>Direct the studio</span><i aria-hidden="true">↗</i></button>
-        </div>
-      </div>
-
-      <div class="content-agent-composition" aria-hidden="true">
-        <span class="content-agent-sheet sheet-brief">
-          <i>01</i><b>BRIEF</b><em></em><em></em><em></em>
-        </span>
-        <span class="content-agent-sheet sheet-assets">
-          <i>02</i><b>ASSETS</b><span class="asset-grid"><em></em><em></em><em></em><em></em></span>
-        </span>
-        <span class="content-agent-sheet sheet-canvas">
-          <span class="content-agent-sheet-head"><i>03</i><b>${escapeHtml(focus.phase)}</b></span>
-          <span class="content-agent-layout-block layout-image"></span>
-          <span class="content-agent-layout-block layout-copy"><em></em><em></em><em></em></span>
-          <span class="content-agent-layout-block layout-cta"></span>
-          <span class="content-agent-composition-scan"></span>
-        </span>
-        <span class="content-agent-proof-mark">90+</span>
-      </div>
-
-      <div class="content-agent-focus-copy${campaignTitleClass}">
-        <span class="content-agent-focus-phase"><i></i>${escapeHtml(focus.phase)}</span>
-        <h3>${escapeHtml(campaignName)}</h3>
-        <p>${escapeHtml(focus.sentence)}</p>
-        <div class="content-agent-focus-meta" aria-label="Current run details">
-          <span>${escapeHtml(sourceLabel)}</span>
-          <span>${escapeHtml(progressLabel)}</span>
-          ${queuedCount ? `<span>${queuedCount} waiting</span>` : ""}
-        </div>
-        ${isContentAgentJobStudioEligible(focusJob) ? `<button class="content-agent-review-button" type="button" data-content-agent-open="${escapeHtml(focusJob.id)}">${focusJob.state === "quality_blocked" ? `Open Studio draft · ${getContentAgentJobQualityScore(focusJob)}` : "Enter Studio"} <span>→</span></button>` : ""}
-      </div>
-
-      <div class="content-agent-stage-foot">
-        <div class="content-agent-phase-track" aria-label="Campaign production progress">
-          ${["Brief", "Design", "Quality", "Review"].map((label, index) => `<span class="${index + 1 < focus.step ? "is-done" : ""}${index + 1 === focus.step ? " is-current" : ""}"><i></i>${label}</span>`).join("")}
-        </div>
-        <p><span></span>Human approval only</p>
-      </div>
-
-      <aside class="content-agent-director${directorOpen ? " is-open" : ""}" aria-hidden="${directorOpen ? "false" : "true"}">
-        <div class="content-agent-director-head">
-          <div><span>Creative direction</span><strong>Move this campaign to the front.</strong></div>
-          <button class="content-agent-director-close" id="content-agent-direct-close" type="button" aria-label="Close">×</button>
-        </div>
-        <div class="content-agent-fields">
-          <label><span>Asana campaign</span><select class="dashboard-control-select" id="content-agent-campaign"${agent.running || appState.campaignAsanaLoading ? " disabled" : ""}>
-            ${campaignTasks.length ? campaignTasks.map((task) => `<option value="${escapeHtml(task.gid)}"${task.gid === selectedCampaign?.gid ? " selected" : ""}>${escapeHtml(task.name)}</option>`).join("") : `<option value="">${appState.campaignAsanaLoading ? "Reading Asana..." : "No campaigns available"}</option>`}
-          </select></label>
-          <label><span>Matched content</span><select class="dashboard-control-select" id="content-agent-content"${agent.running || appState.campaignAsanaLoading ? " disabled" : ""}>
-            ${(appState.campaignAsanaContentTasks || []).map((task) => `<option value="${escapeHtml(task.gid)}"${task.gid === (appState.campaignAsanaSelectedContentGid || matchedContent?.task?.gid) ? " selected" : ""}>${escapeHtml(task.name)}</option>`).join("") || `<option value="">No content task available</option>`}
-          </select></label>
-          <label class="content-agent-direction"><span>Extra direction <small>optional</small></span><input class="campaign-studio-input" id="content-agent-direction" value="${escapeHtml(agent.direction || "")}" placeholder="Example: Lead with carousel and Scandinavian luxury"></label>
-          ${runningJob ? `<div class="content-agent-takeover-note"><span>Studio is working</span><strong>${escapeHtml(runningJob.campaignTaskName || "Current campaign")}</strong><small>Pause happens after the current safe production step.</small></div>` : ""}
-          <div class="content-agent-start-actions${runningJob ? " has-takeover" : ""}">
-            <button class="content-agent-start${runningJob ? " is-queue" : ""}" id="content-agent-start" data-content-agent-start-mode="queue" type="button"${!selectedCampaign || agent.running ? " disabled" : ""}>${agent.running ? "Working…" : runningJob ? "Queue next" : "Start now"}<span>→</span></button>
-            ${runningJob ? `<button class="content-agent-takeover" data-content-agent-start-mode="takeover" type="button"${!selectedCampaign || agent.running ? " disabled" : ""}>Pause current & start<span>↗</span></button>` : ""}
-          </div>
-        </div>
-        ${agent.notice ? `<p class="content-agent-notice">${escapeHtml(agent.notice)}</p>` : ""}
-        ${agent.error ? `<p class="content-agent-error">${escapeHtml(agent.error)}</p>` : ""}
-      </aside>
-      <span class="content-agent-ripple-layer" aria-hidden="true"></span>
-    </section>
-
-    <section class="content-agent-mission" aria-label="Content Agent operations">
-      <header class="content-agent-mission-head">
-        <div>
-          <span class="content-agent-mission-kicker">Studio pulse</span>
-          <h3>Campaign operations</h3>
-          <p>Everything the agent has in motion, ready for review or waiting for attention.</p>
-        </div>
-        <div class="content-agent-heartbeat" data-health="${escapeHtml(healthStatus)}">
-          <i aria-hidden="true"></i>
-          <span><small>${escapeHtml(healthLabel)}</small>${escapeHtml(formatContentAgentTime(health.lastHeartbeatAt || state.lastScanAt))}</span>
-        </div>
-      </header>
-
-      <div class="content-agent-health-grid" aria-label="24/7 agent health">
-        <article><span>Pipeline</span><strong>v${escapeHtml(String(health.pipelineVersion || "—"))}</strong><small>production contract</small></article>
-        <article><span>Persistent state</span><strong>${health.persistentStore ? "Redis" : "Offline"}</strong><small>${escapeHtml(health.storeMode || agent.store?.mode || "unknown")}</small></article>
-        <article><span>Heartbeat age</span><strong>${Number.isFinite(Number(health.scanAgeMinutes)) ? `${escapeHtml(String(health.scanAgeMinutes))}m` : "—"}</strong><small>hourly discovery</small></article>
-        <article><span>Dead letter</span><strong>${escapeHtml(String(health.deadLetterCount || 0))}</strong><small>${health.failedCount ? `${escapeHtml(String(health.failedCount))} recoverable` : health.historicalFailureCount ? `${escapeHtml(String(health.historicalFailureCount))} archived legacy failures` : "no exhausted jobs"}</small></article>
-      </div>
-      ${healthAlerts.length ? `<div class="content-agent-alert-stack">${healthAlerts.map((alert) => `<p data-severity="${escapeHtml(alert.severity || "warning")}"><i></i><span>${escapeHtml(alert.message || "Agent health warning")}</span></p>`).join("")}</div>` : `<div class="content-agent-all-clear"><i></i><span>Scheduler, Redis and recovery checks are clear.${Number(learning.eventCount || 0) ? ` Human learning is active with ${escapeHtml(String(learning.eventCount))} recorded signal${Number(learning.eventCount) === 1 ? "" : "s"}.` : " Human learning is ready for its first reviewed campaign."}</span></div>`}
-
-      <div class="content-agent-metrics" aria-label="Agent summary">
-        <article data-tone="working"><span>In motion</span><strong>${workingCount}</strong><small>${workingCount ? escapeHtml(getContentAgentStateLabel(activeJob.state, activeJob)) : "Agent is standing by"}</small></article>
-        <article data-tone="queue"><span>Up next</span><strong>${queuedCount}</strong><small>${pausedCount ? `${pausedCount} paused · ${queuedCount} queued` : queuedCount === 1 ? "campaign in queue" : "campaigns in queue"}</small></article>
-        <article data-tone="ready"><span>Ready for you</span><strong>${readyCount}</strong><small>${readyCount === 1 ? "campaign to review" : "campaigns to review"}</small></article>
-        <article data-tone="attention"><span>Needs attention</span><strong>${attentionCount}</strong><small>${attentionCount ? (attentionCount === 1 ? "campaign needs intervention" : "campaigns need intervention") : "No blocked runs"}</small></article>
-      </div>
-
-      ${renderCampaignLearningStudio(agent)}
-
-      <div class="content-agent-runs">
-        <div class="content-agent-runs-head">
-          <div><span>Run log</span><strong>Latest campaigns</strong></div>
-          <small>${jobs.length} total run${jobs.length === 1 ? "" : "s"}</small>
-        </div>
-        <div class="content-agent-job-list">
-          ${visibleJobs.length ? visibleJobs.map(renderContentAgentJob).join("") : `
-            <div class="content-agent-empty">
-              <span aria-hidden="true">01</span>
-              <div><strong>No campaigns yet</strong><p>Direct the studio to start a priority run, or let the hourly scan discover the next brief.</p></div>
-            </div>
-          `}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function flushContentAgentDirectorRender() {
-  const agent = appState.contentAgent || {};
-  if (!agent.directorRenderPending || isContentAgentDirectorInteractionActive()) return;
-  renderContentAgentConsole({ force: true });
-}
-
-function scheduleContentAgentPolling() {
-  if (contentAgentPollTimer) window.clearTimeout(contentAgentPollTimer);
-  contentAgentPollTimer = null;
-  const activeStates = new Set(["queued", "analysing", "producing", "quality_review"]);
-  const hasActiveJob = (appState.contentAgent?.state?.jobs || []).some((job) => activeStates.has(job.state));
-  if (appState.klaviyoView !== "campaign_brain") return;
-  contentAgentPollTimer = window.setTimeout(() => loadContentAgentStatus({ silent: true }), hasActiveJob ? 5000 : 60000);
-}
-
-async function loadContentAgentStatus({ silent = false } = {}) {
-  const agent = appState.contentAgent;
-  if (!agent || agent.loading) return;
-  agent.loading = true;
-  if (!silent) agent.error = "";
-  renderContentAgentConsole();
-  try {
-    const result = await requestContentAgentStatus();
-    agent.state = result.state || null;
-    agent.store = result.store || null;
-    agent.health = result.health || null;
-    agent.policy = result.policy || null;
-    agent.learning = result.learning || null;
-    agent.loaded = true;
-  } catch (error) {
-    agent.error = error.message || "Could not load Content Agent.";
-  } finally {
-    agent.loading = false;
-    renderContentAgentConsole();
-    scheduleContentAgentPolling();
-  }
-}
-
-async function recoverContentAgentJob(jobId) {
-  const agent = appState.contentAgent;
-  if (!agent || agent.running || !jobId) return;
-  agent.running = true;
-  agent.error = "";
-  renderContentAgentConsole();
-  try {
-    const result = await requestContentAgentRetry(jobId);
-    agent.state = result.state || agent.state;
-    agent.health = result.health || agent.health;
-  } catch (error) {
-    agent.error = error.message || "Content Agent recovery could not start.";
-  } finally {
-    agent.running = false;
-    renderContentAgentConsole();
-    scheduleContentAgentPolling();
-  }
-}
-
-async function rejectAndRestartContentAgentJob(jobId, reason = "") {
-  const agent = appState.contentAgent;
-  if (!agent || agent.running || agent.rejectingJobId || !jobId) return;
-  agent.rejectingJobId = jobId;
-  agent.rejectConfirmJobId = "";
-  agent.error = "";
-  renderContentAgentConsole({ force: true });
-  try {
-    const resetsOpenReview = appState.campaignStudioReviewJob?.id === jobId;
-    const storedDraftKey = resetsOpenReview ? getCampaignStudioDraftStorageKey() : "";
-    const result = await requestContentAgentRejectRestart(jobId, reason);
-    agent.state = result.state || agent.state;
-    agent.health = result.health || agent.health;
-    if (resetsOpenReview) {
-      if (storedDraftKey && typeof window !== "undefined") window.localStorage?.removeItem(storedDraftKey);
-      appState.campaignStudioReviewOpen = false;
-      appState.campaignStudioReviewJob = null;
-      appState.campaignArtifactDraft = null;
-      appState.campaignArtifactsResult = null;
-      appState.campaignBrainResult = null;
-      appState.campaignAssemblyObject = null;
-      appState.campaignEmailBuilder.history = [];
-      appState.campaignEmailBuilder.future = [];
-      appState.campaignEmailBuilder.inlineEditing = false;
-      appState.campaignEmailBuilder.selectedIndex = 0;
-      renderCampaignBrainPanel();
-    }
-    hydrateCampaignStudioDraftStatus("Campaign rejected. A clean priority restart has been queued from the original brief.");
-  } catch (error) {
-    agent.error = error.message || "The campaign could not be rejected and restarted.";
-  } finally {
-    agent.rejectingJobId = "";
-    renderContentAgentConsole({ force: true });
-    scheduleContentAgentPolling();
-  }
-}
-
-async function controlContentAgentJobFromStudio(jobId, command) {
-  const agent = appState.contentAgent;
-  if (!agent || agent.running || agent.controllingJobId || !jobId) return;
-  agent.controllingJobId = jobId;
-  agent.error = "";
-  agent.notice = command === "pause" ? "Pause requested. The agent will stop at the next safe checkpoint." : "Resume requested. The campaign is moving to the front.";
-  renderContentAgentConsole({ force: true });
-  try {
-    const result = await requestContentAgentControl(jobId, command);
-    agent.state = result.state || agent.state;
-    agent.health = result.health || agent.health;
-    agent.notice = result.pendingControl
-      ? (command === "pause" ? "Pause accepted — finishing the current safe step first." : "Resume accepted — it will take the next production slot.")
-      : (command === "pause" ? "Campaign paused safely." : "Campaign resumed at the front of the queue.");
-  } catch (error) {
-    agent.notice = "";
-    agent.error = error.message || "The job control could not be applied.";
-  } finally {
-    agent.controllingJobId = "";
-    renderContentAgentConsole({ force: true });
-    scheduleContentAgentPolling();
-  }
-}
-
-async function startContentAgent(startMode = "queue") {
-  const agent = appState.contentAgent;
-  if (!agent || agent.running) return;
-  const campaignTaskGid = document.getElementById("content-agent-campaign")?.value || appState.campaignAsanaSelectedCampaignGid;
-  const contentTaskGid = document.getElementById("content-agent-content")?.value || appState.campaignAsanaSelectedContentGid;
-  if (!campaignTaskGid || !contentTaskGid) {
-    agent.error = "Choose both an Asana campaign and its content task.";
-    renderContentAgentConsole();
-    return;
-  }
-  agent.running = true;
-  agent.error = "";
-  agent.notice = startMode === "takeover" ? "Requesting a safe takeover…" : "Adding the campaign to the priority queue…";
-  agent.directorOpen = false;
-  renderContentAgentConsole();
-  try {
-    const result = await requestContentAgentStart({ campaignTaskGid, contentTaskGid, direction: agent.direction || "", startMode });
-    agent.state = result.state || agent.state;
-    agent.store = result.store || agent.store;
-    agent.notice = result.statusMessage || (startMode === "takeover"
-      ? "Takeover accepted. The previous campaign will remain safely paused."
-      : "Campaign accepted and placed in the priority queue.");
-    if (result.job?.state === "failed") agent.error = result.job.error || "The agent run needs attention.";
-  } catch (error) {
-    agent.notice = "";
-    agent.error = error.message || "Content Agent could not complete the task.";
-  } finally {
-    agent.running = false;
-    renderContentAgentConsole();
-    scheduleContentAgentPolling();
-  }
-}
-
-function normalizeCampaignAttachmentName(value = "") {
-  return String(value || "")
-    .split("/")
-    .pop()
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
-}
-
-function isCampaignImageAttachment(attachment = {}) {
-  const name = String(attachment?.name || "").toLowerCase();
-  const type = String(attachment?.resourceSubtype || attachment?.resource_subtype || attachment?.type || "").toLowerCase();
-  if (/\.(?:mp4|mov|m4v|webm|avi)(?:$|\?)/i.test(name) || /video/.test(type)) return false;
-  return /\.(?:jpe?g|png|webp|gif|avif)(?:$|\?)/i.test(name) || /image|photo/.test(type);
-}
-
-function buildCampaignAssetProxyUrl(sourceUrl = "") {
-  const params = new URLSearchParams({ action: "asset_proxy", url: String(sourceUrl || "") });
-  return `/api/campaign/brain?${params.toString()}`;
-}
-
-function rewriteCampaignHtmlImageSources(html = "", replacements = new Map(), fallbackUrls = []) {
-  if (!html || (!replacements.size && !fallbackUrls.length)) return html;
-  const documentNode = new DOMParser().parseFromString(String(html), "text/html");
-  let fallbackIndex = 0;
-  documentNode.querySelectorAll("img[src]").forEach((image) => {
-    const current = image.getAttribute("data-campaign-original-src") || image.getAttribute("src") || "";
-    const replacement = replacements.get(current)
-      || (/asanausercontent\.com/i.test(current) && fallbackUrls.length
-        ? fallbackUrls[fallbackIndex++ % fallbackUrls.length]
-        : "");
-    if (replacement) {
-      image.setAttribute("src", replacement);
-      image.removeAttribute("data-campaign-original-src");
-    }
-  });
-  return `<!doctype html>\n${documentNode.documentElement.outerHTML}`;
 }
 
 function quarantineCampaignArtifactAsanaImages(artifactDraft = null) {
@@ -4950,134 +4298,6 @@ function quarantineCampaignArtifactAsanaImages(artifactDraft = null) {
   }
   if (artifacts.blog?.bodyHtml) artifacts.blog.bodyHtml = quarantineHtml(artifacts.blog.bodyHtml);
   return artifactDraft;
-}
-
-async function hydrateContentAgentCampaignAssets(job) {
-  const sourceState = appState.campaignStudioSourceAssets;
-  if (!job?.contentTaskGid || sourceState.loading) return;
-  sourceState.loading = true;
-  sourceState.error = "";
-  renderCampaignBrainPanel();
-  try {
-    const bundle = await requestCampaignAsanaTask(job.contentTaskGid);
-    const freshAttachments = (Array.isArray(bundle?.attachments) ? bundle.attachments : [])
-      .filter((attachment) => isCampaignImageAttachment(attachment) && (attachment.downloadUrl || attachment.download_url));
-    if (!freshAttachments.length) throw new Error("No displayable campaign images were found in the linked Asana content task.");
-
-    const originalAttachments = appState.campaignAssemblyObject?.campaignObject?.linkedTasks?.contentTask?.attachments || [];
-    const originalsByName = new Map(originalAttachments.map((attachment) => [normalizeCampaignAttachmentName(attachment.name), attachment]));
-    const replacements = new Map();
-    const items = freshAttachments.slice(0, 24).map((attachment, index) => {
-      const original = originalsByName.get(normalizeCampaignAttachmentName(attachment.name)) || originalAttachments[index] || null;
-      const sourceUrl = attachment.downloadUrl || attachment.download_url || "";
-      const proxyUrl = buildCampaignAssetProxyUrl(sourceUrl);
-      if (original?.url) replacements.set(String(original.url), proxyUrl);
-      return {
-        gid: String(attachment.gid || ""),
-        name: String(attachment.name || `campaign-image-${index + 1}.jpg`),
-        originalUrl: String(original?.url || ""),
-        proxyUrl,
-        sourceUrl,
-        remoteUrl: proxyUrl,
-        type: "image/jpeg"
-      };
-    });
-
-    const email = appState.campaignArtifactDraft?.artifacts?.email;
-    if (email?.bodyHtml) {
-      email.bodyHtml = rewriteCampaignHtmlImageSources(email.bodyHtml, replacements, items.map((item) => item.proxyUrl));
-      if (email.heroImageMode !== "none" && (!email.heroImageUrl || /asanausercontent\.com/i.test(String(email.heroImageUrl)))) {
-        email.heroImageUrl = items[0]?.proxyUrl || "";
-        email.heroImageAlt = email.heroImageAlt || items[0]?.name || "Campaign image";
-        email.heroImageMode = email.heroImageUrl ? "assigned" : "auto";
-      }
-      if (Array.isArray(email.sections)) {
-        email.sections.forEach((section, index) => {
-          if (section.imageMode !== "none" && (!section.imageUrl || /asanausercontent\.com/i.test(String(section.imageUrl)))) {
-            const item = items[index % items.length];
-            if (item) {
-              section.imageUrl = item.proxyUrl;
-              section.imageAlt = section.imageAlt || item.name;
-              section.imageMode = "assigned";
-            }
-          }
-        });
-      }
-      email.visualAssets = items.slice(0, 4).map((item, index) => ({
-        role: index === 0 ? "hero" : `campaign image ${index + 1}`,
-        name: item.name,
-        imageUrl: item.proxyUrl,
-        hosted: false
-      }));
-    }
-    const blog = appState.campaignArtifactDraft?.artifacts?.blog;
-    if (blog?.bodyHtml) blog.bodyHtml = rewriteCampaignHtmlImageSources(blog.bodyHtml, replacements, items.map((item) => item.proxyUrl));
-
-    const concepts = appState.campaignArtifactDraft?.artifacts?.meta?.carouselConcepts || [];
-    const selectedConcept = concepts.find((concept) => Array.isArray(concept?.cards) && concept.cards.length) || null;
-    const conceptCards = selectedConcept?.cards || [];
-    const itemByOriginalUrl = new Map(items.filter((item) => item.originalUrl).map((item) => [item.originalUrl, item]));
-    const selectedItems = conceptCards.length
-      ? conceptCards.map((card, index) => itemByOriginalUrl.get(String(card.assetUrl || "")) || items[index % items.length]).filter(Boolean)
-      : items.slice(0, Math.min(7, items.length));
-    setCampaignBrainCarouselFiles(selectedItems);
-    if (conceptCards.length) {
-      appState.campaignBrainMetaAssets.carouselCardDrafts = selectedItems.map((_, index) => ({
-        title: conceptCards[index]?.headline || buildDefaultCampaignBrainCarouselCardDraft(index).title,
-        description: conceptCards[index]?.body || buildDefaultCampaignBrainCarouselCardDraft(index).description,
-        role: conceptCards[index]?.role || getCampaignBrainCarouselCardRole(index, selectedItems.length),
-        cropIntent: conceptCards[index]?.cropIntent || "",
-        overlayGuidance: conceptCards[index]?.overlayGuidance || ""
-      }));
-    }
-    setCampaignBrainCarouselWarnings(selectedItems.map((_, index) => ({ index, items: [] })));
-    appState.campaignBrainEnvironmentAssets = {
-      ...(appState.campaignBrainEnvironmentAssets || {}),
-      sourceFiles: items.slice(0, 12),
-      selectedSourceIndexes: items.slice(0, 6).map((_, index) => index)
-    };
-    sourceState.items = items;
-    hydrateCampaignStudioDraftStatus(`${items.length} campaign images restored from Asana for review.`);
-  } catch (error) {
-    sourceState.error = error.message || "Campaign images could not be restored from Asana.";
-  } finally {
-    sourceState.loading = false;
-    renderCampaignBrainPanel();
-  }
-}
-
-function openContentAgentJob(jobId = "") {
-  const job = (appState.contentAgent?.state?.jobs || []).find((item) => item.id === jobId);
-  const output = job?.output;
-  if (!isContentAgentJobStudioEligible(job) || !output?.artifactPack?.artifacts) return false;
-  appState.campaignAssemblyObject = output.assembled || null;
-  appState.campaignBrainResult = output.plan || null;
-  appState.campaignArtifactsResult = output.artifactPack;
-  const storedDraft = loadCampaignStudioDraftFromStorage();
-  appState.campaignArtifactDraft = storedDraft?.draft?.artifacts
-    ? storedDraft.draft
-    : JSON.parse(JSON.stringify(output.artifactPack));
-  quarantineCampaignArtifactAsanaImages(appState.campaignArtifactDraft);
-  appState.campaignBrainGeneratedAt = output.plan?.generatedAt || job.completedAt || "";
-  appState.campaignArtifactsGeneratedAt = output.artifactPack?.generatedAt || job.completedAt || "";
-  appState.campaignStudioMode = "asana_combo";
-  appState.campaignStudioActiveView = "meta";
-  appState.campaignStudioReviewJob = job;
-  appState.campaignStudioReviewOpen = true;
-  appState.campaignStudioSourceAssets = { loading: false, error: "", items: [] };
-  setCampaignBrainCarouselFiles([]);
-  appState.campaignEmailBuilder.saveState = "saved";
-  appState.campaignEmailBuilder.saveMessage = storedDraft?.draft?.artifacts ? "Recovered local draft" : "Saved locally";
-  hydrateCampaignStudioDraftStatus(storedDraft?.draft?.artifacts
-    ? `Recovered studio draft saved ${formatKlaviyoDate(storedDraft.savedAt || new Date().toISOString())}`
-    : job.state === "quality_blocked"
-      ? `Opened at ${getContentAgentJobQualityScore(job)}/100 for human editing. Quality blockers remain active; this is not an approved campaign.`
-      : "Opened the Content Agent output. Human review is required before any draft handoff.");
-  renderCampaignBrainPanel();
-  hydrateContentAgentCampaignAssets(job);
-  reconcileCampaignStudioDraftWithServer(storedDraft);
-  window.requestAnimationFrame(() => document.getElementById("campaign-brain-artifact-section")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  return true;
 }
 
 // Restoring the browser copy stays synchronous so the panel paints immediately. The server copy
@@ -8212,7 +7432,6 @@ function setCampaignStudioBlogExportFeedback(message) {
 function renderCampaignBrainPanel() {
   renderCampaignAsanaSource();
   renderCampaignMetaMasterSource();
-  renderContentAgentConsole();
   const statusNode = document.getElementById("campaign-brain-status");
   const assemblyGeneratedNode = document.getElementById("campaign-brain-assembly-generated-at");
   const assemblyGlanceNode = document.getElementById("campaign-brain-assembly-glance");
@@ -8255,10 +7474,6 @@ function renderCampaignBrainPanel() {
     brainPanel.dataset.campaignMode = appState.campaignStudioMode;
     brainPanel.classList.toggle("is-studio-focus", studioReady);
     brainPanel.classList.toggle("is-guided-intake", ["asana_combo", "meta_master"].includes(appState.campaignStudioMode) && !studioReady);
-    brainPanel.classList.toggle("is-manual-workspace-open", appState.campaignManualWorkspaceOpen);
-    brainPanel.classList.toggle("is-agent-review-open", Boolean(appState.campaignStudioReviewJob && appState.campaignStudioReviewOpen));
-    brainPanel.classList.toggle("is-agent-review-idle", Boolean(appState.campaignStudioReviewJob && !appState.campaignStudioReviewOpen));
-    document.body.classList.toggle("campaign-studio-review-mode", Boolean(appState.campaignStudioReviewJob && appState.campaignStudioReviewOpen));
   }
 
   // Buttons only: the panel itself carries data-campaign-mode (styles.css reads it), and matching
@@ -8680,20 +7895,12 @@ function renderCampaignBrainPanel() {
       const libraryItems = getCampaignAssetLibraryItems();
       const sourceAssetState = appState.campaignStudioSourceAssets || { loading: false, error: "", items: [] };
       const sourceVisuals = Array.isArray(sourceAssetState.items) ? sourceAssetState.items : [];
-      const reviewJob = appState.campaignStudioReviewJob || null;
-      const reviewScore = Number(appState.campaignStudioMode === "meta_master"
-        ? metaQualityReview?.overallScore || 0
-        : reviewJob?.output?.qualityAudit?.score || reviewJob?.qualityIterations?.at(-1)?.review?.overallScore || 0);
-      const reviewFloor = Number(appState.campaignStudioMode === "meta_master"
-        ? metaQualityReview?.dimensionFloor || 0
-        : reviewJob?.output?.qualityAudit?.gate?.dimensionFloor || 0);
-      const reviewQualityAudit = appState.campaignStudioMode === "meta_master" ? null : reviewJob?.output?.qualityAudit || null;
-      const reviewAdmissionTier = reviewQualityAudit?.admissionTier || "";
-      const reviewVerdict = reviewQualityAudit?.verdict || "";
-      const reviewIsFullPass = appState.campaignStudioMode === "meta_master"
-        ? metaQualityReview?.passed === true
-        : reviewAdmissionTier === "excellent" || reviewVerdict === "ready";
-      const reviewIsReviewableTier = reviewAdmissionTier === "reviewable" || reviewVerdict === "ready_with_notes";
+      // Only Meta from Master has a reviewer of its own, the Meta Creative Director. Every other
+      // studio is a draft for a person to judge.
+      const metaMasterReview = appState.campaignStudioMode === "meta_master" ? metaQualityReview : null;
+      const reviewScore = Number(metaMasterReview?.overallScore || 0);
+      const reviewFloor = Number(metaMasterReview?.dimensionFloor || 0);
+      const reviewIsFullPass = metaMasterReview?.passed === true;
       const visibleLibraryItems = appState.campaignBrainAssetLibrary?.scope === "all"
         ? getCampaignAssetLibraryAllItems()
         : libraryItems;
@@ -8746,10 +7953,6 @@ function renderCampaignBrainPanel() {
         <article class="klaviyo-variant-card campaign-studio-master-card">
           <div class="campaign-studio-master-copy">
             <div class="campaign-studio-review-breadcrumb">
-              <div class="campaign-studio-review-breadcrumb-actions">
-                <button type="button" id="campaign-studio-back-to-agent"><span>←</span> Content Agent</button>
-                ${reviewJob?.state === "ready_for_review" ? `${appState.contentAgent.rejectConfirmJobId === reviewJob.id ? `<input class="campaign-studio-reset-reason" data-content-agent-reject-reason="${escapeHtml(reviewJob.id)}" type="text" maxlength="600" placeholder="Tell the AI what was not good enough">` : ""}<button type="button" class="campaign-studio-reset-run${appState.contentAgent.rejectConfirmJobId === reviewJob.id ? " is-confirming" : ""}" data-campaign-studio-reset="${escapeHtml(reviewJob.id)}"${appState.contentAgent.rejectingJobId === reviewJob.id ? " disabled" : ""}>${appState.contentAgent.rejectingJobId === reviewJob.id ? "Restarting…" : appState.contentAgent.rejectConfirmJobId === reviewJob.id ? "Confirm full reset" : "Reset & regenerate"}<span>↻</span></button>` : ""}
-              </div>
               <p class="section-label">Live campaign review</p>
             </div>
             <h4>${escapeHtml(packTitle)}</h4>
@@ -8758,7 +7961,7 @@ function renderCampaignBrainPanel() {
           <aside class="campaign-studio-review-score" aria-label="Quality review summary">
             <span>Quality Director</span>
             <strong>${reviewScore || "—"}<small>${reviewScore ? "/100" : ""}</small></strong>
-            <p>${reviewJob?.state === "quality_blocked" ? `Editable Studio draft · not quality approved` : reviewIsFullPass ? "Passed for human review" : reviewIsReviewableTier ? "Reviewable draft · not a full pass" : reviewJob ? "Human decision required" : "Studio draft"}${reviewFloor ? ` · floor ${reviewFloor}` : ""}</p>
+            <p>${reviewIsFullPass ? "Passed for human review" : "Studio draft"}${reviewFloor ? ` · floor ${reviewFloor}` : ""}</p>
           </aside>
           <div class="campaign-studio-master-meta">
             <span class="campaign-brain-pill">${escapeHtml(taskPair.join(" + ") || "Standalone studio run")}</span>
@@ -10938,13 +10141,11 @@ function buildCampaignLearningArtifactSnapshot(pack) {
 
 async function recordCurrentCampaignLearning(eventType, channel = "cross_channel", metadata = {}) {
   const editedArtifact = buildCampaignLearningArtifactSnapshot(appState.campaignArtifactDraft);
-  const originalSource = appState.campaignStudioReviewJob?.output?.artifactPack || appState.campaignArtifactsResult;
-  const originalArtifact = buildCampaignLearningArtifactSnapshot(originalSource);
+  const originalArtifact = buildCampaignLearningArtifactSnapshot(appState.campaignArtifactsResult);
   if (!editedArtifact?.artifacts || !originalArtifact?.artifacts) return null;
   try {
     return await requestCampaignLearningFeedback({
       eventType,
-      jobId: appState.campaignStudioReviewJob?.id || "",
       editedArtifact,
       originalArtifact,
       channel,
@@ -14509,120 +13710,6 @@ function attachEvents() {
       return;
     }
 
-    const agentStartButton = target.closest("[data-content-agent-start-mode]");
-    if (agentStartButton) {
-      await startContentAgent(agentStartButton.getAttribute("data-content-agent-start-mode") || "queue");
-      return;
-    }
-    if (target.closest("#content-agent-direct")) {
-      appState.contentAgent.directorOpen = true;
-      appState.contentAgent.directorInteractionActive = false;
-      renderContentAgentConsole({ force: true });
-      return;
-    }
-    if (target.closest("#content-agent-direct-close")) {
-      appState.contentAgent.directorOpen = false;
-      appState.contentAgent.directorInteractionActive = false;
-      renderContentAgentConsole({ force: true });
-      return;
-    }
-    if (target.closest("#content-agent-refresh")) {
-      await loadContentAgentStatus();
-      return;
-    }
-    if (target.closest("[data-learning-toggle]")) {
-      appState.contentAgent.learningOpen = !appState.contentAgent.learningOpen;
-      renderContentAgentConsole({ force: true });
-      return;
-    }
-    const learningOperation = target.closest("[data-learning-operation]");
-    if (learningOperation) {
-      await moderateCampaignLearning(
-        learningOperation.getAttribute("data-learning-event") || "",
-        learningOperation.getAttribute("data-learning-operation") || ""
-      );
-      return;
-    }
-    const agentRetryButton = target.closest("[data-content-agent-retry]");
-    if (agentRetryButton) {
-      await recoverContentAgentJob(agentRetryButton.getAttribute("data-content-agent-retry") || "");
-      return;
-    }
-    const agentControlButton = target.closest("[data-content-agent-control]");
-    if (agentControlButton) {
-      await controlContentAgentJobFromStudio(
-        agentControlButton.getAttribute("data-content-agent-job") || "",
-        agentControlButton.getAttribute("data-content-agent-control") || ""
-      );
-      return;
-    }
-    const agentRejectButton = target.closest("[data-content-agent-reject]");
-    if (agentRejectButton) {
-      const jobId = agentRejectButton.getAttribute("data-content-agent-reject") || "";
-      if (appState.contentAgent.rejectConfirmJobId !== jobId) {
-        appState.contentAgent.rejectConfirmJobId = jobId;
-        renderContentAgentConsole({ force: true });
-        window.setTimeout(() => {
-          if (appState.contentAgent.rejectConfirmJobId === jobId && !appState.contentAgent.rejectingJobId) {
-            appState.contentAgent.rejectConfirmJobId = "";
-            renderContentAgentConsole({ force: true });
-          }
-        }, 7000);
-        return;
-      }
-      const reason = document.querySelector(`[data-content-agent-reject-reason="${CSS.escape(jobId)}"]`)?.value || "";
-      await rejectAndRestartContentAgentJob(jobId, reason);
-      return;
-    }
-    if (target.closest("#campaign-manual-workspace-toggle")) {
-      appState.campaignManualWorkspaceOpen = !appState.campaignManualWorkspaceOpen;
-      renderCampaignBrainPanel();
-      if (appState.campaignManualWorkspaceOpen) {
-        window.requestAnimationFrame(() => document.getElementById("campaign-brain-linking-section")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-      }
-      return;
-    }
-    if (target.closest("#campaign-studio-back-to-agent")) {
-      appState.campaignStudioReviewOpen = false;
-      renderCampaignBrainPanel();
-      window.requestAnimationFrame(() => document.getElementById("content-agent-console")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-      return;
-    }
-    const studioResetButton = target.closest("[data-campaign-studio-reset]");
-    if (studioResetButton) {
-      const jobId = studioResetButton.getAttribute("data-campaign-studio-reset") || "";
-      if (!jobId) return;
-      if (appState.contentAgent.rejectConfirmJobId !== jobId) {
-        appState.contentAgent.rejectConfirmJobId = jobId;
-        renderCampaignBrainPanel();
-        window.setTimeout(() => {
-          if (appState.contentAgent.rejectConfirmJobId === jobId && !appState.contentAgent.rejectingJobId) {
-            appState.contentAgent.rejectConfirmJobId = "";
-            renderCampaignBrainPanel();
-          }
-        }, 8000);
-        return;
-      }
-      const reason = document.querySelector(`[data-content-agent-reject-reason="${CSS.escape(jobId)}"]`)?.value || "";
-      await rejectAndRestartContentAgentJob(jobId, reason);
-      return;
-    }
-    const agentOpenButton = target.closest("[data-content-agent-open]");
-    if (agentOpenButton) {
-      openContentAgentJob(agentOpenButton.getAttribute("data-content-agent-open") || "");
-      return;
-    }
-    const agentStage = target.closest("[data-content-agent-stage]");
-    if (agentStage && !target.closest("button, select, input, label, aside")) {
-      const bounds = agentStage.getBoundingClientRect();
-      const ripple = document.createElement("i");
-      ripple.className = "content-agent-stage-ripple";
-      ripple.style.left = `${event.clientX - bounds.left}px`;
-      ripple.style.top = `${event.clientY - bounds.top}px`;
-      agentStage.querySelector(".content-agent-ripple-layer")?.appendChild(ripple);
-      window.setTimeout(() => ripple.remove(), 1000);
-    }
-
     if (target.closest("#campaign-asana-refresh-button")) {
       await loadCampaignAsanaWorkspace({ force: true });
       return;
@@ -14964,26 +14051,9 @@ function attachEvents() {
     renderCampaignBrainPanel();
   });
 
-  document.addEventListener("pointerdown", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
-    const insideDirectorField = target.closest(".content-agent-director select, .content-agent-director input");
-    if (insideDirectorField) {
-      appState.contentAgent.directorInteractionActive = true;
-      return;
-    }
-    if (appState.contentAgent.directorInteractionActive) {
-      appState.contentAgent.directorInteractionActive = false;
-      window.setTimeout(flushContentAgentDirectorRender, 0);
-    }
-  }, true);
-
   document.addEventListener("focusin", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (target.closest(".content-agent-director select, .content-agent-director input")) {
-      appState.contentAgent.directorInteractionActive = true;
-    }
     if (appState.campaignEmailBuilder?.restoringView) return;
     const moduleField = target.getAttribute("data-email-module-field");
     const moduleIndex = target.getAttribute("data-email-module-index");
@@ -14998,18 +14068,6 @@ function attachEvents() {
     }
   });
 
-  document.addEventListener("focusout", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.closest(".content-agent-director")) return;
-    window.setTimeout(() => {
-      const director = document.querySelector(".content-agent-director.is-open");
-      if (!director?.contains(document.activeElement)) {
-        appState.contentAgent.directorInteractionActive = false;
-        flushContentAgentDirectorRender();
-      }
-    }, 0);
-  });
-
   document.addEventListener("input", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
@@ -15021,11 +14079,6 @@ function attachEvents() {
     if (emailModuleField && emailModuleIndex !== null && "value" in target) {
       updateCampaignEmailModule(emailModuleIndex, emailModuleField, target.value || "");
       hydrateCampaignStudioDraftStatus("Editing campaign modules...");
-      return;
-    }
-
-    if (target.id === "content-agent-direction" && "value" in target) {
-      appState.contentAgent.direction = target.value || "";
       return;
     }
 
@@ -15123,14 +14176,6 @@ function attachEvents() {
   });
 
   document.addEventListener("keydown", handleCampaignEmailBuilderKeyboard, true);
-
-  document.addEventListener("pointermove", (event) => {
-    const stage = event.target instanceof Element ? event.target.closest("[data-content-agent-stage]") : null;
-    if (!stage) return;
-    const bounds = stage.getBoundingClientRect();
-    stage.style.setProperty("--studio-x", `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
-    stage.style.setProperty("--studio-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
-  });
 
   document.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || !(event.target instanceof Element)) return;
@@ -15445,21 +14490,6 @@ function attachEvents() {
     if (target.hasAttribute("data-email-builder-hero-file-upload") && target instanceof HTMLInputElement) {
       const file = target.files?.[0] || null;
       if (file) await uploadCampaignEmailHeroImage(file);
-      return;
-    }
-
-    if (target.id === "content-agent-campaign" && "value" in target) {
-      appState.contentAgent.directorInteractionActive = false;
-      appState.campaignAsanaSelectedCampaignGid = target.value || "";
-      const match = findCampaignAsanaContentMatch(getSelectedCampaignAsanaTask("campaign"));
-      appState.campaignAsanaSelectedContentGid = match?.task?.gid || "";
-      renderContentAgentConsole({ force: true });
-      return;
-    }
-    if (target.id === "content-agent-content" && "value" in target) {
-      appState.contentAgent.directorInteractionActive = false;
-      appState.campaignAsanaSelectedContentGid = target.value || "";
-      flushContentAgentDirectorRender();
       return;
     }
 

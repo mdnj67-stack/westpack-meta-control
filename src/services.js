@@ -595,64 +595,6 @@ export async function requestAssetLibraryDelete(campaignKey, id) {
   if (!response.ok) throw new Error(payload?.error || "Could not remove the campaign asset.");
   return payload;
 }
-export async function requestContentAgentStatus() {
-  const response = await authenticatedFetch("/api/campaign/brain?action=agent_status");
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error || "Could not load Content Agent status.");
-  return payload;
-}
-
-export async function requestContentAgentStart({ campaignTaskGid, contentTaskGid = "", direction = "", startMode = "queue" } = {}) {
-  const response = await authenticatedFetch("/api/campaign/brain", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "agent_start",
-      campaignTaskGid,
-      contentTaskGid,
-      direction,
-      startMode,
-      processNow: false
-    })
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error || "Content Agent could not start the task.");
-  return payload;
-}
-
-export async function requestContentAgentControl(jobId, command) {
-  const response = await authenticatedFetch("/api/campaign/brain", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "agent_control", jobId: String(jobId || ""), command: String(command || "") })
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error || "Content Agent control could not be applied.");
-  return payload;
-}
-
-export async function requestContentAgentRetry(jobId) {
-  const response = await authenticatedFetch("/api/campaign/brain", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "agent_retry", jobId: String(jobId || "") })
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error || "Content Agent recovery could not start.");
-  return payload;
-}
-
-export async function requestContentAgentRejectRestart(jobId, reason = "") {
-  const response = await authenticatedFetch("/api/campaign/brain", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "agent_reject_restart", jobId: String(jobId || ""), reason: String(reason || "") })
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error || "The campaign could not be rejected and restarted.");
-  return payload;
-}
-
 export async function requestCampaignLearningFeedback(payload = {}) {
   const response = await authenticatedFetch("/api/campaign/brain", {
     method: "POST",

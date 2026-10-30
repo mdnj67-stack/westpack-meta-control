@@ -29,13 +29,6 @@ test("canvas selection excludes the hero wrapper from editable module indexes", 
   assert.match(appSource, /campaign-email-crop-error/);
 });
 
-test("long campaign titles cannot cover the Studio entry action", () => {
-  assert.match(appSource, /campaignName\.length >= 54/);
-  assert.match(appSource, /is-very-long-title/);
-  assert.match(styleSource, /\.content-agent-focus-copy\.is-long-title h3/);
-  assert.match(styleSource, /\.content-agent-focus-copy\.is-very-long-title h3/);
-});
-
 test("module drag exposes the drop surface before the iframe can intercept it", () => {
   const pressIndex = appSource.indexOf("appState.campaignEmailBuilder.draggingModuleId = libraryModuleId;");
   const moveIndex = appSource.indexOf("const move = (moveEvent) =>", pressIndex);

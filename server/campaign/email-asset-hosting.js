@@ -1,18 +1,11 @@
 // Campaign imagery arrives as short-lived signed Asana attachment URLs. Those URLs expire within
-// hours, so anything that keeps one - a compiled email stored in Redis, a quality review that
-// fetches the image, a draft a human opens days later - ends up pointing at a dead link. Every
-// campaign image therefore has to be copied into Klaviyo's permanent image library before it is
-// written into an artifact, and the hosted URL is what the rest of the pipeline uses.
+// hours, so anything that keeps one - a saved Studio draft, an asset library record, a draft a
+// human opens days later - ends up pointing at a dead link. Campaign Studio therefore copies
+// each image into Klaviyo's permanent image library (`host_email_asset`) before using it.
 
 const KLAVIYO_IMAGE_REVISION = "2026-04-15";
 const KLAVIYO_IMAGE_UPLOAD_REVISION = "2026-07-15";
 const KLAVIYO_UPLOAD_TIMEOUT_MS = 25_000;
-const HOSTING_CONCURRENCY = 3;
-
-// Klaviyo serves its image library from CloudFront. A URL already on one of these hosts is
-// permanent and must pass through untouched - re-importing it would duplicate the library entry
-// on every run.
-const PERMANENT_IMAGE_HOST_PATTERN = /(?:^|\.)(?:cloudfront\.net|klaviyo\.com)$/i;
 
 function assertSafeCampaignAssetUrl(value = "") {
   const url = new URL(String(value || ""));
@@ -22,14 +15,6 @@ function assertSafeCampaignAssetUrl(value = "") {
     throw new Error("Campaign asset host is not allowed.");
   }
   return url.toString();
-}
-
-function isPermanentlyHostedImageUrl(value = "") {
-  try {
-    return PERMANENT_IMAGE_HOST_PATTERN.test(new URL(String(value || "")).hostname);
-  } catch (error) {
-    return false;
-  }
 }
 
 function parseKlaviyoMarkets(raw) {
@@ -101,95 +86,8 @@ async function uploadEmailVisualFileToKlaviyo(config, account, file, name) {
   return readHostedImageUrl(payload);
 }
 
-function buildHostedImageName(namePrefix, index) {
-  const base = String(namePrefix || "campaign-image")
-    .replace(/[^a-z0-9._-]+/gi, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80) || "campaign-image";
-  return `${base}-${String(index + 1).padStart(2, "0")}.jpg`;
-}
-
-/**
- * Copies every source image into Klaviyo's permanent library and returns the mapping from the
- * original URL to the hosted one.
- *
- * The pipeline resumes in a fresh serverless invocation at every stage, and each resume refreshes
- * the Asana URLs, so the cache is keyed by a caller-supplied stable identity rather than by the
- * URL itself. Callers persist the returned cache in the job checkpoint; without it each of the
- * ten-odd stages would re-import the same photographs and fill the image library with duplicates.
- *
- * Hosting failures are deliberately not fatal. Losing a campaign because one attachment could not
- * be copied would be worse than compiling with the original URL, so a failed image keeps its
- * source URL and is reported in `failures` for the caller to record as a production note.
- */
-async function hostCampaignImageUrls(config, urls = [], options = {}) {
-  const {
-    account = "DK",
-    cache = {},
-    keyForUrl = (url) => url,
-    namePrefix = "campaign-image",
-    upload = uploadEmailVisualToKlaviyo
-  } = options;
-
-  const nextCache = { ...cache };
-  const hostedByUrl = new Map();
-  const failures = [];
-  const pending = [];
-
-  const sourceUrls = [...new Set((Array.isArray(urls) ? urls : []).filter((url) => /^https?:\/\//i.test(String(url || ""))))];
-
-  for (const sourceUrl of sourceUrls) {
-    if (isPermanentlyHostedImageUrl(sourceUrl)) {
-      hostedByUrl.set(sourceUrl, sourceUrl);
-      continue;
-    }
-    const cacheKey = String(keyForUrl(sourceUrl) || sourceUrl);
-    const cached = nextCache[cacheKey];
-    if (cached) {
-      hostedByUrl.set(sourceUrl, cached);
-      continue;
-    }
-    pending.push({ sourceUrl, cacheKey });
-  }
-
-  for (let index = 0; index < pending.length; index += HOSTING_CONCURRENCY) {
-    const batch = pending.slice(index, index + HOSTING_CONCURRENCY);
-    const results = await Promise.all(batch.map(async (item, offset) => {
-      try {
-        const safeUrl = assertSafeCampaignAssetUrl(item.sourceUrl);
-        const hosted = await upload(config, account, safeUrl, buildHostedImageName(namePrefix, index + offset));
-        return { ...item, hostedUrl: hosted.imageUrl };
-      } catch (error) {
-        return { ...item, error: error?.message || "Klaviyo image hosting failed." };
-      }
-    }));
-    for (const result of results) {
-      if (result.hostedUrl) {
-        nextCache[result.cacheKey] = result.hostedUrl;
-        hostedByUrl.set(result.sourceUrl, result.hostedUrl);
-      } else {
-        hostedByUrl.set(result.sourceUrl, result.sourceUrl);
-        failures.push({ sourceUrl: result.sourceUrl, error: result.error });
-      }
-    }
-  }
-
-  return {
-    cache: nextCache,
-    hostedByUrl,
-    // Only the URLs that actually moved, so callers can remap artifacts without rewriting
-    // everything back onto itself.
-    replacements: new Map([...hostedByUrl].filter(([sourceUrl, hostedUrl]) => hostedUrl !== sourceUrl)),
-    hostedCount: [...hostedByUrl].filter(([sourceUrl, hostedUrl]) => hostedUrl !== sourceUrl).length,
-    failures
-  };
-}
-
 module.exports = {
   assertSafeCampaignAssetUrl,
-  buildHostedImageName,
-  hostCampaignImageUrls,
-  isPermanentlyHostedImageUrl,
   parseKlaviyoMarkets,
   uploadEmailVisualFileToKlaviyo,
   uploadEmailVisualToKlaviyo

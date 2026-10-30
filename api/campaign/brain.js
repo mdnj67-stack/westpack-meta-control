@@ -31,15 +31,6 @@ const {
   normalizeMetaFromMasterResult,
   extractMasterVisualUrls
 } = require("../../server/campaign/meta-from-master");
-const {
-  getContentAgentStatus,
-  controlContentAgentJob,
-  queueAgentContinuation,
-  rejectAndRestartContentAgentJob,
-  retryContentAgentJob,
-  runContentAgentCycle,
-  startManualAgentJob
-} = require("../../server/campaign/content-agent-worker");
 const { readHistoricalIntelligence } = require("../../server/meta/historical-store");
 const { buildMetaIntelligencePromptBlock } = require("../../server/meta/historical-intelligence");
 const {
@@ -173,19 +164,14 @@ function buildEmailVisualPrompts(input, plan, emailArtifact) {
 
 module.exports = async (req, res) => {
   const config = getConfig();
-  const requestedAction = String(
-    req.query?.action || req.headers?.["x-content-agent-action"] || ""
-  ).trim().toLowerCase();
-  const cronAuthorized = ["agent_scan", "agent_work", "agent_discover"].includes(requestedAction)
-    && Boolean(config.cronSecret)
-    && String(req.headers?.authorization || "") === `Bearer ${config.cronSecret}`;
-  if (!cronAuthorized && !requireAuth(req, res, config)) {
+  const requestedAction = String(req.query?.action || "").trim().toLowerCase();
+  if (!requireAuth(req, res, config)) {
     return;
   }
 
   if (req.method === "GET") {
     const action = requestedAction;
-    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "agent_status", "agent_scan", "agent_work", "agent_discover", "campaign_learning_status", "studio_draft_load", "audit_log", "asset_library_load"]).has(action)) {
+    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asset_proxy", "campaign_learning_status", "studio_draft_load", "audit_log", "asset_library_load"]).has(action)) {
       sendJson(res, 400, { error: "Unsupported Campaign Brain GET action." });
       return;
     }
@@ -213,68 +199,8 @@ module.exports = async (req, res) => {
       });
       return;
     }
-    if (action === "agent_status") {
-      try {
-        const status = await getContentAgentStatus();
-        sendJson(res, 200, { ok: true, ...status });
-      } catch (error) {
-        sendJson(res, 500, { ok: false, error: error.message || "Could not load Content Agent status." });
-      }
-      return;
-    }
     if (action === "campaign_learning_status") {
       sendJson(res, 200, { ok: true, ...(await getCampaignLearningStatus()) });
-      return;
-    }
-    if (["agent_scan", "agent_work"].includes(action)) {
-      if (!config.asanaAccessToken || !config.asanaCampaignProjectGid || !config.asanaContentProjectGid) {
-        sendJson(res, 503, { ok: false, error: "Content Agent Asana projects are not configured." });
-        return;
-      }
-      try {
-        const cycle = await runContentAgentCycle(config, { processOne: true, discover: action === "agent_scan" });
-        const busyContinuation = cycle.busy
-          ? await queueAgentContinuation(config, { delaySeconds: 60, action })
-          : null;
-        sendJson(res, 200, {
-          ok: true,
-          busy: cycle.busy,
-          skipped: Boolean(cycle.skipped),
-          reason: cycle.reason || "",
-          job: cycle.job,
-          discoveredCount: cycle.discovered?.length || 0,
-          backlogContinuation: cycle.backlogContinuation || busyContinuation,
-          state: cycle.state,
-          store: (await getContentAgentStatus()).store
-        });
-      } catch (error) {
-        sendJson(res, Number(error?.statusCode) || 500, { ok: false, error: error.message || "Content Agent cycle failed." });
-      }
-      return;
-    }
-    if (action === "agent_discover") {
-      if (!config.asanaAccessToken || !config.asanaCampaignProjectGid || !config.asanaContentProjectGid) {
-        sendJson(res, 503, { ok: false, error: "Content Agent Asana projects are not configured." });
-        return;
-      }
-      try {
-        const cycle = await runContentAgentCycle(config, { processOne: false });
-        const continuation = await queueAgentContinuation(config, {
-          delaySeconds: cycle.busy ? 60 : 10,
-          action: cycle.busy ? "agent_discover" : "agent_work"
-        });
-        sendJson(res, 200, {
-          ok: true,
-          busy: cycle.busy,
-          discoveredCount: cycle.discovered?.length || 0,
-          continuation,
-          summary: cycle.state?.lastScanSummary || null,
-          queueDepth: (cycle.state?.jobs || []).filter((job) => job.state === "queued").length,
-          publishCapability: false
-        });
-      } catch (error) {
-        sendJson(res, Number(error?.statusCode) || 500, { ok: false, error: error.message || "Content Agent discovery failed." });
-      }
       return;
     }
     if (action === "asset_proxy") {
@@ -438,84 +364,8 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (action === "agent_start") {
-      if (!config.asanaAccessToken || !config.asanaCampaignProjectGid || !config.asanaContentProjectGid) {
-        sendJson(res, 503, { error: "Content Agent Asana projects are not configured." });
-        return;
-      }
-      const result = await startManualAgentJob(config, {
-        campaignTaskGid: rawInput?.campaignTaskGid,
-        contentTaskGid: rawInput?.contentTaskGid,
-        direction: rawInput?.direction,
-        processNow: rawInput?.processNow === true,
-        startMode: rawInput?.startMode
-      });
-      sendJson(res, 200, {
-        ok: true,
-        job: result.job,
-        state: result.state,
-        pendingControl: Boolean(result.pendingControl),
-        statusMessage: result.statusMessage || result.job?.statusMessage || "",
-        continuation: result.continuation,
-        store: (await getContentAgentStatus()).store,
-        publishCapability: false
-      });
-      return;
-    }
-
-    if (action === "agent_control") {
-      const result = await controlContentAgentJob(config, {
-        jobId: rawInput?.jobId,
-        command: rawInput?.command
-      });
-      sendJson(res, 200, {
-        ok: true,
-        job: result.job,
-        state: result.state,
-        pendingControl: Boolean(result.pendingControl),
-        continuation: result.continuation,
-        health: (await getContentAgentStatus()).health,
-        publishCapability: false
-      });
-      return;
-    }
-
-    if (action === "agent_retry") {
-      const result = await retryContentAgentJob(config, rawInput?.jobId);
-      sendJson(res, 200, {
-        ok: true,
-        job: result.job,
-        state: result.state,
-        continuation: result.continuation,
-        health: (await getContentAgentStatus()).health,
-        publishCapability: false
-      });
-      return;
-    }
-
-    if (action === "agent_reject_restart") {
-      const result = await rejectAndRestartContentAgentJob(config, rawInput?.jobId, rawInput?.reason);
-      await recordAuditEvent("job_rejected_restarted", {
-        jobId: String(rawInput?.jobId || ""),
-        campaignTitle: result.rejectedJob?.campaignTaskName || "",
-        operator: rawInput?.operator || "",
-        note: String(rawInput?.reason || "")
-      });
-      sendJson(res, 200, {
-        ok: true,
-        rejectedJob: result.rejectedJob,
-        job: result.job,
-        state: result.state,
-        continuation: result.continuation,
-        health: (await getContentAgentStatus()).health,
-        publishCapability: false
-      });
-      return;
-    }
-
-    // The Content Agent's own output has always been server-side. These keep the operator's edits
-    // there too, so a campaign is not tied to one person's browser profile. Loading is a GET and
-    // is handled with the other GET actions above.
+    // These keep the operator's edits on the server, so a campaign is not tied to one person's
+    // browser profile. Loading is a GET and is handled with the other GET actions above.
     // The library holds metadata only. Image bytes go to Klaviyo first, so a record carries a
     // CDN URL rather than the base64 payload that kept the whole library inside one browser.
     if (action === "asset_library_save") {

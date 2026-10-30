@@ -76,7 +76,6 @@ test("the log is honest that a shared password cannot attribute an action to a p
 test("every point where a human commits something is recorded", () => {
   assert.match(klaviyoSource, /recordAuditEvent\("klaviyo_draft_created"/);
   assert.match(brainSource, /recordAuditEvent\("studio_draft_saved"/);
-  assert.match(brainSource, /recordAuditEvent\("job_rejected_restarted"/);
 
   const metaCalls = metaSource.match(/recordAuditEvent\("meta_draft_created"/g) || [];
   assert.equal(metaCalls.length, 3, "single image, carousel and video each create a paused ad");

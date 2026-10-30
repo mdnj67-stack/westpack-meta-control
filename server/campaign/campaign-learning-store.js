@@ -4,8 +4,7 @@ const { acquireLocalLock, releaseLocalLock } = require("./agent-store");
 
 const STORE_KEY = "westpack:campaign-learning:events:v1";
 const LOCAL_PATH = path.join(process.cwd(), "data", "campaign-learning-events.json");
-// Dedicated lock file, distinct from agent-store's content-agent-state.lock.json, so the two
-// subsystems never contend on the same lock for unrelated work.
+// Dedicated lock file, so this store never contends with another store's lock for unrelated work.
 const LOCAL_LOCK_PATH = path.join(process.cwd(), "data", "campaign-learning-events.lock.json");
 const LOCAL_LOCK_TTL_SECONDS = 30;
 const MAX_EVENTS = 500;
@@ -15,9 +14,8 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// local_file mode has no cross-invocation mutual exclusion otherwise (same gap agent-store.js
-// fixed for content-agent-state.json): two overlapping writers can each read the same base
-// array, mutate their own copy, and have the second write silently clobber the first. This holds
+// local_file mode has no cross-invocation mutual exclusion otherwise: two overlapping writers can
+// each read the same base array, mutate their own copy, and have the second write silently clobber the first. This holds
 // a real file lock across the whole read -> mutate -> write cycle, retrying (rather than failing
 // fast) so a contended writer waits its turn instead of dropping its event.
 async function withLocalLearningLock(fn) {

@@ -52,20 +52,19 @@ Repo facts you must respect:
 - Root: ${REPO}. There is no package.json and no npm/node_modules setup — do not add one.
 - Read CLAUDE.md and README.md first — they capture what is already known about this subsystem (architecture, known risk areas, where the prior AI session left off). Do not repeat investigation they already contain; build on it.
 - Tests run with Node's built-in test runner directly against files, e.g. \`node --test tests/<file>.test.js\`.
-- Many existing tests (e.g. tests/campaign-studio-admission.test.js) assert against literal regex patterns in app.js's/styles.css's source text rather than calling exported functions. Check how existing tests for the file(s) you touch actually work before assuming a different style, and before trusting a "passing test" as full behavioral proof.
-- app.js is a single large (~780KB) file that a lot of Campaign Studio front-end behavior lives in directly. styles.css is similarly large. Treat both as high-collision-risk files.
+- Many existing tests (e.g. tests/campaign-email-editor-usability.test.js) assert against literal regex patterns in app.js's/styles.css's source text rather than calling exported functions. Check how existing tests for the file(s) you touch actually work before assuming a different style, and before trusting a "passing test" as full behavioral proof.
+- app.js is a single large (~680KB) file that a lot of Campaign Studio front-end behavior lives in directly. styles.css is similarly large. Treat both as high-collision-risk files.
 - Follow existing code conventions in touched files. No comments unless they explain a non-obvious WHY. No refactors or abstractions beyond what the task requires. No new dependencies, frameworks or config files.
-- Hard guardrails, non-negotiable regardless of task: never touch secrets/credentials/.env* files; never change anything that would let the Content Agent worker auto-publish (publishCapability must stay false everywhere it already is); never run destructive git operations (no reset --hard, no force push, no discarding uncommitted work); never delete a test without replacing it with an equal-or-better check; never commit — leave changes in the working tree for a human to review.
+- Hard guardrails, non-negotiable regardless of task: never touch secrets/credentials/.env* files; never add a path that publishes or sends anything (Campaign Studio hands off Klaviyo drafts and paused Meta ads only, and the autonomous Content Agent was removed on 2026-10-30 - do not rebuild it); never run destructive git operations (no reset --hard, no force push, no discarding uncommitted work); never delete a test without replacing it with an equal-or-better check; never commit — leave changes in the working tree for a human to review.
 `.trim()
 
 const DEFAULT_GOAL = `
-Keep discovering and completing real, valuable engineering work on the Campaign Studio / Campaign Brain /
-Content Agent subsystem, round after round, until there is genuinely nothing safe and valuable left to do.
-Known candidate risk areas already documented in CLAUDE.md include: agent-store.js's advisory lock only
-being real when Redis is configured (no mutual exclusion in local-file/volatile mode), the e2e Playwright
+Keep discovering and completing real, valuable engineering work on the Campaign Studio / Campaign Brain
+subsystem, round after round, until there is genuinely nothing safe and valuable left to do.
+Known candidate risk areas already documented in CLAUDE.md include: the e2e Playwright
 harness (tests/e2e/campaign-brain-ui.spec.js) not being runnable from a fresh clone, a corrupted line in
-.gitignore ("k.includes( ' npm ' )))"), and the three-layer module contract (email-module-library.js /
-email-design.js / quality-agent.js) that must stay in sync. Also look for anything else you find by reading
+.gitignore ("k.includes( ' npm ' )))"), and the module contract (email-module-library.js /
+email-design.js) that must stay in sync. Also look for anything else you find by reading
 the real code: real bugs, missing error handling at real boundaries, incomplete features, genuine test gaps.
 Do not invent speculative features nobody asked for, and do not do cosmetic refactors — prioritize fixing
 real bugs, closing real gaps, and hardening real risk, in order of risk and impact.
@@ -163,7 +162,7 @@ ${REPO_FACTS}
 
 Do a final sanity pass:
 1. Run the full campaign-related unit test suite: node --test against every tests/campaign-*.test.js plus
-   tests/content-agent-domain.test.js, tests/content-quality-agent.test.js, tests/creative-production.test.js,
+   tests/content-agent-decommissioned.test.js, tests/agent-store.test.js, tests/meta-from-master.test.js,
    tests/master-design-dna.test.js, tests/meta-carousel-contract.test.js, tests/meta-quality-director.test.js.
    Report exact pass/fail counts.
 2. Run git status and git diff --stat to summarize everything changed across the whole run.

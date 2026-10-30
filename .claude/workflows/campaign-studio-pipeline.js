@@ -49,9 +49,9 @@ const REPO_FACTS = `
 Repo facts you must respect:
 - Root: ${REPO}. There is no package.json and no npm/node_modules setup — do not add one.
 - Tests run with Node's built-in test runner directly against files, e.g. \`node --test tests/<file>.test.js\`.
-- Many existing tests (e.g. tests/campaign-studio-admission.test.js) assert against literal regex patterns in app.js's source text rather than calling exported functions. Check how existing tests for the file(s) you touch actually work before assuming a different style.
-- app.js is a single large (~780KB) file that a lot of Campaign Studio behavior lives in directly.
-- Campaign Studio production behavior is governed by contracts described in README.md: the module library (3-4 modules from an approved ten-module set), the campaign master compiler (westpack-campaign-master-v2), the Quality Director rubric (westpack-quality-director-v2/v4) and the Content Agent job state machine (queued -> analysing -> producing -> quality_review -> ready_for_review / quality_blocked). Do not violate these contracts.
+- Many existing tests (e.g. tests/campaign-email-editor-usability.test.js) assert against literal regex patterns in app.js's source text rather than calling exported functions. Check how existing tests for the file(s) you touch actually work before assuming a different style.
+- app.js is a single large (~680KB) file that a lot of Campaign Studio behavior lives in directly.
+- Campaign Studio production behavior is governed by contracts described in README.md: the module library (3-4 modules from an approved ten-module set), the campaign master compiler (westpack-campaign-master-v2) and the Meta from Master carousel contract (meta-carousel-contract.js). Do not violate these contracts. The autonomous Content Agent was removed on 2026-10-30; do not rebuild it.
 - Follow existing code conventions in touched files. No comments unless they explain a non-obvious WHY. No refactors or abstractions beyond what the task requires. No new dependencies, frameworks or config files.
 `.trim()
 
