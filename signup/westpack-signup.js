@@ -35,6 +35,8 @@
     test: data.test === "1" || data.mode === "preview" || Boolean(storePreview),
     // data-track="" switches tracking off (local tests); no attribute means the app's endpoint
     trackUrl: data.track !== undefined ? data.track : "https://project-4fcxa.vercel.app/api/signup/track",
+    // what runs, from the app's Signup page; data-control="" leaves it to core/markets.js (local tests)
+    controlUrl: data.control !== undefined ? data.control : new URL("../api/signup/control?action=config", BASE).href,
     autostart: data.autostart !== "0",
     // preview only: answer a signup as Klaviyo would without sending it, for screenshots and design review
     dryRun: data.mode === "preview" && data.dry === "1",
@@ -400,6 +402,19 @@
   }
 
   // ---------- boot ----------
+  // The app's control (api/signup/control.js), or null. A slow or failed read never holds the page up for long, and
+  // null means the file decides, which keeps the live stores off.
+  async function readControl() {
+    if (!OPTS.controlUrl || typeof fetch !== "function" || typeof AbortController !== "function") return null;
+    const abort = new AbortController();
+    const timer = setTimeout(() => abort.abort(), 2500);
+    try {
+      const res = await fetch(OPTS.controlUrl, { signal: abort.signal, credentials: "omit" });
+      const json = res.ok ? await res.json() : null;
+      return json && json.v === 1 ? json : null;
+    } catch (e) { return null; } finally { clearTimeout(timer); }
+  }
+
   async function boot() {
     await Promise.all([loadScript(`${BASE}core/rules.js`), loadScript(`${BASE}core/markets.js`)]);
     R = window.WestpackSignupRules; M = window.WestpackSignupMarkets;
@@ -412,13 +427,18 @@
       market = Object.assign({}, market, { storeUrl: here(market.storeUrl), privacyUrl: here(market.privacyUrl), boxesUrl: here(market.boxesUrl) });
     }
     if (resetAsked) { local.remove(R.STATE_KEY); sess.remove(R.SESSION_KEY); }
-    // M.LIVE is the master switch (core/markets.js): off, the store's tag does nothing but answer ?wps=preview
-    if (!market || (!((M.LIVE || staging) && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
+    // What runs is set on the app's Signup page. core/markets.js (LIVE, CURRENT) is the fallback when that cannot be
+    // read, and it keeps the live stores off. Off, the tag does nothing but answer ?wps=preview.
+    const ctl = market && OPTS.mode !== "preview" && !OPTS.storePreview ? await readControl() : null;
+    const side = ctl && (staging ? ctl.staging : ctl.live);
+    const on = side ? Boolean(side.on && (staging || !side.markets || side.markets[market.market] !== false)) : M.LIVE || staging;
+    const weights = side && R.CONCEPT_IDS.includes(side.current) ? { [side.current]: 1 } : market && market.concepts;
+    if (!market || (!(on && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
     state = R.parseState(local.get(R.STATE_KEY));
     reducedMotion = Boolean(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
     device = R.deviceClass(innerWidth, Boolean(window.matchMedia && matchMedia("(pointer: coarse)").matches));
     if (R.isEmailVisit(location.search)) { state.emailVisitAt = now(); saveState(); }
-    const pick = R.assignConcept(state, market.concepts, Math.random(), OPTS.concept);
+    const pick = R.assignConcept(state, weights, Math.random(), OPTS.concept);
     concept = pick.concept;
     if (!concept) return;
     if (pick.assigned) { state.concept = concept; state.assignedAt = now(); saveState(); }

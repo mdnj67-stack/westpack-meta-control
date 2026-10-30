@@ -19,7 +19,7 @@ const fs = require("fs");
 const path = require("path");
 const ROOT = path.resolve(__dirname, "..", "..");
 const { chromium, devices } = require(path.join(ROOT, "tmp", "playwright-runner", "node_modules", "playwright"));
-const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
+const { MARKETS, CURRENT } = require(path.join(ROOT, "signup", "core", "markets.js"));
 
 const PROD = "https://project-4fcxa.vercel.app";
 const TYPES = { ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".woff2": "font/woff2", ".json": "application/json" };
@@ -36,6 +36,9 @@ function loadCopy(lang) {
 }
 
 async function route(page, forceLive) {
+  // what runs comes from the app's Signup page; a simulated launch answers for it, in this browser only
+  if (forceLive) await page.route(`${PROD}/api/signup/control?action=config*`, (r) => r.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" },
+    body: JSON.stringify({ v: 1, live: { on: true, current: CURRENT, markets: {} }, staging: { on: true, current: CURRENT } }) }));
   await page.route(`${PROD}/signup/**`, async (r) => {
     const rel = new URL(r.request().url()).pathname.replace(/^\//, "");
     if (!local && !(forceLive && rel === "signup/core/markets.js")) return r.continue();

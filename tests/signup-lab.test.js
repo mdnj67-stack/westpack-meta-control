@@ -264,12 +264,20 @@ test("a staging store runs the Signup Lab whatever the switch says, and can only
   assert.match(runtime, /const storePreview = resetAsked \? "" : wps;/);
 });
 
-test("one master switch decides whether the stores run the Signup Lab, and ?wps= previews it on a real store", () => {
+test("the app's Signup page decides whether the stores run the Signup Lab, the file is the fallback, and ?wps= previews it", () => {
   const { LIVE } = require("../signup/core/markets");
   assert.equal(typeof LIVE, "boolean");
   const runtime = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
+  // the control is read from the app; unreadable, the file decides (LIVE), and a preview needs neither
+  assert.match(runtime, /controlUrl: data\.control !== undefined \? data\.control : new URL\("\.\.\/api\/signup\/control\?action=config", BASE\)\.href/);
+  assert.match(runtime, /const ctl = market && OPTS\.mode !== "preview" && !OPTS\.storePreview \? await readControl\(\) : null;/);
+  assert.match(runtime, /const on = side \? Boolean\(side\.on && \(staging \|\| !side\.markets \|\| side\.markets\[market\.market\] !== false\)\) : M\.LIVE \|\| staging;/);
+  // a read that hangs is given up on, and anything but a v1 answer counts as no answer
+  assert.match(runtime, /setTimeout\(\(\) => abort\.abort\(\), 2500\)/);
+  assert.match(runtime, /return json && json\.v === 1 \? json : null;/);
   // off: the tag does nothing, except a store preview; a preview is always test mode, so it can only reach the test list
-  assert.match(runtime, /if \(!market \|\| \(!\(\(M\.LIVE \|\| staging\) && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);
+  assert.match(runtime, /if \(!market \|\| \(!\(on && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);
+  assert.match(runtime, /const pick = R\.assignConcept\(state, weights, Math\.random\(\), OPTS\.concept\);/);
   assert.match(runtime, /test: data\.test === "1" \|\| data\.mode === "preview" \|\| Boolean\(storePreview\)/);
   assert.match(runtime, /get\("wps"\)/);
   // go-live touches only The Insert popups and needs --apply to touch anything
