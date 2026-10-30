@@ -438,6 +438,20 @@ skrevet (250 € blev engang regnet om i oversættelsen; det er rettet i oversæ
 De to stærke 2025-mails klarede sig godt i næsten alle markeder (Hagerty 1,14–2,20 i alle undtagen FI),
 så humoren oversætter. Finland lå lavt på alle tre 2025-mails.
 
+Lært af prøveoversættelserne af W46-hotlinen (okt. 2026):
+
+- **Skriv kønsneutralt om læseren.** "Du er den første, der er kommet igennem" blev til "Sie sind der oder
+  die Erste, der/die …" og "Sei riuscito"; "du har travlt" til "vous êtes occupé". Fransk, italiensk og
+  polsk bøjer tillægsord og datid efter køn. Skriv om opkaldet, linjen eller handlingen i nutid i stedet:
+  "Der er hul igennem!", "Dit opkald er det første …", "du har meget at lave", "Du står allerede på listen".
+- **Kevins citattegn beskyttes** med `<span translate="no">“</span>`, ellers laver fransk dem om til «…» og
+  glemmer ofte det sidste ». Ingen fed skrift midt i en replik: det deler sætningen i flere stykker, som
+  oversættes hver for sig.
+- **Hans engelske replikker står på egen linje** med `translate="no"`. Inde i en dansk sætning ødelægger de
+  grammatikken i oversættelsen.
+- **Tiltaleformen er markedets egen** (DE Sie, FR vous, PT você, resten du-form); oversætteren får den
+  besked siden 30. okt. 2026. Kevin siger altså "Sie" på tysk – det er rigtigt.
+
 ---
 
 ## 11. De næste Kevin-mails (W46–W49 2026) – hvad tallene peger på
