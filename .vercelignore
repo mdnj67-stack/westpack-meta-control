@@ -6,6 +6,10 @@ klaviyo-config.json
 META_SETUP.md
 START_APP.txt
 README.md
+# The pattern above matches a README at any depth, which also kept the site facts out of the upload, so
+# api/agents.js's includeFiles bundled nothing and every Email check ran without them ("not in the site facts").
+# Only this one is needed by a function; the other READMEs are internal team docs and stay out.
+!knowledge/westpack-site/README.md
 campaign-memory
 
 # Environment files. These live in the project root (.env.local, .env.production) and hold
