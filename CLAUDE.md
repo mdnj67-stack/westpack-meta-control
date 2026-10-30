@@ -317,8 +317,8 @@ Tests: `tests/signup-control.test.js`. Views: Signup Lab (control), Results, Kla
   the watchdog's Magento lesson), for the tag (a `data-test` tag does not count) and for Klaviyo's `company_id` inline,
   plus the ids Tag Manager (GTM-5QRXWTJ) loads on every store. That makes the 26 Oct break visible per market: DK "Own
   account", EU "Own account, via Tag Manager", the other 16 "EU account only". Staging needs `SIGNUP_STAGING_AUTH`
-  (`user:password`) in Vercel; without it the staging column says "Not checked". It was not set on 2026-10-30 - adding
-  a secret is the user's to do.
+  (`user:password`) in Vercel; without it the staging column says "Not checked". Set for production on 2026-10-30 at
+  the user's word; a new env var only reaches the functions after a redeploy (`vercel redeploy <prod url>`).
 - **Klaviyo forms** lists every form (live, optionally drafts) in the 18 accounts; on 2026-10-30, 106 live.
 - History of changes lives in the document (100 entries). There is no per-person identity (shared password).
 - Local checks: run a copy of `local-static-server.js` on another port if 4173 is someone else's, without
