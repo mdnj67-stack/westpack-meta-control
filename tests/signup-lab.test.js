@@ -119,6 +119,17 @@ test("phones get a card they choose to open; desktops get the dialog", () => {
   assert.equal(d.mode, "dialog"); assert.equal(d.exitIntent, true); assert.ok(d.delayMs >= 6000);
 });
 
+test("one experience runs at a time: CURRENT alone in every market, and a visitor on another one moves to it", () => {
+  const { CURRENT, MARKETS } = require("../signup/core/markets");
+  assert.ok(R.CONCEPT_IDS.includes(CURRENT));
+  for (const m of Object.values(MARKETS)) assert.deepEqual(Object.entries(m.concepts).filter(([, w]) => w > 0).map(([id]) => id), [CURRENT], m.market);
+  const moved = R.assignConcept({ concept: "pack-and-ship" }, MARKETS.dkk_dk_den.concepts, 0.9);
+  assert.equal(moved.concept, CURRENT);
+  assert.equal(moved.assigned, true);
+  // a preview still opens any of the three
+  assert.equal(R.assignConcept({}, MARKETS.dkk_dk_den.concepts, 0.1, "swipe-match").concept, "swipe-match");
+});
+
 test("A/B: a visitor keeps their experience, and the split follows the weights", () => {
   const w = { "logo-studio": 1, "swipe-match": 1, "pack-and-ship": 1 };
   assert.deepEqual(R.assignConcept({ concept: "swipe-match" }, w, 0.01), { concept: "swipe-match", assigned: false });

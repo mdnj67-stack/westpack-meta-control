@@ -90,7 +90,9 @@ gives som `DK:SPPrjA` osv.). Ét marked slås fra med `enabled: false` på marke
 - **Bot-andelen skal være tæt på nul.** Klaviyo undertrykte gentagne automatiske test-tilmeldinger som
   `BOT_PROTECTION`. Rigtige mennesker forventes at gå igennem, men det er det første tal at se på. Ellers kontaktes
   Klaviyo, før testen fortsætter.
-- **A/B:** de tre oplevelser ligeligt fordelt. Cirka fire uger før en forskel på 30 % kan ses; stop ikke på en flot
+- **Én oplevelse ad gangen:** Logo-studiet kører alene (`CURRENT` i `signup/core/markets.js`), til den er slidt
+  op; se README. Det gamle A/B-råd herunder gælder kun, hvis vi en dag sammenligner igen.
+- **A/B (hvis det kommer):** Cirka fire uger før en forskel på 30 % kan ses; stop ikke på en flot
   første uge. Vinderen vælges på bekræftede tilmeldinger pr. visning.
 
 ## Ikke blokerende, men værd at vide

@@ -19,6 +19,11 @@
   // in the same minutes as The Insert popups are unpublished (node tools/signup/go-live.js; see IMPLEMENTERING.md).
   const LIVE = false;
 
+  // One experience at a time, not an A/B test (the user, 2026-10-30): Logo studio runs until it is judged worn out,
+  // then Swipe match, then Pack & ship - each gets its design pass when its turn comes. Changing the experience is
+  // this one line. The others stay in the code and still open with ?wps=<id>.
+  const CURRENT = "logo-studio";
+
   const privacy = (code) => `https://www.westpack.com/${code}/westpack-gdpr`;
   const store = (code) => `https://www.westpack.com/${code}/`;
 
@@ -123,8 +128,9 @@
     m.privacyUrl = privacy(code);
     m.storeUrl = store(code);
     m.boxesUrl = store(code) + (BOXES_PATH[code] || "jewellery-boxes.html");
-    // which experiences may run, and with what share of new visitors; an A/B test is a change here, not in code
-    m.concepts = m.concepts || { "logo-studio": 1, "swipe-match": 1, "pack-and-ship": 1 };
+    // which experiences may run, and with what share of new visitors: CURRENT alone, unless a market says otherwise.
+    // A visitor assigned an experience that no longer runs is given CURRENT on their next page.
+    m.concepts = m.concepts || { [CURRENT]: 1 };
     // a market with enabled: false gets nothing; switch a market off here rather than in the store
     if (m.enabled === undefined) m.enabled = true;
   }
@@ -138,7 +144,7 @@
   // basic auth, where the user tests the whole thing before live (2026-10-30).
   const STAGING_HOSTS = ["westpack-staging.wexohosting.com"];
 
-  const api = { LIVE, MARKETS, TEST_TARGET, STAGING_HOSTS };
+  const api = { LIVE, CURRENT, MARKETS, TEST_TARGET, STAGING_HOSTS };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.WestpackSignupMarkets = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

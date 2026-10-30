@@ -1353,6 +1353,11 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   forms named "… - Popup - The Insert …" and records them for `republish --apply`); the embeds and the "Always on
   sale" flyout (sale/outlet pages only, which the Signup Lab avoids) stay. Launch needs the user's go and the line
   in Magento.
+- **One experience at a time** (2026-10-30, the user: "Jeg er mere tilbøjelig til at bare køre 1. Når vi vurderer
+  den er død kører vi den næste"). Not an A/B test: `CURRENT` in `signup/core/markets.js` (Logo studio) runs alone in
+  every market; then Swipe match, then Pack & ship, each getting its design pass only when its turn comes - all three
+  at Logo studio's level would have been needed for a fair A/B. "Worn out" = confirmed signups per exposure 30%+ under
+  its own first four weeks, two weeks running (README). A visitor on a retired experience gets CURRENT next page.
 - **Staging first** (2026-10-30, the user: "Jeg vil teste det hele på staging først", live dropped for now). Wexo
   put the line on `westpack-staging.wexohosting.com` (basic auth; ask the user). A host in `STAGING_HOSTS`
   (`signup/core/markets.js`) runs as live whatever `LIVE` says, but forces test mode: TEST list, `env=test` tracking,

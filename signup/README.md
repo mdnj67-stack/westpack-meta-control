@@ -101,10 +101,22 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 - **dataLayer:** `wp_signup` (hvert trin) og `wp_signup_subscribed` uden persondata, klar til GA4, hvis nogen
   opsætter en trigger i Tag Manager.
 
-## A/B-test
+## Én oplevelse ad gangen
 
-- Standard: de tre oplevelser ligeligt fordelt i alle markeder (`concepts` i `core/markets.js`). En vægt på 0
-  slår en oplevelse fra; ændringer kræver ingen kode i oplevelserne.
+Besluttet 2026-10-30: vi kører ikke de tre mod hinanden, men én ad gangen. **Logo-studiet** kører, til vi vurderer, at
+den er slidt op; så kommer **Æske-match**, og til sidst **Pakket & sendt**. Hver af de to sidste får sit designløft,
+når det bliver dens tur, ikke før. Skiftet er én linje: `CURRENT` i `core/markets.js`. Besøgende, der havde fået
+en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?wps=swipe-match` / `?wps=pack-and-ship`.
+
+- **Hvornår er den slidt op:** bekræftede tilmeldinger pr. visning, uge for uge, sammenlignet med dens egne første
+  fire uger. Ligger den mindst 30 % under i to uger i træk, er det tid. Sæsonen (jul, januar) flytter alle tal, så
+  se det sammen med trafikken, ikke alene.
+- Et A/B-split er stadig muligt (`concepts` pr. marked, vægte; 0 slår en fra), hvis der en dag skal sammenlignes.
+
+### Hvis vi A/B-tester igen
+
+- Vægte pr. marked i `concepts` i `core/markets.js`. En vægt på 0 slår en oplevelse fra; ændringer kræver ingen kode
+  i oplevelserne.
 - **Primært mål:** bekræftede tilmeldinger pr. visning, pr. oplevelse, alle markeder samlet. Visningen udløses af
   den samme trigger for alle tre, så sammenligningen er fair.
 - **Hvor længe:** med ca. 0,4 % tilmelding pr. visning skal hver arm have omkring 50.000 visninger for at se en
