@@ -6750,6 +6750,13 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   cursor: default;
 }
 
+/* A day's label sits under its column, the last one included (the line charts pin their end labels to the edges). */
+.signup-bars .wp-chart-axis-x span,
+.signup-bars .wp-chart-axis-x span:first-child,
+.signup-bars .wp-chart-axis-x span:last-child {
+  transform: translateX(-50%);
+}
+
 .signup-bars-cols {
   position: absolute;
   inset: 0 52px 0 0;

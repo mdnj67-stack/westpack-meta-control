@@ -158,7 +158,11 @@ function applyChange(control, change, now = new Date().toISOString()) {
     if (typeof ch.on !== "boolean") throw new Error("Say on or off.");
     if (next.live.on === ch.on) throw new Error(`Live is already ${ch.on ? "on" : "off"}.`);
     next.live.on = ch.on;
-    if (ch.on && !targetReach(next).length) throw new Error("No live store carries the tag yet (check the stores first), so switching live on would reach nobody.");
+    if (ch.on && !targetReach(next).length) {
+      throw new Error(installedMarkets(next).length
+        ? "Every store that carries the tag is switched off below, so switching live on would reach nobody."
+        : "No live store carries the tag yet, so switching live on would reach nobody. Put the line under Install on the stores first.");
+    }
     text = `Live switched ${ch.on ? "on" : "off"}.`;
   } else if (ch.type === "reach") {
     if (!next.live.on) throw new Error("Live is off, so it runs nowhere.");

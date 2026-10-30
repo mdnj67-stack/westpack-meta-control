@@ -18,7 +18,10 @@ tragten registreres som `env=test` (ikke live), og at links bliver på staging. 
 - **Se den igen:** tilføj `?wps=reset` bag adressen. Så glemmer browseren, at du har lukket den eller tilmeldt dig,
   og du er en ny besøgende igen.
 - **En bestemt oplevelse:** `?wps=logo-studio`, `?wps=swipe-match` eller `?wps=pack-and-ship` åbner den med det samme.
-- **Tragten fra staging:** `GET /api/signup/track?action=report&env=test&from=<dato>`.
+- **Tragten fra staging:** i biblen, Signup Lab → Signups → "Staging & tests" (eller
+  `GET /api/signup/track?action=report&env=test&from=<dato>`).
+- **Hvad staging kører:** Signup Lab → Control. Staging har sin egen tænd/sluk og sin egen oplevelse, uafhængigt af
+  live. Linjen under kontakten viser, hvad butikkerne får serveret; en ændring er der inden for et halvt minut.
 - Gentagne tilmeldinger fra samme maskine kan blive taget af Klaviyos bot-filter; det er Klaviyo, ikke formen.
 
 ## 1. Tagget i Magento (kræver adgang til Magento-admin)
@@ -61,21 +64,24 @@ testlisten "TEST - Signup Lab (preview only)" i DK-kontoen. Uden parameteren ske
 
 ## 2. At tænde
 
-**Fra 2026-10-30 gøres det i biblen:** Signup → Signup Lab. Tryk "Check the stores now", og derefter "Switch live on".
-Siden viser først præcis hvilke The Insert-popups der slukkes (kun i markeder, hvis butik har tagget), og gør det hele
-i ét hug, når du bekræfter. "Switch live off" sætter præcis de samme popups op igen. Markeder slås til og fra i tabellen
-under. Butikkerne har ændringen inden for et minut. Trinene herunder er den manuelle vej, hvis siden ikke kan bruges.
+**Det gøres i biblen: Signup Lab → Control** (`#signup-lab`). Tryk "Switch live on". Siden ser først på de 18
+butikker igen, viser så præcis hvilke The Insert-popups der slukkes (kun i markeder, hvis butik har tagget), og gør
+det hele i ét hug, når du bekræfter: først tændes Signup Lab, så slukkes popupperne. "Switch live off" sætter præcis de
+samme popups op igen, før Signup Lab slukkes. Markeder slås til og fra i feltet "Markets on the live stores".
+Linjen under kontakten viser, hvornår butikkerne har ændringen (målt 15-34 sekunder).
 
-Kør det i den rækkefølge, uden pause imellem:
-
-1. Sæt `const LIVE = true;` i `signup/core/markets.js`, commit og push. Vent til
-   `node tools/signup/go-live.js status` siger `LIVE = true` (3–5 minutter).
-2. `node tools/signup/go-live.js unpublish --apply` – slukker The Insert-popupperne i alle 18 Klaviyo-konti, så ingen
-   får to popups. Kun formularer, der hedder "… - Popup - The Insert …", røres. De indlejrede formularer (forside,
-   nyhedsbrevsside) og "Always on sale"-flyoutet, der kun vises på udsalgs- og outletsider, bliver.
-3. `node tools/signup/store-check.js tmp/signup-store-check --installed` – åbner alle 18 butikker som en besøgende
-   med butikkens eget tag og tjekker, at oplevelsen kommer af sig selv, på det rigtige sprog med butikkens
-   samtykketekst, og aldrig i kurven.
+- **Kun hvor tagget er, og kun hvor siden har tændt.** Butikkerne får at vide præcis hvilke markeder der kører. Får en
+  butik tagget senere, mens live er tændt, sker der intet dér, før siden viser "Bring live in line" og du bekræfter –
+  ellers ville den butik vise både Signup Lab og The Insert.
+- **`LIVE` i `signup/core/markets.js` tænder ikke noget.** Butikkerne læser, hvad siden har sat; filen bruges kun, når
+  appen ikke kan svare, og den holder live slukket. Lad den stå på `false`.
+- **Bagefter:** `node tools/signup/store-check.js tmp/signup-store-check --installed` åbner alle 18 butikker som en
+  besøgende med butikkens eget tag og tjekker, at oplevelsen kommer af sig selv, på det rigtige sprog med butikkens
+  samtykketekst, og aldrig i kurven.
+- **Hvis appen er nede i længere tid efter lanceringen:** så falder butikkerne tilbage til filen, og Signup Lab
+  slukker – mens The Insert-popupperne stadig er slukket. Så er der ingen popup. Sæt dem op igen med
+  `node tools/signup/go-live.js republish --apply DK:SPPrjA DE:Uf83fC …` (id'erne står i tabellen herunder, og i
+  Control → Changes for hver popup siden har slukket). Når appen svarer igen, kører siden videre som sat.
 
 The Insert-popupperne, der slukkes (live 2026-10-29):
 
@@ -83,15 +89,14 @@ The Insert-popupperne, der slukkes (live 2026-10-29):
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | W2HqGi | Uf83fC | SPPrjA | Vdfmib | RkRWsd | SrgpCY | YmiXMm | RLPAUc | UDdGe8 | SqF9AC | TibdhM | Y745pu | WdpFvf | U742Dy | SV3VHk | S7kChL | TVzpg7 | WZ5YLi |
 
-**Rul tilbage:** `const LIVE = false;` og deploy, og `node tools/signup/go-live.js republish --apply` (genudgiver
-præcis de formularer, `unpublish` slukkede; de er gemt i `tmp/signup-go-live-unpublished.json`, og ellers kan de
-gives som `DK:SPPrjA` osv.). Ét marked slås fra med `enabled: false` på markedet i samme fil.
+**Rul tilbage:** "Switch live off" i Control (sætter de popups, siden slukkede, op igen). Ét marked slås fra ved at
+fjerne fluebenet på markedet i Control.
 
 ## 3. Første uge
 
-- **Hver dag:** `GET /api/signup/track?action=report&env=live&from=<startdato>` (tragten pr. oplevelse, enhed og
-  marked) og `GET /api/signup/track?action=confirmed&from=<startdato>` (indsendt, bekræftet på listen og taget af
-  Klaviyos bot-filter). Log ind i appen først.
+- **Hver dag:** Signup Lab → Signups → "Live stores": tilmeldt pr. dag, pr. marked og pr. oplevelse, og hvad Klaviyo
+  har på listerne og har taget med bot-filteret. Samme tal som data: `GET /api/signup/track?action=report&env=live`
+  og `?action=confirmed&env=live` med `&from=<startdato>`.
 - **Bot-andelen skal være tæt på nul.** Klaviyo undertrykte gentagne automatiske test-tilmeldinger som
   `BOT_PROTECTION`. Rigtige mennesker forventes at gå igennem, men det er det første tal at se på. Ellers kontaktes
   Klaviyo, før testen fortsætter.

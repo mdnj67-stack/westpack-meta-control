@@ -60,7 +60,7 @@ test("live cannot be switched on before a live store carries the tag", () => {
   assert.throws(() => control.applyChange(testOnly, { type: "live", on: true }), /No live store carries the tag/);
   // nor does a store that carries it but is switched off
   const off = control.applyChange(installed(c, ["DK"]), { type: "market", market: "DK", on: false }).control;
-  assert.throws(() => control.applyChange(off, { type: "live", on: true }), /No live store carries the tag/);
+  assert.throws(() => control.applyChange(off, { type: "live", on: true }), /Every store that carries the tag is switched off/);
   const on = control.applyChange(installed(c, ["DK"]), { type: "live", on: true });
   assert.equal(on.control.live.on, true);
   assert.deepEqual(on.control.live.reach, ["DK"]);

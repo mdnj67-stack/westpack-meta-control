@@ -292,42 +292,75 @@ Then a careful read on `CONTENT_AGENT_MODEL` (high, background job, ~60-90 s) ag
 Candidates for the next agents, not built: Asana "Review" creative -> paused ad in Placeholder;
 the Monday Meta status and ad-swap analysis (now local scripts mailed via Outlook) as in-app agents.
 
-## Signup - a menu group of its own (2026-10-30)
+## Signup Lab - a menu group of its own (2026-10-30)
 
-Asked for as "et separat ting ind i biblen omkring ... sign up forms, studio osv. særligt det der skal gøre igennem et
-script så vi har noget styring på det". A **fourth workspace** (`body[data-workspace="signup"]`), built like Agents:
-`src/signup-control.js`, `api/signup/control.js` (`?action=`), `server/signup/{control,store-check,klaviyo-forms}.js`,
-the `signup-product-panel` in `index.html`, the Signup section at the end of `design-system.css`.
-Tests: `tests/signup-control.test.js`. Views: Signup Lab (control), Results, Klaviyo forms, Preview.
+First asked for as "et separat ting ind i biblen omkring ... sign up forms, studio osv. særligt det der skal gøre
+igennem et script så vi har noget styring på det" (6085382), then separated further the same day: "Det der er vigtigt
+for mig er at jeg kan styre scriptet. At jeg kan se hvor mange subs der kommer ind. At jeg kan preview sign ups". So
+the rail group is **Signup Lab** with exactly three views - **Control**, **Signups**, **Preview** - and an address of
+its own: `#signup-lab`, `#signup-lab/signups`, `#signup-lab/preview` (read in `attachEvents` before `initializeApp`
+opens the workspace; leaving the workspace takes the hash off). **Klaviyo's own forms are not the Lab's**: they are
+Klaviyo email → **Signup forms** (`signup_forms` view, `src/klaviyo-signup-forms.js`, read-only), with the "Klaviyo's
+script on the store" column. A **fourth workspace** (`body[data-workspace="signup"]`): `src/signup-lab.js`,
+`api/signup/control.js` and `api/signup/track.js` (`?action=`), `server/signup/{control,store-check,klaviyo-forms,
+klaviyo-reconcile,funnel-store}.js`, the `signup-product-panel` in `index.html`, the Signup Lab section at the end of
+`design-system.css`. Tests: `tests/signup-control.test.js`.
 
 - **The script on the stores reads what to run from here.** `GET /api/signup/control?action=config` is public, CORS
   `*`, edge-cached 30 s (`s-maxage=30, stale-while-revalidate=300`), and returns only on/off, the experience and the
   markets. The runtime gives it 2.5 s; no answer, a non-200 or anything but `v: 1` means `signup/core/markets.js`
   decides (`LIVE`, `CURRENT`), which keeps live **off**. A failed Blob read answers 503 for the same reason. The
   document is Blob `signup/control.json`, read from Blob alone (`readSignupControl`), never through the full Redis.
+  **Measured 2026-10-30: a change reached what the stores are served in 15-34 s**, and the real script on a staging
+  URL followed it (`tmp/playwright-runner/signup-control-e2e.js`: the production script on an intercepted store page,
+  tracking and Klaviyo blocked). Control shows a "The stores are served ..." line under each switch, read the way a
+  store reads it, and watches it after a change until it matches (`config.at` = the document's `updatedAt`).
 - **Live and staging are set separately**, each with its own experience, so the next experience can be tested on
   staging while the current one runs live. Markets are switched per market for live.
-- **Live can only reach a store that carries the tag**, by the last store check (`installedMarkets`). Switching live
-  on with none refuses. Where the Signup Lab then runs, that market's live Insert popups are unpublished (no two
-  popups); where it stops, exactly the popups this page took down are published again (`insert.unpublished`).
-  Popups someone else unpublished are never touched. A market whose popups cannot be read does not go live. The
-  switch is written before the popups change: a minute with two popups loses nobody's signup, a minute with none would.
+- **`live.markets` is the wish, `live.reach` is where the stores run it.** The stores are told `reach` only
+  (`publicConfig`). Live can only reach a store that carries the tag (`installedMarkets`, last store check), and every
+  market in `reach` has had its Insert popup taken down. Without `reach`, a store that gained the tag while live was on
+  would start the Lab beside its Insert popup - two popups. A store check that finds the tags moved shows
+  `pendingReach` and "Bring live in line" (`{ type: "reach" }`). Only a change to live moves `reach`
+  (`touchesLive`): a staging change never touches live or the popups. A live change re-reads the live stores first
+  when the last check is over ten minutes old (`withFreshLiveCheck`).
+- **The Insert popups.** Where the Lab runs, that market's live Insert popups are unpublished; where it stops, exactly
+  the popups this page took down are published again (`insert.unpublished`). Popups someone else unpublished are never
+  touched. A market whose popups cannot be read does not go live. **Popups that come back go up before the switch,
+  popups that come down go down after it**: a minute with two popups loses nobody's signup, a minute with none would.
   Anything that reaches live visitors or Klaviyo is shown as a dry run (`dryRun: true`) and confirmed first.
+- **A change carries the `updatedAt` the page saw (`expect`)**; one made on top of someone else's newer change is
+  refused with 409 and the current state, never applied over it.
 - **The store check** (`store_check`) fetches every store's own page, live and staging, with a browser's headers (see
   the watchdog's Magento lesson), for the tag (a `data-test` tag does not count) and for Klaviyo's `company_id` inline,
   plus the ids Tag Manager (GTM-5QRXWTJ) loads on every store. That makes the 26 Oct break visible per market: DK "Own
   account", EU "Own account, via Tag Manager", the other 16 "EU account only". Staging needs `SIGNUP_STAGING_AUTH`
   (`user:password`) in Vercel; without it the staging column says "Not checked". Set for production on 2026-10-30 at
   the user's word; a new env var only reaches the functions after a redeploy (`vercel redeploy <prod url>`).
-- **Klaviyo forms** lists every form (live, optionally drafts) in the 18 accounts; on 2026-10-30, 106 live.
+- **Control also says how the script behaves** (`control.behaviour()`, read from `rules.js`: delays, phone card, never
+  on/for, the close cool-downs) and holds the one install line with a Copy button.
+- **Signups: live and test are never mixed.** Test signups land in the DK account too (TEST list `WUDjfX`), and the
+  first version counted them as live DK submissions (7 submitted, 0 confirmed). The "Signup Lab Subscribed" event now
+  names its list (`wp_signup_list`, `rules.buildCompletionEvent`); events without it are all test signups, because live
+  had never run before it existed. Klaviyo is counted **per person, not per event** - one test signup wrote two
+  events. Live reads each market's newsletter list, Staging & tests the TEST list; "On the list" is still subscribed
+  with the Lab as source. The view opens on Staging & tests while live is off. Days are Danish days, and "Today" starts
+  at midnight in Copenhagen (`since` is an instant, not a UTC date).
+- **The funnel folds files as it reads** (`funnel-store.js`): a finished day into one daily file, and today's shards
+  older than two minutes into a part file once there are 40 of them, so a busy live day is not thousands of Blob reads
+  per page load. Records carry their shard name as `id`, so two reports folding the same shards cannot count one twice.
+- **Preview** runs `signup/preview/frame.html` in a scaled device with native controls (experience, market, device,
+  opens as, dry run or real to the TEST list) and a log of the visitor's steps from the frame's `postMessage`. It passes
+  `track=` empty: a preview is never counted. The designers' own full-screen tool stays at `/signup/preview/`.
 - History of changes lives in the document (100 entries). There is no per-person identity (shared password).
 - Local checks: run a copy of `local-static-server.js` on another port if 4173 is someone else's, without
-  `BLOB_READ_WRITE_TOKEN` (local file `data/signup-control.json`), and `tmp/playwright-runner/signup-page-check.js`.
+  `BLOB_READ_WRITE_TOKEN` (local file `data/signup-control.json`), and `tmp/playwright-runner/signup-lab-check.js`
+  (all three views and Signup forms, desktop and phone, one page load each, staging changed and put back).
 
 ## Test suite status
 
 As of 2026-10-30, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —
-`node --test tests/` does not work) runs 852 tests: 845 pass and 7 fail, all seven in
+`node --test tests/` does not work) runs 873 tests: 866 pass and 7 fail, all seven in
 `tests/meta-expansion-reach.test.js`. Those seven failed identically before the Content Agent was
 removed and have not been investigated. The count drifts as tests are added — re-run the command
 rather than trusting the number if it looks stale.

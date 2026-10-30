@@ -447,7 +447,8 @@ function barChart(days, label) {
   const max = Math.max(...days.map((d) => d.subscribed), 0);
   const scale = niceScale(0, Math.max(max, 1), 3);
   const top = scale.max || 1;
-  const ticks = scale.ticks.filter((t) => t >= 0 && t <= top);
+  // people come whole: a step of 0.5 printed "1, 1, 0" down the axis
+  const ticks = scale.ticks.filter((t) => t >= 0 && t <= top && Number.isInteger(t));
   const n = days.length;
   const y = (v) => (100 - (v / top) * 100).toFixed(2);
   const labelEvery = Math.ceil(n / 6);

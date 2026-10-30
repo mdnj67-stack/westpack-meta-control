@@ -89,12 +89,16 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 Pr. visning (en oplevelse, der blev vist) gemmes én post: marked, sprog, oplevelse, enhed, trigger, udfald og
 trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > email_focus > submit > subscribed`).
 
-- **Tragt:** `GET /api/signup/track?action=report&env=live&from=2026-11-01` (log ind i appen først):
-  visninger, åbninger, interaktion, e-mailfokus, indsendt, tilmeldt, lukket, fejl – pr. oplevelse, enhed og marked.
-- **Hvad der faktisk kom ind i Klaviyo:** `GET /api/signup/track?action=confirmed&from=2026-11-01` sammenholder
-  pr. marked og oplevelse: *indsendt* (eventet "Signup Lab Subscribed"), *bekræftet* (på nyhedsbrevslisten med
-  Signup Lab som kilde) og *taget af bot-filteret*. Se "Klaviyos bot-beskyttelse" nedenfor – det er derfor, den
-  findes.
+- **I biblen: Signup Lab → Signups** (`#signup-lab/signups`). Live og Staging & tests hver for sig, aldrig
+  blandet; i dag, 7 eller 30 danske dage. Tilmeldt pr. dag, de seneste tilmeldinger (uden e-mailadresse), pr. marked
+  og pr. oplevelse, og ved siden af hvad Klaviyo faktisk har: *på listen* (stadig tilmeldt, med Signup Lab som kilde)
+  og *taget af bot-filteret*. Se "Klaviyos bot-beskyttelse" nedenfor – det er derfor, tallet findes.
+- **Tragt som data:** `GET /api/signup/track?action=report&env=live&since=<ISO-tid>` (eller `&from=2026-11-01`; log
+  ind i appen først): visninger, åbninger, interaktion, e-mailfokus, indsendt, tilmeldt, lukket, fejl – pr. oplevelse,
+  enhed, marked og dag, og de seneste tilmeldinger.
+- **Klaviyo som data:** `GET /api/signup/track?action=confirmed&env=live|test&since=<ISO-tid>`. Live læser hvert
+  markeds nyhedsbrevsliste, test læser TEST-listen. En person tælles én gang. Eventet "Signup Lab Subscribed" bærer
+  `wp_signup_list` (listen, tilmeldingen gik til), så en testtilmelding i DK-kontoen aldrig tælles som live.
 - **I Klaviyo:** profilen får `wp_signup_concept`, `wp_signup_market` m.fl. og eventet "Signup Lab Subscribed",
   så flows og segmenter kan skelne. Logo-studiet gemmer `wp_brand_name` (og `organization`), folie, låg og skrift;
   Æske-match gemmer `wp_style_profile`, `wp_style_scores` og `wp_liked_boxes`.
