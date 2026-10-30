@@ -2,27 +2,42 @@
 
 Alt er bygget, testet og deployet. Der mangler to ting, og ingen af dem kræver kode:
 
-1. **Tagget på butikkerne** – én linje i Google Tag Manager. Det kan sættes ind nu: indtil vi tænder, gør det
-   ingenting.
+1. **Tagget på butikkerne** – én linje i Magento. Det kan sættes ind nu: indtil vi tænder, gør det ingenting.
 2. **At tænde** – én linje her i repoet og et script, der slukker The Insert-popupperne i Klaviyo. Det gør vi
    samme dag, i de samme minutter.
 
-## 1. Tagget (kræver adgang til Tag Manager)
+## 1. Tagget i Magento (kræver adgang til Magento-admin)
 
-Alle 18 butikker bruger samme container, **GTM-5QRXWTJ** (læst på hver butiks forside 2026-10-29). Ét tag dækker
-dem alle.
+Linjen, der skal ind:
 
-- **Tagtype:** Custom HTML
-- **Indhold:**
+```html
+<script src="https://project-4fcxa.vercel.app/signup/westpack-signup.js" async></script>
+```
 
-  ```html
-  <script src="https://project-4fcxa.vercel.app/signup/westpack-signup.js" async></script>
-  ```
+1. **Content → Design → Configuration.**
+2. Åbn rækken **Global** (øverst) med **Edit**.
+3. Under **Other Settings → HTML Head → Scripts and Style Sheets**: sæt linjen ind **nederst**, under det, der
+   allerede står der. Slet ikke noget af det eksisterende.
+4. **Save Configuration.**
+5. **System → Cache Management → Flush Magento Cache.**
 
-- **Trigger:** All Pages (Page View), én gang pr. side.
-- Scriptet finder selv butikken i adressen (`/eur_eu_ger/…` → Tyskland), venter selv på svaret i cookie-banneret,
-  før det viser noget, sætter ingen cookies og holder sig selv væk fra kurv, checkout, konto, nyhedsbrevssiden,
-  udsalg og outlet. Det kører i sin egen shadow root, så det hverken kan ødelægge eller ødelægges af butikkens CSS.
+Butikker, hvis egen række har et andet indhold i feltet (fluebenet "Use Default Value" er fjernet), arver ikke fra
+Global og skal have linjen sat ind i deres egen række også. Tjekket herunder siger præcis hvilke.
+
+Scriptet finder selv butikken i adressen (`/eur_eu_ger/…` → Tyskland), venter selv på svaret i cookie-banneret, før
+det viser noget, sætter ingen cookies og holder sig selv væk fra kurv, checkout, konto, nyhedsbrevssiden, udsalg og
+outlet. Det kører i sin egen shadow root, så det hverken kan ødelægge eller ødelægges af butikkens CSS. Det er testet
+lagt øverst i `<head>` i de rigtige butikkers HTML, der hvor Magento sætter det (DK desktop og mobil, DE, UK,
+2026-10-30): tavst med kontakten slukket, preview åbner i den rigtige butik, tændt kommer det af sig selv, og aldrig i
+kurven. Butikkernes sikkerhedspolitik (CSP) er kun "report-only" og blokerer det ikke.
+
+**Tjek alle 18 butikker, når linjen er sat ind:** `node tools/signup/store-check.js tmp/signup-store-check --installed`
+lægger intet ind selv, men tester butikkens eget tag og fejler hver butik, der ikke har det. Viser en butik stadig
+ikke tagget efter cache-tømningen, kan Cloudflare foran butikken holde på en gammel side; så skal dens cache tømmes.
+
+**Alternativ:** Google Tag Manager-containeren **GTM-5QRXWTJ**, som alle 18 butikker også indlæser: ét Custom
+HTML-tag med samme linje, trigger All Pages. Brug kun én af de to veje (scriptet ignorerer i øvrigt en dobbelt
+indlæsning).
 
 **Tjek at tagget virker:** åbn en hvilken som helst butik med `?wps=preview` bag adressen, fx
 `https://www.westpack.com/dkk_dk_den/?wps=preview` (eller `?wps=logo-studio`, `?wps=swipe-match`,
@@ -38,8 +53,9 @@ Kør det i den rækkefølge, uden pause imellem:
 2. `node tools/signup/go-live.js unpublish --apply` – slukker The Insert-popupperne i alle 18 Klaviyo-konti, så ingen
    får to popups. Kun formularer, der hedder "… - Popup - The Insert …", røres. De indlejrede formularer (forside,
    nyhedsbrevsside) og "Always on sale"-flyoutet, der kun vises på udsalgs- og outletsider, bliver.
-3. `node tools/signup/store-check.js tmp/signup-store-check` – åbner alle 18 butikker som en besøgende og tjekker,
-   at oplevelsen kommer af sig selv, på det rigtige sprog med butikkens samtykketekst, og aldrig i kurven.
+3. `node tools/signup/store-check.js tmp/signup-store-check --installed` – åbner alle 18 butikker som en besøgende
+   med butikkens eget tag og tjekker, at oplevelsen kommer af sig selv, på det rigtige sprog med butikkens
+   samtykketekst, og aldrig i kurven.
 
 The Insert-popupperne, der slukkes (live 2026-10-29):
 
@@ -78,15 +94,18 @@ gives som `DK:SPPrjA` osv.). Ét marked slås fra med `enabled: false` på marke
 
 ---
 
-## For the Tag Manager administrator (English)
+## For the Magento administrator (English)
 
-Please add one tag to container **GTM-5QRXWTJ** (used by all 18 Westpack stores):
+Please add one line to **Content → Design → Configuration → Global → Edit → Other Settings → HTML Head → Scripts and
+Style Sheets**, at the end of what is already there, then **Save Configuration** and **flush the Magento cache**:
 
-- Tag type: **Custom HTML**, firing **once per page** on **All Pages**
-- HTML: `<script src="https://project-4fcxa.vercel.app/signup/westpack-signup.js" async></script>`
+```html
+<script src="https://project-4fcxa.vercel.app/signup/westpack-signup.js" async></script>
+```
 
-The script is inert until Westpack switches it on from its own side, so it is safe to publish now. It sets no
-cookies, waits for the visitor's answer in the cookie banner before showing anything, and runs inside its own
-shadow root. To check it after publishing, open any store with `?wps=preview` appended, e.g.
-`https://www.westpack.com/dkk_dk_den/?wps=preview` – a newsletter signup opens straight away (in test mode). Without
-the parameter nothing should happen. To remove it, pause or delete the tag.
+Store views that override this field (Use Default Value unticked) need the line in their own row as well. The
+script is inert until Westpack switches it on from its own side, so it is safe to publish now. It sets no cookies,
+waits for the visitor's answer in the cookie banner before showing anything, and runs inside its own shadow root.
+To check it, open any store with `?wps=preview` appended, e.g. `https://www.westpack.com/dkk_dk_den/?wps=preview` –
+a newsletter signup opens straight away (in test mode). Without the parameter nothing should happen. To remove it,
+delete the line and flush the cache.

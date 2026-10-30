@@ -1,6 +1,6 @@
 /**
- * Runs the Signup Lab on the real stores, the way the Tag Manager tag will: opens a westpack.com storefront, answers
- * the cookie banner, adds the one script line, and checks what a visitor gets. Nothing is submitted, signups could
+ * Runs the Signup Lab on the real stores, the way the store tag will (Magento's HTML head or Tag Manager): opens a
+ * westpack.com storefront, answers the cookie banner, adds the one script line, and checks what a visitor gets. Nothing is submitted, signups could
  * only ever reach the test list (data-test="1"), and tracking is off.
  *
  * Scenarios, per store:
@@ -12,7 +12,8 @@
  * Each run also notes whether Klaviyo's own popup showed, since that is what has to be unpublished at launch.
  *
  * Usage: node tools/signup/store-check.js <outDir> [--local] [--simulate-live] [--mobile] [--stores=DK,DE]
- *   --local  serves signup/ from this checkout instead of production, to check work before it is deployed
+ *   --local      serves signup/ from this checkout instead of production, to check work before it is deployed
+ *   --installed  adds nothing: checks the tag the store itself now carries, and fails a store that does not have it
  */
 const fs = require("fs");
 const path = require("path");
@@ -24,7 +25,7 @@ const PROD = "https://project-4fcxa.vercel.app";
 const TYPES = { ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".woff2": "font/woff2", ".json": "application/json" };
 const args = process.argv.slice(2);
 const outDir = args.find((a) => !a.startsWith("--")) || path.join(ROOT, "tmp", "signup-store-check");
-const local = args.includes("--local"), simulateLive = args.includes("--simulate-live"), mobile = args.includes("--mobile");
+const local = args.includes("--local"), installedOnly = args.includes("--installed"), simulateLive = args.includes("--simulate-live"), mobile = args.includes("--mobile");
 const only = ((args.find((a) => a.startsWith("--stores=")) || "").slice(9) || "").split(",").filter(Boolean);
 const stores = Object.entries(MARKETS).filter(([, m]) => !only.length || only.includes(m.market));
 
@@ -91,17 +92,20 @@ const state = (page) => page.evaluate(() => {
       await route(page, forceLive);
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
       await acceptCookies(page);
-      await addTag(page);
+      // whether the store's own page already carries the tag (after it is installed in Magento or Tag Manager)
+      const installed = await page.evaluate(() => [...document.querySelectorAll("script[src]")].some((x) => x.src.includes("/signup/westpack-signup.js") && !x.dataset.test));
+      if (!installedOnly) await addTag(page);
       await page.waitForTimeout(waitMs);
       const s = await state(page);
       await page.screenshot({ path: path.join(outDir, `${m.market}-${scenario}${mobile ? "-mobile" : ""}.jpg`), type: "jpeg", quality: 70 });
       await ctx.close();
-      return { ...s, errors };
+      return { ...s, installed, errors };
     };
     const base = `https://www.westpack.com/${code}/`;
     const off = await run("tag", base, false, switchOn ? (mobile ? 12000 : 17000) : 14000);
     const pv = await run("preview", `${base}?wps=logo-studio`, false, 6000);
     const r = { market: m.market,
+      installed: off.installed ? "yes" : "no",
       tag: switchOn ? (off.open || off.peek ? "shows" : "NOTHING") : !off.open && !off.peek ? "silent" : "SHOWED",
       preview: pv.open ? (pv.market === m.market ? "opens" : `WRONG MARKET ${pv.market}`) : "DID NOT OPEN",
       language: pv.title && pv.title === copy.title ? "ok" : `title "${pv.title.slice(0, 30)}"`,
@@ -121,7 +125,7 @@ const state = (page) => page.evaluate(() => {
   }
   await browser.close();
   fs.writeFileSync(path.join(outDir, "store-check.json"), JSON.stringify(rows, null, 2));
-  const bad = rows.filter((r) => r.tag !== (switchOn ? "shows" : "silent") || r.preview !== "opens" || r.language !== "ok" || r.consent !== "ok" || r.errors || (simulateLive && (r.live === "NOTHING" || r.cart !== "silent")));
+  const bad = rows.filter((r) => (installedOnly && r.installed !== "yes") || r.tag !== (switchOn ? "shows" : "silent") || r.preview !== "opens" || r.language !== "ok" || r.consent !== "ok" || r.errors || (simulateLive && (r.live === "NOTHING" || r.cart !== "silent")));
   console.log(`${rows.length} stores, ${bad.length} with a problem${bad.length ? ": " + bad.map((r) => r.market).join(", ") : ""}`);
   process.exit(bad.length ? 1 : 0);
 })().catch((e) => { console.error(e); process.exit(1); });

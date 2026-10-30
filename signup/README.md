@@ -197,8 +197,10 @@ trafik ikke tæt på nul, skal Klaviyo support kontaktes, før testen fortsætte
 
 ## Til produktion
 
-Se [`IMPLEMENTERING.md`](IMPLEMENTERING.md). Kort: ét Custom HTML-tag i Tag Manager GTM-5QRXWTJ (alle 18
-butikker), som kan sættes ind nu, fordi det intet gør, før `LIVE` står på `true`; at tænde er `LIVE = true`,
+Se [`IMPLEMENTERING.md`](IMPLEMENTERING.md). Kort: én script-linje i Magento (Content → Design → Configuration →
+Global → HTML Head → Scripts and Style Sheets, alle 18 butikker), som kan sættes ind nu, fordi den intet gør, før
+`LIVE` står på `true`; Tag Manager GTM-5QRXWTJ er alternativet. Tjek installationen med
+`node tools/signup/store-check.js <mappe> --installed`; at tænde er `LIVE = true`,
 deploy og `node tools/signup/go-live.js unpublish --apply` i de samme minutter. Rul tilbage med `LIVE = false` og
 `go-live.js republish --apply`.
 

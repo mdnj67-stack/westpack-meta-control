@@ -1272,16 +1272,21 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
 - Tests and the preview subscribe only to `WUDjfX` "TEST - Signup Lab (preview only)" in the DK account.
 - **Not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
   the master switch: off, the store tag does nothing except answer `?wps=preview` / `?wps=<concept>`, which opens
-  the experience at once in test mode (test list only) - so the tag can go into GTM before launch and be checked on
-  the real store. All 18 stores use one container, GTM-5QRXWTJ: one Custom HTML tag, All Pages. Launch is
+  the experience at once in test mode (test list only) - so the tag can go in before launch and be checked on the
+  real store. **The tag goes into Magento, not Tag Manager** (the user, 2026-10-30: "er træt af det er tag
+  manager"): one line in Content → Design → Configuration → Global → HTML Head → Scripts and Style Sheets, then
+  flush the cache. It was tested placed at the top of `<head>` in the real stores' HTML, before `<body>` exists
+  (the runtime waits for DOMContentLoaded); the stores' CSP is report-only. GTM-5QRXWTJ, which all 18 stores also
+  load, is the fallback - never both. Launch is
   `LIVE = true` + deploy and `node tools/signup/go-live.js unpublish --apply` in the same minutes (it touches only
   forms named "… - Popup - The Insert …" and records them for `republish --apply`); the embeds and the "Always on
-  sale" flyout (sale/outlet pages only, which the Signup Lab avoids) stay. Launch needs the user's go and someone
-  with GTM access.
-- `tools/signup/store-check.js` opens the 18 real storefronts, answers the cookie banner, adds the tag as GTM will
-  and checks: silent with the switch off (or showing with it on), preview opens in the store's language with its
-  consent sentence, never on the cart. `--local` serves this checkout, `--simulate-live` forces the switch on in
-  the test browser only. Use it before and after launch.
+  sale" flyout (sale/outlet pages only, which the Signup Lab avoids) stay. Launch needs the user's go and the line
+  in Magento.
+- `tools/signup/store-check.js` opens the 18 real storefronts, answers the cookie banner, adds the tag and checks:
+  silent with the switch off (or showing with it on), preview opens in the store's language with its consent
+  sentence, never on the cart. `--local` serves this checkout, `--simulate-live` forces the switch on in the test
+  browser only, `--installed` adds nothing and fails every store whose own page lacks the tag - the check to run
+  once it is in Magento, and at launch.
 - The 15 transcreated languages had an independent read (`tools/signup/proofread.js`, gpt-5.6 high, findings in
   `tmp/signup-proofread/`): 56 fixes applied after review, mostly the right local term for hot-foil stamping;
   suggestions that would replace a store's own newsletter wording were rejected. Still not a native read.
