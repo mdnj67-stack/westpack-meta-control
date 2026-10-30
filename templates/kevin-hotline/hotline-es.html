@@ -1,0 +1,737 @@
+<div class="kh" id="kvhotline">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;700&family=IBM+Plex+Mono:wght@500;700&display=swap');
+#kvhotline{--bg:#10261b;--panel:#17352a;--line:#2a4a3b;--text:#f6efdf;--soft:#c9d3c7;--muted:#8fa597;--lcd:#0b1c12;--ink:#a8e27c;--dim:#1d3a24;--bezel:#d8ccb2;--bezel2:#bfb193;--red:#e5392f;--gold:#e2bf6e;--key:#f6efdf;--keyshade:#c9bfa8;--keyink:#12261b;--go:#2f9e5b;max-width:980px;margin:0 auto 60px;font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55;color:var(--text);text-align:left}
+#kvhotline *,#kvhotline *::before,#kvhotline *::after{box-sizing:border-box}
+#kvhotline p,#kvhotline h2,#kvhotline h3,#kvhotline ol,#kvhotline ul,#kvhotline li,#kvhotline figure{margin:0;padding:0}
+#kvhotline p,#kvhotline li,#kvhotline span,#kvhotline strong,#kvhotline b,#kvhotline small{font-size:inherit;line-height:inherit;font-family:inherit;color:inherit;letter-spacing:normal}
+#kvhotline strong,#kvhotline b{font-weight:700}
+#kvhotline li{list-style:none}
+#kvhotline img{display:block;max-width:100%;height:auto;border:0}
+#kvhotline a{color:inherit}
+#kvhotline button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#kvhotline button:focus-visible,#kvhotline a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#kvhotline .kh-strings{display:none!important}
+#kvhotline h2,#kvhotline h3{font-family:'Archivo Black','Arial Black',Arial,sans-serif;font-weight:400;line-height:1.08;letter-spacing:-.5px;color:var(--text)}
+#kvhotline .kh-kick{font:700 12px/1.4 'IBM Plex Mono','Courier New',monospace;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold)}
+#kvhotline .kh-kick .kh-dot{color:var(--red)}
+
+/* The stage: the dark green of the hotline email */
+#kvhotline .kh-stage{position:relative;overflow:hidden;container-type:inline-size;background:var(--bg);border-radius:20px;padding:30px 26px 26px}
+#kvhotline .kh-stage h2{margin-top:10px;font-size:clamp(36px,7vw,56px)}
+#kvhotline .kh-lead{margin-top:14px;max-width:620px;color:var(--soft)}
+#kvhotline .kh-lead strong{color:var(--text)}
+#kvhotline .kh-hero{margin:24px -26px 0}
+#kvhotline .kh-hero img{width:100%}
+#kvhotline .kh-play{display:grid;gap:18px;margin-top:26px;grid-template-columns:minmax(0,1fr);grid-template-areas:"screen" "phone" "side"}
+@container (min-width:640px){
+  #kvhotline .kh-play{grid-template-columns:300px minmax(0,1fr);grid-template-areas:"phone screen" "side side";gap:22px;align-items:stretch}
+  #kvhotline .kh-screen{height:auto;min-height:100%}
+}
+
+/* The phone */
+#kvhotline .kh-phone{grid-area:phone;width:100%;max-width:340px;margin:0 auto;background:linear-gradient(170deg,var(--bezel),var(--bezel2));border-radius:26px;padding:14px 14px 16px;box-shadow:0 18px 40px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.35);outline:none}
+#kvhotline .kh-lcd{background:var(--lcd);border-radius:10px;padding:10px 12px 11px;box-shadow:inset 0 3px 8px rgba(0,0,0,.6);font:700 12px/1.3 'IBM Plex Mono','Courier New',monospace;color:var(--ink);letter-spacing:1px;text-transform:uppercase}
+#kvhotline .kh-lcd-top{display:flex;justify-content:space-between;gap:10px;min-height:16px}
+#kvhotline .kh-lcd-main{margin-top:6px;min-height:34px;font:700 26px/34px 'IBM Plex Mono','Courier New',monospace;letter-spacing:2px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#kvhotline .kh-lcd.is-blink .kh-lcd-main{animation:kh-blink .5s steps(1) 6}
+#kvhotline .kh-keys{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}
+#kvhotline .kh-key{position:relative;min-height:58px;border-radius:14px;background:var(--key);color:var(--keyink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:6px 4px 7px;border-bottom:4px solid var(--keyshade);transition:transform .06s,border-width .06s,background .2s;user-select:none;-webkit-user-select:none}
+#kvhotline .kh-key b{font:400 24px/1 'Archivo Black','Arial Black',Arial,sans-serif}
+#kvhotline .kh-key small{font:700 10px/1.15 'IBM Plex Mono','Courier New',monospace;letter-spacing:.4px;text-transform:uppercase;color:#4f5e48;text-align:center;overflow-wrap:anywhere}
+#kvhotline .kh-key.is-down,#kvhotline .kh-key:active{transform:translateY(3px);border-bottom-width:1px}
+#kvhotline .kh-key.is-found::after{content:"";position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--go)}
+#kvhotline .kh-key.is-glow{background:#fff6cf;box-shadow:0 0 0 3px var(--gold)}
+#kvhotline .kh-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:12px}
+#kvhotline .kh-call,#kvhotline .kh-hang{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:52px;border-radius:40px;font:400 15px/1.1 'Archivo Black','Arial Black',Arial,sans-serif;color:#fff;text-align:center;padding:8px 10px;overflow-wrap:anywhere;hyphens:auto}
+@container (max-width:420px){#kvhotline .kh-call,#kvhotline .kh-hang{font-size:13px;gap:5px;padding:8px 8px}#kvhotline .kh-call svg,#kvhotline .kh-hang svg{width:15px;height:15px;flex-basis:15px}}
+#kvhotline .kh-call{background:var(--go);box-shadow:0 4px 0 #1f6b3d}
+#kvhotline .kh-hang{background:var(--red);box-shadow:0 4px 0 #9c2119}
+#kvhotline .kh-call[disabled],#kvhotline .kh-hang[disabled]{opacity:.35;cursor:default;box-shadow:none}
+#kvhotline .kh-call.is-wiggle{animation:kh-wiggle .5s ease-in-out 2}
+#kvhotline .kh-call svg,#kvhotline .kh-hang svg{width:18px;height:18px;fill:#fff;flex:0 0 18px}
+#kvhotline .kh-hang svg{transform:rotate(135deg)}
+
+/* The screen: Kevin's recorded voice and what each key does */
+#kvhotline .kh-screen{grid-area:screen;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:18px;height:400px;overflow:hidden}
+#kvhotline .kh-rec{display:flex;align-items:center;gap:12px;padding:12px 16px 11px;border-bottom:1px solid var(--line)}
+#kvhotline .kh-rec-txt{min-width:0;flex:1 1 auto}
+#kvhotline .kh-rec-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
+#kvhotline .kh-rec img{width:42px;height:42px;border-radius:50%;flex:0 0 42px}
+#kvhotline .kh-rec-name{font-weight:700;font-size:14px;line-height:1.25}
+#kvhotline .kh-rec-state{font:700 11px/1.4 'IBM Plex Mono','Courier New',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+#kvhotline .kh-rec-state.is-live{color:var(--ink)}
+#kvhotline .kh-wave{display:inline-flex;align-items:center;gap:3px;height:18px;flex:0 0 auto}
+#kvhotline .kh-wave i{display:block;width:3px;height:6px;border-radius:2px;background:#41604f}
+#kvhotline .kh-screen.is-talk .kh-wave i{background:var(--gold);animation:kh-wave .55s ease-in-out infinite alternate}
+#kvhotline .kh-wave i:nth-child(2n){animation-delay:-.2s!important}
+#kvhotline .kh-wave i:nth-child(3n){animation-delay:-.35s!important}
+#kvhotline .kh-wave i:nth-child(5n){animation-delay:-.1s!important}
+#kvhotline .kh-view{position:relative;flex:1 1 auto;overflow-y:auto;padding:14px 16px 16px;-webkit-overflow-scrolling:touch}
+#kvhotline .kh-screen{position:relative}
+#kvhotline .kh-screen.is-more::after{content:"";position:absolute;left:1px;right:1px;bottom:1px;height:44px;border-radius:0 0 18px 18px;background:linear-gradient(rgba(23,53,42,0),var(--panel));pointer-events:none}
+#kvhotline .kh-line{margin-bottom:10px;color:var(--soft);animation:kh-in .3s ease-out}
+#kvhotline .kh-line.is-kevin::before{content:"\201C"}
+#kvhotline .kh-line.is-kevin::after{content:"\201D"}
+#kvhotline .kh-line.is-new{color:var(--text);font-weight:700}
+#kvhotline .kh-line.is-en{font:400 21px/1.25 'Archivo Black','Arial Black',Arial,sans-serif;color:var(--gold)}
+#kvhotline .kh-line.is-en::before,#kvhotline .kh-line.is-en::after{content:none}
+#kvhotline .kh-line.is-aside{font:500 13px/1.5 'IBM Plex Mono','Courier New',monospace;color:var(--muted)}
+#kvhotline .kh-line.is-aside::before,#kvhotline .kh-line.is-aside::after{content:none}
+#kvhotline .kh-line.is-sys{font:700 12px/1.5 'IBM Plex Mono','Courier New',monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink)}
+#kvhotline .kh-line.is-sys::before,#kvhotline .kh-line.is-sys::after{content:none}
+#kvhotline .kh-card{animation:kh-in .3s ease-out}
+#kvhotline .kh-card .kh-say{display:none;margin-bottom:10px;color:var(--text);font-weight:700}
+#kvhotline .kh-card .kh-say.is-on{display:block}
+#kvhotline .kh-card .kh-say::before{content:"\201C"}
+#kvhotline .kh-card .kh-say::after{content:"\201D"}
+#kvhotline .kh-card h3{font-size:22px;margin-bottom:8px;hyphens:manual;overflow-wrap:normal}
+#kvhotline .kh-card p{color:var(--soft);font-size:16px;line-height:1.5}
+#kvhotline .kh-card .kh-n{font:700 12px/1.5 'IBM Plex Mono','Courier New',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+#kvhotline .kh-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+#kvhotline .kh-gal img{border-radius:8px;aspect-ratio:1/1;object-fit:cover;width:100%}
+#kvhotline .kh-pic{float:right;width:38%;max-width:170px;margin:2px 0 8px 14px}
+#kvhotline .kh-pic img{border-radius:10px;width:100%}
+#kvhotline .kh-pic.is-jack{width:34%;max-width:150px}
+#kvhotline .kh-pic.is-block{float:none;width:70%;max-width:240px;margin:6px auto 0}
+#kvhotline .kh-card::after{content:"";display:block;clear:both}
+#kvhotline .kh-gal{margin:4px 0 10px}
+#kvhotline a.kh-btn{display:inline-block;margin-top:14px;padding:12px 20px;border-radius:40px;background:var(--red);color:#fff!important;text-decoration:none!important;font:400 15px/1.2 'Archivo Black','Arial Black',Arial,sans-serif}
+#kvhotline a.kh-btn::after{content:"\00a0\2192"}
+#kvhotline .kh-cust{margin-top:10px;font:700 26px/1.2 'IBM Plex Mono','Courier New',monospace;letter-spacing:3px;color:var(--ink);background:var(--lcd);border-radius:8px;padding:8px 12px;min-height:48px}
+#kvhotline .kh-skip{align-self:flex-start;margin:0 16px 14px;padding:8px 14px;border:1px solid var(--line);border-radius:30px;font:700 12px/1.2 'IBM Plex Mono','Courier New',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--soft)}
+#kvhotline .kh-skip[hidden]{display:none}
+
+/* Keys found, sound and the certificate */
+#kvhotline .kh-side{grid-area:side;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px}
+#kvhotline .kh-found{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#kvhotline .kh-found-label{font:700 12px/1.4 'IBM Plex Mono','Courier New',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+#kvhotline .kh-found-n{font-family:'Archivo Black','Arial Black',Arial,sans-serif;color:var(--text)}
+#kvhotline .kh-minis{display:grid;grid-template-columns:repeat(12,minmax(0,18px));gap:3px;width:100%;max-width:260px}
+#kvhotline .kh-minis i{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:1/1;border-radius:5px;background:var(--dim);font:700 10px/1 'IBM Plex Mono','Courier New',monospace;font-style:normal;color:var(--muted)}
+#kvhotline .kh-minis i.is-found{background:var(--ink);color:var(--keyink)}
+#kvhotline .kh-sound{padding:8px 14px;border-radius:30px;background:rgba(255,255,255,.08);font:700 12px/1.2 'IBM Plex Mono','Courier New',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--soft)}
+#kvhotline .kh-hint{flex-basis:100%;font-size:13px;color:var(--muted)}
+#kvhotline .kh-cert{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(6,16,11,.82)}
+#kvhotline .kh-cert.is-on{display:flex}
+#kvhotline .kh-cert-card{max-width:440px;width:100%;background:var(--text);color:var(--keyink);border:3px solid var(--gold);border-radius:18px;padding:28px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:kh-pop .45s cubic-bezier(.3,1.6,.5,1)}
+#kvhotline .kh-cert-card h3{color:var(--keyink);font-size:26px;margin:8px 0 10px}
+#kvhotline .kh-cert-card p{font-size:16px;color:#3b4a40}
+#kvhotline .kh-cert-card .kh-kick{color:#9a7b2c}
+#kvhotline .kh-cert-close{display:inline-block;margin:14px 0 0 12px;padding:10px 16px;font-weight:700;color:var(--keyink);text-decoration:underline}
+
+/* Without Kevin: the facts, on the page's own light background */
+#kvhotline .kh-real{margin-top:44px;color:#1e2a23}
+#kvhotline .kh-real .kh-kick{color:#9a3a2a}
+#kvhotline .kh-real h3{margin-top:8px;font-size:clamp(28px,5vw,38px);color:#10261b}
+#kvhotline .kh-real p{margin-top:12px;color:#33433a}
+#kvhotline .kh-steps{margin-top:14px;counter-reset:kh}
+#kvhotline .kh-steps li{position:relative;padding:0 0 12px 46px;counter-increment:kh;color:#33433a}
+#kvhotline .kh-steps li::before{content:counter(kh);position:absolute;left:0;top:-3px;width:32px;height:32px;border-radius:50%;background:#10261b;color:var(--key);font:400 17px/32px 'Archivo Black','Arial Black',Arial,sans-serif;text-align:center}
+#kvhotline .kh-real-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+#kvhotline .kh-real-gal img{border-radius:10px;width:100%}
+#kvhotline .kh-links{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+#kvhotline .kh-links a{display:inline-block;padding:6px 0;font-weight:700;color:#10261b;text-decoration:underline}
+#kvhotline .kh-links a.kh-btn{color:#fff;padding:12px 20px;text-decoration:none}
+#kvhotline .kh-sign{margin-top:40px;display:flex;align-items:center;gap:16px;padding-top:22px;border-top:1px solid #d4d7cf;color:#33433a}
+#kvhotline .kh-sign img{width:72px;height:72px;border-radius:50%;flex:0 0 72px}
+#kvhotline .kh-sign img{margin:0!important}
+#kvhotline .kh-sign p{flex:1 1 auto;margin:0;text-align:left}
+#kvhotline .kh-sign b{display:block;font:400 19px/1.15 'Archivo Black','Arial Black',Arial,sans-serif;color:#10261b}
+#kvhotline .kh-sign p>span{display:block;font-size:14px;line-height:1.45;color:#5d6b62}
+#kvhotline .kh-ps{margin-top:18px;color:#33433a}
+
+@keyframes kh-blink{50%{opacity:0}}
+@keyframes kh-wave{from{height:4px}to{height:17px}}
+@keyframes kh-in{from{opacity:0;transform:translateY(6px)}}
+@keyframes kh-wiggle{25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+@keyframes kh-pop{from{opacity:0;transform:scale(.85)}}
+@media (max-width:600px){
+  #kvhotline{font-size:16px}
+  #kvhotline .kh-stage{padding:24px 16px 18px;border-radius:16px}
+  #kvhotline .kh-hero{margin:20px -16px 0}
+  #kvhotline .kh-screen{height:400px}
+  #kvhotline .kh-key{min-height:54px}
+}
+@media (prefers-reduced-motion:reduce){#kvhotline *{animation:none!important;transition:none!important}}
+</style>
+
+<section class="kh-stage">
+  <p class="kh-kick"><span class="kh-dot">&#9679;</span>&nbsp;La línea directa de cajas navideñas de Kevin · Abierta las 24 horas</p>
+  <h2>Te vamos a transferir.</h2>
+  <p class="kh-lead">Pulsa el botón verde para llamar. Kevin ha grabado un mensaje. Después puedes navegar por el menú pulsando los números. <strong>Cada una de las 12 teclas hace algo. Descúbrelas todas.</strong></p>
+  <figure class="kh-hero"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/d3dea45c-b9dc-4628-87fe-1bfa418f51d6.gif" width="600" height="400" alt="Kevin, con gorro de elfo y auriculares, sostiene una caja navideña color salvia con un cable de teléfono en la oreja, rodeado de teléfonos sonando y pilas de cajas para joyas. A su lado, un reno con chaleco reflectante y auriculares con auricular de teléfono." loading="lazy"></figure>
+
+  <div class="kh-play">
+    <div class="kh-screen" aria-live="polite">
+      <div class="kh-rec">
+        <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/0f5b96db-6811-4050-95a0-0938d6fb1576.png" width="42" height="42" alt="Kevin ROIberg" loading="lazy">
+        <div class="kh-rec-txt"><p class="kh-rec-name">Mensaje automático de <span translate="no">Kevin ROIberg</span></p><p class="kh-rec-row"><span class="kh-rec-state">&#9679;&nbsp;<span class="kh-rec-text">Listo para llamar</span></span><span class="kh-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></p></div>
+      </div>
+      <div class="kh-view"><p class="kh-line">Pulsa el botón verde para llamar. Kevin te ha dejado un mensaje.</p></div>
+      <button type="button" class="kh-skip" hidden>Saltar mensaje</button>
+    </div>
+
+    <div class="kh-phone" tabindex="0" role="group" aria-label="Teléfono">
+      <div class="kh-lcd" aria-hidden="true">
+        <div class="kh-lcd-top"><span class="kh-lcd-state">Listo</span><span class="kh-lcd-time">00:00</span></div>
+        <div class="kh-lcd-main">&nbsp;</div>
+      </div>
+      <div class="kh-keys">
+        <button type="button" class="kh-key" data-key="1"><b>1</b><small>Pedir</small></button>
+        <button type="button" class="kh-key" data-key="2"><b>2</b><small>Motivos</small></button>
+        <button type="button" class="kh-key" data-key="3"><b>3</b><small>Logo</small></button>
+        <button type="button" class="kh-key" data-key="4"><b>4</b><small>Plazos</small></button>
+        <button type="button" class="kh-key" data-key="5"><b>5</b><small>Kevin</small></button>
+        <button type="button" class="kh-key" data-key="6"><b>6</b><small>Reno</small></button>
+        <button type="button" class="kh-key" data-key="7"><b>7</b><small>Excel</small></button>
+        <button type="button" class="kh-key" data-key="8"><b>8</b><small>Navidad</small></button>
+        <button type="button" class="kh-key" data-key="9"><b>9</b><small>Newsletter</small></button>
+        <button type="button" class="kh-key" data-key="*"><b>*</b><small>Cliente</small></button>
+        <button type="button" class="kh-key" data-key="0"><b>0</b><small>Persona</small></button>
+        <button type="button" class="kh-key" data-key="#"><b>#</b><small>Menú</small></button>
+      </div>
+      <div class="kh-actions">
+        <button type="button" class="kh-call"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg><span class="kh-call-text">Llamar</span></button>
+        <button type="button" class="kh-hang" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg><span>Colgar</span></button>
+      </div>
+    </div>
+
+    <div class="kh-side">
+      <div class="kh-found"><span class="kh-found-label">Teclas encontradas: <span class="kh-found-n">0</span> de 12</span><span class="kh-minis" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>*</i><i>0</i><i>#</i></span></div>
+      <button type="button" class="kh-sound" aria-pressed="true">Sonido: encendido</button>
+      <p class="kh-hint">En ordenador también puedes pulsar en el teclado: números, * y #. Enter llama, Esc cuelga.</p>
+    </div>
+  </div>
+
+  <div class="kh-cert" role="dialog" aria-modal="true" aria-label="Diploma">
+    <div class="kh-cert-card">
+      <p class="kh-kick">Las 12 teclas encontradas</p>
+      <h3><span translate="no">Certified Hotline Survivor™</span></h3>
+      <p>Has probado las 12 teclas. Solo Kevin lo había hecho antes. Él no recibió diploma.</p>
+      <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Ver cajas navideñas</a><button type="button" class="kh-cert-close">Cerrar</button>
+    </div>
+  </div>
+</section>
+
+<section class="kh-real">
+  <p class="kh-kick">Resumen rápido</p>
+  <h3>Sin Kevin.</h3>
+  <p>Una caja navideña es una de nuestras cajas para joyas normales con un motivo navideño en foil dorado ya preparado. Así la pides:</p>
+  <ol class="kh-steps">
+    <li>Elige la caja, el tamaño y el color que sueles usar.</li>
+    <li>Abre el módulo de logotipos en la página del producto y selecciona un motivo navideño en «Logos estándar».</li>
+    <li>Añadir al carrito. El logotipo es gratis en todas nuestras cajas para joyas.</li>
+  </ol>
+  <p>Si tenemos tu propio logotipo, puedes combinar: tu logotipo en la bolsa o en la caja de regalo por fuera y el motivo navideño en la caja para joyas por dentro. Las primeras fechas recomendadas para pedidos con impresión ya son el 10 de diciembre y varían de un país a otro.</p>
+  <div class="kh-real-gal">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/9c6d661b-7920-4e86-b532-435664596d87.jpeg" width="480" height="480" alt="Cuatro cajas para joyas con diferentes motivos navideños en dorado y bayas rojas" loading="lazy">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/45d8901f-1460-43ff-be93-232e8f780ad1.jpeg" width="480" height="480" alt="Caja para joyas verde salvia con Merry Christmas en dorado y una cinta de satén verde" loading="lazy">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/31d525c9-8344-44ae-88ea-657800b3e147.jpeg" width="480" height="480" alt="Cajas para joyas apiladas en marrón y azul con estampados navideños y una cinta dorada" loading="lazy">
+  </div>
+  <div class="kh-links">
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Ver las cajas para joyas</a>
+    <a class="kh-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-logoprint">Ver los motivos navideños</a>
+    <a class="kh-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Ver tus pedidos anteriores</a>
+    <a class="kh-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Ver los plazos para tu país</a>
+  </div>
+
+  <div class="kh-sign">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/0f5b96db-6811-4050-95a0-0938d6fb1576.png" width="72" height="72" alt="Kevin ROIberg con gorro de duende navideño y ojos muy abiertos" loading="lazy">
+    <p><b translate="no">Kevin ROIberg</b><span><span translate="no">E.L.F. · Executive Leader of Fulfillment</span><br>Jefe de la línea directa. Autoproclamado.</span></p>
+  </div>
+  <p class="kh-ps"><strong>PD:</strong> La línea directa se cierra cuando las cajas navideñas han sido pedidas. Eso lo ha decidido Kevin. También ha decidido que el reno haga el turno de noche. Al reno no se le ha preguntado.</p>
+</section>
+
+<div class="kh-strings" hidden aria-hidden="true">
+  <span data-k="lcdReady">Listo</span>
+  <span data-k="lcdRing">Llamando</span>
+  <span data-k="lcdConn">Conectado</span>
+  <span data-k="lcdMenu">Elige un número</span>
+  <span data-k="lcdQueue">En espera</span>
+  <span data-k="lcdBusy">Ocupado</span>
+  <span data-k="lcdEnd">Finalizado</span>
+  <span data-k="lcdCust">Cliente</span>
+  <span data-k="lcdExcel">Pestaña</span>
+  <span data-k="stReady">Listo para llamar</span>
+  <span data-k="stRing">Llamando…</span>
+  <span data-k="stPlay">Reproduciendo</span>
+  <span data-k="stMenu">Esperando número</span>
+  <span data-k="stQueue">Estás en espera</span>
+  <span data-k="stEnd">Llamada finalizada</span>
+  <span data-k="callAgain">Llamar otra vez</span>
+  <span data-k="call">Llamar</span>
+  <span data-k="soundOn">Sonido: activado</span>
+  <span data-k="soundOff">Sonido: desactivado</span>
+  <span data-k="nudgeIdle">Primero tienes que llamar. Es el botón verde.</span>
+  <span data-k="nudgeEnd">La llamada ha terminado. Pulsa el botón verde para volver a llamar.</span>
+  <span data-k="welcomeBack">Bienvenido de nuevo. Has llamado <span class="kh-n-calls">0</span> veces. Kevin las ha contado.</span>
+  <span data-k="voiceCredit">(La voz de Kevin es prestada. La suya propia se quedó ronca después de 47 grabaciones).</span>
+  <span data-k="queueBack">Has salido de la cola. Se fue por el camino equivocado mientras esperabas.</span>
+  <span data-k="queueStill">Sigues en espera. Kevin también.</span>
+  <span data-k="excelStop">Has interrumpido a Kevin en la pestaña <span class="kh-n-tab">0</span>Empieza de nuevo cuando cuelgas.</span>
+  <span data-k="excelTab">Pestaña <span class="kh-n-tab">0</span> de 72:</span>
+  <span data-k="excelDone">Esa era la pestaña 72. Empieza de nuevo.</span>
+  <span data-k="foundOne">Nueva tecla encontrada:</span>
+
+  <ul data-list="msg">
+    <li>¡Hola! ¡Soy Kevin! ¡La línea funciona! Este es un mensaje automático, pero lo he grabado muy personalmente. 47 veces. Esta fue la mejor.</li>
+    <li>Tu llamada es la primera que entra. No me cuento a mí mismo.</li>
+    <li>Prometo ser breve. Sé que tienes mucho que hacer. Yo también. No he dormido desde agosto.</li>
+    <li>Mira: Una caja de Navidad es solo una caja para joyas normal, pero con un motivo navideño en foil dorado. Eso es todo. He hecho 72 diapositivas sobre ello, pero eso es todo. Yo le llamo:</li>
+    <li data-kind="en"><span translate="no">Pre-installed Christmas™.</span></li>
+    <li data-kind="aside">(Nadie más la llama así.)</li>
+    <li>Los motivos están listos en el módulo de logos, así que no tienes que diseñar nada. Eliges la caja. Eliges el motivo. Y ya es Navidad.</li>
+    <li>Y la impresión del logo es gratis en todas las cajas para joyas. He preguntado en ventas 43 veces. La última vez solo dijeron sí, Kevin.</li>
+    <li>Escucha bien, porque nuestro menú ha cambiado.</li>
+    <li data-kind="aside">(No ha cambiado. Es la primera vez que se reproduce. Kevin siempre ha querido decirlo.)</li>
+    <li>Por favor, elige entre las siguientes opciones. Están en las teclas. Las escribí yo mismo.</li>
+  </ul>
+
+  <ul data-list="tabs">
+    <li><span translate="no">Q4 Giftification – Final_FINAL_v73</span></li>
+    <li>Cálculo maximizador de ventas navideñas, versión 7, por fin, por fin</li>
+    <li>Hoja de horas del reno</li>
+    <li>Mi pulso en reposo, hora por hora</li>
+    <li>Cajas que he contado dos veces</li>
+    <li>Sala de reuniones 2, reservada para el resto del año</li>
+    <li>Purpurina, consumo semanal</li>
+    <li>Gente que ha dicho sí, Kevin</li>
+    <li>Cosas que ha dicho la impresora</li>
+    <li>Pestaña 4, otra vez, por si acaso</li>
+  </ul>
+
+  <div data-card="1" class="kh-card">
+    <p class="kh-say">Tecla 1. Buena elección. Era la mía también.</p>
+    <p class="kh-say">Tecla 1 de nuevo. Sabes lo que quieres. Eso lo admiro.</p>
+    <h3>Pide tu caja habitual – con motivo navideño</h3>
+    <p>Encuéntrala entre tus pedidos anteriores, y elige un motivo navideño en el módulo de logos en vez de tu logo.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/?utm_source=blog&amp;utm_content=kh_key1">Ver tus pedidos anteriores</a>
+  </div>
+  <div data-card="2" class="kh-card">
+    <p class="kh-say">Aquí están. Las he plastificado. Para ti.</p>
+    <p class="kh-say">Ya las has visto. Te las enseño otra vez con gusto. No tengo nada más que hacer.</p>
+    <h3>Los motivos navideños</h3>
+    <div class="kh-gal">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/31c1b57c-2f81-4426-b459-1381f2f9c607.jpeg" width="480" height="480" alt="Caja para joyas verde salvia con una fila de árboles de Navidad y estrellas en foil dorado">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/ac5b2fc9-dfc3-4424-bf96-e53779c0f855.jpeg" width="480" height="480" alt="Merry Christmas y una guirnalda de bolas navideñas en foil dorado sobre una caja verde salvia">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/d7e2865e-1c77-43f6-a4c2-0c8767fb3b8c.jpeg" width="480" height="480" alt="Caja para joyas verde oscuro con Merry Christmas y acebo en foil dorado">
+    </div>
+    <p>Están listas en el módulo de logos bajo Logos estándar cuando pidas. No tienes que diseñar nada. Y la impresión del logo es gratis en todas nuestras cajas para joyas.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-logoprint?utm_source=blog&amp;utm_content=kh_key2">Ver todos los motivos navideños</a>
+  </div>
+  <div data-card="3" class="kh-card">
+    <p class="kh-say">Esta es mi tecla favorita. No se lo digas a las demás teclas.</p>
+    <h3>Tu logo fuera, la Navidad dentro</h3>
+    <figure class="kh-pic"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/31d525c9-8344-44ae-88ea-657800b3e147.jpeg" width="480" height="480" alt="Cajas para joyas apiladas en marrón y azul con estampado navideño y una banda dorada"></figure>
+    <p>Muestra tu logo en la caja de regalo o en la bolsa, y pon un motivo navideño en la Caja para joyas dentro. O al revés. Así tu cliente recibe tanto tu marca como la Navidad.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-logoprint?utm_source=blog&amp;utm_content=kh_key3">Cómo mezclar</a>
+  </div>
+  <div data-card="4" class="kh-card">
+    <p class="kh-say">Todavía no. Pero casi. Mi pulso en reposo es 180.</p>
+    <h3>¿Cuándo es demasiado tarde?</h3>
+    <p>Las primeras fechas límite recomendadas para pedidos con impresión empiezan el 10 de diciembre, y varían según el país. No se puede garantizar la entrega antes de Navidad.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026?utm_source=blog&amp;utm_content=kh_key4">Ver los plazos para tu país</a>
+  </div>
+  <div data-card="5" class="kh-card">
+    <p class="kh-say">¡Hola! Sigo siendo yo. No puedo transferirte a mí mismo. Así que te paso mi informe en su lugar.</p>
+    <p class="kh-say">¿Otra vez? Qué emoción. Eso no está en el mensaje grabado. Es que me emociona.</p>
+    <h3>El informe de Kevin sobre el cuidado de joyas</h3>
+    <figure class="kh-pic is-jack"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/28a159bd-fac2-4a96-ac93-0555a1fbbff5.gif" width="300" height="450" alt="Kevin salta de una Caja para joyas Merry Christmas verde oscuro abierta, montado sobre un resorte de acero, con auriculares y los brazos alzados"></figure>
+    <p>La escribió la última Navidad. Nadie en la oficina la ha leído entera.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/blog/The-Dirty-Jewellery-Report-2025?utm_source=blog&amp;utm_content=kh_key5">Leer el informe de Kevin</a>
+  </div>
+  <div data-card="6" class="kh-card">
+    <p class="kh-say">El reno tiene el turno de noche. Ahora es de día. De todas formas, no va a contestar.</p>
+    <p class="kh-say">El reno ha dejado el auricular a un lado.</p>
+    <p class="kh-say">El reno está en la nómina. Es legal. Lo hemos comprobado.</p>
+    <p class="kh-n">Línea ocupada</p>
+    <figure class="kh-pic is-block"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/a4fbe891-b840-4bcc-95ee-d9cbf56a4888.jpeg" width="480" height="480" alt="Un reno con chaleco reflectante amarillo, auriculares y un teléfono fijo beige, que no parece que vaya a contestar"></figure>
+  </div>
+  <div data-card="7" class="kh-card">
+    <p class="kh-say">Hoja 1. Es importante. Todas lo son.</p>
+    <h3>Kevin lee su hoja de Excel</h3>
+    <p class="kh-n kh-tab-line">&nbsp;</p>
+    <p class="kh-tab-name">&nbsp;</p>
+    <p>Las 72 hojas. Tarda 19 horas. Pulsa otra tecla para escapar.</p>
+  </div>
+  <div data-card="8" class="kh-card">
+    <p class="kh-say">Todo lo demás. He intentado contarlo todo. He llegado a las cintas de regalo.</p>
+    <h3>Todo lo demás para Navidad</h3>
+    <p>Cintas, papel de regalo, bolsas para joyas y adornos de paquete con motivos navideños.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/christmas.html?utm_source=blog&amp;utm_content=kh_key8">Ver surtido navideño</a>
+  </div>
+  <div data-card="9" class="kh-card">
+    <p class="kh-say">¿Quieres apuntarte a mi boletín? Es lo más bonito que me han dicho hoy.</p>
+    <h3>El boletín de Kevin</h3>
+    <p>Si vienes del correo, ya estás en la lista. Si no, puedes apuntarte abajo en la página. Escribimos nosotros. Kevin pone su granito de arena.</p>
+  </div>
+  <div data-card="*" class="kh-card">
+    <p class="kh-say">Por favor, introduce tu número de cliente seguido de almohadilla.</p>
+    <p class="kh-n">Utiliza el teclado. Pulsa # cuando termines.</p>
+    <p class="kh-cust" aria-live="polite">&nbsp;</p>
+    <p class="kh-cust-answer">&nbsp;</p>
+  </div>
+  <ul data-list="cust">
+    <li data-n="wrong">Gracias. No era correcto.</li>
+    <li data-n="wrong3">Gracias. No era correcto. No pasa nada. El mío también estaba mal.</li>
+    <li data-n="1953">1953. Ese año se fundó Westpack. Pero todavía no es un número de cliente.</li>
+    <li data-n="212">212. Son las veces que Kevin ha llamado hoy aquí. No es un número de cliente. Es un estilo de vida.</li>
+    <li data-n="empty">No tecleaste nada. Es la respuesta más precisa que hemos recibido hoy.</li>
+  </ul>
+  <div data-card="0" class="kh-card">
+    <p class="kh-say">¿Una persona? Te entiendo. Te paso con una persona.</p>
+    <h3>Habla con una persona</h3>
+    <p>Nuestro servicio al cliente está formado por personas reales. Lo hemos comprobado. Kevin no está incluido.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/contact?utm_source=blog&amp;utm_content=kh_key0">Contactar servicio al cliente</a>
+  </div>
+  <div data-card="#" class="kh-card">
+    <p class="kh-say">Por supuesto. Es un buen menú. Lo he escrito yo mismo.</p>
+    <h3>Menú de nuevo</h3>
+    <p>Has escuchado el menú <span class="kh-n-menu">1</span> veces hoy. Kevin lo ha escuchado 11.</p>
+    <p>Las teclas están en el teléfono. Pulsa una de ellas.</p>
+  </div>
+  <div data-card="queue" class="kh-card">
+    <p class="kh-say">Todos nuestros elfos están ocupados. Estás en la cola.</p>
+    <h3>Tu posición en la cola: <span class="kh-n-queue">47</span></h3>
+    <p>Va en la dirección equivocada. Kevin vuelve a colarse delante de ti.</p>
+    <p>No podemos permitirnos Last Christmas. Así que Kevin pone Jingle Bells y Noche de paz al mismo tiempo. Medio tono desfasadas.</p>
+  </div>
+  <div data-card="end" class="kh-card">
+    <p class="kh-say">Gracias por tu llamada. De verdad. Gracias por tu paciencia. Vuelve a llamar cuando quieras. Aquí estoy. Aquí siempre estoy.</p>
+    <h3>Bip. Bip. Bip.</h3>
+    <p>La línea cuelga. Kevin llama inmediatamente otra vez para comprobar que el número sigue funcionando. Es su llamada nro. <span class="kh-n-kevin">213</span> de hoy.</p>
+    <a class="kh-btn kh-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html?utm_source=blog&amp;utm_content=kh_end">Ver las cajas navideñas</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.getElementById("kvhotline");
+  if (!root || root.getAttribute("data-ready")) return;
+  root.setAttribute("data-ready", "1");
+  var qs = function (s, el) { return (el || root).querySelector(s); };
+  var qsa = function (s, el) { return Array.prototype.slice.call((el || root).querySelectorAll(s)); };
+
+  // The post lives in every store with the Danish links in it; point them at the store this page is in. Norway has
+  // no christmas.html, only Magento's catalog path for its Christmas category.
+  var store = (location.pathname.split("/")[1] || "");
+  var FIX = { nok_no_nor: { "christmas.html": "catalog/category/view/s/jul/id/809/" }, nor_no_den: { "christmas.html": "catalog/category/view/s/jul/id/809/" } };
+  if (/^[a-z]{3}_[a-z]{2}_[a-z]{3}$/.test(store) && store !== "dkk_dk_den") {
+    qsa("a.kh-store").forEach(function (a) {
+      var h = a.getAttribute("href").replace("/dkk_dk_den/", "/" + store + "/"), fx = FIX[store];
+      if (fx) Object.keys(fx).forEach(function (p) { h = h.replace("/" + p, "/" + fx[p]); });
+      a.setAttribute("href", h);
+    });
+  }
+
+  // Every visible word lives in the markup, so the post translates like any other; none lives in this script.
+  var S = {};
+  qsa(".kh-strings [data-k]").forEach(function (el) { S[el.getAttribute("data-k")] = el.innerHTML.trim(); });
+  var list = function (k) { return qsa('.kh-strings [data-list="' + k + '"] > li').map(function (el) { return { html: el.innerHTML.trim(), kind: el.getAttribute("data-kind") || "", n: el.getAttribute("data-n") || "" }; }); };
+  var MSG = list("msg"), TABS = list("tabs"), CUST = {};
+  list("cust").forEach(function (c) { CUST[c.n] = c.html; });
+  var plain = function (html) { var d = document.createElement("div"); d.innerHTML = html; return (d.textContent || "").replace(/\s+/g, " ").trim(); };
+  var fill = function (html, cls, value) { var d = document.createElement("div"); d.innerHTML = html; qsa("." + cls, d).forEach(function (el) { el.textContent = value; }); return d.innerHTML; };
+
+  var screen = qs(".kh-screen"), view = qs(".kh-view"), recText = qs(".kh-rec-text"), recState = qs(".kh-rec-state");
+  var lcd = qs(".kh-lcd"), lcdState = qs(".kh-lcd-state"), lcdTime = qs(".kh-lcd-time"), lcdMain = qs(".kh-lcd-main");
+  var callBtn = qs(".kh-call"), callText = qs(".kh-call-text"), hangBtn = qs(".kh-hang"), skipBtn = qs(".kh-skip"), phone = qs(".kh-phone");
+  var KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
+
+  // ---------- Progress, kept in the visitor's own browser ----------
+  var SAVE = "kvhotline-v1", saved = { found: [], calls: 0, cert: false };
+  try { var raw = localStorage.getItem(SAVE); if (raw) { var p = JSON.parse(raw); if (p && p.found) saved = { found: p.found, calls: p.calls || 0, cert: !!p.cert }; } } catch (e) { /* private window */ }
+  var store$ = function () { try { localStorage.setItem(SAVE, JSON.stringify(saved)); } catch (e) { /* not stored */ } };
+
+  // ---------- Sound: all synthesised (Web Audio), so there are no files and no rights to clear ----------
+  var actx = null, master = null, noiseBuf = null, soundOn = true;
+  function audio() {
+    if (!soundOn) return null;
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+      actx = new AC();
+      var comp = actx.createDynamicsCompressor(); master = actx.createGain(); master.gain.value = 0.9;
+      master.connect(comp); comp.connect(actx.destination);
+    }
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function envelope(gn, t, peak, att, dur, hold) {
+    gn.gain.setValueAtTime(0.0001, t);
+    gn.gain.exponentialRampToValueAtTime(peak, t + att);
+    if (hold) gn.gain.setValueAtTime(peak, t + att + hold);
+    gn.gain.exponentialRampToValueAtTime(0.0001, t + att + dur);
+  }
+  function tone(o) {
+    var a = audio(); if (!a) return;
+    var t = a.currentTime + (o.at || 0), dur = o.dur || 0.2, att = o.att || 0.01;
+    var osc = a.createOscillator(), gn = a.createGain(), node = osc, f = o.f || [[0, 440]];
+    osc.type = o.type || "sine";
+    osc.frequency.setValueAtTime(f[0][1], t);
+    for (var i = 1; i < f.length; i += 1) { if (f[i][2] === "lin") osc.frequency.linearRampToValueAtTime(f[i][1], t + f[i][0]); else osc.frequency.exponentialRampToValueAtTime(f[i][1], t + f[i][0]); }
+    if (o.vib) { var lfo = a.createOscillator(), lg = a.createGain(); lfo.frequency.value = o.vib[0]; lg.gain.value = o.vib[1]; lfo.connect(lg); lg.connect(osc.frequency); lfo.start(t); lfo.stop(t + att + dur + 0.05); }
+    if (o.filter) { var bq = a.createBiquadFilter(); bq.type = o.filter[0]; bq.frequency.value = o.filter[1]; bq.Q.value = o.filter[2] || 1; node.connect(bq); node = bq; }
+    envelope(gn, t, o.vol || 0.15, att, dur, o.hold);
+    node.connect(gn); gn.connect(o.out || master); osc.start(t); osc.stop(t + att + dur + 0.05);
+  }
+  function hiss(o) {
+    var a = audio(); if (!a) return;
+    if (!noiseBuf) { noiseBuf = a.createBuffer(1, a.sampleRate, a.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i += 1) d[i] = Math.random() * 2 - 1; }
+    var t = a.currentTime + (o.at || 0), src = a.createBufferSource(), gn = a.createGain(), bq = a.createBiquadFilter();
+    src.buffer = noiseBuf; src.loop = true; bq.type = o.type || "bandpass"; bq.frequency.value = o.freq || 1000; bq.Q.value = o.q || 1;
+    envelope(gn, t, o.vol || 0.1, 0.005, o.dur || 0.2);
+    src.connect(bq); bq.connect(gn); gn.connect(master); src.start(t); src.stop(t + (o.dur || 0.2) + 0.06);
+  }
+  // Real telephone keypad tones (DTMF): every key is the pair of frequencies a phone really sends.
+  var DTMF = { "1": [697, 1209], "2": [697, 1336], "3": [697, 1477], "4": [770, 1209], "5": [770, 1336], "6": [770, 1477], "7": [852, 1209], "8": [852, 1336], "9": [852, 1477], "*": [941, 1209], "0": [941, 1336], "#": [941, 1477] };
+  var SFX = {
+    dtmf: function (k) { (DTMF[k] || []).forEach(function (fr) { tone({ f: [[0, fr]], dur: 0.13, hold: 0.09, vol: 0.06 }); }); },
+    ring: function (at) { [0, 0.4].forEach(function (d) { tone({ at: at + d, f: [[0, 425]], dur: 0.38, hold: 0.32, vol: 0.09 }); tone({ at: at + d, f: [[0, 450]], dur: 0.38, hold: 0.32, vol: 0.05 }); }); },
+    click: function () { hiss({ type: "highpass", freq: 2500, dur: 0.04, vol: 0.12 }); tone({ f: [[0, 180], [0.06, 90]], dur: 0.07, vol: 0.2 }); },
+    beeps: function () { [0, 0.42, 0.84].forEach(function (d) { tone({ at: d, f: [[0, 425]], dur: 0.2, hold: 0.16, vol: 0.1 }); }); },
+    busy: function () { for (var i = 0; i < 6; i += 1) tone({ at: i * 0.5, f: [[0, 425]], dur: 0.24, hold: 0.2, vol: 0.08 }); },
+    boing: function () { tone({ f: [[0, 150], [0.5, 270]], dur: 0.55, vol: 0.24, vib: [16, 120] }); },
+    airhorn: function () { [[0, 0.16], [0.2, 0.09], [0.33, 0.6]].forEach(function (p) { [466, 470, 554, 559].forEach(function (fr) { tone({ at: p[0], type: "sawtooth", f: [[0, fr]], dur: p[1], hold: p[1] * 0.7, att: 0.015, vol: 0.05, filter: ["lowpass", 2600, 0.7] }); }); }); },
+    grunt: function () { tone({ type: "sawtooth", f: [[0, 110], [0.35, 70, "lin"]], dur: 0.45, att: 0.03, vol: 0.2, filter: ["lowpass", 500, 3] }); },
+    coin: function () { tone({ type: "square", f: [[0, 988]], dur: 0.08, hold: 0.06, vol: 0.06 }); tone({ at: 0.08, type: "square", f: [[0, 1319]], dur: 0.35, vol: 0.06 }); },
+    fanfare: function () { [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, i) { tone({ at: i * 0.11, type: "square", f: [[0, fr]], dur: i === 3 ? 0.6 : 0.1, hold: i === 3 ? 0.35 : 0.06, vol: 0.06 }); }); },
+    sad: function () { [293.66, 277.18, 261.63, 246.94].forEach(function (fr, i) { tone({ at: i * 0.38, type: "sawtooth", f: [[0, fr]], dur: i === 3 ? 0.9 : 0.33, att: 0.04, vol: 0.1, filter: ["lowpass", 1100, 2] }); }); },
+  };
+
+  // Hold music: two public-domain carols at once, the second a semitone sharp. Its own gain node, so hanging
+  // up stops it at once instead of letting the scheduled notes play out.
+  var music = null, musicTimer = null;
+  var midi = function (n) { return 440 * Math.pow(2, (n - 69) / 12); };
+  var JINGLE = [[64, 1], [64, 1], [64, 2], [64, 1], [64, 1], [64, 2], [64, 1], [67, 1], [60, 1.5], [62, 0.5], [64, 4], [65, 1], [65, 1], [65, 1.5], [65, 0.5], [65, 1], [64, 1], [64, 1], [64, 0.5], [64, 0.5], [64, 1], [62, 1], [62, 1], [64, 1], [62, 2], [67, 2]];
+  var SILENT = [[67, 3], [69, 1], [67, 2], [64, 6], [67, 3], [69, 1], [67, 2], [64, 6], [74, 4], [74, 2], [71, 6], [72, 4], [72, 2], [67, 6]];
+  function playMusic() {
+    var a = audio(); if (!a) return;
+    music = a.createGain(); music.gain.value = 1; music.connect(master);
+    (function loop() {
+      var t = 0; JINGLE.forEach(function (n) { tone({ at: t, type: "square", f: [[0, midi(n[0])]], dur: n[1] * 0.3 * 0.85, vol: 0.026, out: music }); t += n[1] * 0.3; });
+      var s = 0; SILENT.forEach(function (n) { tone({ at: s, type: "triangle", f: [[0, midi(n[0] + 1)]], dur: n[1] * 0.205 * 0.9, vol: 0.05, out: music }); s += n[1] * 0.205; });
+      musicTimer = setTimeout(loop, Math.max(t, s) * 1000);
+    })();
+  }
+  function stopMusic() { clearTimeout(musicTimer); musicTimer = null; if (music) { try { music.gain.value = 0; music.disconnect(); } catch (e) { /* gone */ } music = null; } }
+
+  // ---------- Kevin's voice: the browser's own speech, in the page's language, where the device has one ----------
+  var synth = window.speechSynthesis, voice = null, lang2 = (document.documentElement.lang || "da").slice(0, 2).toLowerCase(), credited = false;
+  function pickVoice() { try { var vs = synth.getVoices() || []; voice = vs.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf(lang2) === 0; })[0] || null; } catch (e) { voice = null; } }
+  if (synth) { pickVoice(); try { synth.addEventListener("voiceschanged", pickVoice); } catch (e) { synth.onvoiceschanged = pickVoice; } }
+  var canSpeak = function () { return soundOn && synth && voice; };
+  function stopSpeech() { try { if (synth) synth.cancel(); } catch (e) { /* none */ } }
+
+  // ---------- Sequencing: every chain carries the run it belongs to, so a key press cancels it cleanly ----------
+  var run = 0, timers = [];
+  function later(ms, fn) { var id = run; timers.push(setTimeout(function () { if (id === run) fn(); }, ms)); }
+  function cancelAll() { run += 1; timers.forEach(clearTimeout); timers = []; stopSpeech(); stopMusic(); talking(false); }
+  function talking(on) { screen.classList.toggle("is-talk", !!on); }
+  function speak(text, then) {
+    var id = run, done = false;
+    var finish = function () { if (done || id !== run) return; done = true; talking(false); if (then) later(260, then); };
+    var est = Math.max(1500, text.length * 58 + 800);
+    talking(true);
+    if (canSpeak() && text) {
+      try {
+        var u = new SpeechSynthesisUtterance(text); u.voice = voice; u.lang = voice.lang; u.rate = 1.22; u.pitch = 0.92;
+        u.onend = finish; u.onerror = finish; synth.speak(u);
+        later(est * 2.4 + 2500, finish);
+        if (!credited) { credited = true; addLine(S.voiceCredit, "aside"); }
+        return;
+      } catch (e) { /* fall through to reading time */ }
+    }
+    later(est, finish);
+  }
+
+  // ---------- The screen ----------
+  function setRec(text, live) { recText.innerHTML = text; recState.classList.toggle("is-live", !!live); }
+  function setLcd(state, main) { lcdState.innerHTML = state; if (main !== undefined) lcdMain.innerHTML = main || "&nbsp;"; }
+  function clearView() { view.innerHTML = ""; view.scrollTop = 0; more(); }
+  function more() { setTimeout(function () { screen.classList.toggle("is-more", view.scrollHeight - view.scrollTop - view.clientHeight > 12); }, 60); }
+  view.addEventListener("scroll", more);
+  function addLine(html, kind) {
+    if (view.querySelector(".kh-card")) clearView();
+    qsa(".kh-line.is-new", view).forEach(function (el) { el.classList.remove("is-new"); });
+    var p = document.createElement("p");
+    p.className = "kh-line " + (kind === "en" ? "is-en" : kind === "aside" ? "is-aside" : kind === "sys" ? "is-sys" : "is-kevin is-new");
+    p.innerHTML = html; view.appendChild(p);
+    while (view.children.length > 6) view.removeChild(view.firstChild);
+    view.scrollTop = view.scrollHeight; more();
+  }
+  var presses = {};
+  function showCard(name) {
+    var tpl = qs('.kh-strings [data-card="' + name + '"]'); if (!tpl) return null;
+    var card = tpl.cloneNode(true); card.removeAttribute("data-card");
+    var says = qsa(".kh-say", card), n = presses[name] = (presses[name] || 0) + 1;
+    var said = says.length ? says[(n - 1) % says.length] : null;
+    if (said) said.classList.add("is-on");
+    clearView(); view.appendChild(card); more();
+    qsa("img", card).forEach(function (im) { if (!im.complete) im.addEventListener("load", more); });
+    return { card: card, say: said ? plain(said.innerHTML) : "" };
+  }
+
+  // ---------- Call timer ----------
+  var started = 0, clock = null;
+  var mmss = function (s) { var m = Math.floor(s / 60), r = s % 60; return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r; };
+  function startClock() { started = Date.now(); clearInterval(clock); clock = setInterval(function () { lcdTime.textContent = mmss(Math.floor((Date.now() - started) / 1000)); }, 500); }
+  function stopClock() { clearInterval(clock); clock = null; }
+
+  // ---------- Keys found ----------
+  var minis = qsa(".kh-minis i"), foundN = qs(".kh-found-n"), cert = qs(".kh-cert");
+  function paintFound() {
+    KEYS.forEach(function (k, i) { var on = saved.found.indexOf(k) >= 0; minis[i].classList.toggle("is-found", on); qs('.kh-key[data-key="' + (k === "#" ? "\\#" : k === "*" ? "\\*" : k) + '"]').classList.toggle("is-found", on); });
+    foundN.textContent = saved.found.length;
+  }
+  function found(k) {
+    if (saved.found.indexOf(k) >= 0) return;
+    saved.found.push(k); store$(); paintFound(); SFX.coin();
+    if (saved.found.length === KEYS.length && !saved.cert) { saved.cert = true; store$(); setTimeout(function () { cert.classList.add("is-on"); SFX.fanfare(); }, 2600); }
+  }
+  qs(".kh-cert-close").addEventListener("click", function () { cert.classList.remove("is-on"); });
+
+  // ---------- The call ----------
+  var state = "idle", queueN = 47, menuHeard = 0, custBuf = "", custTries = 0, tabN = 0, custTimer = null;
+  var QUEUE = [47, 48, 49, 51, 55, 63, 88, 147, 212, 404, 512, 998, 999];
+  function setButtons() {
+    var live = state !== "idle" && state !== "ended";
+    callBtn.disabled = live; hangBtn.disabled = !live;
+    callText.innerHTML = state === "ended" ? S.callAgain : S.call;
+    skipBtn.hidden = state !== "msg";
+  }
+  function call() {
+    if (state !== "idle" && state !== "ended") return;
+    cancelAll(); state = "ring"; setButtons();
+    saved.calls += 1; store$();
+    clearView(); addLine(S.stRing, "sys"); setRec(S.stRing, false); setLcd(S.lcdRing, "..."); lcdTime.textContent = "00:00";
+    SFX.ring(0.05); SFX.ring(1.65);
+    later(3300, connect);
+  }
+  function connect() {
+    state = "msg"; setButtons(); SFX.click(); startClock();
+    setLcd(S.lcdConn, "KEVIN"); setRec(S.stPlay, true); clearView();
+    if (saved.calls > 1) addLine(fill(S.welcomeBack, "kh-n-calls", saved.calls), "aside");
+    later(500, function () { message(0); });
+  }
+  function message(i) {
+    if (i >= MSG.length) { menu(); return; }
+    var m = MSG[i];
+    addLine(m.html, m.kind);
+    if (m.kind === "aside") { later(Math.max(1600, plain(m.html).length * 45), function () { message(i + 1); }); return; }
+    speak(plain(m.html), function () { message(i + 1); });
+  }
+  function menu() {
+    state = "menu"; setButtons(); setRec(S.stMenu, false); setLcd(S.lcdMenu, "1-9 * 0 #");
+    // The keys light up one by one, the way a menu would read them out.
+    KEYS.forEach(function (k, i) { later(i * 110, function () { var b = keyBtn(k); b.classList.add("is-glow"); setTimeout(function () { b.classList.remove("is-glow"); }, 420); }); });
+    armQueue();
+  }
+  function armQueue() { later(25000, queue); }
+  function queue() {
+    state = "queue"; setButtons(); setRec(S.stQueue, false);
+    var c = showCard("queue"); queueN = 47;
+    setLcd(S.lcdQueue, String(queueN)); speak(c.say);
+    later(2600, playMusic);
+    var step = 0;
+    (function tick() { later(1700, function () { step = Math.min(step + 1, QUEUE.length - 1); queueN = QUEUE[step]; setLcd(S.lcdQueue, String(queueN)); var n = c.card.querySelector(".kh-n-queue"); if (n) n.textContent = queueN; if (step === QUEUE.length - 1) { lcd.classList.remove("is-blink"); void lcd.offsetWidth; lcd.classList.add("is-blink"); } else tick(); }); })();
+    later(42000, function () { addLine(S.queueStill, "aside"); });
+  }
+  function hangUp() {
+    if (state === "idle" || state === "ended") return;
+    cancelAll(); stopClock(); state = "ended"; setButtons(); SFX.click(); SFX.beeps();
+    setRec(S.stEnd, false); setLcd(S.lcdEnd, lcdTime.textContent);
+    var c = showCard("end"), k = c.card.querySelector(".kh-n-kevin"); if (k) k.textContent = 212 + saved.calls;
+    later(1300, function () { speak(c.say); });
+  }
+
+  // ---------- The keys ----------
+  function keyBtn(k) { return qs('.kh-key[data-key="' + (k === "#" ? "\\#" : k === "*" ? "\\*" : k) + '"]'); }
+  function nudge(text) {
+    var card = view.querySelector(".kh-card");
+    if (card) { var p = document.createElement("p"); p.className = "kh-line is-sys"; p.innerHTML = text; card.appendChild(p); view.scrollTop = view.scrollHeight; more(); } else addLine(text, "sys"); callBtn.classList.remove("is-wiggle"); void callBtn.offsetWidth; callBtn.classList.add("is-wiggle"); }
+  function press(k) {
+    if (KEYS.indexOf(k) < 0) return;
+    SFX.dtmf(k); try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { /* no vibration */ }
+    var b = keyBtn(k); b.classList.add("is-down"); setTimeout(function () { b.classList.remove("is-down"); }, 120);
+    if (state === "idle") { nudge(S.nudgeIdle); return; }
+    if (state === "ended") { nudge(S.nudgeEnd); return; }
+    if (state === "ring") return;
+    if (state === "cust") { custKey(k); return; }
+    var fromQueue = state === "queue", fromExcel = state === "excel", lastTab = tabN;
+    cancelAll(); state = "menu"; setButtons(); setRec(S.stMenu, false); setLcd(S.lcdMenu, k);
+    found(k);
+    var lead = fromQueue ? S.queueBack : fromExcel ? fill(S.excelStop, "kh-n-tab", lastTab) : "";
+    handle(k, lead);
+  }
+  function respond(name, lead, after) {
+    var c = showCard(name);
+    if (lead) { var p = document.createElement("p"); p.className = "kh-line is-aside"; p.innerHTML = lead; c.card.insertBefore(p, c.card.firstChild); }
+    speak(c.say, function () { if (after) after(c); else armQueue(); });
+    return c;
+  }
+  function handle(k, lead) {
+    if (k === "5") { respond("5", lead); SFX.boing(); setTimeout(SFX.airhorn, 450); return; }
+    if (k === "6") { state = "menu"; setLcd(S.lcdBusy, "6"); SFX.busy(); later(600, SFX.grunt); respond("6", lead); return; }
+    if (k === "7") { excel(lead); return; }
+    if (k === "*") { cust(lead); return; }
+    if (k === "#") { menuHeard += 1; var c = respond("#", lead); var n = c.card.querySelector(".kh-n-menu"); if (n) n.textContent = menuHeard; return; }
+    respond(k, lead);
+  }
+  function excel(lead) {
+    state = "excel"; setButtons(); tabN = 0;
+    var c = respond("7", lead, function () { next(); });
+    var line = c.card.querySelector(".kh-tab-line"), name = c.card.querySelector(".kh-tab-name");
+    function next() {
+      if (tabN >= 72) { name.innerHTML = S.excelDone; speak(plain(S.excelDone)); return; }
+      tabN += 1; var t = TABS[(tabN - 1) % TABS.length];
+      line.innerHTML = fill(S.excelTab, "kh-n-tab", tabN); name.innerHTML = t.html; setLcd(S.lcdExcel, tabN + "/72");
+      speak(plain(line.innerHTML) + " " + plain(t.html), next);
+    }
+  }
+  function cust(lead) {
+    state = "cust"; setButtons(); custBuf = ""; setLcd(S.lcdCust, "_");
+    respond("*", lead, function () { /* no queue while typing */ });
+  }
+  function custKey(k) {
+    var box = view.querySelector(".kh-cust"), ans = view.querySelector(".kh-cust-answer");
+    // Left alone for 20 seconds, the customer-number prompt gives up and returns to the menu.
+    clearTimeout(custTimer); custTimer = setTimeout(function () { if (state !== "cust") return; state = "menu"; setButtons(); setLcd(S.lcdMenu, "1-9 * 0 #"); armQueue(); }, 20000);
+    if (/[0-9]/.test(k)) { if (custBuf.length < 12) custBuf += k; box.textContent = custBuf; setLcd(S.lcdCust, custBuf + "_"); return; }
+    if (k === "*") { custBuf = ""; box.innerHTML = "&nbsp;"; setLcd(S.lcdCust, "_"); return; }
+    // # submits. Every customer number is wrong; a few are wrong in a special way.
+    custTries += 1;
+    var out = !custBuf ? CUST.empty : CUST[custBuf] ? CUST[custBuf] : custTries % 3 === 0 ? CUST.wrong3 : CUST.wrong;
+    ans.innerHTML = out; ans.classList.add("kh-say", "is-on"); setLcd(S.lcdCust, custBuf ? custBuf : "_");
+    cancelAll(); state = "cust"; setButtons();
+    if (custBuf === "1953" || custBuf === "212") SFX.fanfare(); else SFX.sad();
+    custBuf = "";
+    speak(plain(out), function () { box.innerHTML = "&nbsp;"; setLcd(S.lcdCust, "_"); });
+  }
+
+  // ---------- Wiring ----------
+  qsa(".kh-key").forEach(function (b) { b.addEventListener("click", function () { press(b.getAttribute("data-key")); }); });
+  callBtn.addEventListener("click", call);
+  hangBtn.addEventListener("click", hangUp);
+  skipBtn.addEventListener("click", function () { cancelAll(); clearView(); menu(); addLine(plain(MSG[MSG.length - 1].html), "kevin"); });
+  var soundBtn = qs(".kh-sound");
+  soundBtn.addEventListener("click", function () {
+    soundOn = !soundOn; soundBtn.innerHTML = soundOn ? S.soundOn : S.soundOff; soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+    if (!soundOn) { stopSpeech(); stopMusic(); } else if (state === "queue") playMusic();
+  });
+  var inView = false;
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }, { threshold: 0.25 }).observe(qs(".kh-play")); else inView = true;
+  document.addEventListener("keydown", function (e) {
+    if (!inView || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    if (KEYS.indexOf(e.key) >= 0) { e.preventDefault(); press(e.key); }
+    else if (e.key === "Enter" && (state === "idle" || state === "ended") && (t === document.body || root.contains(t))) { e.preventDefault(); call(); }
+    else if (e.key === "Escape") hangUp();
+  });
+  window.addEventListener("pagehide", function () { cancelAll(); });
+
+  paintFound(); setButtons(); setLcd(S.lcdReady, "&nbsp;"); setRec(S.stReady, false);
+})();
+</script>
+</div>
