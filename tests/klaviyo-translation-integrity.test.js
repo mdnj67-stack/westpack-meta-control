@@ -185,3 +185,17 @@ test("one language failing no longer throws away the languages already translate
   assert.match(rollout, /retry only/);
   assert.doesNotMatch(rollout, /throw new Error\(`Generated \$\{brokenVariant\.label\}/);
 });
+
+test("layout entities are not sent for translation, but copy that starts with one is", () => {
+  // A W46 email had 44 of its 176 fragments as bare &nbsp; spacers and &rarr; arrows. The letters in an
+  // entity's name passed the "has letters" check, the model sometimes answered them blank, and Polish failed.
+  const source = '<td>&nbsp;</td><a>&rarr;</a><p>&#9679;&nbsp;</p><p>&nbsp;Se pris&nbsp;&rarr;</p><p>Écrin</p>';
+  const { tokens, segments } = extractHtmlSegments(source);
+  assert.deepEqual(segments, ["&nbsp;Se pris&nbsp;&rarr;", "Écrin"]);
+  assert.equal(rebuildHtml(tokens, ["&nbsp;Zobacz cenę&nbsp;&rarr;", "Etui"]), '<td>&nbsp;</td><a>&rarr;</a><p>&#9679;&nbsp;</p><p>&nbsp;Zobacz cenę&nbsp;&rarr;</p><p>Etui</p>');
+});
+
+test("the missing-fragment error quotes the fragment as written", async () => {
+  const requestBatch = async ({ ids }) => ({ parsed: { fragments: ids.map((index) => ({ id: index + 1, text: index === 0 ? "" : "T" })) }, model: "m" });
+  await assert.rejects(requestFragmentsById({ segments: ["Spørgsmål  om  æsker", "b"], requestBatch }), /returned blank: "Spørgsmål om æsker"/);
+});

@@ -13,7 +13,11 @@ function isProtectedTextSegment(value = "") {
   const text = String(value || "");
   const trimmed = text.trim();
   if (!trimmed) return true;
-  if (!/[A-Za-zÀ-ÿ]/.test(trimmed)) return true;
+  // Entities are read as what they render: "&nbsp;" and "&rarr;" are layout, not copy, although their
+  // names are letters. Sent to the model, an email's spacer cells came back blank often enough to fail
+  // whole languages ("16 of 176 fragments came back missing", Polish, 2026-10-30).
+  const rendered = trimmed.replace(/&(#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/gi, "");
+  if (!/\p{L}/u.test(rendered)) return true;
   if (/({{|}}|{%-?|-%}|{%|%})/.test(trimmed)) return true;
   if (/(https?:\/\/|mailto:|tel:|%20)/i.test(trimmed)) return true;
   return false;
@@ -203,7 +207,7 @@ async function requestFragmentsById({
   if (pending.length) {
     const first = pending[0];
     const how = returnedBlank.has(first) ? "returned blank" : "left out";
-    const excerpt = String(segments[first] || "").trim().replace(/s+/g, " ").slice(0, 60);
+    const excerpt = String(segments[first] || "").trim().replace(/\s+/g, " ").slice(0, 60);
     throw new Error(
       `${pending.length} of ${segments.length} HTML text fragments came back missing after ${maxAttempts} attempts (first missing: #${first + 1}, ${how}: "${excerpt}"). Nothing was generated for this language - try again.`
     );
