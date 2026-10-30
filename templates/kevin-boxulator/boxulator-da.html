@@ -1,768 +1,179 @@
 <div class="bx" id="boxulator">
-<style>
-#boxulator{--bordeaux:#5d272a;--red:#d31b21;--cream:#f8f7f2;--ink:#222222;--muted:#727272;--soft:#f1dede;--gold:#e8cf9a;max-width:980px;margin:0 auto 60px;font-family:Georgia,Times,'Times New Roman',serif;font-size:17px;line-height:1.5;color:var(--ink);text-align:left}
-#boxulator *,#boxulator *::before,#boxulator *::after{box-sizing:border-box}
-#boxulator p,#boxulator h2,#boxulator h3,#boxulator ol,#boxulator ul,#boxulator li,#boxulator figure{margin:0;padding:0}
-#boxulator p,#boxulator li,#boxulator span,#boxulator strong,#boxulator b,#boxulator label,#boxulator small{font-size:inherit;line-height:inherit;font-family:inherit;color:inherit;letter-spacing:normal}
-#boxulator strong,#boxulator b{font-weight:700}
-#boxulator li{list-style:none}
-#boxulator img{display:block;max-width:100%;height:auto;border:0}
-#boxulator button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent}
-#boxulator .bx-strings{display:none!important}
-#boxulator h2,#boxulator h3{margin:0;padding:0;font-family:Georgia,Times,'Times New Roman',serif;font-weight:700;line-height:1.15;color:var(--bordeaux)}
-#boxulator .bx-kick{font:600 12px/1.4 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase;color:var(--red)}
-#boxulator .bx-game{position:relative;overflow:hidden;container-type:inline-size;border:3px solid var(--red);border-radius:20px;padding:30px 26px 26px;color:#fff;background:radial-gradient(120% 80% at 50% 0%,#73333a 0%,#5d272a 55%,#4a1e21 100%)}
-#boxulator .bx-head{text-align:center}
-#boxulator .bx-game .bx-kick{color:var(--soft)}
-#boxulator .bx-head h2{margin-top:6px;font-size:clamp(34px,7vw,56px);color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:8px}
-#boxulator .bx-sub{margin-top:12px;font-style:italic;color:var(--soft)}
-#boxulator .bx-sound{position:absolute;top:16px;right:16px;z-index:8;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:19px;line-height:1}
-#boxulator .bx-play{display:grid;gap:22px;margin-top:10px}
-@container (min-width:640px){#boxulator .bx-play{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:end}#boxulator .bx-hud .bx-stats{grid-template-columns:1fr}#boxulator .bx-calcwrap{margin:0}}
-#boxulator .bx-calcwrap{position:relative;width:100%;max-width:400px;margin:0 auto;padding-top:64px}
-#boxulator .bx-peek{position:absolute;top:0;right:24px;z-index:0;width:96px;height:96px;transform:translateY(50px) rotate(10deg);transition:transform .45s cubic-bezier(.3,1.7,.5,1);pointer-events:none}
-#boxulator .bx-peek img{width:96px;height:96px;border:3px solid var(--red);border-radius:50%}
-#boxulator .bx-calcwrap.is-peek .bx-peek{transform:translateY(-6px) rotate(-6deg)}
-#boxulator .bx-bubble{position:absolute;top:-4px;right:128px;z-index:7;max-width:min(270px,64%);padding:10px 14px;border:2px solid var(--red);border-radius:14px;background:#fff;color:var(--ink);font:400 15px/1.35 Georgia,Times,serif;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transform:translateY(8px) scale(.9);transform-origin:100% 100%;transition:opacity .2s,transform .25s;pointer-events:none}
-#boxulator .bx-bubble::after{content:"";position:absolute;right:-9px;bottom:14px;border:8px solid transparent;border-left-color:var(--red);border-right:0}
-#boxulator .bx-bubble a{color:var(--red);text-decoration:underline}
-#boxulator .bx-calcwrap.is-talk .bx-bubble{opacity:1;transform:none;pointer-events:auto}
-#boxulator .bx-calc{position:relative;z-index:1;background:linear-gradient(160deg,#343740,#1c1e24);border-radius:28px;padding:16px 18px 20px;outline:none;box-shadow:0 20px 44px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.08)}
-#boxulator .bx-calc:focus-visible{box-shadow:0 0 0 4px var(--gold),0 20px 44px rgba(0,0,0,.45)}
-#boxulator .bx-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#boxulator .bx-brand{font:700 16px/1 Georgia,Times,serif;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
-#boxulator .bx-brand small{display:block;margin-top:5px;font:700 9px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;color:#8b8f9c}
-#boxulator .bx-solar{display:flex;gap:3px;width:44%;height:22px;padding:3px;background:#0d0e12;border-radius:4px}
-#boxulator .bx-solar i{flex:1;border-radius:2px;background:linear-gradient(160deg,#4a3326,#1b120d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
-#boxulator .bx-lcd{position:relative;margin-top:12px;border:7px solid #121318;border-radius:12px;padding:8px 12px 10px;background:linear-gradient(#c8d4a9,#a7b888);box-shadow:inset 0 3px 8px rgba(0,0,0,.35)}
-#boxulator .bx-lcd-top{display:flex;justify-content:space-between;height:15px;font:700 12px/15px 'Courier New',Courier,monospace;color:rgba(27,38,17,.8)}
-#boxulator .bx-lcd svg{display:block;width:100%;height:auto;margin-top:2px}
-#boxulator .bx-seg{fill:rgba(27,38,17,.07)}
-#boxulator .bx-seg.on{fill:#1b2611}
-#boxulator .bx-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
-#boxulator .bx-key{position:relative;aspect-ratio:1/1;min-height:52px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:700 clamp(22px,6vw,30px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--gold);text-shadow:0 1px 0 rgba(0,0,0,.35);background:var(--c);box-shadow:0 6px 0 rgba(0,0,0,.5),inset 0 -3px 0 rgba(0,0,0,.18);transition:box-shadow .06s;user-select:none;-webkit-user-select:none}
-#boxulator .bx-key::before{content:"";position:absolute;left:-3%;right:-3%;top:0;height:24%;border-radius:7px 7px 3px 3px;background:rgba(255,255,255,.14);box-shadow:0 2px 0 rgba(0,0,0,.25)}
-#boxulator .bx-key:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-#boxulator .bx-key.is-down,#boxulator .bx-key:active{translate:0 5px;box-shadow:0 1px 0 rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.18)}
-#boxulator .k-sage{--c:#8fa58a;color:#fff4d6}
-#boxulator .k-green{--c:#1f4a36}
-#boxulator .k-navy{--c:#2b3d6e}
-#boxulator .k-brown{--c:#6a4532}
-#boxulator .k-op{font:700 clamp(28px,7.5vw,38px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif}
-#boxulator .k-eq{aspect-ratio:auto;--c:#c8102e;color:#fff1c2;font-size:clamp(30px,8vw,42px)}
-#boxulator .k-kevin{--c:#15171c;color:var(--gold)}
-#boxulator .k-minus{background:linear-gradient(90deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),linear-gradient(0deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),var(--c);color:rgba(230,199,125,.45)}
-#boxulator .bx-bow{position:absolute;top:-9px;left:50%;z-index:2;width:12px;height:12px;margin-left:-6px;border-radius:3px;background:#a50e24}
-#boxulator .bx-bow::before,#boxulator .bx-bow::after{content:"";position:absolute;top:-4px;width:20px;height:15px;border:5px solid #d0142f;border-radius:50%/60% 60% 40% 40%}
-#boxulator .bx-bow::before{right:9px;transform:rotate(-22deg)}
-#boxulator .bx-bow::after{left:9px;transform:rotate(22deg)}
-#boxulator .bx-upsell{position:absolute;left:14px;right:14px;top:96px;z-index:5;display:none;padding:18px 16px 16px;border:3px solid var(--red);border-radius:16px;background:rgba(93,39,42,.97);text-align:center}
-#boxulator .bx-upsell.is-on{display:block;animation:bx-pop .3s cubic-bezier(.3,1.6,.5,1)}
-#boxulator .bx-upsell-q{font:700 24px/1.2 Georgia,Times,serif;color:#fff}
-#boxulator .bx-upsell-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
-#boxulator .bx-yes{padding:12px 22px;border:3px solid var(--red);border-radius:6px;background:#fff;color:var(--bordeaux);font:700 19px/1 'Helvetica Neue',Helvetica,Arial,sans-serif}
-#boxulator .bx-yes.is-alt{background:var(--red);color:#fff;border-color:#fff}
-#boxulator .bx-timer{height:6px;margin-top:14px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
-#boxulator .bx-timer i{display:block;width:100%;height:100%;background:var(--red)}
-#boxulator .bx-upsell.is-on .bx-timer i{animation:bx-timer 6s linear forwards}
-#boxulator .bx-upsell-note{margin-top:8px;font-size:13px;font-style:italic;color:var(--soft)}
-#boxulator .bx-hud{display:grid;gap:14px;align-content:end}
-#boxulator .bx-card{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.07)}
-#boxulator .bx-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-#boxulator .bx-label{display:block;font:600 11px/1.3 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:1.8px;text-transform:uppercase;color:var(--soft)}
-#boxulator .bx-big{display:block;margin-top:4px;font:700 36px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;white-space:nowrap}
-#boxulator .bx-big.is-long{font-size:24px;line-height:1.75}
-#boxulator .bx-bar{height:10px;margin-top:10px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}
-#boxulator .bx-bar i{display:block;width:0;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .5s}
-#boxulator .bx-badges-top{display:flex;align-items:baseline;justify-content:space-between}
-#boxulator .bx-found{font:700 20px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff}
-#boxulator .bx-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:420px;margin:12px auto 0}
-#boxulator .bx-badge{min-width:0;text-align:center}
-#boxulator .bx-badge:nth-child(4n+1){--c:#8fa58a}
-#boxulator .bx-badge:nth-child(4n+2){--c:#1f4a36}
-#boxulator .bx-badge:nth-child(4n+3){--c:#2b3d6e}
-#boxulator .bx-badge:nth-child(4n){--c:#6a4532}
-#boxulator .bx-b-box{position:relative;aspect-ratio:1/1;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--c);box-shadow:0 4px 0 rgba(0,0,0,.35)}
-#boxulator .bx-b-box::before{content:"";position:absolute;left:-4%;right:-4%;top:0;height:26%;border-radius:9px 9px 3px 3px;background:rgba(255,255,255,.16);transform-origin:50% 0;transition:transform .5s}
-#boxulator .bx-b-q{font:700 24px/1 Georgia,Times,serif;color:rgba(255,255,255,.45)}
-#boxulator .bx-b-icon{display:none;font-size:30px;line-height:1}
-#boxulator .bx-b-name,#boxulator .bx-b-hint{margin-top:6px;font-size:11px;line-height:1.2;overflow-wrap:anywhere}
-#boxulator .bx-b-name{display:none;font-weight:700;color:#fff}
-#boxulator .bx-b-hint{font-style:italic;color:var(--soft)}
-#boxulator .bx-badge.is-open .bx-b-box{background:linear-gradient(150deg,#f6dc8c,#c9a24e);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}
-#boxulator .bx-badge.is-open .bx-b-box::before{transform:rotateX(120deg) translateY(-8px)}
-#boxulator .bx-badge.is-open .bx-b-q,#boxulator .bx-badge.is-open .bx-b-hint{display:none}
-#boxulator .bx-badge.is-open .bx-b-icon,#boxulator .bx-badge.is-open .bx-b-name{display:block}
-#boxulator .bx-wh{position:relative;height:150px;margin-top:22px;border:2px solid var(--red);border-radius:14px;background:var(--cream);overflow:hidden}
-#boxulator .bx-wh canvas{position:absolute;inset:0;width:100%;height:100%}
-#boxulator .bx-wh-label{position:absolute;top:10px;left:14px;font:700 11px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;text-transform:uppercase;color:rgba(93,39,42,.6)}
-#boxulator .bx-wh.is-shake{animation:bx-shake .07s linear 10}
-#boxulator .bx-glit{position:absolute;z-index:30;width:7px;height:7px;border-radius:1px;pointer-events:none}
-#boxulator .bx-final{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(74,30,33,.94)}
-#boxulator .bx-final.is-on{display:flex;animation:bx-fade .4s}
-#boxulator .bx-cert{width:100%;max-width:440px;padding:18px 18px 22px;border:3px solid var(--red);border-radius:16px;background:var(--cream);color:var(--ink);text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}
-#boxulator .bx-cert img{border-radius:10px}
-#boxulator .bx-cert h3{margin-top:14px;font-size:clamp(26px,6vw,34px);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:6px}
-#boxulator .bx-cert p{margin-top:8px}
-#boxulator .bx-cert .bx-label{margin-top:12px;color:var(--muted)}
-#boxulator .bx-cert-n{display:block;margin-top:2px;font:700 clamp(26px,7vw,36px)/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;white-space:nowrap;color:var(--red)}
-#boxulator .bx-cert-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:18px}
-#boxulator .bx-close{font-weight:700;color:var(--bordeaux);text-decoration:underline}
-#boxulator a.bx-btn{display:inline-block;padding:13px 24px;border:3px solid var(--red);border-radius:6px;background:var(--bordeaux);color:#fff!important;text-decoration:none!important;font:700 19px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif}
-#boxulator a.bx-link{font-weight:700;color:var(--bordeaux);text-decoration:underline}
-#boxulator .bx-real{margin-top:34px;padding:30px 28px;border:3px solid var(--red);border-radius:20px;background:var(--cream);text-align:center}
-#boxulator .bx-real h3{margin-top:8px;font-size:clamp(26px,5vw,36px)}
-#boxulator .bx-real>p{margin-top:12px}
-#boxulator .bx-form{display:grid;gap:16px;max-width:420px;margin:22px auto 0;text-align:left}
-#boxulator .bx-form label{display:block;font-weight:700;font-size:17px;line-height:1.35;color:var(--bordeaux)}
-#boxulator .bx-form label small{display:block;font-weight:400;font-style:italic;font-size:14px;color:var(--muted)}
-#boxulator .bx-form label small a{color:var(--bordeaux);text-decoration:underline}
-#boxulator input{all:unset;box-sizing:border-box;display:block;width:100%;max-width:240px;margin-top:6px;padding:12px 14px;border:2px solid var(--bordeaux);border-radius:8px;background:#fff;font:700 22px/1.2 'Courier New',Courier,monospace;color:var(--ink)}
-#boxulator input:focus{outline:3px solid var(--red);outline-offset:1px}
-#boxulator .bx-out{max-width:520px;margin:22px auto 0;padding:18px 20px;border:3px solid var(--red);border-radius:10px;background:var(--bordeaux);color:#fff;font-size:20px;font-weight:700;line-height:1.4}
-#boxulator .bx-out strong{margin:0 4px;font:700 40px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;vertical-align:-4px}
-#boxulator .bx-out [hidden]{display:none!important}
-#boxulator .bx-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:24px}
-#boxulator .bx-small{max-width:600px;margin:16px auto 0;font-size:15px;line-height:1.55;font-style:italic;color:#555}
-#boxulator .bx-calc.is-dancing{animation:bx-dance .45s ease-in-out 6}
-#boxulator .bx-calc.is-hot{animation:bx-shake .07s linear 14}
-#boxulator .bx-key.is-wiggle{animation:bx-wiggle .5s ease-in-out}
-#boxulator .bx-lcd.is-blink svg{animation:bx-blink .45s steps(1) 4}
-@keyframes bx-pop{from{transform:scale(.6)}}
-@keyframes bx-fade{from{opacity:0}}
-@keyframes bx-timer{to{width:0}}
-@keyframes bx-dance{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg) translateY(-6px)}50%{transform:rotate(3deg)}75%{transform:rotate(-2deg) translateY(-4px)}}
-@keyframes bx-shake{0%,100%{transform:translate(0)}25%{transform:translate(-4px,1px)}75%{transform:translate(4px,-1px)}}
-@keyframes bx-wiggle{20%{transform:rotate(-14deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(4deg)}}
-@keyframes bx-blink{50%{opacity:0}}
-@media (max-width:600px){
-  #boxulator{font-size:16px}
-  #boxulator .bx-game{padding:24px 14px 16px;border-radius:16px}
-  #boxulator .bx-sound{top:10px;right:10px}
-  #boxulator .bx-calc{padding:14px 14px 18px;border-radius:22px}
-  #boxulator .bx-keys{gap:10px}
-  #boxulator .bx-card{padding:14px}
-  #boxulator .bx-badges{gap:8px}
-  #boxulator .bx-big{font-size:30px}
-  #boxulator .bx-big.is-long{font-size:20px;line-height:1.65}
-  #boxulator .bx-wh{height:130px}
-  #boxulator .bx-real{padding:24px 18px}
-}
-@media (prefers-reduced-motion:reduce){#boxulator *{animation:none!important;transition:none!important}}
-</style>
-
+<style>#boxulator{--bordeaux:#5d272a;--red:#d31b21;--cream:#f8f7f2;--ink:#222222;--muted:#727272;--soft:#f1dede;--gold:#e8cf9a;max-width:980px;margin:0 auto 60px;font-family:Georgia,Times,'Times New Roman',serif;font-size:17px;line-height:1.5;color:var(--ink);text-align:left}#boxulator *,#boxulator *::before,#boxulator *::after{box-sizing:border-box}#boxulator p,#boxulator h2,#boxulator h3,#boxulator ol,#boxulator ul,#boxulator li,#boxulator figure{margin:0;padding:0}#boxulator p,#boxulator li,#boxulator span,#boxulator strong,#boxulator b,#boxulator label,#boxulator small{font-size:inherit;line-height:inherit;font-family:inherit;color:inherit;letter-spacing:normal}#boxulator strong,#boxulator b{font-weight:700}#boxulator li{list-style:none}#boxulator img{display:block;max-width:100%;height:auto;border:0}#boxulator button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}#boxulator .bx-strings{display:none!important}#boxulator h2,#boxulator h3{margin:0;padding:0;font-family:Georgia,Times,'Times New Roman',serif;font-weight:700;line-height:1.15;color:var(--bordeaux)}#boxulator .bx-kick{font:600 12px/1.4 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase;color:var(--red)}#boxulator .bx-game{position:relative;overflow:hidden;container-type:inline-size;border:3px solid var(--red);border-radius:20px;padding:30px 26px 26px;color:#fff;background:radial-gradient(120% 80% at 50% 0%,#73333a 0%,#5d272a 55%,#4a1e21 100%)}#boxulator .bx-head{text-align:center}#boxulator .bx-game .bx-kick{color:var(--soft)}#boxulator .bx-head h2{margin-top:6px;font-size:clamp(34px,7vw,56px);color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:8px}#boxulator .bx-sub{margin-top:12px;font-style:italic;color:var(--soft)}#boxulator .bx-sound{position:absolute;top:16px;right:16px;z-index:8;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:19px;line-height:1}#boxulator .bx-play{display:grid;gap:22px;margin-top:10px}@container (min-width:640px){#boxulator .bx-play{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:end}#boxulator .bx-hud .bx-stats{grid-template-columns:1fr}#boxulator .bx-calcwrap{margin:0}}#boxulator .bx-calcwrap{position:relative;width:100%;max-width:400px;margin:0 auto;padding-top:64px}#boxulator .bx-peek{position:absolute;top:0;right:24px;z-index:0;width:96px;height:96px;transform:translateY(28px) rotate(8deg);transition:transform .45s cubic-bezier(.3,1.7,.5,1);pointer-events:none}#boxulator .bx-peek img{width:96px;height:96px;border:3px solid var(--red);border-radius:50%}#boxulator .bx-calcwrap.is-peek .bx-peek{transform:translateY(-6px) rotate(-6deg)}#boxulator .bx-bubble{position:absolute;top:-4px;right:128px;z-index:7;max-width:min(270px,64%);padding:10px 14px;border:2px solid var(--red);border-radius:14px;background:#fff;color:var(--ink);font:400 15px/1.35 Georgia,Times,serif;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transform:translateY(8px) scale(.9);transform-origin:100% 100%;transition:opacity .2s,transform .25s;pointer-events:none}#boxulator .bx-bubble::after{content:"";position:absolute;right:-9px;bottom:14px;border:8px solid transparent;border-left-color:var(--red);border-right:0}#boxulator .bx-bubble a{color:var(--red);text-decoration:underline}#boxulator .bx-calcwrap.is-talk .bx-bubble{opacity:1;transform:none;pointer-events:auto}#boxulator .bx-calc{position:relative;z-index:1;background:linear-gradient(160deg,#343740,#1c1e24);border-radius:28px;padding:16px 18px 20px;outline:none;box-shadow:0 20px 44px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.08)}#boxulator .bx-calc:focus-visible{box-shadow:0 0 0 4px var(--gold),0 20px 44px rgba(0,0,0,.45)}#boxulator .bx-top{display:flex;align-items:center;justify-content:space-between;gap:12px}#boxulator .bx-brand{font:700 16px/1 Georgia,Times,serif;letter-spacing:1px;color:var(--gold);text-transform:uppercase}#boxulator .bx-brand small{display:block;margin-top:5px;font:700 9px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;color:#8b8f9c}#boxulator .bx-solar{display:flex;gap:3px;width:44%;height:22px;padding:3px;background:#0d0e12;border-radius:4px}#boxulator .bx-solar i{flex:1;border-radius:2px;background:linear-gradient(160deg,#4a3326,#1b120d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}#boxulator .bx-lcd{position:relative;margin-top:12px;border:7px solid #121318;border-radius:12px;padding:8px 12px 10px;background:linear-gradient(#c8d4a9,#a7b888);box-shadow:inset 0 3px 8px rgba(0,0,0,.35)}#boxulator .bx-lcd-top{display:flex;justify-content:space-between;height:15px;font:700 12px/15px 'Courier New',Courier,monospace;color:rgba(27,38,17,.8)}#boxulator .bx-lcd svg{display:block;width:100%;height:auto;margin-top:2px}#boxulator .bx-seg{fill:rgba(27,38,17,.07)}#boxulator .bx-seg.on{fill:#1b2611}#boxulator .bx-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}#boxulator .bx-key{position:relative;aspect-ratio:1/1;min-height:52px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:700 clamp(22px,6vw,30px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--gold);text-shadow:0 1px 0 rgba(0,0,0,.35);background:var(--c);box-shadow:0 6px 0 rgba(0,0,0,.5),inset 0 -3px 0 rgba(0,0,0,.18);transition:box-shadow .06s;user-select:none;-webkit-user-select:none}#boxulator .bx-key::before{content:"";position:absolute;left:-3%;right:-3%;top:0;height:24%;border-radius:7px 7px 3px 3px;background:rgba(255,255,255,.14);box-shadow:0 2px 0 rgba(0,0,0,.25)}#boxulator .bx-key:focus-visible{outline:3px solid var(--gold);outline-offset:2px}#boxulator .bx-key.is-down,#boxulator .bx-key:active{translate:0 5px;box-shadow:0 1px 0 rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.18)}#boxulator .k-sage{--c:#8fa58a;color:#fff4d6}#boxulator .k-green{--c:#1f4a36}#boxulator .k-navy{--c:#2b3d6e}#boxulator .k-brown{--c:#6a4532}#boxulator .k-op{font:700 clamp(28px,7.5vw,38px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif}#boxulator .k-eq{aspect-ratio:auto;--c:#c8102e;color:#fff1c2;font-size:clamp(30px,8vw,42px)}#boxulator .k-kevin{--c:#15171c;color:var(--gold)}#boxulator .k-minus{background:linear-gradient(90deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),linear-gradient(0deg,transparent 42%,#d0142f 42%,#d0142f 58%,transparent 58%),var(--c);color:rgba(230,199,125,.45)}#boxulator .bx-bow{position:absolute;top:-9px;left:50%;z-index:2;width:12px;height:12px;margin-left:-6px;border-radius:3px;background:#a50e24}#boxulator .bx-bow::before,#boxulator .bx-bow::after{content:"";position:absolute;top:-4px;width:20px;height:15px;border:5px solid #d0142f;border-radius:50%/60% 60% 40% 40%}#boxulator .bx-bow::before{right:9px;transform:rotate(-22deg)}#boxulator .bx-bow::after{left:9px;transform:rotate(22deg)}#boxulator .bx-upsell{position:absolute;left:14px;right:14px;top:96px;z-index:5;display:none;padding:18px 16px 16px;border:3px solid var(--red);border-radius:16px;background:rgba(93,39,42,.97);text-align:center}#boxulator .bx-upsell.is-on{display:block;animation:bx-pop .3s cubic-bezier(.3,1.6,.5,1)}#boxulator .bx-upsell-q{font:700 24px/1.2 Georgia,Times,serif;color:#fff}#boxulator .bx-upsell-row{display:flex;justify-content:center;gap:10px;margin-top:14px}#boxulator .bx-yes{padding:12px 22px;border:3px solid var(--red);border-radius:6px;background:#fff;color:var(--bordeaux);font:700 19px/1 'Helvetica Neue',Helvetica,Arial,sans-serif}#boxulator .bx-yes.is-alt{background:var(--red);color:#fff;border-color:#fff}#boxulator .bx-timer{height:6px;margin-top:14px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}#boxulator .bx-timer i{display:block;width:100%;height:100%;background:var(--red)}#boxulator .bx-upsell.is-on .bx-timer i{animation:bx-timer 6s linear forwards}#boxulator .bx-upsell-note{margin-top:8px;font-size:13px;font-style:italic;color:var(--soft)}#boxulator .bx-hud{display:grid;gap:14px;align-content:end}#boxulator .bx-card{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.07)}#boxulator .bx-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}#boxulator .bx-label{display:block;font:600 11px/1.3 Poppins,'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:1.8px;text-transform:uppercase;color:var(--soft)}#boxulator .bx-big{display:block;margin-top:4px;font:700 36px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;white-space:nowrap}#boxulator .bx-big.is-long{font-size:24px;line-height:1.75}#boxulator .bx-bar{height:10px;margin-top:10px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}#boxulator .bx-bar i{display:block;width:0;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .5s}#boxulator .bx-badges-top{display:flex;align-items:baseline;justify-content:space-between}#boxulator .bx-found{font:700 20px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff}#boxulator .bx-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:420px;margin:12px auto 0}#boxulator .bx-badge{min-width:0;text-align:center}#boxulator .bx-badge:nth-child(4n+1){--c:#8fa58a}#boxulator .bx-badge:nth-child(4n+2){--c:#1f4a36}#boxulator .bx-badge:nth-child(4n+3){--c:#2b3d6e}#boxulator .bx-badge:nth-child(4n){--c:#6a4532}#boxulator .bx-b-box{position:relative;aspect-ratio:1/1;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--c);box-shadow:0 4px 0 rgba(0,0,0,.35)}#boxulator .bx-b-box::before{content:"";position:absolute;left:-4%;right:-4%;top:0;height:26%;border-radius:9px 9px 3px 3px;background:rgba(255,255,255,.16);transform-origin:50% 0;transition:transform .5s}#boxulator .bx-b-q{font:700 24px/1 Georgia,Times,serif;color:rgba(255,255,255,.45)}#boxulator .bx-b-icon{display:none;font-size:30px;line-height:1}#boxulator .bx-b-name,#boxulator .bx-b-hint{margin-top:6px;font-size:11px;line-height:1.2;overflow-wrap:anywhere}#boxulator .bx-b-name{display:none;font-weight:700;color:#fff}#boxulator .bx-b-hint{font-style:italic;color:var(--soft)}#boxulator .bx-badge.is-open .bx-b-box{background:linear-gradient(150deg,#f6dc8c,#c9a24e);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}#boxulator .bx-badge.is-open .bx-b-box::before{transform:rotateX(120deg) translateY(-8px)}#boxulator .bx-badge.is-open .bx-b-q,#boxulator .bx-badge.is-open .bx-b-hint{display:none}#boxulator .bx-badge.is-open .bx-b-icon,#boxulator .bx-badge.is-open .bx-b-name{display:block}#boxulator .bx-wh{position:relative;height:150px;margin-top:22px;border:2px solid var(--red);border-radius:14px;background:var(--cream);overflow:hidden}#boxulator .bx-wh canvas{position:absolute;inset:0;width:100%;height:100%}#boxulator .bx-wh-label{position:absolute;top:10px;left:14px;font:700 11px/1 'Courier New',Courier,monospace;letter-spacing:1.6px;text-transform:uppercase;color:rgba(93,39,42,.6)}#boxulator .bx-wh-empty{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);font:italic 15px/1.4 Georgia,Times,serif;color:rgba(93,39,42,.55);text-align:center;transition:opacity .4s}#boxulator .bx-wh.has-boxes .bx-wh-empty{opacity:0}#boxulator .bx-wh.is-shake{animation:bx-shake .07s linear 10}#boxulator .bx-glit{position:absolute;z-index:30;width:7px;height:7px;border-radius:1px;pointer-events:none}#boxulator .bx-final{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(74,30,33,.94)}#boxulator .bx-final.is-on{display:flex;animation:bx-fade .4s}#boxulator .bx-cert{width:100%;max-width:440px;padding:18px 18px 22px;border:3px solid var(--red);border-radius:16px;background:var(--cream);color:var(--ink);text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:bx-pop .5s cubic-bezier(.3,1.6,.5,1)}#boxulator .bx-cert img{border-radius:10px}#boxulator .bx-cert h3{margin-top:14px;font-size:clamp(26px,6vw,34px);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:6px}#boxulator .bx-cert p{margin-top:8px}#boxulator .bx-cert .bx-label{margin-top:12px;color:var(--muted)}#boxulator .bx-cert-n{display:block;margin-top:2px;font:700 clamp(26px,7vw,36px)/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;white-space:nowrap;color:var(--red)}#boxulator .bx-cert-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:18px}#boxulator .bx-close{font-weight:700;color:var(--bordeaux);text-decoration:underline}#boxulator a.bx-btn{display:inline-block;padding:13px 24px;border:3px solid var(--red);border-radius:6px;background:var(--bordeaux);color:#fff!important;text-decoration:none!important;font:700 19px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif}#boxulator a.bx-link{font-weight:700;color:var(--bordeaux);text-decoration:underline}#boxulator .bx-real{margin-top:34px;padding:30px 28px;border:3px solid var(--red);border-radius:20px;background:var(--cream);text-align:center}#boxulator .bx-real h3{margin-top:8px;font-size:clamp(26px,5vw,36px)}#boxulator .bx-real>p{margin-top:12px}#boxulator .bx-form{display:grid;gap:16px;max-width:420px;margin:22px auto 0;text-align:left}#boxulator .bx-form label{display:block;font-weight:700;font-size:17px;line-height:1.35;color:var(--bordeaux)}#boxulator .bx-form label small{display:block;font-weight:400;font-style:italic;font-size:14px;color:var(--muted)}#boxulator .bx-form label small a{color:var(--bordeaux);text-decoration:underline}#boxulator input{all:unset;box-sizing:border-box;display:block;width:100%;max-width:240px;margin-top:6px;padding:12px 14px;border:2px solid var(--bordeaux);border-radius:8px;background:#fff;font:700 22px/1.2 'Courier New',Courier,monospace;color:var(--ink)}#boxulator input:focus{outline:3px solid var(--red);outline-offset:1px}#boxulator .bx-out{max-width:520px;margin:22px auto 0;padding:18px 20px;border:3px solid var(--red);border-radius:10px;background:var(--bordeaux);color:#fff;font-size:20px;font-weight:700;line-height:1.4}#boxulator .bx-out strong{margin:0 4px;font:700 40px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;vertical-align:-4px}#boxulator .bx-out [hidden]{display:none!important}#boxulator .bx-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:24px}#boxulator .bx-small{max-width:600px;margin:16px auto 0;font-size:15px;line-height:1.55;font-style:italic;color:#555}#boxulator .bx-calc.is-dancing{animation:bx-dance .45s ease-in-out 6}#boxulator .bx-calc.is-hot{animation:bx-shake .07s linear 14}#boxulator .bx-key.is-wiggle{animation:bx-wiggle .5s ease-in-out}#boxulator .bx-lcd.is-blink svg{animation:bx-blink .45s steps(1) 4}@keyframes bx-pop{from{transform:scale(.6)}}@keyframes bx-fade{from{opacity:0}}@keyframes bx-timer{to{width:0}}@keyframes bx-dance{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg) translateY(-6px)}50%{transform:rotate(3deg)}75%{transform:rotate(-2deg) translateY(-4px)}}@keyframes bx-shake{0%,100%{transform:translate(0)}25%{transform:translate(-4px,1px)}75%{transform:translate(4px,-1px)}}@keyframes bx-wiggle{20%{transform:rotate(-14deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(4deg)}}@keyframes bx-blink{50%{opacity:0}}@media (max-width:600px){#boxulator{font-size:16px}#boxulator .bx-game{padding:24px 14px 16px;border-radius:16px}#boxulator .bx-sound{top:10px;right:10px}#boxulator .bx-head{padding:0 50px}#boxulator .bx-calcwrap{padding-top:58px}#boxulator .bx-peek{right:12px;width:80px;height:80px}#boxulator .bx-peek img{width:80px;height:80px}#boxulator .bx-bubble{left:0;right:100px;max-width:none;font-size:14px}#boxulator .bx-bubble::after{bottom:10px}#boxulator .bx-calc{padding:14px 14px 18px;border-radius:22px}#boxulator .bx-keys{gap:10px}#boxulator .bx-card{padding:14px}#boxulator .bx-badges{gap:8px}#boxulator .bx-big{font-size:30px}#boxulator .bx-big.is-long{font-size:20px;line-height:1.65}#boxulator .bx-wh{height:130px}#boxulator .bx-real{padding:24px 18px}}@media (prefers-reduced-motion:reduce){#boxulator *{animation:none!important;transition:none!important}}</style>
 <section class="bx-game">
-  <button type="button" class="bx-sound" aria-pressed="true" aria-label="Lyd til">🔊</button>
-  <header class="bx-head">
-    <p class="bx-kick">Set i tv-shop · Nu i virkeligheden</p>
-    <h2><span translate="no">The Boxulator 3000™</span></h2>
-    <p class="bx-sub">Kevins æske-lommeregner. 12 hemmeligheder. Find dem.</p>
-  </header>
-
-  <div class="bx-play">
-    <div class="bx-calcwrap">
-      <div class="bx-peek" aria-hidden="true"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/dcbf8c1d-6b47-4c82-850b-d5516e589d7d.png" width="96" height="96" alt=""></div>
-      <p class="bx-bubble" aria-live="polite"></p>
-      <div class="bx-calc" tabindex="0" role="group" aria-label="The Boxulator 3000">
-        <div class="bx-top">
-          <p class="bx-brand"><span translate="no">Boxulator 3000</span><small translate="no">KEVIN-POWERED</small></p>
-          <div class="bx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        </div>
-        <div class="bx-lcd">
-          <div class="bx-lcd-top" aria-hidden="true"><span class="bx-ind-op"></span><span class="bx-ind-m"></span></div>
-          <svg class="bx-digits" viewBox="0 0 360 72" aria-hidden="true"></svg>
-          <span class="bx-live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
-        </div>
-        <div class="bx-keys">
-          <button type="button" class="bx-key k-sage" data-key="C" aria-label="Ryd">C</button>
-          <button type="button" class="bx-key k-green k-op" data-key="/" aria-label="Divider">÷</button>
-          <button type="button" class="bx-key k-navy k-op" data-key="*" aria-label="Gange">×</button>
-          <button type="button" class="bx-key k-brown k-op k-minus" data-key="-" aria-label="Minus. Pakket ind i gavebånd">−<span class="bx-bow" aria-hidden="true"></span></button>
-          <button type="button" class="bx-key k-sage" data-key="7">7</button>
-          <button type="button" class="bx-key k-green" data-key="8">8</button>
-          <button type="button" class="bx-key k-navy" data-key="9">9</button>
-          <button type="button" class="bx-key k-brown k-op" data-key="+" aria-label="Plus">+</button>
-          <button type="button" class="bx-key k-sage" data-key="4">4</button>
-          <button type="button" class="bx-key k-green" data-key="5">5</button>
-          <button type="button" class="bx-key k-navy" data-key="6">6</button>
-          <button type="button" class="bx-key k-brown" data-key="M" aria-label="Hukommelse">M</button>
-          <button type="button" class="bx-key k-sage" data-key="1">1</button>
-          <button type="button" class="bx-key k-green" data-key="2">2</button>
-          <button type="button" class="bx-key k-navy" data-key="3">3</button>
-          <button type="button" class="bx-key k-op k-eq" data-key="=" aria-label="Lig med">=</button>
-          <button type="button" class="bx-key k-sage" data-key="0">0</button>
-          <button type="button" class="bx-key k-green bx-dec" data-key="." aria-label="Komma">,</button>
-          <button type="button" class="bx-key k-kevin" data-key="K" aria-label="Kevin-knappen">K</button>
-        </div>
-        <div class="bx-upsell" role="dialog" aria-label="Kevins tilbud">
-          <p class="bx-upsell-q">Skal det være lidt flere æsker?</p>
-          <div class="bx-upsell-row"><button type="button" class="bx-yes" data-yes>Ja</button><button type="button" class="bx-yes is-alt" data-yes>Ja tak!</button></div>
-          <div class="bx-timer"><i></i></div>
-          <p class="bx-upsell-note">Kevin tager tavshed som et ja.</p>
-        </div>
-      </div>
-    </div>
-
-    <aside class="bx-hud">
-      <div class="bx-stats">
-        <div class="bx-card"><span class="bx-label">Æsker regnet</span><b class="bx-big bx-score">0</b></div>
-        <div class="bx-card"><span class="bx-label">Kevins Q4-mål</span><b class="bx-big bx-target">500</b><div class="bx-bar"><i></i></div></div>
-      </div>
-      <div class="bx-card">
-        <div class="bx-badges-top"><span class="bx-label">Hemmeligheder</span><b class="bx-found">0/12</b></div>
-        <ol class="bx-badges">
-          <li class="bx-badge" data-badge="first"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📦</span></div><p class="bx-b-name">Første æske</p><p class="bx-b-hint">Tryk på =</p></li>
-          <li class="bx-badge" data-badge="rounded"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">⬆️</span></div><p class="bx-b-name">Rundet op</p><p class="bx-b-hint">Del noget skævt</p></li>
-          <li class="bx-badge" data-badge="safety"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🦺</span></div><p class="bx-b-name">Ekstra æske</p><p class="bx-b-hint">Regn videre</p></li>
-          <li class="bx-badge" data-badge="minus"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎯</span></div><p class="bx-b-name">Minus-jæger</p><p class="bx-b-hint">Fang minus tre gange</p></li>
-          <li class="bx-badge" data-badge="div0"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎤</span></div><p class="bx-b-name">Mariah-alarm</p><p class="bx-b-hint">Del med nul</p></li>
-          <li class="bx-badge" data-badge="year"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎂</span></div><p class="bx-b-name">Født 1953</p><p class="bx-b-hint">Westpacks fødselsår</p></li>
-          <li class="bx-badge" data-badge="panic"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">✨</span></div><p class="bx-b-name">Glimmer i næsen</p><p class="bx-b-hint">Tryk vildt hurtigt</p></li>
-          <li class="bx-badge" data-badge="kevin"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎅</span></div><p class="bx-b-name">Kevin-fan</p><p class="bx-b-hint">Tryk K fem gange</p></li>
-          <li class="bx-badge" data-badge="overflow"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">💥</span></div><p class="bx-b-name">Overflow</p><p class="bx-b-hint">Over 99.999.999</p></li>
-          <li class="bx-badge" data-badge="upsell"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🛒</span></div><p class="bx-b-name">Sagde ja</p><p class="bx-b-hint">Sig ja til Kevin</p></li>
-          <li class="bx-badge" data-badge="goal"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📈</span></div><p class="bx-b-name">Mål nået</p><p class="bx-b-hint">Nå Kevins mål</p></li>
-          <li class="bx-badge" data-badge="avalanche"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🏔️</span></div><p class="bx-b-name">Lavine</p><p class="bx-b-hint">Fyld lageret</p></li>
-        </ol>
-      </div>
-    </aside>
-  </div>
-
-  <div class="bx-wh" aria-hidden="true"><canvas></canvas><span class="bx-wh-label" translate="no">North Pole South</span></div>
-
-  <div class="bx-final" role="dialog" aria-label="Certified Box Counter">
-    <div class="bx-cert">
-      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/bfd8f360-760c-4919-80f5-5f4e7adeae30.gif" width="600" height="600" alt="To Kevins i nissehue kigger frem bag kæmpelommeregneren foran en bordeaux bølge med juleikoner" loading="lazy">
-      <h3><span translate="no">Certified Box Counter™</span></h3>
-      <p>Du har fundet alle 12 af Kevins hemmeligheder. Han er rørt. Og lidt bekymret for dig.</p>
-      <span class="bx-label">Æsker regnet</span><b class="bx-cert-n">0</b>
-      <div class="bx-cert-row">
-        <a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Bestil rigtige æsker →</a>
-        <button type="button" class="bx-close">Spil videre</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="bx-real">
-  <p class="bx-kick">Bygget af Team Westpack · Uden Kevin</p>
-  <h3>Juleformlen. Den kan trække fra.</h3>
-  <p>Hvor mange æsker skal du bestille før jul? Skriv tre tal, så regner den ud, hvad du mangler.</p>
-  <div class="bx-form">
-    <label>Æsker, du brugte i december sidste år<small>Kan du ikke huske det? Se din <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">ordrehistorik</a>.</small><input type="number" inputmode="numeric" min="0" step="1" class="bx-in-last" placeholder="0"></label>
-    <label>Hvor meget mere regner du med at sælge i år? (%)<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-grow" placeholder="10"></label>
-    <label>Æsker, du har på hylden nu<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-stock" placeholder="0"></label>
-  </div>
-  <div class="bx-out" aria-live="polite">
-    <p class="bx-out-empty">Skriv dine tal ovenfor.</p>
-    <p class="bx-out-need" hidden>Du skal bestille cirka <strong class="bx-out-n">0</strong> æsker.</p>
-    <p class="bx-out-enough" hidden>Du har æsker nok til jul. Kevin er dybt skuffet.</p>
-  </div>
-  <div class="bx-cta">
-    <a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Find din æske →</a>
-    <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Genbestil fra din ordrehistorik</a>
-  </div>
-  <p class="bx-small">Skriv antallet på produktsiden, så regner den selv stykprisen og mængderabatten ud. Logotryk er gratis på smykkeæsker. Har vi dit logo, tager produktionen 4–5 hverdage på de fleste smykkeæsker. De første anbefalede frister for ordrer med tryk falder allerede 10. december – og de er forskellige fra land til land. <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Se fristerne for dit land</a>.</p>
-</section>
-
-<div class="bx-strings" hidden aria-hidden="true">
-  <span data-k="rounded">Rundet op. Man kan ikke sælge en halv æske.</span>
-  <span data-k="safety">En æske ekstra. For en sikkerheds skyld. Jeg kender mig selv.</span>
-  <span data-k="zero">Jeg har sat et nul på. Jeg tror på dig.</span>
-  <span data-k="hundred">Rundet op til nærmeste hundrede. Jeg tænker stort på dine vegne.</span>
-  <span data-k="minus">Den er pakket ind. Den virker ikke. Med vilje.</span>
-  <span data-k="minusCaught">Okay. Du fangede den. Den virker stadig ikke.</span>
-  <span data-k="div0">Du delte med nul. Nu danser vi. Vi har ikke rettighederne til Mariah Carey.</span>
-  <span data-k="overflow">Displayet kan ikke rumme det. Det kan jeg heller ikke.</span>
-  <span data-k="panic">Hvilepuls 180. Der kommer glimmer ud af næsen.</span>
-  <span data-k="memory">Min hukommelse er fuld. 72 faner. Din ligger i din <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">ordrehistorik</a>.</span>
-  <span data-k="reset">Nulstillet. Det er jeg ikke.</span>
-  <span data-k="idle">Hallo? Er du der stadig? Jeg har ikke andre.</span>
-  <span data-k="goal">Mål nået! Jeg har hævet målet. Det gør jeg altid.</span>
-  <span data-k="upsellYes">Jeg vidste, du ville sige ja. Jeg havde allerede pakket dem.</span>
-  <span data-k="upsellAuto">Det tager jeg som et ja.</span>
-  <span data-k="avalanche">Lageret er fuldt. Det var med vilje. Det var ikke med vilje.</span>
-  <span data-k="kevinFan">Fem gange? Jeg føler mig set.</span>
-  <span data-k="soundOn">Lyd til</span>
-  <span data-k="soundOff">Lyd fra</span>
-  <ul data-list="dodge">
-    <li>Nix.</li>
-    <li>Den vil ikke trykkes på.</li>
-    <li>Næsten!</li>
-    <li><span translate="no">Subtraction is not a growth mindset.</span></li>
-    <li>Den er hurtigere end dig.</li>
-  </ul>
-  <ul data-list="comments">
-    <li>Kontrolleret. Af mig. Kun af mig.</li>
-    <li>Printeren klappede.</li>
-    <li>Sat ind i fane 73. Den fandtes ikke før.</li>
-    <li>Godkendt. Underskrevet med glimmer.</li>
-    <li>Jeg har læst det højt over højttaleranlægget.</li>
-    <li>Kantinen er orienteret.</li>
-    <li>Jeg får det trykt på et krus.</li>
-    <li>For lidt. Det er altid for lidt.</li>
-    <li>Jeg ringer lige til mig selv og fortæller det.</li>
-    <li>Mødelokale 2 jublede. Det er kun mig derinde.</li>
-    <li>Smukt tal. Jeg græd lidt.</li>
-    <li>Jeg viste tallet til receptionen. De sagde ‘ja, Kevin’. Det gør de altid.</li>
-  </ul>
-  <ul data-list="magic">
-    <li data-n="1953">1953! Westpacks fødselsår. Jeg rejste mig og klappede.</li>
-    <li data-n="72">72. Faner i mit Excel-ark. Du må ikke åbne det.</li>
-    <li data-n="180">180. Min hvilepuls.</li>
-    <li data-n="7">7. Kopper espresso. Indtil videre i dag.</li>
-    <li data-n="48">48. Mange af vores smykkeæsker kan bestilles med dit logo fra 48 stk. Det er faktisk rigtigt.</li>
-    <li data-n="96">96. Her starter mængderabatten på mange af vores smykkeæsker. Også rigtigt.</li>
-    <li data-n="20">20. Så mange smykkeæsker er lommeregneren bygget af.</li>
-    <li data-n="2.4">2,4. Lommeregnerens højde i meter. Den står i mødelokale 2. Den kan ikke være der.</li>
-    <li data-n="1987">1987. Min første lommeregner. Min første kærlighed.</li>
-    <li data-n="600">600. Kabelbindere på firmakortet. Spørg ikke.</li>
-    <li data-n="0">0 æsker?! Jeg skal lige sidde ned.</li>
-  </ul>
-  <ul data-list="quotes">
-    <li>Jeg har lavet en fane til dig i mit Excel-ark. Nummer 73. Den er tom. Jeg venter.</li>
-    <li>Jeg sov i mødelokale 2 i nat. Lommeregneren holdt mig varm.</li>
-    <li>Du trykker på mine taster, som ingen har gjort før. Det betyder meget for mig.</li>
-    <li>Jeg har printet dit sidste resultat ud. Det hænger på mit køleskab nu.</li>
-    <li>Hvis du nogensinde mangler æsker, så tænk på mig. Det gør jeg. Hele tiden.</li>
-    <li>Jeg har lamineret lommeregneren. To gange. For en sikkerheds skyld.</li>
-    <li>Kantinen spurgte, om jeg ville have frokost. Jeg sagde, at jeg havde dig.</li>
-    <li>Jeg tæller ikke får, når jeg skal sove. Jeg tæller æsker. Jeg har ikke sovet siden august.</li>
-  </ul>
+<button type="button" class="bx-sound" aria-pressed="true" aria-label="Lyd til">🔊</button>
+<header class="bx-head">
+<p class="bx-kick">Set i tv-shop · Nu i virkeligheden</p>
+<h2><span translate="no">The Boxulator 3000™</span></h2>
+<p class="bx-sub">Kevins æske-lommeregner. 12 hemmeligheder. Find dem.</p>
+</header>
+<div class="bx-play">
+<div class="bx-calcwrap">
+<div class="bx-peek" aria-hidden="true"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/dcbf8c1d-6b47-4c82-850b-d5516e589d7d.png" width="96" height="96" alt=""></div>
+<p class="bx-bubble" aria-live="polite"></p>
+<div class="bx-calc" tabindex="0" role="group" aria-label="The Boxulator 3000">
+<div class="bx-top">
+<p class="bx-brand"><span translate="no">Boxulator 3000</span><small translate="no">KEVIN-POWERED</small></p>
+<div class="bx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 </div>
-
-<script>
-(function () {
-  "use strict";
-  var root = document.getElementById("boxulator");
-  if (!root || root.getAttribute("data-ready")) return;
-  root.setAttribute("data-ready", "1");
-  var qs = function (s) { return root.querySelector(s); };
-  var qsa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
-  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
-
-  // The post lives in every store with the Danish links in it; point them at the store this page is in.
-  var store = (location.pathname.split("/")[1] || "");
-  if (/^[a-z]{3}_[a-z]{2}_[a-z]{3}$/.test(store) && store !== "dkk_dk_den") {
-    qsa("a.bx-store").forEach(function (a) { a.setAttribute("href", a.getAttribute("href").replace("/dkk_dk_den/", "/" + store + "/")); });
-  }
-
-  // Every visible word lives in the markup above, so the post translates like any other; none lives here.
-  var S = {};
-  qsa(".bx-strings [data-k]").forEach(function (el) { S[el.getAttribute("data-k")] = el.innerHTML.trim(); });
-  var list = function (k) { return qsa('.bx-strings [data-list="' + k + '"] > li').map(function (el) { return { html: el.innerHTML.trim(), n: el.getAttribute("data-n") }; }); };
-  var COMMENTS = list("comments"), MAGIC = list("magic"), QUOTES = list("quotes"), DODGE = list("dodge");
-  var lang = document.documentElement.lang || undefined;
-  var num = function (n, max, group) { try { return Number(n).toLocaleString(lang, { maximumFractionDigits: max === undefined ? 6 : max, useGrouping: !!group }); } catch (e) { return String(n); } };
-  qs(".bx-dec").textContent = num(1.5, 1).charAt(1) || ",";
-  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var game = qs(".bx-game"), calc = qs(".bx-calc"), wrap = qs(".bx-calcwrap"), bubble = qs(".bx-bubble"), lcd = qs(".bx-lcd");
-
-  // ---------- Seven-segment display: eight cells, drawn once, switched segment by segment ----------
-  var SEG = { "0": "abcdef", "1": "bc", "2": "abdeg", "3": "abcdg", "4": "bcfg", "5": "acdfg", "6": "acdefg", "7": "abc", "8": "abcdefg", "9": "abcdfg", "E": "adefg", "F": "aefg", "H": "bcefg", "h": "cefg", "L": "def", "P": "abefg", "o": "cdeg", "n": "ceg", "r": "eg", "t": "defg", "U": "bcdef", "-": "g", " ": "" };
-  var svg = qs(".bx-digits"), NS = "http://www.w3.org/2000/svg", cells = [];
-  var W = 34, H = 60, T = 7, PITCH = 44, TOP = 6;
-  var poly = function (pts) { var p = document.createElementNS(NS, "polygon"); p.setAttribute("points", pts.map(function (x) { return x.join(","); }).join(" ")); p.setAttribute("class", "bx-seg"); return p; };
-  var hz = function (x, y) { return poly([[x + T / 2 + 1, y], [x + T + 1, y - T / 2], [x + W - T - 1, y - T / 2], [x + W - T / 2 - 1, y], [x + W - T - 1, y + T / 2], [x + T + 1, y + T / 2]]); };
-  var vt = function (x, y1, y2) { return poly([[x, y1 + T / 2 + 1], [x + T / 2, y1 + T + 1], [x + T / 2, y2 - T - 1], [x, y2 - T / 2 - 1], [x - T / 2, y2 - T - 1], [x - T / 2, y1 + T + 1]]); };
-  for (var c = 0; c < 8; c += 1) {
-    var x0 = 6 + c * PITCH, g = document.createElementNS(NS, "g");
-    g.setAttribute("transform", "skewX(-7) translate(8 0)");
-    var segs = { a: hz(x0, TOP + T / 2), g: hz(x0, TOP + H / 2), d: hz(x0, TOP + H - T / 2), f: vt(x0 + T / 2, TOP, TOP + H / 2), b: vt(x0 + W - T / 2, TOP, TOP + H / 2), e: vt(x0 + T / 2, TOP + H / 2, TOP + H), c: vt(x0 + W - T / 2, TOP + H / 2, TOP + H) };
-    Object.keys(segs).forEach(function (k) { g.appendChild(segs[k]); });
-    var dp = document.createElementNS(NS, "circle");
-    dp.setAttribute("cx", x0 + W + 4); dp.setAttribute("cy", TOP + H - 3); dp.setAttribute("r", 3.6); dp.setAttribute("class", "bx-seg");
-    g.appendChild(dp); svg.appendChild(g);
-    cells.push({ segs: segs, dp: dp });
-  }
-  var live = qs(".bx-live"), indOp = qs(".bx-ind-op"), indM = qs(".bx-ind-m");
-  function show(text) {
-    var out = [];
-    String(text).split("").forEach(function (ch) { if (ch === "." && out.length) out[out.length - 1].dp = true; else out.push({ ch: ch, dp: false }); });
-    out = out.slice(-8);
-    while (out.length < 8) out.unshift({ ch: " ", dp: false });
-    out.forEach(function (o, i) {
-      var lit = SEG[o.ch] || "";
-      "abcdefg".split("").forEach(function (s) { cells[i].segs[s].classList.toggle("on", lit.indexOf(s) >= 0); });
-      cells[i].dp.classList.toggle("on", o.dp);
-    });
-    live.textContent = String(text);
-  }
-  function blink() { lcd.classList.remove("is-blink"); void lcd.offsetWidth; lcd.classList.add("is-blink"); }
-  function forDisplay(n) {
-    if (!isFinite(n) || n > 99999999) return "E";
-    var digits = Math.max(0, 7 - Math.floor(Math.log10(Math.max(1, Math.abs(n)))));
-    return String(Number(n.toFixed(digits)));
-  }
-
-  // ---------- Sound: every key makes a noise that has nothing to do with a calculator ----------
-  // All synthesised here (Web Audio), so there are no sound files and no rights to clear.
-  var actx = null, master = null, noiseBuf = null, soundOn = true;
-  function audio() {
-    if (!soundOn) return null;
-    if (!actx) {
-      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
-      actx = new AC();
-      var comp = actx.createDynamicsCompressor(); master = actx.createGain(); master.gain.value = 0.9;
-      master.connect(comp); comp.connect(actx.destination);
-    }
-    if (actx.state === "suspended") actx.resume();
-    return actx;
-  }
-  function envelope(gn, t, peak, att, dur, hold) {
-    gn.gain.setValueAtTime(0.0001, t);
-    gn.gain.exponentialRampToValueAtTime(peak, t + att);
-    if (hold) gn.gain.setValueAtTime(peak, t + att + hold);
-    gn.gain.exponentialRampToValueAtTime(0.0001, t + att + dur);
-  }
-  function tone(o) {
-    var a = audio(); if (!a) return;
-    var t = a.currentTime + (o.at || 0), dur = o.dur || 0.2, att = o.att || 0.01;
-    var osc = a.createOscillator(), gn = a.createGain(), node = osc, f = o.f || [[0, 440]];
-    osc.type = o.type || "sine";
-    osc.frequency.setValueAtTime(f[0][1], t);
-    for (var i = 1; i < f.length; i += 1) { if (f[i][2] === "lin") osc.frequency.linearRampToValueAtTime(f[i][1], t + f[i][0]); else osc.frequency.exponentialRampToValueAtTime(f[i][1], t + f[i][0]); }
-    if (o.vib) {
-      var lfo = a.createOscillator(), lg = a.createGain(); lfo.frequency.value = o.vib[0]; lg.gain.setValueAtTime(o.vib[1], t);
-      if (o.vib[2]) lg.gain.exponentialRampToValueAtTime(0.01, t + dur);
-      lfo.connect(lg); lg.connect(osc.frequency); lfo.start(t); lfo.stop(t + att + dur + 0.05);
-    }
-    if (o.filter) {
-      var bq = a.createBiquadFilter(), ff = o.filter[1]; bq.type = o.filter[0]; bq.Q.value = o.filter[2] || 1;
-      bq.frequency.setValueAtTime(ff[0][1], t);
-      for (var j = 1; j < ff.length; j += 1) bq.frequency.linearRampToValueAtTime(ff[j][1], t + ff[j][0]);
-      node.connect(bq); node = bq;
-    }
-    if (o.am) {
-      var amg = a.createGain(), mod = a.createOscillator(), modg = a.createGain();
-      mod.type = o.am[2] || "square"; mod.frequency.value = o.am[0]; modg.gain.value = o.am[1]; amg.gain.value = 1 - o.am[1];
-      mod.connect(modg); modg.connect(amg.gain); node.connect(amg); node = amg; mod.start(t); mod.stop(t + att + dur + 0.05);
-    }
-    envelope(gn, t, o.vol || 0.15, att, dur, o.hold);
-    node.connect(gn); gn.connect(master); osc.start(t); osc.stop(t + att + dur + 0.05);
-  }
-  function hiss(o) {
-    var a = audio(); if (!a) return;
-    if (!noiseBuf) { noiseBuf = a.createBuffer(1, a.sampleRate, a.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i += 1) d[i] = Math.random() * 2 - 1; }
-    var t = a.currentTime + (o.at || 0), src = a.createBufferSource(), gn = a.createGain(), bq = a.createBiquadFilter();
-    src.buffer = noiseBuf; src.loop = true; bq.type = o.type || "bandpass"; bq.frequency.value = o.freq || 1000; bq.Q.value = o.q || 1;
-    envelope(gn, t, o.vol || 0.1, 0.005, o.dur || 0.2);
-    src.connect(bq); bq.connect(gn); gn.connect(master); src.start(t); src.stop(t + (o.dur || 0.2) + 0.06);
-  }
-  var SFX = {
-    boing: function () { tone({ f: [[0, 150], [0.5, 270]], dur: 0.55, vol: 0.24, vib: [16, 120, true] }); },
-    slideUp: function () { tone({ f: [[0, 320], [0.32, 1500, "lin"]], dur: 0.36, vol: 0.14, vib: [7, 14] }); },
-    slideDown: function () { tone({ f: [[0, 1400], [0.4, 260, "lin"]], dur: 0.42, vol: 0.14, vib: [7, 14] }); },
-    pew: function () { tone({ type: "square", f: [[0, 1700], [0.18, 110]], dur: 0.2, vol: 0.07 }); },
-    squeak: function () { [0, 0.13].forEach(function (d) { tone({ at: d, type: "triangle", f: [[0, 1300], [0.04, 2100], [0.09, 1500]], dur: 0.09, vol: 0.14 }); }); },
-    kazoo: function () { tone({ type: "sawtooth", f: [[0, 230], [0.15, 262, "lin"], [0.45, 205, "lin"]], dur: 0.48, vol: 0.13, vib: [6, 9], filter: ["bandpass", [[0, 1100]], 3], am: [34, 0.35, "sine"] }); },
-    bonk: function () { tone({ f: [[0, 520], [0.12, 110]], dur: 0.14, vol: 0.32 }); hiss({ type: "highpass", freq: 3000, dur: 0.03, vol: 0.08 }); },
-    blop: function () { tone({ f: [[0, 240], [0.07, 980]], dur: 0.09, vol: 0.26 }); },
-    meow: function () { tone({ type: "sawtooth", f: [[0, 520], [0.18, 700, "lin"], [0.55, 430, "lin"]], dur: 0.58, att: 0.04, vol: 0.17, vib: [5, 8], filter: ["bandpass", [[0, 600], [0.2, 1500], [0.55, 700]], 4] }); },
-    moo: function () { tone({ type: "sawtooth", f: [[0, 120], [0.3, 126, "lin"], [1.0, 92, "lin"]], dur: 1.0, att: 0.08, vol: 0.22, filter: ["lowpass", [[0, 300], [0.35, 900], [1.0, 340]], 6] }); },
-    raspberry: function () { tone({ type: "sawtooth", f: [[0, 86], [0.55, 58, "lin"]], dur: 0.58, vol: 0.24, filter: ["lowpass", [[0, 900]], 1], am: [27, 0.85] }); hiss({ freq: 600, q: 0.8, dur: 0.5, vol: 0.05 }); },
-    goat: function () { tone({ type: "sawtooth", f: [[0, 430], [0.6, 380, "lin"]], dur: 0.65, att: 0.03, vol: 0.15, vib: [9, 45], filter: ["bandpass", [[0, 900], [0.6, 1250]], 3] }); },
-    quack: function () { [0, 0.18].forEach(function (d) { tone({ at: d, type: "sawtooth", f: [[0, 380], [0.12, 260]], dur: 0.13, vol: 0.2, filter: ["bandpass", [[0, 1300], [0.12, 800]], 5] }); }); },
-    chipmunk: function () { for (var i = 0; i < 6; i += 1) tone({ at: i * 0.07, type: "triangle", f: [[0, i % 2 ? 1500 : 1250], [0.05, i % 2 ? 1750 : 1420]], dur: 0.05, vol: 0.11 }); },
-    airhorn: function () { [[0, 0.16], [0.2, 0.09], [0.33, 0.6]].forEach(function (p) { [466, 470, 554, 559].forEach(function (fr) { tone({ at: p[0], type: "sawtooth", f: [[0, fr]], dur: p[1], hold: p[1] * 0.7, att: 0.015, vol: 0.05, filter: ["lowpass", [[0, 2600]], 0.7] }); }); }); },
-    sad: function () { [293.66, 277.18, 261.63, 246.94].forEach(function (fr, i) { var last = i === 3; tone({ at: i * 0.42, type: "sawtooth", f: [[0, fr], [0.35, fr * 0.97, "lin"]], dur: last ? 1.1 : 0.36, att: 0.04, vol: 0.14, vib: last ? [5.5, 6] : null, filter: ["lowpass", [[0, 500], [0.15, 1400], [0.35, 600]], 4] }); }); },
-    rimshot: function () { tone({ f: [[0, 190], [0.12, 120]], dur: 0.14, vol: 0.36 }); tone({ at: 0.14, f: [[0, 150], [0.14, 90]], dur: 0.16, vol: 0.36 }); hiss({ at: 0.36, type: "highpass", freq: 6500, dur: 0.7, vol: 0.12 }); hiss({ at: 0.36, freq: 3500, q: 2, dur: 0.12, vol: 0.12 }); },
-    siren: function () { tone({ type: "triangle", f: [[0, 650], [0.35, 1250, "lin"], [0.7, 650, "lin"], [1.05, 1250, "lin"], [1.4, 650, "lin"]], dur: 1.45, hold: 1.2, vol: 0.12 }); },
-    coin: function () { tone({ type: "square", f: [[0, 988]], dur: 0.08, hold: 0.06, vol: 0.06 }); tone({ at: 0.08, type: "square", f: [[0, 1319]], dur: 0.35, vol: 0.06 }); },
-    kaching: function () { hiss({ freq: 2500, q: 1.5, dur: 0.06, vol: 0.18 }); [2093, 2637, 3136].forEach(function (fr, i) { tone({ at: 0.08 + i * 0.01, f: [[0, fr]], dur: 0.7, vol: 0.07 }); }); },
-    fanfare: function () { [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, i) { tone({ at: i * 0.09, type: "square", f: [[0, fr]], dur: i === 3 ? 0.5 : 0.09, hold: i === 3 ? 0.3 : 0.05, vol: 0.05 }); }); },
-    jingle: function () { var E = 659.25, G = 783.99, C = 523.25, D = 587.33, q = 0.19, t = 0; [[E, 1], [E, 1], [E, 2], [E, 1], [E, 1], [E, 2], [E, 1], [G, 1], [C, 1.5], [D, 0.5], [E, 4]].forEach(function (n) { tone({ at: t, type: "square", f: [[0, n[0]]], dur: q * n[1] * 0.9, vol: 0.05 }); t += q * n[1]; }); },
-  };
-  var FUNNY = ["boing", "slideUp", "slideDown", "pew", "squeak", "kazoo", "bonk", "blop", "meow", "moo", "raspberry", "goat", "quack", "chipmunk"], lastFunny = "";
-  function funny() { var k; do { k = pick(FUNNY); } while (k === lastFunny); lastFunny = k; SFX[k](); }
-  var soundBtn = qs(".bx-sound");
-  soundBtn.addEventListener("click", function () {
-    soundOn = !soundOn;
-    soundBtn.textContent = soundOn ? "🔊" : "🔇";
-    soundBtn.setAttribute("aria-label", soundOn ? S.soundOn : S.soundOff);
-    soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
-  });
-
-  // ---------- Kevin, peeking over the calculator ----------
-  var talkTimer = null;
-  function say(html, ms) {
-    bubble.innerHTML = html;
-    wrap.classList.add("is-peek", "is-talk");
-    clearTimeout(talkTimer);
-    talkTimer = setTimeout(function () { wrap.classList.remove("is-talk", "is-peek"); }, ms || 3200);
-  }
-
-  // ---------- Glitter, from anything, across the whole game ----------
-  function glitter(count, from) {
-    if (still || !game.animate) return;
-    var r = (from || lcd).getBoundingClientRect(), base = game.getBoundingClientRect();
-    var cx = r.left - base.left + r.width / 2, cy = r.top - base.top + r.height / 2;
-    var colours = ["#e8cf9a", "#d31b21", "#ffffff", "#f1dede", "#c9a24e", "#8fa58a"];
-    for (var i = 0; i < count; i += 1) {
-      var s = document.createElement("span"), ang = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 190;
-      s.className = "bx-glit"; s.style.left = cx + "px"; s.style.top = cy + "px"; s.style.background = colours[i % colours.length];
-      game.appendChild(s);
-      s.animate([{ transform: "translate(0,0) rotate(0)", opacity: 1 }, { transform: "translate(" + Math.cos(ang) * dist + "px," + (Math.sin(ang) * dist + 100) + "px) rotate(" + Math.random() * 720 + "deg)", opacity: 0 }], { duration: 900 + Math.random() * 800, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(s);
-    }
-  }
-  function anim(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(function () { el.classList.remove(cls); }, 3200); }
-
-  // ---------- Secrets ----------
-  var badges = qsa(".bx-badge"), found = 0, foundEl = qs(".bx-found"), finalEl = qs(".bx-final");
-  function unlock(id) {
-    var b = qs('.bx-badge[data-badge="' + id + '"]');
-    if (!b || b.classList.contains("is-open")) return;
-    b.classList.add("is-open"); found += 1; foundEl.textContent = found + "/" + badges.length;
-    setTimeout(function () { SFX.coin(); glitter(26, b.querySelector(".bx-b-box")); }, 250);
-    if (found === badges.length) setTimeout(finale, 1800);
-  }
-  function finale() {
-    qs(".bx-cert-n").textContent = num(score, 0, true);
-    finalEl.classList.add("is-on"); SFX.fanfare(); setTimeout(SFX.airhorn, 600); glitter(90, qs(".bx-cert"));
-  }
-  qs(".bx-close").addEventListener("click", function () { finalEl.classList.remove("is-on"); });
-
-  // ---------- Boxes counted, and Kevin's Q4 target, which he raises every time it is reached ----------
-  var score = 0, shown = 0, target = 500, raf = 0, scoreEl = qs(".bx-score"), targetEl = qs(".bx-target"), barEl = qs(".bx-bar i");
-  var nice = function (n) { var p = Math.pow(10, Math.floor(Math.log10(Math.max(1, n)))); return Math.ceil(n / p) * p; };
-  function setBig(el, n) { var s = num(n, 0, true); el.textContent = s; el.classList.toggle("is-long", s.length > 7); }
-  function bar() { barEl.style.width = Math.min(100, (score / target) * 100) + "%"; }
-  function addBoxes(n) {
-    n = Math.ceil(n); if (!(n > 0)) return;
-    score += n; bar();
-    cancelAnimationFrame(raf);
-    var from = shown, to = score, t0 = performance.now();
-    (function step(now) { var k = Math.min(1, (now - t0) / 650); shown = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); setBig(scoreEl, shown); if (k < 1) raf = requestAnimationFrame(step); })(t0);
-    if (score >= target) {
-      unlock("goal");
-      var next = nice(score * 3);
-      setTimeout(function () { target = next; setBig(targetEl, target); bar(); SFX.sad(); say(S.goal, 3600); }, 1500);
-    }
-  }
-
-  // ---------- North Pole South: every result rains down as boxes until the pile collapses ----------
-  var wh = qs(".bx-wh"), cv = qs(".bx-wh canvas"), ctx = cv.getContext ? cv.getContext("2d") : null;
-  var BOXC = ["#8fa58a", "#1f4a36", "#2b3d6e", "#6a4532", "#c8102e"];
-  var size = 14, cols = 0, heights = [], settled = [], falling = [], flying = [], WW = 0, HH = 0, dpr = 1, looping = false, crashing = false;
-  function fit() {
-    if (!ctx) return;
-    var r = cv.getBoundingClientRect(); if (!r.width) return;
-    dpr = Math.min(2, window.devicePixelRatio || 1); WW = r.width; HH = r.height;
-    cv.width = Math.round(WW * dpr); cv.height = Math.round(HH * dpr);
-    size = WW < 420 ? 12 : 14;
-    var n = Math.floor(WW / size);
-    if (n !== cols) { cols = n; heights = []; for (var i = 0; i < cols; i += 1) heights.push(0); settled = []; }
-    draw();
-  }
-  function boxAt(b) {
-    var s = size; ctx.save(); ctx.translate(b.x + s / 2, b.y + s / 2); ctx.rotate(b.r || 0);
-    ctx.fillStyle = b.c; ctx.fillRect(-s / 2, -s / 2 + 2, s, s - 2);
-    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.fillRect(-s / 2 - 1, -s / 2, s + 2, 4);
-    ctx.fillStyle = "#d9b45a"; ctx.fillRect(-s * 0.2, 1, s * 0.4, 2);
-    ctx.restore();
-  }
-  function draw() {
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, WW, HH);
-    ctx.fillStyle = "rgba(93,39,42,.35)"; ctx.fillRect(0, HH - 4, WW, 4);
-    settled.forEach(boxAt); falling.forEach(boxAt); flying.forEach(boxAt);
-  }
-  function frame() {
-    falling = falling.filter(function (b) {
-      b.vy += 0.9; b.y += b.vy;
-      if (b.y < b.ty) return true;
-      b.y = b.ty;
-      if (b.vy > 7) { b.vy = -b.vy * 0.28; return true; }
-      b.r = b.r * 0.3; settled.push(b); return false;
-    });
-    flying = flying.filter(function (b) { b.vy += 0.6; b.x += b.vx; b.y += b.vy; b.r += b.vr; return b.y < HH + 40 && b.x > -40 && b.x < WW + 40; });
-    draw();
-    if (falling.length || flying.length) requestAnimationFrame(frame); else looping = false;
-  }
-  function run() { if (!looping) { looping = true; requestAnimationFrame(frame); } }
-  function spawn() {
-    if (!cols) return;
-    var c = Math.round(cols / 2 + (Math.random() + Math.random() + Math.random() - 1.5) * (cols / 5));
-    c = Math.max(0, Math.min(cols - 1, c));
-    for (var k = 0; k < cols; k += 1) { // slide down the slope, like sand
-      var l = c > 0 && heights[c - 1] < heights[c] - 1, r = c < cols - 1 && heights[c + 1] < heights[c] - 1;
-      if (l && r) c += Math.random() < 0.5 ? -1 : 1; else if (l) c -= 1; else if (r) c += 1; else break;
-    }
-    heights[c] += 1;
-    var b = { x: (WW - cols * size) / 2 + c * size, y: -size - Math.random() * 40, vy: 0, ty: HH - 4 - heights[c] * size, c: BOXC[Math.floor(Math.random() * BOXC.length)], r: (Math.random() - 0.5) * 0.6, vr: 0 };
-    if (still) { b.y = b.ty; settled.push(b); draw(); } else { falling.push(b); run(); }
-    if (!crashing && heights[c] * size > HH - 30) { crashing = true; setTimeout(avalanche, 700); }
-  }
-  function drop(n) {
-    if (!ctx || !(n > 0)) return;
-    var k = n <= 12 ? Math.ceil(n) : Math.min(40, 12 + Math.round(Math.log10(n) * 6));
-    for (var i = 0; i < k; i += 1) setTimeout(spawn, i * 45);
-  }
-  function avalanche() {
-    unlock("avalanche"); say(S.avalanche, 3600);
-    for (var i = 0; i < 6; i += 1) setTimeout(SFX.bonk, i * 90);
-    setTimeout(SFX.raspberry, 650);
-    anim(wh, "is-shake");
-    var all = settled.concat(falling);
-    flying = flying.concat(all.map(function (b) { return { x: b.x, y: b.y, c: b.c, r: b.r, vx: ((b.x - WW / 2) / WW) * 16 + (Math.random() - 0.5) * 6, vy: -4 - Math.random() * 9, vr: (Math.random() - 0.5) * 0.5 }; }));
-    settled = []; falling = []; for (var j = 0; j < cols; j += 1) heights[j] = 0;
-    run(); setTimeout(function () { crashing = false; }, 1500);
-  }
-  var resizeTimer = null;
-  window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(fit, 200); });
-  fit();
-
-  // ---------- Keys: placed explicitly, so the minus key can run away and come back ----------
-  var LAYOUT = { "C": [1, 1], "/": [1, 2], "*": [1, 3], "-": [1, 4], "7": [2, 1], "8": [2, 2], "9": [2, 3], "+": [2, 4], "4": [3, 1], "5": [3, 2], "6": [3, 3], "M": [3, 4], "1": [4, 1], "2": [4, 2], "3": [4, 3], "=": [4, 4], "0": [5, 1], ".": [5, 2], "K": [5, 3] };
-  var keys = qsa(".bx-key"), pos = {};
-  function place(b) { var k = b.getAttribute("data-key"), p = pos[k]; b.style.gridRow = k === "=" ? p[0] + " / span 2" : String(p[0]); b.style.gridColumn = String(p[1]); }
-  keys.forEach(function (b) { var k = b.getAttribute("data-key"); pos[k] = LAYOUT[k].slice(); place(b); });
-  function flip(moves) { // moves: [[el, newPos], ...], each animated from where it was
-    var before = moves.map(function (m) { return m[0].getBoundingClientRect(); });
-    moves.forEach(function (m) { pos[m[0].getAttribute("data-key")] = m[1]; place(m[0]); });
-    if (still || !calc.animate) return;
-    moves.forEach(function (m, i) {
-      var now = m[0].getBoundingClientRect(), dx = before[i].left - now.left, dy = before[i].top - now.top;
-      if (dx || dy) m[0].animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 260, easing: "cubic-bezier(.3,1.5,.5,1)" });
-    });
-  }
-  var minusKey = qs('[data-key="-"]'), restoreTimer = null, catches = 0, skipClick = false;
-  function dodge() {
-    var others = keys.filter(function (b) { var k = b.getAttribute("data-key"); return k !== "-" && k !== "="; });
-    var other = pick(others), a = pos["-"].slice(), b = pos[other.getAttribute("data-key")].slice();
-    flip([[minusKey, b], [other, a]]);
-    SFX.slideUp(); say(pick(DODGE).html, 1500);
-    clearTimeout(restoreTimer); restoreTimer = setTimeout(restore, 3500);
-  }
-  function restore() { flip(keys.map(function (b) { return [b, LAYOUT[b.getAttribute("data-key")].slice()]; })); }
-  minusKey.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse" && Math.random() < 0.7) dodge(); });
-  minusKey.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse" && Math.random() < 0.55) { skipClick = true; dodge(); } });
-
-  // ---------- Kevin's upsell: two buttons, both yes; silence also counts as yes ----------
-  var upsellEl = qs(".bx-upsell"), upsellTimer = null, upsellBase = 0;
-  function upsell(v) {
-    upsellBase = v; upsellEl.classList.add("is-on"); SFX.kaching(); lockUntil = Date.now() + 7000;
-    clearTimeout(upsellTimer); upsellTimer = setTimeout(function () { acceptUpsell(true); }, 6000);
-  }
-  function acceptUpsell(auto) {
-    if (!upsellEl.classList.contains("is-on")) return;
-    clearTimeout(upsellTimer); upsellEl.classList.remove("is-on"); lockUntil = 0;
-    var v = Math.min(99999999, upsellBase * 2);
-    cur = String(v); fresh = true; render(); blink(); SFX.kaching(); setTimeout(SFX.coin, 250);
-    addBoxes(v - upsellBase); drop(v - upsellBase); unlock("upsell"); glitter(34, lcd);
-    say(auto ? S.upsellAuto : S.upsellYes, 3000);
-  }
-  qsa("[data-yes]").forEach(function (b) { b.addEventListener("click", function () { acceptUpsell(false); }); });
-
-  // ---------- The arithmetic. No minus. Kevin interferes. ----------
-  var acc = null, op = null, cur = "0", fresh = true, results = 0, kevins = 0, presses = [], clears = [], last = Date.now(), busyUntil = 0, lockUntil = 0;
-  var SYM = { "+": "+", "*": "×", "/": "÷" };
-  var val = function (s) { return parseFloat(s) || 0; };
-  function compute(a, o, b) { if (o === "+") return a + b; if (o === "*") return a * b; if (o === "/") return b === 0 ? NaN : a / b; return b; }
-  function render() { show(cur); indOp.textContent = op ? SYM[op] : ""; }
-  function reset() { acc = null; op = null; cur = "0"; fresh = true; render(); }
-  function hold(text, ms) { busyUntil = Date.now() + ms; show(text); blink(); setTimeout(function () { if (Date.now() >= busyUntil) render(); }, ms); }
-  function magicFor(n) { for (var i = 0; i < MAGIC.length; i += 1) if (Math.abs(parseFloat(MAGIC[i].n) - n) < 1e-9) return MAGIC[i].html; return null; }
-
-  function equals() {
-    var b = val(cur), raw = op && acc !== null ? compute(acc, op, b) : b;
-    acc = null; op = null; fresh = true; indOp.textContent = "";
-    if (isNaN(raw)) {
-      cur = "0"; lockUntil = Date.now() + 2600; hold("Err", 2600); anim(calc, "is-dancing"); SFX.jingle(); glitter(30, lcd);
-      unlock("div0"); say(S.div0, 3800); return;
-    }
-    results += 1;
-    if (results === 1) unlock("first");
-    if (raw % 1 !== 0) unlock("rounded");
-    var magic = magicFor(raw), v = Math.ceil(raw - 1e-9), line, step = results % 6;
-    if (magic) { line = magic; v = raw; if (Math.abs(raw - 1953) < 1e-9) unlock("year"); }
-    else if (step === 2) { v += 1; line = S.safety; unlock("safety"); }
-    else if (step === 4 && v > 0) { v *= 10; line = S.zero; }
-    else if (step === 0 && v % 100 !== 0) { v = Math.ceil(v / 100) * 100; line = S.hundred; }
-    else if (raw % 1 !== 0) line = S.rounded;
-    else line = pick(COMMENTS).html;
-    if (v > 99999999) { cur = "0"; hold("E", 2400); SFX.airhorn(); unlock("overflow"); say(S.overflow, 3000); addBoxes(99999999); drop(99999999); return; }
-    cur = String(v); render(); blink(); SFX.rimshot(); glitter(magic ? 24 : 10, lcd);
-    say(line, 3400);
-    addBoxes(v); drop(v);
-    if (!magic && results % 3 === 0) setTimeout(function () { upsell(Math.ceil(v)); }, 1400);
-  }
-
-  function press(k) {
-    var now = Date.now();
-    if (now < lockUntil) return;
-    last = now;
-    presses.push(now); presses = presses.filter(function (t) { return now - t < 2000; });
-    if (presses.length >= 14 && now > busyUntil + 4000) {
-      presses = []; lockUntil = now + 2400; anim(calc, "is-hot"); glitter(70, lcd); hold("hot", 2400); SFX.siren();
-      unlock("panic"); say(S.panic, 2800); return;
-    }
-    if (/^[0-9]$/.test(k)) {
-      if (fresh) { cur = k; fresh = false; } else if (cur.replace(".", "").length < 8) cur = cur === "0" ? k : cur + k;
-      funny(); render(); return;
-    }
-    if (k === ".") { if (fresh) { cur = "0."; fresh = false; } else if (cur.indexOf(".") < 0) cur += "."; funny(); render(); return; }
-    if (k === "+" || k === "*" || k === "/") {
-      if (op && acc !== null && !fresh) { var r = compute(acc, op, val(cur)); if (isNaN(r)) { op = null; acc = null; equals(); return; } acc = r; } else acc = val(cur);
-      op = k; fresh = true; funny(); show(forDisplay(acc)); indOp.textContent = SYM[op]; return;
-    }
-    if (k === "-") {
-      catches += 1; anim(minusKey, "is-wiggle"); SFX.sad(); hold("no", 1300);
-      if (catches >= 3) { unlock("minus"); say(S.minusCaught, 3000); } else say(S.minus, 2400);
-      return;
-    }
-    if (k === "=") { equals(); return; }
-    if (k === "C") {
-      clears.push(now); clears = clears.filter(function (t) { return now - t < 1600; });
-      funny(); reset();
-      if (clears.length >= 3) { clears = []; say(S.reset, 2400); }
-      return;
-    }
-    if (k === "M") { funny(); indM.textContent = "M"; hold("FULL", 1600); say(S.memory, 4200); return; }
-    if (k === "K") {
-      kevins += 1; SFX.airhorn(); glitter(40, lcd); say(pick(QUOTES).html, 2800);
-      if (kevins === 5) { unlock("kevin"); setTimeout(function () { say(S.kevinFan, 2600); }, 2900); }
-    }
-  }
-
-  keys.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var k = btn.getAttribute("data-key");
-      if (k === "-" && skipClick) { skipClick = false; return; }
-      press(k);
-    });
-  });
-  var KEYMAP = { "Enter": "=", "=": "=", "+": "+", "*": "*", "x": "*", "X": "*", "/": "/", ":": "/", "-": "-", ",": ".", ".": ".", "Escape": "C", "Delete": "C", "Backspace": "C", "c": "C", "m": "M", "M": "M", "k": "K", "K": "K" };
-  calc.addEventListener("keydown", function (e) {
-    if (e.target !== calc) return;
-    var k = /^[0-9]$/.test(e.key) ? e.key : KEYMAP[e.key];
-    if (!k) return;
-    e.preventDefault();
-    var btn = qs('[data-key="' + k + '"]');
-    if (btn) { btn.classList.add("is-down"); setTimeout(function () { btn.classList.remove("is-down"); }, 110); }
-    press(k);
-  });
-
-  // Left alone and in view for 25 seconds, Kevin checks you are still there. Once.
-  var visible = false, greeted = false;
-  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.6 }).observe(calc);
-  setInterval(function () {
-    if (greeted || !visible || Date.now() - last < 25000 || Date.now() < lockUntil) return;
-    greeted = true; hold("HELL0", 3000); SFX.chipmunk(); say(S.idle, 3600);
-  }, 1000);
-
-  render();
-
-  // ---------- Team Westpack's formula: the one that subtracts ----------
-  var inLast = qs(".bx-in-last"), inGrow = qs(".bx-in-grow"), inStock = qs(".bx-in-stock");
-  var outEmpty = qs(".bx-out-empty"), outNeed = qs(".bx-out-need"), outEnough = qs(".bx-out-enough"), outN = qs(".bx-out-n");
-  function formula() {
-    var lastYear = parseFloat(inLast.value), grow = parseFloat(inGrow.value), stock = parseFloat(inStock.value);
-    if (!(lastYear > 0)) { outEmpty.hidden = false; outNeed.hidden = true; outEnough.hidden = true; return; }
-    var need = Math.ceil(lastYear * (1 + (grow > 0 ? grow : 0) / 100)) - (stock > 0 ? stock : 0);
-    outEmpty.hidden = true; outNeed.hidden = need <= 0; outEnough.hidden = need > 0;
-    outN.textContent = num(Math.max(0, need), 0, true);
-  }
-  [inLast, inGrow, inStock].forEach(function (el) { el.addEventListener("input", formula); });
-})();
-</script>
+<div class="bx-lcd">
+<div class="bx-lcd-top" aria-hidden="true"><span class="bx-ind-op"></span><span class="bx-ind-m"></span></div>
+<svg class="bx-digits" viewBox="0 0 360 72" aria-hidden="true"></svg>
+<span class="bx-live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+</div>
+<div class="bx-keys">
+<button type="button" class="bx-key k-sage" data-key="C" aria-label="Ryd">C</button>
+<button type="button" class="bx-key k-green k-op" data-key="/" aria-label="Divider">÷</button>
+<button type="button" class="bx-key k-navy k-op" data-key="*" aria-label="Gange">×</button>
+<button type="button" class="bx-key k-brown k-op k-minus" data-key="-" aria-label="Minus. Pakket ind i gavebånd">−<span class="bx-bow" aria-hidden="true"></span></button>
+<button type="button" class="bx-key k-sage" data-key="7">7</button>
+<button type="button" class="bx-key k-green" data-key="8">8</button>
+<button type="button" class="bx-key k-navy" data-key="9">9</button>
+<button type="button" class="bx-key k-brown k-op" data-key="+" aria-label="Plus">+</button>
+<button type="button" class="bx-key k-sage" data-key="4">4</button>
+<button type="button" class="bx-key k-green" data-key="5">5</button>
+<button type="button" class="bx-key k-navy" data-key="6">6</button>
+<button type="button" class="bx-key k-brown" data-key="M" aria-label="Hukommelse">M</button>
+<button type="button" class="bx-key k-sage" data-key="1">1</button>
+<button type="button" class="bx-key k-green" data-key="2">2</button>
+<button type="button" class="bx-key k-navy" data-key="3">3</button>
+<button type="button" class="bx-key k-op k-eq" data-key="=" aria-label="Lig med">=</button>
+<button type="button" class="bx-key k-sage" data-key="0">0</button>
+<button type="button" class="bx-key k-green bx-dec" data-key="." aria-label="Komma">,</button>
+<button type="button" class="bx-key k-kevin" data-key="K" aria-label="Kevin-knappen">K</button>
+</div>
+<div class="bx-upsell" role="dialog" aria-label="Kevins tilbud">
+<p class="bx-upsell-q">Skal det være lidt flere æsker?</p>
+<div class="bx-upsell-row"><button type="button" class="bx-yes" data-yes>Ja</button><button type="button" class="bx-yes is-alt" data-yes>Ja tak!</button></div>
+<div class="bx-timer"><i></i></div>
+<p class="bx-upsell-note">Kevin tager tavshed som et ja.</p>
+</div>
+</div>
+</div>
+<aside class="bx-hud">
+<div class="bx-stats">
+<div class="bx-card"><span class="bx-label">Æsker regnet</span><b class="bx-big bx-score">0</b></div>
+<div class="bx-card"><span class="bx-label">Kevins Q4-mål</span><b class="bx-big bx-target">500</b><div class="bx-bar"><i></i></div></div>
+</div>
+<div class="bx-card">
+<div class="bx-badges-top"><span class="bx-label">Hemmeligheder</span><b class="bx-found">0/12</b></div>
+<ol class="bx-badges">
+<li class="bx-badge" data-badge="first"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📦</span></div><p class="bx-b-name">Første æske</p><p class="bx-b-hint">Tryk på =</p></li>
+<li class="bx-badge" data-badge="rounded"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">⬆️</span></div><p class="bx-b-name">Rundet op</p><p class="bx-b-hint">Del noget skævt</p></li>
+<li class="bx-badge" data-badge="safety"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🦺</span></div><p class="bx-b-name">Ekstra æske</p><p class="bx-b-hint">Regn videre</p></li>
+<li class="bx-badge" data-badge="minus"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎯</span></div><p class="bx-b-name">Minus-jæger</p><p class="bx-b-hint">Fang minus tre gange</p></li>
+<li class="bx-badge" data-badge="div0"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎤</span></div><p class="bx-b-name">Mariah-alarm</p><p class="bx-b-hint">Del med nul</p></li>
+<li class="bx-badge" data-badge="year"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎂</span></div><p class="bx-b-name">Født 1953</p><p class="bx-b-hint">Westpacks fødselsår</p></li>
+<li class="bx-badge" data-badge="panic"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">✨</span></div><p class="bx-b-name">Glimmer i næsen</p><p class="bx-b-hint">Tryk vildt hurtigt</p></li>
+<li class="bx-badge" data-badge="kevin"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🎅</span></div><p class="bx-b-name">Kevin-fan</p><p class="bx-b-hint">Tryk K fem gange</p></li>
+<li class="bx-badge" data-badge="overflow"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">💥</span></div><p class="bx-b-name">Overflow</p><p class="bx-b-hint">Over 99.999.999</p></li>
+<li class="bx-badge" data-badge="upsell"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🛒</span></div><p class="bx-b-name">Sagde ja</p><p class="bx-b-hint">Sig ja til Kevin</p></li>
+<li class="bx-badge" data-badge="goal"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">📈</span></div><p class="bx-b-name">Mål nået</p><p class="bx-b-hint">Nå Kevins mål</p></li>
+<li class="bx-badge" data-badge="avalanche"><div class="bx-b-box"><span class="bx-b-q">?</span><span class="bx-b-icon">🏔️</span></div><p class="bx-b-name">Lavine</p><p class="bx-b-hint">Fyld lageret</p></li>
+</ol>
+</div>
+</aside>
+</div>
+<div class="bx-wh" aria-hidden="true"><canvas></canvas><span class="bx-wh-label" translate="no">North Pole South</span><span class="bx-wh-empty">Dine æsker lander her.</span></div>
+<div class="bx-final" role="dialog" aria-label="Certified Box Counter">
+<div class="bx-cert">
+<img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/bfd8f360-760c-4919-80f5-5f4e7adeae30.gif" width="600" height="600" alt="To Kevins i nissehue kigger frem bag kæmpelommeregneren foran en bordeaux bølge med juleikoner" loading="lazy">
+<h3><span translate="no">Certified Box Counter™</span></h3>
+<p>Du har fundet alle 12 af Kevins hemmeligheder. Han er rørt. Og lidt bekymret for dig.</p>
+<span class="bx-label">Æsker regnet</span><b class="bx-cert-n">0</b>
+<div class="bx-cert-row">
+<a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Bestil rigtige æsker →</a>
+<button type="button" class="bx-close">Spil videre</button>
+</div>
+</div>
+</div>
+</section>
+<section class="bx-real">
+<p class="bx-kick">Bygget af Team Westpack · Uden Kevin</p>
+<h3>Juleformlen. Den kan trække fra.</h3>
+<p>Hvor mange æsker skal du bestille før jul? Skriv tre tal, så regner den ud, hvad du mangler.</p>
+<div class="bx-form">
+<label>Æsker, du brugte i december sidste år<small>Kan du ikke huske det? Se din <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">ordrehistorik</a>.</small><input type="number" inputmode="numeric" min="0" step="1" class="bx-in-last" placeholder="0"></label>
+<label>Hvor meget mere regner du med at sælge i år? (%)<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-grow" placeholder="10"></label>
+<label>Æsker, du har på hylden nu<input type="number" inputmode="numeric" min="0" step="1" class="bx-in-stock" placeholder="0"></label>
+</div>
+<div class="bx-out" aria-live="polite">
+<p class="bx-out-empty">Skriv dine tal ovenfor.</p>
+<p class="bx-out-need" hidden>Du skal bestille cirka <strong class="bx-out-n">0</strong> æsker.</p>
+<p class="bx-out-enough" hidden>Du har æsker nok til jul. Kevin er dybt skuffet.</p>
+</div>
+<div class="bx-cta">
+<a class="bx-btn bx-store" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Find din æske →</a>
+<a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">Genbestil fra din ordrehistorik</a>
+</div>
+<p class="bx-small">Skriv antallet på produktsiden, så regner den selv stykprisen og mængderabatten ud. Logotryk er gratis på smykkeæsker. Har vi dit logo, tager produktionen 4–5 hverdage på de fleste smykkeæsker. De første anbefalede frister for ordrer med tryk falder allerede 10. december – og de er forskellige fra land til land. <a class="bx-link bx-store" href="https://www.westpack.com/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Se fristerne for dit land</a>.</p>
+</section>
+<div class="bx-strings" hidden aria-hidden="true">
+<span data-k="rounded">Rundet op. Man kan ikke sælge en halv æske.</span>
+<span data-k="safety">En æske ekstra. For en sikkerheds skyld. Jeg kender mig selv.</span>
+<span data-k="zero">Jeg har sat et nul på. Jeg tror på dig.</span>
+<span data-k="hundred">Rundet op til nærmeste hundrede. Jeg tænker stort på dine vegne.</span>
+<span data-k="minus">Den er pakket ind. Den virker ikke. Med vilje.</span>
+<span data-k="minusCaught">Okay. Du fangede den. Den virker stadig ikke.</span>
+<span data-k="div0">Du delte med nul. Nu danser vi. Vi har ikke rettighederne til Mariah Carey.</span>
+<span data-k="overflow">Displayet kan ikke rumme det. Det kan jeg heller ikke.</span>
+<span data-k="panic">Hvilepuls 180. Der kommer glimmer ud af næsen.</span>
+<span data-k="memory">Min hukommelse er fuld. 72 faner. Din ligger i din <a class="bx-store" href="https://www.westpack.com/dkk_dk_den/sales/order/history/">ordrehistorik</a>.</span>
+<span data-k="reset">Nulstillet. Det er jeg ikke.</span>
+<span data-k="idle">Hallo? Er du der stadig? Jeg har ikke andre.</span>
+<span data-k="goal">Mål nået! Jeg har hævet målet. Det gør jeg altid.</span>
+<span data-k="upsellYes">Jeg vidste, du ville sige ja. Jeg havde allerede pakket dem.</span>
+<span data-k="upsellAuto">Det tager jeg som et ja.</span>
+<span data-k="avalanche">Lageret er fuldt. Det var med vilje. Det var ikke med vilje.</span>
+<span data-k="kevinFan">Fem gange? Jeg føler mig set.</span>
+<span data-k="hello">Hej. Jeg har ventet på dig. Tryk på noget. Hvad som helst.</span>
+<span data-k="back">Du kom tilbage. Jeg vidste det. Jeg har gemt dine æsker.</span>
+<span data-k="soundOn">Lyd til</span>
+<span data-k="soundOff">Lyd fra</span>
+<ul data-list="dodge">
+<li>Nix.</li>
+<li>Den vil ikke røres.</li>
+<li>Næsten!</li>
+<li><span translate="no">Subtraction is not a growth mindset.</span></li>
+<li>Den er hurtigere end dig.</li>
+</ul>
+<ul data-list="comments">
+<li>Kontrolleret. Af mig. Kun af mig.</li>
+<li>Printeren klappede.</li>
+<li>Sat ind i fane 73. Den fandtes ikke før.</li>
+<li>Godkendt. Underskrevet med glimmer.</li>
+<li>Jeg har læst det højt over højttaleranlægget.</li>
+<li>Kantinen er orienteret.</li>
+<li>Jeg får det trykt på et krus.</li>
+<li>For lidt. Det er altid for lidt.</li>
+<li>Jeg ringer lige til mig selv og fortæller det.</li>
+<li>Mødelokale 2 jublede. Det er kun mig derinde.</li>
+<li>Smukt tal. Jeg græd lidt.</li>
+<li>Jeg viste tallet til receptionen. De sagde ‘ja, Kevin’. Det gør de altid.</li>
+</ul>
+<ul data-list="magic">
+<li data-n="1953">1953! Westpacks fødselsår. Jeg rejste mig og klappede.</li>
+<li data-n="72">72. Faner i mit Excel-ark. Du må ikke åbne det.</li>
+<li data-n="180">180. Min hvilepuls.</li>
+<li data-n="7">7. Kopper espresso. Indtil videre i dag.</li>
+<li data-n="48">48. Mange af vores smykkeæsker kan bestilles med dit logo fra 48 stk. Det er faktisk rigtigt.</li>
+<li data-n="96">96. Her starter mængderabatten på mange af vores smykkeæsker. Også rigtigt.</li>
+<li data-n="20">20. Så mange smykkeæsker er lommeregneren bygget af.</li>
+<li data-n="2.4">2,4. Lommeregnerens højde i meter. Den står i mødelokale 2. Den kan ikke være der.</li>
+<li data-n="1987">1987. Min første lommeregner. Min første kærlighed.</li>
+<li data-n="600">600. Kabelbindere på firmakortet. Spørg ikke.</li>
+<li data-n="0">0 æsker?! Jeg skal lige sidde ned.</li>
+</ul>
+<ul data-list="quotes">
+<li>Jeg har lavet en fane til dig i mit Excel-ark. Nummer 73. Den er tom. Jeg venter.</li>
+<li>Jeg sov i mødelokale 2 i nat. Lommeregneren holdt mig varm.</li>
+<li>Du trykker på mine taster, som ingen har gjort før. Det betyder meget for mig.</li>
+<li>Jeg har printet dit sidste resultat ud. Det hænger på mit køleskab nu.</li>
+<li>Hvis du nogensinde mangler æsker, så tænk på mig. Det gør jeg. Hele tiden.</li>
+<li>Jeg har lamineret lommeregneren. To gange. For en sikkerheds skyld.</li>
+<li>Kantinen spurgte, om jeg ville have frokost. Jeg sagde, at jeg havde dig.</li>
+<li>Jeg tæller ikke får, når jeg skal sove. Jeg tæller æsker. Jeg har ikke sovet siden august.</li>
+</ul>
+</div>
+<script>!function(){"use strict";var t=document.getElementById("boxulator");if(t&&!t.getAttribute("data-ready")){t.setAttribute("data-ready","1");var e=function(e){return t.querySelector(e)},n=function(e){return Array.prototype.slice.call(t.querySelectorAll(e))},a=function(t){return t[Math.floor(Math.random()*t.length)]},i=location.pathname.split("/")[1]||"";/^[a-z]{3}_[a-z]{2}_[a-z]{3}$/.test(i)&&"dkk_dk_den"!==i&&n("a.bx-store").forEach((function(t){t.setAttribute("href",t.getAttribute("href").replace("/dkk_dk_den/","/"+i+"/"))}));var r={};n(".bx-strings [data-k]").forEach((function(t){r[t.getAttribute("data-k")]=t.innerHTML.trim()}));var o=function(t){return n('.bx-strings [data-list="'+t+'"] > li').map((function(t){return{html:t.innerHTML.trim(),n:t.getAttribute("data-n")}}))},u=o("comments"),c=o("magic"),l=o("quotes"),s=o("dodge"),f=document.documentElement.lang||void 0,d=function(t,e,n){try{return Number(t).toLocaleString(f,{maximumFractionDigits:void 0===e?6:e,useGrouping:!!n})}catch(e){return String(t)}};e(".bx-dec").textContent=d(1.5,1).charAt(1)||",";for(var h=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,v=e(".bx-game"),m=e(".bx-calc"),g=e(".bx-calcwrap"),p=e(".bx-bubble"),b=e(".bx-lcd"),y={0:"abcdef",1:"bc",2:"abdeg",3:"abcdg",4:"bcfg",5:"acdfg",6:"acdefg",7:"abc",8:"abcdefg",9:"abcdfg",E:"adefg",F:"aefg",H:"bcefg",h:"cefg",L:"def",P:"abefg",o:"cdeg",n:"ceg",r:"eg",t:"defg",U:"bcdef","-":"g"," ":""},x=e(".bx-digits"),w="http://www.w3.org/2000/svg",M=[],k=34,T=function(t){var e=document.createElementNS(w,"polygon");return e.setAttribute("points",t.map((function(t){return t.join(",")})).join(" ")),e.setAttribute("class","bx-seg"),e},E=function(t,e){return T([[t+3.5+1,e],[t+7+1,e-3.5],[t+k-7-1,e-3.5],[t+k-3.5-1,e],[t+k-7-1,e+3.5],[t+7+1,e+3.5]])},A=function(t,e,n){return T([[t,e+3.5+1],[t+3.5,e+7+1],[t+3.5,n-7-1],[t,n-3.5-1],[t-3.5,n-7-1],[t-3.5,e+7+1]])},L=0;L<8;L+=1){var q=6+44*L,C=document.createElementNS(w,"g");C.setAttribute("transform","skewX(-7) translate(8 0)");var S={a:E(q,9.5),g:E(q,36),d:E(q,62.5),f:A(q+3.5,6,36),b:A(q+k-3.5,6,36),e:A(q+3.5,36,66),c:A(q+k-3.5,36,66)};Object.keys(S).forEach((function(t){C.appendChild(S[t])}));var R=document.createElementNS(w,"circle");R.setAttribute("cx",q+k+4),R.setAttribute("cy",63),R.setAttribute("r",3.6),R.setAttribute("class","bx-seg"),C.appendChild(R),x.appendChild(C),M.push({segs:S,dp:R})}var F=e(".bx-live"),D=e(".bx-ind-op"),N=e(".bx-ind-m"),O=null,B=null,V=null,z=!0,I={boing:function(){oe({f:[[0,150],[.5,270]],dur:.55,vol:.24,vib:[16,120,!0]})},slideUp:function(){oe({f:[[0,320],[.32,1500,"lin"]],dur:.36,vol:.14,vib:[7,14]})},slideDown:function(){oe({f:[[0,1400],[.4,260,"lin"]],dur:.42,vol:.14,vib:[7,14]})},pew:function(){oe({type:"square",f:[[0,1700],[.18,110]],dur:.2,vol:.07})},squeak:function(){[0,.13].forEach((function(t){oe({at:t,type:"triangle",f:[[0,1300],[.04,2100],[.09,1500]],dur:.09,vol:.14})}))},kazoo:function(){oe({type:"sawtooth",f:[[0,230],[.15,262,"lin"],[.45,205,"lin"]],dur:.48,vol:.13,vib:[6,9],filter:["bandpass",[[0,1100]],3],am:[34,.35,"sine"]})},bonk:function(){oe({f:[[0,520],[.12,110]],dur:.14,vol:.32}),ue({type:"highpass",freq:3e3,dur:.03,vol:.08})},blop:function(){oe({f:[[0,240],[.07,980]],dur:.09,vol:.26})},meow:function(){oe({type:"sawtooth",f:[[0,520],[.18,700,"lin"],[.55,430,"lin"]],dur:.58,att:.04,vol:.17,vib:[5,8],filter:["bandpass",[[0,600],[.2,1500],[.55,700]],4]})},moo:function(){oe({type:"sawtooth",f:[[0,120],[.3,126,"lin"],[1,92,"lin"]],dur:1,att:.08,vol:.22,filter:["lowpass",[[0,300],[.35,900],[1,340]],6]})},raspberry:function(){oe({type:"sawtooth",f:[[0,86],[.55,58,"lin"]],dur:.58,vol:.24,filter:["lowpass",[[0,900]],1],am:[27,.85]}),ue({freq:600,q:.8,dur:.5,vol:.05})},goat:function(){oe({type:"sawtooth",f:[[0,430],[.6,380,"lin"]],dur:.65,att:.03,vol:.15,vib:[9,45],filter:["bandpass",[[0,900],[.6,1250]],3]})},quack:function(){[0,.18].forEach((function(t){oe({at:t,type:"sawtooth",f:[[0,380],[.12,260]],dur:.13,vol:.2,filter:["bandpass",[[0,1300],[.12,800]],5]})}))},chipmunk:function(){for(var t=0;t<6;t+=1)oe({at:.07*t,type:"triangle",f:[[0,t%2?1500:1250],[.05,t%2?1750:1420]],dur:.05,vol:.11})},airhorn:function(){[[0,.16],[.2,.09],[.33,.6]].forEach((function(t){[466,470,554,559].forEach((function(e){oe({at:t[0],type:"sawtooth",f:[[0,e]],dur:t[1],hold:.7*t[1],att:.015,vol:.05,filter:["lowpass",[[0,2600]],.7]})}))}))},sad:function(){[293.66,277.18,261.63,246.94].forEach((function(t,e){var n=3===e;oe({at:.42*e,type:"sawtooth",f:[[0,t],[.35,.97*t,"lin"]],dur:n?1.1:.36,att:.04,vol:.14,vib:n?[5.5,6]:null,filter:["lowpass",[[0,500],[.15,1400],[.35,600]],4]})}))},rimshot:function(){oe({f:[[0,190],[.12,120]],dur:.14,vol:.36}),oe({at:.14,f:[[0,150],[.14,90]],dur:.16,vol:.36}),ue({at:.36,type:"highpass",freq:6500,dur:.7,vol:.12}),ue({at:.36,freq:3500,q:2,dur:.12,vol:.12})},siren:function(){oe({type:"triangle",f:[[0,650],[.35,1250,"lin"],[.7,650,"lin"],[1.05,1250,"lin"],[1.4,650,"lin"]],dur:1.45,hold:1.2,vol:.12})},coin:function(){oe({type:"square",f:[[0,988]],dur:.08,hold:.06,vol:.06}),oe({at:.08,type:"square",f:[[0,1319]],dur:.35,vol:.06})},kaching:function(){ue({freq:2500,q:1.5,dur:.06,vol:.18}),[2093,2637,3136].forEach((function(t,e){oe({at:.08+.01*e,f:[[0,t]],dur:.7,vol:.07})}))},fanfare:function(){[523.25,659.25,783.99,1046.5].forEach((function(t,e){oe({at:.09*e,type:"square",f:[[0,t]],dur:3===e?.5:.09,hold:3===e?.3:.05,vol:.05})}))},jingle:function(){var t=659.25,e=0;[[t,1],[t,1],[t,2],[t,1],[t,1],[t,2],[t,1],[783.99,1],[523.25,1.5],[587.33,.5],[t,4]].forEach((function(t){oe({at:e,type:"square",f:[[0,t[0]]],dur:.19*t[1]*.9,vol:.05}),e+=.19*t[1]}))}},G=["boing","slideUp","slideDown","pew","squeak","kazoo","bonk","blop","meow","moo","raspberry","goat","quack","chipmunk"],j="",_=e(".bx-sound");_.addEventListener("click",(function(){z=!z,_.textContent=z?"🔊":"🔇",_.setAttribute("aria-label",z?r.soundOn:r.soundOff),_.setAttribute("aria-pressed",z?"true":"false")}));var H=function(t){try{navigator.vibrate&&navigator.vibrate(t)}catch(t){}},K=null,U=n(".bx-badge"),P=0,$=e(".bx-found"),J=e(".bx-final"),Q=!1;e(".bx-close").addEventListener("click",(function(){J.classList.remove("is-on")}));var W=0,X=0,Y=500,Z=0,tt=e(".bx-score"),et=e(".bx-target"),nt=e(".bx-bar i"),at=function(t){var e=Math.pow(10,Math.floor(Math.log10(Math.max(1,t))));return Math.ceil(t/e)*e},it="westpack-boxulator-v1",rt=!1;!function(){var t=null;try{t=JSON.parse(localStorage.getItem(it)||"null")}catch(e){t=null}t&&"object"==typeof t&&((t.found||[]).forEach((function(t){var n=e('.bx-badge[data-badge="'+t+'"]');n&&!n.classList.contains("is-open")&&(n.classList.add("is-open"),P+=1)})),$.textContent=P+"/"+U.length,t.score>0&&(W=Math.floor(t.score),X=W,ve(tt,W)),t.target>0&&(Y=Math.floor(t.target),ve(et,Y)),me(),Q=!!t.done,rt=P>0||W>0)}();var ot=e(".bx-wh"),ut=e(".bx-wh canvas"),ct=ut.getContext?ut.getContext("2d"):null,lt=["#8fa58a","#1f4a36","#2b3d6e","#6a4532","#c8102e"],st=14,ft=0,dt=[],ht=[],vt=[],mt=[],gt=0,pt=0,bt=1,yt=!1,xt=!1,wt=null;window.addEventListener("resize",(function(){clearTimeout(wt),wt=setTimeout(be,200)})),be();var Mt={C:[1,1],"/":[1,2],"*":[1,3],"-":[1,4],7:[2,1],8:[2,2],9:[2,3],"+":[2,4],4:[3,1],5:[3,2],6:[3,3],M:[3,4],1:[4,1],2:[4,2],3:[4,3],"=":[4,4],0:[5,1],".":[5,2],K:[5,3]},kt=n(".bx-key"),Tt={};kt.forEach((function(t){var e=t.getAttribute("data-key");Tt[e]=Mt[e].slice(),Ae(t)}));var Et=e('[data-key="-"]'),At=null,Lt=0,qt=!1;Et.addEventListener("pointerenter",(function(t){"mouse"===t.pointerType&&Math.random()<.7&&qe()})),Et.addEventListener("pointerdown",(function(t){"mouse"!==t.pointerType&&Math.random()<.55&&(qt=!0,qe())}));var Ct=e(".bx-upsell"),St=null,Rt=0;n("[data-yes]").forEach((function(t){t.addEventListener("click",(function(){Se(!1)}))}));var Ft=null,Dt=null,Nt="0",Ot=!0,Bt=0,Vt=0,zt=[],It=[],Gt=Date.now(),jt=0,_t=0,Ht={"+":"+","*":"×","/":"÷"},Kt=function(t){return parseFloat(t)||0};kt.forEach((function(t){t.addEventListener("click",(function(){var e=t.getAttribute("data-key");"-"===e&&qt?qt=!1:Oe(e)}))}));var Ut={Enter:"=","=":"=","+":"+","*":"*",x:"*",X:"*","/":"/",":":"/","-":"-",",":".",".":".",Escape:"C",Delete:"C",Backspace:"C",c:"C",m:"M",M:"M",k:"K",K:"K"};m.addEventListener("keydown",(function(t){if(t.target===m){var n=/^[0-9]$/.test(t.key)?t.key:Ut[t.key];if(n){t.preventDefault();var a=e('[data-key="'+n+'"]');a&&(a.classList.add("is-down"),setTimeout((function(){a.classList.remove("is-down")}),110)),Oe(n)}}}));var Pt=!1,$t=!1,Jt=!1;"IntersectionObserver"in window&&new IntersectionObserver((function(t){(Pt=t[0].isIntersecting)&&!Jt&&(Jt=!0,Gt=Date.now(),setTimeout((function(){le(rt?r.back:r.hello,3800)}),600))}),{threshold:.6}).observe(m),setInterval((function(){$t||!Pt||Date.now()-Gt<25e3||Date.now()<_t||($t=!0,De("HELL0",3e3),I.chipmunk(),le(r.idle,3600))}),1e3),Fe();var Qt=e(".bx-in-last"),Wt=e(".bx-in-grow"),Xt=e(".bx-in-stock"),Yt=e(".bx-out-empty"),Zt=e(".bx-out-need"),te=e(".bx-out-enough"),ee=e(".bx-out-n");[Qt,Wt,Xt].forEach((function(t){t.addEventListener("input",Be)}))}function ne(t){var e=[];for(String(t).split("").forEach((function(t){"."===t&&e.length?e[e.length-1].dp=!0:e.push({ch:t,dp:!1})})),e=e.slice(-8);e.length<8;)e.unshift({ch:" ",dp:!1});e.forEach((function(t,e){var n=y[t.ch]||"";"abcdefg".split("").forEach((function(t){M[e].segs[t].classList.toggle("on",n.indexOf(t)>=0)})),M[e].dp.classList.toggle("on",t.dp)})),F.textContent=String(t)}function ae(){b.classList.remove("is-blink"),b.offsetWidth,b.classList.add("is-blink")}function ie(){if(!z)return null;if(!O){var t=window.AudioContext||window.webkitAudioContext;if(!t)return null;var e=(O=new t).createDynamicsCompressor();(B=O.createGain()).gain.value=.9,B.connect(e),e.connect(O.destination)}return"suspended"===O.state&&O.resume(),O}function re(t,e,n,a,i,r){t.gain.setValueAtTime(1e-4,e),t.gain.exponentialRampToValueAtTime(n,e+a),r&&t.gain.setValueAtTime(n,e+a+r),t.gain.exponentialRampToValueAtTime(1e-4,e+a+i)}function oe(t){var e=ie();if(e){var n=e.currentTime+(t.at||0),a=t.dur||.2,i=t.att||.01,r=e.createOscillator(),o=e.createGain(),u=r,c=t.f||[[0,440]];r.type=t.type||"sine",r.frequency.setValueAtTime(c[0][1],n);for(var l=1;l<c.length;l+=1)"lin"===c[l][2]?r.frequency.linearRampToValueAtTime(c[l][1],n+c[l][0]):r.frequency.exponentialRampToValueAtTime(c[l][1],n+c[l][0]);if(t.vib){var s=e.createOscillator(),f=e.createGain();s.frequency.value=t.vib[0],f.gain.setValueAtTime(t.vib[1],n),t.vib[2]&&f.gain.exponentialRampToValueAtTime(.01,n+a),s.connect(f),f.connect(r.frequency),s.start(n),s.stop(n+i+a+.05)}if(t.filter){var d=e.createBiquadFilter(),h=t.filter[1];d.type=t.filter[0],d.Q.value=t.filter[2]||1,d.frequency.setValueAtTime(h[0][1],n);for(var v=1;v<h.length;v+=1)d.frequency.linearRampToValueAtTime(h[v][1],n+h[v][0]);u.connect(d),u=d}if(t.am){var m=e.createGain(),g=e.createOscillator(),p=e.createGain();g.type=t.am[2]||"square",g.frequency.value=t.am[0],p.gain.value=t.am[1],m.gain.value=1-t.am[1],g.connect(p),p.connect(m.gain),u.connect(m),u=m,g.start(n),g.stop(n+i+a+.05)}re(o,n,t.vol||.15,i,a,t.hold),u.connect(o),o.connect(B),r.start(n),r.stop(n+i+a+.05)}}function ue(t){var e=ie();if(e){if(!V)for(var n=(V=e.createBuffer(1,e.sampleRate,e.sampleRate)).getChannelData(0),a=0;a<n.length;a+=1)n[a]=2*Math.random()-1;var i=e.currentTime+(t.at||0),r=e.createBufferSource(),o=e.createGain(),u=e.createBiquadFilter();r.buffer=V,r.loop=!0,u.type=t.type||"bandpass",u.frequency.value=t.freq||1e3,u.Q.value=t.q||1,re(o,i,t.vol||.1,.005,t.dur||.2),r.connect(u),u.connect(o),o.connect(B),r.start(i),r.stop(i+(t.dur||.2)+.06)}}function ce(){var t;do{t=a(G)}while(t===j);j=t,I[t]()}function le(t,e){p.innerHTML=t,g.classList.add("is-peek","is-talk"),clearTimeout(K),K=setTimeout((function(){g.classList.remove("is-talk","is-peek")}),e||3200)}function se(t,e){if(!h&&v.animate)for(var n=(e||b).getBoundingClientRect(),a=v.getBoundingClientRect(),i=n.left-a.left+n.width/2,r=n.top-a.top+n.height/2,o=["#e8cf9a","#d31b21","#ffffff","#f1dede","#c9a24e","#8fa58a"],u=0;u<t;u+=1){var c=document.createElement("span"),l=Math.random()*Math.PI*2,s=50+190*Math.random();c.className="bx-glit",c.style.left=i+"px",c.style.top=r+"px",c.style.background=o[u%o.length],v.appendChild(c),c.animate([{transform:"translate(0,0) rotate(0)",opacity:1},{transform:"translate("+Math.cos(l)*s+"px,"+(Math.sin(l)*s+100)+"px) rotate("+720*Math.random()+"deg)",opacity:0}],{duration:900+800*Math.random(),easing:"cubic-bezier(.2,.7,.4,1)"}).onfinish=function(t){return function(){t.remove()}}(c)}}function fe(t,e){t.classList.remove(e),t.offsetWidth,t.classList.add(e),setTimeout((function(){t.classList.remove(e)}),3200)}function de(t){var n=e('.bx-badge[data-badge="'+t+'"]');n&&!n.classList.contains("is-open")&&(n.classList.add("is-open"),P+=1,$.textContent=P+"/"+U.length,H([20,40,20]),pe(),setTimeout((function(){I.coin(),se(26,n.querySelector(".bx-b-box"))}),250),P===U.length&&setTimeout(he,1800))}function he(){Q=!0,pe(),e(".bx-cert-n").textContent=d(W,0,!0),J.classList.add("is-on"),I.fanfare(),setTimeout(I.airhorn,600),se(90,e(".bx-cert"))}function ve(t,e){var n=d(e,0,!0);t.textContent=n,t.classList.toggle("is-long",n.length>7)}function me(){nt.style.width=Math.min(100,W/Y*100)+"%"}function ge(t){if((t=Math.ceil(t))>0){W+=t,me(),pe(),cancelAnimationFrame(Z);var e=X,n=W,a=performance.now();if(function t(i){var r=Math.min(1,(i-a)/650);X=Math.round(e+(n-e)*(1-Math.pow(1-r,3))),ve(tt,X),r<1&&(Z=requestAnimationFrame(t))}(a),W>=Y){de("goal");var i=at(3*W);setTimeout((function(){ve(et,Y=i),me(),pe(),I.sad(),le(r.goal,3600)}),1500)}}}function pe(){try{localStorage.setItem(it,JSON.stringify({found:U.filter((function(t){return t.classList.contains("is-open")})).map((function(t){return t.getAttribute("data-badge")})),score:W,target:Y,done:Q}))}catch(t){}}function be(){if(ct){var t=ut.getBoundingClientRect();if(t.width){bt=Math.min(2,window.devicePixelRatio||1),gt=t.width,pt=t.height,ut.width=Math.round(gt*bt),ut.height=Math.round(pt*bt),st=gt<420?12:14;var e=Math.floor(gt/st);if(e!==ft){ft=e,dt=[];for(var n=0;n<ft;n+=1)dt.push(0);ht=[]}xe()}}}function ye(t){var e=st;ct.save(),ct.translate(t.x+e/2,t.y+e/2),ct.rotate(t.r||0),ct.fillStyle=t.c,ct.fillRect(-e/2,-e/2+2,e,e-2),ct.fillStyle="rgba(255,255,255,.25)",ct.fillRect(-e/2-1,-e/2,e+2,4),ct.fillStyle="#d9b45a",ct.fillRect(.2*-e,1,.4*e,2),ct.restore()}function xe(){ct.setTransform(bt,0,0,bt,0,0),ct.clearRect(0,0,gt,pt),ct.fillStyle="rgba(93,39,42,.35)",ct.fillRect(0,pt-4,gt,4),ht.forEach(ye),vt.forEach(ye),mt.forEach(ye)}function we(){vt=vt.filter((function(t){return t.vy+=.9,t.y+=t.vy,t.y<t.ty||(t.y=t.ty,t.vy>7?(t.vy=.28*-t.vy,!0):(t.r=.3*t.r,ht.push(t),!1))})),mt=mt.filter((function(t){return t.vy+=.6,t.x+=t.vx,t.y+=t.vy,t.r+=t.vr,t.y<pt+40&&t.x>-40&&t.x<gt+40})),xe(),vt.length||mt.length?requestAnimationFrame(we):yt=!1}function Me(){yt||(yt=!0,requestAnimationFrame(we))}function ke(){if(ft){var t=Math.round(ft/2+(Math.random()+Math.random()+Math.random()-1.5)*(ft/5));t=Math.max(0,Math.min(ft-1,t));for(var e=0;e<ft;e+=1){var n=t>0&&dt[t-1]<dt[t]-1,a=t<ft-1&&dt[t+1]<dt[t]-1;if(n&&a)t+=Math.random()<.5?-1:1;else if(n)t-=1;else{if(!a)break;t+=1}}dt[t]+=1,ot.classList.add("has-boxes");var i={x:(gt-ft*st)/2+t*st,y:-st-40*Math.random(),vy:0,ty:pt-4-dt[t]*st,c:lt[Math.floor(Math.random()*lt.length)],r:.6*(Math.random()-.5),vr:0};h?(i.y=i.ty,ht.push(i),xe()):(vt.push(i),Me()),!xt&&dt[t]*st>pt-30&&(xt=!0,setTimeout(Ee,700))}}function Te(t){if(ct&&t>0)for(var e=t<=12?Math.ceil(t):Math.min(40,12+Math.round(6*Math.log10(t))),n=0;n<e;n+=1)setTimeout(ke,45*n)}function Ee(){de("avalanche"),le(r.avalanche,3600),H([40,30,80]);for(var t=0;t<6;t+=1)setTimeout(I.bonk,90*t);setTimeout(I.raspberry,650),fe(ot,"is-shake");var e=ht.concat(vt);mt=mt.concat(e.map((function(t){return{x:t.x,y:t.y,c:t.c,r:t.r,vx:(t.x-gt/2)/gt*16+6*(Math.random()-.5),vy:-4-9*Math.random(),vr:.5*(Math.random()-.5)}}))),ht=[],vt=[];for(var n=0;n<ft;n+=1)dt[n]=0;Me(),setTimeout((function(){xt=!1}),1500)}function Ae(t){var e=t.getAttribute("data-key"),n=Tt[e];t.style.gridRow="="===e?n[0]+" / span 2":String(n[0]),t.style.gridColumn=String(n[1])}function Le(t){var e=t.map((function(t){return t[0].getBoundingClientRect()}));t.forEach((function(t){Tt[t[0].getAttribute("data-key")]=t[1],Ae(t[0])})),!h&&m.animate&&t.forEach((function(t,n){var a=t[0].getBoundingClientRect(),i=e[n].left-a.left,r=e[n].top-a.top;(i||r)&&t[0].animate([{transform:"translate("+i+"px,"+r+"px)"},{transform:"none"}],{duration:260,easing:"cubic-bezier(.3,1.5,.5,1)"})}))}function qe(){var t=kt.filter((function(t){var e=t.getAttribute("data-key");return"-"!==e&&"="!==e})),e=a(t),n=Tt["-"].slice(),i=Tt[e.getAttribute("data-key")].slice();Le([[Et,i],[e,n]]),I.slideUp(),le(a(s).html,1500),clearTimeout(At),At=setTimeout(Ce,3500)}function Ce(){Le(kt.map((function(t){return[t,Mt[t.getAttribute("data-key")].slice()]})))}function Se(t){if(Ct.classList.contains("is-on")){clearTimeout(St),Ct.classList.remove("is-on"),_t=0;var e=Math.min(99999999,2*Rt);Nt=String(e),Ot=!0,Fe(),ae(),I.kaching(),setTimeout(I.coin,250),ge(e-Rt),Te(e-Rt),de("upsell"),se(34,b),le(t?r.upsellAuto:r.upsellYes,3e3)}}function Re(t,e,n){return"+"===e?t+n:"*"===e?t*n:"/"===e?0===n?NaN:t/n:n}function Fe(){ne(Nt),D.textContent=Dt?Ht[Dt]:""}function De(t,e){jt=Date.now()+e,ne(t),ae(),setTimeout((function(){Date.now()>=jt&&Fe()}),e)}function Ne(){var t=Kt(Nt),e=Dt&&null!==Ft?Re(Ft,Dt,t):t;if(Ft=null,Dt=null,Ot=!0,D.textContent="",isNaN(e))return Nt="0",_t=Date.now()+2600,De("Err",2600),fe(m,"is-dancing"),I.jingle(),se(30,b),de("div0"),void le(r.div0,3800);1===(Bt+=1)&&de("first"),e%1!=0&&de("rounded");var n,i=function(t){for(var e=0;e<c.length;e+=1)if(Math.abs(parseFloat(c[e].n)-t)<1e-9)return c[e].html;return null}(e),o=Math.ceil(e-1e-9),l=Bt%6;if(i?(n=i,o=e,Math.abs(e-1953)<1e-9&&de("year")):2===l?(o+=1,n=r.safety,de("safety")):4===l&&o>0?(o*=10,n=r.zero):0===l&&o%100!=0?(o=100*Math.ceil(o/100),n=r.hundred):n=e%1!=0?r.rounded:a(u).html,o>99999999)return Nt="0",De("E",2400),I.airhorn(),de("overflow"),le(r.overflow,3e3),ge(99999999),void Te(99999999);Nt=String(o),Fe(),ae(),I.rimshot(),se(i?24:10,b),le(n,3400),ge(o),Te(o),i||Bt%3!=0||setTimeout((function(){!function(t){Rt=t,Ct.classList.add("is-on"),I.kaching(),_t=Date.now()+7e3,clearTimeout(St),St=setTimeout((function(){Se(!0)}),6e3)}(Math.ceil(o))}),1400)}function Oe(t){var e=Date.now();if(!(e<_t)){if(Gt=e,H(8),zt.push(e),(zt=zt.filter((function(t){return e-t<2e3}))).length>=14&&e>jt+4e3)return zt=[],_t=e+2400,fe(m,"is-hot"),se(70,b),De("hot",2400),I.siren(),de("panic"),void le(r.panic,2800);if(/^[0-9]$/.test(t))return Ot?(Nt=t,Ot=!1):Nt.replace(".","").length<8&&(Nt="0"===Nt?t:Nt+t),ce(),void Fe();if("."===t)return Ot?(Nt="0.",Ot=!1):Nt.indexOf(".")<0&&(Nt+="."),ce(),void Fe();if("+"===t||"*"===t||"/"===t){if(Dt&&null!==Ft&&!Ot){var n=Re(Ft,Dt,Kt(Nt));if(isNaN(n))return Dt=null,Ft=null,void Ne();Ft=n}else Ft=Kt(Nt);return Dt=t,Ot=!0,ce(),ne(function(t){if(!isFinite(t)||t>99999999)return"E";var e=Math.max(0,7-Math.floor(Math.log10(Math.max(1,Math.abs(t)))));return String(Number(t.toFixed(e)))}(Ft)),void(D.textContent=Ht[Dt])}if("-"===t)return Lt+=1,fe(Et,"is-wiggle"),I.sad(),De("no",1300),void(Lt>=3?(de("minus"),le(r.minusCaught,3e3)):le(r.minus,2400));if("="!==t)return"C"===t?(It.push(e),It=It.filter((function(t){return e-t<1600})),ce(),Ft=null,Dt=null,Nt="0",Ot=!0,Fe(),void(It.length>=3&&(It=[],le(r.reset,2400)))):"M"===t?(ce(),N.textContent="M",De("FULL",1600),void le(r.memory,4200)):void("K"===t&&(Vt+=1,I.airhorn(),se(40,b),le(a(l).html,2800),5===Vt&&(de("kevin"),setTimeout((function(){le(r.kevinFan,2600)}),2900))));Ne()}}function Be(){var t=parseFloat(Qt.value),e=parseFloat(Wt.value),n=parseFloat(Xt.value);if(!(t>0))return Yt.hidden=!1,Zt.hidden=!0,void(te.hidden=!0);var a=Math.ceil(t*(1+(e>0?e:0)/100))-(n>0?n:0);Yt.hidden=!0,Zt.hidden=a<=0,te.hidden=a>0,ee.textContent=d(Math.max(0,a),0,!0)}}();</script>
 </div>
