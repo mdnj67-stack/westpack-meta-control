@@ -300,6 +300,52 @@ async function getAsanaTaskComments(config, taskGid) {
     }));
 }
 
+// The one write this module makes: a comment on a task in one of the projects the app is configured for
+// (campaign, content, Meta Creatives). A task anywhere else in the workspace is refused, so the route
+// cannot be used to post into boards the dashboard has no business in.
+const MAX_COMMENT_CHARS = 4000;
+
+async function addAsanaTaskComment(config, taskGid, text) {
+  const normalizedTaskGid = String(taskGid || "").trim();
+  const body = String(text || "").trim();
+  if (!/^\d+$/.test(normalizedTaskGid)) {
+    const error = new Error("A valid Asana task GID is required.");
+    error.statusCode = 400;
+    throw error;
+  }
+  if (!body || body.length > MAX_COMMENT_CHARS) {
+    const error = new Error(`A comment needs between 1 and ${MAX_COMMENT_CHARS} characters.`);
+    error.statusCode = 400;
+    throw error;
+  }
+  const allowed = new Set(Object.keys(ASANA_PROJECT_KINDS).map((kind) => resolveAsanaProjectGid(config, kind).projectGid).filter(Boolean));
+  const task = await asanaGet(config, `/tasks/${normalizedTaskGid}`, { opt_fields: "gid,name,projects.gid" });
+  if (!(task?.projects || []).some((project) => allowed.has(String(project?.gid || "")))) {
+    const error = new Error("The task is not in a project this app works with.");
+    error.statusCode = 403;
+    throw error;
+  }
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/tasks/${normalizedTaskGid}/stories`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.asanaAccessToken}`
+    },
+    body: JSON.stringify({ data: { text: body } })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return {
+    gid: String(payload?.data?.gid || ""),
+    taskGid: normalizedTaskGid,
+    taskName: String(task?.name || ""),
+    createdAt: String(payload?.data?.created_at || "")
+  };
+}
+
 async function getAsanaTaskSubtasks(config, taskGid) {
   const normalizedTaskGid = String(taskGid || "").trim();
   if (!/^\d+$/.test(normalizedTaskGid)) {
@@ -354,6 +400,7 @@ async function getAsanaTaskBundle(config, taskGid) {
 }
 
 module.exports = {
+  addAsanaTaskComment,
   asanaGet,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,

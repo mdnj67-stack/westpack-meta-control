@@ -2,6 +2,7 @@ const { getConfig } = require("../../server/lib/config");
 const { requireAuth } = require("../../server/lib/auth");
 const { readJsonBody, sendJson } = require("../../server/lib/http");
 const {
+  addAsanaTaskComment,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskBundle,
@@ -287,6 +288,22 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "GET, POST");
     sendJson(res, 405, { error: "Method not allowed." });
+    return;
+  }
+
+  // Feedback on a creative or content task, e.g. why a design was not used in an ad. Named in the query so
+  // it is dispatched before the OpenAI check below, which it does not need.
+  if (requestedAction === "asana_comment") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, comment: await addAsanaTaskComment(config, input?.taskGid, input?.text) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not comment in Asana." });
+    }
     return;
   }
 
