@@ -1347,8 +1347,13 @@ template list never shows those); the message id is `id` on a subject-line histo
 `resolveAsanaProjectGid` (`server/lib/asana.js`): `campaign`, `content` (the Content Library) and
 `creatives` — **"Meta Creatives"** (1218826645554863, added 2026-10-20), where designed ads per
 language move Drafts → To Do → In progress → Review. The user's rule: creatives in **Review** may
-be used in ads. An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
+be used in ads, and so may those in **Done** (the user, 2026-11-02). An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
 also returns the task's comments, which is where reviewers leave feedback on a creative.
+
+The one Asana write: `POST /api/campaign/brain?action=asana_comment` with `{ taskGid, text }` posts a comment, as
+the production token's owner, on a task in one of those three projects and refuses any other task (403). It is
+dispatched before the OpenAI check. Used to tell the designer why a creative was not taken into an ad.
+Asana's signed attachment URLs expire within the hour, so re-read a task right before downloading its files.
 
 The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns
 sensitive variables empty, so Asana is read through production (log in as `smoke-local.js` does).
