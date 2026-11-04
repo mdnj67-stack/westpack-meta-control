@@ -60,10 +60,12 @@ async function eurostat(dataset, params) {
     value[k] = { recent: curve(list, 2022, 2024, 3), older: curve(list, 2020, 2021, 5) };
     console.log(`${k.padEnd(4)} recent ${value[k].recent.map((x) => `${x.cum}(n${x.n})`).join(" ")} | 2020-21 ${value[k].older.map((x) => `${x.cum}(n${x.n})`).join(" ")}`);
   }
-  // Retention by market (year after acquisition), cohorts 2020-24.
+  // Retention by market (year after acquisition), cohorts 2020-24. Only customers invoiced in their acquisition year:
+  // a first order invoiced after 30 April lands in the next fiscal year and would otherwise count as a repurchase
+  // (3-6 % of each cohort; it put the all-market rate at 32 % instead of 29.5 %).
   for (const k of ["IT", "DE", "FR", "EU"]) {
     const set = new Set(groups[k]);
-    const el = all.filter((c) => set.has(c.country) && c.fy0 >= 2020 && c.fy0 <= 2024);
+    const el = all.filter((c) => set.has(c.country) && c.fy0 >= 2020 && c.fy0 <= 2024 && (c.sales[c.fy0] || 0) > 0);
     console.log(`${k} bought again next FY: ${Math.round((el.filter((c) => (c.sales[c.fy0 + 1] || 0) > 0).length / el.length) * 100)}% (n ${el.length})`);
   }
 
@@ -85,11 +87,21 @@ async function eurostat(dataset, params) {
   const sum = (key) => jcurve.IT[key].map((_, i) => (jcurve.IT[key][i] ?? 0) + (jcurve.DE[key][i] ?? 0) + (jcurve.FR[key][i] ?? 0));
   console.log("DE+FR+IT net per 30 days: recent", sum("recent").join(" / "), "| 2020-21 behaviour", sum("older").join(" / "));
 
-  // Awareness spend per market, last three full months (Aug-Oct 2026), per 30 days.
+  // Awareness spend per market in the SAME 30 days as the conversion spend above (precision.json's window), each month
+  // prorated by its days inside the window. An Aug-Oct average once stood in for it and understated DE+FR+IT by a
+  // quarter (67k against 88k), because awareness rose every month after the relaunch.
   const meta = loadMeta();
+  const { SINCE30, UNTIL } = JSON.parse(fs.readFileSync(path.join(SCRATCH, "data", "meta", "precision.json"), "utf8"));
+  const day = (s) => new Date(`${s}T00:00:00Z`).getTime() / 864e5;
+  const share = (month) => {
+    const first = day(`${month}-01`);
+    const end = Math.min(first + new Date(Date.UTC(+month.slice(0, 4), +month.slice(5), 0)).getUTCDate() - 1, day(UNTIL)); // the Meta data stop at UNTIL
+    const overlap = end - Math.max(first, day(SINCE30)) + 1;
+    return overlap > 0 ? overlap / (end - first + 1) : 0;
+  };
   const aware = {};
-  for (const v of Object.values(meta)) if (v.month >= "2026-08" && v.month <= "2026-10") aware[v.country] = (aware[v.country] || 0) + v.aware;
-  console.log("Awareness per 30 days, Aug-Oct 2026:", ["DE", "FR", "IT", "ES", "GB", "NL"].map((cc) => `${cc} ${Math.round((aware[cc] || 0) / 92 * 30)}`).join(", "));
+  for (const v of Object.values(meta)) { const f = share(v.month); if (f) aware[v.country] = (aware[v.country] || 0) + v.aware * f; }
+  console.log(`Awareness ${SINCE30} - ${UNTIL}:`, ["DE", "FR", "IT", "ES", "GB", "NL"].map((cc) => `${cc} ${Math.round(aware[cc] || 0)}`).join(", "));
 
   fs.writeFileSync(path.join(SCRATCH, "data", "market-entry.json"), JSON.stringify({ pen, value, jcurve, aware }, null, 1));
 })().catch((e) => { console.error(e); process.exit(1); });

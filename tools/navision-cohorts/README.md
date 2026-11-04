@@ -57,3 +57,11 @@ For a new quarter, move those constants forward rather than reading the old numb
   Power BI does not exist in first-order data (194 vs 158).
 - **Meta keeps 37 months** of insights (country spend from Nov 2023); its incrementality figure exists
   from April 2025, and an absent key is missing, not zero (`meta-load.js`).
+- **A first order invoiced after 30 April lands in the next fiscal year** (3–6 % of each cohort). Count a
+  repurchase only for customers invoiced in their acquisition year, or "bought again" reads 32 % for 29.5 %.
+- **The pre-2019 number series (`10xxxxx`) marks old accounts** first seen in the history: 7.6 % of the
+  2020 cohort, 3.4 % of 2021, ≤ 1.4 % later. Negligible for 2022–24 values, 2–4 % on 2020–21.
+- **Awareness belongs to the same window as the conversion spend.** An Aug–Oct average understated the
+  30-day awareness in DE+FR+IT by a quarter after the relaunch (`market-entry.js` now prorates).
+- **Compare all first orders with all first orders** in a recent window: invoiced-only, a 30-day window
+  ending today reads 30–50 % down simply because recent orders are not invoiced yet.

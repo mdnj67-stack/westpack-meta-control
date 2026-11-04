@@ -215,7 +215,65 @@ og være present").** Per-customer payback is the EU campaign's yardstick only. 
   (−76 %), DE 4,519 → 2,453 (−46 %), FR 9,158 → 4,113 (−55 %). EU 794 → 892 on twice the budget.
 - New customers in the market vs the same 30 days last year: IT +49 %, DE +12 %, FR 0 %.
 - Net per month after 3½ years = contribution of Meta's directly counted customers (45 %) minus
-  conversion and awareness spend: IT +46,200, DE −12,600, FR −51,400; all three ≈ −17,700 kr. a month.
-  First-year cash outlay ≈ −200,000 a month (the J-curve). With 2020–21 buying patterns +142,000.
+  conversion and awareness spend **in the same 30 days**: IT +40,400, DE −20,600, FR −58,100; all three
+  ≈ −38,000 kr. a month. First-year cash outlay ≈ −220,000 a month. With 2020–21 buying patterns
+  +122,000. (A first version used the Aug–Oct awareness average, 67k against the window's 88k, and read
+  −18,000; `market-entry.js` now prorates awareness into the conversion window.)
   What presence buys beyond the direct customers (being known when buyers need packaging) is not in
   these figures; branded search per country is how it will be measured.
+
+**The whole account, everything in (2026-11-04).** All Meta spend (conversion, awareness, the rest)
+against the 3½-year contribution of Meta's incremental new customers, each valued with its market's
+curve: last 30 days 464k kr → 229 customers → 1.33 kr back per krone (0.42 / 0.79 / 1.08 / 1.33 by
+year); last 12 months 2.66m → 1,223 → 1.22 (0.39 / 0.72 / 0.98 / 1.22); Apr 2025–Sep 2026 ≈ 0.9. Paid
+back after about 2½–3 years. Per campaign with its share of awareness: EU 2.4 · IT 1.4 · DE 0.8 · FR
+0.4 (conversion spend alone: 2.9 · 2.0 · 1.1 · 0.6). The EU campaign's last budget step (late
+September–early October to late October) cost about 1,800 kr per extra incremental customer before
+seasonality — close to the ~2,070 kr a customer in its markets is worth after 2½ years.
+
+**Meta's two counts, and what Navision can say about them (2026-11-04).** Meta's ordinary count
+(7-day click + 1-day view) gave 511 new customers in the four conversion campaigns over 5 Oct–3 Nov
+2026, against 225 incremental: EU 296/134, IT 80/46, DE 69/29, FR 66/16; 325 of the 511 are 1-day
+view. Over Apr 2025–Sep 2026 it is 3,849 against 1,198 (3.2×) on a true 7-day click + 1-day view
+basis; the ad sets' own settings give 2,949, because incremental ad sets report incremental as their
+`value`. "Cautious" is relative: in the EU campaign the incremental count (134) exceeds 7-day clicks
+(91), and the incremental share of click+view drifted from 0.11 (April 2025) to 0.45 (October 2026).
+
+Navision cannot pick between the two. Meta also ran last year, so compare increases, October against
+October: Navision IT +58 against Meta +32 (incremental) / +42 (ordinary), DE +27 against +20 / +52,
+FR −1 against +10 / +32. But one month cannot carry it: the monthly all-market total swings 17–32 %
+year on year (SD), DK rose 46 % in the same window with flat Meta spend, per-market 30-day changes
+swing ±18 (IT), ±50 (DE), ±84 (FR) customers, and the 2026 window had one more weekday (22 against 21,
+≈ +4 %). A first version of this note said Navision "lies nearer the incremental count in all three";
+that compared Navision's change with Meta's level and ignored the noise.
+
+**What the evidence allows on Meta's share.** Meta's incremental model: ~9 % of all new customers
+(1,223 of 14,188, 12 months to Oct 2026). The 17-country panel's upper bound is about 1.5× that (2×
+for Nov 2025–Sep 2026 alone); its point estimates are below Meta's claim and a placebo gives a similar
+size, i.e. noise. The DE+FR+IT relaunch (spend ×4.2) showed −0.2 % against other markets where the
+incremental count implied +8 % and the ordinary count +21 % (SD ~15 %). New customers over 12 months
+fell 2.7 % (14,577 → 14,188) on +34 % spend; FY 2025/26 (13,869) is below FY 2022/23 (14,460) — so
+"+1,793 since Oct 2024" is a low base, not growth. Defensible: about 9 %, plausibly up to 12–15 %; 20 %
+or more conflicts with Navision. Measured reasons Meta under-counts (so its counts are floors): ~30 %
+of orders get neither new_customer nor existing_customer (15–22 Oct), and new_customer is sent without
+email (EMQ 5.9 vs Purchase 8.9) — both being fixed, which will raise Meta's counts without any real
+change. Not in any figure: Meta's claim of 2,098 incremental purchases by existing customers worth
+6.55m kr in 12 months (its model, unverified).
+
+**Audit traps found before the leadership deck (2026-11-04)** — two independent reviews, then each
+claim re-checked against the data:
+- Repurchase "the year after" must count only customers invoiced in their acquisition year: 3–6 % of
+  each cohort have their first order invoiced after 30 April, and counting them read 32 % instead of
+  29.5 % (of 100: 30 / 22 / 18 a year, 39 within four years, not 32 / 23 / 19 / 43).
+- "Those who stay buy five times as much" is survivorship: cohort 2020's year-six buyers already bought
+  3,871 kr in the acquisition year against 1,795 for those who left. The big customers stay.
+- Italy's 15,145 kr (2020–21) rests on five customers (39 % of the total); without them 9,337.
+  Present DE/FR/IT customers as "not worse", not "40 % better".
+- Market headroom per jewellery enterprise flatters Italy (217 per million people against Germany's
+  77). Germany's level in Italy is ~1,400 new customers a year per capita, ~4,000 per jeweller.
+- The pre-2019 customer-number series (`10xxxxx`) is 35 % of the 2019/20 cohort, 7.6 % of 2020, 3.4 %
+  of 2021 and ≤ 1.4 % from 2022: old accounts first seen in the history. They barely move the 2022–24
+  value curve (5,851 → 5,852) and lower 2020–21 values 2–4 %; the 2019/20 cohort stays out entirely.
+- Customer value is heavy-tailed (top 10 % = 65–79 % of a cohort's sales), so a month's 16–46 Meta
+  customers can be worth far more or less than the average; payback per campaign needs ranges.
+- The 45 % margin is an assumption; finance's real contribution margin was still outstanding.
