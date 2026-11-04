@@ -168,3 +168,42 @@ power arithmetic was far too optimistic because real between-country noise dwarf
   far larger (table above). Treat geo tests on Navision counts as underpowered for Meta-sized effects.
 - 00's Brand Lift minimums conflict with Meta's own page as quoted in search — unconfirmed both ways.
 - ES is not disqualified as a comparison market by the Power BI "Spain anomaly" — it is a definition effect.
+
+## Update 2026-11-04 (later the same day) — the market-entry case and how precise Meta's cost is [Own]
+
+**Market size against what we win** (Eurostat sbs_ovw_act, enterprises in NACE 47.77 watches and
+jewellery, 2022 × Navision new paying customers 2025/26), new customers per year per 100 jewellery
+enterprises: DK 128 · FI 91 · NL 76 · SE 61 · IE 46 · FR 43 · BE 42 · DE 31 · PL 29 · AT 28 · PT 10 ·
+**IT 7 · ES 6**. Italy has 12,787 such enterprises (25× Denmark's 515) and we win 842 new customers a
+year there vs 657 in DK. Germany's rate in Italy would be ~4,000 a year (arithmetic, not a forecast).
+Not all customers are jewellers; the figure is market size, not share. `tools/navision-cohorts/market-entry.js`.
+
+**Customer value by market, cohorts 2020-21 after 4½ years:** IT 15,145 kr. (+39 % vs average 10,909),
+FR 11,953, DE 9,477, other EU 10,482. Next-year repurchase: IT 36 %, FR 33 %, DE 30 %, all 32 %.
+Customers in the entry markets are not worse customers; they are dearer to win.
+
+**Cost per new customer, last 30 days (5 Oct–3 Nov 2026) vs 90 days (incl. the relaunch weeks),
+incremental attribution, Poisson 95 % ranges:** EU 884 (746–1,055) vs 854 · IT 1,564 (1,172–2,136)
+vs 2,664 · DE 2,481 (1,727–3,705) vs 3,275 · FR 4,476 (2,756–7,836) vs 5,784. Week by week since
+9 Sep: IT fell from ~3,700 to ~1,200, DE from ~8,300 to ~1,800 (the relaunch's learning weeks);
+EU rose from ~700–900 to ~1,040 as its budget went up. Incremental ÷ reported: EU 0.45, DE 0.42,
+IT 0.57, FR 0.24. `meta-precision.js` (2 calls).
+
+**Navision check, same 30 days vs the same days of 2025 (all first orders):** IT 118 → 176 (+58)
+against Meta's 46; DE 221 → 248 (+27) against 29; FR 242 → 241 (−1) against 16; ES (no local
+campaign) 69 → 64. In IT and DE two independent sources agree; FR's effect is not visible. One month
+in peak season, and single countries have swung this much without Meta before — strong consistency,
+not proof. The September–October window (learning) showed no DE/FR/IT difference.
+
+**Payback on the 30-day prices, each market valued with its own customers (cohorts 2022–24, 45 %
+margin), kroner back per krone after 3½ years:** EU 2.9 · IT 2.0 · DE 1.1 · FR 0.6 (90-day prices:
+3.0 · 1.2 · 0.8 · 0.5). J-curve per 100,000 kr. in DE+FR+IT: −61k in the acquisition year, ±0 after
+~2½ years, +23k after 3½ (with the 2020–21 cohorts' buying pattern +97k and +202k after 5½).
+Awareness in the three markets (~67k per 30 days) is not in these figures.
+
+**Holst Mouritsen's figures, checked:** Profit Ability 2 (Thinkbox, 2024; 141 brands, 14 sectors,
+£1.8bn, 2021–23): short-term profit ROI £1.87, £4.11 including sustained effects (to 24 months) —
+that is 55 % of profit after 13 weeks; "58 %" appears only in WARC's headline (25 Apr 2024), not on
+Thinkbox's page. Day One list: Google & Bain 2022, 1,208 US B2B buyers, 86 % have one, 92 % buy from
+it — primary page not reachable, secondary sources consistent; Bain later ~90 %. "2× more likely to be
+bought" (McKinsey, per Holst Mouritsen): not verified — left out of the deck.

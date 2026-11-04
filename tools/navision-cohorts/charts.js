@@ -136,7 +136,10 @@ const write = (name, w, h, svgStr, labels) => {
     });
   };
   const EU = ["GB", "NL", "BE", "PL", "ES", "PT", "SE", "FI", "AT", "CH", "IE", "NO", "CZ", "SK", "HU", "RO", "GR", "HR", "BG", "LU", "EE", "LV", "LT", "SI"];
-  const series = [["EU", 854, EU, C.blue], ["IT", 2664, ["IT"], C.orange], ["DE", 3275, ["DE"], C.aqua], ["FR", 5784, ["FR"], C.yellow]];
+  // Cost per new customer = the last 30 days of the current setup (meta-precision.js).
+  const P = JSON.parse(fs.readFileSync(path.join(SCRATCH, "data", "meta", "precision.json"), "utf8")).last30;
+  const cpa = (name) => { const r = P.find((x) => x.name === name); return r.spend / r.ia; };
+  const series = [["EU", cpa("Conv - 04 - EU - Standard"), EU, C.blue], ["IT", cpa("Conv - 03 - IT"), ["IT"], C.orange], ["DE", cpa("Conv - 01 - DE"), ["DE"], C.aqua], ["FR", cpa("Conv - 02 - FR"), ["FR"], C.yellow]];
   const W = 1180, H = 560, L = 90, R = 170, T = 24, B = 72, max = 3.25;
   const pw = W - L - R, ph = H - T - B, y = (v) => T + ph - (v / max) * ph, xs = (i) => L + 40 + ((pw - 80) / 3) * i;
   let body = "";
@@ -210,3 +213,73 @@ fs.writeFileSync(path.join(SCRATCH, "data", "deck-numbers.json"), JSON.stringify
 const cr = D.cohortRows;
 console.log("per active customer, cohort 2020:", cr[2020].perActive.map(kr).join(" / "), " cohort 2021:", cr[2021].perActive.map(kr).join(" / "));
 console.log("cohort tables for appendix:", JSON.stringify(Object.fromEntries(Object.entries(cr).map(([k, v]) => [k, { n: v.n, act: v.act.map((a) => Math.round(a * 100)), rev: v.rev.map((r) => Math.round(r)) }]))));
+
+// ---------- Market entry (market-entry.js must have run) ----------
+{
+  const ME = JSON.parse(fs.readFileSync(path.join(SCRATCH, "data", "market-entry.json"), "utf8"));
+  const NAME = { DK: "Danmark", FI: "Finland", NL: "Holland", SE: "Sverige", IE: "Irland", FR: "Frankrig", BE: "Belgien", DE: "Tyskland", PL: "Polen", AT: "Østrig", PT: "Portugal", IT: "Italien", ES: "Spanien" };
+  const ENTRY = new Set(["DE", "FR", "IT"]);
+
+  // C10: new customers per year per 100 jewellery shops, by country.
+  {
+    const rows = ME.pen.filter((r) => NAME[r.cc] && r.per100Jewellers != null).sort((a, b) => b.per100Jewellers - a.per100Jewellers);
+    const W = 1100, H = 572, L = 170, R = 110, T = 4, B = 4, max = 135;
+    const pw = W - L - R, rowH = (H - T - B) / rows.length, t = 28;
+    let body = `<line x1="${L}" x2="${L}" y1="${T}" y2="${H - B}" stroke="${C.axis}" stroke-width="2"/>`;
+    const labels = [];
+    rows.forEach((r, i) => {
+      const yy = T + rowH * i + (rowH - t) / 2, len = (r.per100Jewellers / max) * pw;
+      body += hbar(L, yy, len, t, ENTRY.has(r.cc) ? C.orange : "#6da7ec");
+      labels.push(p(0, yy - 1, L - 16, NAME[r.cc], { align: "right", color: ENTRY.has(r.cc) ? C.ink : C.ink2, bold: ENTRY.has(r.cc) }));
+      labels.push(p(L + len + 12, yy - 1, 100, r.per100Jewellers.toFixed(0), { color: C.ink, bold: true, nowrap: true }));
+    });
+    write("c10-penetration", W, H, svg(W, H, `Nye kunder om året pr. 100 smykkebutikker: ${rows.map((r) => `${NAME[r.cc]} ${r.per100Jewellers.toFixed(0)}`).join(", ")}`, body), labels);
+  }
+
+  // C11: sales per customer 4½ years after acquisition (cohorts 2020-21, fully measured), by market.
+  {
+    const v = (k) => ME.value[k].older[4].cum;
+    const rows = [["Italien", v("IT"), true], ["Frankrig", v("FR"), true], ["Gennemsnit", v("ALL"), false], ["Øvrige EU", v("EU"), false], ["Tyskland", v("DE"), true]].sort((a, b) => b[1] - a[1]);
+    const W = 1100, H = 440, L = 220, R = 170, T = 10, B = 10, max = 16000;
+    const pw = W - L - R, rowH = (H - T - B) / rows.length, t = 48;
+    let body = `<line x1="${L}" x2="${L}" y1="${T}" y2="${H - B}" stroke="${C.axis}" stroke-width="2"/>`;
+    const labels = [];
+    rows.forEach(([name, val, entry], i) => {
+      const yy = T + rowH * i + (rowH - t) / 2, len = (val / max) * pw;
+      body += hbar(L, yy, len, t, entry ? C.orange : "#B9B5AA");
+      labels.push(p(0, yy + 8, L - 20, name, { align: "right", color: entry ? C.ink : C.ink2, bold: entry }));
+      labels.push(p(L + len + 14, yy + 8, 160, `${kr(val)} kr.`, { color: C.ink, bold: true, nowrap: true }));
+    });
+    write("c11-market-value", W, H, svg(W, H, `Omsætning pr. ny kunde efter 4½ år, kunder fra 2020-21: ${rows.map((r) => `${r[0]} ${kr(r[1])}`).join(", ")} kr.`, body), labels);
+  }
+
+  // C12: J-curve, net result per 100,000 DKK spent (thousand DKK) by year after acquisition, so EU and
+  // DE+FR+IT (different budgets) are comparable.
+  {
+    const J = ME.jcurve;
+    const per100k = (vals, spend) => vals.map((v) => (v / spend) * 1e5);
+    const entrySpend = J.IT.spend30 + J.DE.spend30 + J.FR.spend30;
+    const sum = (key) => J.IT[key].map((_, i) => (J.IT[key][i] ?? 0) + (J.DE[key][i] ?? 0) + (J.FR[key][i] ?? 0));
+    const series = [["EU-kampagnen", per100k(J.EU.recent, J.EU.spend30), C.blue], ["DE+FR+IT, nye kunder", per100k(sum("recent"), entrySpend), C.orange], ["DE+FR+IT, købsmønster som 2020–21", per100k(sum("older"), entrySpend), C.aqua]];
+    const W = 1180, H = 560, L = 110, R = 300, T = 24, B = 72, min = -75000, max = 215000;
+    const pw = W - L - R, ph = H - T - B, y = (v) => T + ph - ((v - min) / (max - min)) * ph, xs = (i) => L + 40 + ((pw - 80) / 5) * i;
+    let body = "";
+    const labels = [];
+    for (const v of [-50000, 0, 50000, 100000, 150000, 200000]) {
+      body += `<line x1="${L}" x2="${W - R}" y1="${r1(y(v))}" y2="${r1(y(v))}" stroke="${v === 0 ? C.ink2 : C.grid}" stroke-width="${v === 0 ? 3 : 2}"/>`;
+      labels.push(p(0, y(v) - 15, L - 16, `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v / 1000)}`, { align: "right", color: v === 0 ? C.ink : C.muted, bold: v === 0 }));
+    }
+    ["Købsåret", "+1 år", "+2 år", "+3 år", "+4 år", "+5 år"].forEach((n, i) => labels.push(p(xs(i) - 80, H - B + 16, 160, n, { align: "center" })));
+    const desc = [];
+    series.forEach(([name, vals, color]) => {
+      desc.push(`${name}: ${vals.map((v) => Math.round(v / 1000)).join(" / ")}`);
+      body += `<polyline points="${vals.map((v, i) => `${r1(xs(i))},${r1(y(v))}`).join(" ")}" fill="none" stroke="${color}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
+      const last = vals.length - 1;
+      body += `<circle cx="${r1(xs(last))}" cy="${r1(y(vals[last]))}" r="9" fill="${color}" stroke="${C.surface}" stroke-width="4"/>`;
+      labels.push(p(xs(last) + 22, y(vals[last]) - 16, 280, `${vals[last] > 0 ? "+" : "−"}${kr(Math.abs(vals[last]) / 1000)} t.kr.`, { color: C.ink, bold: true, nowrap: true }));
+    });
+    console.log("C12", desc.join(" | "));
+    console.log("C12 spend per 30 days: EU", Math.round(J.EU.spend30), "DE+FR+IT", Math.round(entrySpend));
+    write("c12-jcurve", W, H, svg(W, H, `Nettoresultat pr. 100.000 kr. brugt på Meta, tusind kr., ved 45 % dækningsgrad. ${desc.join(". ")}.`, body), labels);
+  }
+}

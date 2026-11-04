@@ -70,9 +70,13 @@ Presumably Normal, the Danish retail chain, on running social across its countri
 
 - Not neat and polished, or you look like everyone else. The Von Restorff effect: the odd one out
   is remembered. Dare to be a little crooked.
-- The audience thinks about itself: what's in it for me. The "so what?" test, possibly asked
-  several times, finds the angle.
-- The cheat code: use the audience's own words (uncertain reading).
+- The audience thinks about itself: what's in it for me. The "so what?" test ("Hvad så?-testen"),
+  possibly asked several times, finds the angle.
+- The **comeback cheat code** ("Comeback-snydekoden"): use the audience's own words — what they
+  say — and come back with the material (re-read 2026-11-04 from the mirrored see-through text,
+  "...ck snydekoden / bruge målgruppens ... / ...er med materialet"; the user named it "comeback
+  snydekoden"). First used in the W47 Kevin email: each route is headed by a sentence the shop
+  owner says, and the answer under it is the comeback.
 - The good hook is relevant, catches attention, pokes a little and makes you want to read on.
 - The pancake test (content not readable).
 - Fluffy bullshit is found by reversing the sentence. If nobody would ever say the opposite, the
@@ -127,13 +131,17 @@ Claims and checks:
   (2022). The study surveyed 1,208 US buyers of software, cloud, hardware, telecoms, logistics,
   marketing and industrial equipment: 86 % have a "Day One list" and 92 % buy from it. That is
   enterprise B2B, not small businesses buying packaging.
-- "Twice the chance of purchase (initial thought)" — not traced.
-- "42 % of the effect within 13 weeks, 58 % after, once the campaign is off" matches Thinkbox,
+  The primary page could not be opened (checked 2026-11-04); the figures are consistent across
+  secondary sources, and Bain later gives ~90 %.
+- "Twice the chance of purchase (initial thought)" — usually attributed to McKinsey (whose 2009
+  article is often quoted as "up to three times"); not verified, so not used.
+- "42 % of the effect within 13 weeks, 58 % after, once the campaign is off" refers to Thinkbox,
   *Profit Ability 2* (UK, 2024, with Ebiquity, EssenceMediacom, Gain Theory, Mindshare and
-  Wavemaker; £1.8bn of media).
-  - 58 % of advertising's total profit comes after the first 13 weeks. The note's "14–24 uger" is
-    week 14 to **24 months**, not 24 weeks.
-  - Short-term profit ROI was £1.87, and £4.11 including sustained effects.
+  Wavemaker; 141 brands, 14 sectors, £1.8bn of media, 2021–23).
+  - Thinkbox's own page gives short-term profit ROI £1.87 and £4.11 including sustained effects
+    (week 14 to **24 months** — the note's "14–24 uger" is months, not weeks). That makes **55 %**
+    of profit after 13 weeks. "58 %" is WARC's headline (25 April 2024) and is not on Thinkbox's
+    page; the deck uses 55 % and names both.
   - The funder is the UK commercial-TV body and the brands are B2C, so read it as direction, not
     as a figure for Westpack.
 
