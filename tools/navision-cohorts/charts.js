@@ -35,25 +35,25 @@ const write = (name, w, h, svgStr, labels) => {
 
 // ---------- C1: cumulative sales per new customer, acquisition year vs later years ----------
 {
-  const cum = D.recentCum, first = D.recent[0];
-  const W = 1040, H = 560, L = 120, R = 20, T = 48, B = 96, max = 8000;
+  // Measured years only: +3 years is the 2022/23 cohort's own figure; nothing extrapolated.
+  const cum = D.recentCum.slice(0, 4), first = D.recent[0];
+  const W = 1040, H = 560, L = 120, R = 20, T = 48, B = 72, max = 6500;
   const pw = W - L - R, ph = H - T - B, y = (v) => T + ph - (v / max) * ph;
   let body = "";
-  for (const v of [0, 2000, 4000, 6000, 8000]) body += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? C.grid : C.axis}" stroke-width="2"/>`;
+  for (const v of [0, 2000, 4000, 6000]) body += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? C.grid : C.axis}" stroke-width="2"/>`;
   const labels = [];
-  for (const v of [0, 2000, 4000, 6000, 8000]) labels.push(p(0, y(v) - 15, L - 16, kr(v), { align: "right" }));
-  const band = pw / 6, bw = 72;
-  const names = ["Købsåret", "+1 år", "+2 år", "+3 år", "+4 år", "+5 år"];
+  for (const v of [0, 2000, 4000, 6000]) labels.push(p(0, y(v) - 15, L - 16, kr(v), { align: "right" }));
+  const band = pw / 4, bw = 96;
+  const names = ["Købsåret", "+1 år", "+2 år", "+3 år"];
   cum.forEach((v, i) => {
     const x = L + band * i + (band - bw) / 2;
     const hFirst = (first / max) * ph, hAll = (v / max) * ph;
     body += col(x, y(0), bw, hFirst, C.orange, i === 0);
-    if (i > 0) body += col(x, y(0) - hFirst - 4, bw, hAll - hFirst - 4, i >= 4 ? "#86b6ef" : C.blue);
+    if (i > 0) body += col(x, y(0) - hFirst - 4, bw, hAll - hFirst - 4, C.blue);
     labels.push(p(x - 40, y(v) - 40, bw + 80, kr(v), { align: "center", color: C.ink, bold: true }));
     labels.push(p(L + band * i, H - B + 14, band, names[i], { align: "center" }));
   });
-  labels.push(p(L + band * 4, H - B + 46, band * 2, "skønnet", { align: "center", size: 24 }));
-  write("c1-cumulative", W, H, svg(W, H, "Kumuleret omsætning pr. ny kunde: 1.913 kr. i købsåret, 3.471 efter +1 år, 4.734 efter +2, 5.851 efter +3, skønnet 6.831 og 7.744 efter +4 og +5 år", body), labels);
+  write("c1-cumulative", W, H, svg(W, H, "Samlet omsætning pr. ny kunde: 1.913 kr. i købsåret, 3.471 efter +1 år, 4.734 efter +2 år og 5.851 efter +3 år", body), labels);
 }
 
 // ---------- C3: layer cake, sales per fiscal year by acquisition cohort (m DKK) ----------
@@ -121,22 +121,38 @@ const write = (name, w, h, svgStr, labels) => {
   write("c5-campaign-cpa", W, H, svg(W, H, "Kroner pr. inkrementel ny kunde, seneste 90 dage: EU 854, IT 2.664, DE 3.275, FR 5.784. Grænser: 2.130 kr. tjenes hjem på ca. 2½ år, 3.485 kr. på ca. 5½ år ved 45 % dækningsgrad.", body), labels);
 }
 
-// ---------- C6: kroner back per krone, by cost per new customer (ordinal blue), 45% margin ----------
+// ---------- C6: kroner back per krone by campaign, measured years only, 45% margin ----------
+// Each campaign is valued with its own markets' customers (cohorts 2022-24, years they have completed):
+// EU = the markets Conv - 04 - EU serves (all but DK, DE, FR, IT). Cost = Meta's incremental cost per
+// new customer, last 90 days (meta-campaigns.js).
 {
-  const series = [[854, "854 kr."], [2233, "2.233 kr."], [2874, "2.874 kr."], [4770, "4.770 kr."]];
-  const W = 1180, H = 560, L = 90, R = 190, T = 24, B = 72, max = 4.5;
-  const pw = W - L - R, ph = H - T - B, y = (v) => T + ph - (v / max) * ph, xs = (i) => L + (pw / 5) * i;
+  const paid = JSON.parse(fs.readFileSync(path.join(SCRATCH, "data", "cohorts", "customers.json"), "utf8")).filter((c) => c.total > 0);
+  const curve = (ccs) => {
+    const set = new Set(ccs);
+    let cum = 0;
+    return [0, 1, 2, 3].map((t) => {
+      const el = paid.filter((c) => set.has(c.country) && c.fy0 >= 2022 && c.fy0 <= 2024 && c.fy0 + t <= 2025);
+      return (cum += el.reduce((s, c) => s + (c.sales[c.fy0 + t] || 0), 0) / el.length);
+    });
+  };
+  const EU = ["GB", "NL", "BE", "PL", "ES", "PT", "SE", "FI", "AT", "CH", "IE", "NO", "CZ", "SK", "HU", "RO", "GR", "HR", "BG", "LU", "EE", "LV", "LT", "SI"];
+  const series = [["EU", 854, EU, C.blue], ["IT", 2664, ["IT"], C.orange], ["DE", 3275, ["DE"], C.aqua], ["FR", 5784, ["FR"], C.yellow]];
+  const W = 1180, H = 560, L = 90, R = 170, T = 24, B = 72, max = 3.25;
+  const pw = W - L - R, ph = H - T - B, y = (v) => T + ph - (v / max) * ph, xs = (i) => L + 40 + ((pw - 80) / 3) * i;
   let body = "";
   const labels = [];
-  for (const v of [0, 1, 2, 3, 4]) { body += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? C.axis : v === 1 ? C.ink2 : C.grid}" stroke-width="${v === 1 ? 3 : 2}"/>`; labels.push(p(0, y(v) - 15, L - 16, `${v}`, { align: "right", color: v === 1 ? C.ink : C.muted, bold: v === 1 })); }
-  ["Købsåret", "+1 år", "+2 år", "+3 år", "+4 år", "+5 år"].forEach((n, i) => labels.push(p(xs(i) - 80, H - B + 16, 160, n, { align: "center" })));
-  series.forEach(([cac, name], k) => {
-    const vals = D.recentCum.map((v) => (v * 0.45) / cac);
-    body += `<polyline points="${vals.map((v, i) => `${r1(xs(i))},${r1(y(v))}`).join(" ")}" fill="none" stroke="${C.ramp[k]}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
-    body += `<circle cx="${r1(xs(5))}" cy="${r1(y(vals[5]))}" r="9" fill="${C.ramp[k]}" stroke="${C.surface}" stroke-width="4"/>`;
-    labels.push(p(xs(5) + 20, y(vals[5]) - 16, 168, `${name}: ${vals[5].toFixed(1).replace(".", ",")}`, { color: C.ink, nowrap: true }));
+  for (const v of [0, 1, 2, 3]) { body += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? C.axis : v === 1 ? C.ink2 : C.grid}" stroke-width="${v === 1 ? 3 : 2}"/>`; labels.push(p(0, y(v) - 15, L - 16, `${v}`, { align: "right", color: v === 1 ? C.ink : C.muted, bold: v === 1 })); }
+  ["Købsåret", "+1 år", "+2 år", "+3 år"].forEach((n, i) => labels.push(p(xs(i) - 80, H - B + 16, 160, n, { align: "center" })));
+  const desc = [];
+  series.forEach(([name, cac, ccs, color]) => {
+    const vals = curve(ccs).map((v) => (v * 0.45) / cac);
+    desc.push(`${name} ${vals.map((v) => v.toFixed(2)).join("/")}`);
+    body += `<polyline points="${vals.map((v, i) => `${r1(xs(i))},${r1(y(v))}`).join(" ")}" fill="none" stroke="${color}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
+    body += `<circle cx="${r1(xs(3))}" cy="${r1(y(vals[3]))}" r="9" fill="${color}" stroke="${C.surface}" stroke-width="4"/>`;
+    labels.push(p(xs(3) + 22, y(vals[3]) - 16, 150, `${name}: ${vals[3].toFixed(1).replace(".", ",")}`, { color: C.ink, bold: true, nowrap: true }));
   });
-  write("c6-payback", W, H, svg(W, H, "Kroner dækningsbidrag tilbage pr. investeret krone efter år, ved 45 % dækningsgrad. Ved 854 kr. pr. kunde: 1,0 i købsåret og 4,1 efter 5 år. Ved 2.233 kr.: tjent hjem efter +3 år. Ved 2.874 kr.: efter +4 år. Ved 4.770 kr.: 0,7 efter 5 år.", body), labels);
+  console.log("C6 per campaign:", desc.join("  "));
+  write("c6-payback", W, H, svg(W, H, `Kroner dækningsbidrag tilbage pr. krone brugt på Meta, ved 45 % dækningsgrad, købsåret til +3 år: ${desc.join("; ")}.`, body), labels);
 }
 
 // ---------- C7: rolling 12 months, Meta spend vs new paying customers, indexed Oct 2024 = 100 ----------
