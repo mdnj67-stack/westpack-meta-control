@@ -207,3 +207,15 @@ that is 55 % of profit after 13 weeks; "58 %" appears only in WARC's headline (2
 Thinkbox's page. Day One list: Google & Bain 2022, 1,208 US B2B buyers, 86 % have one, 92 % buy from
 it — primary page not reachable, secondary sources consistent; Bain later ~90 %. "2× more likely to be
 bought" (McKinsey, per Holst Mouritsen): not verified — left out of the deck.
+
+**How to judge the entry markets (the user, 2026-11-04: "det er jo en investering i at bryde markedet op
+og være present").** Per-customer payback is the EU campaign's yardstick only. For DE/FR/IT report
+(a) whether the market opens and (b) the net price of presence:
+- Price per new customer, first 4 weeks after the 9 Sep relaunch → next 4 weeks: IT 6,446 → 1,538
+  (−76 %), DE 4,519 → 2,453 (−46 %), FR 9,158 → 4,113 (−55 %). EU 794 → 892 on twice the budget.
+- New customers in the market vs the same 30 days last year: IT +49 %, DE +12 %, FR 0 %.
+- Net per month after 3½ years = contribution of Meta's directly counted customers (45 %) minus
+  conversion and awareness spend: IT +46,200, DE −12,600, FR −51,400; all three ≈ −17,700 kr. a month.
+  First-year cash outlay ≈ −200,000 a month (the J-curve). With 2020–21 buying patterns +142,000.
+  What presence buys beyond the direct customers (being known when buyers need packaging) is not in
+  these figures; branded search per country is how it will be measured.
