@@ -1369,6 +1369,22 @@ turned up (including deprecated fields still sent by `api/meta/publish-ad.js`). 
 Meta setting, budget split or test design, start from these reports rather than general knowledge,
 and refresh any part older than about six months.
 
+`07-measurement-ladder.md` (2026-11-04) is the one built on Westpack's own numbers: Navision cohort
+value per new customer, Meta's cost per new customer by campaign, and the measured finding that **no
+market-level test on Navision new customers can see an effect of Meta's claimed size (3–10 %)** — even
+DE+FR+IT against all other markets for a year detects only ~20 %. Use Meta Conversion Lift instead.
+The scripts are `tools/navision-cohorts/` (README there); the conference notes it came from are
+`knowledge/social-ads-conference-2026/`.
+
+## New customers in Navision — first order, not Power BI
+
+"New customer" in the cohort work is a customer number's **first-ever** sales order in Navision that was
+invoiced; Power BI's "no purchase in a year" also counts returning customers, and the two disagree
+(the Power BI "Spain +222" is not in first-order data). Navision is read only through ast's workbook
+button on a copy (`tools/navision-cohorts/run-nav-report.ps1`): a Windows-integrated SQL login is
+refused, and the workbook's stored SQL login must never be read out of Windows. Order history starts
+April 2019; count markets by customer country, because department codes changed in 2020–21.
+
 ## The Trustpilot carousel is a template — `templates/meta-trustpilot-carousel/`
 
 Added 2026-10-27 at the user's request: "a carousel we can always use on Meta with Trustpilot, across
