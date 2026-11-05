@@ -63,5 +63,11 @@ For a new quarter, move those constants forward rather than reading the old numb
   2020 cohort, 3.4 % of 2021, ≤ 1.4 % later. Negligible for 2022–24 values, 2–4 % on 2020–21.
 - **Awareness belongs to the same window as the conversion spend.** An Aug–Oct average understated the
   30-day awareness in DE+FR+IT by a quarter after the relaunch (`market-entry.js` now prorates).
+- **Finance's Power BI cohort report (KAS/DETAIL = DETAIL) is not the same "DETAIL".** The workbook selects
+  customers by its 25 departments ("DETAIL findes ikke som dimensionsværdi i udtrækket") and counts all their
+  sales. Checked 2026-11-05 (`tmp/navision-cohorts/scratch/finance-compare.js`): acquisition years agree within
+  0–9 %; later years ours is 5–17 % higher for 2022/23–2024/25 and 34–51 % for 2020/21–2021/22, and the gap is
+  70–100 % of what customers buying over 100,000 kr. a year spend (22–33 per old cohort). Finance's DETAIL leaves
+  out the customers who grew big. For the deck's cohorts that is 5–9 % less value (5,850 → ~5,300 kr.).
 - **Compare all first orders with all first orders** in a recent window: invoiced-only, a 30-day window
   ending today reads 30–50 % down simply because recent orders are not invoiced yet.
