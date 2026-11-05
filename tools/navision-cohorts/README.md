@@ -69,5 +69,10 @@ For a new quarter, move those constants forward rather than reading the old numb
   0–9 %; later years ours is 5–17 % higher for 2022/23–2024/25 and 34–51 % for 2020/21–2021/22, and the gap is
   70–100 % of what customers buying over 100,000 kr. a year spend (22–33 per old cohort). Finance's DETAIL leaves
   out the customers who grew big. For the deck's cohorts that is 5–9 % less value (5,850 → ~5,300 kr.).
+  **Confirmed the same day: they are KAS.** Customer 222356 (4.94m in 2022/23) is absent under DETAIL and present under
+  KAS in Power BI; (Tom) is negligible. Dropping every customer whose biggest fiscal year exceeds 150,000 kr. (104 in
+  the 2020/21–2025/26 cohorts) reproduces finance's DETAIL report in all 21 cells within −4..+2 % (mean 1.6 %;
+  `finance-threshold.js`). Run any script on that basis with `NAV_COHORT_DIR=tmp/navision-cohorts-detail` (filtered
+  customers.json, a junction to nav-runs). Value per new customer 5,851 → 5,340; whole account 1.33 → 1.21.
 - **Compare all first orders with all first orders** in a recent window: invoiced-only, a 30-day window
   ending today reads 30–50 % down simply because recent orders are not invoiced yet.
