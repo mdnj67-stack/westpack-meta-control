@@ -253,8 +253,13 @@ for Nov 2025–Sep 2026 alone); its point estimates are below Meta's claim and a
 size, i.e. noise. The DE+FR+IT relaunch (spend ×4.2) showed −0.2 % against other markets where the
 incremental count implied +8 % and the ordinary count +21 % (SD ~15 %). New customers over 12 months
 fell 2.7 % (14,577 → 14,188) on +34 % spend; FY 2025/26 (13,869) is below FY 2022/23 (14,460) — so
-"+1,793 since Oct 2024" is a low base, not growth. Defensible: about 9 %, plausibly up to 12–15 %; 20 %
-or more conflicts with Navision. Measured reasons Meta under-counts (so its counts are floors): ~30 %
+"+1,793 since Oct 2024" is a low base, not growth. Meta's model says about 9 %; **the Navision checks can
+neither confirm nor rule out a larger share** (revised 2026-11-05, after the user rejected "hardly double" on a
+leadership slide: too many pitfalls). They mostly cover the old theme setup — the market setup has run only since
+9 Sep 2026 and is an investment that needs time; noise is as large as the effect (placebo of similar size, one
+month ±17–32 %); and they see only changes over a year or two, not what was already built or a slow B2B/awareness
+effect. An earlier version of this note said "plausibly up to 12–15 %; 20 % or more conflicts with Navision" —
+do not present an upper bound. Only a randomised test can size it. Measured reasons Meta under-counts (so its counts are floors): ~30 %
 of orders get neither new_customer nor existing_customer (15–22 Oct), and new_customer is sent without
 email (EMQ 5.9 vs Purchase 8.9) — both being fixed, which will raise Meta's counts without any real
 change. Not in any figure: Meta's claim of 2,098 incremental purchases by existing customers worth
