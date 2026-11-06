@@ -1376,6 +1376,17 @@ DE+FR+IT against all other markets for a year detects only ~20 %. Use Meta Conve
 The scripts are `tools/navision-cohorts/` (README there); the conference notes it came from are
 `knowledge/social-ads-conference-2026/`.
 
+## Social Ads Conference 2026 — `knowledge/social-ads-conference-2026/`
+
+The user attended on 3 November 2026 and wants the work here to build on it. `speaker-notes.md` is the organiser's
+full text of all 20 talks (shared 2026-11-06); `README.md` distils it into standing lessons for Westpack (creative
+and content, copy, measurement, B2B, agents), a one-line index of the talks and the user's own notebook notes matched
+to them. **Read the README before writing or judging ad creative or copy, briefing the content team, choosing
+formats, or designing a measurement or budget test**, and name the talk when you use one of its ideas. They are
+speakers' claims and anecdotes: Westpack's measured evidence (`knowledge/meta-research/`, the ad-level limits, the
+Navision cohorts) wins where they disagree. The speaker of the measurement ladder is **Jacob Holst Mouritzen**
+(with z).
+
 ## New customers in Navision — first order, not Power BI
 
 "New customer" in the cohort work is a customer number's **first-ever** sales order in Navision that was

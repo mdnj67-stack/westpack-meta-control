@@ -15,7 +15,7 @@ ends each section with "For Westpack". Refresh anything older than about six mon
 | [04-b2b-and-europe.md](04-b2b-and-europe.md) | Finding business buyers, LTV/payback, multi-country delivery, EU regulation, market expansion |
 | [05-scaling-and-decisions.md](05-scaling-and-decisions.md) | Budget steps, decision rules with small numbers, edit cadence, Q4, governance |
 | [06-platform-changes-2025-2026.md](06-platform-changes-2025-2026.md) | Dated changelog: products, API v22–v26, policy, prices, what is coming |
-| [07-measurement-ladder.md](07-measurement-ladder.md) | (2026-11-04) Holst Mouritsen's measurement ladder: Navision cohort value, what Meta costs per new customer, why geo tests cannot see Meta-sized effects here, brand-signal and MMM research, corrections to 03/00 |
+| [07-measurement-ladder.md](07-measurement-ladder.md) | (2026-11-04) Holst Mouritzen's measurement ladder: Navision cohort value, what Meta costs per new customer, why geo tests cannot see Meta-sized effects here, brand-signal and MMM research, corrections to 03/00 |
 
 Limits: Meta's Help Center renders client-side, so several Meta quotes come via developer-doc markdown or
 practitioner summaries; the shared web-search budget ran out late in five of the six passes, so copy-length

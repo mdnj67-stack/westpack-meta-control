@@ -1,6 +1,6 @@
 # The measurement ladder for Westpack — what our own data can and cannot show (2026-11-04)
 
-Holst Mouritsen presented a "measurement ladder" (måletrappen) at Social Ads Conference, Copenhagen, on
+Jacob Holst Mouritzen presented a "measurement ladder" (måletrappen) at Social Ads Conference, Copenhagen, on
 3 November 2026, which the user found "ultra værdifuldt" (notes: `knowledge/social-ads-conference-2026/`).
 This report has three parts: what Westpack's own Navision and Meta data showed when we tried to climb the
 ladder (measured 2026-11-04), desk research on the steps we do not have yet, and corrections to reports
@@ -201,12 +201,12 @@ margin), kroner back per krone after 3½ years:** EU 2.9 · IT 2.0 · DE 1.1 · 
 ~2½ years, +23k after 3½ (with the 2020–21 cohorts' buying pattern +97k and +202k after 5½).
 Awareness in the three markets (~67k per 30 days) is not in these figures.
 
-**Holst Mouritsen's figures, checked:** Profit Ability 2 (Thinkbox, 2024; 141 brands, 14 sectors,
+**Holst Mouritzen's figures, checked:** Profit Ability 2 (Thinkbox, 2024; 141 brands, 14 sectors,
 £1.8bn, 2021–23): short-term profit ROI £1.87, £4.11 including sustained effects (to 24 months) —
 that is 55 % of profit after 13 weeks; "58 %" appears only in WARC's headline (25 Apr 2024), not on
 Thinkbox's page. Day One list: Google & Bain 2022, 1,208 US B2B buyers, 86 % have one, 92 % buy from
 it — primary page not reachable, secondary sources consistent; Bain later ~90 %. "2× more likely to be
-bought" (McKinsey, per Holst Mouritsen): not verified — left out of the deck.
+bought" (McKinsey, per Holst Mouritzen): not verified — left out of the deck.
 
 **How to judge the entry markets (the user, 2026-11-04: "det er jo en investering i at bryde markedet op
 og være present").** Per-customer payback is the EU campaign's yardstick only. For DE/FR/IT report
