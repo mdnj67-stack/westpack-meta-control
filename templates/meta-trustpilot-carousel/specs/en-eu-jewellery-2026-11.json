@@ -1,0 +1,61 @@
+{
+  "id": "en-eu-jewellery-2026-11",
+  "note": "EU version for Conv - 04 - EU - Standard (Broad - Alle EU-lande), built PAUSED 6/11/2026 for the 10k peak push at the user's request. English reviews by customers across Europe, short and plain, none about delivery speed; two reviews saying the boxes are made in Europe were left out (Westpack sources across Europe and Asia). Checked against the English Trustpilot export of 27/10. No flag (pan-European).",
+  "locale": "en",
+  "trustpilot": {
+    "score": 4.6,
+    "reviews": 2796,
+    "asOf": "2026-10"
+  },
+  "hero": {
+    "photo": {
+      "src": "photos/kundelogo-02.jpg",
+      "y": -600
+    }
+  },
+  "quotes": [
+    {
+      "text": "The logo printing looks perfect and I am really happy with my first order from Westpack.",
+      "author": "Violet May Jewellery",
+      "date": "2026-01-20",
+      "stars": 5,
+      "photo": {
+        "src": "photos/kundelogo-01.jpg"
+      }
+    },
+    {
+      "text": "Great selection and quality, the printing is clean and impressive, pro job!",
+      "author": "Gyula",
+      "display": "Gyula",
+      "date": "2026-03-01",
+      "stars": 5,
+      "photo": {
+        "src": "photos/kundelogo-14.jpg"
+      }
+    },
+    {
+      "text": "I love my boxes — the quality is excellent — and I really appreciated having a real human being guide me through the design process.",
+      "author": "Serengeti Gems & Jewels",
+      "date": "2025-09-14",
+      "stars": 5,
+      "photo": {
+        "src": "photos/kundelogo-04.jpg"
+      }
+    },
+    {
+      "text": "Everything worked very well with my orders - already 3 years working with Westpack and I will continue. Very good and reliable team.",
+      "author": "Izabela",
+      "display": "Izabela",
+      "date": "2026-02-13",
+      "stars": 5,
+      "photo": {
+        "src": "photos/kundelogo-11.jpg"
+      }
+    }
+  ],
+  "offer": {
+    "photo": {
+      "src": "photos/kundelogo-03.jpg"
+    }
+  }
+}
