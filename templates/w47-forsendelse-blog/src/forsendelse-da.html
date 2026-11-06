@@ -139,6 +139,10 @@
 #w47fs .fs-ph img{aspect-ratio:4/5;object-fit:cover;border-radius:4px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 #w47fs .fs-ph a:hover img{transform:translateY(-4px) rotate(-.6deg)}
 #w47fs .fs-ph span{display:block;margin-top:10px;font:500 12px/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+#w47fs .fs-facts{display:grid;gap:0;margin-top:clamp(22px,4cqw,32px);border-top:1px solid var(--line)}
+#w47fs .fs-facts li{padding:14px 0;border-bottom:1px solid var(--line);font-size:15.5px;line-height:1.5}
+#w47fs .fs-facts b{display:block;font:400 26px/1.15 var(--disp);color:var(--ink);margin-bottom:2px}
+@container (min-width:700px){#w47fs .fs-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;border-top:0}#w47fs .fs-facts li{border-top:1px solid var(--line);border-bottom:0;padding-top:16px}}
 #w47fs .fs-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 @container (min-width:700px){#w47fs .fs-ph{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @container (max-width:480px){#w47fs .fs-btns .fs-btn{flex:1 1 100%}}
@@ -190,7 +194,7 @@
 <h2 class="fs-h2" data-r>Ikke i december.</h2>
 <ol class="fs-why-l">
 <li data-r><span class="fs-n">01</span><h3 class="fs-h3s">Gaven er klar, når den lander.</h3><p>I december er mange ordrer gaver. Kommer smykket færdigpakket, kan din kunde lægge det direkte under træet. Den slags husker din kunde, næste gang der skal købes en&nbsp;gave.</p></li>
-<li data-r><span class="fs-n">02</span><h3 class="fs-h3s">Den, der får gaven, ser dit navn.</h3><p>Logoet på smykkeæsken fortæller modtageren, hvor gaven er købt. Og modtageren kan blive din næste&nbsp;kunde.</p></li>
+<li data-r><span class="fs-n">02</span><h3 class="fs-h3s">Den, der får gaven, ser dit navn.</h3><p>Står dit logo på postæsken, ved modtageren, hvor gaven er købt, før den er pakket ud. Og modtageren kan blive din næste&nbsp;kunde.</p></li>
 <li data-r><span class="fs-n">03</span><h3 class="fs-h3s">Fold, læg i, sæt i, fold over, bind.</h3><p>Det er hele kunsten. Vi har bare skrevet den op – med&nbsp;billeder.</p></li>
 </ol>
 </section>
@@ -286,7 +290,7 @@
 <div class="fs-look-t" data-r>
 <p class="fs-k">Look 05</p>
 <h3 class="fs-h3">Sort &amp; sølv</h3>
-<p class="fs-ltx">Sort i sort, sølv på toppen og en Vienna-æske i mat soft touch. Det ser dyrt&nbsp;ud.</p>
+<p class="fs-ltx">Sort i sort, sølv på toppen. Det ser dyrt&nbsp;ud.</p>
 <p class="fs-k fs-need">Det skal du bruge</p>
 <ul class="fs-list"><li><a href="https://www.westpack.com/dkk_dk_den/postal-box-236x181x54-mm-32372310101.html"><span class="fs-nm">Sort postæske</span><i aria-hidden="true">&rarr;</i></a></li><li><a href="https://www.westpack.com/dkk_dk_den/fscr-certified-tissue-paper-chloride-acid-free-32721150100.html"><span class="fs-nm">Sort silkepapir med glitter</span><i aria-hidden="true">&rarr;</i></a></li><li><a href="https://www.westpack.com/dkk_dk_den/satin-ribbon-narrow-02342430030.html"><span class="fs-nm">Satinbånd i sølv</span><i aria-hidden="true">&rarr;</i></a></li><li><a href="https://www.westpack.com/dkk_dk_den/wooden-snowflake-36-pcs-02352110000.html"><span class="fs-nm">Snefnug i træ, metallisk sølv</span><i aria-hidden="true">&rarr;</i></a></li><li><a href="https://www.westpack.com/dkk_dk_den/vienna-jewellery-box-for-ring-stud-earrings-00320000102.html"><span class="fs-nm"><span translate="no" class="notranslate">Vienna</span> smykkeæske, mat sort</span><span class="fs-free">gratis&nbsp;logotryk</span><i aria-hidden="true">&rarr;</i></a></li></ul>
 
@@ -300,12 +304,13 @@
 </div>
 </section>
 <section class="fs-sec fs-logo" id="fs-logo">
-<p class="fs-k" data-r>Med dit logo</p>
-<p class="fs-said" data-r>“Logotryk er kun for de store.”</p>
-<h2 class="fs-h2" data-r>Ikke på <span translate="no" class="notranslate">Boston&nbsp;ECO</span>. <em>Logoet er gratis&nbsp;– også i små&nbsp;oplag.</em></h2>
-<p class="fs-lead" data-r>På postæsken koster logoet ekstra, og du bestiller fra 200&nbsp;stk. Så møder kunden det fire gange, før smykket er pakket ud: udenpå låget, inden i låget, på smykkeæsken og på&nbsp;posen.</p>
-<ul class="fs-ph"><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/e015a19e-da7c-4554-850d-974524348edc.jpeg" alt="Postæske i kraft med logo i guldfolie på låget" width="640" height="800" loading="lazy" decoding="async"><span>Folie udenpå postæsken</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/ce64d7d4-2f65-43f5-ab58-6f483a1a5faf.jpeg" alt="Åben postæske med logo trykt inden i låget" width="640" height="800" loading="lazy" decoding="async"><span>Tryk inden i låget</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/4b71f5bb-76e0-4bd3-8f7a-f651f83175ed.jpeg" alt="To smykkeæsker med logo, en sort og en lyserød" width="640" height="800" loading="lazy" decoding="async"><span>Logo på smykkeæsken</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/b20aee65-0c08-4fab-979f-60e37c55a64b.jpeg" alt="Grøn smykkeæske og sort smykkepose med logo" width="640" height="800" loading="lazy" decoding="async"><span>– og på posen</span></a></li></ul>
-<div class="fs-btns" data-r><a class="fs-btn" href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html">Se postæsker</a><a class="fs-btn" href="https://www.westpack.com/dkk_dk_den/jewellery-boxes.html">Se smykkeæsker</a></div>
+<p class="fs-k" data-r>Logo på postæsken</p>
+<p class="fs-said" data-r>“Logo på postæsken? Det er kun for de store.”</p>
+<h2 class="fs-h2" data-r>Fra 200&nbsp;stk. <em>Så ligner du en af&nbsp;dem.</em></h2>
+<p class="fs-lead" data-r>Folie udenpå låget, tryk inden i – eller begge dele. Så ser kunden dit navn, før pakken er åben – og igen, når den&nbsp;er.</p>
+<ul class="fs-ph"><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/e015a19e-da7c-4554-850d-974524348edc.jpeg" alt="Postæske i kraft med et logo i guldfolie på låget" width="640" height="800" loading="lazy" decoding="async"><span>Guldfolie udenpå</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/ce64d7d4-2f65-43f5-ab58-6f483a1a5faf.jpeg" alt="Åben postæske med et logo trykt inden i låget" width="640" height="800" loading="lazy" decoding="async"><span>Tryk inden i låget</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/c481805c-d05a-43f3-b3ec-f095506dcfc9.jpeg" alt="Lukket postæske i kraft med et stort sort logo på låget" width="640" height="800" loading="lazy" decoding="async"><span>Sort folie på kraft</span></a></li><li data-r><a href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/a931f2ef-259d-44da-808d-133fd62cd3ab.jpeg" alt="Postæsker med logo både udenpå og inden i låget" width="640" height="800" loading="lazy" decoding="async"><span>Ude og inde</span></a></li></ul>
+<ul class="fs-facts" data-r><li><b>Fra 200&nbsp;stk.</b>med dit logo – logoet koster ekstra pr.&nbsp;æske</li><li><b>Folie eller tryk</b>folie i guld, sølv, kobber og flere farver udenpå, tryk&nbsp;indeni</li><li><b>7–8 hverdage</b>i produktion med et nyt logo – 4–5, når du genbestiller med samme</li></ul>
+<div class="fs-btns" data-r><a class="fs-btn" href="https://www.westpack.com/dkk_dk_den/shipment-products/postal-boxes.html">Se postæsker</a></div>
 </section>
 <section class="fs-sec fs-faq" id="fs-praktisk">
 <p class="fs-k" data-r>Alt det praktiske</p>

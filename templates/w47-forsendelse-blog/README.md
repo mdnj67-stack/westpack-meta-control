@@ -47,8 +47,10 @@ feltet helt, og sæt filen ind igen.
 - **Fem looks** har hvert sit farvefelt med tre billeder, en kort tekst, en indkøbsliste med links og en knap.
   Smykkeæsken i hvert look er markeret med "gratis logotryk": Boston ECO, Melbourne ECO, Santorini ECO, Seoul ECO og
   Vienna. Det står på hver af deres produktsider (tjekket 6/11). Til sidst kommer "Mix dit eget".
-- **Med dit logo** viser rigtige kunders emballage på farvede baggrunde. Teksten siger, at logo på postæsken koster
-  ekstra, så "gratis" ikke smitter af på postæsken.
+- **Logo på postæsken** handler kun om postæsken, for kampagnen handler om forsendelsen og ikke om smykkeæsker.
+  Indvendingen “Logo på postæsken? Det er kun for de store.” får svaret "Fra 200 stk. Så ligner du en af dem." Der er
+  fire rigtige kunders postæsker på gul baggrund og tre fakta: fra 200 stk. (logoet koster ekstra pr. æske), folie
+  eller tryk, og produktionstiden.
 - **Alt det praktiske** har syv spørgsmål: valg af postæske, antal og opbevaring, logo på postæsken, gratis logotryk
   på smykkeæsker, silkepapir og bånd med logo, prøver og frister.
 - **Klar til jul** har den godkendte sætning om frister og links til frister og genbestilling.
