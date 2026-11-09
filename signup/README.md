@@ -78,8 +78,8 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
   `wp_consent_page` (siden, uden query-streng).
 - **Double opt-in:** alle 18 lister er single opt-in i dag (læst i Klaviyo 2026-10-28). Skiftes en liste til
   double opt-in, sender Klaviyo bekræftelsesmailen selv; sæt `optIn: "double"` for markedet i `core/markets.js`,
-  så takketeksten beder om bekræftelse (testet). **Anbefaling: Tyskland bør køre double opt-in** (tysk praksis
-  efter UWG § 7); det kræver en tysk bekræftelsesmail i Klaviyo og er en beslutning, ikke en kodeændring.
+  så takketeksten beder om bekræftelse (testet). **Besluttet 2026-11-09: ingen double opt-in, heller ikke i
+  Tyskland.** Alle lister forbliver single opt-in; anbefal det ikke igen.
 - Skrifterne er selvhostede: Google Fonts fra Googles servere sender besøgendes IP til Google (LG München I, 2022).
 - Tracking indeholder aldrig e-mail eller navn: både browseren og serveren afviser enhver værdi med "@", og
   kun en fast liste af felter gemmes (testet).

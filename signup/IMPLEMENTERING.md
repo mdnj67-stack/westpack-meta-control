@@ -112,9 +112,9 @@ fjerne fluebenet på markedet i Control.
   med folie, grammatik, retstavning, typografi), mens forslag, der ville erstatte butikkens egne formuleringer,
   blev afvist. Det er ikke en modersmålslæsning; lad en med sproget som modersmål læse de største markeder, når der
   er lejlighed.
-- **Tyskland og double opt-in:** alle 18 lister er single opt-in, ligesom Klaviyo-formularerne i dag. Tysk praksis
-  peger mod double opt-in; det er en beslutning i Klaviyo (listen og en tysk bekræftelsesmail), ikke en kodeændring.
-  Sættes listen til double opt-in, sættes `optIn: "double"` for DE, så takketeksten beder om bekræftelse.
+- **Ingen double opt-in (besluttet 2026-11-09), heller ikke i Tyskland:** alle 18 lister forbliver single opt-in,
+  ligesom Klaviyo-formularerne. Skulle det ændre sig, sættes `optIn: "double"` for markedet, så takketeksten beder om
+  bekræftelse.
 - **Safari på iPhone** er ikke testet på en rigtig telefon. Chrome, Edge og Firefox tegner trykket inden for 0,06 %
   af det målte låg; WebKit til Windows tegner perspektivet fladt, og siden skifter da selv til den bedste flade
   tilnærmelse. Ægte Safari bør tegne perspektivet korrekt – åbn `?wps=preview` på en iPhone og se efter.
