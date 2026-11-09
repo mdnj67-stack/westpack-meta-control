@@ -3,6 +3,7 @@ const { requireAuth } = require("../../server/lib/auth");
 const { readJsonBody, sendJson } = require("../../server/lib/http");
 const {
   addAsanaTaskComment,
+  createAsanaTask,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskBundle,
@@ -303,6 +304,22 @@ module.exports = async (req, res) => {
       sendJson(res, 200, { ok: true, comment: await addAsanaTaskComment(config, input?.taskGid, input?.text) });
     } catch (error) {
       sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not comment in Asana." });
+    }
+    return;
+  }
+
+  // A to-do for the token's owner (My Tasks, optionally in one of the app's projects), with a due date.
+  // Always assigned to the token's owner - see createAsanaTask.
+  if (requestedAction === "asana_task_create") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, task: await createAsanaTask(config, input || {}) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the Asana task." });
     }
     return;
   }

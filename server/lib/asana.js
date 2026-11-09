@@ -346,6 +346,87 @@ async function addAsanaTaskComment(config, taskGid, text) {
   };
 }
 
+// The second write: a to-do for the token's owner. The task is always assigned to "me" - the person whose
+// token this is - in that person's own workspace, optionally inside one of the app's projects. It can never
+// be assigned to someone else, so the route cannot fill colleagues' task lists.
+const MAX_TASK_NAME_CHARS = 300;
+const MAX_TASK_NOTES_CHARS = 20000;
+
+function validDueOn(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return null;
+  const date = new Date(`${text}T12:00:00Z`);
+  return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== text ? null : text;
+}
+
+async function createAsanaTask(config, { name, notes, dueOn, projectKind } = {}) {
+  const taskName = String(name || "").trim();
+  const taskNotes = String(notes || "").trim();
+  const due = validDueOn(dueOn);
+  if (!taskName || taskName.length > MAX_TASK_NAME_CHARS) {
+    const error = new Error(`A task name needs between 1 and ${MAX_TASK_NAME_CHARS} characters.`);
+    error.statusCode = 400;
+    throw error;
+  }
+  if (taskNotes.length > MAX_TASK_NOTES_CHARS) {
+    const error = new Error(`Task notes can be at most ${MAX_TASK_NOTES_CHARS} characters.`);
+    error.statusCode = 400;
+    throw error;
+  }
+  if (due === null) {
+    const error = new Error("dueOn must be a real date written YYYY-MM-DD.");
+    error.statusCode = 400;
+    throw error;
+  }
+  let projectGid = "";
+  if (projectKind) {
+    if (!ASANA_PROJECT_KINDS[String(projectKind).trim().toLowerCase()]) {
+      const error = new Error(`Unknown Asana project kind "${projectKind}". Use ${Object.keys(ASANA_PROJECT_KINDS).join(", ")} or leave it out for My Tasks.`);
+      error.statusCode = 400;
+      throw error;
+    }
+    projectGid = resolveAsanaProjectGid(config, projectKind).projectGid;
+    if (!projectGid) {
+      const error = new Error(`The Asana ${projectKind} project is not configured.`);
+      error.statusCode = 503;
+      throw error;
+    }
+  }
+  const profile = await getAsanaConnectionProfile(config);
+  const workspaceGid = profile.workspaces?.[0]?.gid || "";
+  if (!workspaceGid) {
+    const error = new Error("The Asana token has no workspace.");
+    error.statusCode = 503;
+    throw error;
+  }
+  const data = { name: taskName, assignee: "me", workspace: workspaceGid };
+  if (taskNotes) data.notes = taskNotes;
+  if (due) data.due_on = due;
+  if (projectGid) data.projects = [projectGid];
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/tasks?opt_fields=gid,name,due_on,permalink_url,assignee.name`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.asanaAccessToken}`
+    },
+    body: JSON.stringify({ data })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return {
+    gid: String(payload?.data?.gid || ""),
+    name: String(payload?.data?.name || taskName),
+    dueOn: String(payload?.data?.due_on || due || ""),
+    assignee: String(payload?.data?.assignee?.name || profile.name || ""),
+    permalinkUrl: String(payload?.data?.permalink_url || ""),
+    projectGid
+  };
+}
+
 async function getAsanaTaskSubtasks(config, taskGid) {
   const normalizedTaskGid = String(taskGid || "").trim();
   if (!/^\d+$/.test(normalizedTaskGid)) {
@@ -402,6 +483,7 @@ async function getAsanaTaskBundle(config, taskGid) {
 module.exports = {
   addAsanaTaskComment,
   asanaGet,
+  createAsanaTask,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskComments,
