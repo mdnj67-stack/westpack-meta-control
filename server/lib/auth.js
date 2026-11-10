@@ -177,7 +177,5 @@ module.exports = {
   isAuthEnabled,
   isAuthenticated,
   requireAuth,
-  validatePassword,
-  // For the office TV's feed (server/tv/feed-auth.js): a timing-safe check of its bearer token.
-  safeCompare
+  validatePassword
 };

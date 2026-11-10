@@ -39,7 +39,6 @@ const {
   readAudienceSaturation,
   writeAudienceSaturation
 } = require("../../server/meta/historical-store");
-const { recordTvMetaAcquisition } = require("../../server/tv/meta-acquisition");
 const {
   sendMetaCatalogCacheHit,
   sendMetaCatalogFallback,
@@ -72,7 +71,7 @@ const META_INSIGHTS_CACHE_MAX_AGE_MS = 15 * 60 * 1000;
 // finished, so the series barely changes; a long TTL keeps the widest query off the
 // per-refresh path, which matters while the app is on the development access tier.
 const META_ACQUISITION_TREND_CACHE_MAX_AGE_MS = 3 * 60 * 60 * 1000;
-const META_SERVER_CRON_SCHEDULES = ["45 5 * * *", "15 8 * * *"];
+const META_SERVER_CRON_SCHEDULES = ["45 5 * * *"];
 // Fifteen seconds was tighter than this account's heaviest query: the ad-set daily
 // insights call was measured at 15,009ms, so it failed by nine milliseconds and took the
 // whole snapshot with it. The function itself has a 300s budget (vercel.json), so the
@@ -221,11 +220,11 @@ function buildScheduleDiagnostics() {
     timezone: COPENHAGEN_TIMEZONE,
     targetSlots: META_TARGET_REFRESH_SLOTS.map((slot) => ({ ...slot })),
     serverCronSchedulesUtc: [...META_SERVER_CRON_SCHEDULES],
-    serverCronSummary: "Two server-side Vercel crons build the snapshot each day; the 08:15 UTC one runs after Meta's day has rolled over, so the office TV's month to date is current each morning.",
+    serverCronSummary: "One server-side Vercel cron is configured right now.",
     browserDailySummary: "Browser daily refresh can target 07:45 and 13:00 Copenhagen while the dashboard tab is open.",
     notes: [
       "Vercel cron schedules are defined in UTC.",
-      "The current production config builds the snapshot from a server cron twice a day.",
+      "The current production config only includes one server cron path invocation per day.",
       "Browser daily refresh is session-dependent and only runs while an operator has the dashboard open."
     ]
   };
@@ -2195,10 +2194,6 @@ module.exports = async (req, res) => {
     };
 
     setCachedSnapshot(snapshotCacheKey, responsePayload);
-    // The office TV reads this month's new customers from Blob instead of building a snapshot of its
-    // own. It never throws and gives up after 5 s; the .catch is a second guard so a failed write can
-    // never fail or alter this response.
-    await recordTvMetaAcquisition(responsePayload).catch(() => null);
     console.log("[meta-sync]", JSON.stringify({
       scope: `${dateScope.since}:${dateScope.until}`,
       totalMs: timings.total_snapshot_ms,

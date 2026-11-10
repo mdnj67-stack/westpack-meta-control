@@ -357,48 +357,13 @@ klaviyo-reconcile,funnel-store}.js`, the `signup-product-panel` in `index.html`,
   `BLOB_READ_WRITE_TOKEN` (local file `data/signup-control.json`), and `tmp/playwright-runner/signup-lab-check.js`
   (all three views and Signup forms, desktop and phone, one page load each, staging changed and put back).
 
-## The office TV feed (2026-11-10)
-
-The department's TV (a WebGL wood stove with KPIs and Westpack facts rising out of the smoke) is a
-project of its own since the user asked for it to be pulled out of this app: `C:\Projects\westpack-tv`,
-Vercel project `westpack-tv`, with its own CLAUDE.md. **This repo only produces its live figures.**
-`api/tv.js` + `server/tv/*`; tests `tests/tv-display.test.js`.
-
-- **`GET /api/tv?action=kpis`**, readable server to server with `Authorization: Bearer $TV_FEED_TOKEN`
-  (the same secret on both Vercel projects; under 32 characters accepts nothing) or with a normal
-  session (`server/tv/feed-auth.js`). It answers scenes ready to draw: `{ id, eyebrow, valueText, suffix,
-  line, source, asOf }`, Danish copy.
-- **It costs no Meta quota.** The dashboard snapshot lives only in instance memory, so
-  `api/meta/account-snapshot.js` hands each fresh build to `recordTvMetaAcquisition`, which stores the
-  month-to-date `customerAcquisition.trend` in Blob `tv/meta-acquisition.json` (never throws, 5 s cap).
-  A second daily cron (08:15 UTC, `?preset=last_7d`) builds after Meta's day has rolled over in Los
-  Angeles; the 05:45 one is a day behind. Subscribers are Klaviyo's live list counts, at most every 3 h,
-  and one failed market means no total; emails come from the subject-line history in Blob. Payload cache
-  `tv/kpis.json` (10 min). Nothing goes to Redis.
-- **Webshop orders, live** (`server/tv/webshop-orders.js`): Klaviyo's "Placed Order" from **Magento 2
-  only** (integration key `magento_two`) in all 18 accounts, hourly counts in Copenhagen time, one
-  metric-aggregates request per store per rebuild (metric ids kept a day). Since 19-27 Oct 2026 every
-  account also has Klaviyo's own GTM "Placed Order" (key `api`) repeating ~3 of 4 orders, and NO/PL/UK an
-  old empty "Magento" one - picking by name double counts. Scenes: orders today to the last whole hour
-  vs the same weekday last week to the same hour, yesterday vs the weekday before, the busiest store
-  (none on a tie) and the last whole hour. One store failing means no order scene; a count older than
-  30 min is dropped. First live read 2026-11-10 11:0x: 99 today (+39 %), 417 yesterday (+16 %), 48 in
-  the last hour.
-- **What it hands over and what it leaves out.** Meta new customers 1st-yesterday vs the same days last
-  month, cost per new customer, newsletter list members ("Med på nyhedsbrevet" - members, not consents),
-  campaign emails delivered and unique clicks per email this month. First-time reach is built but off
-  (`DEFAULT_SCENE_IDS`): Expansion calls it a diagnostic, and a reach figure alone reads as a win. Opens
-  are never shown (Apple MPP). Any figure that is missing, stale (>36 h) or zero is dropped, never 0.
-- The TV's Westpack facts (site claims, Navision aggregates, Trustpilot quotes) are built in the TV
-  project from this repo's files (`knowledge/westpack-site`, `tmp/navision-cohorts`, the Trustpilot specs)
-  by its `tools/build-facts.js`.
-
 ## Test suite status
 
-As of 2026-11-10, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —
-`node --test tests/` does not work) runs 911 tests and all pass; the seven
-`tests/meta-expansion-reach.test.js` failures recorded on 2026-10-30 no longer occur. The count drifts
-as tests are added — re-run the command rather than trusting the number if it looks stale.
+As of 2026-10-30, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —
+`node --test tests/` does not work) runs 873 tests: 866 pass and 7 fail, all seven in
+`tests/meta-expansion-reach.test.js`. Those seven failed identically before the Content Agent was
+removed and have not been investigated. The count drifts as tests are added — re-run the command
+rather than trusting the number if it looks stale.
 
 Git history before commit `d56f472` ("Sync full local project state to repo") was squashed on
 import, so `git log` per-file is uninformative for chronology before then.

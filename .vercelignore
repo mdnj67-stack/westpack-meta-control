@@ -45,10 +45,6 @@ test-results/
 data/klaviyo-subject-line-history.json
 data/klaviyo-subject-line-team.json
 data/klaviyo-subject-line-tags.json
-# The office TV's local-mode documents (production keeps them in Blob): Meta and Klaviyo figures.
-data/tv-meta-acquisition.json
-data/tv-kpis.json
-data/tv-subscriber-daily.json
 
 # Not needed at runtime.
 tests/
