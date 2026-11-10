@@ -47,11 +47,18 @@ feltet helt, og sæt filen ind igen.
 - **Fem looks** har hvert sit farvefelt med tre billeder, en kort tekst, en indkøbsliste med links og en knap.
   Smykkeæsken i hvert look er markeret med "gratis logotryk": Boston ECO, Melbourne ECO, Santorini ECO, Seoul ECO og
   Vienna. Det står på hver af deres produktsider (tjekket 6/11). Til sidst kommer "Mix dit eget".
+- **Ikke kun til smykker** (tilføjet 10/11) svarer på “Postæsker? Vi sælger jo ikke smykker.” med "Det gør postæsken
+  heller ikke." Der er to felter side om side. Det ene er en lille tegnet animation, hvor et duftlys, et tørklæde, en
+  creme, en kop, solbriller, en dåbsske og til sidst en smykkeæske falder ned i en postæske efter tur, med navnet under.
+  Det andet er Westpacks eget prøvetryk "FILLED WITH LOVE … and other cool stuff" (Content Library, "Digital print
+  (postæsker)"). Derunder står ét faktum: postæskerne går fra 2,2 til 12,8 cm i højden og op til 40 cm i længden. Det er
+  tjekket på kategorisiden 10/11, og æsker på restsalg er ikke talt med (XXL 455 × 305 × 255 og 3237 9-serien udgår).
+  Animationen er ren CSS på en indlejret SVG, ca. 3 KB. Den står stille for dem, der har slået bevægelse fra.
 - **Logo på postæsken** handler kun om postæsken, for kampagnen handler om forsendelsen og ikke om smykkeæsker.
   Indvendingen “Logo på postæsken? Det er kun for de store.” får svaret "Fra 200 stk. Så ligner du en af dem." Der er
   fire rigtige kunders postæsker på gul baggrund og tre fakta: fra 200 stk. (logoet koster ekstra pr. æske), folie
   eller tryk, og produktionstiden.
-- **Alt det praktiske** har syv spørgsmål: valg af postæske, antal og opbevaring, logo på postæsken, gratis logotryk
+- **Alt det praktiske** har syv spørgsmål (det første starter nu med "det, du sender", ikke smykkeæskerne): valg af postæske, antal og opbevaring, logo på postæsken, gratis logotryk
   på smykkeæsker, silkepapir og bånd med logo, prøver og frister.
 - **Klar til jul** har den godkendte sætning om frister og links til frister og genbestilling.
 
@@ -64,21 +71,22 @@ feltet helt, og sæt filen ind igen.
 | `#trin-1` … `#trin-5` | trin for trin, åbnet på det trin (mailen holder trin 4 og 5 tilbage og linker til `#trin-4`) |
 | `#look-06` | "Mix dit eget" |
 | `#faq-logo` (og `#faq-postaeske`, `#faq-antal`, `#faq-gratis`, `#faq-silkepapir`, `#faq-proeve`, `#faq-frister`) | det spørgsmål, foldet ud |
+| `#fs-andet` | "Ikke kun til smykker" (mailens GIF og link lander her) |
 | `#fs-trin`, `#fs-looks`, `#fs-logo`, `#fs-praktisk` | det afsnit |
 
 Kommer man ind via et link, afspiller trin-guiden sig ikke selv. Den, der kom for noget bestemt, skal ikke se siden flytte sig.
 
 ## Godt at vide
 
-- **Butikslinksene er danske** (`dkk_dk_den`). Blokken skifter dem selv til den butik, siden står i, ligesom
-  Boxulatoren.
+- **Butikslinksene er danske og uden domæne** (`/dkk_dk_den/…`). Indlægget ligger altid på www.westpack.com, så de
+  virker, og det sparer ca. 1,8 KB. Blokken skifter dem selv til den butik, siden står i, ligesom Boxulatoren.
 - **Billederne ligger i Klaviyos billedbibliotek** (DK, `w47-blog-*`) og hentes fra `d3k81ch9hvuctc.cloudfront.net`,
   som butikkens sikkerhedsregler allerede tillader.
 - **Al CSS hænger på blokkens id (`#w47fs`)**, så temaet ikke kan ændre indlægget, og indlægget ikke kan ændre resten
   af siden.
 - **Uden JavaScript** står alle fem trin under hinanden med billede, og intet forsvinder.
 - **Ingen emojis** og ingen tegn på 4 bytes, for Magentos database afviser dem.
-- Filen er ca. 56 KB. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
+- Filen er ca. 62 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men ikke til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
 - **Teksten er læst igennem efter Copywriter-oplægget** (Hvad så?-testen, comeback-snydekoden, du-form, aktive
   verber), og hver påstand er tjekket mod butikkens egne sider.
 - **Til oversættelsen:** teksterne til Guldstjerner-udgaven af trinene ligger i attributterne `data-w-t` (og
