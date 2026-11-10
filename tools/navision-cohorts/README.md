@@ -76,3 +76,11 @@ For a new quarter, move those constants forward rather than reading the old numb
   customers.json, a junction to nav-runs). Value per new customer 5,851 → 5,340; whole account 1.33 → 1.21.
 - **Compare all first orders with all first orders** in a recent window: invoiced-only, a 30-day window
   ending today reads 30–50 % down simply because recent orders are not invoiced yet.
+- **Sample orders have their own number series (E…) only from February 2024.** Before that a sample was an
+  ordinary first order, so "first order is not a sample" drops 25–35 % at that date and 2024 reads −44 % on it.
+  Across 2024 compare all first orders. A first invoice between 0 and 300 kr. tracks the E series closely
+  (Jan 2025: 452 against 465) if a sample proxy is needed before 2024.
+- **The DETAIL workbook refused a ten-month custom period** (1 Jan–8 Nov 2026: VBA 0x800A9C68 at once) and hung
+  on May–Aug 2026 (no dialog, no CPU for ten minutes; the Excel instance had to be stopped). The full run
+  (`c<date>`, `Nye_kunder_SQL_login.xlsm`) holds exactly the same customers as a DETAIL run of the same months
+  (checked Sep–Oct 2025 and 2026); it has no KAS departments and no `KunProeve` column, so use the E prefix there.
