@@ -89,6 +89,11 @@ Kommer man ind via et link, afspiller trin-guiden sig ikke selv. Den, der kom fo
 - Filen er ca. 62 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men ikke til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
 - **Teksten er læst igennem efter Copywriter-oplægget** (Hvad så?-testen, comeback-snydekoden, du-form, aktive
   verber), og hver påstand er tjekket mod butikkens egne sider.
+- **Animationen kan oversættes.** Tegningen har ingen ord. De syv navne ("Et duftlys." … "Og ja – smykker.") står som
+  almindelig tekst i `<figcaption class="fs-cn">` under den, ligesom "Det står der jo på låget.". Oversæt dem som al
+  anden tekst. Rækkefølgen skal blive den samme, for navn nummer 1 hører til tegning nummer 1. Et langt navn må gerne
+  fylde to linjer, for feltet holder højden. Mailens GIF har heller ingen ord. Navnene står som tekst under den, så
+  Duplicate & translate oversætter dem til hvert marked (fra mail v11).
 - **Til oversættelsen:** teksterne til Guldstjerner-udgaven af trinene ligger i attributterne `data-w-t` (og
   Rosa-teksterne i `data-r-t`). De skal oversættes med, ellers skifter guiden til dansk, når man vælger Guldstjerner.
 - Bloggen sender links med `?utm_…` videre til samme side uden parametrene. Ankeret (`#look-03`) følger med.
