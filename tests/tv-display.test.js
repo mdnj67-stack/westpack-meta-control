@@ -12,6 +12,7 @@ const { resolveFeedAccess, MIN_FEED_TOKEN_LENGTH } = require("../server/tv/feed-
 const { createSessionToken, isAuthenticated } = require("../server/lib/auth");
 const { buildTvMetaAcquisitionDoc, recordTvMetaAcquisition } = require("../server/tv/meta-acquisition");
 const { getTvKpis, __resetMemory } = require("../server/tv/kpi-sources");
+const { fetchWebshopOrders, pickMagentoPlacedOrder, readHourlyCounts } = require("../server/tv/webshop-orders");
 
 const NBSP = String.fromCharCode(0xa0);
 const MINUS = String.fromCharCode(0x2212);
@@ -48,12 +49,34 @@ function emailAggregate(overrides = {}, monthKey = "2026-11") {
   return { monthKey, historySyncedAt: "2026-11-10T04:52:00Z", markets: { ...markets, ...overrides } };
 }
 
+// Hourly order counts in Copenhagen time. NOW is Tuesday 10 November, 10:00 in Copenhagen, so the
+// whole hours of today are 00-09.
+function hoursFor(dateKey, perHour) {
+  const hours = {};
+  for (let h = 0; h < 24; h += 1) hours[`${dateKey} ${String(h).padStart(2, "0")}`] = perHour(h);
+  return hours;
+}
+
+function ordersInput(overrides = {}) {
+  const store = (country, scale) => ({
+    country,
+    hours: {
+      ...hoursFor("2026-11-02", (h) => (h >= 8 && h < 18 ? 2 * scale : 0)), // the Monday before: 20 x scale
+      ...hoursFor("2026-11-03", (h) => (h >= 8 && h < 10 ? 2 * scale : 0)), // last Tuesday to 10:00: 4 x scale
+      ...hoursFor("2026-11-09", (h) => (h >= 8 && h < 18 ? 3 * scale : 0)), // yesterday: 30 x scale
+      ...hoursFor("2026-11-10", (h) => (h >= 8 && h < 10 ? 3 * scale : h === 10 ? 50 : 0)) // today; 10:00 is not whole yet
+    }
+  });
+  return { complete: true, marketCount: 3, markets: [store("DE", 2), store("EU", 1), store("DK", 1)], fetchedAt: "2026-11-10T08:58:00Z", ...overrides };
+}
+
 function fullInputs(overrides = {}) {
   return {
     meta: metaInput(),
     subscribers: { complete: true, total: 25808, marketCount: 18, fetchedAt: "2026-11-10T07:30:00Z" },
     subscriberDaily: { days: {} },
     email: { aggregate: emailAggregate() },
+    orders: ordersInput(),
     ...overrides
   };
 }
@@ -69,9 +92,13 @@ test("every scene renders with Danish formatting, in order, new customers first"
   }), NOW);
   assert.deepEqual(result.scenes.map((scene) => scene.id), [
     "meta_new_customers_mtd",
+    "webshop_orders_today",
     "meta_cost_per_new_customer",
+    "webshop_orders_yesterday",
     "newsletter_subscribers",
+    "webshop_busiest_today",
     "newsletter_delivered_mtd",
+    "webshop_orders_last_hour",
     "newsletter_clicks_mtd"
   ]);
   for (const scene of result.scenes) {
@@ -299,7 +326,7 @@ test("first-time reach is built from the Expansion tab's fields, and left off th
   assert.equal(reach.valueText, "212.345");
   assert.equal(reach.line, "1.–9. november · samme dage i oktober: 171.729");
   assert.match(reach.source, /konverteringskampagner/);
-  assert.deepEqual(on.scenes.map((scene) => scene.id).slice(0, 3), ["meta_new_customers_mtd", "meta_cost_per_new_customer", "expansion_first_time_reach"]);
+  assert.deepEqual(on.scenes.map((scene) => scene.id).filter((id) => !id.startsWith("webshop_")).slice(0, 3), ["meta_new_customers_mtd", "meta_cost_per_new_customer", "expansion_first_time_reach"]);
 
   const stale = buildTvScenes(fullInputs({ expansion: { snapshot: { ...snapshot, generatedAt: "2026-11-08T03:12:00Z" } }, sceneIds: ["expansion_first_time_reach"] }), NOW);
   assert.equal(stale.scenes.length, 0);
@@ -407,6 +434,7 @@ function fakeDeps(overrides = {}) {
       calls.fetchSubscribers += 1;
       return { complete: true, total: 25808, marketCount: 18, markets: [], failed: [], fetchedAt: "2026-11-10T08:00:00.000Z" };
     },
+    fetchOrders: async () => ({ ...ordersInput(), failed: [], metricIds: { DE: { id: "m-de", at: "2026-11-10T08:58:00Z" } } }),
     expectedEmailMarkets: ["DK"],
     ...overrides
   };
@@ -463,10 +491,12 @@ test("one source failing drops its scenes and nothing else", async () => {
   const deps = fakeDeps({
     readMetaAcquisition: async () => { throw new Error("Blob read failed (503)."); },
     readHistory: async () => { throw new Error("Blob read failed (503)."); },
-    fetchSubscribers: async () => { throw new Error("socket hang up"); }
+    fetchSubscribers: async () => { throw new Error("socket hang up"); },
+    fetchOrders: async () => { throw new Error("socket hang up"); }
   });
   const { payload } = await getTvKpis({ deps, now: NOW });
   assert.equal(payload.scenes.length, 0);
+  assert.equal(payload.sources.orders.status, "unavailable");
   assert.equal(payload.sources.meta.status, "unavailable");
   assert.equal(payload.sources.email.status, "unavailable");
   assert.equal(payload.sources.subscribers.status, "unavailable");
@@ -474,7 +504,7 @@ test("one source failing drops its scenes and nothing else", async () => {
   __resetMemory();
   const partial = fakeDeps({ readMetaAcquisition: async () => { throw new Error("Blob read failed (503)."); } });
   const result = await getTvKpis({ deps: partial, now: NOW });
-  assert.deepEqual(result.payload.scenes.map((scene) => scene.id), ["newsletter_subscribers", "newsletter_delivered_mtd", "newsletter_clicks_mtd"]);
+  assert.deepEqual(result.payload.scenes.map((scene) => scene.id), ["webshop_orders_today", "webshop_orders_yesterday", "newsletter_subscribers", "webshop_busiest_today", "newsletter_delivered_mtd", "webshop_orders_last_hour", "newsletter_clicks_mtd"]);
 });
 
 test("the daily subscriber record is never rewritten after a failed read", async () => {
@@ -567,4 +597,116 @@ test("the TV's documents never touch Redis", async () => {
     }
     delete require.cache[require.resolve(MODULE)];
   }
+});
+
+// ---- Webshop orders ------------------------------------------------------------------------------
+
+test("orders today are whole hours, against the same weekday a week ago to the same hour", () => {
+  const result = buildTvScenes(fullInputs(), NOW);
+  const today = sceneById(result, "webshop_orders_today");
+  // 00-09 today: 3 x (2 + 1 + 1) x 2 hours = 24; the same hours last Tuesday: 2 x 4 x 2 = 16; the
+  // 50 orders in the unfinished 10:00 hour are not counted yet
+  assert.equal(today.valueText, "24");
+  assert.equal(today.eyebrow, "Webshop-ordrer i dag");
+  assert.equal(today.line, `til kl. 10 · 50${NBSP}% flere end sidste tirsdag til samme tid`);
+  assert.match(today.source, /Placed Order fra Magento/);
+});
+
+test("yesterday is a whole day against the same weekday the week before", () => {
+  const yesterday = sceneById(buildTvScenes(fullInputs(), NOW), "webshop_orders_yesterday");
+  assert.equal(yesterday.valueText, "120");
+  assert.equal(yesterday.line, `mandag 9. november · 50${NBSP}% flere end mandagen før`);
+});
+
+test("the busiest store is named in Danish, and a tie names nobody", () => {
+  const busiest = sceneById(buildTvScenes(fullInputs(), NOW), "webshop_busiest_today");
+  assert.equal(busiest.valueText, "Tyskland");
+  assert.equal(busiest.line, "12 af dagens 24 ordrer · til kl. 10");
+  const tie = ordersInput();
+  tie.markets = tie.markets.filter((m) => m.country !== "DE");
+  const result = buildTvScenes(fullInputs({ orders: tie }), NOW);
+  assert.equal(sceneById(result, "webshop_busiest_today"), undefined);
+  assert.ok(skippedIds(result).includes("webshop_busiest_today"));
+  const eu = ordersInput();
+  eu.markets = [eu.markets[1]];
+  assert.equal(sceneById(buildTvScenes(fullInputs({ orders: eu }), NOW), "webshop_busiest_today").valueText, "EU-webshoppen");
+});
+
+test("the last whole hour, and nothing when it had no orders", () => {
+  const last = sceneById(buildTvScenes(fullInputs(), NOW), "webshop_orders_last_hour");
+  assert.equal(last.valueText, "12");
+  assert.equal(last.line, "kl. 9–10 · alle 3 webshops");
+  const quiet = ordersInput();
+  for (const m of quiet.markets) m.hours["2026-11-10 09"] = 0;
+  assert.equal(sceneById(buildTvScenes(fullInputs({ orders: quiet }), NOW), "webshop_orders_last_hour"), undefined);
+});
+
+test("no order scene at all from an incomplete, failed or stale count", () => {
+  const ids = ["webshop_orders_today", "webshop_orders_yesterday", "webshop_busiest_today", "webshop_orders_last_hour"];
+  for (const orders of [
+    { complete: false, error: "Not counted: FR (timeout).", fetchedAt: "2026-11-10T08:58:00Z" },
+    ordersInput({ fetchedAt: "2026-11-10T08:20:00Z" }),
+    null
+  ]) {
+    const result = buildTvScenes(fullInputs({ orders }), NOW);
+    for (const id of ids) {
+      assert.equal(sceneById(result, id), undefined, id);
+      assert.ok(skippedIds(result).includes(id), id);
+    }
+  }
+  assert.equal(buildTvScenes(fullInputs({ orders: null }), NOW).sources.orders.status, "unavailable");
+});
+
+test("before one o'clock there is no whole hour of today to show", () => {
+  const justAfterMidnight = new Date("2026-11-09T23:30:00Z"); // 00:30 on the 10th in Copenhagen
+  const late = ordersInput({ fetchedAt: "2026-11-09T23:29:00Z" });
+  late.markets[0].hours["2026-11-09 23"] = 5;
+  const result = buildTvScenes(fullInputs({ orders: late }), justAfterMidnight);
+  assert.equal(sceneById(result, "webshop_orders_last_hour")?.valueText, "5");
+  assert.equal(sceneById(result, "webshop_orders_today"), undefined);
+  assert.equal(sceneById(result, "webshop_orders_last_hour")?.line, "kl. 23–24 · alle 3 webshops");
+});
+
+test("only Magento 2's Placed Order counts - never Klaviyo's API copy or the old empty Magento one", () => {
+  const metrics = [
+    { id: "api", attributes: { name: "Placed Order", integration: { key: "api" }, updated: "2026-11-09T00:00:00Z" } },
+    { id: "old", attributes: { name: "Placed Order", integration: { key: "magento" }, updated: "2019-01-01T00:00:00Z" } },
+    { id: "m2", attributes: { name: "Placed Order", integration: { key: "magento_two" }, updated: "2026-11-01T00:00:00Z" } },
+    { id: "other", attributes: { name: "Ordered Product", integration: { key: "magento_two" } } }
+  ];
+  assert.equal(pickMagentoPlacedOrder(metrics), "m2");
+  assert.equal(pickMagentoPlacedOrder(metrics.filter((m) => m.id !== "m2")), "");
+});
+
+test("Klaviyo's hourly dates are read as Copenhagen hours, whatever offset they carry", () => {
+  const hours = readHourlyCounts({ data: { attributes: {
+    dates: ["2026-11-10T09:00:00+01:00", "2026-11-10T09:00:00Z"],
+    data: [{ measurements: { count: [4, 6] } }]
+  } } });
+  assert.deepEqual(hours, { "2026-11-10 09": 4, "2026-11-10 10": 6 });
+});
+
+test("one store that cannot be counted makes the whole count incomplete; metric ids are reused", async () => {
+  const config = { klaviyoMarketsJson: JSON.stringify([{ country: "DE", privateKey: "pk_de" }, { country: "FR", privateKey: "pk_fr" }]) };
+  const calls = { pages: 0, aggregates: 0 };
+  const deps = {
+    buildHeaders: (key) => ({ key }),
+    getAllPages: async () => { calls.pages += 1; return [{ id: "m2", attributes: { name: "Placed Order", integration: { key: "magento_two" } } }]; },
+    klaviyoRequest: async (url, headers, method, body) => {
+      calls.aggregates += 1;
+      assert.equal(method, "POST");
+      assert.equal(body.data.attributes.metric_id, "m2");
+      assert.equal(body.data.attributes.interval, "hour");
+      assert.equal(body.data.attributes.timezone, "Europe/Copenhagen");
+      if (headers.key === "pk_fr") throw new Error("throttled");
+      return { data: { attributes: { dates: ["2026-11-10T09:00:00+01:00"], data: [{ measurements: { count: [7] } }] } } };
+    }
+  };
+  const first = await fetchWebshopOrders(config, { now: NOW, deps });
+  assert.equal(first.complete, false);
+  assert.match(first.error, /FR \(throttled\)/);
+  const cachedMetricIds = { DE: { id: "m2", at: NOW.toISOString() }, FR: { id: "m2", at: NOW.toISOString() } };
+  calls.pages = 0;
+  await fetchWebshopOrders(config, { now: NOW, deps, cachedMetricIds });
+  assert.equal(calls.pages, 0, "a known metric id is not looked up again within a day");
 });

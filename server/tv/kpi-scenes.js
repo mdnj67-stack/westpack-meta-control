@@ -13,6 +13,7 @@
 // `buildTvScenes(inputs, now)` -> { generatedAt, scenes, skipped, sources }.
 
 const { buildMarketEntries } = require("../klaviyo/subject-line-history");
+const { copenhagenHourKey } = require("./webshop-orders");
 
 const COPENHAGEN = "Europe/Copenhagen";
 const NBSP = String.fromCharCode(0xa0);
@@ -38,19 +39,30 @@ const SUBSCRIBER_MAX_AGE_MS = 24 * HOUR_MS;
 // a figure rising out of the TV's smoke would do. Add the id here to show it.
 const DEFAULT_SCENE_IDS = [
   "meta_new_customers_mtd",
+  "webshop_orders_today",
   "meta_cost_per_new_customer",
+  "webshop_orders_yesterday",
   "newsletter_subscribers",
+  "webshop_busiest_today",
   "newsletter_delivered_mtd",
+  "webshop_orders_last_hour",
   "newsletter_clicks_mtd"
 ];
 const SCENE_ORDER = [
   "meta_new_customers_mtd",
+  "webshop_orders_today",
   "meta_cost_per_new_customer",
+  "webshop_orders_yesterday",
   "expansion_first_time_reach",
   "newsletter_subscribers",
+  "webshop_busiest_today",
   "newsletter_delivered_mtd",
+  "webshop_orders_last_hour",
   "newsletter_clicks_mtd"
 ];
+// The orders are counted on every rebuild (ten minutes); a count older than this means the TV's
+// source has stopped, and a live figure from half an hour ago is no longer "today so far".
+const ORDERS_MAX_AGE_MS = 30 * 60 * 1000;
 
 // ---- Formatting ------------------------------------------------------------------------------
 
@@ -402,6 +414,134 @@ function buildClicksScene(email) {
   };
 }
 
+// ---- Webshop orders: Magento's "Placed Order" in Klaviyo, every store, per Copenhagen hour --------
+//
+// Comparisons are made on whole hours only, against the same weekday a week earlier up to the same
+// hour - a Tuesday morning is never compared with a whole Monday. See server/tv/webshop-orders.js for
+// why only the Magento 2 metric is counted.
+
+const WEEKDAYS_DA = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
+const regionNames = new Intl.DisplayNames(["da"], { type: "region" });
+const STORE_NAMES = { EU: "EU-webshoppen", UK: "Storbritannien", US: "USA" };
+const ORDERS_SOURCE = "Klaviyo · Placed Order fra Magento, alle webshops";
+
+function storeName(code) {
+  return STORE_NAMES[code] || regionNames.of(code) || code;
+}
+
+function shiftDate(dateKey, days) {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+function weekdayOf(dateKey) {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  return WEEKDAYS_DA[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+}
+
+function sumHours(hours, dateKey, fromHour, toHour) {
+  let sum = 0;
+  for (let h = fromHour; h < toHour; h += 1) sum += Number(hours?.[`${dateKey} ${String(h).padStart(2, "0")}`]) || 0;
+  return sum;
+}
+
+function sumStores(orders, dateKey, fromHour, toHour) {
+  return orders.markets.reduce((total, market) => total + sumHours(market.hours, dateKey, fromHour, toHour), 0);
+}
+
+function comparePhrase(current, previous, against) {
+  if (!(previous > 0)) return "";
+  const pct = Math.round(((current - previous) / previous) * 100);
+  if (pct === 0) return `samme antal som ${against}`;
+  return `${formatPercent(Math.abs(pct))} ${pct > 0 ? "flere" : "færre"} end ${against}`;
+}
+
+function readOrders(orders, now) {
+  if (!orders) return { error: "The webshop orders have not been counted yet." };
+  if (!orders.complete) return { error: orders.error || "Not every store's orders could be counted." };
+  if (ageMs(orders.fetchedAt, now) > ORDERS_MAX_AGE_MS) {
+    return { error: `The webshop orders were counted at ${orders.fetchedAt}, more than 30 minutes ago.`, stale: true };
+  }
+  const key = copenhagenHourKey(now);
+  return { ...orders, date: key.slice(0, 10), hour: Number(key.slice(11, 13)), asOf: orders.fetchedAt };
+}
+
+function buildOrdersTodayScene(o) {
+  if (o.hour < 1) return { skip: "No whole hour of today has passed yet." };
+  const today = sumStores(o, o.date, 0, o.hour);
+  if (!(today > 0)) return { skip: "No orders yet today." };
+  const lastWeek = sumStores(o, shiftDate(o.date, -7), 0, o.hour);
+  const compare = comparePhrase(today, lastWeek, `sidste ${weekdayOf(o.date)} til samme tid`);
+  return {
+    id: "webshop_orders_today",
+    eyebrow: "Webshop-ordrer i dag",
+    value: today,
+    valueText: formatCount(today),
+    suffix: "",
+    line: [`til kl. ${o.hour}`, compare].filter(Boolean).join(" · "),
+    source: ORDERS_SOURCE,
+    asOf: o.asOf
+  };
+}
+
+function buildOrdersYesterdayScene(o) {
+  const day = shiftDate(o.date, -1);
+  const count = sumStores(o, day, 0, 24);
+  if (!(count > 0)) return { skip: "No orders were counted yesterday." };
+  const before = sumStores(o, shiftDate(o.date, -8), 0, 24);
+  const weekday = weekdayOf(day);
+  const parts = isoParts(day);
+  const compare = comparePhrase(count, before, `${weekday}en før`);
+  return {
+    id: "webshop_orders_yesterday",
+    eyebrow: "Ordrer i går",
+    value: count,
+    valueText: formatCount(count),
+    suffix: "",
+    line: [`${weekday} ${parts.day}. ${MONTHS_DA[parts.month - 1]}`, compare].filter(Boolean).join(" · "),
+    source: ORDERS_SOURCE,
+    asOf: o.asOf
+  };
+}
+
+function buildBusiestStoreScene(o) {
+  if (o.hour < 1) return { skip: "No whole hour of today has passed yet." };
+  const ranked = o.markets
+    .map((market) => ({ country: market.country, count: sumHours(market.hours, o.date, 0, o.hour) }))
+    .sort((a, b) => b.count - a.count);
+  const total = ranked.reduce((sum, row) => sum + row.count, 0);
+  const [top, second] = ranked;
+  if (!top || !(top.count > 0)) return { skip: "No orders yet today." };
+  if (second && second.count === top.count) return { skip: "Two stores share the most orders today." };
+  return {
+    id: "webshop_busiest_today",
+    eyebrow: "Flest ordrer i dag",
+    value: top.count,
+    valueText: storeName(top.country),
+    suffix: "",
+    line: `${formatCount(top.count)} af dagens ${formatCount(total)} ordrer · til kl. ${o.hour}`,
+    source: ORDERS_SOURCE,
+    asOf: o.asOf
+  };
+}
+
+function buildLastHourScene(o) {
+  const date = o.hour === 0 ? shiftDate(o.date, -1) : o.date;
+  const hour = o.hour === 0 ? 23 : o.hour - 1;
+  const count = sumStores(o, date, hour, hour + 1);
+  if (!(count > 0)) return { skip: "No orders in the last whole hour." };
+  return {
+    id: "webshop_orders_last_hour",
+    eyebrow: "Ordrer den seneste time",
+    value: count,
+    valueText: formatCount(count),
+    suffix: "",
+    line: `kl. ${hour}–${hour + 1} · alle ${formatCount(o.marketCount)} webshops`,
+    source: ORDERS_SOURCE,
+    asOf: o.asOf
+  };
+}
+
 // ---- Assembly ----------------------------------------------------------------------------------
 
 function sourceStatus(error, stale, asOf, extra = {}) {
@@ -415,6 +555,7 @@ function sourceStatus(error, stale, asOf, extra = {}) {
 //   subscribers:     { total, marketCount, complete, fetchedAt, ... } | null, plus subscribersError
 //   subscriberDaily: { days: { "YYYY-MM-DD": { total, marketCount, at } } }
 //   email:           { aggregate } | { error } - aggregateEmailMonth's output
+//   orders:          fetchWebshopOrders output (complete, markets: [{ country, hours }], fetchedAt)
 //   sceneIds:        which scenes to show (default DEFAULT_SCENE_IDS)
 // }
 function buildTvScenes(inputs = {}, now = new Date()) {
@@ -469,6 +610,21 @@ function buildTvScenes(inputs = {}, now = new Date()) {
   } else {
     offer("newsletter_delivered_mtd", buildDeliveredScene(email, now));
     offer("newsletter_clicks_mtd", buildClicksScene(email));
+  }
+
+  // Webshop orders
+  const orders = readOrders(inputs.orders, now);
+  sources.orders = sourceStatus(orders.error, orders.stale, orders.asOf || inputs.orders?.fetchedAt, {
+    marketCount: inputs.orders?.marketCount ?? null
+  });
+  const orderScenes = {
+    webshop_orders_today: buildOrdersTodayScene,
+    webshop_orders_yesterday: buildOrdersYesterdayScene,
+    webshop_busiest_today: buildBusiestStoreScene,
+    webshop_orders_last_hour: buildLastHourScene
+  };
+  for (const [id, build] of Object.entries(orderScenes)) {
+    offer(id, orders.error ? { skip: orders.error } : build(orders));
   }
 
   return {

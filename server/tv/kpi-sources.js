@@ -6,6 +6,9 @@
 // - Subscribers: Klaviyo, live, at most once every three hours (two requests per market).
 // - Email: the subject line history in Blob (~5.7 MB), re-read only when its last-modified changes,
 //   which is once a night; the month's aggregate is kept in tv/kpis.json between reads.
+// - Webshop orders: Klaviyo's Magento "Placed Order", hourly, one request per store on every
+//   rebuild (server/tv/webshop-orders.js). A failed count falls back to the last complete one for
+//   half an hour.
 // - The assembled payload is kept in tv/kpis.json and served as is for ten minutes.
 //
 // One source failing never fails the response: its scenes are left out and `sources` says why.
@@ -14,12 +17,14 @@
 const store = require("../meta/historical-store");
 const { aggregateEmailMonth, buildTvScenes, zonedDateKey, zonedMonthKey } = require("./kpi-scenes");
 const { configuredKlaviyoMarkets, fetchSubscriberTotal } = require("./subscriber-total");
+const { fetchWebshopOrders } = require("./webshop-orders");
 
 const KPIS_DOC_VERSION = 1;
 const KPIS_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const SUBSCRIBER_REFRESH_MS = 3 * 60 * 60 * 1000;
 const SUBSCRIBER_RETRY_AFTER_FAILURE_MS = 30 * 60 * 1000;
 const SUBSCRIBER_DAILY_DAYS_KEPT = 400;
+const ORDERS_FALLBACK_MS = 30 * 60 * 1000;
 const COPENHAGEN = "Europe/Copenhagen";
 
 // The last document this instance read or wrote, for when Blob cannot be read: without it every
@@ -42,6 +47,7 @@ function defaultDeps(config) {
     readHistoryModifiedAt: store.readSubjectLineHistoryModifiedAt,
     readHistory: store.readSubjectLineHistory,
     fetchSubscribers: () => fetchSubscriberTotal(config),
+    fetchOrders: (cachedMetricIds) => fetchWebshopOrders(config, { cachedMetricIds }),
     expectedEmailMarkets: configuredKlaviyoMarkets(config).map((market) => String(market.country).trim().toUpperCase())
   };
 }
@@ -161,6 +167,28 @@ async function gatherEmail(deps, cached, now) {
   return { aggregate, cache: { sourceModifiedAt: modifiedAt || "", expectedMarkets, aggregate } };
 }
 
+async function gatherOrders(deps, cached, now) {
+  if (!deps.fetchOrders) return { orders: null, metricIds: cached?.ordersMetricIds || {} };
+  let result;
+  try {
+    result = await deps.fetchOrders(cached?.ordersMetricIds || {});
+  } catch (error) {
+    result = { complete: false, error: error.message || String(error) };
+  }
+  const metricIds = { ...(cached?.ordersMetricIds || {}), ...(result?.metricIds || {}) };
+  if (result?.complete) {
+    const orders = {
+      complete: true,
+      marketCount: result.marketCount,
+      markets: result.markets.map(({ country, hours }) => ({ country, hours })),
+      fetchedAt: result.fetchedAt
+    };
+    return { orders, metricIds };
+  }
+  const last = cached?.orders?.complete && ageMs(cached.orders.fetchedAt, now) < ORDERS_FALLBACK_MS ? cached.orders : null;
+  return { orders: last || { complete: false, error: result?.error || "The webshop orders could not be counted.", fetchedAt: now.toISOString() }, metricIds };
+}
+
 async function readCachedDoc(deps) {
   try {
     const doc = await deps.readKpis();
@@ -180,11 +208,12 @@ async function getTvKpis({ config = {}, now = new Date(), fresh = false, deps = 
   }
 
   const showExpansion = (sceneIds || []).includes("expansion_first_time_reach");
-  const [meta, expansion, subscribers, email] = await Promise.all([
+  const [meta, expansion, subscribers, email, orders] = await Promise.all([
     gatherMeta(sources),
     showExpansion ? gatherExpansion(sources) : Promise.resolve(null),
     gatherSubscribers(sources, cached, now),
-    gatherEmail(sources, cached, now)
+    gatherEmail(sources, cached, now),
+    gatherOrders(sources, cached, now)
   ]);
 
   const payload = buildTvScenes({
@@ -194,6 +223,7 @@ async function getTvKpis({ config = {}, now = new Date(), fresh = false, deps = 
     subscribersError: subscribers.error,
     subscriberDaily: subscribers.daily,
     email: email.error ? { error: email.error } : { aggregate: email.aggregate },
+    orders: orders.orders,
     sceneIds
   }, now);
 
@@ -202,7 +232,9 @@ async function getTvKpis({ config = {}, now = new Date(), fresh = false, deps = 
     payload,
     subscribers: subscribers.subscribers,
     subscriberAttempt: subscribers.attempt,
-    email: email.cache
+    email: email.cache,
+    orders: orders.orders?.complete ? orders.orders : (cached?.orders || null),
+    ordersMetricIds: orders.metricIds
   };
   memoryDoc = doc;
   try {

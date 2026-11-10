@@ -375,6 +375,15 @@ Vercel project `westpack-tv`, with its own CLAUDE.md. **This repo only produces 
   Angeles; the 05:45 one is a day behind. Subscribers are Klaviyo's live list counts, at most every 3 h,
   and one failed market means no total; emails come from the subject-line history in Blob. Payload cache
   `tv/kpis.json` (10 min). Nothing goes to Redis.
+- **Webshop orders, live** (`server/tv/webshop-orders.js`): Klaviyo's "Placed Order" from **Magento 2
+  only** (integration key `magento_two`) in all 18 accounts, hourly counts in Copenhagen time, one
+  metric-aggregates request per store per rebuild (metric ids kept a day). Since 19-27 Oct 2026 every
+  account also has Klaviyo's own GTM "Placed Order" (key `api`) repeating ~3 of 4 orders, and NO/PL/UK an
+  old empty "Magento" one - picking by name double counts. Scenes: orders today to the last whole hour
+  vs the same weekday last week to the same hour, yesterday vs the weekday before, the busiest store
+  (none on a tie) and the last whole hour. One store failing means no order scene; a count older than
+  30 min is dropped. First live read 2026-11-10 11:0x: 99 today (+39 %), 417 yesterday (+16 %), 48 in
+  the last hour.
 - **What it hands over and what it leaves out.** Meta new customers 1st-yesterday vs the same days last
   month, cost per new customer, newsletter list members ("Med på nyhedsbrevet" - members, not consents),
   campaign emails delivered and unique clicks per email this month. First-time reach is built but off
