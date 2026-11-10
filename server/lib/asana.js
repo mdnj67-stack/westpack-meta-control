@@ -480,10 +480,111 @@ async function getAsanaTaskBundle(config, taskGid) {
   };
 }
 
+// Task templates of one of the app's projects, e.g. the campaign project's "W??" template that every email
+// campaign card starts from.
+async function getAsanaTaskTemplates(config, projectKind = "campaign") {
+  const { kind, projectGid } = resolveAsanaProjectGid(config, projectKind);
+  if (!projectGid) {
+    const error = new Error(`The Asana ${kind} project is not configured.`);
+    error.statusCode = 503;
+    throw error;
+  }
+  const templates = await collectAsanaPages(config, "/task_templates", { project: projectGid, opt_fields: "gid,name" }, 3);
+  return templates
+    .map((template) => ({ gid: String(template?.gid || ""), name: String(template?.name || "") }))
+    .filter((template) => template.gid);
+}
+
+// The third write: a card made from one of a project's own task templates, so it gets the template's description
+// and subtasks exactly as when someone picks the template in Asana. Only a template that belongs to the named
+// project of this app can be used, and the card lands in that project. Who the template's subtasks go to is the
+// template's own design, not the caller's choice.
+async function createAsanaTaskFromTemplate(config, { templateGid, name, dueOn, projectKind = "campaign" } = {}) {
+  const normalizedTemplateGid = String(templateGid || "").trim();
+  const taskName = String(name || "").trim();
+  const due = validDueOn(dueOn);
+  if (!/^\d+$/.test(normalizedTemplateGid)) {
+    const error = new Error("A valid Asana task template GID is required.");
+    error.statusCode = 400;
+    throw error;
+  }
+  if (!taskName || taskName.length > MAX_TASK_NAME_CHARS) {
+    const error = new Error(`A task name needs between 1 and ${MAX_TASK_NAME_CHARS} characters.`);
+    error.statusCode = 400;
+    throw error;
+  }
+  if (due === null) {
+    const error = new Error("dueOn must be a real date written YYYY-MM-DD.");
+    error.statusCode = 400;
+    throw error;
+  }
+  const { kind, projectGid } = resolveAsanaProjectGid(config, projectKind);
+  if (!projectGid) {
+    const error = new Error(`The Asana ${kind} project is not configured.`);
+    error.statusCode = 503;
+    throw error;
+  }
+  const template = await asanaGet(config, `/task_templates/${normalizedTemplateGid}`, { opt_fields: "gid,name,project.gid" });
+  if (String(template?.project?.gid || "") !== projectGid) {
+    const error = new Error(`The task template is not in the ${kind} project.`);
+    error.statusCode = 403;
+    throw error;
+  }
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${config.asanaAccessToken}`
+  };
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/task_templates/${normalizedTemplateGid}/instantiateTask?opt_fields=gid,status,new_task.gid,new_task.name`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: { name: taskName } })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  let newTaskGid = String(payload?.data?.new_task?.gid || "");
+  const jobGid = String(payload?.data?.gid || "");
+  for (let attempt = 0; !newTaskGid && jobGid && attempt < 10; attempt += 1) {
+    await wait(700);
+    const job = await asanaGet(config, `/jobs/${jobGid}`, { opt_fields: "status,new_task.gid" });
+    newTaskGid = String(job?.new_task?.gid || "");
+    if (job?.status === "failed") break;
+  }
+  if (!newTaskGid) {
+    const error = new Error("Asana did not report the new task from the template.");
+    error.statusCode = 502;
+    throw error;
+  }
+  const update = { name: taskName };
+  if (due) update.due_on = due;
+  const updated = await fetchWithTimeout(`${ASANA_API_BASE_URL}/tasks/${newTaskGid}?opt_fields=gid,name,due_on,permalink_url`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: update })
+  }, 20000);
+  const updatedPayload = await updated.json().catch(() => ({}));
+  if (!updated.ok) {
+    throw normalizeAsanaError(updatedPayload, updated.status);
+  }
+  return {
+    gid: newTaskGid,
+    name: String(updatedPayload?.data?.name || taskName),
+    dueOn: String(updatedPayload?.data?.due_on || due || ""),
+    permalinkUrl: String(updatedPayload?.data?.permalink_url || ""),
+    templateGid: normalizedTemplateGid,
+    templateName: String(template?.name || ""),
+    projectGid
+  };
+}
+
 module.exports = {
   addAsanaTaskComment,
   asanaGet,
   createAsanaTask,
+  createAsanaTaskFromTemplate,
+  getAsanaTaskTemplates,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskComments,

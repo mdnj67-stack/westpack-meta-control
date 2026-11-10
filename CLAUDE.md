@@ -1350,7 +1350,7 @@ language move Drafts → To Do → In progress → Review. The user's rule: crea
 be used in ads, and so may those in **Done** (the user, 2026-11-02). An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
 also returns the task's comments, which is where reviewers leave feedback on a creative.
 
-Two Asana writes, both dispatched before the OpenAI check and both acting as the production token's owner (Mads,
+Three Asana writes, all dispatched before the OpenAI check and all acting as the production token's owner (Mads,
 workspace westpack.com):
 - `POST /api/campaign/brain?action=asana_comment` with `{ taskGid, text }` posts a comment on a task in one of those
   three projects and refuses any other task (403). Used to tell the designer why a creative was not taken into an ad.
@@ -1358,6 +1358,13 @@ workspace westpack.com):
   (added 2026-11-09, the user: "Du har min fulde tilladelse") creates a to-do **always assigned to the token's owner**
   - in My Tasks, or in one of the three projects when `projectKind` is given. The caller cannot choose the assignee,
   workspace or another project, so it can never fill a colleague's list. `tests/asana-task-create.test.js`.
+- `POST /api/campaign/brain?action=asana_task_from_template` with `{ templateGid, name, dueOn?, projectKind? }` (added
+  2026-11-10) makes a card from one of the project's own Asana **task templates** - every email campaign card starts
+  from the campaign project's template "W??", which gives it the subtasks (Opsæt i Klaviyo, Billeder, Korrektur,
+  Upload på Sharepoint, Versionering, Emnelinjer, Afsendelse). The template must belong to that project (403
+  otherwise); who its subtasks go to is the template's design. `GET ...?action=asana_task_templates&kind=campaign`
+  lists the templates (the task list never shows them). Cards are named "Wxx: name" with the send date as due date.
+  `tests/asana-task-template.test.js`.
 Asana's signed attachment URLs expire within the hour, so re-read a task right before downloading its files.
 
 The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns
