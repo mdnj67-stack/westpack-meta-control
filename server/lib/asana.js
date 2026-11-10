@@ -579,11 +579,107 @@ async function createAsanaTaskFromTemplate(config, { templateGid, name, dueOn, p
   };
 }
 
+// The order of the cards in one column (section) of one of the app's projects, earliest due date first and
+// undated cards last in the order they had. Only open cards are read and moved; nothing about a card changes but
+// its place. A card is moved only when it is not already right after the one before it, so a sorted column
+// costs no writes. A board column is a section, so this is what "sort the board by date" means in Asana, whose
+// own view sort is a per-view display setting that the API does not reach.
+function sortTasksByDueDate(tasks = []) {
+  const dueKey = (task) => String(task?.due_on || String(task?.due_at || "").slice(0, 10) || "");
+  const dated = tasks.filter((task) => dueKey(task));
+  const undated = tasks.filter((task) => !dueKey(task));
+  const sorted = dated
+    .map((task, index) => ({ task, index }))
+    .sort((left, right) => dueKey(left.task).localeCompare(dueKey(right.task)) || left.index - right.index)
+    .map((entry) => entry.task);
+  return [...sorted, ...undated];
+}
+
+function planSectionMoves(currentGids = [], targetGids = []) {
+  const order = [...currentGids];
+  const moves = [];
+  targetGids.forEach((gid, index) => {
+    const at = order.indexOf(gid);
+    if (index === 0) {
+      if (at !== 0) {
+        moves.push({ task: gid, insert_before: order[0] });
+        order.splice(at, 1);
+        order.unshift(gid);
+      }
+      return;
+    }
+    const previous = targetGids[index - 1];
+    if (order.indexOf(previous) + 1 !== at) {
+      moves.push({ task: gid, insert_after: previous });
+      order.splice(at, 1);
+      order.splice(order.indexOf(previous) + 1, 0, gid);
+    }
+  });
+  return moves;
+}
+
+async function sortAsanaSectionByDueDate(config, { projectKind = "campaign", section } = {}) {
+  const wanted = String(section || "").trim();
+  if (!wanted) {
+    const error = new Error("Name the section (board column) to sort, or give its GID.");
+    error.statusCode = 400;
+    throw error;
+  }
+  const { kind, projectGid } = resolveAsanaProjectGid(config, projectKind);
+  if (!projectGid) {
+    const error = new Error(`The Asana ${kind} project is not configured.`);
+    error.statusCode = 503;
+    throw error;
+  }
+  const sections = await collectAsanaPages(config, `/projects/${projectGid}/sections`, { opt_fields: "gid,name" }, 2);
+  const match = sections.find((item) => String(item?.gid || "") === wanted)
+    || sections.find((item) => String(item?.name || "").trim().toLowerCase() === wanted.toLowerCase());
+  if (!match) {
+    const error = new Error(`There is no section "${wanted}" in the ${kind} project.`);
+    error.statusCode = 404;
+    throw error;
+  }
+  const sectionGid = String(match.gid);
+  const records = await collectAsanaPages(config, `/sections/${sectionGid}/tasks`, {
+    completed_since: "now",
+    opt_fields: "gid,name,due_on,due_at,completed"
+  });
+  const open = records.filter((task) => task?.gid && !task.completed);
+  const target = sortTasksByDueDate(open);
+  const moves = planSectionMoves(open.map((task) => String(task.gid)), target.map((task) => String(task.gid)));
+  for (const move of moves) {
+    const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/sections/${sectionGid}/addTask`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${config.asanaAccessToken}`
+      },
+      body: JSON.stringify({ data: move })
+    }, 20000);
+    if (!response.ok) {
+      throw normalizeAsanaError(await response.json().catch(() => ({})), response.status);
+    }
+  }
+  return {
+    section: { gid: sectionGid, name: String(match.name || "") },
+    moved: moves.length,
+    order: target.map((task) => ({
+      gid: String(task.gid),
+      name: String(task.name || ""),
+      dueOn: String(task.due_on || String(task.due_at || "").slice(0, 10) || "")
+    }))
+  };
+}
+
 module.exports = {
   addAsanaTaskComment,
   asanaGet,
   createAsanaTask,
   createAsanaTaskFromTemplate,
+  planSectionMoves,
+  sortAsanaSectionByDueDate,
+  sortTasksByDueDate,
   getAsanaTaskTemplates,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,

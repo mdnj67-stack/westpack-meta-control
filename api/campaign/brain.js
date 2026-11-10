@@ -11,7 +11,8 @@ const {
   getAsanaTaskComments,
   getAsanaTaskTemplates,
   getAsanaWorkspaceProjects,
-  resolveAsanaProjectGid
+  resolveAsanaProjectGid,
+  sortAsanaSectionByDueDate
 } = require("../../server/lib/asana");
 const { assembleCampaignObject } = require("../../server/campaign/object");
 const {
@@ -343,6 +344,22 @@ module.exports = async (req, res) => {
       sendJson(res, 200, { ok: true, task: await createAsanaTaskFromTemplate(config, input || {}) });
     } catch (error) {
       sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the task from the template." });
+    }
+    return;
+  }
+
+  // Put the open cards of one board column (section) of one of the app's projects in due-date order - see
+  // sortAsanaSectionByDueDate. Only the cards' places change.
+  if (requestedAction === "asana_section_sort") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, ...(await sortAsanaSectionByDueDate(config, input || {})) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not sort the Asana section." });
     }
     return;
   }
