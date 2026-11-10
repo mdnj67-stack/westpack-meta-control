@@ -61,3 +61,6 @@ data/klaviyo-subject-line-tags.json
 data/agents-watchdog.json
 data/agents-email-checks.json
 data/signup-control.json
+data/tv-meta-acquisition.json
+data/tv-kpis.json
+data/tv-subscriber-daily.json

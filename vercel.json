@@ -31,6 +31,9 @@
     },
     "api/signup/control.js": {
       "maxDuration": 120
+    },
+    "api/tv.js": {
+      "maxDuration": 60
     }
   },
   "crons": [
@@ -57,6 +60,10 @@
     {
       "path": "/api/agents?action=watchdog_run",
       "schedule": "7 * * * *"
+    },
+    {
+      "path": "/api/meta/account-snapshot?preset=last_7d",
+      "schedule": "15 8 * * *"
     }
   ],
   "rewrites": [

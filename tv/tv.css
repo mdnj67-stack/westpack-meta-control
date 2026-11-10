@@ -1,0 +1,223 @@
+/* Westpack TV - the wood stove. Everything visible is drawn in WebGL; this sheet only holds the
+   page, the one-time login and the fallback for screens without WebGL2. */
+
+:root {
+  --tv-bg: #050403;
+  --tv-cream: #f6ead9;
+  --tv-cream-dim: rgba(246, 234, 217, 0.72);
+  --tv-amber: #f0b46a;
+  --tv-ember: #ff7a2e;
+  --tv-panel: rgba(16, 11, 8, 0.72);
+  --tv-line: rgba(246, 234, 217, 0.16);
+  --tv-danger: #ff9b84;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--tv-bg);
+  color: var(--tv-cream);
+  font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.is-idle { cursor: none; }
+
+#tv-fire {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+/* ------------------------------------------------------------------ login */
+.tv-login {
+  position: fixed;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: min(460px, calc(100vw - 32px));
+  padding: 36px 36px 30px;
+  background: var(--tv-panel);
+  border: 1px solid var(--tv-line);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.tv-login.is-leaving {
+  opacity: 0;
+  transform: translate(-50%, -54%);
+  pointer-events: none;
+}
+
+.tv-login-eyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tv-amber);
+}
+
+.tv-login-title {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.tv-login-copy {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--tv-cream-dim);
+}
+
+.tv-login-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: var(--tv-cream-dim);
+}
+
+.tv-login-field input {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--tv-line);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--tv-cream);
+  font: inherit;
+  font-size: 17px;
+  outline: none;
+}
+
+.tv-login-field input:focus {
+  border-color: var(--tv-amber);
+  box-shadow: 0 0 0 3px rgba(240, 180, 106, 0.22);
+}
+
+.tv-login-button {
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f3a55a, #e07a35);
+  color: #1b0d04;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.tv-login-button:focus-visible {
+  outline: 3px solid var(--tv-cream);
+  outline-offset: 3px;
+}
+
+.tv-login-button[disabled] { opacity: 0.6; cursor: progress; }
+
+.tv-login-error {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--tv-danger);
+}
+
+/* ------------------------------------------------------------------ hint and debug */
+.tv-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 11vh;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--tv-cream-dim);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: opacity 1200ms ease;
+}
+
+.tv-hint.is-gone { opacity: 0; }
+
+.tv-hint kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 6px;
+  border: 1px solid var(--tv-line);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 13px;
+  text-align: center;
+}
+
+.tv-debug {
+  position: fixed;
+  left: 12px;
+  top: 10px;
+  margin: 0;
+  font: 12px/1.4 ui-monospace, "IBM Plex Mono", monospace;
+  color: rgba(246, 234, 217, 0.8);
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ no WebGL2 */
+body.is-fallback {
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 100%, rgba(255, 122, 46, 0.55), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 110%, rgba(150, 50, 10, 0.5), transparent 75%),
+    var(--tv-bg);
+}
+
+.tv-fallback {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 0 6vw 14vh;
+  transition: opacity 1400ms ease;
+}
+
+.tv-fallback.is-out { opacity: 0; }
+
+.tv-fallback p { margin: 0; }
+
+.tv-fallback-eyebrow {
+  font-size: 2.6vh;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tv-amber);
+}
+
+.tv-fallback-value {
+  margin: 3vh 0 2vh !important;
+  font-size: 22vh;
+  font-weight: 300;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-fallback-suffix {
+  margin-left: 0.12em;
+  font-size: 0.36em;
+  font-weight: 400;
+}
+
+.tv-fallback-line {
+  font-size: 3.6vh;
+  color: var(--tv-cream-dim);
+}

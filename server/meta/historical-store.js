@@ -8,6 +8,7 @@ const path = require("path");
 // Agents page's watchdog results and email checks, and the Signup page's control of the Signup Lab. They are kept under separate keys rather than in one blob,
 // because each is written by its own job and a shared value would make
 // one job's write clobber the other's.
+// The office TV's three documents (tv/*) are Blob or local file only - never Redis, see readTvDocument.
 const HISTORICAL_STORE_KEY = "westpack:meta-historical-intelligence:v1";
 const EXPANSION_STORE_KEY = "westpack:meta-expansion-reach:v1";
 const SATURATION_STORE_KEY = "westpack:meta-audience-saturation:v1";
@@ -17,6 +18,9 @@ const SUBJECT_TAGS_STORE_KEY = "westpack:klaviyo-subject-line-tags:v1";
 const AGENT_WATCHDOG_STORE_KEY = "westpack:agents-watchdog:v1";
 const AGENT_EMAIL_CHECKS_STORE_KEY = "westpack:agents-email-checks:v1";
 const SIGNUP_CONTROL_STORE_KEY = "westpack:signup-control:v1";
+const TV_META_ACQUISITION_STORE_KEY = "westpack:tv-meta-acquisition:v1";
+const TV_KPIS_STORE_KEY = "westpack:tv-kpis:v1";
+const TV_SUBSCRIBER_DAILY_STORE_KEY = "westpack:tv-subscriber-daily:v1";
 
 const LOCAL_PATHS = {
   [HISTORICAL_STORE_KEY]: path.join(process.cwd(), "data", "meta-historical-intelligence.json"),
@@ -27,7 +31,10 @@ const LOCAL_PATHS = {
   [SUBJECT_TAGS_STORE_KEY]: path.join(process.cwd(), "data", "klaviyo-subject-line-tags.json"),
   [AGENT_WATCHDOG_STORE_KEY]: path.join(process.cwd(), "data", "agents-watchdog.json"),
   [AGENT_EMAIL_CHECKS_STORE_KEY]: path.join(process.cwd(), "data", "agents-email-checks.json"),
-  [SIGNUP_CONTROL_STORE_KEY]: path.join(process.cwd(), "data", "signup-control.json")
+  [SIGNUP_CONTROL_STORE_KEY]: path.join(process.cwd(), "data", "signup-control.json"),
+  [TV_META_ACQUISITION_STORE_KEY]: path.join(process.cwd(), "data", "tv-meta-acquisition.json"),
+  [TV_KPIS_STORE_KEY]: path.join(process.cwd(), "data", "tv-kpis.json"),
+  [TV_SUBSCRIBER_DAILY_STORE_KEY]: path.join(process.cwd(), "data", "tv-subscriber-daily.json")
 };
 
 const volatileSnapshots = new Map();
@@ -58,7 +65,10 @@ const BLOB_PATHS = {
   [SUBJECT_TAGS_STORE_KEY]: "klaviyo-snapshots/subject-line-tags.json",
   [AGENT_WATCHDOG_STORE_KEY]: "agents/watchdog.json",
   [AGENT_EMAIL_CHECKS_STORE_KEY]: "agents/email-checks.json",
-  [SIGNUP_CONTROL_STORE_KEY]: "signup/control.json"
+  [SIGNUP_CONTROL_STORE_KEY]: "signup/control.json",
+  [TV_META_ACQUISITION_STORE_KEY]: "tv/meta-acquisition.json",
+  [TV_KPIS_STORE_KEY]: "tv/kpis.json",
+  [TV_SUBSCRIBER_DAILY_STORE_KEY]: "tv/subscriber-daily.json"
 };
 
 function getBlobToken() {
@@ -225,6 +235,62 @@ const writeAgentEmailChecks = (snapshot) => writeSnapshot(AGENT_EMAIL_CHECKS_STO
 const readSignupControl = async () => (getHistoricalStoreProfile().mode === "blob" ? blobRead(SIGNUP_CONTROL_STORE_KEY) : readSnapshot(SIGNUP_CONTROL_STORE_KEY));
 const writeSignupControl = (snapshot) => writeSnapshot(SIGNUP_CONTROL_STORE_KEY, snapshot);
 
+// The office TV's documents. Blob when it is configured, the local file in development, memory
+// otherwise - and never Redis in any mode, not even as a fallback: Redis has been full since
+// 2026-10-21, and a TV that polls all day must not add to what is waiting on it.
+function getTvStoreMode() {
+  if (getBlobToken()) return "blob";
+  if (!process.env.VERCEL) return "local_file";
+  return "volatile";
+}
+
+async function readTvDocument(storeKey) {
+  const mode = getTvStoreMode();
+  if (mode === "blob") return blobRead(storeKey);
+  if (mode === "local_file") {
+    try { return JSON.parse(fs.readFileSync(LOCAL_PATHS[storeKey], "utf8")); } catch { return null; }
+  }
+  return volatileSnapshots.get(storeKey) || null;
+}
+
+async function writeTvDocument(storeKey, doc) {
+  const mode = getTvStoreMode();
+  if (mode === "blob") {
+    await blobWrite(storeKey, doc);
+  } else if (mode === "local_file") {
+    const localPath = LOCAL_PATHS[storeKey];
+    fs.mkdirSync(path.dirname(localPath), { recursive: true });
+    const tempPath = `${localPath}.${process.pid}.tmp`;
+    fs.writeFileSync(tempPath, JSON.stringify(doc, null, 2), "utf8");
+    fs.renameSync(tempPath, localPath);
+  } else {
+    volatileSnapshots.set(storeKey, doc);
+  }
+  return doc;
+}
+
+const readTvMetaAcquisition = () => readTvDocument(TV_META_ACQUISITION_STORE_KEY);
+const writeTvMetaAcquisition = (doc) => writeTvDocument(TV_META_ACQUISITION_STORE_KEY, doc);
+const readTvKpis = () => readTvDocument(TV_KPIS_STORE_KEY);
+const writeTvKpis = (doc) => writeTvDocument(TV_KPIS_STORE_KEY, doc);
+const readTvSubscriberDaily = () => readTvDocument(TV_SUBSCRIBER_DAILY_STORE_KEY);
+const writeTvSubscriberDaily = (doc) => writeTvDocument(TV_SUBSCRIBER_DAILY_STORE_KEY, doc);
+
+// When the subject line history was last written, without reading its ~5.7 MB: a Blob HEAD, or the
+// local file's mtime. Null when the store cannot say (Redis or memory), which callers read as
+// "re-read it".
+async function readSubjectLineHistoryModifiedAt() {
+  const mode = getHistoricalStoreProfile().mode;
+  if (mode === "blob") {
+    const head = await blobLastModified(SUBJECT_HISTORY_STORE_KEY);
+    return head.exists ? head.lastModified : "";
+  }
+  if (mode === "local_file") {
+    try { return fs.statSync(LOCAL_PATHS[SUBJECT_HISTORY_STORE_KEY]).mtime.toISOString(); } catch { return ""; }
+  }
+  return null;
+}
+
 module.exports = {
   getHistoricalStoreProfile,
   readHistoricalIntelligence,
@@ -245,5 +311,13 @@ module.exports = {
   writeAgentEmailChecks,
   readSignupControl,
   writeSignupControl,
-  readNightlySnapshotTimes
+  readNightlySnapshotTimes,
+  getTvStoreMode,
+  readTvMetaAcquisition,
+  writeTvMetaAcquisition,
+  readTvKpis,
+  writeTvKpis,
+  readTvSubscriberDaily,
+  writeTvSubscriberDaily,
+  readSubjectLineHistoryModifiedAt
 };
