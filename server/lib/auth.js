@@ -178,10 +178,6 @@ module.exports = {
   isAuthenticated,
   requireAuth,
   validatePassword,
-  // For the office TV's own token (server/tv/tv-auth.js), which must sign and read cookies the
-  // same way without ever being accepted as a session.
-  getSigningSecret,
-  isSecureRequest,
-  parseCookies,
+  // For the office TV's feed (server/tv/feed-auth.js): a timing-safe check of its bearer token.
   safeCompare
 };

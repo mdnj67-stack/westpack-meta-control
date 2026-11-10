@@ -357,36 +357,17 @@ klaviyo-reconcile,funnel-store}.js`, the `signup-product-panel` in `index.html`,
   `BLOB_READ_WRITE_TOKEN` (local file `data/signup-control.json`), and `tmp/playwright-runner/signup-lab-check.js`
   (all three views and Signup forms, desktop and phone, one page load each, staging changed and put back).
 
-## The office TV — a wood stove at `/tv` (2026-11-10)
+## The office TV feed (2026-11-10)
 
-Asked for as "en netflix ish brændeovn ... fede kpi'er op af røgen ... mega gennemført". A full-screen
-page for the department's TV: a WebGL wood stove (`tv/fire-engine.js`) burns all day, and every ~25 s
-one KPI condenses out of the smoke, holds and burns away from the bottom. `tv/tv.js` is the programme
-(scenes, login, plate clock, the day's fire level), `api/tv.js` + `server/tv/*` the data. Team README in
-Danish: `tv/README.md`. Tests: `tests/tv-fireplace.test.js` (front end), `tests/tv-display.test.js`.
+The department's TV (a WebGL wood stove with KPIs and Westpack facts rising out of the smoke) is a
+project of its own since the user asked for it to be pulled out of this app: `C:\Projects\westpack-tv`,
+Vercel project `westpack-tv`, with its own CLAUDE.md. **This repo only produces its live figures.**
+`api/tv.js` + `server/tv/*`; tests `tests/tv-display.test.js`.
 
-- **No asset, everything procedural**, in three passes: scene (firebox, birch logs, coals, flames,
-  smoke, at an adaptive 0.38-0.8 scale) + sparks as instanced streaks, a dual-filter bloom, and a
-  full-resolution composite (text, glass soot, cast-iron frame with an embossed plate, ACES, grain).
-  ~60 fps at 1080p and 1440p on a Radeon 890M.
-- **Time never reaches a shader as a growing float.** Each scrolling noise layer has a phase
-  (`PHASE_RATES`), computed in double precision and wrapped at 256, where the noise lattice (hashed
-  `mod 256`) repeats exactly. A phase may only be *added*, or scaled by an integer; a phase times 0.8
-  jumps at every wrap. Without this the fire visibly degrades after hours on the wall.
-- **GLSL ES 3.00 reserves `patch`, `cast` and more** - each once failed the whole stove, and the page
-  then silently falls back to plain text. Inside a branch, sample with `textureLod`: an implicit-LOD
-  `texture()` drew a bright line across the screen where the text branch began.
-- **The KPI text is a 2D canvas** (alpha = coverage, red = amber accent, blue = dimmed); the shader
-  chooses colours. Formation pulls the text's mip-blurred shape up from below through turbulence; the
-  exit front (`qE * 1.5 - 0.25`, with noise) chars the letters, glows, sheds sparks from points sampled
-  on the glyphs and sends their shape up as smoke. Scene and composite share that front formula.
-- **The fire follows the working day** (Copenhagen): lit 06-07, full to 17, embers by 22. `?level=`
-  pins it; `?demo` shows sample figures with "DEMO · IKKE RIGTIGE TAL" on the plate; `?debug` shows fps;
-  `?still=<s>&p=&q=&scene=` renders one frozen frame for screenshots. Daily reload at 05:30, wake lock,
-  a slow pixel orbit against OLED burn-in.
-- **Its own sign-in.** The session lasts 12 h, so `/api/tv?action=login` sets `westpack_tv` (400 days,
-  `Path=/api/tv`, Lax), signed with a key derived from the signing secret *and* the password: it can
-  never pass as a session, and changing the password signs every TV out. A normal session also works.
+- **`GET /api/tv?action=kpis`**, readable server to server with `Authorization: Bearer $TV_FEED_TOKEN`
+  (the same secret on both Vercel projects; under 32 characters accepts nothing) or with a normal
+  session (`server/tv/feed-auth.js`). It answers scenes ready to draw: `{ id, eyebrow, valueText, suffix,
+  line, source, asOf }`, Danish copy.
 - **It costs no Meta quota.** The dashboard snapshot lives only in instance memory, so
   `api/meta/account-snapshot.js` hands each fresh build to `recordTvMetaAcquisition`, which stores the
   month-to-date `customerAcquisition.trend` in Blob `tv/meta-acquisition.json` (never throws, 5 s cap).
@@ -394,17 +375,19 @@ Danish: `tv/README.md`. Tests: `tests/tv-fireplace.test.js` (front end), `tests/
   Angeles; the 05:45 one is a day behind. Subscribers are Klaviyo's live list counts, at most every 3 h,
   and one failed market means no total; emails come from the subject-line history in Blob. Payload cache
   `tv/kpis.json` (10 min). Nothing goes to Redis.
-- **What it shows and what it leaves out.** Meta new customers 1st-yesterday vs the same days last
+- **What it hands over and what it leaves out.** Meta new customers 1st-yesterday vs the same days last
   month, cost per new customer, newsletter list members ("Med på nyhedsbrevet" - members, not consents),
-  campaign emails delivered and unique clicks per email this month, and a Christmas countdown. First-time
-  reach is built but off (`DEFAULT_SCENE_IDS`): Expansion calls it a diagnostic, and a reach figure
-  rising out of the smoke alone reads as a win. Opens are never shown (Apple MPP). Any figure that is
-  missing, stale (>36 h) or zero is dropped rather than shown as 0.
+  campaign emails delivered and unique clicks per email this month. First-time reach is built but off
+  (`DEFAULT_SCENE_IDS`): Expansion calls it a diagnostic, and a reach figure alone reads as a win. Opens
+  are never shown (Apple MPP). Any figure that is missing, stale (>36 h) or zero is dropped, never 0.
+- The TV's Westpack facts (site claims, Navision aggregates, Trustpilot quotes) are built in the TV
+  project from this repo's files (`knowledge/westpack-site`, `tmp/navision-cohorts`, the Trustpilot specs)
+  by its `tools/build-facts.js`.
 
 ## Test suite status
 
 As of 2026-11-10, `node --test "tests/*.test.js"` (quoted so the shell does not expand the glob —
-`node --test tests/` does not work) runs 921 tests and all pass; the seven
+`node --test tests/` does not work) runs 911 tests and all pass; the seven
 `tests/meta-expansion-reach.test.js` failures recorded on 2026-10-30 no longer occur. The count drifts
 as tests are added — re-run the command rather than trusting the number if it looks stale.
 

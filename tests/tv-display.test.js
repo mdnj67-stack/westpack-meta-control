@@ -1,4 +1,5 @@
-// The office TV: its scenes, its sign-in, its caches and the dashboard hook that feeds it.
+// The office TV's feed: its scenes, who may read it, its caches and the dashboard hook that feeds it.
+// The TV itself is its own project (westpack-tv).
 // Fixtures only - nothing here reaches Meta, Klaviyo or Blob.
 
 const test = require("node:test");
@@ -7,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { buildTvScenes, aggregateEmailMonth, formatDayRange, DEFAULT_SCENE_IDS } = require("../server/tv/kpi-scenes");
-const tvAuth = require("../server/tv/tv-auth");
+const { resolveFeedAccess, MIN_FEED_TOKEN_LENGTH } = require("../server/tv/feed-auth");
 const { createSessionToken, isAuthenticated } = require("../server/lib/auth");
 const { buildTvMetaAcquisitionDoc, recordTvMetaAcquisition } = require("../server/tv/meta-acquisition");
 const { getTvKpis, __resetMemory } = require("../server/tv/kpi-sources");
@@ -317,6 +318,7 @@ test("window labels use Danish month names", () => {
 // ---- The TV's sign-in --------------------------------------------------------------------------
 
 const AUTH = { authPassword: "hemmeligt", authSessionSecret: "session-secret" };
+const FEED_TOKEN = "f".repeat(48);
 const reqWith = (cookies = {}, headers = {}) => ({
   headers: {
     host: "project-4fcxa.vercel.app",
@@ -326,74 +328,35 @@ const reqWith = (cookies = {}, headers = {}) => ({
   }
 });
 
-test("a TV token round-trips and lasts 400 days", () => {
-  const issued = Date.parse("2026-11-10T08:00:00Z");
-  const token = tvAuth.createTvToken(AUTH, issued);
-  assert.equal(tvAuth.verifyTvToken(token, AUTH, issued), true);
-  assert.equal(tvAuth.verifyTvToken(token, AUTH, issued + 399 * 86400000), true);
-  assert.equal(tvAuth.verifyTvToken(token, AUTH, issued + 401 * 86400000), false, "expired");
-  assert.equal(tvAuth.verifyTvToken(token, AUTH, issued - 60 * 60000), false, "issued an hour in the future");
-  assert.equal(tvAuth.resolveTvAuth(reqWith({ westpack_tv: token }), AUTH, issued), "tv");
-  assert.equal(tvAuth.verifyTvToken(`${token}x`, AUTH, issued), false, "tampered signature");
-  const [payload, signature] = token.split(".");
-  const forged = Buffer.from(JSON.stringify({ iat: issued, scope: "admin" })).toString("base64url");
-  assert.equal(tvAuth.verifyTvToken(`${forged}.${signature}`, AUTH, issued), false, "payload swapped under the signature");
-  assert.ok(payload);
+test("the feed opens to the TV project's token or a session, and to nothing else", () => {
+  const env = { TV_FEED_TOKEN: FEED_TOKEN };
+  assert.equal(resolveFeedAccess(reqWith({}, { authorization: `Bearer ${FEED_TOKEN}` }), AUTH, env), "feed");
+  assert.equal(resolveFeedAccess(reqWith({}, { authorization: `bearer ${FEED_TOKEN}` }), AUTH, env), "feed");
+  assert.equal(resolveFeedAccess(reqWith({}, { authorization: `Bearer ${FEED_TOKEN}x` }), AUTH, env), null, "wrong token");
+  assert.equal(resolveFeedAccess(reqWith(), AUTH, env), null, "no token, no session");
+  assert.equal(resolveFeedAccess(reqWith({ westpack_session: createSessionToken(AUTH) }), AUTH, env), "session");
+  assert.equal(resolveFeedAccess(reqWith({ westpack_session: "forged.token" }), AUTH, env), null);
+  assert.equal(resolveFeedAccess({ headers: { cookie: "westpack_session=%" } }, AUTH, env), null, "a malformed cookie is no session");
 });
 
-test("a TV token is never a session, and a session token is never a TV token", () => {
-  const tvToken = tvAuth.createTvToken(AUTH);
-  assert.equal(isAuthenticated(reqWith({ westpack_session: tvToken }), AUTH), false, "TV token rejected as the session cookie");
-
-  const sessionToken = createSessionToken(AUTH);
-  assert.equal(tvAuth.verifyTvToken(sessionToken, AUTH), false, "session token rejected as TV-scoped");
-  assert.equal(tvAuth.resolveTvAuth(reqWith({ westpack_tv: sessionToken }), AUTH), null);
-  assert.equal(tvAuth.resolveTvAuth(reqWith({ westpack_session: sessionToken }), AUTH), "session", "a normal session may also open the TV");
+test("a missing or short TV_FEED_TOKEN accepts no token at all", () => {
+  assert.equal(resolveFeedAccess(reqWith({}, { authorization: "Bearer " }), AUTH, {}), null);
+  assert.equal(resolveFeedAccess(reqWith({}, { authorization: "Bearer kort" }), AUTH, { TV_FEED_TOKEN: "kort" }), null);
+  assert.ok(MIN_FEED_TOKEN_LENGTH >= 32);
 });
 
-test("changing the password ends every TV sign-in, even with a separate session secret", () => {
-  const token = tvAuth.createTvToken(AUTH);
-  assert.equal(tvAuth.verifyTvToken(token, { ...AUTH, authPassword: "nyt-kodeord" }), false);
-  const passwordOnly = { authPassword: "hemmeligt" };
-  const passwordToken = tvAuth.createTvToken(passwordOnly);
-  assert.equal(tvAuth.verifyTvToken(passwordToken, passwordOnly), true);
-  assert.equal(tvAuth.verifyTvToken(passwordToken, { authPassword: "andet" }), false);
+test("the feed token is never a session for the rest of the app", () => {
+  assert.equal(isAuthenticated(reqWith({ westpack_session: FEED_TOKEN }), AUTH), false);
 });
 
-test("with no password configured the TV is open, as the app is", () => {
-  assert.equal(tvAuth.resolveTvAuth(reqWith(), {}), "open");
-  assert.equal(tvAuth.isTvAuthenticated(reqWith(), {}), true);
-  assert.equal(tvAuth.isTvAuthenticated(reqWith(), AUTH), false);
-});
-
-test("the TV cookie is scoped to /api/tv, HttpOnly, Lax and secure on https", () => {
-  const cookie = tvAuth.buildTvCookie("abc.def", reqWith());
-  assert.match(cookie, /^westpack_tv=abc\.def; /);
-  assert.match(cookie, /Path=\/api\/tv(;|$)/);
-  assert.match(cookie, /HttpOnly/);
-  assert.match(cookie, /SameSite=Lax/);
-  assert.match(cookie, /Max-Age=34560000/);
-  assert.match(cookie, /Secure/);
-  const local = tvAuth.buildTvCookie("abc.def", { headers: { host: "127.0.0.1:4173" } });
-  assert.doesNotMatch(local, /Secure/);
-  assert.match(tvAuth.buildTvLogoutCookie(reqWith()), /^westpack_tv=; Path=\/api\/tv; .*Max-Age=0/);
-});
-
-test("a malformed cookie header reads as signed out, not as an error", () => {
-  assert.equal(tvAuth.resolveTvAuth({ headers: { cookie: "westpack_tv=%E0%A4%A; westpack_session=%" } }, AUTH), null);
-});
-
-test("the route: session, a wrong password, a login that sets the TV cookie, and kpis behind it", async () => {
-  const saved = { AUTH_PASSWORD: process.env.AUTH_PASSWORD, AUTH_SESSION_SECRET: process.env.AUTH_SESSION_SECRET };
+test("the route serves kpis only, behind the feed check", async () => {
+  const saved = { AUTH_PASSWORD: process.env.AUTH_PASSWORD, AUTH_SESSION_SECRET: process.env.AUTH_SESSION_SECRET, TV_FEED_TOKEN: process.env.TV_FEED_TOKEN };
   process.env.AUTH_PASSWORD = "tv-test-password";
   process.env.AUTH_SESSION_SECRET = "tv-test-secret";
+  process.env.TV_FEED_TOKEN = FEED_TOKEN;
   const route = require("../api/tv");
-  const call = async ({ method = "GET", action, body = null, cookie = "" }) => {
-    const { Readable } = require("stream");
-    const req = Readable.from(body ? [JSON.stringify(body)] : []);
-    req.method = method;
-    req.query = { action };
-    req.headers = { host: "project-4fcxa.vercel.app", "x-forwarded-proto": "https", cookie };
+  const call = async ({ method = "GET", action, authorization = "" }) => {
+    const req = { method, query: { action }, headers: { host: "project-4fcxa.vercel.app", "x-forwarded-proto": "https", authorization } };
     const res = {
       statusCode: 200,
       headers: {},
@@ -405,29 +368,14 @@ test("the route: session, a wrong password, a login that sets the TV cookie, and
     return { status: res.statusCode, headers: res.headers, json: JSON.parse(res.body || "{}") };
   };
   try {
-    const session = await call({ action: "session" });
-    assert.equal(session.status, 200);
-    assert.deepEqual(session.json, { authenticated: false, passwordEnabled: true, via: null });
-    assert.equal(session.headers["cache-control"], "no-store");
-
-    const wrong = await call({ method: "POST", action: "login", body: { password: "nej" } });
-    assert.equal(wrong.status, 401);
-    assert.equal(wrong.json.error, "Forkert kodeord.");
-    assert.equal(wrong.headers["set-cookie"], undefined);
-
     const locked = await call({ action: "kpis" });
     assert.equal(locked.status, 401);
-
-    const login = await call({ method: "POST", action: "login", body: { password: "tv-test-password" } });
-    assert.equal(login.status, 200);
-    assert.match(login.headers["set-cookie"], /^westpack_tv=[^;]+; Path=\/api\/tv; HttpOnly; SameSite=Lax; Max-Age=34560000; Secure$/);
-    const cookie = login.headers["set-cookie"].split(";")[0];
-    const signedIn = await call({ action: "session", cookie });
-    assert.deepEqual(signedIn.json, { authenticated: true, passwordEnabled: true, via: "tv" });
-
-    const loggedOut = await call({ method: "POST", action: "logout" });
-    assert.match(loggedOut.headers["set-cookie"], /Max-Age=0/);
-    assert.equal((await call({ method: "POST", action: "session" })).status, 405);
+    assert.equal(locked.headers["cache-control"], "no-store");
+    assert.equal((await call({ action: "kpis", authorization: "Bearer nej" })).status, 401);
+    assert.equal((await call({ method: "POST", action: "kpis", authorization: `Bearer ${FEED_TOKEN}` })).status, 405);
+    // the sign-in moved to the TV project; this app no longer answers it
+    assert.equal((await call({ method: "POST", action: "login" })).status, 400);
+    assert.equal((await call({ action: "session" })).status, 400);
   } finally {
     for (const [key, value] of Object.entries(saved)) {
       if (value === undefined) delete process.env[key];
