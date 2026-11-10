@@ -6,7 +6,7 @@ look-felter åbner hvert sit look her, og linket under trinene åbner guiden med
 
 Udtrykket er det samme som mailens: skandinavisk, creme og dæmpede farver, dyb grøn, Instrument Serif og Jost.
 
-> **Status 6/11:** Kun dansk. Oversættelserne laves, når den danske er godkendt.
+> **Status 10/11:** Kun dansk. Mads oversætter selv artiklen.
 
 ## Sådan lægger du indlægget op
 
@@ -61,7 +61,12 @@ feltet helt, og sæt filen ind igen.
 |---|---|
 | `#look-01` … `#look-05` | det look (toppen viser også looket) |
 | `#trin-guldstjerner` | trin for trin med Guldstjerner valgt |
+| `#trin-1` … `#trin-5` | trin for trin, åbnet på det trin (mailen holder trin 4 og 5 tilbage og linker til `#trin-4`) |
+| `#look-06` | "Mix dit eget" |
+| `#faq-logo` (og `#faq-postaeske`, `#faq-antal`, `#faq-gratis`, `#faq-silkepapir`, `#faq-proeve`, `#faq-frister`) | det spørgsmål, foldet ud |
 | `#fs-trin`, `#fs-looks`, `#fs-logo`, `#fs-praktisk` | det afsnit |
+
+Kommer man ind via et link, afspiller trin-guiden sig ikke selv. Den, der kom for noget bestemt, skal ikke se siden flytte sig.
 
 ## Godt at vide
 
