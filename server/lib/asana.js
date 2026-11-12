@@ -264,7 +264,8 @@ async function getAsanaProjectTasks(config, projectGid, { includeCompleted = fal
 const ASANA_PROJECT_KINDS = {
   campaign: "asanaCampaignProjectGid",
   content: "asanaContentProjectGid",
-  creatives: "asanaCreativesProjectGid"
+  creatives: "asanaCreativesProjectGid",
+  production: "asanaProductionProjectGid"
 };
 
 function resolveAsanaProjectGid(config = {}, kind = "campaign") {
@@ -424,6 +425,151 @@ async function createAsanaTask(config, { name, notes, dueOn, projectKind } = {})
     assignee: String(payload?.data?.assignee?.name || profile.name || ""),
     permalinkUrl: String(payload?.data?.permalink_url || ""),
     projectGid
+  };
+}
+
+// Workspace members whose name starts with or contains the query, so a content request can name who it is for.
+// Read-only (Asana's typeahead).
+async function findAsanaUsers(config, query) {
+  const text = String(query || "").trim();
+  if (text.length < 2 || text.length > 60) {
+    const error = new Error("Search for a person with 2 to 60 characters.");
+    error.statusCode = 400;
+    throw error;
+  }
+  const profile = await getAsanaConnectionProfile(config);
+  const workspaceGid = profile.workspaces?.[0]?.gid || "";
+  if (!workspaceGid) {
+    const error = new Error("The Asana token has no workspace.");
+    error.statusCode = 503;
+    throw error;
+  }
+  const users = await asanaGet(config, `/workspaces/${workspaceGid}/typeahead`, { resource_type: "user", query: text, count: 10, opt_fields: "gid,name,email" });
+  return (Array.isArray(users) ? users : []).map((user) => ({
+    gid: String(user?.gid || ""),
+    name: String(user?.name || ""),
+    email: String(user?.email || "")
+  })).filter((user) => user.gid);
+}
+
+// Plain text with **bold** to Asana's rich text. Everything else is escaped, and newlines stay newlines.
+function toAsanaHtml(text) {
+  return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+}
+
+// The third write: a content request on the content team's board (Content Production), in one of its columns,
+// for a named colleague, with colleagues to keep informed. Unlike createAsanaTask this one is meant for someone
+// else's list, which is why it is confined to that one project, every person must be a member of the token's
+// workspace, and the followers are @-mentioned in the description so they are notified.
+const MAX_REQUEST_FOLLOWERS = 5;
+
+async function createAsanaContentRequest(config, { name, notes, dueOn, section = "Content requests", assignee, followers = [] } = {}) {
+  const taskName = String(name || "").trim();
+  const taskNotes = String(notes || "").trim();
+  const due = validDueOn(dueOn);
+  const assigneeGid = String(assignee || "").trim();
+  const followerGids = [...new Set((Array.isArray(followers) ? followers : []).map((gid) => String(gid || "").trim()).filter(Boolean))];
+  const sectionName = String(section || "").trim().toLowerCase();
+  const refuse = (message, statusCode = 400) => { const error = new Error(message); error.statusCode = statusCode; throw error; };
+  if (!taskName || taskName.length > MAX_TASK_NAME_CHARS) refuse(`A task name needs between 1 and ${MAX_TASK_NAME_CHARS} characters.`);
+  if (taskNotes.length > MAX_TASK_NOTES_CHARS) refuse(`Task notes can be at most ${MAX_TASK_NOTES_CHARS} characters.`);
+  if (due === null) refuse("dueOn must be a real date written YYYY-MM-DD.");
+  if (!/^\d+$/.test(assigneeGid)) refuse("A content request needs an assignee (an Asana user GID).");
+  if (followerGids.length > MAX_REQUEST_FOLLOWERS || followerGids.some((gid) => !/^\d+$/.test(gid))) refuse(`Followers must be up to ${MAX_REQUEST_FOLLOWERS} Asana user GIDs.`);
+  if (!sectionName) refuse("Name the column the request goes in.");
+  const projectGid = resolveAsanaProjectGid(config, "production").projectGid;
+  if (!projectGid) refuse("The Asana production project is not configured.", 503);
+
+  const profile = await getAsanaConnectionProfile(config);
+  const workspaceGid = profile.workspaces?.[0]?.gid || "";
+  if (!workspaceGid) refuse("The Asana token has no workspace.", 503);
+  const people = {};
+  for (const gid of [assigneeGid, ...followerGids]) {
+    const user = await asanaGet(config, `/users/${gid}`, { opt_fields: "gid,name,workspaces.gid" });
+    if (!(user?.workspaces || []).some((workspace) => String(workspace?.gid || "") === workspaceGid)) {
+      refuse(`User ${gid} is not a member of the ${profile.workspaces[0].name || "Asana"} workspace.`, 403);
+    }
+    people[gid] = String(user?.name || "");
+  }
+  const sections = await asanaGet(config, `/projects/${projectGid}/sections`, { opt_fields: "gid,name" });
+  const target = (Array.isArray(sections) ? sections : []).find((item) => String(item?.name || "").trim().toLowerCase() === sectionName);
+  if (!target) refuse(`No column named "${section}" in Content Production. Columns: ${(sections || []).map((item) => item.name).join(", ")}.`);
+
+  const mentions = followerGids.length ? `\n\nCc: ${followerGids.map((gid) => `<a data-asana-gid="${gid}"/>`).join(" ")}` : "";
+  const data = {
+    name: taskName,
+    workspace: workspaceGid,
+    assignee: assigneeGid,
+    memberships: [{ project: projectGid, section: String(target.gid) }],
+    html_notes: `<body>${toAsanaHtml(taskNotes)}${mentions}</body>`
+  };
+  if (followerGids.length) data.followers = followerGids;
+  if (due) data.due_on = due;
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/tasks?opt_fields=gid,name,due_on,permalink_url,assignee.name,followers.name`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.asanaAccessToken}`
+    },
+    body: JSON.stringify({ data })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return {
+    gid: String(payload?.data?.gid || ""),
+    name: String(payload?.data?.name || taskName),
+    dueOn: String(payload?.data?.due_on || due || ""),
+    assignee: String(payload?.data?.assignee?.name || people[assigneeGid] || ""),
+    followers: (payload?.data?.followers || []).map((follower) => String(follower?.name || "")).filter(Boolean),
+    section: String(target.name || ""),
+    permalinkUrl: String(payload?.data?.permalink_url || ""),
+    projectGid
+  };
+}
+
+// The fourth write: a file attached to a task in one of the app's projects (a preview video on a content request,
+// for example). The request body is the file itself, so it is held to what a Vercel function accepts.
+const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024;
+const ATTACHMENT_TYPES = new Set(["video/mp4", "video/quicktime", "image/jpeg", "image/png", "application/pdf"]);
+
+async function attachFileToAsanaTask(config, { taskGid, fileName, contentType, buffer } = {}) {
+  const normalizedTaskGid = String(taskGid || "").trim();
+  const name = String(fileName || "").trim();
+  const type = String(contentType || "").split(";")[0].trim().toLowerCase();
+  const refuse = (message, statusCode = 400) => { const error = new Error(message); error.statusCode = statusCode; throw error; };
+  if (!/^\d+$/.test(normalizedTaskGid)) refuse("A valid Asana task GID is required.");
+  if (!name || name.length > 120 || /[\\/]/.test(name)) refuse("A file name needs 1 to 120 characters and no slashes.");
+  if (!ATTACHMENT_TYPES.has(type)) refuse(`Only ${[...ATTACHMENT_TYPES].join(", ")} can be attached.`, 415);
+  if (!Buffer.isBuffer(buffer) || !buffer.length) refuse("The file is empty.");
+  if (buffer.length > MAX_ATTACHMENT_BYTES) refuse(`The file can be at most ${MAX_ATTACHMENT_BYTES / 1024 / 1024} MB.`, 413);
+  const allowed = new Set(Object.keys(ASANA_PROJECT_KINDS).map((kind) => resolveAsanaProjectGid(config, kind).projectGid).filter(Boolean));
+  const task = await asanaGet(config, `/tasks/${normalizedTaskGid}`, { opt_fields: "gid,name,projects.gid" });
+  if (!(task?.projects || []).some((project) => allowed.has(String(project?.gid || "")))) refuse("The task is not in a project this app works with.", 403);
+  const form = new FormData();
+  form.append("parent", normalizedTaskGid);
+  form.append("file", new Blob([buffer], { type }), name);
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/attachments?opt_fields=gid,name,size,view_url`, {
+    method: "POST",
+    headers: { Accept: "application/json", Authorization: `Bearer ${config.asanaAccessToken}` },
+    body: form
+  }, 60000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return {
+    gid: String(payload?.data?.gid || ""),
+    name: String(payload?.data?.name || name),
+    size: Number(payload?.data?.size || buffer.length),
+    taskGid: normalizedTaskGid,
+    taskName: String(task?.name || "")
   };
 }
 
@@ -675,7 +821,11 @@ async function sortAsanaSectionByDueDate(config, { projectKind = "campaign", sec
 module.exports = {
   addAsanaTaskComment,
   asanaGet,
+  attachFileToAsanaTask,
+  createAsanaContentRequest,
   createAsanaTask,
+  findAsanaUsers,
+  toAsanaHtml,
   createAsanaTaskFromTemplate,
   planSectionMoves,
   sortAsanaSectionByDueDate,

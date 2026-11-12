@@ -80,9 +80,34 @@ function readJsonBody(req) {
   });
 }
 
+// The request body as bytes, for routes that receive a file rather than JSON. Refuses with 413 past maxBytes.
+function readRawBody(req, maxBytes) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let receivedBytes = 0;
+    let settled = false;
+    req.on("data", (chunk) => {
+      if (settled) return;
+      receivedBytes += chunk.length;
+      if (receivedBytes > maxBytes) {
+        settled = true;
+        const error = new Error("Request body too large.");
+        error.statusCode = 413;
+        if (typeof req.destroy === "function") req.destroy();
+        reject(error);
+        return;
+      }
+      chunks.push(Buffer.from(chunk));
+    });
+    req.on("end", () => { if (!settled) { settled = true; resolve(Buffer.concat(chunks)); } });
+    req.on("error", (error) => { if (!settled) { settled = true; reject(error); } });
+  });
+}
+
 module.exports = {
   fetchWithTimeout,
   sendJson,
   readJsonBody,
+  readRawBody,
   MAX_JSON_BODY_BYTES
 };

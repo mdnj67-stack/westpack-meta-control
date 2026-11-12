@@ -128,6 +128,8 @@ function getConfig() {
     // A project GID is an identifier, not a secret, so it has a default and the env var only
     // overrides it.
     asanaCreativesProjectGid: process.env.ASANA_CREATIVES_PROJECT_GID || fileEnv.ASANA_CREATIVES_PROJECT_GID || localSecrets.asanaCreativesProjectGid || "1218826645554863",
+    // "Content Production" - the content team's board; content requests are briefed there (see createAsanaContentRequest).
+    asanaProductionProjectGid: process.env.ASANA_PRODUCTION_PROJECT_GID || fileEnv.ASANA_PRODUCTION_PROJECT_GID || localSecrets.asanaProductionProjectGid || "1213419820411447",
     // Canva Connect. The redirect URI is optional: when it is absent the OAuth route derives it
     // from the request host, which is right for both localhost and the Vercel deployment. Set it
     // explicitly only if the app is reached on a host that differs from the one registered in

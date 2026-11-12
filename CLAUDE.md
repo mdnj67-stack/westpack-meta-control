@@ -1350,7 +1350,7 @@ language move Drafts → To Do → In progress → Review. The user's rule: crea
 be used in ads, and so may those in **Done** (the user, 2026-11-02). An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
 also returns the task's comments, which is where reviewers leave feedback on a creative.
 
-Four Asana writes, all dispatched before the OpenAI check and all acting as the production token's owner (Mads,
+Six Asana writes, all dispatched before the OpenAI check and all acting as the production token's owner (Mads,
 workspace westpack.com):
 - `POST /api/campaign/brain?action=asana_comment` with `{ taskGid, text }` posts a comment on a task in one of those
   three projects and refuses any other task (403). Used to tell the designer why a creative was not taken into an ad.
@@ -1370,6 +1370,15 @@ workspace westpack.com):
   undated last. Only places change, and a card already in place is not written, so a sorted column costs no writes.
   Asana's own "Sort" in the board is a view setting the API cannot reach. Re-run it after making new cards, which
   land at the top. `tests/asana-section-sort.test.js`.
+- `POST /api/campaign/brain?action=asana_content_request` with `{ name, notes, dueOn?, section?, assignee, followers? }`
+  (added 2026-11-12, the user: "Giv dem til Rikke og tag Nicklas ... på content production") is the one write meant for
+  a colleague's list, so it is confined: always in **Content Production** (1213419820411447, project kind `production`,
+  `ASANA_PRODUCTION_PROJECT_GID`), in a named column (default "Content requests"), assignee and up to 5 followers given
+  as user GIDs and each checked to be a member of the workspace; followers are @-mentioned at the end of the
+  description. `notes` is plain text with `**bold**`. `GET ...?action=asana_users&query=` finds people (typeahead).
+- `POST /api/campaign/brain?action=asana_task_attach&taskGid=&name=` with the file as the raw body (mp4, mov, jpeg,
+  png, pdf; at most 4 MB, under Vercel's request limit) attaches it to a task in one of the app's projects - send a
+  compressed preview for video. `tests/asana-content-request.test.js`.
 Asana's signed attachment URLs expire within the hour, so re-read a task right before downloading its files.
 
 The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns

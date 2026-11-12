@@ -1,10 +1,13 @@
 const { getConfig } = require("../../server/lib/config");
 const { requireAuth } = require("../../server/lib/auth");
-const { readJsonBody, sendJson } = require("../../server/lib/http");
+const { readJsonBody, readRawBody, sendJson } = require("../../server/lib/http");
 const {
   addAsanaTaskComment,
+  attachFileToAsanaTask,
+  createAsanaContentRequest,
   createAsanaTask,
   createAsanaTaskFromTemplate,
+  findAsanaUsers,
   getAsanaConnectionProfile,
   getAsanaProjectTasks,
   getAsanaTaskBundle,
@@ -176,7 +179,7 @@ module.exports = async (req, res) => {
 
   if (req.method === "GET") {
     const action = requestedAction;
-    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asana_task_templates", "asset_proxy", "campaign_learning_status", "studio_draft_load", "audit_log", "asset_library_load"]).has(action)) {
+    if (!new Set(["asana_status", "asana_projects", "asana_tasks", "asana_task", "asana_task_templates", "asana_users", "asset_proxy", "campaign_learning_status", "studio_draft_load", "audit_log", "asset_library_load"]).has(action)) {
       sendJson(res, 400, { error: "Unsupported Campaign Brain GET action." });
       return;
     }
@@ -262,6 +265,10 @@ module.exports = async (req, res) => {
         sendJson(res, 200, { ok: true, readOnly: true, kind: String(req.query?.kind || "campaign"), templates });
         return;
       }
+      if (action === "asana_users") {
+        sendJson(res, 200, { ok: true, readOnly: true, users: await findAsanaUsers(config, req.query?.query) });
+        return;
+      }
       const profile = await getAsanaConnectionProfile(config);
       if (action === "asana_projects") {
         const workspaceGid = String(req.query?.workspaceGid || profile.workspaces?.[0]?.gid || "");
@@ -328,6 +335,38 @@ module.exports = async (req, res) => {
       sendJson(res, 200, { ok: true, task: await createAsanaTask(config, input || {}) });
     } catch (error) {
       sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the Asana task." });
+    }
+    return;
+  }
+
+  // A content request on the content team's board (Content Production), for a named colleague, with followers
+  // who are @-mentioned. Confined to that project - see createAsanaContentRequest.
+  if (requestedAction === "asana_content_request") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, task: await createAsanaContentRequest(config, input || {}) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the content request." });
+    }
+    return;
+  }
+
+  // A file (the request body itself) attached to a task in one of the app's projects: ?taskGid=&name=, with the
+  // file's Content-Type. Up to 4 MB - see attachFileToAsanaTask.
+  if (requestedAction === "asana_task_attach") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const buffer = await readRawBody(req, 4 * 1024 * 1024);
+      sendJson(res, 200, { ok: true, attachment: await attachFileToAsanaTask(config, { taskGid: req.query?.taskGid, fileName: req.query?.name, contentType: req.headers?.["content-type"], buffer }) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not attach the file." });
     }
     return;
   }
