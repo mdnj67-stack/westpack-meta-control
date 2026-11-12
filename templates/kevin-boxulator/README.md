@@ -8,6 +8,9 @@ som Kevin-mailene fra 2025: bordeaux, rød kant, creme og Georgia.
 > (20 hemmeligheder, titler, gummiænder og oplæser) og juleformlen. De 15 andre sprog er en gammel version med
 > emojis, som Magento afviser. **Brug dem ikke.** De bliver lavet igen ud fra den danske, når den er godkendt.
 >
+> **Live i DK (tjekket 12/11):** `…/blog/the-boxulator-3000`. `…/blog/boxulator-3000`, som står nedenfor,
+> giver 404. Brug samme URL-nøgle som DK, når de andre butikker kommer på.
+>
 > **Vil I tilbage til en tidligere dansk version?** Sæt den ind på samme måde. De ligger i `tidligere/`:
 > - `boxulator-da-v5.html`: samme spil, uden artikelintro.
 > - `boxulator-da-v4.html`: 12 hemmeligheder og ingen titler. Den er også tagget `boxulator-da-v4` i git.
@@ -118,7 +121,15 @@ Indlægget skal ligge i **alle 18 butikker med samme URL-nøgle**, ellers giver 
    Elements) ind. Klik i feltet, tryk **Ctrl+A** og **Delete**, så det er tomt, og sæt **hele** indholdet af
    sprogets fil ind. Tilføj ikke andre elementer, for blokken har selv overskrift og tekst. Brug **ikke** den
    almindelige teksteditor (WYSIWYG): den fjerner `<script>` og `<style>`, og så virker lommeregneren ikke.
-4. Sæt `cover.jpg` som indlæggets billede (listebillede).
+4. Udfyld billede og metatekster:
+   - **Post image (og listebillede):** `post-image-600.jpg` fra denne mappe (600 × 600). Bloggens liste viser
+     alle indlæg i 600 × 600, så det brede `cover.jpg` (1200 × 800) bliver beskåret og skærer Kevin-hovederne
+     over. Brug kun `cover.jpg`, hvis et felt beder om et bredt billede. Billedet har ingen tekst, så det kan
+     bruges i alle butikker. Displayet viser 3000.
+   - **Alt-tekst:** Kevin kigger frem bag The Boxulator 3000, en kæmpe lommeregner med smykkeæsker som taster
+   - **Meta title:** The Boxulator 3000: Kevins æske-lommeregner | Westpack
+   - **Meta description:** Kevin har bygget en lommeregner af smykkeæsker. Find de 20 hemmeligheder, eller lad
+     juleformlen regne ud, hvor mange æsker du skal bestille før jul.
 5. Vælg butikken (store view), og gem. Gentag for hver butik med sprogets fil.
 6. Åbn indlægget på sitet, og tryk 2 + 2 =. Står der 4 i displayet, og lyser ON AIR, virker det.
 
