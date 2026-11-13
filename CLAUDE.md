@@ -1603,8 +1603,11 @@ key `customer-feedback-2026` in every store; answers go to `api/survey.js` and a
   versions (eight reason tiles, then one-tap follow-ups in `REASONS[].details`) were replaced the same day; their
   answers still read, and the view shows the reason table only when such answers exist.
 - Every save carries the whole answer and a visit id (`sid`); the view keys on token, else visit, and keeps the latest
-  save, so two saves are one answer. Saves use `keepalive`. The look is the blog's own (W47): fir green, oat,
-  champagne, Instrument Serif and Jost.
+  save, so two saves are one answer. Saves use `keepalive`.
+- **It looks like the store, not a campaign** (the user: "passer lidt bedre ind på siden"): the theme's own Inter
+  (`font-family: inherit`, no font import), `--color-primary` red `#d10a11` / `#c30910`, a white card with the
+  "Recent posts" cards' 4px radius and `0 1px 4px rgba(0,0,0,.08)` shadow, inputs bordered `#e0e0e0`, 6px buttons.
+  Measured off the saved store page with Playwright; re-measure rather than guess if the theme changes.
 - **One Blob file per save** under `surveys/customer-feedback-2026/responses/`, so concurrent answers never overwrite
   each other. Local development writes `tmp/surveys/`.
 - Submit is public, posted as `text/plain` (no CORS preflight) from `www.westpack.com` or staging. A honeypot or a

@@ -11,8 +11,10 @@ mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen i 
    grund.
 2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej, med ét tryk.
 
-Til sidst takker skemaet med firmanavnet. Udtrykket er bloggens eget: dyb grøn, havre og champagne, Instrument Serif og
-Jost, som i W47-indlægget.
+Til sidst takker skemaet med firmanavnet. **Udseendet er butikkens eget**, så kortet ligner en del af siden og ikke en
+kampagne. Det bruger temaets skrift Inter, Westpack-rød `#d10a11` på knapper og detaljer, og et hvidt kort med samme
+skygge og hjørner som "Seneste indlæg". En rød linje øverst på kortet binder det sammen med den røde titel. Blokken
+henter ingen skrifttyper selv.
 
 **Titlen på indlægget ses af kunden.** Den står med rødt over kortet og i brødkrummen. Kald det ikke "Churn survey".
 Brug "Vi vil gerne høre fra dig" og på engelsk "We'd like to hear from you".
