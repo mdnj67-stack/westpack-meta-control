@@ -68,15 +68,19 @@ function sanitizeSubmission(input = {}, { now = Date.now() } = {}) {
   if (String(input.hp || "").trim()) return { drop: "honeypot" };
   const fillMs = Number(input.ms);
   if (Number.isFinite(fillMs) && fillMs >= 0 && fillMs < MIN_FILL_MS) return { drop: "too_fast" };
+  // Since 2026-11-13 the post asks for a written answer only (the user: "skrevne og specifikke svar ... har mere
+  // værdi"), so an answer carries no reason; then its own words are required. A reason, when sent, must be known.
   const reason = String(input.reason || "");
-  if (!REASON_IDS.has(reason)) return { error: "Unknown reason." };
+  const written = text(input.followup, 1500);
+  if (reason && !REASON_IDS.has(reason)) return { error: "Unknown reason." };
+  if (!reason && written.replace(/\s/g, "").length < 3) return { error: "Expected an answer in the visitor's own words." };
   const rawToken = String(input.k || "").toLowerCase().trim();
   const test = rawToken === "test";
   const token = test ? null : TOKEN.test(rawToken) ? rawToken : null;
   const contact = input.contact === "yes" ? "yes" : input.contact === "no" ? "no" : "";
   const email = text(input.email, 200);
-  // the one-tap answers to question 2: only the ones that exist for this reason, each once
-  const def = REASON_BY_ID.get(reason);
+  // the one-tap answers to the old question 2: only the ones that exist for this reason, each once
+  const def = REASON_BY_ID.get(reason) || { details: [] };
   const allowed = new Set(def.details.map((d) => d.id));
   let details = [...new Set((Array.isArray(input.details) ? input.details : []).map(String).filter((d) => allowed.has(d)))];
   if (def.single) details = details.slice(0, 1);
@@ -94,9 +98,9 @@ function sanitizeSubmission(input = {}, { now = Date.now() } = {}) {
     reason,
     details,
     other: reason === "other" ? text(input.other, 200) : "",
-    followup: text(input.followup, 1500),
+    followup: written,
     contact,
-    // how far the person got: 1 = only the reason, 2 = past the follow-up, 3 = finished
+    // how far the person got: 3 = finished; anything less stopped before the last question
     step: [1, 2, 3].includes(step) ? step : 3,
   };
   if (!token && contact === "yes" && EMAIL.test(email)) record.email = email;
@@ -167,7 +171,7 @@ function summarize({ responses = [], recipients = [], includeTest = false } = {}
   const counts = Object.fromEntries(REASONS.map((r) => [r.id, 0]));
   const detailCounts = {};
   for (const r of latest) {
-    counts[r.reason] = (counts[r.reason] || 0) + 1;
+    if (r.reason) counts[r.reason] = (counts[r.reason] || 0) + 1;
     for (const d of r.details) detailCounts[`${r.reason}:${d}`] = (detailCounts[`${r.reason}:${d}`] || 0) + 1;
   }
   const answeredTokens = new Set(latest.filter((r) => r.recipient).map((r) => r.token));
@@ -187,6 +191,7 @@ function summarize({ responses = [], recipients = [], includeTest = false } = {}
       anonymous: latest.filter((r) => !r.token).length,
       unknownToken: latest.filter((r) => r.token && !r.recipient).length,
       wantsContact: latest.filter((r) => r.contact === "yes").length,
+      written: latest.filter((r) => !r.reason).length,
       finished: latest.filter((r) => (r.step || 3) >= 3).length,
     },
     answered: [...answeredTokens],

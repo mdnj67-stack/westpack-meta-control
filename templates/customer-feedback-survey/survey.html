@@ -5,59 +5,39 @@
 #wpfb *,#wpfb *::before,#wpfb *::after{box-sizing:border-box}
 #wpfb [hidden]{display:none!important}
 #wpfb .wpfb-card{border-radius:20px;overflow:hidden;background:var(--oat);box-shadow:0 1px 0 rgba(36,33,29,.04),0 24px 48px -32px rgba(36,33,29,.45)}
-#wpfb .wpfb-head{position:relative;background:var(--fir);color:var(--oat);padding:30px 40px 30px;overflow:hidden;isolation:isolate}
+#wpfb .wpfb-head{position:relative;background:var(--fir);color:var(--oat);padding:30px 40px 32px;overflow:hidden;isolation:isolate}
 #wpfb .wpfb-head::before{content:"";position:absolute;z-index:-1;right:-120px;top:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(closest-side,rgba(232,199,159,.22),rgba(232,199,159,0))}
 #wpfb .wpfb-row{display:flex;align-items:center;gap:16px;margin:0 0 22px;min-height:20px}
 #wpfb .wpfb-hi{margin:0;font:500 12.5px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--champ);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #wpfb .wpfb-meta{margin:0 0 0 auto;display:flex;align-items:center;gap:12px;font:500 13px/1 var(--sans);color:rgba(244,239,232,.7);white-space:nowrap;font-variant-numeric:lining-nums tabular-nums}
 #wpfb .wpfb-prog{display:flex;gap:5px}
-#wpfb .wpfb-prog i{display:block;width:22px;height:3px;border-radius:3px;background:rgba(244,239,232,.22);transition:background .4s var(--ease)}
+#wpfb .wpfb-prog i{display:block;width:26px;height:3px;border-radius:3px;background:rgba(244,239,232,.22);transition:background .4s var(--ease)}
 #wpfb .wpfb-prog i.on{background:var(--champ)}
-#wpfb .wpfb-h{margin:0 0 10px;font:400 42px/1.06 var(--disp);letter-spacing:-.012em;color:var(--oat);max-width:21ch;outline:none;text-wrap:balance}
-#wpfb .wpfb-sub{margin:0;font:400 17px/1.45 var(--sans);color:rgba(244,239,232,.8);max-width:44ch;text-wrap:pretty}
+#wpfb .wpfb-h{margin:0 0 12px;font:400 42px/1.06 var(--disp);letter-spacing:-.012em;color:var(--oat);max-width:21ch;outline:none;text-wrap:balance}
+#wpfb .wpfb-sub{margin:0;font:400 17px/1.5 var(--sans);color:rgba(244,239,232,.8);max-width:48ch;text-wrap:pretty}
 #wpfb .wpfb-hx.is-in{animation:wpfb-in .42s var(--ease) both}
 #wpfb form{margin:0;padding:30px 40px 26px;background:var(--oat)}
 #wpfb .wpfb-step.is-in{animation:wpfb-in .42s var(--ease) both}
 @keyframes wpfb-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-#wpfb .wpfb-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@container (min-width:660px){#wpfb .wpfb-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
-#wpfb .wpfb-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-height:128px;margin:0;padding:18px 16px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px;color:var(--ink);font:500 16px/1.25 var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;transition:transform .22s var(--ease),border-color .22s,background-color .22s,color .22s,box-shadow .22s}
-#wpfb .wpfb-tile:hover{border-color:var(--fir);transform:translateY(-2px);box-shadow:0 12px 24px -18px rgba(36,33,29,.55)}
-#wpfb .wpfb-tile:active{transform:translateY(0) scale(.985)}
-#wpfb .wpfb-tile input,#wpfb .wpfb-chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
-#wpfb .wpfb-ico{display:block;width:30px;height:30px;fill:none;stroke:var(--fir);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .22s}
-#wpfb .wpfb-ico .bg{fill:var(--card);transition:fill .22s}
-#wpfb .wpfb-tl small{display:block;margin-top:4px;font-weight:400;font-size:13.5px;line-height:1.3;color:var(--muted);transition:color .22s}
-#wpfb .wpfb-tile.is-on{background:var(--fir);border-color:var(--fir);color:var(--oat);box-shadow:0 14px 26px -18px rgba(36,33,29,.7)}
-#wpfb .wpfb-tile.is-on .wpfb-ico{stroke:var(--champ)}
-#wpfb .wpfb-tile.is-on .wpfb-ico .bg{fill:var(--fir)}
-#wpfb .wpfb-tile.is-on small{color:rgba(244,239,232,.72)}
-#wpfb .wpfb-tick{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--champ);opacity:0;transform:scale(.3);transition:opacity .2s,transform .32s var(--ease)}
-#wpfb .wpfb-tick svg{display:block;width:24px;height:24px;fill:none;stroke:var(--fir);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-#wpfb .wpfb-tile.is-on .wpfb-tick{opacity:1;transform:scale(1)}
-#wpfb .wpfb-tile:has(input:focus-visible),#wpfb .wpfb-chip:has(input:focus-visible){outline:3px solid var(--champ);outline-offset:3px}
-#wpfb .wpfb-chips{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 24px;padding:0;border:0}
-#wpfb .wpfb-chip{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0;padding:11px 20px;background:var(--card);border:1px solid var(--line);border-radius:999px;font:500 16px/1.2 var(--sans);color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;transition:background-color .2s,border-color .2s,color .2s,padding .2s var(--ease)}
-#wpfb .wpfb-chip:hover{border-color:var(--fir)}
-#wpfb .wpfb-chip svg{width:0;height:18px;flex:0 0 auto;fill:none;stroke:var(--champ);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:width .22s var(--ease),opacity .2s}
-#wpfb .wpfb-chip.is-on{background:var(--fir);border-color:var(--fir);color:var(--oat);padding-left:16px}
-#wpfb .wpfb-chip.is-on svg{width:18px;opacity:1}
-#wpfb .wpfb-field{display:block;margin:0 0 24px}
-#wpfb .wpfb-field>span{display:block;margin:0 0 8px;font:500 15px/1.3 var(--sans);color:var(--body)}
-#wpfb textarea,#wpfb input[type=email]{display:block;width:100%;margin:0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;font:400 16px/1.45 var(--sans);color:var(--ink);box-shadow:none;transition:border-color .2s,box-shadow .2s}
-#wpfb textarea{min-height:104px;resize:vertical}
-#wpfb textarea::placeholder,#wpfb input::placeholder{color:var(--muted)}
-#wpfb textarea:focus,#wpfb input[type=email]:focus{outline:none;border-color:var(--fir);box-shadow:0 0 0 3px rgba(47,61,51,.14)}
-#wpfb .wpfb-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:24px 0 0}
-#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;margin:0;padding:14px 28px;background:var(--fir);border:0;border-radius:999px;color:var(--oat);font:600 16px/1 var(--sans);letter-spacing:.01em;text-decoration:none;cursor:pointer;transition:background-color .2s,transform .2s var(--ease)}
+#wpfb .wpfb-write{position:relative;display:block;margin:0}
+#wpfb .wpfb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#wpfb textarea{display:block;width:100%;min-height:168px;max-height:420px;margin:0;padding:20px 22px;background:var(--card);border:1px solid var(--line);border-radius:18px;font:400 18px/1.55 var(--sans);color:var(--ink);box-shadow:inset 0 1px 2px rgba(36,33,29,.04);resize:none;overflow:auto;transition:border-color .2s,box-shadow .2s}
+#wpfb textarea::placeholder{color:var(--muted)}
+#wpfb textarea:focus{outline:none;border-color:var(--fir);box-shadow:0 0 0 4px rgba(47,61,51,.12)}
+#wpfb .wpfb-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:16px 0 0}
+#wpfb .wpfb-hint{margin:0;font:400 15px/1.4 var(--sans);color:var(--muted)}
+#wpfb .wpfb-hint b{font-weight:500;color:var(--body)}
+#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;margin:0;padding:14px 28px;background:var(--fir);border:0;border-radius:999px;color:var(--oat);font:600 16px/1 var(--sans);letter-spacing:.01em;text-decoration:none;cursor:pointer;transition:background-color .2s,opacity .2s,transform .2s var(--ease)}
 #wpfb .wpfb-btn:hover{background:var(--fir2);color:var(--oat)}
 #wpfb .wpfb-btn:active{transform:scale(.98)}
 #wpfb .wpfb-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--ease)}
 #wpfb .wpfb-btn:hover svg{transform:translateX(3px)}
+#wpfb .wpfb-btn.is-idle{opacity:.45}
 #wpfb .wpfb-btn[disabled]{opacity:.55;cursor:default}
-#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-yn button:focus-visible{outline:3px solid var(--champ);outline-offset:3px}
+#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-yn button:focus-visible,#wpfb .wpfb-back:focus-visible{outline:3px solid var(--champ);outline-offset:3px}
 #wpfb .wpfb-link{margin:0;padding:6px 2px;background:none;border:0;border-radius:4px;font:500 15.5px/1.3 var(--sans);color:var(--body);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;cursor:pointer}
 #wpfb .wpfb-link:hover{color:var(--ink);text-decoration-color:currentColor}
+#wpfb .wpfb-quote{margin:0 0 22px;padding:16px 20px;border-left:3px solid var(--champ);background:rgba(251,248,243,.7);border-radius:0 12px 12px 0;font:italic 400 19px/1.45 var(--disp);color:var(--body);max-height:7.5em;overflow:hidden;white-space:pre-wrap;word-break:break-word}
 #wpfb .wpfb-yn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #wpfb .wpfb-yn button{min-height:64px;margin:0;padding:16px 20px;border-radius:16px;font:500 18px/1.2 var(--sans);cursor:pointer;transition:background-color .2s,border-color .2s,color .2s,transform .2s var(--ease)}
 #wpfb .wpfb-yn button:active{transform:scale(.985)}
@@ -67,18 +47,22 @@
 #wpfb .wpfb-no:hover{border-color:var(--fir)}
 #wpfb .wpfb-yn button[aria-pressed=true]{box-shadow:0 0 0 3px var(--champ)}
 #wpfb .wpfb-email{margin:22px 0 0}
-#wpfb .wpfb-done{text-align:left}
+#wpfb .wpfb-field{display:block;margin:0}
+#wpfb .wpfb-field>span{display:block;margin:0 0 8px;font:500 15px/1.3 var(--sans);color:var(--body)}
+#wpfb input[type=email]{display:block;width:100%;margin:0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;font:400 16px/1.45 var(--sans);color:var(--ink);box-shadow:none;transition:border-color .2s,box-shadow .2s}
+#wpfb input[type=email]:focus{outline:none;border-color:var(--fir);box-shadow:0 0 0 4px rgba(47,61,51,.12)}
+#wpfb .wpfb-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:20px 0 0}
 #wpfb .wpfb-check{display:block;width:64px;height:64px;margin:4px 0 18px;fill:none;stroke:var(--fir);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #wpfb .wpfb-check circle{stroke:var(--champ);stroke-dasharray:176;stroke-dashoffset:176}
 #wpfb .wpfb-check path{stroke-dasharray:40;stroke-dashoffset:40}
 #wpfb .wpfb-done.is-in .wpfb-check circle{animation:wpfb-draw .7s var(--ease) .1s forwards}
 #wpfb .wpfb-done.is-in .wpfb-check path{animation:wpfb-draw .45s var(--ease) .55s forwards}
 @keyframes wpfb-draw{to{stroke-dashoffset:0}}
-#wpfb .wpfb-done p{margin:0 0 24px;font:400 18px/1.5 var(--sans);color:var(--body);max-width:46ch}
-#wpfb .wpfb-err{margin:18px 0 0;font:500 15.5px/1.4 var(--sans);color:var(--acc)}
+#wpfb .wpfb-done p{margin:0 0 4px;font:400 18px/1.5 var(--sans);color:var(--body);max-width:46ch}
+#wpfb .wpfb-err{margin:16px 0 0;font:500 15.5px/1.4 var(--sans);color:var(--acc)}
 #wpfb .wpfb-foot{display:flex;align-items:flex-start;gap:16px;margin:28px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
 #wpfb .wpfb-foot p{margin:0;font:400 13.5px/1.5 var(--sans);color:var(--muted);max-width:60ch}
-#wpfb .wpfb-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;margin:0;padding:2px 0;background:none;border:0;font:500 14px/1.4 var(--sans);color:var(--body);cursor:pointer}
+#wpfb .wpfb-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;margin:0;padding:2px 0;background:none;border:0;border-radius:4px;font:500 14px/1.4 var(--sans);color:var(--body);cursor:pointer}
 #wpfb .wpfb-back:hover{color:var(--ink)}
 #wpfb .wpfb-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
@@ -90,59 +74,42 @@
 #wpfb .wpfb-h{font-size:31px;line-height:1.08}
 #wpfb .wpfb-sub{font-size:16px}
 #wpfb form{padding:20px 16px 20px}
-#wpfb .wpfb-tiles{gap:10px}
-#wpfb .wpfb-tile{min-height:112px;padding:15px 13px 13px;gap:12px;font-size:15px;border-radius:14px}
-#wpfb .wpfb-ico{width:26px;height:26px}
-#wpfb .wpfb-tick{top:11px;right:11px;width:22px;height:22px}
-#wpfb .wpfb-tick svg{width:22px;height:22px}
-#wpfb .wpfb-chip{font-size:15px;padding:10px 16px;min-height:46px}
+#wpfb textarea{min-height:150px;padding:16px 18px;font-size:17px}
+#wpfb .wpfb-bar{flex-direction:column-reverse;align-items:stretch}
+#wpfb .wpfb-hint{text-align:center}
 #wpfb .wpfb-yn{grid-template-columns:minmax(0,1fr)}
 #wpfb .wpfb-btn{width:100%}
 #wpfb .wpfb-actions{justify-content:center}
-#wpfb .wpfb-meta .wpfb-time{display:none}
 #wpfb .wpfb-foot{flex-direction:column;gap:12px}
 }
 @media (prefers-reduced-motion:reduce){#wpfb *{animation:none!important;transition:none!important}#wpfb .wpfb-check circle,#wpfb .wpfb-check path{stroke-dashoffset:0}}
 </style>
 <div class="wpfb-card">
 <div class="wpfb-head">
-<div class="wpfb-row"><p class="wpfb-hi" data-hi hidden></p><p class="wpfb-meta"><span data-meta>1 af 3</span><span class="wpfb-time" data-time data-t="time">ca. 20 sek.</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i><i></i></span></p></div>
+<div class="wpfb-row"><p class="wpfb-hi" data-hi hidden></p><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
 <div class="wpfb-hx" data-hx>
 <h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har vi ikke set dig i et stykke tid?</h2>
-<p class="wpfb-sub" data-sub>Ét klik er nok – resten er frivilligt.</p>
+<p class="wpfb-sub" data-sub>Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.</p>
 </div>
 </div>
 <form novalidate>
 <div class="wpfb-step" data-step="1">
-<div class="wpfb-tiles" role="radiogroup" aria-labelledby="wpfb-h" data-tiles>
-<label class="wpfb-tile"><input type="radio" name="reason" value="stock"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 13.5h7.5v7H3.5zM13 13.5h7.5v7H13zM8.25 5.5h7.5v7.5h-7.5z"/></svg><span class="wpfb-tl" data-t="r_stock">Vi har stadig lager</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="other_channel"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.75" y="2.75" width="10.5" height="18.5" rx="2.4"/><path d="M10.5 18h3"/></svg><span class="wpfb-tl"><span data-t="r_other_channel">Vi bestiller på en anden måde</span><small data-t="r_other_channel_hint">Telefon, mail eller en kollega</small></span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="competitor"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h14.5M15 4.5 18.5 8 15 11.5M20 16H5.5M9 12.5 5.5 16 9 19.5"/></svg><span class="wpfb-tl" data-t="r_competitor">Vi har fundet en anden leverandør</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="price"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.4V4.6c0-.6.5-1.1 1.1-1.1h7.8l8.2 8.2c.5.5.5 1.3 0 1.8l-7.2 7.2c-.5.5-1.3.5-1.8 0z"/><circle cx="8.1" cy="8.1" r="1.6"/></svg><span class="wpfb-tl" data-t="r_price">Prisen</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="delivery"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.75 6.25h11v9.5h-11zM13.75 9.75h4.2l3.3 3.4v2.6h-7.5"/><circle class="bg" cx="7" cy="17.25" r="2"/><circle class="bg" cx="17.25" cy="17.25" r="2"/></svg><span class="wpfb-tl" data-t="r_delivery">Leveringen</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="quality"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5.75"/><path d="M8.6 13.6 7.25 21 12 18.6l4.75 2.4-1.35-7.4M12 6.6l.75 1.55 1.7.25-1.22 1.2.29 1.7L12 10.5l-1.52.8.29-1.7-1.22-1.2 1.7-.25z"/></svg><span class="wpfb-tl" data-t="r_quality">Kvalitet eller logotryk</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="business_changed"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 10.5V20h15v-9.5M3 10.5 4.8 4h14.4l1.8 6.5zM9.5 20v-5.5h5V20M3 10.5c0 1.4 1.1 2.5 2.5 2.5S8 11.9 8 10.5c0 1.4 1.1 2.5 2.5 2.5h3c1.4 0 2.5-1.1 2.5-2.5 0 1.4 1.1 2.5 2.5 2.5S21 11.9 21 10.5"/></svg><span class="wpfb-tl" data-t="r_business_changed">Forretningen har ændret sig</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-<label class="wpfb-tile"><input type="radio" name="reason" value="other"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10.5L6 19.75V16H4z"/><path d="M8.6 10.5h.01M12 10.5h.01M15.4 10.5h.01" stroke-width="2.6"/></svg><span class="wpfb-tl" data-t="r_other">Noget andet</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
-</div>
-<div class="wpfb-actions" data-next1-box hidden><button class="wpfb-btn" type="submit"><span data-t="next">Næste</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+<label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har vi ikke set dig i et stykke tid?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
+<div class="wpfb-bar"><p class="wpfb-hint" data-t-html="hint">Under et minut. <b>Vi læser hvert eneste svar.</b></p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
 <div class="wpfb-step" data-step="2" hidden>
-<div class="wpfb-chips" data-chips aria-labelledby="wpfb-h"></div>
-<label class="wpfb-field"><span data-more>Vil du uddybe? (valgfrit)</span><textarea name="followup" maxlength="1500" data-ph></textarea></label>
-<div class="wpfb-actions"><button class="wpfb-btn" type="submit"><span data-t="next">Næste</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="wpfb-link" type="button" data-skip data-t="skip">Spring over</button></div>
-</div>
-<div class="wpfb-step" data-step="3" hidden>
+<p class="wpfb-quote" data-quote></p>
 <div class="wpfb-yn"><button class="wpfb-yes" type="button" data-contact="yes" aria-pressed="false" data-t="yes">Ja, gerne</button><button class="wpfb-no" type="button" data-contact="no" aria-pressed="false" data-t="no">Nej tak</button></div>
-<div class="wpfb-email" data-emailbox hidden><label class="wpfb-field"><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label><div class="wpfb-actions"><button class="wpfb-btn" type="submit"><span data-t="send">Send</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
+<div class="wpfb-email" data-emailbox hidden><label class="wpfb-field"><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label><div class="wpfb-actions"><button class="wpfb-btn" type="submit" data-send2><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
 </div>
-<div class="wpfb-step wpfb-done" data-step="4" hidden>
+<div class="wpfb-step wpfb-done" data-step="3" hidden>
 <svg class="wpfb-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m21 33 7.5 7.5L44 25"/></svg>
 <p data-done-text></p>
-<div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/dkk_dk_den/"><span data-t="done_shop">Til webshoppen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="wpfb-link" data-history href="/dkk_dk_den/sales/order/history/" hidden data-t="done_history">Genbestil fra din ordrehistorik</a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Ret mit svar</button></div>
+<div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/dkk_dk_den/"><span data-t="done_shop">Til webshoppen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Ret mit svar</button></div>
 </div>
 <div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="wpfb-err" role="alert" data-err hidden></p>
-<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Tilbage</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p></div>
+<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Ret svaret</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p></div>
 </form>
 </div>
 <script>
@@ -153,130 +120,67 @@
   var STR = {
     da: {
       hi: "Hej {firma}",
-      step: "{n} af 3",
-      time: "ca. 20 sek.",
+      step: "{n} af 2",
       done_meta: "Færdig",
       h1: "Hvorfor har vi ikke set dig i et stykke tid?",
-      sub1: "Ét klik er nok – resten er frivilligt.",
-      r_stock: "Vi har stadig lager",
-      r_other_channel: "Vi bestiller på en anden måde",
-      r_other_channel_hint: "Telefon, mail eller en kollega",
-      r_competitor: "Vi har fundet en anden leverandør",
-      r_price: "Prisen",
-      r_delivery: "Leveringen",
-      r_quality: "Kvalitet eller logotryk",
-      r_business_changed: "Forretningen har ændret sig",
-      r_other: "Noget andet",
-      next: "Næste",
-      q2_stock: "Hvornår regner du med at skulle bruge ny emballage?",
-      q2_other_channel: "Hvordan bestiller du i dag?",
-      q2_competitor: "Hvad gør de bedre end os?",
-      q2_price: "Hvad var for dyrt?",
-      q2_delivery: "Hvad gik galt?",
-      q2_quality: "Hvad skuffede dig?",
-      q2_business_changed: "Hvad er der sket?",
-      q2_other: "Hvad er grunden?",
-      sub2_one: "Tak – det hjælper. Vælg det, der passer bedst.",
-      sub2_many: "Tak – det hjælper. Vælg gerne flere.",
-      sub2_text: "Tak – et par ord er nok.",
-      c_stock: [["within_3m", "Inden for 3 måneder"], ["3_6m", "Om 3–6 måneder"], ["later", "Senere"], ["unknown", "Ved ikke endnu"]],
-      c_other_channel: [["phone", "Telefon"], ["email", "Mail"], ["colleague", "En kollegas konto"], ["dealer", "Gennem en forhandler"]],
-      c_competitor: [["price", "Lavere pris"], ["speed", "Hurtigere levering"], ["moq", "Lavere minimumsantal"], ["quality", "Bedre kvalitet"], ["range", "Et sortiment, vi manglede"], ["local", "En lokal leverandør"]],
-      c_price: [["products", "Produkterne"], ["logo", "Logotrykket"], ["freight", "Fragten"], ["moq", "Minimumsantallet"]],
-      c_delivery: [["slow", "For lang leveringstid"], ["late", "Kom for sent"], ["wrong", "Fejl i ordren"], ["freight", "Dyr fragt"]],
-      c_quality: [["product", "Produktet"], ["print", "Logotrykket"], ["damaged", "Skadet ved levering"], ["photo", "Så anderledes ud end på billedet"]],
-      c_business_changed: [["closed", "Lukket"], ["sold", "Solgt"], ["concept", "Nyt koncept eller sortiment"], ["smaller", "Mindre forretning"]],
-      more: "Vil du uddybe? (valgfrit)",
-      more_other: "Med dine egne ord",
-      placeholder: "Skriv her …",
-      skip: "Spring over",
-      h3: "Må vi vende tilbage til dig om det?",
-      sub3: "Sidste spørgsmål.",
+      sub1: "Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.",
+      placeholder: "Skriv dit svar her …",
+      hint: "Under et minut. <b>Vi læser hvert eneste svar.</b>",
+      send: "Send svar",
+      sending: "Sender …",
+      err_short: "Skriv gerne en hel sætning – så kan vi bruge dit svar.",
+      h2: "Må vi vende tilbage til dig om det?",
+      sub2: "Tak – det er præcis den slags, vi har brug for at vide.",
       yes: "Ja, gerne",
       no: "Nej tak",
       email_label: "Din e-mail, så vi ved, hvem vi skal svare",
-      send: "Send",
-      sending: "Sender …",
-      back: "Tilbage",
-      err_reason: "Vælg den grund, der passer bedst.",
+      back: "Ret svaret",
       err_send: "Svaret kunne ikke sendes. Prøv igen om et øjeblik.",
-      thanks: "Tak for hjælpen.",
+      thanks: "Tak for dit svar.",
       thanks_name: "Tak, {firma}.",
-      sub4: "Det var det hele. Vi læser hvert eneste svar.",
+      sub3: "Vi læser hvert eneste svar.",
       done_yes: "Vi vender tilbage til dig.",
       done_no: "Tak, fordi du tog dig tiden.",
       done_shop: "Til webshoppen",
-      done_history: "Genbestil fra din ordrehistorik",
       done_edit: "Ret mit svar",
       privacy: "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra."
     },
     en: {
       hi: "Hi {firma}",
-      step: "{n} of 3",
-      time: "about 20 sec.",
+      step: "{n} of 2",
       done_meta: "Done",
       h1: "Why haven't we seen you for a while?",
-      sub1: "One click is enough – the rest is optional.",
-      r_stock: "We still have stock",
-      r_other_channel: "We order another way",
-      r_other_channel_hint: "By phone, by email or via a colleague",
-      r_competitor: "We found another supplier",
-      r_price: "The price",
-      r_delivery: "The delivery",
-      r_quality: "Quality or logo print",
-      r_business_changed: "Our business has changed",
-      r_other: "Something else",
-      next: "Next",
-      q2_stock: "When do you expect to need new packaging?",
-      q2_other_channel: "How do you order today?",
-      q2_competitor: "What do they do better than us?",
-      q2_price: "What was too expensive?",
-      q2_delivery: "What went wrong?",
-      q2_quality: "What disappointed you?",
-      q2_business_changed: "What happened?",
-      q2_other: "What is the reason?",
-      sub2_one: "Thank you – that helps. Pick the one that fits best.",
-      sub2_many: "Thank you – that helps. Pick as many as you like.",
-      sub2_text: "Thank you – a few words are enough.",
-      c_stock: [["within_3m", "Within 3 months"], ["3_6m", "In 3–6 months"], ["later", "Later"], ["unknown", "Don't know yet"]],
-      c_other_channel: [["phone", "By phone"], ["email", "By email"], ["colleague", "A colleague's account"], ["dealer", "Through a reseller"]],
-      c_competitor: [["price", "Lower price"], ["speed", "Faster delivery"], ["moq", "Lower minimum order"], ["quality", "Better quality"], ["range", "A range we needed"], ["local", "A local supplier"]],
-      c_price: [["products", "The products"], ["logo", "The logo print"], ["freight", "The freight"], ["moq", "The minimum order"]],
-      c_delivery: [["slow", "Delivery time too long"], ["late", "Arrived too late"], ["wrong", "Mistakes in the order"], ["freight", "Expensive freight"]],
-      c_quality: [["product", "The product"], ["print", "The logo print"], ["damaged", "Damaged on arrival"], ["photo", "Looked different from the photo"]],
-      c_business_changed: [["closed", "Closed"], ["sold", "Sold"], ["concept", "New concept or range"], ["smaller", "Smaller business"]],
-      more: "Anything to add? (optional)",
-      more_other: "In your own words",
-      placeholder: "Write here …",
-      skip: "Skip",
-      h3: "May we get back to you about this?",
-      sub3: "Last question.",
+      sub1: "Tell us in your own words. The more specific, the better – one sentence is enough.",
+      placeholder: "Write your answer here …",
+      hint: "Under a minute. <b>We read every single answer.</b>",
+      send: "Send answer",
+      sending: "Sending …",
+      err_short: "A whole sentence would help – then we can use your answer.",
+      h2: "May we get back to you about this?",
+      sub2: "Thank you – that is exactly what we need to know.",
       yes: "Yes, please",
       no: "No, thanks",
       email_label: "Your email, so we know who to reply to",
-      send: "Send",
-      sending: "Sending …",
-      back: "Back",
-      err_reason: "Pick the reason that fits best.",
+      back: "Edit answer",
       err_send: "Your answer could not be sent. Please try again in a moment.",
-      thanks: "Thank you for your help.",
+      thanks: "Thank you for your answer.",
       thanks_name: "Thank you, {firma}.",
-      sub4: "That's all. We read every single answer.",
+      sub3: "We read every single answer.",
       done_yes: "We will get back to you.",
       done_no: "Thank you for taking the time.",
       done_shop: "Go to the webshop",
-      done_history: "Reorder from your order history",
       done_edit: "Change my answer",
       privacy: "Your answer is kept by Westpack and used only to help us do better. If you came here through a link from us, we can see which customer the answer is from."
     }
   };
   // Store path -> language. A store whose language is not in STR yet shows English.
   var STORE_LANG = { dkk_dk_den: "da", gbp_uk_eng: "en", eur_eu_eng: "en", usd_us_eng: "en", eur_eu_ger: "de", eur_eu_fra: "fr", eur_eu_ita: "it", eur_eu_spa: "es", eur_eu_ned: "nl", eur_eu_por: "pt", sek_se_swe: "sv", nok_no_nor: "nb", eur_eu_fin: "fi", pln_pl_pol: "pl", eur_eu_rou: "ro", eur_eu_cze: "cs", eur_eu_svk: "sk", eur_eu_hun: "hu" };
-  var SINGLE = { stock: 1 };
-  var REORDER = { stock: 1, other_channel: 1 };
+  // An answer needs this many letters (spaces not counted) to be a sentence we can use.
+  var MIN_CHARS = 12;
   var seg = (location.pathname.split("/")[1] || "").toLowerCase();
   var store = STORE_LANG[seg] ? seg : "";
-  var L = STR[store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2)] ? (store ? STORE_LANG[store] : document.documentElement.lang.slice(0, 2)) : "en";
+  var want = store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2);
+  var L = STR[want] ? want : "en";
   var T = STR[L];
   var api = root.getAttribute("data-api");
   var started = Date.now();
@@ -300,138 +204,89 @@
     sid = ""; for (var i = 0; i < 16; i++) sid += abc[b[i] % 36];
     mem.set("wpfb-sid", sid);
   }
-  var S = { reason: "", details: [], followup: "", contact: "", email: "", step: 1, firma: "" };
-  var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.4 3.6 3.6L18 7.8"/></svg>';
+  var S = { text: "", contact: "", email: "", step: 1, firma: "" };
+  var ta = q("textarea[name=answer]");
 
   qa("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (typeof T[k] === "string") el.textContent = T[k]; });
-  if (store) {
-    q("[data-shop]").setAttribute("href", "/" + store + "/");
-    q("[data-history]").setAttribute("href", "/" + store + "/sales/order/history/");
-  }
+  qa("[data-t-html]").forEach(function (el) { el.innerHTML = T[el.getAttribute("data-t-html")]; });
+  ta.setAttribute("placeholder", T.placeholder);
+  if (store) q("[data-shop]").setAttribute("href", "/" + store + "/");
 
+  function letters(s) { return String(s || "").replace(/\s/g, "").length; }
   function payload(step) {
-    return { k: token, sid: sid, store: store, lang: L, reason: S.reason, details: S.details, followup: S.followup, contact: S.contact, email: S.email, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
+    return { k: token, sid: sid, store: store, lang: L, followup: S.text, contact: S.contact, email: S.email, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
   }
   function save(step) {
-    if (!api || !window.fetch || !S.reason) return Promise.reject(new Error("no"));
+    if (!api || !window.fetch || letters(S.text) < 3) return Promise.reject(new Error("no"));
     return fetch(api + "?action=submit", { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload(step)), keepalive: true })
       .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); });
   }
-  function quiet(p) { p.catch(function () {}); }
-
   function restart(el) { el.classList.remove("is-in"); void el.offsetWidth; el.classList.add("is-in"); }
   function head(n) {
     var h = q("[data-h]"), sub = q("[data-sub]");
     if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
-    if (n === 2) { h.textContent = T["q2_" + S.reason]; sub.textContent = S.reason === "other" ? T.sub2_text : SINGLE[S.reason] ? T.sub2_one : T.sub2_many; }
-    if (n === 3) { h.textContent = T.h3; sub.textContent = T.sub3; }
-    if (n === 4) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma) : T.thanks; sub.textContent = T.sub4; }
-    q("[data-meta]").textContent = n < 4 ? T.step.replace("{n}", n) : T.done_meta;
-    q("[data-time]").hidden = n !== 1;
-    qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 3)); });
+    if (n === 2) { h.textContent = T.h2; sub.textContent = T.sub2; }
+    if (n === 3) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma) : T.thanks; sub.textContent = T.sub3; }
+    q("[data-meta]").textContent = n < 3 ? T.step.replace("{n}", n) : T.done_meta;
+    qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 2)); });
   }
   function go(n, silent) {
     S.step = n;
     qa("[data-step]").forEach(function (s) { var on = +s.getAttribute("data-step") === n; s.hidden = !on; if (on && !silent) restart(s); });
     head(n);
     if (!silent) restart(q("[data-hx]"));
-    q("[data-back]").hidden = !(n === 2 || n === 3);
+    q("[data-back]").hidden = n !== 2;
     q("[data-err]").hidden = true;
     if (silent) return;
-    var h = q("[data-h]");
-    try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+    var target = n === 1 ? ta : q("[data-h]");
+    try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
     var top = root.getBoundingClientRect().top;
     if (top < 0) window.scrollTo({ top: window.pageYOffset + top - 100, behavior: reduce ? "auto" : "smooth" });
   }
   function err(msg) { var e = q("[data-err]"); e.textContent = msg; e.hidden = false; }
+  // The field grows with the answer, so a long answer never hides behind a scrollbar.
+  function grow() { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 2, 420) + "px"; }
+  function ready() { q("[data-send1]").classList.toggle("is-idle", letters(ta.value) < MIN_CHARS); }
 
-  function markTiles() { qa(".wpfb-tile").forEach(function (t) { t.classList.toggle("is-on", t.querySelector("input").checked); }); }
-  function markChips() { qa(".wpfb-chip").forEach(function (c) { c.classList.toggle("is-on", c.querySelector("input").checked); }); }
-  function buildChips() {
-    var box = q("[data-chips]"), list = T["c_" + S.reason] || [], one = !!SINGLE[S.reason];
-    box.innerHTML = "";
-    box.hidden = !list.length;
-    box.setAttribute("role", one ? "radiogroup" : "group");
-    list.forEach(function (c) {
-      var l = document.createElement("label"), inp = document.createElement("input"), s = document.createElement("span");
-      l.className = "wpfb-chip"; inp.type = one ? "radio" : "checkbox"; inp.name = "detail"; inp.value = c[0];
-      inp.checked = S.details.indexOf(c[0]) > -1; s.textContent = c[1];
-      l.appendChild(inp); l.insertAdjacentHTML("beforeend", CHECK); l.appendChild(s); box.appendChild(l);
-    });
-    markChips();
-    var ta = q("textarea[name=followup]");
-    q("[data-more]").textContent = S.reason === "other" ? T.more_other : T.more;
-    ta.setAttribute("placeholder", T.placeholder);
-    ta.value = S.followup;
-  }
-
-  var advance = 0, pending = 0;
-  function toTwo() {
-    if (!S.reason) { err(T.err_reason); return; }
-    clearTimeout(pending); clearTimeout(advance);
-    quiet(save(1));
-    buildChips();
+  function sendText() {
+    S.text = ta.value.trim();
+    if (letters(S.text) < MIN_CHARS) { err(T.err_short); ta.focus(); return; }
+    q("[data-quote]").textContent = S.text;
+    save(1).catch(function () {});
     go(2);
   }
-  function toThree() { S.followup = q("textarea[name=followup]").value; quiet(save(2)); go(3); }
   function finish(btn) {
     var label = btn ? btn.innerHTML : "";
-    qa("[data-step='3'] button").forEach(function (b) { b.disabled = true; });
+    qa("[data-step='2'] button").forEach(function (x) { x.disabled = true; });
     if (btn) btn.textContent = T.sending;
     save(3).then(function () {
       mem.set("wpfb-done-" + (token || sid), "1");
       q("[data-done-text]").textContent = S.contact === "yes" ? T.done_yes : T.done_no;
-      q("[data-history]").hidden = !REORDER[S.reason];
-      go(4);
+      go(3);
     }).catch(function () { err(T.err_send); }).then(function () {
-      qa("[data-step='3'] button").forEach(function (b) { b.disabled = false; });
+      qa("[data-step='2'] button").forEach(function (x) { x.disabled = false; });
       if (btn) btn.innerHTML = label;
     });
   }
 
-  root.addEventListener("change", function (e) {
-    var t = e.target;
-    if (t.name === "reason") {
-      if (S.reason !== t.value) S.details = [];
-      S.reason = t.value;
-      markTiles();
-      q("[data-next1-box]").hidden = false;
-      q("[data-err]").hidden = true;
-      clearTimeout(pending);
-      pending = setTimeout(function () { quiet(save(1)); }, 700);
-    }
-    if (t.name === "detail") {
-      S.details = qa("input[name=detail]:checked").map(function (x) { return x.value; });
-      markChips();
-    }
-  });
-  // A tap or click on a reason moves on by itself; arrow keys only select, so a keyboard user is never carried off.
-  q("[data-tiles]").addEventListener("pointerup", function (e) {
-    var tile = e.target.closest && e.target.closest(".wpfb-tile");
-    if (!tile || e.button > 0) return;
-    var v = tile.querySelector("input").value;
-    clearTimeout(advance);
-    advance = setTimeout(function () { if (S.step === 1 && S.reason === v) toTwo(); }, reduce ? 150 : 480);
-  });
+  ta.addEventListener("input", function () { grow(); ready(); if (letters(ta.value) >= MIN_CHARS) q("[data-err]").hidden = true; });
+  ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendText(); } });
   root.addEventListener("click", function (e) {
     var t = e.target.closest ? e.target.closest("button") : null;
     if (!t || !root.contains(t)) return;
-    if (t.hasAttribute("data-skip")) { toThree(); }
-    if (t.hasAttribute("data-back")) { go(S.step === 3 ? 2 : 1); if (S.step === 2) buildChips(); }
-    if (t.hasAttribute("data-edit")) { go(1); markTiles(); }
+    if (t.hasAttribute("data-back") || t.hasAttribute("data-edit")) { go(1); ta.value = S.text; grow(); ready(); }
     var c = t.getAttribute("data-contact");
     if (c) {
       S.contact = c;
-      qa("[data-contact]").forEach(function (b) { b.setAttribute("aria-pressed", String(b === t)); });
+      qa("[data-contact]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === t)); });
       if (c === "yes" && (!token || isTest)) { q("[data-emailbox]").hidden = false; q("input[name=email]").focus(); }
       else { q("[data-emailbox]").hidden = true; finish(t); }
     }
   });
   q("form").addEventListener("submit", function (e) {
     e.preventDefault();
-    if (S.step === 1) toTwo();
-    else if (S.step === 2) toThree();
-    else if (S.step === 3) { S.email = q("input[name=email]").value; finish(q("[data-emailbox] .wpfb-btn")); }
+    if (S.step === 1) sendText();
+    else if (S.step === 2) { S.email = q("input[name=email]").value; finish(q("[data-send2]")); }
   });
 
   if (token && !isTest && api && window.fetch) {
@@ -439,11 +294,11 @@
       if (!j || !j.known || !j.firma) return;
       S.firma = j.firma;
       var hi = q("[data-hi]"); hi.textContent = T.hi.replace("{firma}", j.firma); hi.hidden = false;
-      if (S.step === 4) head(4);
+      if (S.step === 3) head(3);
     }).catch(function () {});
   }
-  if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(4, true); }
-  else go(1, true);
+  if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(3, true); }
+  else { go(1, true); ready(); }
 })();
 </script>
 </div>

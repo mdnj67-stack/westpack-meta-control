@@ -51,6 +51,7 @@ function detailLine(r) {
 }
 
 function reasonLabel(id) {
+  if (!id) return "Written answer";
   return state.data?.reasons?.find((r) => r.id === id)?.label || id;
 }
 
@@ -89,7 +90,7 @@ function answerRows() {
 // The post saves after every question, so an answer can stop after the reason (1) or the follow-up (2).
 function stepNote(a) {
   const step = a.step || 3;
-  return step >= 3 ? "" : `<br><span class="survey-muted">Stopped after question ${step}</span>`;
+  return step >= 3 ? "" : `<br><span class="survey-muted">${a.reason ? `Stopped after question ${step}` : "Did not answer the contact question"}</span>`;
 }
 
 function renderAnswers() {
@@ -143,11 +144,11 @@ function render() {
   const max = Math.max(1, ...state.data.reasons.map((r) => r.count));
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
-    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted · ${t.finished} answered all three questions</p>
-    <div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
+    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted · ${t.finished} finished</p>
+    ${state.data.reasons.some((r) => r.count) ? `<div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>
-      <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}${detailLine(r)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers ? Math.round((r.count / t.answers) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
-    </table></div>
+      <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}${detailLine(r)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers - (t.written || 0) ? Math.round((r.count / (t.answers - (t.written || 0))) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
+    </table></div>` : ""}
     <div class="signup-toolbar survey-toolbar">
       <div class="wp-tabs" role="tablist">
         <button type="button" role="tab" class="wp-tab" aria-selected="${state.tab === "answers"}" data-survey-tab="answers">Answers</button>

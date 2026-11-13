@@ -135,15 +135,11 @@ test("the blog block can be pasted into Magento and posts to the survey route", 
   for (const rule of css.replace(/@(container|media)[^{]*\{/g, "").split("}").map((s) => s.split("{")[0].trim()).filter(Boolean)) {
     for (const sel of rule.split(",")) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
   }
-  // every reason on the page is one the server accepts
-  const values = [...html.matchAll(/name="reason" value="([a-z_]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(values, survey.REASONS.map((r) => r.id));
   // every language has every string
   const strBlock = html.match(/var STR = (\{[\s\S]*?\n  \});/)[1];
   const STR = Function(`return ${strBlock}`)();
   const keys = Object.keys(STR.da).sort();
   for (const [lang, table] of Object.entries(STR)) assert.deepEqual(Object.keys(table).sort(), keys, `${lang} has every string`);
-  for (const id of values) { assert.ok(STR.da[`r_${id}`]); assert.ok(STR.da[`q2_${id}`]); }
 });
 
 test("the app view is reachable from the Klaviyo rail", () => {
@@ -182,16 +178,23 @@ test("a visit saved after every question is one answer, on its latest save", () 
   assert.deepEqual(s.answers.find((a) => a.sid === "visit0001aa").detailLabels, ["Lower price", "Lower minimum order"]);
 });
 
-test("the post offers exactly the server's one-tap answers, in every language", () => {
+test("the post asks for a written answer: no options to pick, and words are required", () => {
   const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
-  const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
-  for (const [lang, t] of Object.entries(STR)) {
-    for (const r of survey.REASONS) {
-      assert.deepEqual((t[`c_${r.id}`] || []).map((c) => c[0]), r.details.map((d) => d.id), `${lang} ${r.id}`);
-      assert.ok(t[`q2_${r.id}`], `${lang} q2_${r.id}`);
-    }
-  }
-  assert.match(html, /SINGLE = \{ stock: 1 \}/, "the post and the server agree that stock takes one answer");
-  assert.ok(survey.REASONS.find((r) => r.id === "stock").single);
+  // the user, 2026-11-13: "skrevne og specifikke svar ... har mere værdi" - nothing to choose from instead of writing
+  assert.equal(/name="reason"|name="detail"|wpfb-tile|wpfb-chip/.test(html), false, "no options to pick");
+  assert.match(html, /<textarea name="answer"/);
+  assert.match(html, /followup: S\.text/, "the words are sent as the answer");
+  assert.match(html, /MIN_CHARS = \d+/, "a sentence is asked for before it can be sent");
   assert.match(html, /keepalive: true/, "a save survives the visitor leaving the page");
+  // no example answers: examples get copied instead of the customer's own reason
+  const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
+  assert.equal(/fx |e\.g\.|for example/i.test(STR.da.placeholder + STR.en.placeholder), false);
+  // the server takes an answer without a reason, but never one without words
+  const written = survey.sanitizeSubmission({ followup: "Vi fandt en leverandør med lavere minimum", sid: "visit0003cc", step: 1, ms: 30000 });
+  assert.equal(written.record.reason, "");
+  assert.equal(written.record.followup, "Vi fandt en leverandør med lavere minimum");
+  assert.ok(survey.sanitizeSubmission({ followup: "  ", ms: 30000 }).error);
+  const s = survey.summarize({ responses: [written.record] });
+  assert.equal(s.totals.written, 1);
+  assert.equal(s.reasons.every((r) => r.count === 0), true, "a written answer is not counted under any reason");
 });

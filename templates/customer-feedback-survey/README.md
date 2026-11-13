@@ -1,22 +1,21 @@
 # Kundeundersøgelse – hvorfor har vi ikke set dig i et år? (blogindlæg)
 
-Et kort spørgeskema på bloggen til kunder, der ikke har bestilt i webshoppen det seneste år. Det er lavet til folk, der
-ikke vil bruge ret meget tid på os: **ét klik er nok**, og resten er frivilligt. Det tager ca. 20 sekunder, og man ser
-ét spørgsmål ad gangen i et kort med "1 af 3" øverst.
+Et kort spørgeskema på bloggen til kunder, der ikke har bestilt i webshoppen det seneste år. **Kunden svarer med egne
+ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og specifikke svar så har det
+mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen i et kort med "1 af 2" øverst.
 
-1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Otte felter med ikon og kort tekst: lager, bestiller på en anden
-   måde, anden leverandør, prisen, leveringen, kvalitet eller logotryk, forretningen har ændret sig, noget andet.
-   **Svaret gemmes i det øjeblik, man trykker**, og så går skemaet selv videre. Den, der stopper der, har givet os det
-   vigtigste.
-2. **Et opfølgende spørgsmål, der passer til grunden. Det kan besvares med ét tryk.** Fx "Hvad gør de bedre end os?"
-   med Lavere pris, Hurtigere levering, Lavere minimumsantal, Bedre kvalitet, Et sortiment, vi manglede og En lokal
-   leverandør. Eller "Hvornår regner du med at skulle bruge ny emballage?" med Inden for 3 måneder, Om 3–6 måneder,
-   Senere og Ved ikke endnu. Der er også et frivilligt tekstfelt, og man kan springe spørgsmålet over.
-3. **"Må vi vende tilbage til dig om det?"** Ja eller nej med ét tryk.
+1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Et stort tekstfelt. Under overskriften står: "Skriv det med dine
+   egne ord. Jo mere konkret, jo bedre – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
+   først, når der står en sætning (mindst 12 bogstaver). **Svaret gemmes, så snart man trykker Send**, så det er med,
+   selv om man stopper der. Der er bevidst ingen eksempelsvar, for folk skriver eksemplet af i stedet for deres egen
+   grund.
+2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej, med ét tryk.
 
-Til sidst takker skemaet med firmanavnet. Har kunden svaret "lager" eller "bestiller på en anden måde", får de et link
-til at genbestille fra deres ordrehistorik. Udtrykket er bloggens eget: dyb grøn, havre og champagne, Instrument Serif
-og Jost, som i W47-indlægget.
+Til sidst takker skemaet med firmanavnet. Udtrykket er bloggens eget: dyb grøn, havre og champagne, Instrument Serif og
+Jost, som i W47-indlægget.
+
+**Titlen på indlægget ses af kunden.** Den står med rødt over kortet og i brødkrummen. Kald det ikke "Churn survey".
+Brug "Vi vil gerne høre fra dig" og på engelsk "We'd like to hear from you".
 
 Svarene gemmes i biblens eget lager (Vercel Blob) og kan læses under **Klaviyo email → Customer survey**. Der ser du
 også hver kundes personlige link, og hvem der har svaret. Intet bliver skrevet til Klaviyo, Magento eller Navision.
@@ -75,10 +74,12 @@ feltet helt, og sæt filen ind igen.
 
 - **En kunde tæller én gang.** Svaret gemmes efter hvert spørgsmål, men ét besøg er ét svar. En kunde med personligt
   link tæller én gang, også på tværs af besøg og enheder, og det er det nyeste svar, der gælder. I biblen står der
-  "Stopped after question 1", hvis en kunde ikke gik videre efter første tryk.
+  "Did not answer the contact question", hvis en kunde skrev sit svar, men ikke svarede på det sidste spørgsmål.
 - **Genindlæser kunden siden** efter at have svaret, ser de takken med "Ret mit svar" i stedet for skemaet igen.
-- **Tastatur:** Piletasterne vælger en grund uden at gå videre, Enter går videre, og fokus flytter til næste spørgsmål.
-  Et tryk eller klik går selv videre.
+  "Ret svaret" på spørgsmål 2 går tilbage til teksten, uden at den forsvinder.
+- **Tastatur:** Ctrl+Enter (Cmd+Enter på Mac) sender svaret, og fokus flytter til næste spørgsmål.
+- **Svar fra den første version** (med svarmuligheder) står stadig i biblen med deres grund. Tabellen med grunde vises
+  kun, når der er sådanne svar.
 - **Beskyttelse mod spam.** Der er et skjult felt, som kun robotter udfylder. Desuden bliver et svar, der er sendt
   hurtigere end 1,2 sekunder efter, at siden blev åbnet, ignoreret.
 - **Går serveren ned,** står kunden stadig på sidste spørgsmål med en fejlbesked og kan prøve igen.
