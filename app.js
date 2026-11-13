@@ -12,6 +12,7 @@ import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.
 import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261030-agents1";
 import { initSignupLab, showSignupLabView, signupLabViewFromHash, leaveSignupLab } from "./src/signup-lab.js?v=20261030-signuplab1";
 import { loadKlaviyoSignupForms } from "./src/klaviyo-signup-forms.js?v=20261030-signupforms1";
+import { loadCustomerSurvey } from "./src/customer-survey.js?v=20261113-survey1";
 import { attachChartHover, timeSeriesChart, sparkline } from "./src/chart.js?v=20260921-chart1";
 import {
   adaptationGoals,
@@ -50,7 +51,7 @@ import {
 } from "./src/klaviyo-template-domain.js?v=20261027-klaviyotemplatedomain2";
 import {
   createKlaviyoDashboardDomain
-} from "./src/klaviyo-dashboard-domain.js?v=20261030-klaviyodashboarddomain3";
+} from "./src/klaviyo-dashboard-domain.js?v=20261113-klaviyodashboarddomain4";
 import {
   createMetaMasterArtifactDraft,
   createMetaMasterCardDrafts,
@@ -4245,7 +4246,7 @@ function getKlaviyoSourceLabel() {
 }
 
 function setKlaviyoView(nextView = "overview") {
-  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer", "subject_lines", "signup_forms"].includes(nextView) ? nextView : "dashboard";
+  const requestedView = ["dashboard", "duplicate_translate", "campaign_ai", "campaign_brain", "canva_localizer", "subject_lines", "signup_forms", "customer_survey"].includes(nextView) ? nextView : "dashboard";
   appState.klaviyoView = requestedView;
   document.querySelectorAll("[data-klaviyo-view]").forEach((button) => {
     button.classList.toggle("active", button.dataset.klaviyoView === appState.klaviyoView);
@@ -4257,8 +4258,12 @@ function setKlaviyoView(nextView = "overview") {
   document.getElementById("klaviyo-canva-localizer-panel")?.classList.toggle("active", appState.klaviyoView === "canva_localizer");
   document.getElementById("klaviyo-subject-lines-panel")?.classList.toggle("active", appState.klaviyoView === "subject_lines");
   document.getElementById("klaviyo-signup-forms-panel")?.classList.toggle("active", appState.klaviyoView === "signup_forms");
+  document.getElementById("klaviyo-customer-survey-panel")?.classList.toggle("active", appState.klaviyoView === "customer_survey");
   if (appState.klaviyoView === "signup_forms") {
     loadKlaviyoSignupForms();
+  }
+  if (appState.klaviyoView === "customer_survey") {
+    loadCustomerSurvey();
   }
   if (appState.klaviyoView === "subject_lines") {
     loadSubjectLines();

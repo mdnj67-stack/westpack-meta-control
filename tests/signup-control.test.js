@@ -386,9 +386,9 @@ test("the Signup Lab is a group of its own - Control, Signups, Preview - and Kla
   assert.match(app, /getElementById\("signup-product-panel"\)\?\.classList\.toggle\("active", appState\.workspace === "signup"\)/);
   assert.match(app, /if \(appState\.workspace === "signup"\) \{\r?\n\s+showSignupLabView\(appState\.signupView\);\r?\n\s+\} else \{\r?\n\s+leaveSignupLab\(\);/);
   // the Klaviyo view is known to both lists that decide which Klaviyo views exist, or the rail and the page disagree
-  assert.match(app, /"subject_lines", "signup_forms"\]\.includes\(nextView\)/);
+  assert.match(app, /"subject_lines", "signup_forms"(, "[a-z_]+")*\]\.includes\(nextView\)/);
   assert.match(app, /getElementById\("klaviyo-signup-forms-panel"\)\?\.classList\.toggle\("active", appState\.klaviyoView === "signup_forms"\)/);
-  assert.match(read("src/klaviyo-dashboard-domain.js"), /"subject_lines", "signup_forms"\]\.includes\(appState\.klaviyoView\)/);
+  assert.match(read("src/klaviyo-dashboard-domain.js"), /"subject_lines", "signup_forms"(, "[a-z_]+")*\]\.includes\(appState\.klaviyoView\)/);
   // the address opens it: set before initializeApp opens the workspace
   assert.match(app, /const signupLabView = signupLabViewFromHash\(window\.location\.hash\);\r?\n\s+if \(signupLabView\) \{\r?\n\s+appState\.workspace = "signup";/);
   // the rail may show one current item: the Signup Lab clears the platform groups' highlight like Agents does

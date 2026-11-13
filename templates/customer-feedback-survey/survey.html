@@ -1,0 +1,244 @@
+<div id="wpfb" data-api="https://project-4fcxa.vercel.app/api/survey">
+<style>
+#wpfb{--g:#34453f;--g2:#2a3833;--cream:#f6f2eb;--line:#d8d1c4;--ink:#1e2622;--mute:#5a625e;--err:#a3392a;container-type:inline-size;color:var(--ink);font-family:inherit;line-height:1.5;margin:0 0 2rem}
+#wpfb *{box-sizing:border-box}
+#wpfb .wpfb-card{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:28px 32px}
+#wpfb .wpfb-kicker{margin:0 0 6px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);font-weight:600}
+#wpfb .wpfb-to{margin:0 0 10px;font-size:20px;font-weight:600;color:var(--g)}
+#wpfb .wpfb-lead{margin:0 0 24px;font-size:17px;max-width:62ch}
+#wpfb form{margin:0}
+#wpfb fieldset{border:0;margin:0 0 26px;padding:0;min-width:0}
+#wpfb legend{display:flex;gap:12px;align-items:flex-start;font-size:18px;font-weight:600;line-height:1.35;margin:0 0 14px;padding:0}
+#wpfb .wpfb-n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--g);color:#fff;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:lining-nums;margin-top:-1px}
+#wpfb .wpfb-opts{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@container (min-width:560px){#wpfb .wpfb-opts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#wpfb .wpfb-opt{position:relative;display:flex;gap:12px;align-items:flex-start;min-height:52px;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:16px;line-height:1.35;transition:border-color .15s,box-shadow .15s}
+#wpfb .wpfb-opt:hover{border-color:var(--g)}
+#wpfb .wpfb-opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+#wpfb .wpfb-dot{flex:0 0 20px;height:20px;border-radius:50%;border:2px solid #9aa19d;background:#fff;margin-top:1px;transition:border-color .15s,box-shadow .15s}
+#wpfb .wpfb-opt.is-on{border-color:var(--g);box-shadow:inset 0 0 0 1px var(--g)}
+#wpfb .wpfb-opt.is-on .wpfb-dot{border-color:var(--g);box-shadow:inset 0 0 0 4px #fff;background:var(--g)}
+#wpfb .wpfb-opt:focus-within{outline:3px solid rgba(52,69,63,.35);outline-offset:2px}
+#wpfb .wpfb-opt small{display:block;color:var(--mute);font-size:14px;margin-top:2px}
+#wpfb .wpfb-yn{display:flex;gap:8px;flex-wrap:wrap}
+#wpfb .wpfb-yn .wpfb-opt{flex:1 1 160px}
+#wpfb .wpfb-field{display:block;margin-top:10px}
+#wpfb .wpfb-field span{display:block;font-size:15px;color:var(--mute);margin-bottom:6px}
+#wpfb input[type=text],#wpfb input[type=email],#wpfb textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:0}
+#wpfb textarea{min-height:110px;resize:vertical}
+#wpfb input:focus,#wpfb textarea:focus{outline:3px solid rgba(52,69,63,.35);outline-offset:1px;border-color:var(--g)}
+#wpfb .wpfb-hint{margin:6px 0 0;font-size:14px;color:var(--mute)}
+#wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#wpfb .wpfb-err{margin:0 0 14px;color:var(--err);font-weight:600;font-size:16px}
+#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 28px;border:0;border-radius:8px;background:var(--g);color:#fff;font:inherit;font-size:17px;font-weight:600;cursor:pointer;text-decoration:none}
+#wpfb .wpfb-btn:hover{background:var(--g2);color:#fff}
+#wpfb .wpfb-btn[disabled]{opacity:.6;cursor:default}
+#wpfb .wpfb-btn:focus-visible{outline:3px solid rgba(52,69,63,.45);outline-offset:3px}
+#wpfb .wpfb-privacy{margin:16px 0 0;font-size:14px;color:var(--mute);max-width:62ch}
+#wpfb .wpfb-done h3{margin:0 0 8px;font-size:24px;color:var(--g)}
+#wpfb .wpfb-done p{margin:0 0 18px;font-size:17px}
+#wpfb .wpfb-done:focus{outline:none}
+#wpfb [hidden]{display:none!important}
+@container (max-width:420px){#wpfb .wpfb-card{padding:20px 16px}#wpfb legend{font-size:17px}#wpfb .wpfb-btn{width:100%}}
+@media (prefers-reduced-motion:reduce){#wpfb *{transition:none!important}}
+</style>
+<div class="wpfb-card">
+<div data-form>
+<p class="wpfb-kicker" data-t="kicker">Tre korte spørgsmål – under et minut</p>
+<p class="wpfb-to" data-to hidden></p>
+<p class="wpfb-lead" data-t="lead">Det er et stykke tid siden, vi har set dig i webshoppen. Det kan der være mange gode grunde til – og vi vil gerne kende din, så vi kan blive bedre.</p>
+<form novalidate>
+<fieldset>
+<legend><span class="wpfb-n">1</span><span data-t="q1">Hvad er den vigtigste grund til, at du ikke har bestilt hos os det seneste år?</span></legend>
+<div class="wpfb-opts">
+<label class="wpfb-opt"><input type="radio" name="reason" value="stock"><span class="wpfb-dot"></span><span data-t="r_stock">Vi har stadig emballage nok på lager</span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="other_channel"><span class="wpfb-dot"></span><span><span data-t="r_other_channel">Vi bestiller stadig hos Westpack – bare på en anden måde</span><small data-t="r_other_channel_hint">Telefon, mail eller en anden konto</small></span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="competitor"><span class="wpfb-dot"></span><span data-t="r_competitor">Vi er skiftet til en anden leverandør</span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="price"><span class="wpfb-dot"></span><span data-t="r_price">Prisen</span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="delivery"><span class="wpfb-dot"></span><span data-t="r_delivery">Levering eller leveringstid</span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="quality"><span class="wpfb-dot"></span><span data-t="r_quality">Kvaliteten eller logotrykket</span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="business_changed"><span class="wpfb-dot"></span><span><span data-t="r_business_changed">Vores forretning har ændret sig</span><small data-t="r_business_changed_hint">Fx lukket, solgt eller nyt koncept</small></span></label>
+<label class="wpfb-opt"><input type="radio" name="reason" value="other"><span class="wpfb-dot"></span><span data-t="r_other">Andet</span></label>
+</div>
+<label class="wpfb-field" data-other hidden><span data-t="other_label">Hvad er grunden?</span><input type="text" name="other" maxlength="200" autocomplete="off"></label>
+</fieldset>
+<fieldset data-q2 hidden>
+<legend><span class="wpfb-n">2</span><span data-q2-label></span></legend>
+<textarea name="followup" maxlength="1500" aria-describedby="wpfb-q2-hint"></textarea>
+<p class="wpfb-hint" id="wpfb-q2-hint" data-t="q2_hint">Valgfrit – et par ord er nok.</p>
+</fieldset>
+<fieldset>
+<legend><span class="wpfb-n" data-q3-n>2</span><span data-t="q3">Må vi kontakte dig om dit svar?</span></legend>
+<div class="wpfb-yn">
+<label class="wpfb-opt"><input type="radio" name="contact" value="yes"><span class="wpfb-dot"></span><span data-t="yes">Ja, gerne</span></label>
+<label class="wpfb-opt"><input type="radio" name="contact" value="no"><span class="wpfb-dot"></span><span data-t="no">Nej tak</span></label>
+</div>
+<label class="wpfb-field" data-email hidden><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label>
+</fieldset>
+<div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
+<p class="wpfb-err" role="alert" data-err hidden></p>
+<button class="wpfb-btn" type="submit" data-submit data-t="submit">Send mit svar</button>
+<p class="wpfb-privacy" data-t="privacy">Vi gemmer dit svar hos Westpack og bruger det kun til at blive bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p>
+</form>
+</div>
+<div class="wpfb-done" data-done tabindex="-1" hidden>
+<h3 data-t="done_title">Tak for dit svar</h3>
+<p><span data-t="done_body">Vi læser hvert eneste svar.</span> <span data-done-contact hidden data-t="done_contact">Vi vender tilbage til dig.</span></p>
+<a class="wpfb-btn" data-shop href="/dkk_dk_den/" data-t="done_link">Til webshoppen</a>
+</div>
+</div>
+<script>
+(function () {
+  var root = document.getElementById("wpfb");
+  if (!root || root.getAttribute("data-ready")) return;
+  root.setAttribute("data-ready", "1");
+  var STR = {
+    da: {
+      kicker: "Tre korte spørgsmål – under et minut",
+      to: "Til {firma}",
+      lead: "Det er et stykke tid siden, vi har set dig i webshoppen. Det kan der være mange gode grunde til – og vi vil gerne kende din, så vi kan blive bedre.",
+      q1: "Hvad er den vigtigste grund til, at du ikke har bestilt hos os det seneste år?",
+      r_stock: "Vi har stadig emballage nok på lager",
+      r_other_channel: "Vi bestiller stadig hos Westpack – bare på en anden måde",
+      r_other_channel_hint: "Telefon, mail eller en anden konto",
+      r_competitor: "Vi er skiftet til en anden leverandør",
+      r_price: "Prisen",
+      r_delivery: "Levering eller leveringstid",
+      r_quality: "Kvaliteten eller logotrykket",
+      r_business_changed: "Vores forretning har ændret sig",
+      r_business_changed_hint: "Fx lukket, solgt eller nyt koncept",
+      r_other: "Andet",
+      other_label: "Hvad er grunden?",
+      q2_stock: "Hvornår regner du med at skulle bruge ny emballage?",
+      q2_other_channel: "Hvordan bestiller du i dag? Så retter vi det hos os.",
+      q2_competitor: "Hvad gør den nye leverandør bedre end os?",
+      q2_price: "Hvad skulle der til, for at du bestilte hos os igen?",
+      q2_delivery: "Hvad gik galt – eller hvad havde du brug for?",
+      q2_quality: "Hvad levede ikke op til det, du forventede?",
+      q2_business_changed: "Hvad har I brug for i dag?",
+      q2_other: "Hvad skulle der til, for at du bestilte hos os igen?",
+      q2_hint: "Valgfrit – et par ord er nok.",
+      q3: "Må vi kontakte dig om dit svar?",
+      yes: "Ja, gerne",
+      no: "Nej tak",
+      email_label: "Din e-mail, så vi ved, hvem vi skal svare",
+      submit: "Send mit svar",
+      sending: "Sender …",
+      err_reason: "Vælg den vigtigste grund i spørgsmål 1.",
+      err_send: "Svaret kunne ikke sendes. Prøv igen om lidt.",
+      privacy: "Vi gemmer dit svar hos Westpack og bruger det kun til at blive bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.",
+      done_title: "Tak for dit svar",
+      done_body: "Vi læser hvert eneste svar.",
+      done_contact: "Vi vender tilbage til dig.",
+      done_link: "Til webshoppen"
+    },
+    en: {
+      kicker: "Three short questions – under a minute",
+      to: "For {firma}",
+      lead: "It has been a while since we last saw you in our webshop. There can be plenty of good reasons for that – and we would like to know yours, so we can do better.",
+      q1: "What is the main reason you have not ordered from us in the past year?",
+      r_stock: "We still have enough packaging in stock",
+      r_other_channel: "We still order from Westpack – just in a different way",
+      r_other_channel_hint: "By phone, by email or on another account",
+      r_competitor: "We have moved to another supplier",
+      r_price: "The price",
+      r_delivery: "Delivery or delivery time",
+      r_quality: "The quality or the logo print",
+      r_business_changed: "Our business has changed",
+      r_business_changed_hint: "For example closed, sold or a new concept",
+      r_other: "Something else",
+      other_label: "What is the reason?",
+      q2_stock: "When do you expect to need new packaging?",
+      q2_other_channel: "How do you order today? Then we can put it right on our side.",
+      q2_competitor: "What does the new supplier do better than us?",
+      q2_price: "What would it take for you to order from us again?",
+      q2_delivery: "What went wrong – or what did you need?",
+      q2_quality: "What did not live up to what you expected?",
+      q2_business_changed: "What do you need today?",
+      q2_other: "What would it take for you to order from us again?",
+      q2_hint: "Optional – a few words are enough.",
+      q3: "May we contact you about your answer?",
+      yes: "Yes, please",
+      no: "No, thank you",
+      email_label: "Your email, so we know who to reply to",
+      submit: "Send my answer",
+      sending: "Sending …",
+      err_reason: "Please choose the main reason in question 1.",
+      err_send: "Your answer could not be sent. Please try again in a moment.",
+      privacy: "We keep your answer at Westpack and use it only to do better. If you came here through a link from us, we can see which customer the answer is from.",
+      done_title: "Thank you for your answer",
+      done_body: "We read every single answer.",
+      done_contact: "We will get back to you.",
+      done_link: "Go to the webshop"
+    }
+  };
+  // Store path -> language. A store whose language is not in STR yet shows English.
+  var STORE_LANG = { dkk_dk_den: "da", gbp_uk_eng: "en", eur_eu_eng: "en", usd_us_eng: "en", eur_eu_ger: "de", eur_eu_fra: "fr", eur_eu_ita: "it", eur_eu_spa: "es", eur_eu_ned: "nl", eur_eu_por: "pt", sek_se_swe: "sv", nok_no_nor: "nb", eur_eu_fin: "fi", pln_pl_pol: "pl", eur_eu_rou: "ro", eur_eu_cze: "cs", eur_eu_svk: "sk", eur_eu_hun: "hu" };
+  var seg = (location.pathname.split("/")[1] || "").toLowerCase();
+  var store = STORE_LANG[seg] ? seg : "";
+  var lang = store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2);
+  var T = STR[lang] || STR.en;
+  var api = root.getAttribute("data-api");
+  var started = Date.now();
+  var $ = function (s) { return root.querySelector(s); };
+  var all = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+
+  function tokenFromHash() {
+    var m = /(?:^|[#&])k=([a-z0-9]{6,16})/i.exec(location.hash || "");
+    if (m) { try { sessionStorage.setItem("wpfb-k", m[1].toLowerCase()); } catch (e) {} return m[1].toLowerCase(); }
+    try { return sessionStorage.getItem("wpfb-k") || ""; } catch (e) { return ""; }
+  }
+  var token = tokenFromHash();
+  var isTest = token === "test";
+
+  all("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (T[k]) el.textContent = T[k]; });
+  if (store) $("[data-shop]").setAttribute("href", "/" + store + "/");
+
+  if (token && !isTest && api && window.fetch) {
+    fetch(api + "?action=who&k=" + encodeURIComponent(token)).then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.known && j.firma) { var to = $("[data-to]"); to.textContent = T.to.replace("{firma}", j.firma); to.hidden = false; }
+    }).catch(function () {});
+  }
+
+  function sync() {
+    all(".wpfb-opt").forEach(function (l) { var i = l.querySelector("input"); l.classList.toggle("is-on", !!(i && i.checked)); });
+    var r = (root.querySelector("input[name=reason]:checked") || {}).value || "";
+    $("[data-other]").hidden = r !== "other";
+    var q2 = $("[data-q2]");
+    q2.hidden = !r;
+    if (r) $("[data-q2-label]").textContent = T["q2_" + r] || T.q2_other;
+    $("[data-q3-n]").textContent = r ? "3" : "2";
+    var c = (root.querySelector("input[name=contact]:checked") || {}).value || "";
+    $("[data-email]").hidden = !(c === "yes" && (!token || isTest));
+    if (r) $("[data-err]").hidden = true;
+  }
+  root.addEventListener("change", sync);
+  sync();
+
+  var form = root.querySelector("form");
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var err = $("[data-err]");
+    var reason = (root.querySelector("input[name=reason]:checked") || {}).value || "";
+    if (!reason) { err.textContent = T.err_reason; err.hidden = false; root.querySelector("input[name=reason]").focus(); return; }
+    var btn = $("[data-submit]");
+    btn.disabled = true; btn.textContent = T.sending; err.hidden = true;
+    var contact = (root.querySelector("input[name=contact]:checked") || {}).value || "";
+    var body = {
+      k: token, store: store, lang: STR[lang] ? lang : "en", reason: reason,
+      other: form.elements.other.value, followup: form.elements.followup.value,
+      contact: contact, email: form.elements.email.value, hp: form.elements.hp.value, ms: Date.now() - started
+    };
+    fetch(api + "?action=submit", { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body: JSON.stringify(body) })
+      .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+      .then(function () {
+        $("[data-form]").hidden = true;
+        $("[data-done-contact]").hidden = contact !== "yes";
+        var done = $("[data-done]"); done.hidden = false; done.focus();
+        if (done.scrollIntoView) done.scrollIntoView({ block: "center", behavior: "smooth" });
+      })
+      .catch(function () { err.textContent = T.err_send; err.hidden = false; btn.disabled = false; btn.textContent = T.submit; });
+  });
+})();
+</script>
+</div>

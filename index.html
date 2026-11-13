@@ -88,6 +88,10 @@
               <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.25" y="2.25" width="11.5" height="11.5" rx="1.75" stroke="currentColor" stroke-width="1.5"/><path d="M5 5.75h6M5 8h6M5 10.25h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
               <span>Signup forms</span>
             </button>
+            <button class="subnav-button wp-nav-item" data-klaviyo-view="customer_survey" data-nav-workspace="klaviyo" type="button">
+              <svg class="wp-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.75 3.25h10.5v7.5H8.5L5.25 13v-2.25h-2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5.5 6.25h5M5.5 8.25h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Customer survey</span>
+            </button>
           </div>
         </div>
 
@@ -1686,6 +1690,19 @@ Vis tal og forretningscase</textarea>
             </div>
           </section>
           <div class="signup-body" id="klaviyo-signup-forms"></div>
+        </section>
+
+        <!-- The lapsed-customer survey: answers from the blog post templates/customer-feedback-survey/ and each
+             customer's personal link (src/customer-survey.js, api/survey.js). -->
+        <section class="klaviyo-view-panel" id="klaviyo-customer-survey-panel">
+          <section class="topbar klaviyo-topbar">
+            <div class="topbar-copy">
+              <p class="section-label">Klaviyo</p>
+              <h2>Customer survey</h2>
+              <p class="topbar-sub">Why customers who have not ordered for a year stopped, in their own words, and the personal link each of them is sent.</p>
+            </div>
+          </section>
+          <div class="signup-body" id="klaviyo-customer-survey"></div>
         </section>
       </section>
 

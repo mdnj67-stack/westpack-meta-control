@@ -1581,6 +1581,30 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
 - Checks: `node --test tests/signup-lab.test.js`, `node tools/signup/qa.js <dir>` (83 browser checks, every language),
   `node tools/signup/screens.js <dir> [concept] [market] --steps`.
 
+## Customer survey - why lapsed customers stopped (2026-11-13)
+
+Asked for as "et blogpost til amasty blog pro ... et spørgeskema med max 2-3 spørgsmål ... hvorfor de churner. OG så
+skal vi have et sted at gemme dataen", for the top 500 customers by lifetime webshop value with no webshop order in
+12 months. The post is one HTML Code block (`templates/customer-feedback-survey/survey.html`, README in Danish), URL
+key `customer-feedback-2026` in every store; answers go to `api/survey.js` and are read under Klaviyo email →
+**Customer survey** (`src/customer-survey.js`). Tests: `tests/customer-survey.test.js`.
+
+- **A personal link carries a token after `#`** (`…/blog/customer-feedback-2026#k=<token>`): the blog redirects any
+  URL with a query string to itself without it. `#k=test` stores a test answer, hidden in the view by default.
+- **The token resolves only in this app's store.** `surveys/customer-feedback-2026/recipients.json` (Blob) holds
+  company, contact name, market, lifetime value and the link - never e-mail or phone; those stay in the local Excel
+  list. `?action=who` (public) returns the company name for a token so the post can greet it.
+- **One Blob file per answer** under `surveys/customer-feedback-2026/responses/`, so concurrent answers never overwrite
+  each other; the view counts each customer once, on their latest answer. Local development writes `tmp/surveys/`.
+- Submit is public, posted as `text/plain` (no CORS preflight) from `www.westpack.com` or staging. A honeypot or a
+  form sent within 2.5 s is answered 200 and dropped. Reasons are a closed list shared by block and server (a test
+  checks they match); an e-mail is kept only for an answer without a token that asked to be contacted.
+- **Key accounts are not the survey's to contact.** The list removes customers with an own Magento customer group
+  (agreed prices) or a Navision fiscal year over 150,000 kr.; Navision's DETAIL data cannot see KAS departments
+  (3200/3210/3300), so a person still reviews the list before anyone is contacted (the user, 2026-11-13).
+- Languages: `da` and `en` in `STR`; every other store shows English until the Danish is approved and translated
+  (the user's rule: finish the Danish master before translating). A test requires every language to carry every string.
+
 ## Agent workflow for this subsystem
 
 `.claude/workflows/campaign-studio-pipeline.js` is a saved Workflow implementing a scope → build →

@@ -6953,3 +6953,49 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
     flex-wrap: wrap;
   }
 }
+
+/* ===========================================================================
+   Customer survey (Klaviyo email → Customer survey, src/customer-survey.js)
+   The answers to "why have we not seen you for a year" and each customer's personal link.
+   =========================================================================== */
+.survey-summary {
+  margin: 0 0 var(--wp-space-3);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+}
+
+.survey-reasons {
+  margin-bottom: var(--wp-space-4);
+}
+
+.survey-reasons .survey-bar-cell {
+  width: 40%;
+}
+
+.survey-bar {
+  display: block;
+  height: 8px;
+  min-width: 2px;
+  border-radius: var(--wp-radius-sm);
+  background: var(--wp-brand);
+}
+
+.survey-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.survey-table td {
+  vertical-align: top;
+}
+
+.survey-table .survey-words {
+  min-width: 260px;
+  max-width: 520px;
+  white-space: pre-wrap;
+}
+
+.survey-muted {
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
