@@ -128,7 +128,10 @@ test("the blog block can be pasted into Magento and posts to the survey route", 
   assert.match(html, /text\/plain/, "a simple request, so the browser sends no preflight");
   assert.match(html, /k=\(\[a-z0-9\]\{6,16\}\)/, "the token is read from the hash: the blog drops query strings");
   // every rule is anchored on the block's id, since the theme's post typography beats class selectors
-  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1]
+    .replace(/@import url\([^)]*\);/g, "")
+    .replace(/@keyframes[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, "");
+  assert.equal(/@import/.test(html.replace(/@import url\('https:\/\/fonts\.googleapis\.com\/[^']*'\);/, "")), false, "the only import is the blog's own fonts");
   for (const rule of css.replace(/@(container|media)[^{]*\{/g, "").split("}").map((s) => s.split("{")[0].trim()).filter(Boolean)) {
     for (const sel of rule.split(",")) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
   }
@@ -152,4 +155,43 @@ test("the app view is reachable from the Klaviyo rail", () => {
   assert.match(app, /"customer_survey"\]\.includes\(nextView\)/);
   assert.match(app, /loadCustomerSurvey\(\)/);
   assert.match(domain, /"customer_survey"\]\.includes\(appState\.klaviyoView\)/);
+});
+
+test("question 2's one-tap answers: only those for the reason, once each; stock takes one", () => {
+  const r = survey.sanitizeSubmission(ok({ reason: "competitor", details: ["price", "speed", "price", "bogus", "closed"] })).record;
+  assert.deepEqual(r.details, ["price", "speed"]);
+  assert.deepEqual(survey.sanitizeSubmission(ok({ reason: "stock", details: ["within_3m", "later"] })).record.details, ["within_3m"]);
+  assert.deepEqual(survey.sanitizeSubmission(ok({ reason: "other", details: ["price"] })).record.details, []);
+  assert.equal(survey.sanitizeSubmission(ok({ step: 1 })).record.step, 1);
+  assert.equal(survey.sanitizeSubmission(ok({ step: 9 })).record.step, 3);
+});
+
+test("a visit saved after every question is one answer, on its latest save", () => {
+  const responses = [
+    { sid: "visit0001aa", token: null, at: "2026-11-13T09:00:00Z", reason: "competitor", details: [], step: 1 },
+    { sid: "visit0001aa", token: null, at: "2026-11-13T09:00:20Z", reason: "competitor", details: ["price", "moq"], step: 2 },
+    { sid: "visit0001aa", token: null, at: "2026-11-13T09:00:30Z", reason: "competitor", details: ["price", "moq"], contact: "no", step: 3 },
+    { sid: "visit0002bb", token: null, at: "2026-11-13T10:00:00Z", reason: "stock", details: ["later"], step: 2 },
+  ];
+  const s = survey.summarize({ responses });
+  assert.equal(s.totals.answers, 2);
+  assert.equal(s.totals.finished, 1);
+  const competitor = s.reasons.find((r) => r.id === "competitor");
+  assert.equal(competitor.count, 1);
+  assert.equal(competitor.details.find((d) => d.id === "price").count, 1);
+  assert.deepEqual(s.answers.find((a) => a.sid === "visit0001aa").detailLabels, ["Lower price", "Lower minimum order"]);
+});
+
+test("the post offers exactly the server's one-tap answers, in every language", () => {
+  const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
+  const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
+  for (const [lang, t] of Object.entries(STR)) {
+    for (const r of survey.REASONS) {
+      assert.deepEqual((t[`c_${r.id}`] || []).map((c) => c[0]), r.details.map((d) => d.id), `${lang} ${r.id}`);
+      assert.ok(t[`q2_${r.id}`], `${lang} q2_${r.id}`);
+    }
+  }
+  assert.match(html, /SINGLE = \{ stock: 1 \}/, "the post and the server agree that stock takes one answer");
+  assert.ok(survey.REASONS.find((r) => r.id === "stock").single);
+  assert.match(html, /keepalive: true/, "a save survives the visitor leaving the page");
 });

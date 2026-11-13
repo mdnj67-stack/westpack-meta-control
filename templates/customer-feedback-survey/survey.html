@@ -1,91 +1,149 @@
 <div id="wpfb" data-api="https://project-4fcxa.vercel.app/api/survey">
 <style>
-#wpfb{--g:#34453f;--g2:#2a3833;--cream:#f6f2eb;--line:#d8d1c4;--ink:#1e2622;--mute:#5a625e;--err:#a3392a;container-type:inline-size;color:var(--ink);font-family:inherit;line-height:1.5;margin:0 0 2rem}
-#wpfb *{box-sizing:border-box}
-#wpfb .wpfb-card{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:28px 32px}
-#wpfb .wpfb-kicker{margin:0 0 6px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);font-weight:600}
-#wpfb .wpfb-to{margin:0 0 10px;font-size:20px;font-weight:600;color:var(--g)}
-#wpfb .wpfb-lead{margin:0 0 24px;font-size:17px;max-width:62ch}
-#wpfb form{margin:0}
-#wpfb fieldset{border:0;margin:0 0 26px;padding:0;min-width:0}
-#wpfb legend{display:flex;gap:12px;align-items:flex-start;font-size:18px;font-weight:600;line-height:1.35;margin:0 0 14px;padding:0}
-#wpfb .wpfb-n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--g);color:#fff;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:lining-nums;margin-top:-1px}
-#wpfb .wpfb-opts{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
-@container (min-width:560px){#wpfb .wpfb-opts{grid-template-columns:repeat(2,minmax(0,1fr))}}
-#wpfb .wpfb-opt{position:relative;display:flex;gap:12px;align-items:flex-start;min-height:52px;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:16px;line-height:1.35;transition:border-color .15s,box-shadow .15s}
-#wpfb .wpfb-opt:hover{border-color:var(--g)}
-#wpfb .wpfb-opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-#wpfb .wpfb-dot{flex:0 0 20px;height:20px;border-radius:50%;border:2px solid #9aa19d;background:#fff;margin-top:1px;transition:border-color .15s,box-shadow .15s}
-#wpfb .wpfb-opt.is-on{border-color:var(--g);box-shadow:inset 0 0 0 1px var(--g)}
-#wpfb .wpfb-opt.is-on .wpfb-dot{border-color:var(--g);box-shadow:inset 0 0 0 4px #fff;background:var(--g)}
-#wpfb .wpfb-opt:focus-within{outline:3px solid rgba(52,69,63,.35);outline-offset:2px}
-#wpfb .wpfb-opt small{display:block;color:var(--mute);font-size:14px;margin-top:2px}
-#wpfb .wpfb-yn{display:flex;gap:8px;flex-wrap:wrap}
-#wpfb .wpfb-yn .wpfb-opt{flex:1 1 160px}
-#wpfb .wpfb-field{display:block;margin-top:10px}
-#wpfb .wpfb-field span{display:block;font-size:15px;color:var(--mute);margin-bottom:6px}
-#wpfb input[type=text],#wpfb input[type=email],#wpfb textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:0}
-#wpfb textarea{min-height:110px;resize:vertical}
-#wpfb input:focus,#wpfb textarea:focus{outline:3px solid rgba(52,69,63,.35);outline-offset:1px;border-color:var(--g)}
-#wpfb .wpfb-hint{margin:6px 0 0;font-size:14px;color:var(--mute)}
-#wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-#wpfb .wpfb-err{margin:0 0 14px;color:var(--err);font-weight:600;font-size:16px}
-#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 28px;border:0;border-radius:8px;background:var(--g);color:#fff;font:inherit;font-size:17px;font-weight:600;cursor:pointer;text-decoration:none}
-#wpfb .wpfb-btn:hover{background:var(--g2);color:#fff}
-#wpfb .wpfb-btn[disabled]{opacity:.6;cursor:default}
-#wpfb .wpfb-btn:focus-visible{outline:3px solid rgba(52,69,63,.45);outline-offset:3px}
-#wpfb .wpfb-privacy{margin:16px 0 0;font-size:14px;color:var(--mute);max-width:62ch}
-#wpfb .wpfb-done h3{margin:0 0 8px;font-size:24px;color:var(--g)}
-#wpfb .wpfb-done p{margin:0 0 18px;font-size:17px}
-#wpfb .wpfb-done:focus{outline:none}
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Jost:wght@400;500;600&display=swap');
+#wpfb{--fir:#2f3d33;--fir2:#26322a;--oat:#f4efe8;--card:#fbf8f3;--ink:#24211d;--body:#5a544c;--muted:#867e74;--line:#ddd4c8;--champ:#e8c79f;--acc:#9b3a32;--disp:'Instrument Serif',Georgia,serif;--sans:'Jost',system-ui,-apple-system,'Segoe UI',sans-serif;--ease:cubic-bezier(.2,.7,.2,1);container-type:inline-size;margin:0 0 40px;color:var(--ink);font-family:var(--sans);scroll-margin-top:110px;-webkit-font-smoothing:antialiased}
+#wpfb *,#wpfb *::before,#wpfb *::after{box-sizing:border-box}
 #wpfb [hidden]{display:none!important}
-@container (max-width:420px){#wpfb .wpfb-card{padding:20px 16px}#wpfb legend{font-size:17px}#wpfb .wpfb-btn{width:100%}}
-@media (prefers-reduced-motion:reduce){#wpfb *{transition:none!important}}
+#wpfb .wpfb-card{border-radius:20px;overflow:hidden;background:var(--oat);box-shadow:0 1px 0 rgba(36,33,29,.04),0 24px 48px -32px rgba(36,33,29,.45)}
+#wpfb .wpfb-head{position:relative;background:var(--fir);color:var(--oat);padding:30px 40px 30px;overflow:hidden;isolation:isolate}
+#wpfb .wpfb-head::before{content:"";position:absolute;z-index:-1;right:-120px;top:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(closest-side,rgba(232,199,159,.22),rgba(232,199,159,0))}
+#wpfb .wpfb-row{display:flex;align-items:center;gap:16px;margin:0 0 22px;min-height:20px}
+#wpfb .wpfb-hi{margin:0;font:500 12.5px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--champ);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#wpfb .wpfb-meta{margin:0 0 0 auto;display:flex;align-items:center;gap:12px;font:500 13px/1 var(--sans);color:rgba(244,239,232,.7);white-space:nowrap;font-variant-numeric:lining-nums tabular-nums}
+#wpfb .wpfb-prog{display:flex;gap:5px}
+#wpfb .wpfb-prog i{display:block;width:22px;height:3px;border-radius:3px;background:rgba(244,239,232,.22);transition:background .4s var(--ease)}
+#wpfb .wpfb-prog i.on{background:var(--champ)}
+#wpfb .wpfb-h{margin:0 0 10px;font:400 42px/1.06 var(--disp);letter-spacing:-.012em;color:var(--oat);max-width:21ch;outline:none;text-wrap:balance}
+#wpfb .wpfb-sub{margin:0;font:400 17px/1.45 var(--sans);color:rgba(244,239,232,.8);max-width:44ch;text-wrap:pretty}
+#wpfb .wpfb-hx.is-in{animation:wpfb-in .42s var(--ease) both}
+#wpfb form{margin:0;padding:30px 40px 26px;background:var(--oat)}
+#wpfb .wpfb-step.is-in{animation:wpfb-in .42s var(--ease) both}
+@keyframes wpfb-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#wpfb .wpfb-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@container (min-width:660px){#wpfb .wpfb-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+#wpfb .wpfb-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-height:128px;margin:0;padding:18px 16px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px;color:var(--ink);font:500 16px/1.25 var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;transition:transform .22s var(--ease),border-color .22s,background-color .22s,color .22s,box-shadow .22s}
+#wpfb .wpfb-tile:hover{border-color:var(--fir);transform:translateY(-2px);box-shadow:0 12px 24px -18px rgba(36,33,29,.55)}
+#wpfb .wpfb-tile:active{transform:translateY(0) scale(.985)}
+#wpfb .wpfb-tile input,#wpfb .wpfb-chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+#wpfb .wpfb-ico{display:block;width:30px;height:30px;fill:none;stroke:var(--fir);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .22s}
+#wpfb .wpfb-ico .bg{fill:var(--card);transition:fill .22s}
+#wpfb .wpfb-tl small{display:block;margin-top:4px;font-weight:400;font-size:13.5px;line-height:1.3;color:var(--muted);transition:color .22s}
+#wpfb .wpfb-tile.is-on{background:var(--fir);border-color:var(--fir);color:var(--oat);box-shadow:0 14px 26px -18px rgba(36,33,29,.7)}
+#wpfb .wpfb-tile.is-on .wpfb-ico{stroke:var(--champ)}
+#wpfb .wpfb-tile.is-on .wpfb-ico .bg{fill:var(--fir)}
+#wpfb .wpfb-tile.is-on small{color:rgba(244,239,232,.72)}
+#wpfb .wpfb-tick{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--champ);opacity:0;transform:scale(.3);transition:opacity .2s,transform .32s var(--ease)}
+#wpfb .wpfb-tick svg{display:block;width:24px;height:24px;fill:none;stroke:var(--fir);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#wpfb .wpfb-tile.is-on .wpfb-tick{opacity:1;transform:scale(1)}
+#wpfb .wpfb-tile:has(input:focus-visible),#wpfb .wpfb-chip:has(input:focus-visible){outline:3px solid var(--champ);outline-offset:3px}
+#wpfb .wpfb-chips{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 24px;padding:0;border:0}
+#wpfb .wpfb-chip{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0;padding:11px 20px;background:var(--card);border:1px solid var(--line);border-radius:999px;font:500 16px/1.2 var(--sans);color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;transition:background-color .2s,border-color .2s,color .2s,padding .2s var(--ease)}
+#wpfb .wpfb-chip:hover{border-color:var(--fir)}
+#wpfb .wpfb-chip svg{width:0;height:18px;flex:0 0 auto;fill:none;stroke:var(--champ);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:width .22s var(--ease),opacity .2s}
+#wpfb .wpfb-chip.is-on{background:var(--fir);border-color:var(--fir);color:var(--oat);padding-left:16px}
+#wpfb .wpfb-chip.is-on svg{width:18px;opacity:1}
+#wpfb .wpfb-field{display:block;margin:0 0 24px}
+#wpfb .wpfb-field>span{display:block;margin:0 0 8px;font:500 15px/1.3 var(--sans);color:var(--body)}
+#wpfb textarea,#wpfb input[type=email]{display:block;width:100%;margin:0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;font:400 16px/1.45 var(--sans);color:var(--ink);box-shadow:none;transition:border-color .2s,box-shadow .2s}
+#wpfb textarea{min-height:104px;resize:vertical}
+#wpfb textarea::placeholder,#wpfb input::placeholder{color:var(--muted)}
+#wpfb textarea:focus,#wpfb input[type=email]:focus{outline:none;border-color:var(--fir);box-shadow:0 0 0 3px rgba(47,61,51,.14)}
+#wpfb .wpfb-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:24px 0 0}
+#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;margin:0;padding:14px 28px;background:var(--fir);border:0;border-radius:999px;color:var(--oat);font:600 16px/1 var(--sans);letter-spacing:.01em;text-decoration:none;cursor:pointer;transition:background-color .2s,transform .2s var(--ease)}
+#wpfb .wpfb-btn:hover{background:var(--fir2);color:var(--oat)}
+#wpfb .wpfb-btn:active{transform:scale(.98)}
+#wpfb .wpfb-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--ease)}
+#wpfb .wpfb-btn:hover svg{transform:translateX(3px)}
+#wpfb .wpfb-btn[disabled]{opacity:.55;cursor:default}
+#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-yn button:focus-visible{outline:3px solid var(--champ);outline-offset:3px}
+#wpfb .wpfb-link{margin:0;padding:6px 2px;background:none;border:0;border-radius:4px;font:500 15.5px/1.3 var(--sans);color:var(--body);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;cursor:pointer}
+#wpfb .wpfb-link:hover{color:var(--ink);text-decoration-color:currentColor}
+#wpfb .wpfb-yn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#wpfb .wpfb-yn button{min-height:64px;margin:0;padding:16px 20px;border-radius:16px;font:500 18px/1.2 var(--sans);cursor:pointer;transition:background-color .2s,border-color .2s,color .2s,transform .2s var(--ease)}
+#wpfb .wpfb-yn button:active{transform:scale(.985)}
+#wpfb .wpfb-yes{background:var(--fir);border:1px solid var(--fir);color:var(--oat)}
+#wpfb .wpfb-yes:hover{background:var(--fir2)}
+#wpfb .wpfb-no{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+#wpfb .wpfb-no:hover{border-color:var(--fir)}
+#wpfb .wpfb-yn button[aria-pressed=true]{box-shadow:0 0 0 3px var(--champ)}
+#wpfb .wpfb-email{margin:22px 0 0}
+#wpfb .wpfb-done{text-align:left}
+#wpfb .wpfb-check{display:block;width:64px;height:64px;margin:4px 0 18px;fill:none;stroke:var(--fir);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#wpfb .wpfb-check circle{stroke:var(--champ);stroke-dasharray:176;stroke-dashoffset:176}
+#wpfb .wpfb-check path{stroke-dasharray:40;stroke-dashoffset:40}
+#wpfb .wpfb-done.is-in .wpfb-check circle{animation:wpfb-draw .7s var(--ease) .1s forwards}
+#wpfb .wpfb-done.is-in .wpfb-check path{animation:wpfb-draw .45s var(--ease) .55s forwards}
+@keyframes wpfb-draw{to{stroke-dashoffset:0}}
+#wpfb .wpfb-done p{margin:0 0 24px;font:400 18px/1.5 var(--sans);color:var(--body);max-width:46ch}
+#wpfb .wpfb-err{margin:18px 0 0;font:500 15.5px/1.4 var(--sans);color:var(--acc)}
+#wpfb .wpfb-foot{display:flex;align-items:flex-start;gap:16px;margin:28px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
+#wpfb .wpfb-foot p{margin:0;font:400 13.5px/1.5 var(--sans);color:var(--muted);max-width:60ch}
+#wpfb .wpfb-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;margin:0;padding:2px 0;background:none;border:0;font:500 14px/1.4 var(--sans);color:var(--body);cursor:pointer}
+#wpfb .wpfb-back:hover{color:var(--ink)}
+#wpfb .wpfb-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@container (max-width:540px){
+#wpfb .wpfb-head{padding:22px 20px 24px}
+#wpfb .wpfb-row{margin-bottom:18px;flex-wrap:wrap;row-gap:12px}
+#wpfb .wpfb-hi{flex:1 1 100%;white-space:normal}
+#wpfb .wpfb-meta{margin-left:0}
+#wpfb .wpfb-h{font-size:31px;line-height:1.08}
+#wpfb .wpfb-sub{font-size:16px}
+#wpfb form{padding:20px 16px 20px}
+#wpfb .wpfb-tiles{gap:10px}
+#wpfb .wpfb-tile{min-height:112px;padding:15px 13px 13px;gap:12px;font-size:15px;border-radius:14px}
+#wpfb .wpfb-ico{width:26px;height:26px}
+#wpfb .wpfb-tick{top:11px;right:11px;width:22px;height:22px}
+#wpfb .wpfb-tick svg{width:22px;height:22px}
+#wpfb .wpfb-chip{font-size:15px;padding:10px 16px;min-height:46px}
+#wpfb .wpfb-yn{grid-template-columns:minmax(0,1fr)}
+#wpfb .wpfb-btn{width:100%}
+#wpfb .wpfb-actions{justify-content:center}
+#wpfb .wpfb-meta .wpfb-time{display:none}
+#wpfb .wpfb-foot{flex-direction:column;gap:12px}
+}
+@media (prefers-reduced-motion:reduce){#wpfb *{animation:none!important;transition:none!important}#wpfb .wpfb-check circle,#wpfb .wpfb-check path{stroke-dashoffset:0}}
 </style>
 <div class="wpfb-card">
-<div data-form>
-<p class="wpfb-kicker" data-t="kicker">Tre korte spørgsmål – under et minut</p>
-<p class="wpfb-to" data-to hidden></p>
-<p class="wpfb-lead" data-t="lead">Det er et stykke tid siden, vi har set dig i webshoppen. Det kan der være mange gode grunde til – og vi vil gerne kende din, så vi kan blive bedre.</p>
+<div class="wpfb-head">
+<div class="wpfb-row"><p class="wpfb-hi" data-hi hidden></p><p class="wpfb-meta"><span data-meta>1 af 3</span><span class="wpfb-time" data-time data-t="time">ca. 20 sek.</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i><i></i></span></p></div>
+<div class="wpfb-hx" data-hx>
+<h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har vi ikke set dig i et stykke tid?</h2>
+<p class="wpfb-sub" data-sub>Ét klik er nok – resten er frivilligt.</p>
+</div>
+</div>
 <form novalidate>
-<fieldset>
-<legend><span class="wpfb-n">1</span><span data-t="q1">Hvad er den vigtigste grund til, at du ikke har bestilt hos os det seneste år?</span></legend>
-<div class="wpfb-opts">
-<label class="wpfb-opt"><input type="radio" name="reason" value="stock"><span class="wpfb-dot"></span><span data-t="r_stock">Vi har stadig emballage nok på lager</span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="other_channel"><span class="wpfb-dot"></span><span><span data-t="r_other_channel">Vi bestiller stadig hos Westpack – bare på en anden måde</span><small data-t="r_other_channel_hint">Telefon, mail eller en anden konto</small></span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="competitor"><span class="wpfb-dot"></span><span data-t="r_competitor">Vi er skiftet til en anden leverandør</span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="price"><span class="wpfb-dot"></span><span data-t="r_price">Prisen</span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="delivery"><span class="wpfb-dot"></span><span data-t="r_delivery">Levering eller leveringstid</span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="quality"><span class="wpfb-dot"></span><span data-t="r_quality">Kvaliteten eller logotrykket</span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="business_changed"><span class="wpfb-dot"></span><span><span data-t="r_business_changed">Vores forretning har ændret sig</span><small data-t="r_business_changed_hint">Fx lukket, solgt eller nyt koncept</small></span></label>
-<label class="wpfb-opt"><input type="radio" name="reason" value="other"><span class="wpfb-dot"></span><span data-t="r_other">Andet</span></label>
+<div class="wpfb-step" data-step="1">
+<div class="wpfb-tiles" role="radiogroup" aria-labelledby="wpfb-h" data-tiles>
+<label class="wpfb-tile"><input type="radio" name="reason" value="stock"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 13.5h7.5v7H3.5zM13 13.5h7.5v7H13zM8.25 5.5h7.5v7.5h-7.5z"/></svg><span class="wpfb-tl" data-t="r_stock">Vi har stadig lager</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="other_channel"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.75" y="2.75" width="10.5" height="18.5" rx="2.4"/><path d="M10.5 18h3"/></svg><span class="wpfb-tl"><span data-t="r_other_channel">Vi bestiller på en anden måde</span><small data-t="r_other_channel_hint">Telefon, mail eller en kollega</small></span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="competitor"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h14.5M15 4.5 18.5 8 15 11.5M20 16H5.5M9 12.5 5.5 16 9 19.5"/></svg><span class="wpfb-tl" data-t="r_competitor">Vi har fundet en anden leverandør</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="price"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.4V4.6c0-.6.5-1.1 1.1-1.1h7.8l8.2 8.2c.5.5.5 1.3 0 1.8l-7.2 7.2c-.5.5-1.3.5-1.8 0z"/><circle cx="8.1" cy="8.1" r="1.6"/></svg><span class="wpfb-tl" data-t="r_price">Prisen</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="delivery"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.75 6.25h11v9.5h-11zM13.75 9.75h4.2l3.3 3.4v2.6h-7.5"/><circle class="bg" cx="7" cy="17.25" r="2"/><circle class="bg" cx="17.25" cy="17.25" r="2"/></svg><span class="wpfb-tl" data-t="r_delivery">Leveringen</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="quality"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5.75"/><path d="M8.6 13.6 7.25 21 12 18.6l4.75 2.4-1.35-7.4M12 6.6l.75 1.55 1.7.25-1.22 1.2.29 1.7L12 10.5l-1.52.8.29-1.7-1.22-1.2 1.7-.25z"/></svg><span class="wpfb-tl" data-t="r_quality">Kvalitet eller logotryk</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="business_changed"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 10.5V20h15v-9.5M3 10.5 4.8 4h14.4l1.8 6.5zM9.5 20v-5.5h5V20M3 10.5c0 1.4 1.1 2.5 2.5 2.5S8 11.9 8 10.5c0 1.4 1.1 2.5 2.5 2.5h3c1.4 0 2.5-1.1 2.5-2.5 0 1.4 1.1 2.5 2.5 2.5S21 11.9 21 10.5"/></svg><span class="wpfb-tl" data-t="r_business_changed">Forretningen har ændret sig</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
+<label class="wpfb-tile"><input type="radio" name="reason" value="other"><svg class="wpfb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10.5L6 19.75V16H4z"/><path d="M8.6 10.5h.01M12 10.5h.01M15.4 10.5h.01" stroke-width="2.6"/></svg><span class="wpfb-tl" data-t="r_other">Noget andet</span><span class="wpfb-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7.5 12.4 3 3 6-6.3"/></svg></span></label>
 </div>
-<label class="wpfb-field" data-other hidden><span data-t="other_label">Hvad er grunden?</span><input type="text" name="other" maxlength="200" autocomplete="off"></label>
-</fieldset>
-<fieldset data-q2 hidden>
-<legend><span class="wpfb-n">2</span><span data-q2-label></span></legend>
-<textarea name="followup" maxlength="1500" aria-describedby="wpfb-q2-hint"></textarea>
-<p class="wpfb-hint" id="wpfb-q2-hint" data-t="q2_hint">Valgfrit – et par ord er nok.</p>
-</fieldset>
-<fieldset>
-<legend><span class="wpfb-n" data-q3-n>2</span><span data-t="q3">Må vi kontakte dig om dit svar?</span></legend>
-<div class="wpfb-yn">
-<label class="wpfb-opt"><input type="radio" name="contact" value="yes"><span class="wpfb-dot"></span><span data-t="yes">Ja, gerne</span></label>
-<label class="wpfb-opt"><input type="radio" name="contact" value="no"><span class="wpfb-dot"></span><span data-t="no">Nej tak</span></label>
+<div class="wpfb-actions" data-next1-box hidden><button class="wpfb-btn" type="submit"><span data-t="next">Næste</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
-<label class="wpfb-field" data-email hidden><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label>
-</fieldset>
+<div class="wpfb-step" data-step="2" hidden>
+<div class="wpfb-chips" data-chips aria-labelledby="wpfb-h"></div>
+<label class="wpfb-field"><span data-more>Vil du uddybe? (valgfrit)</span><textarea name="followup" maxlength="1500" data-ph></textarea></label>
+<div class="wpfb-actions"><button class="wpfb-btn" type="submit"><span data-t="next">Næste</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="wpfb-link" type="button" data-skip data-t="skip">Spring over</button></div>
+</div>
+<div class="wpfb-step" data-step="3" hidden>
+<div class="wpfb-yn"><button class="wpfb-yes" type="button" data-contact="yes" aria-pressed="false" data-t="yes">Ja, gerne</button><button class="wpfb-no" type="button" data-contact="no" aria-pressed="false" data-t="no">Nej tak</button></div>
+<div class="wpfb-email" data-emailbox hidden><label class="wpfb-field"><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label><div class="wpfb-actions"><button class="wpfb-btn" type="submit"><span data-t="send">Send</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
+</div>
+<div class="wpfb-step wpfb-done" data-step="4" hidden>
+<svg class="wpfb-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m21 33 7.5 7.5L44 25"/></svg>
+<p data-done-text></p>
+<div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/dkk_dk_den/"><span data-t="done_shop">Til webshoppen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="wpfb-link" data-history href="/dkk_dk_den/sales/order/history/" hidden data-t="done_history">Genbestil fra din ordrehistorik</a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Ret mit svar</button></div>
+</div>
 <div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="wpfb-err" role="alert" data-err hidden></p>
-<button class="wpfb-btn" type="submit" data-submit data-t="submit">Send mit svar</button>
-<p class="wpfb-privacy" data-t="privacy">Vi gemmer dit svar hos Westpack og bruger det kun til at blive bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p>
+<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Tilbage</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p></div>
 </form>
-</div>
-<div class="wpfb-done" data-done tabindex="-1" hidden>
-<h3 data-t="done_title">Tak for dit svar</h3>
-<p><span data-t="done_body">Vi læser hvert eneste svar.</span> <span data-done-contact hidden data-t="done_contact">Vi vender tilbage til dig.</span></p>
-<a class="wpfb-btn" data-shop href="/dkk_dk_den/" data-t="done_link">Til webshoppen</a>
-</div>
 </div>
 <script>
 (function () {
@@ -94,151 +152,298 @@
   root.setAttribute("data-ready", "1");
   var STR = {
     da: {
-      kicker: "Tre korte spørgsmål – under et minut",
-      to: "Til {firma}",
-      lead: "Det er et stykke tid siden, vi har set dig i webshoppen. Det kan der være mange gode grunde til – og vi vil gerne kende din, så vi kan blive bedre.",
-      q1: "Hvad er den vigtigste grund til, at du ikke har bestilt hos os det seneste år?",
-      r_stock: "Vi har stadig emballage nok på lager",
-      r_other_channel: "Vi bestiller stadig hos Westpack – bare på en anden måde",
-      r_other_channel_hint: "Telefon, mail eller en anden konto",
-      r_competitor: "Vi er skiftet til en anden leverandør",
+      hi: "Hej {firma}",
+      step: "{n} af 3",
+      time: "ca. 20 sek.",
+      done_meta: "Færdig",
+      h1: "Hvorfor har vi ikke set dig i et stykke tid?",
+      sub1: "Ét klik er nok – resten er frivilligt.",
+      r_stock: "Vi har stadig lager",
+      r_other_channel: "Vi bestiller på en anden måde",
+      r_other_channel_hint: "Telefon, mail eller en kollega",
+      r_competitor: "Vi har fundet en anden leverandør",
       r_price: "Prisen",
-      r_delivery: "Levering eller leveringstid",
-      r_quality: "Kvaliteten eller logotrykket",
-      r_business_changed: "Vores forretning har ændret sig",
-      r_business_changed_hint: "Fx lukket, solgt eller nyt koncept",
-      r_other: "Andet",
-      other_label: "Hvad er grunden?",
+      r_delivery: "Leveringen",
+      r_quality: "Kvalitet eller logotryk",
+      r_business_changed: "Forretningen har ændret sig",
+      r_other: "Noget andet",
+      next: "Næste",
       q2_stock: "Hvornår regner du med at skulle bruge ny emballage?",
-      q2_other_channel: "Hvordan bestiller du i dag? Så retter vi det hos os.",
-      q2_competitor: "Hvad gør den nye leverandør bedre end os?",
-      q2_price: "Hvad skulle der til, for at du bestilte hos os igen?",
-      q2_delivery: "Hvad gik galt – eller hvad havde du brug for?",
-      q2_quality: "Hvad levede ikke op til det, du forventede?",
-      q2_business_changed: "Hvad har I brug for i dag?",
-      q2_other: "Hvad skulle der til, for at du bestilte hos os igen?",
-      q2_hint: "Valgfrit – et par ord er nok.",
-      q3: "Må vi kontakte dig om dit svar?",
+      q2_other_channel: "Hvordan bestiller du i dag?",
+      q2_competitor: "Hvad gør de bedre end os?",
+      q2_price: "Hvad var for dyrt?",
+      q2_delivery: "Hvad gik galt?",
+      q2_quality: "Hvad skuffede dig?",
+      q2_business_changed: "Hvad er der sket?",
+      q2_other: "Hvad er grunden?",
+      sub2_one: "Tak – det hjælper. Vælg det, der passer bedst.",
+      sub2_many: "Tak – det hjælper. Vælg gerne flere.",
+      sub2_text: "Tak – et par ord er nok.",
+      c_stock: [["within_3m", "Inden for 3 måneder"], ["3_6m", "Om 3–6 måneder"], ["later", "Senere"], ["unknown", "Ved ikke endnu"]],
+      c_other_channel: [["phone", "Telefon"], ["email", "Mail"], ["colleague", "En kollegas konto"], ["dealer", "Gennem en forhandler"]],
+      c_competitor: [["price", "Lavere pris"], ["speed", "Hurtigere levering"], ["moq", "Lavere minimumsantal"], ["quality", "Bedre kvalitet"], ["range", "Et sortiment, vi manglede"], ["local", "En lokal leverandør"]],
+      c_price: [["products", "Produkterne"], ["logo", "Logotrykket"], ["freight", "Fragten"], ["moq", "Minimumsantallet"]],
+      c_delivery: [["slow", "For lang leveringstid"], ["late", "Kom for sent"], ["wrong", "Fejl i ordren"], ["freight", "Dyr fragt"]],
+      c_quality: [["product", "Produktet"], ["print", "Logotrykket"], ["damaged", "Skadet ved levering"], ["photo", "Så anderledes ud end på billedet"]],
+      c_business_changed: [["closed", "Lukket"], ["sold", "Solgt"], ["concept", "Nyt koncept eller sortiment"], ["smaller", "Mindre forretning"]],
+      more: "Vil du uddybe? (valgfrit)",
+      more_other: "Med dine egne ord",
+      placeholder: "Skriv her …",
+      skip: "Spring over",
+      h3: "Må vi vende tilbage til dig om det?",
+      sub3: "Sidste spørgsmål.",
       yes: "Ja, gerne",
       no: "Nej tak",
       email_label: "Din e-mail, så vi ved, hvem vi skal svare",
-      submit: "Send mit svar",
+      send: "Send",
       sending: "Sender …",
-      err_reason: "Vælg den vigtigste grund i spørgsmål 1.",
-      err_send: "Svaret kunne ikke sendes. Prøv igen om lidt.",
-      privacy: "Vi gemmer dit svar hos Westpack og bruger det kun til at blive bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.",
-      done_title: "Tak for dit svar",
-      done_body: "Vi læser hvert eneste svar.",
-      done_contact: "Vi vender tilbage til dig.",
-      done_link: "Til webshoppen"
+      back: "Tilbage",
+      err_reason: "Vælg den grund, der passer bedst.",
+      err_send: "Svaret kunne ikke sendes. Prøv igen om et øjeblik.",
+      thanks: "Tak for hjælpen.",
+      thanks_name: "Tak, {firma}.",
+      sub4: "Det var det hele. Vi læser hvert eneste svar.",
+      done_yes: "Vi vender tilbage til dig.",
+      done_no: "Tak, fordi du tog dig tiden.",
+      done_shop: "Til webshoppen",
+      done_history: "Genbestil fra din ordrehistorik",
+      done_edit: "Ret mit svar",
+      privacy: "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra."
     },
     en: {
-      kicker: "Three short questions – under a minute",
-      to: "For {firma}",
-      lead: "It has been a while since we last saw you in our webshop. There can be plenty of good reasons for that – and we would like to know yours, so we can do better.",
-      q1: "What is the main reason you have not ordered from us in the past year?",
-      r_stock: "We still have enough packaging in stock",
-      r_other_channel: "We still order from Westpack – just in a different way",
-      r_other_channel_hint: "By phone, by email or on another account",
-      r_competitor: "We have moved to another supplier",
+      hi: "Hi {firma}",
+      step: "{n} of 3",
+      time: "about 20 sec.",
+      done_meta: "Done",
+      h1: "Why haven't we seen you for a while?",
+      sub1: "One click is enough – the rest is optional.",
+      r_stock: "We still have stock",
+      r_other_channel: "We order another way",
+      r_other_channel_hint: "By phone, by email or via a colleague",
+      r_competitor: "We found another supplier",
       r_price: "The price",
-      r_delivery: "Delivery or delivery time",
-      r_quality: "The quality or the logo print",
+      r_delivery: "The delivery",
+      r_quality: "Quality or logo print",
       r_business_changed: "Our business has changed",
-      r_business_changed_hint: "For example closed, sold or a new concept",
       r_other: "Something else",
-      other_label: "What is the reason?",
+      next: "Next",
       q2_stock: "When do you expect to need new packaging?",
-      q2_other_channel: "How do you order today? Then we can put it right on our side.",
-      q2_competitor: "What does the new supplier do better than us?",
-      q2_price: "What would it take for you to order from us again?",
-      q2_delivery: "What went wrong – or what did you need?",
-      q2_quality: "What did not live up to what you expected?",
-      q2_business_changed: "What do you need today?",
-      q2_other: "What would it take for you to order from us again?",
-      q2_hint: "Optional – a few words are enough.",
-      q3: "May we contact you about your answer?",
+      q2_other_channel: "How do you order today?",
+      q2_competitor: "What do they do better than us?",
+      q2_price: "What was too expensive?",
+      q2_delivery: "What went wrong?",
+      q2_quality: "What disappointed you?",
+      q2_business_changed: "What happened?",
+      q2_other: "What is the reason?",
+      sub2_one: "Thank you – that helps. Pick the one that fits best.",
+      sub2_many: "Thank you – that helps. Pick as many as you like.",
+      sub2_text: "Thank you – a few words are enough.",
+      c_stock: [["within_3m", "Within 3 months"], ["3_6m", "In 3–6 months"], ["later", "Later"], ["unknown", "Don't know yet"]],
+      c_other_channel: [["phone", "By phone"], ["email", "By email"], ["colleague", "A colleague's account"], ["dealer", "Through a reseller"]],
+      c_competitor: [["price", "Lower price"], ["speed", "Faster delivery"], ["moq", "Lower minimum order"], ["quality", "Better quality"], ["range", "A range we needed"], ["local", "A local supplier"]],
+      c_price: [["products", "The products"], ["logo", "The logo print"], ["freight", "The freight"], ["moq", "The minimum order"]],
+      c_delivery: [["slow", "Delivery time too long"], ["late", "Arrived too late"], ["wrong", "Mistakes in the order"], ["freight", "Expensive freight"]],
+      c_quality: [["product", "The product"], ["print", "The logo print"], ["damaged", "Damaged on arrival"], ["photo", "Looked different from the photo"]],
+      c_business_changed: [["closed", "Closed"], ["sold", "Sold"], ["concept", "New concept or range"], ["smaller", "Smaller business"]],
+      more: "Anything to add? (optional)",
+      more_other: "In your own words",
+      placeholder: "Write here …",
+      skip: "Skip",
+      h3: "May we get back to you about this?",
+      sub3: "Last question.",
       yes: "Yes, please",
-      no: "No, thank you",
+      no: "No, thanks",
       email_label: "Your email, so we know who to reply to",
-      submit: "Send my answer",
+      send: "Send",
       sending: "Sending …",
-      err_reason: "Please choose the main reason in question 1.",
+      back: "Back",
+      err_reason: "Pick the reason that fits best.",
       err_send: "Your answer could not be sent. Please try again in a moment.",
-      privacy: "We keep your answer at Westpack and use it only to do better. If you came here through a link from us, we can see which customer the answer is from.",
-      done_title: "Thank you for your answer",
-      done_body: "We read every single answer.",
-      done_contact: "We will get back to you.",
-      done_link: "Go to the webshop"
+      thanks: "Thank you for your help.",
+      thanks_name: "Thank you, {firma}.",
+      sub4: "That's all. We read every single answer.",
+      done_yes: "We will get back to you.",
+      done_no: "Thank you for taking the time.",
+      done_shop: "Go to the webshop",
+      done_history: "Reorder from your order history",
+      done_edit: "Change my answer",
+      privacy: "Your answer is kept by Westpack and used only to help us do better. If you came here through a link from us, we can see which customer the answer is from."
     }
   };
   // Store path -> language. A store whose language is not in STR yet shows English.
   var STORE_LANG = { dkk_dk_den: "da", gbp_uk_eng: "en", eur_eu_eng: "en", usd_us_eng: "en", eur_eu_ger: "de", eur_eu_fra: "fr", eur_eu_ita: "it", eur_eu_spa: "es", eur_eu_ned: "nl", eur_eu_por: "pt", sek_se_swe: "sv", nok_no_nor: "nb", eur_eu_fin: "fi", pln_pl_pol: "pl", eur_eu_rou: "ro", eur_eu_cze: "cs", eur_eu_svk: "sk", eur_eu_hun: "hu" };
+  var SINGLE = { stock: 1 };
+  var REORDER = { stock: 1, other_channel: 1 };
   var seg = (location.pathname.split("/")[1] || "").toLowerCase();
   var store = STORE_LANG[seg] ? seg : "";
-  var lang = store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2);
-  var T = STR[lang] || STR.en;
+  var L = STR[store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2)] ? (store ? STORE_LANG[store] : document.documentElement.lang.slice(0, 2)) : "en";
+  var T = STR[L];
   var api = root.getAttribute("data-api");
   var started = Date.now();
-  var $ = function (s) { return root.querySelector(s); };
-  var all = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
-
-  function tokenFromHash() {
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var q = function (s) { return root.querySelector(s); };
+  var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+  var mem = {
+    get: function (k) { try { return sessionStorage.getItem(k) || ""; } catch (e) { return ""; } },
+    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  };
+  var token = (function () {
     var m = /(?:^|[#&])k=([a-z0-9]{6,16})/i.exec(location.hash || "");
-    if (m) { try { sessionStorage.setItem("wpfb-k", m[1].toLowerCase()); } catch (e) {} return m[1].toLowerCase(); }
-    try { return sessionStorage.getItem("wpfb-k") || ""; } catch (e) { return ""; }
-  }
-  var token = tokenFromHash();
+    if (m) { mem.set("wpfb-k", m[1].toLowerCase()); return m[1].toLowerCase(); }
+    return mem.get("wpfb-k");
+  })();
   var isTest = token === "test";
+  var sid = mem.get("wpfb-sid");
+  if (!/^[a-z0-9]{8,24}$/.test(sid)) {
+    var abc = "abcdefghijklmnopqrstuvwxyz0123456789", b = new Uint8Array(16);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(b); else for (var j = 0; j < 16; j++) b[j] = Math.random() * 256 | 0;
+    sid = ""; for (var i = 0; i < 16; i++) sid += abc[b[i] % 36];
+    mem.set("wpfb-sid", sid);
+  }
+  var S = { reason: "", details: [], followup: "", contact: "", email: "", step: 1, firma: "" };
+  var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.4 3.6 3.6L18 7.8"/></svg>';
 
-  all("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (T[k]) el.textContent = T[k]; });
-  if (store) $("[data-shop]").setAttribute("href", "/" + store + "/");
+  qa("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (typeof T[k] === "string") el.textContent = T[k]; });
+  if (store) {
+    q("[data-shop]").setAttribute("href", "/" + store + "/");
+    q("[data-history]").setAttribute("href", "/" + store + "/sales/order/history/");
+  }
+
+  function payload(step) {
+    return { k: token, sid: sid, store: store, lang: L, reason: S.reason, details: S.details, followup: S.followup, contact: S.contact, email: S.email, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
+  }
+  function save(step) {
+    if (!api || !window.fetch || !S.reason) return Promise.reject(new Error("no"));
+    return fetch(api + "?action=submit", { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload(step)), keepalive: true })
+      .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); });
+  }
+  function quiet(p) { p.catch(function () {}); }
+
+  function restart(el) { el.classList.remove("is-in"); void el.offsetWidth; el.classList.add("is-in"); }
+  function head(n) {
+    var h = q("[data-h]"), sub = q("[data-sub]");
+    if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
+    if (n === 2) { h.textContent = T["q2_" + S.reason]; sub.textContent = S.reason === "other" ? T.sub2_text : SINGLE[S.reason] ? T.sub2_one : T.sub2_many; }
+    if (n === 3) { h.textContent = T.h3; sub.textContent = T.sub3; }
+    if (n === 4) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma) : T.thanks; sub.textContent = T.sub4; }
+    q("[data-meta]").textContent = n < 4 ? T.step.replace("{n}", n) : T.done_meta;
+    q("[data-time]").hidden = n !== 1;
+    qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 3)); });
+  }
+  function go(n, silent) {
+    S.step = n;
+    qa("[data-step]").forEach(function (s) { var on = +s.getAttribute("data-step") === n; s.hidden = !on; if (on && !silent) restart(s); });
+    head(n);
+    if (!silent) restart(q("[data-hx]"));
+    q("[data-back]").hidden = !(n === 2 || n === 3);
+    q("[data-err]").hidden = true;
+    if (silent) return;
+    var h = q("[data-h]");
+    try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+    var top = root.getBoundingClientRect().top;
+    if (top < 0) window.scrollTo({ top: window.pageYOffset + top - 100, behavior: reduce ? "auto" : "smooth" });
+  }
+  function err(msg) { var e = q("[data-err]"); e.textContent = msg; e.hidden = false; }
+
+  function markTiles() { qa(".wpfb-tile").forEach(function (t) { t.classList.toggle("is-on", t.querySelector("input").checked); }); }
+  function markChips() { qa(".wpfb-chip").forEach(function (c) { c.classList.toggle("is-on", c.querySelector("input").checked); }); }
+  function buildChips() {
+    var box = q("[data-chips]"), list = T["c_" + S.reason] || [], one = !!SINGLE[S.reason];
+    box.innerHTML = "";
+    box.hidden = !list.length;
+    box.setAttribute("role", one ? "radiogroup" : "group");
+    list.forEach(function (c) {
+      var l = document.createElement("label"), inp = document.createElement("input"), s = document.createElement("span");
+      l.className = "wpfb-chip"; inp.type = one ? "radio" : "checkbox"; inp.name = "detail"; inp.value = c[0];
+      inp.checked = S.details.indexOf(c[0]) > -1; s.textContent = c[1];
+      l.appendChild(inp); l.insertAdjacentHTML("beforeend", CHECK); l.appendChild(s); box.appendChild(l);
+    });
+    markChips();
+    var ta = q("textarea[name=followup]");
+    q("[data-more]").textContent = S.reason === "other" ? T.more_other : T.more;
+    ta.setAttribute("placeholder", T.placeholder);
+    ta.value = S.followup;
+  }
+
+  var advance = 0, pending = 0;
+  function toTwo() {
+    if (!S.reason) { err(T.err_reason); return; }
+    clearTimeout(pending); clearTimeout(advance);
+    quiet(save(1));
+    buildChips();
+    go(2);
+  }
+  function toThree() { S.followup = q("textarea[name=followup]").value; quiet(save(2)); go(3); }
+  function finish(btn) {
+    var label = btn ? btn.innerHTML : "";
+    qa("[data-step='3'] button").forEach(function (b) { b.disabled = true; });
+    if (btn) btn.textContent = T.sending;
+    save(3).then(function () {
+      mem.set("wpfb-done-" + (token || sid), "1");
+      q("[data-done-text]").textContent = S.contact === "yes" ? T.done_yes : T.done_no;
+      q("[data-history]").hidden = !REORDER[S.reason];
+      go(4);
+    }).catch(function () { err(T.err_send); }).then(function () {
+      qa("[data-step='3'] button").forEach(function (b) { b.disabled = false; });
+      if (btn) btn.innerHTML = label;
+    });
+  }
+
+  root.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.name === "reason") {
+      if (S.reason !== t.value) S.details = [];
+      S.reason = t.value;
+      markTiles();
+      q("[data-next1-box]").hidden = false;
+      q("[data-err]").hidden = true;
+      clearTimeout(pending);
+      pending = setTimeout(function () { quiet(save(1)); }, 700);
+    }
+    if (t.name === "detail") {
+      S.details = qa("input[name=detail]:checked").map(function (x) { return x.value; });
+      markChips();
+    }
+  });
+  // A tap or click on a reason moves on by itself; arrow keys only select, so a keyboard user is never carried off.
+  q("[data-tiles]").addEventListener("pointerup", function (e) {
+    var tile = e.target.closest && e.target.closest(".wpfb-tile");
+    if (!tile || e.button > 0) return;
+    var v = tile.querySelector("input").value;
+    clearTimeout(advance);
+    advance = setTimeout(function () { if (S.step === 1 && S.reason === v) toTwo(); }, reduce ? 150 : 480);
+  });
+  root.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("button") : null;
+    if (!t || !root.contains(t)) return;
+    if (t.hasAttribute("data-skip")) { toThree(); }
+    if (t.hasAttribute("data-back")) { go(S.step === 3 ? 2 : 1); if (S.step === 2) buildChips(); }
+    if (t.hasAttribute("data-edit")) { go(1); markTiles(); }
+    var c = t.getAttribute("data-contact");
+    if (c) {
+      S.contact = c;
+      qa("[data-contact]").forEach(function (b) { b.setAttribute("aria-pressed", String(b === t)); });
+      if (c === "yes" && (!token || isTest)) { q("[data-emailbox]").hidden = false; q("input[name=email]").focus(); }
+      else { q("[data-emailbox]").hidden = true; finish(t); }
+    }
+  });
+  q("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (S.step === 1) toTwo();
+    else if (S.step === 2) toThree();
+    else if (S.step === 3) { S.email = q("input[name=email]").value; finish(q("[data-emailbox] .wpfb-btn")); }
+  });
 
   if (token && !isTest && api && window.fetch) {
     fetch(api + "?action=who&k=" + encodeURIComponent(token)).then(function (r) { return r.json(); }).then(function (j) {
-      if (j && j.known && j.firma) { var to = $("[data-to]"); to.textContent = T.to.replace("{firma}", j.firma); to.hidden = false; }
+      if (!j || !j.known || !j.firma) return;
+      S.firma = j.firma;
+      var hi = q("[data-hi]"); hi.textContent = T.hi.replace("{firma}", j.firma); hi.hidden = false;
+      if (S.step === 4) head(4);
     }).catch(function () {});
   }
-
-  function sync() {
-    all(".wpfb-opt").forEach(function (l) { var i = l.querySelector("input"); l.classList.toggle("is-on", !!(i && i.checked)); });
-    var r = (root.querySelector("input[name=reason]:checked") || {}).value || "";
-    $("[data-other]").hidden = r !== "other";
-    var q2 = $("[data-q2]");
-    q2.hidden = !r;
-    if (r) $("[data-q2-label]").textContent = T["q2_" + r] || T.q2_other;
-    $("[data-q3-n]").textContent = r ? "3" : "2";
-    var c = (root.querySelector("input[name=contact]:checked") || {}).value || "";
-    $("[data-email]").hidden = !(c === "yes" && (!token || isTest));
-    if (r) $("[data-err]").hidden = true;
-  }
-  root.addEventListener("change", sync);
-  sync();
-
-  var form = root.querySelector("form");
-  form.addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    var err = $("[data-err]");
-    var reason = (root.querySelector("input[name=reason]:checked") || {}).value || "";
-    if (!reason) { err.textContent = T.err_reason; err.hidden = false; root.querySelector("input[name=reason]").focus(); return; }
-    var btn = $("[data-submit]");
-    btn.disabled = true; btn.textContent = T.sending; err.hidden = true;
-    var contact = (root.querySelector("input[name=contact]:checked") || {}).value || "";
-    var body = {
-      k: token, store: store, lang: STR[lang] ? lang : "en", reason: reason,
-      other: form.elements.other.value, followup: form.elements.followup.value,
-      contact: contact, email: form.elements.email.value, hp: form.elements.hp.value, ms: Date.now() - started
-    };
-    fetch(api + "?action=submit", { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body: JSON.stringify(body) })
-      .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
-      .then(function () {
-        $("[data-form]").hidden = true;
-        $("[data-done-contact]").hidden = contact !== "yes";
-        var done = $("[data-done]"); done.hidden = false; done.focus();
-        if (done.scrollIntoView) done.scrollIntoView({ block: "center", behavior: "smooth" });
-      })
-      .catch(function () { err.textContent = T.err_send; err.hidden = false; btn.disabled = false; btn.textContent = T.submit; });
-  });
+  if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(4, true); }
+  else go(1, true);
 })();
 </script>
 </div>

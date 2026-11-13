@@ -1594,11 +1594,18 @@ key `customer-feedback-2026` in every store; answers go to `api/survey.js` and a
 - **The token resolves only in this app's store.** `surveys/customer-feedback-2026/recipients.json` (Blob) holds
   company, contact name, market, lifetime value and the link - never e-mail or phone; those stay in the local Excel
   list. `?action=who` (public) returns the company name for a token so the post can greet it.
-- **One Blob file per answer** under `surveys/customer-feedback-2026/responses/`, so concurrent answers never overwrite
-  each other; the view counts each customer once, on their latest answer. Local development writes `tmp/surveys/`.
+- **Built for people who will not spend time on us** (the user: "mere lækkert og målrettet personer som ikke vil bruge
+  særlig lang tid på os ... ekstremt gennemført"): one question at a time, and **the reason is saved on the first
+  tap** (`step: 1`), so one tap is a usable answer; question 2 is one-tap answers per reason (`details`, closed lists in
+  `REASONS`, `single` for stock) plus optional text; question 3 is yes/no. Every save carries the whole answer and a
+  visit id (`sid`); the view keys on token, else visit, and keeps the latest save, so three saves are one answer.
+  Saves use `keepalive`, so leaving the page does not lose them. A tap moves on by itself; arrow keys only select.
+- **One Blob file per save** under `surveys/customer-feedback-2026/responses/`, so concurrent answers never overwrite
+  each other. Local development writes `tmp/surveys/`.
 - Submit is public, posted as `text/plain` (no CORS preflight) from `www.westpack.com` or staging. A honeypot or a
-  form sent within 2.5 s is answered 200 and dropped. Reasons are a closed list shared by block and server (a test
-  checks they match); an e-mail is kept only for an answer without a token that asked to be contacted.
+  save within 1.2 s of page load is answered 200 and dropped. Reasons and details are closed lists shared by block and
+  server (tests check every language against them); an e-mail is kept only for an answer without a token that asked
+  to be contacted. The look is the blog's own (W47): fir green, oat, champagne, Instrument Serif and Jost.
 - **Key accounts are not the survey's to contact.** The list removes customers with an own Magento customer group
   (agreed prices) or a Navision fiscal year over 150,000 kr.; Navision's DETAIL data cannot see KAS departments
   (3200/3210/3300), so a person still reviews the list before anyone is contacted (the user, 2026-11-13).

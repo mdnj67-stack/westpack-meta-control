@@ -44,6 +44,12 @@ function storeLabel(store = "") {
   return region ? `${region.toUpperCase()} store${region === "eu" ? ` (${lang})` : ""}` : "";
 }
 
+// Under each reason, how often each one-tap follow-up was picked (only those picked at least once).
+function detailLine(r) {
+  const picked = (r.details || []).filter((d) => d.count > 0).sort((x, y) => y.count - x.count);
+  return picked.length ? `<br><span class="survey-muted">${picked.map((d) => `${escapeHtml(d.label)} ${d.count}`).join(" · ")}</span>` : "";
+}
+
 function reasonLabel(id) {
   return state.data?.reasons?.find((r) => r.id === id)?.label || id;
 }
@@ -75,23 +81,31 @@ function answerRows() {
     who: a.recipient
       ? `${a.recipient.firma}${a.recipient.kontakt && a.recipient.kontakt.toLowerCase() !== String(a.recipient.firma).toLowerCase() ? ` (${a.recipient.kontakt})` : ""}`
       : a.token ? "Unknown link" : "Without a personal link",
+    picked: (a.detailLabels || []).join(", "),
     words: [a.other, a.followup].filter(Boolean).join(" – "),
   }));
 }
 
+// The post saves after every question, so an answer can stop after the reason (1) or the follow-up (2).
+function stepNote(a) {
+  const step = a.step || 3;
+  return step >= 3 ? "" : `<br><span class="survey-muted">Stopped after question ${step}</span>`;
+}
+
 function renderAnswers() {
-  const rows = answerRows().filter((r) => matches(`${r.who} ${r.words} ${reasonLabel(r.a.reason)} ${r.a.recipient?.land || ""}`));
+  const rows = answerRows().filter((r) => matches(`${r.who} ${r.picked} ${r.words} ${reasonLabel(r.a.reason)} ${r.a.recipient?.land || ""}`));
   return `<div class="wp-table-wrap"><table class="wp-table survey-table">
-    <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Main reason</th><th>In their words</th><th>Contact</th></tr></thead>
-    <tbody>${rows.map(({ a, who, words }) => `<tr>
+    <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Main reason</th><th>Picked</th><th>In their words</th><th>Contact</th></tr></thead>
+    <tbody>${rows.map(({ a, who, picked, words }) => `<tr>
       <td>${escapeHtml(when(a.at))}${a.test ? ' <span class="wp-badge">Test</span>' : ""}</td>
       <td>${escapeHtml(who)}${a.email ? `<br><span class="survey-muted">${escapeHtml(a.email)}</span>` : ""}</td>
       <td>${escapeHtml(a.recipient?.land || storeLabel(a.store))}</td>
       <td class="is-numeric">${a.recipient?.livstid != null ? KR.format(a.recipient.livstid) : ""}</td>
-      <td>${escapeHtml(reasonLabel(a.reason))}</td>
+      <td>${escapeHtml(reasonLabel(a.reason))}${stepNote(a)}</td>
+      <td>${escapeHtml(picked)}</td>
       <td class="survey-words">${escapeHtml(words)}</td>
       <td>${a.contact === "yes" ? '<span class="wp-status is-success">Yes</span>' : a.contact === "no" ? '<span class="wp-status">No</span>' : ""}</td>
-    </tr>`).join("") || '<tr><td colspan="7">No answers yet.</td></tr>'}</tbody>
+    </tr>`).join("") || '<tr><td colspan="8">No answers yet.</td></tr>'}</tbody>
   </table></div>`;
 }
 
@@ -129,10 +143,10 @@ function render() {
   const max = Math.max(1, ...state.data.reasons.map((r) => r.count));
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
-    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted</p>
+    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted · ${t.finished} answered all three questions</p>
     <div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>
-      <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers ? Math.round((r.count / t.answers) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
+      <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}${detailLine(r)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers ? Math.round((r.count / t.answers) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
     </table></div>
     <div class="signup-toolbar survey-toolbar">
       <div class="wp-tabs" role="tablist">
@@ -151,8 +165,8 @@ function render() {
 function exportCsv(kind) {
   if (!state.data) return;
   if (kind === "answers") {
-    const rows = answerRows().map(({ a, who }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", reasonLabel(a.reason), a.other, a.followup, a.contact, a.email || "", a.store, a.lang]);
-    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Main reason", "Other reason", "In their words", "Contact", "Email (no link)", "Store", "Language"], ...rows]));
+    const rows = answerRows().map(({ a, who, picked }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
+    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email (no link)", "Questions answered", "Store", "Language"], ...rows]));
     return;
   }
   const answered = new Set(state.data.answered || []);

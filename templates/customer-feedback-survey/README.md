@@ -1,12 +1,22 @@
 # Kundeundersøgelse – hvorfor har vi ikke set dig i et år? (blogindlæg)
 
-Et kort spørgeskema på bloggen til kunder, der ikke har bestilt i webshoppen det seneste år. Tre spørgsmål:
+Et kort spørgeskema på bloggen til kunder, der ikke har bestilt i webshoppen det seneste år. Det er lavet til folk, der
+ikke vil bruge ret meget tid på os: **ét klik er nok**, og resten er frivilligt. Det tager ca. 20 sekunder, og man ser
+ét spørgsmål ad gangen i et kort med "1 af 3" øverst.
 
-1. **Hvad er den vigtigste grund?** (ét svar: lager, bestiller på en anden måde, anden leverandør, pris, levering,
-   kvalitet/logotryk, forretningen har ændret sig, andet)
-2. **Et opfølgende spørgsmål, der passer til svaret.** Fritekst og valgfrit, fx "Hvad gør den nye leverandør bedre end
-   os?" eller "Hvornår regner du med at skulle bruge ny emballage?"
-3. **Må vi kontakte dig om dit svar?** (ja/nej)
+1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Otte felter med ikon og kort tekst: lager, bestiller på en anden
+   måde, anden leverandør, prisen, leveringen, kvalitet eller logotryk, forretningen har ændret sig, noget andet.
+   **Svaret gemmes i det øjeblik, man trykker**, og så går skemaet selv videre. Den, der stopper der, har givet os det
+   vigtigste.
+2. **Et opfølgende spørgsmål, der passer til grunden. Det kan besvares med ét tryk.** Fx "Hvad gør de bedre end os?"
+   med Lavere pris, Hurtigere levering, Lavere minimumsantal, Bedre kvalitet, Et sortiment, vi manglede og En lokal
+   leverandør. Eller "Hvornår regner du med at skulle bruge ny emballage?" med Inden for 3 måneder, Om 3–6 måneder,
+   Senere og Ved ikke endnu. Der er også et frivilligt tekstfelt, og man kan springe spørgsmålet over.
+3. **"Må vi vende tilbage til dig om det?"** Ja eller nej med ét tryk.
+
+Til sidst takker skemaet med firmanavnet. Har kunden svaret "lager" eller "bestiller på en anden måde", får de et link
+til at genbestille fra deres ordrehistorik. Udtrykket er bloggens eget: dyb grøn, havre og champagne, Instrument Serif
+og Jost, som i W47-indlægget.
 
 Svarene gemmes i biblens eget lager (Vercel Blob) og kan læses under **Klaviyo email → Customer survey**. Der ser du
 også hver kundes personlige link, og hvem der har svaret. Intet bliver skrevet til Klaviyo, Magento eller Navision.
@@ -63,11 +73,17 @@ feltet helt, og sæt filen ind igen.
 
 ## Godt at vide
 
-- **En kunde tæller én gang.** Svarer de igen, er det det nyeste svar, der gælder.
+- **En kunde tæller én gang.** Svaret gemmes efter hvert spørgsmål, men ét besøg er ét svar. En kunde med personligt
+  link tæller én gang, også på tværs af besøg og enheder, og det er det nyeste svar, der gælder. I biblen står der
+  "Stopped after question 1", hvis en kunde ikke gik videre efter første tryk.
+- **Genindlæser kunden siden** efter at have svaret, ser de takken med "Ret mit svar" i stedet for skemaet igen.
+- **Tastatur:** Piletasterne vælger en grund uden at gå videre, Enter går videre, og fokus flytter til næste spørgsmål.
+  Et tryk eller klik går selv videre.
 - **Beskyttelse mod spam.** Der er et skjult felt, som kun robotter udfylder. Desuden bliver et svar, der er sendt
-  hurtigere end 2,5 sekunder efter, at siden blev åbnet, ignoreret.
-- **Tekst om data under knappen:** "Vi gemmer dit svar hos Westpack og bruger det kun til at blive bedre. Kom du hertil
-  via et link fra os, kan vi se, hvilken kunde svaret er fra."
+  hurtigere end 1,2 sekunder efter, at siden blev åbnet, ignoreret.
+- **Går serveren ned,** står kunden stadig på sidste spørgsmål med en fejlbesked og kan prøve igen.
+- **Tekst om data nederst:** "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link
+  fra os, kan vi se, hvilken kunde svaret er fra."
 - **Oversættelse:** al tekst ligger i `STR` i blokkens script, ét sæt pr. sprog. Butikken vælger sproget i
   `STORE_LANG`. Et nyt sprog tilføjes ved at oversætte `da` og indsætte det som fx `de` i `STR`. En test kræver, at
   hvert sprog har alle tekster.
