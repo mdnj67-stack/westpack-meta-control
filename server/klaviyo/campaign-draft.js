@@ -33,10 +33,12 @@ async function readSourceCampaign(klaviyoRequest, headers, campaignId) {
     // Only smart sending is copied: ignore_unsubscribes and friends are not something a draft should inherit.
     sendOptions: { use_smart_sending: attributes.send_options?.use_smart_sending !== false },
     trackingOptions: withoutNulls(attributes.tracking_options || {}),
+    // An empty reply-to on a campaign set up in Klaviyo means "the sender"; the API refuses a create without one
+    // ("Missing reply_to_email", 2026-11-17), so the sender is written in.
     sender: {
       from_email: String(content.from_email || ""),
       from_label: String(content.from_label || ""),
-      reply_to_email: String(content.reply_to_email || ""),
+      reply_to_email: String(content.reply_to_email || content.from_email || ""),
       cc_email: content.cc_email || null,
       bcc_email: content.bcc_email || null
     }

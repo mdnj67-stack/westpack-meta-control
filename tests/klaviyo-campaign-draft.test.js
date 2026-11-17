@@ -69,7 +69,7 @@ const SOURCE = {
     },
     relationships: { "campaign-messages": { data: [{ type: "campaign-message", id: "SRCMSG" }] } }
   },
-  included: [{ type: "campaign-message", id: "SRCMSG", attributes: { label: "W47", content: { subject: "Neu: Geschenkboxen", preview_text: "", from_email: "info@westpack.de", from_label: "Hanne von Westpack", reply_to_email: "info@westpack.de", cc_email: null, bcc_email: null } } }]
+  included: [{ type: "campaign-message", id: "SRCMSG", attributes: { label: "W47", content: { subject: "Neu: Geschenkboxen", preview_text: "", from_email: "info@westpack.de", from_label: "Hanne von Westpack", reply_to_email: "", cc_email: null, bcc_email: null } } }]
 };
 
 function fakeKlaviyo({ existingDraft = false } = {}) {
@@ -123,6 +123,7 @@ test("a campaign draft copies audiences, sender, smart sending and tracking, and
   assert.equal(content.subject, "Kevin hat Ihr Weihnachten ausgerechnet 🧮");
   assert.equal(content.from_label, "Hanne von Westpack");
   assert.equal(content.from_email, "info@westpack.de");
+  assert.equal(content.reply_to_email, "info@westpack.de", "an empty reply-to means the sender, and the API requires one");
   assert.ok(!("cc_email" in content));
   const assign = calls.find((call) => call.url.endsWith("/campaign-message-assign-template/"));
   assert.deepEqual(assign.body.data, { type: "campaign-message", id: "NEWMSG", relationships: { template: { data: { type: "template", id: "Rkyn8k" } } } });
