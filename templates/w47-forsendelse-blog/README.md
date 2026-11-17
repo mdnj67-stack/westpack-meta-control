@@ -1,12 +1,17 @@
-# Den store forsendelse – blogindlæg (W47)
+# Den store forsendelsesguide – blogindlæg (W47)
 
 Et blogindlæg om julepakning i postæsker: fem julelooks, en trin-for-trin-guide, en indkøbsliste til hvert look,
 logotryk og alt det praktiske. Det er **landingssiden for W47-mailen "Den store forsendelse"**: mailens fem
 look-felter åbner hvert sit look her, og linket under trinene åbner guiden med Guldstjerner.
 
-Udtrykket er det samme som mailens: skandinavisk, creme og dæmpede farver, dyb grøn, Instrument Serif og Jost.
+Udtrykket ligger tæt på butikkens eget: hvid baggrund, butikkens skrift (Inter) til teksten og Instrument Serif kun
+på overskrifterne. Skråskrift bruges kun i overskrifterne. Der er farve tre steder: toppen, hvor farven skifter med
+looket, trin-for-trin-guiden og den grønne afslutning. Lookenes farver sidder i billederne.
 
-> **Status 10/11:** Kun dansk. Mads oversætter selv artiklen.
+> **Status 17/11:** Rettet efter Kirstens korrektur (Asana, "Korrektur + blopost"): tonet ned, ny tekst øverst, i
+> "Ikke i december" punkt 01, i trin 1, 2 og 5 (vejledning frem for salgssætninger) og i Look 04, som også har fået
+> et billede af den færdigt indpakkede postæske. Der står "digitaltryk", hvor der før stod "tryk". Kun dansk. Mads
+> oversætter selv artiklen. **Indlægget er ikke lagt op endnu**, så mailens links giver 404, indtil det er.
 
 ## Sådan lægger du indlægget op
 
@@ -15,11 +20,11 @@ Den er ledig (tjekket 6/11 i DK, EU og DE). Mailens links går dertil, så den s
 
 1. Gå til indlæggene i Amasty Blog Pro i admin, og opret et nyt indlæg (Add New Post).
 2. Udfyld felterne:
-   - **Titel:** Den store forsendelse: 5 julelooks til postæsken
+   - **Titel:** Den store forsendelsesguide: 5 julelooks til postæsken
    - **URL-nøgle:** `christmas-unboxing-guide-2026`
    - **Kort beskrivelse (listen):** Fem julelooks til postæsken, fem trin til at pakke dem – og alt det praktiske om
      logotryk, prøver og frister.
-   - **Meta title:** Den store forsendelse: 5 julelooks til postæsken | Westpack
+   - **Meta title:** Den store forsendelsesguide: 5 julelooks til postæsken | Westpack
    - **Meta description:** Fem julelooks til postæsken med trin for trin, indkøbslister og alt det praktiske om
      logotryk, prøver og frister til jul.
    - **Kategorier:** Forsendelsesemballage, Indpakning, Tips & Tricks
@@ -44,7 +49,9 @@ feltet helt, og sæt filen ind igen.
 - **"Ikke i december."** Tre grunde til at gøre sig umage, skrevet som et svar på “Det er jo bare en postæske.”
 - **Trin for trin** har fem trin med billede, tip og link. Man kan se dem med Rosa & guld eller Guldstjerner, bladre,
   swipe på telefonen eller trykke **Afspil**. Guiden spiller selv én gang, når den kommer til syne.
-- **Fem looks** har hvert sit farvefelt med tre billeder, en kort tekst, en indkøbsliste med links og en knap.
+- **Fem looks** står på hvid baggrund med en streg imellem, hver med tre billeder, en kort tekst, en indkøbsliste med
+  links og en knap. Look 04 (Grønne grene) viser også postæsken pakket ind i sit eget gavepapir (billede 70 fra
+  fotograferingen): papir, bånd, gavemærke og rensdyr i æsken er afmålt til at pakke den ind.
   Smykkeæsken i hvert look er markeret med "gratis logotryk": Boston ECO, Melbourne ECO, Santorini ECO, Seoul ECO og
   Vienna. Det står på hver af deres produktsider (tjekket 6/11). Til sidst kommer "Mix dit eget".
 - **Ikke kun til smykker** (tilføjet 10/11) svarer på “Postæsker? Vi sælger jo ikke smykker.” med "Det gør postæsken
@@ -57,7 +64,8 @@ feltet helt, og sæt filen ind igen.
 - **Logo på postæsken** handler kun om postæsken, for kampagnen handler om forsendelsen og ikke om smykkeæsker.
   Indvendingen “Logo på postæsken? Det er kun for de store.” får svaret "Fra 200 stk. Så ligner du en af dem." Der er
   fire rigtige kunders postæsker på gul baggrund og tre fakta: fra 200 stk. (logoet koster ekstra pr. æske), folie
-  eller tryk, og produktionstiden.
+  eller digitaltryk, og produktionstiden. Der står "digitaltryk" overalt, ikke bare "tryk": butikken sælger to
+  teknikker til postæsker, folie og digitaltryk, og det er dem, kunden skal vælge imellem.
 - **Alt det praktiske** har syv spørgsmål (det første starter nu med "det, du sender", ikke smykkeæskerne): valg af postæske, antal og opbevaring, logo på postæsken, gratis logotryk
   på smykkeæsker, silkepapir og bånd med logo, prøver og frister.
 - **Klar til jul** har den godkendte sætning om frister og links til frister og genbestilling.
