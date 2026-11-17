@@ -6,6 +6,7 @@ const { removeStandalonePriceBlocks } = require("../../server/lib/klaviyo-produc
 const { collectWestpackProductFeedUrlMismatches, collectWestpackSnippetUrlMismatches, rewriteWestpackProductFeedUrls, rewriteWestpackSnippetUrls } = require("../../server/lib/westpack-url-locales");
 const { createTemplateVariant } = require("../../server/lib/klaviyo-template-create");
 const { stripNullCharactersDeep } = require("../../server/lib/model-json");
+const { CAMPAIGN_REVISION, createCampaignDraft, renderTemplate } = require("../../server/klaviyo/campaign-draft");
 const TEMPLATE_API_REVISION = "2026-04-15";
 const KLAVIYO_REQUEST_TIMEOUT_MS = 15000;
 
@@ -140,7 +141,48 @@ module.exports = async function handler(req, res) {
   try {
     const body = await readJsonBody(req);
     const dryRun = Boolean(body?.dryRun);
-    if (String(body?.mode || "").trim() === "single_template_variant") {
+    const mode = String(body?.mode || "").trim();
+
+    // A draft campaign with the given subject and template, its audiences, sender and tracking copied from a
+    // campaign already set up in the same account. Never sent or scheduled - the operator does that in Klaviyo.
+    // And the rendered HTML of a template or campaign message, to test a market before anyone presses send.
+    if (mode === "campaign_draft" || mode === "render_template") {
+      const country = String(body?.country || "").trim().toUpperCase();
+      const market = parseMarkets(config.klaviyoMarketsJson).find((item) => String(item?.country || "").trim().toUpperCase() === country);
+      if (!market?.privateKey) {
+        sendJson(res, 404, { error: `No Klaviyo private key configured for ${country}.` });
+        return;
+      }
+      const headers = buildHeaders(String(market.privateKey).trim(), CAMPAIGN_REVISION);
+      if (mode === "render_template") {
+        sendJson(res, 200, { country, ...(await renderTemplate({ klaviyoRequest, headers, templateId: String(body?.templateId || ""), messageId: String(body?.messageId || "") })) });
+        return;
+      }
+      const draft = await createCampaignDraft({
+        klaviyoRequest,
+        headers,
+        name: String(body?.name || "").trim(),
+        subject: String(body?.subject || "").trim(),
+        previewText: String(body?.previewText || "").trim(),
+        templateId: String(body?.templateId || "").trim(),
+        sourceCampaignId: String(body?.sourceCampaignId || "").trim(),
+        dryRun
+      });
+      if (!dryRun) {
+        await recordAuditEvent("klaviyo_campaign_draft_created", {
+          campaignKey: body?.campaignKey || "",
+          campaignTitle: body?.campaignTitle || draft.name,
+          operator: body?.operator || "",
+          reference: draft.campaignId,
+          target: country,
+          dryRun
+        });
+      }
+      sendJson(res, 200, { ok: true, country, ...draft });
+      return;
+    }
+
+    if (mode === "single_template_variant") {
       const country = String(body?.country || "").trim().toUpperCase();
       const sourceTemplateId = String(body?.sourceTemplateId || "").trim();
       const sourceTemplateName = String(body?.sourceTemplateName || "").trim();

@@ -24,6 +24,8 @@ const AUDIT_EVENTS = Object.freeze([
   "klaviyo_draft_created",
   // A revision written over a draft that already exists, rather than a new draft beside it.
   "klaviyo_draft_updated",
+  // A draft campaign made by the app (never sent or scheduled by it).
+  "klaviyo_campaign_draft_created",
   "meta_draft_created",
   "studio_draft_saved",
   "job_rejected_restarted",
