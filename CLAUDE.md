@@ -1318,6 +1318,22 @@ rollout means writing for these rules:
   city-named series names as written inside sentences.
 - Attribute values go back escaped for their own quote character. `tests/klaviyo-translation-integrity.test.js`.
 
+## Campaign drafts from the app (2026-11-17)
+
+`POST /api/klaviyo/push-template-rollout` with `mode: "campaign_draft"` (`server/klaviyo/campaign-draft.js`) makes one
+email campaign **as a draft** in one account: audiences, sender, smart sending and tracking (UTM) copied from a
+campaign the team already set up there (`sourceCampaignId`, e.g. the day's campaign), the subject given, and a
+template assigned. It never sends or schedules - the user does that in Klaviyo ("hverken med send eller scheduling, det
+gør jeg selv"), and `tests/klaviyo-campaign-draft.test.js` fails if the module gains a send job or a send time. A retry
+reuses a draft of the same name. An empty reply-to (Klaviyo's UI default) is refused by the API, so the sender is
+written in. `GET /api/klaviyo/templates?country=XX&campaigns=1` lists drafts and scheduled campaigns; `messageId` then
+returns the template a message will send.
+
+`mode: "render_template"` renders a template through Klaviyo's `template-render`, but that **leaves
+`{{ organization.url }}` empty** (it renders only the context it is given), so it cannot test store links. Test a
+market by comparing the message's own template copy with what was pushed and requesting each link on the account's
+`?organization=1` URL.
+
 ## What Westpack's own website says — `knowledge/westpack-site/`
 
 Added 2026-09-30. A crawl of the whole UK English store (2,491 products, 322 content and category
