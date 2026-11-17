@@ -2,6 +2,9 @@ const { getConfig } = require("../../server/lib/config");
 const { requireAuth } = require("../../server/lib/auth");
 const { fetchWithTimeout, sendJson } = require("../../server/lib/http");
 const TEMPLATE_API_REVISION = "2026-04-15";
+// Campaign messages carry `content` (subject, preview_text, from_label) on this revision, as the
+// subject-line history reads them; later revisions moved it under `definition`.
+const CAMPAIGN_API_REVISION = "2024-10-15";
 const KLAVIYO_REQUEST_TIMEOUT_MS = 12000;
 const TEMPLATE_LIST_CACHE_TTL_MS = 2 * 60 * 1000;
 const TEMPLATE_DETAIL_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -59,8 +62,9 @@ async function klaviyoRequest(url, headers) {
   return payload;
 }
 
-async function getAllPages(url, headers) {
+async function getAllPages(url, headers, { withIncluded = false } = {}) {
   const items = [];
+  const included = [];
   let next = url;
 
   while (next) {
@@ -68,10 +72,13 @@ async function getAllPages(url, headers) {
     if (Array.isArray(payload?.data)) {
       items.push(...payload.data);
     }
+    if (Array.isArray(payload?.included)) {
+      included.push(...payload.included);
+    }
     next = payload?.links?.next || null;
   }
 
-  return items;
+  return withIncluded ? { items, included } : items;
 }
 
 async function getAllTemplates(headers) {
@@ -177,6 +184,83 @@ module.exports = async function handler(req, res) {
         country,
         organizationName: String(contact.organization_name || ""),
         organizationUrl: String(contact.website_url || "")
+      });
+      return;
+    }
+
+    // What is about to go out: the account's email campaigns updated in the last `days` (default 21),
+    // drafts and scheduled ones included, with each message's subject, preheader and sender and the
+    // audiences by name. Read-only. Added 2026-11-17 to check a send the day before; the template a
+    // message will send is then read with `messageId`.
+    if (String(req.query?.campaigns || "") === "1") {
+      const days = Math.max(1, Math.min(90, Number(req.query?.days) || 21));
+      const since = new Date(Date.now() - days * 86400000).toISOString().slice(0, 19);
+      const campaignHeaders = buildHeaders(String(market.privateKey).trim(), CAMPAIGN_API_REVISION);
+      const campaigns = await getAllPages(
+        `https://a.klaviyo.com/api/campaigns/?filter=and(equals(messages.channel,'email'),greater-than(updated_at,${since}))`
+          + "&sort=-updated_at&include=campaign-messages"
+          + "&fields[campaign]=name,status,archived,audiences,send_options,tracking_options,send_strategy,created_at,scheduled_at,updated_at,send_time"
+          + "&fields[campaign-message]=label,content,send_times",
+        campaignHeaders,
+        { withIncluded: true }
+      );
+      const messagesById = new Map(campaigns.included.map((item) => [item.id, item]));
+      const audienceNames = new Map();
+      const audienceIds = new Set();
+      for (const item of campaigns.items) {
+        const audiences = item?.attributes?.audiences || {};
+        for (const id of [...(audiences.included || []), ...(audiences.excluded || [])]) audienceIds.add(id);
+      }
+      for (const id of audienceIds) {
+        for (const kind of ["lists", "segments"]) {
+          try {
+            const payload = await klaviyoRequest(`https://a.klaviyo.com/api/${kind}/${encodeURIComponent(id)}/?fields[${kind.slice(0, -1)}]=name`, campaignHeaders);
+            audienceNames.set(id, `${kind === "lists" ? "List" : "Segment"}: ${payload?.data?.attributes?.name || id}`);
+            break;
+          } catch (error) {
+            // Not a list; try segments, else keep the id.
+          }
+        }
+      }
+      const named = (ids = []) => ids.map((id) => ({ id, name: audienceNames.get(id) || id }));
+      sendJson(res, 200, {
+        country,
+        since,
+        campaigns: campaigns.items.map((item) => {
+          const attributes = item?.attributes || {};
+          const messageIds = (item?.relationships?.["campaign-messages"]?.data || []).map((ref) => ref.id);
+          return {
+            id: String(item.id || ""),
+            name: String(attributes.name || ""),
+            status: String(attributes.status || ""),
+            archived: Boolean(attributes.archived),
+            createdAt: String(attributes.created_at || ""),
+            updatedAt: String(attributes.updated_at || ""),
+            scheduledAt: String(attributes.scheduled_at || ""),
+            sendTime: String(attributes.send_time || ""),
+            sendStrategy: attributes.send_strategy || null,
+            sendOptions: attributes.send_options || null,
+            trackingOptions: attributes.tracking_options || null,
+            audiences: {
+              included: named(attributes.audiences?.included),
+              excluded: named(attributes.audiences?.excluded)
+            },
+            messages: messageIds.map((id) => {
+              const message = messagesById.get(id)?.attributes || {};
+              const content = message.content || message.definition?.content || {};
+              return {
+                id,
+                label: String(message.label || message.definition?.label || ""),
+                subject: String(content.subject || ""),
+                previewText: String(content.preview_text || ""),
+                fromEmail: String(content.from_email || ""),
+                fromLabel: String(content.from_label || ""),
+                replyToEmail: String(content.reply_to_email || ""),
+                sendTimes: message.send_times || []
+              };
+            })
+          };
+        })
       });
       return;
     }
