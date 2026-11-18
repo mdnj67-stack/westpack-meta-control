@@ -4,17 +4,19 @@ Et blogindlæg om julepakning i postæsker: fem julelooks, en trin-for-trin-guid
 logotryk og alt det praktiske. Det er **landingssiden for W47-mailen "Den store forsendelse"**: mailens fem
 look-felter åbner hvert sit look her, og linket under trinene åbner guiden med Guldstjerner.
 
-**Funktionerne er nye, men layout og stil er Westpacks egne blogindlæg** (18/11). Stilen er målt på teamets egne
-indlæg (Kick-off 9 Mersalg, 9 inspirerende sæt, Kick-off 5 Julelogotryk, Top 5 smykkeæsker, Mix & Match):
+**Funktionerne er nye, men layout og stil er Westpacks egne blogindlæg** (18/11). Analysen af teamets egne indlæg
+ligger i `knowledge/westpack-blog-style/README.md`. Indlægget følger den sådan:
 
-- kun temaets Inter: brødtekst 14 px, overskrifter 20 px halvfed og mellemoverskrifter 18 px
-- grå numre ("01"), tynde streger mellem afsnittene og lysegrå bokse (#f5f4f0) med 8 px hjørner
-- grønne links (#34453f) med pil, sorte knapper, runde "piller" som indholdsfortegnelse og tip i den brunkantede boks
-- billeder med 8 px hjørner, og indholdet flugter med indlæggets spalte
+- **Skrift og farver:** kun temaets Inter. Brødtekst 14 px, overskrifter 20 px halvfed. Grå numre ("01"), tynde
+  streger mellem afsnittene og lysegrå bokse (#f5f4f0) med 8 px hjørner. Grønne links med pil, sorte knapper med ➔.
+- **Opbygning:** én spalte. Hvert afsnit starter med en beskrivende overskrift ("Trin for trin", "Fem looks", "Logo på
+  postæsken" ...). Indvendingen står i almindelig tekst og svaret i fed, som i Kick-off 5 Julelogotryk.
+- **Looks:** som sættene i "9 inspirerende sæt". Hvert look har overskriften "Look 01: Rosa & guld", en kort tekst og
+  billederne, hvor ét stort står ved siden af to små som i Kick-off 9. Derefter kommer "Det skal du bruge" som
+  punktliste med links, "Gratis logotryk" som grå pille fra Top 5 og husets sorte knap.
 
-Der er ingen anden skrifttype, ingen skråskrift, ingen spærrede versaler og ingen animation, når man scroller.
-"Gratis logotryk" er et lille rødt mærke som temaets egne tags. To ting fra Kirstens kommentar er beholdt: farven
-skifter med looket i toppen, nu i rammen om det store billede, og afslutningen er grøn, nu i husets grøn.
+To ting fra Kirstens kommentar er beholdt: farven skifter med looket i toppen, nu i rammen om det store billede. Og
+afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 
 > **Status 18/11:** Rettet efter Kirstens korrektur (Asana, "Korrektur + blopost"). Ny tekst øverst, i "Ikke i
 > december" punkt 01, i trin 1, 2 og 5 (vejledning frem for salgssætninger) og i Look 04. Look 04 har også fået et
@@ -62,8 +64,8 @@ feltet helt, og sæt filen ind igen.
   jo bare en postæske.”
 - **Trin for trin** har fem trin med billede, tip og link. Man kan se dem med Rosa & guld eller Guldstjerner, bladre,
   swipe på telefonen eller trykke **Afspil**. Guiden spiller selv én gang, når den kommer til syne.
-- **Fem looks** står efter hinanden med en streg imellem, hver med tre billeder, en kort tekst, en indkøbsliste med
-  links og en knap. Look 04 (Grønne grene) viser også postæsken pakket ind i sit eget gavepapir (billede 70 fra
+- **Fem looks** står i én spalte efter hinanden med en streg imellem. Hvert look har en overskrift, en kort tekst, tre
+  billeder, en indkøbsliste som punktliste med links og en knap. Look 04 (Grønne grene) viser også postæsken pakket ind i sit eget gavepapir (billede 70 fra
   fotograferingen): papir, bånd, gavemærke og rensdyr i æsken er afmålt til at pakke den ind.
   Smykkeæsken i hvert look er markeret med "gratis logotryk": Boston ECO, Melbourne ECO, Santorini ECO, Seoul ECO og
   Vienna. Det står på hver af deres produktsider (tjekket 6/11). Til sidst kommer "Mix dit eget".
@@ -107,7 +109,7 @@ Kommer man ind via et link, afspiller trin-guiden sig ikke selv. Den, der kom fo
   af siden.
 - **Uden JavaScript** står alle fem trin under hinanden med billede, og intet forsvinder.
 - **Ingen emojis** og ingen tegn på 4 bytes, for Magentos database afviser dem.
-- Filen er ca. 58 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men næppe til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
+- Filen er ca. 56 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men næppe til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
 - **Teksten er læst igennem efter Copywriter-oplægget** (Hvad så?-testen, comeback-snydekoden, du-form, aktive
   verber), og hver påstand er tjekket mod butikkens egne sider.
 - **Animationen kan oversættes.** Tegningen har ingen ord. De syv navne ("Et duftlys." … "Og ja – smykker.") står som
