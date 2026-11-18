@@ -442,6 +442,23 @@ The marketing department budgets monthly and treats a month as 30 days — "the 
   and the semi-transparent mix-bar segment. Both rules must read the tokens and neither
   may hard-code a colour; the tone-coverage test enforces that too.
 
+## EU budget pilot — when to turn the budget down (2026-11-18)
+
+The user's rule: a budget goes down when the numbers say so, never because a date says so, and the judgement is
+holistic, not one metric. `server/meta/budget-pilot.js` (pure rules) + `scripts/eu-budget-pilot.js` (four Graph calls,
+read-only, `--backtest[=date]`, `--json`). It recommends; the user changes budgets in Ads Manager. Tests:
+`tests/meta-budget-pilot.test.js`.
+
+- **New customers decide, the leading signals decide how sure and how fast.** Requirement = the measured level below
+  plus the step at break-even (2,670 kr, 50 % DB, 3.5 years), on incremental and 7-day click. Pressure = CPM (3 days vs
+  the same weekdays a week earlier), click rate, buyers per click, frequency, 3-day pace (0-2 points each). Down when
+  both measures are under; one under + 3 points; or under 10 % over + 5 points. Price alone never steps down.
+- **Compare short windows with the same weekdays.** The first emergency brake read a B2B weekend as a collapse and
+  fired on Sunday 15/11 in the backtest; it now needs -40 % against the same days a week earlier, confirmed by price
+  or buyers.
+- `EU_BUDGET_HISTORY` holds the levels; a live budget that differs is appended from the spend (closest level, not a
+  band - a 25 % step sits inside any band). Add a real change to the history when it happens.
+
 ## Expansion reach — its own tab, its own rules
 
 `server/meta/expansion-reach.js` + `renderExpansionView`/`renderOverviewExpansionReach`
