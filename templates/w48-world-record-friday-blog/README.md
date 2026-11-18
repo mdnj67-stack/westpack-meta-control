@@ -36,8 +36,8 @@ Indlægget skal have **URL-nøglen `world-record-friday-2026`**, altså `…/blo
 2. Udfyld felterne:
    - **Titel:** World Record Friday: resultaterne
    - **URL-nøgle:** `world-record-friday-2026`
-   - **Kort beskrivelse (listen):** Fire kolleger, fire rekordforsøg og fem videoer. Se, hvordan det gik – og hvem I
-     holdt med.
+   - **Kort beskrivelse (listen):** Traditionen tro holder vi ikke Black Friday. Fire kolleger gik efter hver sin rekord
+     i stedet – her er alle fem videoer.
    - **Meta title:** World Record Friday: resultaterne | Westpack
    - **Meta description:** Fire kolleger fra Westpack gik efter fire verdensrekorder. Se videoerne, resultaterne og
      rekorderne, de skulle slå.
@@ -62,8 +62,9 @@ feltet helt, og sæt filen ind igen.
 
 ## Hvad der er på siden
 
-- **Toppen** – overskriften fra Pre Black Friday-mailen, “Og I filmede det hele?” / "Hver eneste klemme." og
-  "ingen verdensrekorder kom til skade under optagelserne". Ved siden af ligger introvideoen (0:49). Under den står
+- **Toppen** – overskriften fra Pre Black Friday-mailen, “Og I filmede det hele?” / "Hver eneste klemme." og så lige
+  ud: "Traditionen tro holder vi ikke Black Friday – i hvert fald ikke den med nedtællingsure og “kun i dag”."
+  Ved siden af ligger introvideoen (0:49). Under den står
   **slutstillingen**: de fire deltagere som i mandagens "vælg din spiller"-skærm, med resultat og rekord. Billederne
   lyser op én ad gangen, når man ruller ned til dem, ligesom i mandagens animation. Et tryk på en deltager hopper ned
   til forsøget. Under introvideoen står studieværtens dom: “There were questionable techniques, definitely.”
@@ -74,7 +75,7 @@ feltet helt, og sæt filen ind igen.
   deltagerens kampråb fra mandagens mail, og hvordan det gik med det.
   - Martin: 12 smykkeæsker i ét tårn. Der findes ingen rekord, så tårnet står som den første. Tegningen er et tårn af
     12 æsker. Mandagens mail lovede pakketape om hænderne. I videoen er det engangshandsker, og det siger indlægget
-    ærligt (0:07: "Det er nok den slags, studieværten kalder “questionable techniques”").
+    ærligt (0:07: "Engangshandsker på. Det er nok den slags, studieværten kalder “questionable techniques”.").
   - Mia: 18 M&M's på ét minut med spisepinde. Rekorden er 65 (fra 2011). Tegningen er 65 prikker, og 18 af dem er
     farvede.
   - Cecilia: 6,5 meter med en elastik (bedste af tre skud). Rekorden er 30,16 meter (fra 1999). Tegningen er en streg på
@@ -83,8 +84,8 @@ feltet helt, og sæt filen ind igen.
     Hans video er den lange (4:51).
 - **Jeres favorit** – stemmerne fra mandagens mail (et klik på "Hold med …" var en stemme), som søjler og en
   vinderlinje. Er der delt førsteplads, står der det. Er stemmerne ikke talt, er afsnittet der ikke.
-- **Kevin** – bonusforsøget uden video: flest gange i træk at sige “touchpoint density”. Resultat: 4.000+ ("Sidst vi
-  talte"), samme tal som i mailen.
+- **Kevin** – bonusforsøget uden video: flest gange i træk at sige “touchpoint density”. Resultat: 4.000+, samme tal
+  som i mailen ("Optagelsen kører stadig. Vi har skiftet batteri to gange.").
 - **Tilbuddet** – "Det eneste, vi slog, var prisen.": 20 % på alle smykke- og rejseskrin (hele WTP-serien) til og med
   søndag 29. november, med vægtklasserne fra mandagens mail (Hawaii, Capri, Bali, Tahiti og Stackables). Alle fem var
   på lager og ikke på "Sidste chance" 18/11. Knappen "Se alle WTP-skrin med 20 %" går til alle WTP-skrin (urskrinene er ikke med: de er på 50 % "Sidste
