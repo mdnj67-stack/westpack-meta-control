@@ -4,14 +4,24 @@ Et blogindlæg om julepakning i postæsker: fem julelooks, en trin-for-trin-guid
 logotryk og alt det praktiske. Det er **landingssiden for W47-mailen "Den store forsendelse"**: mailens fem
 look-felter åbner hvert sit look her, og linket under trinene åbner guiden med Guldstjerner.
 
-Udtrykket ligger tæt på butikkens eget: hvid baggrund, butikkens skrift (Inter) til teksten og Instrument Serif kun
-på overskrifterne. Skråskrift bruges kun i overskrifterne. Der er farve tre steder: toppen, hvor farven skifter med
-looket, trin-for-trin-guiden og den grønne afslutning. Lookenes farver sidder i billederne.
+**Funktionerne er nye, men layout og stil er Westpacks egne blogindlæg** (18/11). Stilen er målt på teamets egne
+indlæg (Kick-off 9 Mersalg, 9 inspirerende sæt, Kick-off 5 Julelogotryk, Top 5 smykkeæsker, Mix & Match):
 
-> **Status 17/11:** Rettet efter Kirstens korrektur (Asana, "Korrektur + blopost"): tonet ned, ny tekst øverst, i
-> "Ikke i december" punkt 01, i trin 1, 2 og 5 (vejledning frem for salgssætninger) og i Look 04, som også har fået
-> et billede af den færdigt indpakkede postæske. Der står "digitaltryk", hvor der før stod "tryk". Kun dansk. Mads
-> oversætter selv artiklen. **Indlægget er ikke lagt op endnu**, så mailens links giver 404, indtil det er.
+- kun temaets Inter: brødtekst 14 px, overskrifter 20 px halvfed og mellemoverskrifter 18 px
+- grå numre ("01"), tynde streger mellem afsnittene og lysegrå bokse (#f5f4f0) med 8 px hjørner
+- grønne links (#34453f) med pil, sorte knapper, runde "piller" som indholdsfortegnelse og tip i den brunkantede boks
+- billeder med 8 px hjørner, og indholdet flugter med indlæggets spalte
+
+Der er ingen anden skrifttype, ingen skråskrift, ingen spærrede versaler og ingen animation, når man scroller.
+"Gratis logotryk" er et lille rødt mærke som temaets egne tags. To ting fra Kirstens kommentar er beholdt: farven
+skifter med looket i toppen, nu i rammen om det store billede, og afslutningen er grøn, nu i husets grøn.
+
+> **Status 18/11:** Rettet efter Kirstens korrektur (Asana, "Korrektur + blopost"). Ny tekst øverst, i "Ikke i
+> december" punkt 01, i trin 1, 2 og 5 (vejledning frem for salgssætninger) og i Look 04. Look 04 har også fået et
+> billede af den færdigt indpakkede postæske. Der står "digitaltryk", hvor der før stod "tryk". Den 18/11 blev hele
+> designet lagt om til husets blogstil (se ovenfor). Mads mente, at funktionerne godt måtte være nye, men at layout
+> og stil skulle være Westpacks. Kun dansk; Mads oversætter selv artiklen. **Indlægget er ikke lagt op endnu**, så
+> mailens links giver 404, indtil det er.
 
 ## Sådan lægger du indlægget op
 
@@ -44,12 +54,15 @@ feltet helt, og sæt filen ind igen.
 
 ## Hvad der sker på siden
 
-- **Toppen** viser de fem færdige looks, der skifter hvert fjerde sekund, til man vælger et selv. Baggrunden skifter
-  farve med looket. "Se looket" hopper ned til lookets afsnit.
-- **"Ikke i december."** Tre grunde til at gøre sig umage, skrevet som et svar på “Det er jo bare en postæske.”
+- **Toppen** følger husets rækkefølge: en linje, indledningen og indholdet som piller ("Fem trin", "Fem looks", "Dit
+  logo", "Det praktiske"). Derefter kommer det store billede. Billedet viser de fem færdige looks, der skifter hvert
+  fjerde sekund, til man vælger et selv med pillerne under det. Rammen skifter farve med looket. "Se looket" hopper
+  ned til lookets afsnit. Indlæggets egen titel står over blokken, så blokken har ingen lille overskrift.
+- **"Ikke i december."** Tre grunde til at gøre sig umage i husets nummererede bokse, skrevet som et svar på “Det er
+  jo bare en postæske.”
 - **Trin for trin** har fem trin med billede, tip og link. Man kan se dem med Rosa & guld eller Guldstjerner, bladre,
   swipe på telefonen eller trykke **Afspil**. Guiden spiller selv én gang, når den kommer til syne.
-- **Fem looks** står på hvid baggrund med en streg imellem, hver med tre billeder, en kort tekst, en indkøbsliste med
+- **Fem looks** står efter hinanden med en streg imellem, hver med tre billeder, en kort tekst, en indkøbsliste med
   links og en knap. Look 04 (Grønne grene) viser også postæsken pakket ind i sit eget gavepapir (billede 70 fra
   fotograferingen): papir, bånd, gavemærke og rensdyr i æsken er afmålt til at pakke den ind.
   Smykkeæsken i hvert look er markeret med "gratis logotryk": Boston ECO, Melbourne ECO, Santorini ECO, Seoul ECO og
@@ -63,7 +76,7 @@ feltet helt, og sæt filen ind igen.
   Animationen er ren CSS på en indlejret SVG, ca. 3 KB. Den står stille for dem, der har slået bevægelse fra.
 - **Logo på postæsken** handler kun om postæsken, for kampagnen handler om forsendelsen og ikke om smykkeæsker.
   Indvendingen “Logo på postæsken? Det er kun for de store.” får svaret "Fra 200 stk. Så ligner du en af dem." Der er
-  fire rigtige kunders postæsker på gul baggrund og tre fakta: fra 200 stk. (logoet koster ekstra pr. æske), folie
+  fire rigtige kunders postæsker på gul baggrund (det gule er fotoet) og tre fakta i husets bokse: fra 200 stk. (logoet koster ekstra pr. æske), folie
   eller digitaltryk, og produktionstiden. Der står "digitaltryk" overalt, ikke bare "tryk": butikken sælger to
   teknikker til postæsker, folie og digitaltryk, og det er dem, kunden skal vælge imellem.
 - **Alt det praktiske** har syv spørgsmål (det første starter nu med "det, du sender", ikke smykkeæskerne): valg af postæske, antal og opbevaring, logo på postæsken, gratis logotryk
@@ -94,7 +107,7 @@ Kommer man ind via et link, afspiller trin-guiden sig ikke selv. Den, der kom fo
   af siden.
 - **Uden JavaScript** står alle fem trin under hinanden med billede, og intet forsvinder.
 - **Ingen emojis** og ingen tegn på 4 bytes, for Magentos database afviser dem.
-- Filen er ca. 62 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men ikke til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
+- Filen er ca. 58 KB. Et HTML Code-element kan højst rumme 64 KB, så der er plads til lidt, men næppe til et afsnit mere. Den læsbare udgave ligger i `src/`. Ret dér, og byg den komprimerede igen.
 - **Teksten er læst igennem efter Copywriter-oplægget** (Hvad så?-testen, comeback-snydekoden, du-form, aktive
   verber), og hver påstand er tjekket mod butikkens egne sider.
 - **Animationen kan oversættes.** Tegningen har ingen ord. De syv navne ("Et duftlys." … "Og ja – smykker.") står som
