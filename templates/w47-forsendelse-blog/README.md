@@ -22,18 +22,21 @@ afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 > december" punkt 01, i trin 1, 2 og 5 (vejledning frem for salgssætninger) og i Look 04. Look 04 har også fået et
 > billede af den færdigt indpakkede postæske. Der står "digitaltryk", hvor der før stod "tryk". Den 18/11 blev hele
 > designet lagt om til husets blogstil (se ovenfor). Mads mente, at funktionerne godt måtte være nye, men at layout
-> og stil skulle være Westpacks. Kun dansk; Mads oversætter selv artiklen. **Indlægget er ikke lagt op endnu**, så
-> mailens links giver 404, indtil det er.
+> og stil skulle være Westpacks. Kun dansk; Mads oversætter selv artiklen. **18/11: Indlægget ligger i Magento** med URL-nøglen
+> `the-complete-christmas-shipping-guide-2026` og status Hidden (kan åbnes på adressen, men står ikke på
+> blogoversigten). Mailen linker dertil fra v13, og alle dens dybe links er afprøvet på det live indlæg.
 
 ## Sådan lægger du indlægget op
 
-Indlægget skal have **URL-nøglen `christmas-unboxing-guide-2026`**, altså `…/blog/christmas-unboxing-guide-2026`.
+Indlægget har **URL-nøglen `the-complete-christmas-shipping-guide-2026`**, altså
+`…/blog/the-complete-christmas-shipping-guide-2026`. Teamet valgte den, da indlægget blev lagt op. Mailen (v13) linker
+dertil, så den må ikke ændres, uden at mailens links ændres med. Den oprindelige plan var `christmas-unboxing-guide-2026`.
 Den er ledig (tjekket 6/11 i DK, EU og DE). Mailens links går dertil, så den skal være præcis sådan.
 
 1. Gå til indlæggene i Amasty Blog Pro i admin, og opret et nyt indlæg (Add New Post).
 2. Udfyld felterne:
    - **Titel:** Den store forsendelsesguide: 5 julelooks til postæsken
-   - **URL-nøgle:** `christmas-unboxing-guide-2026`
+   - **URL-nøgle:** `the-complete-christmas-shipping-guide-2026`
    - **Kort beskrivelse (listen):** Fem julelooks til postæsken, fem trin til at pakke dem – og alt det praktiske om
      logotryk, prøver og frister.
    - **Meta title:** Den store forsendelsesguide: 5 julelooks til postæsken | Westpack
@@ -49,7 +52,7 @@ Den er ledig (tjekket 6/11 i DK, EU og DE). Mailens links går dertil, så den s
 5. Åbn indlægget på sitet, og tjek tre ting:
    - Øverst skifter de fem looks af sig selv, og knapperne under billedet skifter look.
    - I trin-for-trin kan du skifte til **Guldstjerner**, og billederne skifter med.
-   - `…/blog/christmas-unboxing-guide-2026#look-03` lander på Guldstjerner.
+   - `…/blog/the-complete-christmas-shipping-guide-2026#look-03` lander på Guldstjerner.
 
 Får du **"Please remove invalid characters"**, er der kommet tegn med i feltet, som databasen ikke kan gemme. Tøm
 feltet helt, og sæt filen ind igen.
