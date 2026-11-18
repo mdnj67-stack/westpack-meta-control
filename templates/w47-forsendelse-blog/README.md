@@ -56,10 +56,12 @@ feltet helt, og sæt filen ind igen.
 
 ## Hvad der sker på siden
 
-- **Toppen** følger husets rækkefølge: en linje, indledningen og indholdet som piller ("Fem trin", "Fem looks", "Dit
-  logo", "Det praktiske"). Derefter kommer det store billede. Billedet viser de fem færdige looks, der skifter hvert
-  fjerde sekund, til man vælger et selv med pillerne under det. Rammen skifter farve med looket. "Se looket" hopper
-  ned til lookets afsnit. Indlæggets egen titel står over blokken, så blokken har ingen lille overskrift.
+- **Toppen** åbner som Kick-off 9 og Mix & Match. Øverst står en stor overskrift (36 px, på telefonen 26 px): "Den
+  store forsendelsesguide: Gør hver ordre til en julegave". Den har titel og undertitel ligesom "Mix & Match: Giv dine
+  smykkeæsker et helt nyt look". Derefter kommer indledningen og indholdet som piller ("Fem trin", "Fem looks", "Dit
+  logo", "Det praktiske"). Så kommer det store billede med de fem færdige looks. De skifter hvert fjerde sekund, til
+  man vælger et selv med pillerne under billedet, og rammen skifter farve med looket. "Se looket" hopper ned til
+  lookets afsnit. Blokken har 32 px luft over sig, så overskriften ikke klistrer til datoen.
 - **"Ikke i december."** Tre grunde til at gøre sig umage i husets nummererede bokse, skrevet som et svar på “Det er
   jo bare en postæske.”
 - **Trin for trin** har fem trin med billede, tip og link. Man kan se dem med Rosa & guld eller Guldstjerner, bladre,
