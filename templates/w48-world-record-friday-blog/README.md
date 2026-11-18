@@ -84,8 +84,6 @@ feltet helt, og sæt filen ind igen.
     Hans video er den lange (4:51).
 - **Jeres favorit** – stemmerne fra mandagens mail (et klik på "Hold med …" var en stemme), som søjler og en
   vinderlinje. Er der delt førsteplads, står der det. Er stemmerne ikke talt, er afsnittet der ikke.
-- **Kevin** – bonusforsøget uden video: flest gange i træk at sige “touchpoint density”. Resultat: 4.000+, samme tal
-  som i mailen ("Optagelsen kører stadig. Vi har skiftet batteri to gange.").
 - **Tilbuddet** – "Det eneste, vi slog, var prisen.": 20 % på alle smykke- og rejseskrin (hele WTP-serien) til og med
   søndag 29. november, med vægtklasserne fra mandagens mail (Hawaii, Capri, Bali, Tahiti og Stackables). Alle fem var
   på lager og ikke på "Sidste chance" 18/11. Knappen "Se alle WTP-skrin med 20 %" går til alle WTP-skrin (urskrinene er ikke med: de er på 50 % "Sidste
