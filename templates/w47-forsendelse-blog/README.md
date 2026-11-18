@@ -31,7 +31,6 @@ afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 Indlægget har **URL-nøglen `the-complete-christmas-shipping-guide-2026`**, altså
 `…/blog/the-complete-christmas-shipping-guide-2026`. Teamet valgte den, da indlægget blev lagt op. Mailen (v13) linker
 dertil, så den må ikke ændres, uden at mailens links ændres med. Den oprindelige plan var `christmas-unboxing-guide-2026`.
-Den er ledig (tjekket 6/11 i DK, EU og DE). Mailens links går dertil, så den skal være præcis sådan.
 
 1. Gå til indlæggene i Amasty Blog Pro i admin, og opret et nyt indlæg (Add New Post).
 2. Udfyld felterne:
