@@ -1497,7 +1497,15 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   submitted vs confirmed vs bot-blocked per market. Space out e2e runs, and delete test profiles afterwards
   (`tools/signup/klaviyo-e2e.js` does) - a SUBSCRIBED test profile can land in a consent segment.
 - Tests and the preview subscribe only to `WUDjfX` "TEST - Signup Lab (preview only)" in the DK account.
-- **Not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
+- **Live in Czechia since 2026-11-19 14:28 UTC**, Logo studio, at the user's word ("sætte den live på tjekkiet,
+  samtidig slukke den eksisterende"). The user put the line in Magento on CZ (without `async`) and Greece only.
+  Control: live on, every other market switched off for live, so a tag appearing elsewhere does not bring a store in;
+  CZ's Insert popup (W2HqGi) unpublished by Control and recorded for republish; CZ's four embedded forms stay. Checked
+  on the real store with tracking blocked: dialog on desktop, peek card on the phone, nothing in the cart, no Klaviyo
+  popup. **Greece carries the tag but is not in `MARKETS`** (nor BG, EE, HR, LV, LT - the site has 24 stores now), and
+  `resolveMarket` stops on an unknown store code before anything else, `?wps=preview` included. Check a store's tag
+  with a cache-busting query string: a cached page hid CZ's tag on the first look.
+- **Before CZ: not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
   the master switch: off, the store tag does nothing except answer `?wps=preview` / `?wps=<concept>`, which opens
   the experience at once in test mode (test list only) - so the tag can go in before launch and be checked on the
   real store. **The tag goes into Magento, not Tag Manager** (the user, 2026-10-30: "er træt af det er tag
