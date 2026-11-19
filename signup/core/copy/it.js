@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 5 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -92,7 +93,7 @@
     "uploadError": "Non riusciamo a leggere il file. Prova con un PNG o JPG.",
     "useName": "Usa il nome",
     "next": "Sta bene",
-    "resultTitle": "{name} sta bene su un astuccio.",
+    "resultTitle": "{name} sta bene sul packaging.",
     "resultLede": "Vuoi altre idee così? Ti scriviamo quando c’è qualcosa di nuovo.",
     "proofTitle": "Clienti veri. Loghi veri.",
     "back": "Modifica il nome",

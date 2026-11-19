@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -92,7 +93,7 @@
     "uploadError": "Emme saaneet tiedostoa auki. Kokeile PNG- tai JPG-tiedostoa.",
     "useName": "Käytä nimeä sittenkin",
     "next": "Näyttää hyvältä",
-    "resultTitle": "{name} näyttää hyvältä korurasiassa.",
+    "resultTitle": "{name} näyttää hyvältä pakkauksessa.",
     "resultLede": "Haluatko lisää tällaisia ideoita? Kirjoitamme, kun on jotain uutta.",
     "proofTitle": "Oikeita asiakkaita. Oikeita logoja.",
     "back": "Muuta nimeä",

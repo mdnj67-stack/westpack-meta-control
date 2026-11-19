@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 10 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -92,7 +93,7 @@
     "uploadError": "Nu am putut citi fișierul. Încearcă un PNG sau JPG.",
     "useName": "Folosește numele",
     "next": "Arată bine",
-    "resultTitle": "{name} dă bine pe o cutie.",
+    "resultTitle": "{name} dă bine pe ambalaj.",
     "resultLede": "Vrei mai multe idei de genul ăsta? Îți scriem când apare ceva nou.",
     "proofTitle": "Clienți reali. Logouri reale.",
     "back": "Schimbă numele",

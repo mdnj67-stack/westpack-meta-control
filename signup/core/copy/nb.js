@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 1 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -92,7 +93,7 @@
     "uploadError": "Vi klarte ikke å lese filen. Prøv en PNG eller JPG.",
     "useName": "Bruk navnet i stedet",
     "next": "Dette ser bra ut",
-    "resultTitle": "{name} kler en smykkeeske.",
+    "resultTitle": "{name} kler emballasjen.",
     "resultLede": "Vil du ha flere ideer som denne? Da skriver vi når det er noe nytt.",
     "proofTitle": "Ekte kunder. Ekte logoer.",
     "back": "Endre navnet",

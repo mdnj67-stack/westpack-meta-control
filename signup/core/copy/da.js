@@ -49,7 +49,7 @@
     uploadError: "Den fil kunne vi ikke læse. Prøv en PNG eller JPG.",
     useName: "Brug navnet i stedet",
     next: "Det ser godt ud",
-    resultTitle: "{name} klæder en æske.",
+    resultTitle: "{name} klæder emballagen.",
     resultLede: "Vil du have flere idéer som den her? Så skriver vi til dig, når der er nyt.",
     proofTitle: "Rigtige kunder. Rigtige logoer.",
     back: "Ret navnet",

@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -92,7 +93,7 @@
     "uploadError": "Ezt a fájlt nem tudtuk beolvasni. Próbáld meg PNG-vel vagy JPG-vel.",
     "useName": "Inkább a nevet használom",
     "next": "Ez jól néz ki",
-    "resultTitle": "{name} jól mutat egy dobozon.",
+    "resultTitle": "{name} jól mutat a csomagoláson.",
     "resultLede": "Jöhet még néhány ilyen ötlet? Írunk, ha lesz valami új.",
     "proofTitle": "Valódi ügyfelek. Valódi logók.",
     "back": "Név módosítása",

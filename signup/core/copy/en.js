@@ -49,7 +49,7 @@
     uploadError: "We couldn't read that file. Try a PNG or JPG.",
     useName: "Use the name instead",
     next: "That looks good",
-    resultTitle: "{name} looks good on a box.",
+    resultTitle: "{name} looks good on packaging.",
     resultLede: "Want more ideas like this one? We'll write when there's something new.",
     proofTitle: "Real customers. Real logos.",
     back: "Change the name",

@@ -7,7 +7,8 @@
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints"
+    "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -93,7 +94,7 @@
     "uploadError": "Tenhle soubor se nám nepodařilo přečíst. Zkuste PNG nebo JPG.",
     "useName": "Použít raději název",
     "next": "To vypadá dobře",
-    "resultTitle": "{name} krabičce sluší.",
+    "resultTitle": "{name} obalu sluší.",
     "resultLede": "Chcete víc podobných nápadů? Ozveme se, až bude něco nového.",
     "proofTitle": "Skuteční zákazníci. Skutečná loga.",
     "back": "Upravit název",
