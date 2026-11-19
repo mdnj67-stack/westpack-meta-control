@@ -190,6 +190,20 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     const col = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const tiles = [...r.querySelectorAll(".ls-tile")]; const area = (t) => { const b = t.querySelector(".ls-tile-frame").getBoundingClientRect(); return b.width * b.height; }; const chosen = r.querySelector(".ls-tile.is-chosen"); return { chosen: chosen && chosen.dataset.box, largest: chosen && tiles.every((t) => t === chosen || area(t) < area(chosen)), inside: tiles.every((t) => { const f = t.querySelector(".ls-tile-frame").getBoundingClientRect(), b = t.querySelector(".ls-print text").getBoundingClientRect(); return b.width > 2 && b.left >= f.left - 1 && b.right <= f.right + 1 && b.top >= f.top - 1 && b.bottom <= f.bottom + 1; }) }; });
     check(`${label}: the chosen piece leads the collection, largest, and every print sits in its frame`, col.chosen === "bag" && col.largest && col.inside, JSON.stringify(col));
     await p.screenshot({ path: path.join(outDir, `bag-collection-${label}.jpg`), type: "jpeg", quality: 75 });
+    // after the signup the thank-you stands alone: the form, the promise list and the consent go (they once stayed,
+    // because their own display beat the hidden attribute) and the thank-you is in view
+    await host.locator(".ls-result .wps-input").fill("navn@firma.dk");
+    await host.locator(".ls-result .wps-form .wps-btn-primary").click();
+    await host.locator(".ls-success:not([hidden])").waitFor({ timeout: 8000 });
+    await p.waitForTimeout(700);
+    const after = await p.evaluate(() => {
+      const r = document.querySelector("#westpack-signup").shadowRoot;
+      const shown = (n) => getComputedStyle(n).display !== "none" && n.getClientRects().length > 0;
+      const t = r.querySelector(".ls-success-title").getBoundingClientRect();
+      return { leftovers: [...r.querySelectorAll(".ls-result > *")].filter((n) => !n.classList.contains("ls-success") && shown(n)).map((n) => n.className || n.tagName), titleInView: t.height > 0 && t.top >= 0 && t.bottom <= innerHeight };
+    });
+    check(`${label}: after the signup only the thank-you shows, and it is in view`, after.leftovers.length === 0 && after.titleInView, JSON.stringify(after));
+    await p.screenshot({ path: path.join(outDir, `logo-success-${label}.jpg`), type: "jpeg", quality: 75 });
     await ctx.close();
   }
 

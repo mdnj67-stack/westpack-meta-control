@@ -1,6 +1,9 @@
 /* Westpack Signup Lab - the shell. Lives inside a shadow root, so nothing here touches the store and nothing on
    the store touches this. Mobile first: a bottom sheet on phones, a centred card from 760px. */
 :host { all: initial; }
+/* hidden always hides. A component that sets display (.wps-form and .wps-promise are grids) beats the attribute's own
+   display: none, so Logo studio's thank-you once sat under the email field it had just hidden. */
+[hidden] { display: none !important; }
 .wps {
   --wps-green: #34453F;
   --wps-green-deep: #22302B;
