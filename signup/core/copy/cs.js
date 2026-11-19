@@ -6,7 +6,8 @@
     "date": "2026-10-29",
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread"
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -19,9 +20,9 @@
     "signup": "Přihlásit se k newsletteru",
     "noThanks": "Ne, děkuji",
     "promise": [
-      "Novinky o produktech a nezbytnostech",
+      "Novinky o krabičkách, taškách a displejích",
       "Užitečné tipy a návody",
-      "Upozornění před vzácnými akcemi"
+      "Upozornění na naše vzácné akce"
     ],
     "doiTitle": "Už jen kousek.",
     "doiBody": "Poslali jsme vám e-mail. Klikněte na odkaz a jste na seznamu.",
@@ -84,7 +85,7 @@
     "disclaimer": "Vizualizace na skutečných obalech Westpack. Vaše logo se razí fólií v jedné barvě.",
     "lightHintMouse": "Přejeďte myší přes potisk a sledujte, jak fólie chytá světlo.",
     "lightHintTouch": "Přejeďte prstem přes potisk a sledujte, jak fólie chytá světlo. Tažením zobrazíte další.",
-    "zoomIn": "Prohlédnout tisk zblízka",
+    "zoomIn": "Prohlédnout potisk zblízka",
     "zoomOut": "Celý pohled",
     "uploadCta": "Použít vlastní logo",
     "uploadHint": "PNG, JPG nebo SVG – logo zůstane ve vašem prohlížeči.",
