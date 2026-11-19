@@ -325,8 +325,16 @@ test("logo studio on a phone: the stage window never runs past the photo, and ce
         assert.ok(top >= H - S - 1e-9 && top <= 1e-9, `${id} at ${S}x${H.toFixed(0)}: top ${top}`);
         const free = H / 2 - cy * S;
         if (free <= 0 && free >= H - S) assert.ok(Math.abs(top + cy * S - H / 2) < 1e-6, `${id} at ${S}x${H.toFixed(0)}: the print centre sits at the window's middle`);
+        // with the disclaimer over the top (two or three lines) and the zoom's band at the foot, the print is centred
+        // in what they leave clear, still never past the photo
+        for (const [a, b] of [[48, 48], [63, 48], [48, 63]]) {
+          const t2 = windowTop(S, H, cy, a, b), mid = (a + H - b) / 2;
+          assert.ok(t2 >= H - S - 1e-9 && t2 <= 1e-9, `${id} at ${S}x${H.toFixed(0)} with bands ${a}/${b}: top ${t2}`);
+          if (mid - cy * S <= 0 && mid - cy * S >= H - S) assert.ok(Math.abs(t2 + cy * S - mid) < 1e-6, `${id} at ${S}x${H.toFixed(0)}: the print centre sits between the bands`);
+        }
       }
       assert.equal(windowTop(S, S, cy), 0, `${id}: a square window shows the whole photo`);
+      assert.ok(Math.abs(windowTop(S, 0.7 * S, cy, 48, 48) - windowTop(S, 0.7 * S, cy)) < 1e-9, `${id}: equal bands centre the print where no bands would`);
     }
   }
 });

@@ -391,6 +391,8 @@
   }
 
   // ---------- open / close ----------
+  let stackTimer = 0;
+  function restack() { if (isOpen) root.style.zIndex = consentBannerOpen() ? "2147483000" : "2147483647"; }
   async function open(trigger) {
     if (isOpen) return;
     isOpen = true;
@@ -406,8 +408,11 @@
     lockScroll();
     // while open nothing of the store's may sit on the sheet: the top z-index, and last in the body so that an
     // element with the same z-index (the cookie button) paints under us. Closed, the host is 0 x 0 and covers nothing.
-    root.style.zIndex = "2147483647";
+    // A consent banner is the exception: one that arrives while the sheet is open (a ?wps= link opens it at once) must
+    // be on top and answerable, so while it shows the host keeps its usual place in the stack.
     if (root.parentNode === document.body && document.body.lastElementChild !== root) document.body.appendChild(root);
+    restack();
+    clearInterval(stackTimer); stackTimer = setInterval(restack, 1000);
     watchViewport();
     ui.wrap.classList.add("is-open");
     track("open");
@@ -426,6 +431,7 @@
     flush(subscribed ? "subscribed" : reason === "link" ? "link" : "closed");
     ui.wrap.classList.remove("is-open");
     unlockScroll();
+    clearInterval(stackTimer); stackTimer = 0;
     if (viewportOff) viewportOff();
     setTimeout(() => {
       if (mounted && mounted.destroy) mounted.destroy(); mounted = null; ui.stage.textContent = "";

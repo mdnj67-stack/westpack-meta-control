@@ -160,8 +160,9 @@
   }
   // On a phone the scene stays an S x S square as wide as the sheet, so the print never changes scale; the frame is a
   // window H tall onto it. The window shows the band of the square round the print (centre cy, 0-1 down the photo):
-  // the print in the window's middle where the photo allows, and never past the photo's edge.
-  function windowTop(S, H, cy) { return Math.min(0, Math.max(H - S, H / 2 - cy * S)); }
+  // the print in the middle of what the overlays leave clear (a at the top, b at the foot) where the photo allows, and
+  // never past the photo's edge.
+  function windowTop(S, H, cy, a = 0, b = 0) { return Math.min(0, Math.max(H - S, (a + H - b) / 2 - cy * S)); }
 
   // the measured light across the print area as an image the filter can multiply by: grey 0.5 is the area's mean.
   // Drawn as SVG rather than canvas, so a browser that blocks canvas reads cannot turn it into noise.
@@ -473,7 +474,12 @@
     const uploadBtn = el("button", { type: "button", class: "ls-upload", "aria-label": onPhone ? copy.uploadCta : null, onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true", text: "↑" }), el("span", { class: "ls-upload-label", text: copy.uploadCta })]);
     const useNameBtn = el("button", { type: "button", class: "wps-link ls-use-name", hidden: true, onclick: () => clearLogo(), text: copy.useName });
     const hint = el("p", { class: "ls-hint", "aria-live": "polite" });
-    const setHint = (text, error) => { hint.textContent = text || ""; hint.classList.toggle("is-error", Boolean(error)); layout.classList.toggle("has-hint", Boolean(text)); if (text) hideCoach(); };
+    const setHint = (text, error) => {
+      const was = hint.textContent;
+      hint.textContent = text || ""; hint.classList.toggle("is-error", Boolean(error)); layout.classList.toggle("has-hint", Boolean(text)); if (text) hideCoach();
+      // on a phone's photo a hint of three lines raises the band the print is centred above
+      if (onPhone && was !== hint.textContent && hint.parentNode === frame) fit();
+    };
     const group = (labelText, key, values, labels) => {
       const gid = `${uid}-${key}`;
       // each face shows the visitor's own name, so the choice is made on what will be printed
@@ -514,7 +520,7 @@
     const typeGroup = group(copy.typeLabel, "type", Object.keys(TYPES), copy.type);
     const nextBtn = el("button", { type: "button", class: "wps-btn wps-btn-primary ls-next", onclick: () => toResult() }, [el("span", { class: "wps-btn-label", text: `${copy.next} →` })]);
 
-    let editPanel, nameBlock, tabBar = null, tabLine = null, tabs = [], toolEls = {}, toolsEl = null, coach = null, backBtn = null;
+    let editPanel, nameBlock, nameRow = null, tabBar = null, tabLine = null, tabs = [], toolEls = {}, toolsEl = null, coach = null, backBtn = null;
     if (!onPhone) {
       nameBlock = el("div", { class: "ls-name-block" }, [
         el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]),
@@ -533,12 +539,14 @@
     } else {
       // ---- the phone's studio: the stage's own overlays, four tools in one cell, one button ----
       // the light hint shows once as a coach mark over the stage; the live hint (a long name, the uploaded logo, an
-      // upload error) is a caption on the photo, so it never changes the panel's height
+      // upload error) is a caption on the photo at rest, so it never changes the panel's height. While the visitor
+      // types it moves to the label's line over the field (placeHint), off the print they are watching
       coach = el("p", { class: "ls-coach", "aria-hidden": "true", text: copy.lightHintTouch });
       backBtn = el("button", { type: "button", class: "ls-back", "aria-label": copy.back, onclick: () => toEdit() }, [ctx.svg(ICON_BACK)]);
       frame.append(coach, hint, under, backBtn);
+      nameRow = el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]);
       nameBlock = el("div", { class: "ls-name-block" }, [
-        el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]),
+        nameRow,
         el("div", { class: "ls-upload-row" }, [uploadBtn, el("div", { class: "ls-upload-aside" }, [el("span", { class: "ls-upload-hint", text: copy.uploadHint }), useNameBtn])]),
         fileInput,
       ]);
@@ -624,6 +632,7 @@
       tabBar.classList.remove("is-tight", "is-tighter");
       if (tabBar.scrollWidth > tabBar.clientWidth + 1) tabBar.classList.add("is-tight");
       if (tabBar.scrollWidth > tabBar.clientWidth + 1) tabBar.classList.add("is-tighter");
+      tabBar.classList.toggle("is-scroll", tabBar.scrollWidth > tabBar.clientWidth + 1);
       moveTabLine();
     }
     function setTool(k, how) {
@@ -639,6 +648,12 @@
         toolEls[key].classList.toggle("is-active", on); toolEls[key].toggleAttribute("inert", !on);
       });
       if (k === "type") fitSamples();
+      // a strip that has to scroll (a narrow landscape panel) keeps the chosen tab in view
+      const chosen = tabs[TOOLS.indexOf(k)];
+      if (tabBar.scrollWidth > tabBar.clientWidth + 1) {
+        if (chosen.offsetLeft < tabBar.scrollLeft) tabBar.scrollLeft = chosen.offsetLeft;
+        else if (chosen.offsetLeft + chosen.offsetWidth > tabBar.scrollLeft + tabBar.clientWidth) tabBar.scrollLeft = chosen.offsetLeft + chosen.offsetWidth - tabBar.clientWidth;
+      }
       moveTabLine();
       if (how) hideCoach();
       if (how === "tap") once(`tool_${k}`);
@@ -646,9 +661,26 @@
     function tabTap(k) { if (k === tool) return; setTool(k, "tap"); }
 
     // ---- the coach mark (phone): the light under the finger, said once ----
+    // It comes only where it can be read without hiding what it is about: never on a short screen (the Packaging tool
+    // carries the same line), never in more than three lines, and never on or near the print. It is laid out while
+    // hidden, so it is measured where it would stand before it shows; if it does not fit, it is simply not said.
     let coachDone = !onPhone, coachT1 = 0, coachT2 = 0;
     function hideCoach() { if (coachDone) return; coachDone = true; clearTimeout(coachT1); clearTimeout(coachT2); layout.classList.remove("is-coach"); }
-    if (onPhone) coachT1 = setTimeout(() => { if (coachDone) return; layout.classList.add("is-coach"); coachT2 = setTimeout(hideCoach, 6000); }, 2200);
+    // the box the print is drawn in on screen: the name's own, or the whole print area for a logo
+    function printBox() {
+      const tx = print.svg.querySelector("text"), r = (tx && tx.getAttribute("display") !== "none" ? tx : print.svg).getBoundingClientRect();
+      return r.width && r.height ? r : null;
+    }
+    function showCoach() {
+      if (coachDone) return;
+      const short = Boolean(window.matchMedia && matchMedia("(max-height: 619px)").matches);
+      const c = coach.getBoundingClientRect(), cs = getComputedStyle(coach), p = printBox(), m = 8;
+      const lines = Math.round((c.height - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) / parseFloat(cs.lineHeight));
+      const onPrint = Boolean(p && c.left < p.right + m && c.right > p.left - m && c.top < p.bottom + m && c.bottom > p.top - m);
+      if (short || !c.height || lines > 3 || onPrint || layout.classList.contains("is-zoomed") || kbUp()) { hideCoach(); return; }
+      layout.classList.add("is-coach"); coachT2 = setTimeout(hideCoach, 6000);
+    }
+    if (onPhone) coachT1 = setTimeout(showCoach, 2200);
 
     // ---- rendering ----
     let placed = null;
@@ -669,6 +701,14 @@
     // the plate follows the frame's width; the loupe's copy shares it. On a phone the scene stays the frame's width
     // whatever its height, and the window onto it follows the print
     let settle = 0, lastWidth = 0;
+    // What the stage's own overlays cover at rest: the disclaimer at the top (two or three lines), the zoom's band at
+    // the foot (the caption, or the live hint in its place when that runs taller). The print is centred between them,
+    // so on a short stage neither sits on it. Typing and the result show neither, and use the whole window.
+    function clearBands() {
+      if (layout.classList.contains("is-result") || (layout.classList.contains("is-typing") && kbUp())) return [0, 0];
+      const foot = hint.parentNode === frame && hint.textContent ? frame.clientHeight - hint.offsetTop : 0;
+      return [disclaimer.offsetTop + disclaimer.offsetHeight, Math.max(48, foot)];
+    }
     function fit() {
       const w = frame.clientWidth;
       if (!w) return;
@@ -677,9 +717,9 @@
         const h = frame.clientHeight;
         layout.style.setProperty("--ls-w", `${w}px`);
         Object.assign(scene.style, { width: `${w}px`, height: `${w}px` });
-        if (placed && h) scene.style.top = `${windowTop(w, h, placed.centre[1] / 100).toFixed(1)}px`;
+        if (placed && h) scene.style.top = `${windowTop(w, h, placed.centre[1] / 100, ...clearBands()).toFixed(1)}px`;
         for (const b of thumbs) { const tw = b.clientWidth; if (tw) b.style.setProperty("--k", (tw / 1000).toFixed(5)); }
-        if (w !== lastWidth) { lastWidth = w; fitTabs(); }
+        if (w !== lastWidth) { lastWidth = w; fitTabs(); fitUpload(); }
       }
       for (const id of BOX_ORDER) thumbPrints[id].refit();
       clearTimeout(settle);
@@ -820,8 +860,22 @@
       clone.style.width = `${r.width}px`; clone.style.height = `${r.height}px`;
       clone.style.transform = `translate(${R - u * r.width * z}px, ${R - v * r.height * z}px) scale(${z})`;
     }
+    // Zoomed on a phone, the print is brought to the middle of the window (clear of the zoom button's band) and scaled
+    // to fill it: 2.35x where it fits, less for a long name, never under 1.5x. The scale stays about the print area's
+    // centre (--zx, --zy), and a translation carries the print's own box to the middle
+    function zoomTo() {
+      const p = printBox(), sc = scene.getBoundingClientRect(), f = frame.getBoundingClientRect();
+      if (!p || !placed) { scene.style.removeProperty("--ls-zt"); return; }
+      const top = 12, foot = 56, side = 12, room = [f.width - 2 * side, f.height - top - foot];
+      const s = Math.max(1.5, Math.min(2.35, room[0] / p.width, room[1] / p.height));
+      const O = [(placed.centre[0] / 100) * sc.width, (placed.centre[1] / 100) * sc.height];
+      const C = [(p.left + p.right) / 2 - sc.left, (p.top + p.bottom) / 2 - sc.top];
+      const M = [f.left + f.width / 2 - sc.left, f.top + top + room[1] / 2 - sc.top];
+      scene.style.setProperty("--ls-zt", `translate(${(M[0] - O[0] - s * (C[0] - O[0])).toFixed(1)}px, ${(M[1] - O[1] - s * (C[1] - O[1])).toFixed(1)}px) scale(${s.toFixed(3)})`);
+    }
     function toggleZoom() {
       const on = !layout.classList.contains("is-zoomed");
+      if (onPhone && on) zoomTo();
       layout.classList.toggle("is-zoomed", on);
       zoomBtn.setAttribute("aria-pressed", String(on));
       if (onPhone) {
@@ -868,16 +922,29 @@
     function restFromTyping() {
       if (!layout.classList.contains("is-typing") || (ctx.root && ctx.root.activeElement === nameInput)) return;
       layout.classList.remove("is-typing");
+      // a long name's or "Westpack"'s hint is said while the name is typed; at rest the stage's foot names the piece
+      // again. An upload's hint stays: it reports what just happened to the logo
+      if (hint.textContent === copy.hintLong || hint.textContent === copy.hintWestpack) setHint("");
+      placeHint();
       for (const id of BOX_ORDER) thumbPrints[id].refit();
       fitSamples();
       if (!movedOn && choice.name.trim() && !layout.classList.contains("is-result")) { movedOn = true; setTool("box"); }
     }
+    // The live hint sits on the photo's foot at rest. In the typing layout the stage is a short window round the print
+    // the visitor is watching their name land on, so the hint takes the label's line over the field instead: the
+    // same node (still the one aria-live element), moved, in a slot kept two lines tall so the stage never jumps
+    function placeHint() {
+      if (!nameRow) return;
+      const typing = layout.classList.contains("is-typing") && kbUp();
+      if (typing && hint.parentNode !== nameRow) nameRow.insertBefore(hint, nameInput);
+      else if (!typing && hint.parentNode !== frame) frame.insertBefore(hint, under);
+    }
     let mo = null;
     if (onPhone) {
-      nameInput.addEventListener("focus", () => { layout.classList.add("is-typing"); hideCoach(); });
+      nameInput.addEventListener("focus", () => { layout.classList.add("is-typing"); hideCoach(); placeHint(); });
       nameInput.addEventListener("blur", () => { if (!kbUp()) restFromTyping(); });
       if (wrapEl && typeof MutationObserver !== "undefined") {
-        mo = new MutationObserver(() => { if (!kbUp()) restFromTyping(); });
+        mo = new MutationObserver(() => { if (!kbUp()) restFromTyping(); placeHint(); });
         mo.observe(wrapEl, { attributes: true, attributeFilter: ["class"] });
       }
     }
@@ -889,6 +956,7 @@
         choice.logo = await logoMask(file);
         ctx.track("logo_uploaded");
         uploadBtn.classList.add("is-active"); useNameBtn.hidden = false;
+        fitUpload();
         setHint(copy.uploadOneColour);
         render(); stamp();
       } catch (e) {
@@ -898,7 +966,18 @@
     });
     function clearLogo() {
       choice.logo = null; uploadBtn.classList.remove("is-active"); useNameBtn.hidden = true; setHint("");
+      fitUpload();
       render(); sweep(); nameInput.focus();
+    }
+    // With a logo in, the gold pill keeps its words where the row also has room for "use the name instead" (in at most
+    // two lines); where it has not, the pill becomes a gold circle with the arrow and keeps its words as its label
+    function fitUpload() {
+      if (!onPhone) return;
+      uploadBtn.classList.remove("is-icon");
+      if (!choice.logo || !uploadBtn.offsetWidth) return;
+      const row = uploadBtn.parentNode, lh = parseFloat(getComputedStyle(useNameBtn).lineHeight) || 16, words = document.createRange();
+      words.selectNodeContents(useNameBtn);
+      if (row.scrollWidth > row.clientWidth + 1 || words.getBoundingClientRect().height > 2 * lh + 0.5) uploadBtn.classList.add("is-icon");
     }
 
     // ---- result and success ----

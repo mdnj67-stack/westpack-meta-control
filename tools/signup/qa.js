@@ -417,6 +417,46 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     for (let i = 0; i < da.length; i += 4) if (Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]) > 30) n++;
     return n / (da.length / 4);
   }, { a: a.toString("base64"), b: b.toString("base64") });
+  // What on the stage covers the print. The print's own pixels are the frame shot with the print against the same
+  // shot without it (every overlay hidden in both); then each overlay that was visible - anything in the frame but the
+  // scene, and the close button - counts how many of them lie under it. share 0 means it sits on none of the print.
+  const coverage = async (p) => {
+    const info = await p.evaluate(() => {
+      const L = window.__ls, fr = L.q(".ls-frame"), f = L.rect(fr);
+      const els = [...fr.children].filter((n) => !n.classList.contains("ls-scene")).flatMap((n) => (n.classList.contains("ls-under") ? [...n.children] : [n]));
+      els.push(L.q(".wps-close"));
+      const ov = els.filter((n) => L.shown(n) && (n.tagName === "BUTTON" || n.textContent.trim())).map((n) => {
+        const cs = getComputedStyle(n), r = L.rect(n);
+        return { name: n.className.split(" ")[0], ...r, lines: Math.round((r.h - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) / (parseFloat(cs.lineHeight) || r.h)) };
+      });
+      return { f, ov, vw: innerWidth, vh: innerHeight };
+    });
+    const x = Math.max(0, info.f.l), y = Math.max(0, info.f.t);
+    const clip = { x, y, width: Math.min(info.f.r, info.vw) - x, height: Math.min(info.f.b, info.vh) - y };
+    const hideOverlays = (v) => p.evaluate((v) => { const L = window.__ls; [...L.q(".ls-frame").children].filter((n) => !n.classList.contains("ls-scene")).forEach((n) => { n.style.visibility = v; }); L.q(".wps-close").style.visibility = v; }, v);
+    const hidePrint = (v) => p.evaluate((v) => { window.__ls.q(".ls-frame .ls-print-wrap").style.visibility = v; }, v);
+    await hideOverlays("hidden"); await p.waitForTimeout(80);
+    const a = await p.screenshot({ clip });
+    await hidePrint("hidden"); await p.waitForTimeout(80);
+    const b = await p.screenshot({ clip });
+    await hidePrint(""); await hideOverlays("");
+    const res = await p.evaluate(async ({ a, b, clip, ov }) => {
+      const load = (s) => new Promise((r) => { const i = new Image(); i.onload = () => r(i); i.src = `data:image/png;base64,${s}`; });
+      const [ia, ib] = await Promise.all([load(a), load(b)]);
+      const px = (img) => { const c = document.createElement("canvas"); c.width = img.width; c.height = img.height; const g = c.getContext("2d"); g.drawImage(img, 0, 0); return g.getImageData(0, 0, c.width, c.height).data; };
+      const da = px(ia), db = px(ib), W = ia.width, sc = ia.width / clip.width;
+      let all = 0; const under = ov.map(() => 0);
+      for (let i = 0; i < da.length; i += 4) {
+        if (Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]) <= 40) continue;
+        all++;
+        const j = i / 4, X = clip.x + (j % W) / sc, Y = clip.y + Math.floor(j / W) / sc;
+        ov.forEach((o, k) => { if (X >= o.l && X <= o.r && Y >= o.t && Y <= o.b) under[k]++; });
+      }
+      return { all, under };
+    }, { a: a.toString("base64"), b: b.toString("base64"), clip, ov: info.ov });
+    return { printPx: res.all, hits: info.ov.map((o, k) => ({ name: o.name, lines: o.lines, share: res.all ? res.under[k] / res.all : 0 })) };
+  };
+  const covering = (c) => c.hits.filter((h) => h.share > 0).map((h) => `${h.name} on ${(h.share * 100).toFixed(1)}%`);
 
   // ---- A. every language on every phone, at rest and on each tool ----
   for (const phone of skip.has("sweep") ? [] : PHONES) {
@@ -516,10 +556,14 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     if (back.k !== rest.k) fails.c5.push(`rest again: --k ${back.k} vs ${rest.k}`);
 
     // (3) a hint showing and an uploaded logo move nothing
+    // the long name's hint shows while the name is typed; with no keyboard up (a hardware one) that is at rest, on the
+    // photo's foot. It clears once the field is left
     await tab("brand");
+    await input.focus(); await input.fill(""); await input.pressSequentially("Smykkehuset Lund Copenhagen", { delay: 5 }); await p.waitForTimeout(300);
     const hinted = await snap();
     const hintOn = await L(() => window.__ls.q(".ls-hint").textContent.length > 0);
     if (!hintOn || !same(hinted, base)) fails.c3.push(`with a hint (${hintOn ? "shown" : "none"}): moved`);
+    await input.blur(); await p.waitForTimeout(300);
     const png = await p.evaluate(() => { const c = document.createElement("canvas"); c.width = 400; c.height = 160; const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, 400, 160); g.fillStyle = "#111"; g.font = "bold 90px Georgia"; g.fillText("Nord", 70, 115); return c.toDataURL("image/png").split(",")[1]; });
     await host.locator('input[type="file"]').setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: Buffer.from(png, "base64") });
     await p.waitForTimeout(900);
@@ -533,6 +577,9 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     for (const k of ["box", "foil", "type"]) { await tab(k); await shot(`tool-${k}`); await sweepState(`tool ${k}`); }
 
     // (20) on the iPhone 13: after many changes the print is still drawn
+    // the print's own pixels on Seville, fresh, before the many changes below (20)
+    await tab("box"); await host.locator('.ls-tool .ls-thumb[data-box="seville"]').click(); await p.waitForTimeout(1100);
+    const fresh = phone === "iPhone 13" ? (await coverage(p)).printPx : 0;
     if (phone === "iPhone 13") {
       for (let i = 0; i < 10; i++) { await tab("brand"); await input.focus(); await p.setViewportSize(kb); await p.waitForTimeout(250); await input.blur(); await p.setViewportSize(vp); await p.waitForTimeout(250); }
       for (const k of ["box", "foil", "type", "brand", "foil", "box", "type", "brand"]) await tab(k);
@@ -546,7 +593,26 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
       const without = await p.screenshot({ clip });
       await L(() => { window.__ls.q(".ls-frame .ls-print-wrap").style.visibility = ""; });
       const share = await pixelShare(p, withPrint, without);
-      check("iPhone 13: (20) after 10 keyboard cycles, 8 tabs, 4 pieces and a zoom the print is still drawn", share >= 0.02, `${(share * 100).toFixed(1)}% of the print's box`);
+      // and against the print itself: the same piece and name still draws at least half the pixels it drew fresh (the
+      // light moves, so not all of them; an undrawn perspective layer draws none)
+      const after = (await coverage(p)).printPx;
+      check("iPhone 13: (20) after 10 keyboard cycles, 8 tabs, 4 pieces and a zoom the print is still drawn", share >= 0.02 && after >= 0.5 * fresh, `${(share * 100).toFixed(1)}% of the print's box; ${after} of ${fresh} print pixels drawn fresh`);
+    }
+
+    // the zoom brings the print to the window's middle and scales it to fill it (at least 1.5x, at most 2.35x): whole
+    // in the window wherever it fits at more than 1.5x; zoomed out, the scene is back to no transform
+    {
+      await host.locator(".ls-zoom").click(); await p.waitForTimeout(1000);
+      const z = await L(() => {
+        const l = window.__ls, f = l.rect(".ls-frame"), t = l.rect(".ls-frame .ls-print text"), m = /scale\(([\d.]+)\)/.exec(l.q(".ls-frame > .ls-scene").style.getPropertyValue("--ls-zt"));
+        const s = m ? Number(m[1]) : 0, cx = (t.l + t.r) / 2, cy = (t.t + t.b) / 2;
+        return { s, dx: cx - (f.l + f.w / 2), dy: cy - (f.t + 12 + (f.h - 68) / 2), inside: l.inside(t, f, 1) };
+      });
+      await shot("zoom");
+      await host.locator(".ls-zoom").click(); await p.waitForTimeout(1000);
+      const out = await L(() => getComputedStyle(window.__ls.q(".ls-frame > .ls-scene")).transform);
+      const ok = z.s >= 1.5 && z.s <= 2.35 && Math.abs(z.dx) <= 3 && Math.abs(z.dy) <= 3 && (z.inside || z.s <= 1.501) && out === "none";
+      check(`${phone}: the zoom centres the print in the window and fills it, and zooms back out`, ok, `scale ${z.s}, off centre ${z.dx.toFixed(1)}/${z.dy.toFixed(1)}px, ${z.inside ? "whole" : "spills"}, after ${out}`);
     }
 
     // the result: the bag chosen, the button pressed
@@ -584,6 +650,9 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await shot("email-error"); await sweepState("email error");
     const err = await L(() => { const l = window.__ls, i = l.rect(".ls-result .wps-input"), e = l.rect(".ls-result .wps-error"), b = l.rect(".ls-result .wps-form .wps-btn-primary"); return { i: l.inView(i), e: l.inView(e), b: l.inView(b), between: Boolean(i && e && b && e.t >= i.b - 0.5 && e.b <= b.t + 0.5) }; });
     check(`${phone}: (15) with the keyboard up (${kb.width}x${kb.height}) the field, its error and the button are in view, the error between them`, err.i && err.e && err.b && err.between, JSON.stringify(err));
+    // there the close button stands on the paper card, so it is drawn as ink on paper, not as the stage's dark glass
+    const closeLook = await L(() => { const c = getComputedStyle(window.__ls.q(".wps-close")); return { bg: c.backgroundColor, fg: c.color }; });
+    check(`${phone}: typing the address, the close button is ink on the paper card`, !/rgba\(12, 16, 15/.test(closeLook.bg) && closeLook.fg !== "rgb(245, 241, 234)", JSON.stringify(closeLook));
     // (16) one tap on the button with a good address signs up (dry run)
     await email.fill("navn@firma.cz");
     await host.locator(".ls-result .wps-form .wps-btn-primary").click();
@@ -665,6 +734,9 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     let v = await fitsView();
     if (!v.inView) out.push("dialog outside the view");
     if (v.x.length) out.push(`overflow ${v.x}`);
+    // nothing sits on the close button here either (a narrow landscape panel once slid its last tab under it)
+    const over = await p.evaluate(() => window.__ls.overClose());
+    if (over.length) out.push(`on the close button: ${over.join(", ")}`);
     const input = host.locator(".ls-name-input");
     try { await input.click({ timeout: 4000 }); await input.pressSequentially("Atelier", { delay: 20 }); } catch (e) { out.push("name field not reachable"); }
     if ((await input.inputValue()) !== "Atelier") out.push("name field took no typing");
@@ -673,6 +745,8 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
       try { await host.locator(`.ls-tab[data-tool="${k}"]`).click({ timeout: 4000 }); await p.waitForTimeout(300); } catch (e) { out.push(`tab ${k} not reachable`); continue; }
       const ok = await p.evaluate((k) => { const l = window.__ls, t = l.q(`.ls-tool[data-tool="${k}"]`); return l.shown(t) && l.q(".ls").dataset.tool === k; }, k);
       if (!ok) out.push(`tool ${k} did not open`);
+      const ov = await p.evaluate(() => window.__ls.overClose());
+      if (ov.length) out.push(`${k}: on the close button: ${ov.join(", ")}`);
     }
     await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-open.jpg`), type: "jpeg", quality: 72 });
     try { await host.locator(".ls-next").click({ timeout: 4000 }); } catch (e) { out.push("button not reachable"); }
@@ -685,6 +759,54 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-result.jpg`), type: "jpeg", quality: 72 });
     report(`${label}: (18) the sheet fits, the name takes typing, all four tools and the result are reachable, no overflow`, out);
     await ctx.close();
+  }
+
+  // ---- F. nothing on the print, with motion on as a visitor gets it (round 2's review): the coach mark about three
+  // seconds after opening, the live hint while a long name is typed with the keyboard up, and the stage back at rest.
+  // Measured on the print's own pixels, every store, every phone ----
+  if (!skip.has("cover")) {
+    const LONG = "Smykkehuset Lund Copenhagen";
+    for (const phone of PHONES.filter((x) => !process.env.QA_PHONES || process.env.QA_PHONES.split(",").includes(x))) {
+      const ctx = await browser.newContext({ ...devices[phone] });
+      const vp = devices[phone].viewport;
+      const sizes = phone === "iPhone 13" ? [KB[phone], { width: 390, height: 290 }] : [KB[phone]];
+      const bad = { coach: [], typing: [], rest: [] };
+      let coached = 0;
+      for (const m of markets) {
+        const p = await open(ctx, `concept=logo-studio&market=${m}`, `${phone} ${m} cover`);
+        await p.waitForTimeout(3300);
+        const at = await coverage(p);
+        const coach = at.hits.find((h) => h.name === "ls-coach");
+        if (coach) {
+          coached++;
+          if (vp.height < 620) bad.coach.push(`${m}: shown on a short screen`);
+          if (coach.share > 0 || coach.lines > 3) bad.coach.push(`${m}: ${coach.lines} lines, on ${(coach.share * 100).toFixed(1)}% of the print`);
+        }
+        const input = p.locator("#westpack-signup .ls-name-input");
+        for (const size of sizes) {
+          await p.locator('#westpack-signup .ls-tab[data-tool="brand"]').click(); await p.waitForTimeout(250);
+          await input.focus(); await input.fill(""); await input.pressSequentially(LONG, { delay: 4 });
+          await p.setViewportSize(size); await p.waitForTimeout(900);
+          const ty = await coverage(p);
+          const hintAt = await p.evaluate(() => { const l = window.__ls, h = l.q(".ls-hint"); const hr = l.rect(h); return { kb: l.q(".wps").classList.contains("is-kb"), text: h.textContent, overField: Boolean(hr && h.closest(".ls-name") && hr.b <= l.rect(".ls-name-input").t + 0.5), field: l.rect(".ls-name-input").b }; });
+          const on = covering(ty);
+          if (on.length) bad.typing.push(`${m} ${size.width}x${size.height}: ${on.join(", ")}`);
+          if (!hintAt.kb || !hintAt.text || !hintAt.overField) bad.typing.push(`${m} ${size.width}x${size.height}: hint ${JSON.stringify(hintAt)}`);
+          if (hintAt.field > size.height + 0.5) bad.typing.push(`${m} ${size.width}x${size.height}: field under the keyboard`);
+          if (m === "eur_eu_ger") await p.screenshot({ path: path.join(outDir, `cover-${phone.replace(/\s+/g, "-").toLowerCase()}-typing-${size.width}x${size.height}.jpg`), type: "jpeg", quality: 72 });
+          await input.blur(); await p.setViewportSize(vp); await p.waitForTimeout(650);
+        }
+        const rest = await coverage(p);
+        const left = await p.evaluate(() => window.__ls.q(".ls-hint").textContent);
+        if (covering(rest).length) bad.rest.push(`${m}: ${covering(rest).join(", ")}`);
+        if (left) bad.rest.push(`${m}: the typing hint stayed at rest`);
+        await p.close();
+      }
+      report(`${phone}, 18 stores, motion on: the coach mark shows only clear of the print, in at most 3 lines${vp.height < 620 ? ", and never on this short screen" : ` (shown in ${coached})`}`, bad.coach);
+      report(`${phone}, 18 stores: typing a long name (${sizes.map((s) => `${s.width}x${s.height}`).join(", ")}) nothing on the stage covers the print, and the hint stands over the field`, bad.typing);
+      report(`${phone}, 18 stores: back at rest the typing hint is gone and nothing on the stage covers the print`, bad.rest);
+      await ctx.close();
+    }
   }
 
   // ---- E. WebKit (19): Playwright's WebKit for Windows draws matrix3d flat, so the probe falls back, without errors ----

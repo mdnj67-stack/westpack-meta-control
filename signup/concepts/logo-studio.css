@@ -266,7 +266,8 @@
 :where(.wps:not([data-device="desktop"])) .ls-stage-inner { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 0; }
 :where(.wps:not([data-device="desktop"])) .ls-frame { flex: 1 1 auto; min-height: 0; width: 100%; aspect-ratio: auto; touch-action: none; cursor: default; }
 :where(.wps:not([data-device="desktop"])) .ls-frame > .ls-scene { inset: auto; left: 0; top: 0; transition: transform 380ms var(--wps-ease-out), opacity 220ms ease, top 240ms var(--wps-ease-out); }
-:where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-frame > .ls-scene { transition: transform 620ms var(--wps-ease-out), opacity 220ms ease, top 240ms var(--wps-ease-out); }
+/* zoomed: the print brought to the window's middle and scaled to fill it (zoomTo() in logo-studio.js) */
+:where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-frame > .ls-scene { transform: var(--ls-zt, scale(2.35)); transition: transform 620ms var(--wps-ease-out), opacity 220ms ease, top 240ms var(--wps-ease-out); }
 /* a shade under the disclaimer, and the photo fading into the studio over its last 48px */
 :where(.wps:not([data-device="desktop"])) .ls-frame::before, :where(.wps:not([data-device="desktop"])) .ls-frame::after { content: ""; position: absolute; left: 0; right: 0; z-index: 1; pointer-events: none; transition: opacity 200ms; }
 :where(.wps:not([data-device="desktop"])) .ls-frame::before { top: 0; height: 84px; background: linear-gradient(rgba(8, 11, 10, 0.55), rgba(8, 11, 10, 0)); }
@@ -276,23 +277,26 @@
   color: rgba(245, 241, 234, 0.82); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55); z-index: 2;
 }
 :where(.wps:not([data-device="desktop"])) .ls-frame .ls-under { position: absolute; left: var(--ls-gut); right: 8px; bottom: 4px; z-index: 2; width: auto; gap: 8px; transition: opacity 200ms; }
-:where(.wps:not([data-device="desktop"])) .ls-box-name { min-width: 0; font-size: 16px; line-height: 20px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity 200ms; }
+/* italic runs past its own advance: the right padding keeps the last letter's overhang inside the clip */
+:where(.wps:not([data-device="desktop"])) .ls-box-name { min-width: 0; padding-right: 0.14em; font-size: 16px; line-height: 20px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity 200ms; }
 :where(.wps:not([data-device="desktop"])) .ls-zoom {
   width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; color: var(--ls-tx);
   background: rgba(12, 16, 15, 0.5); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 :where(.wps:not([data-device="desktop"])) .ls-zoom[aria-pressed="true"] { background: var(--ls-gold); color: #1b1a17; }
 :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-illustration, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-box-name, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-coach, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-frame::before { opacity: 0; }
-/* the coach mark (the light under the finger, said once) and the live hint share the stage's foot */
+/* the coach mark (the light under the finger, said once) and the live hint share the stage's foot: the zoom button's
+   band, beside it and as low as it, where the caption they stand in for sits - the print is centred above */
 :where(.wps:not([data-device="desktop"])) .ls-coach, :where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint {
-  position: absolute; left: var(--ls-gut); right: 60px; bottom: 10px; z-index: 3; margin: 0; min-height: 0; padding: 7px 12px; border-radius: 12px;
-  font-size: 12px; line-height: 16px; color: var(--ls-tx); background: rgba(12, 16, 15, 0.66); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  position: absolute; left: var(--ls-gut); right: 60px; bottom: 4px; z-index: 3; margin: 0; min-height: 44px; padding: 7px 12px; border-radius: 14px;
+  display: flex; align-items: center; font-size: 12px; line-height: 15px; color: var(--ls-tx); background: rgba(12, 16, 15, 0.66);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 :where(.wps:not([data-device="desktop"])) .ls-coach { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 200ms, visibility 0s linear 200ms; }
 :where(.wps:not([data-device="desktop"])) .ls.is-coach .ls-coach { opacity: 1; visibility: visible; transition: opacity 300ms, visibility 0s; }
 :where(.wps:not([data-device="desktop"])) .ls.is-coach .ls-box-name, :where(.wps:not([data-device="desktop"])) .ls.has-hint .ls-box-name { opacity: 0; }
 /* the live hint is a caption on the photo it is about, so it never moves the panel */
-:where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint { font-size: 12.5px; font-style: italic; color: var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint { font-style: italic; color: var(--ls-gold); }
 :where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint:empty { visibility: hidden; }
 :where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint.is-error { color: var(--ls-error); font-style: normal; }
 :where(.wps:not([data-device="desktop"])) .ls-back {
@@ -339,7 +343,7 @@
 :where(.wps:not([data-device="desktop"])) .ls-edit .wps-lede { margin: 0 0 12px; font-size: 14.5px; line-height: 20px; color: var(--ls-tx2); }
 :where(.wps:not([data-device="desktop"])) .ls-name-block { display: grid; gap: 8px; }
 :where(.wps:not([data-device="desktop"])) .ls-name { margin: 0; gap: 6px; }
-:where(.wps:not([data-device="desktop"])) .ls-name-label, :where(.wps:not([data-device="desktop"])) .ls-tool .ls-group-label, :where(.wps:not([data-device="desktop"])) .ls-upload.is-active .ls-upload-label, :where(.wps:not([data-device="desktop"])) .ls-result .wps-label {
+:where(.wps:not([data-device="desktop"])) .ls-name-label, :where(.wps:not([data-device="desktop"])) .ls-tool .ls-group-label, :where(.wps:not([data-device="desktop"])) .ls-upload.is-icon .ls-upload-label, :where(.wps:not([data-device="desktop"])) .ls-result .wps-label {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 :where(.wps:not([data-device="desktop"])) .ls-name-input {
@@ -355,7 +359,8 @@
 }
 :where(.wps:not([data-device="desktop"])) .ls-upload:hover { background: rgba(233, 211, 161, 0.08); }
 /* with a logo in, the pill becomes a gold "upload another" and the rest of the row says how to go back to the name */
-:where(.wps:not([data-device="desktop"])) .ls-upload.is-active { width: 44px; padding: 0; justify-content: center; border-style: solid; background: var(--ls-gold); border-color: var(--ls-gold); color: #1b1a17; }
+:where(.wps:not([data-device="desktop"])) .ls-upload.is-active { border-style: solid; background: var(--ls-gold); border-color: var(--ls-gold); color: #1b1a17; }
+:where(.wps:not([data-device="desktop"])) .ls-upload.is-active.is-icon { width: 44px; padding: 0; justify-content: center; }
 :where(.wps:not([data-device="desktop"])) .ls-upload-aside { flex: 1 1 auto; min-width: 0; min-height: 44px; display: flex; align-items: center; }
 :where(.wps:not([data-device="desktop"])) .ls-upload-hint { font-size: 11px; line-height: 14px; color: var(--ls-tx3); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 :where(.wps:not([data-device="desktop"])) .ls-upload.is-active ~ .ls-upload-aside .ls-upload-hint { display: none; }
@@ -376,7 +381,7 @@
 /* foil: the finish, then its colours; the chosen foil named above them, where nothing covers it */
 :where(.wps:not([data-device="desktop"])) .ls-tool .ls-foils { gap: 10px; }
 :where(.wps:not([data-device="desktop"])) .ls-tool .ls-foil-head { display: block; }
-:where(.wps:not([data-device="desktop"])) .ls-tool .ls-foil-now { display: block; font-size: 19px; line-height: 26px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-foil-now { display: block; padding-right: 0.14em; font-size: 19px; line-height: 26px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 :where(.wps:not([data-device="desktop"])) .ls-tool .ls-finishes { gap: 3px; padding: 3px; border-radius: 16px; background: var(--ls-raise); box-shadow: inset 0 0 0 1px var(--ls-line); }
 :where(.wps:not([data-device="desktop"])) .ls-tool .ls-finish { height: 44px; padding: 0 4px; border-radius: 13px; font-size: 14px; font-weight: 600; color: var(--ls-tx2); }
 :where(.wps:not([data-device="desktop"])) .ls-tool .ls-finish:hover { color: var(--ls-tx); }
@@ -424,11 +429,25 @@
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-kicker, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-title, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-lede,
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-upload-row, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-illustration, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-under, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-coach { display: none; }
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-stage { min-height: 0; }
-:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-tools { padding: 12px var(--ls-gut) max(12px, env(safe-area-inset-bottom, 0px)); }
+/* the panel is the slot and the field, close under the stage and close over the keyboard: every pixel left is the print's window */
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-tools { padding: 6px var(--ls-gut) max(8px, env(safe-area-inset-bottom, 0px)); }
+/* the label's line over the field is a slot two lines of fine print tall: the label, or the live hint in its place
+   (placeHint() moves it there), so the hint never sits on the print and the stage never moves when it fires */
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name { grid-template-rows: minmax(30px, auto) auto; }
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name-label {
-  position: static; width: auto; height: auto; overflow: visible; clip: auto; font-size: 11px; line-height: 14px; letter-spacing: 0.16em; color: var(--ls-gold);
+  grid-area: 1 / 1; align-self: end; position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal;
+  font-size: 11px; line-height: 14px; letter-spacing: 0.16em; color: var(--ls-gold);
 }
-:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-frame .ls-hint { top: 14px; bottom: auto; right: 64px; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name .ls-hint {
+  grid-area: 1 / 1; align-self: end; margin: 0; min-height: 0; padding: 0; font-size: 12px; line-height: 15px; font-style: italic; color: var(--ls-gold);
+}
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name .ls-hint.is-error { color: var(--ls-error); font-style: normal; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name .ls-hint:empty { display: none; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing.has-hint .ls-name-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name-input { grid-area: 2 / 1; }
+/* the short window is all print: no shade for a disclaimer that is not there, and a fade that keeps to the edge */
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-frame::before { opacity: 0; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-frame::after { height: min(48px, 14%); }
 
 /* ---- the result: the chosen piece large, the seven in a strip, the ask on a paper card ---- */
 :where(.wps:not([data-device="desktop"])) .ls.is-result { flex: none; height: var(--ls-sheet); }
@@ -437,7 +456,8 @@
 :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-illustration, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-under, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-coach, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame .ls-hint { opacity: 0; visibility: hidden; }
 :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-back { display: grid; }
 :where(.wps:not([data-device="desktop"])) .ls-strip { display: none; }
-:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-strip { display: block; flex: none; height: 60px; padding: 4px var(--ls-gut) 12px; }
+/* the strip keeps 8px of studio between its pieces and the card that overlaps it */
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-strip { display: block; flex: none; height: 68px; padding: 4px var(--ls-gut) 20px; }
 :where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs { display: flex; justify-content: space-between; gap: 2px; width: 100%; height: 44px; padding: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; }
 :where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumb {
   flex: none; width: 44px; height: 44px; border-radius: 10px; scroll-snap-align: start;
@@ -481,6 +501,10 @@
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result { border-radius: 0; padding-top: 14px; animation: none; box-shadow: none; }
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result .wps-title {
   margin-right: 52px; min-height: 50px; font-size: 22px; line-height: 25px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+/* and the close button stands on the paper card there: ink on paper, not the stage's dark glass */
+:where(.wps:not([data-device="desktop"])).is-kb[data-concept="logo-studio"] .wps-dialog:has(.ls.is-result:not(.is-success)) .wps-close {
+  background: var(--wps-paper); color: var(--wps-ink); box-shadow: 0 0 0 1px rgba(23, 22, 20, 0.18); backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 /* the thank-you: the piece grows back to the square, or as tall as fits, and the card shrinks to its words */
 :where(.wps:not([data-device="desktop"])) .ls.is-success { flex: 1 1 auto; height: auto; }
@@ -533,11 +557,16 @@
   :where(.wps:not([data-device="desktop"])) .ls.is-result { flex: 1 1 auto; height: auto; }
   :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame { flex: 1 1 auto; height: auto; }
   :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-side { margin-top: 0; }
-  :where(.wps:not([data-device="desktop"])) .ls-result { border-radius: 0; padding-top: 60px; }
+  :where(.wps:not([data-device="desktop"])) .ls-result { border-radius: 0; padding-top: 22px; }
   :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-side { flex: 1 1 auto; }
   :where(.wps:not([data-device="desktop"])) .ls-tools { padding-top: 10px; }
-  /* the close button sits at the panel's top right here: the tabs and the card keep clear of it */
-  :where(.wps:not([data-device="desktop"])) .ls-tabs { padding-right: 60px; }
+  /* the close button stands on the photo's top right corner, where it is on a phone held upright, so the tab strip and
+     the card have the panel's whole width */
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-close { right: auto; left: calc(var(--ls-sheet) - 52px); }
+  /* and the grab bar, which would stand behind it at the sheet's middle, sits over the middle of the panel */
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-grab::before { left: calc(var(--ls-sheet) + (100% - var(--ls-sheet)) / 2); }
+  /* a strip that still has to scroll (a narrow panel in a long language) fades at its end rather than cutting a word */
+  :where(.wps:not([data-device="desktop"])) .ls-tabs.is-scroll { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
   @media (min-width: 760px) {
     :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { margin-inline: 0; }
   }
