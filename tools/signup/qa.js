@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const ROOT = path.resolve(__dirname, "..", "..");
-const { chromium, devices } = require(path.join(ROOT, "tmp", "playwright-runner", "node_modules", "playwright"));
+const { chromium, webkit, devices } = require(path.join(ROOT, "tmp", "playwright-runner", "node_modules", "playwright"));
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".woff2": "font/woff2" };
 const serve = () => new Promise((resolve) => {
   const s = http.createServer((req, res) => {
@@ -43,6 +43,18 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   }
   const overflow = (p) => p.evaluate(() => { const d = document.querySelector("#westpack-signup").shadowRoot.querySelector(".wps-dialog"); return { sw: d.scrollWidth, cw: d.clientWidth }; });
   const concepts = ["logo-studio", "swipe-match", "pack-and-ship"];
+  const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
+  const byLang = {};
+  for (const [code, m] of Object.entries(MARKETS)) if (!byLang[m.lang] && m.lang !== "da") byLang[m.lang] = code;
+  // QA_ONLY=studio runs only the phone studio's checks (section 9), for iterating on that layout
+  if (process.env.QA_ONLY === "studio") {
+    await phoneStudio({ browser, url, check, errors, outDir, devices, byLang, webkit });
+    await browser.close(); server.close();
+    check("no JavaScript errors in any run", errors.length === 0, errors.slice(0, 3).join(" | "));
+    const failed = results.filter((r) => !r.ok).length;
+    console.log(`\n${results.length - failed}/${results.length} passed`);
+    process.exit(failed ? 1 : 0);
+  }
 
   // 1. small phones: nothing may overflow sideways; the main control must be reachable
   for (const c of concepts) {
@@ -58,9 +70,6 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   }
 
   // 2. every store language on a phone (one store per language)
-  const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
-  const byLang = {};
-  for (const [code, m] of Object.entries(MARKETS)) if (!byLang[m.lang] && m.lang !== "da") byLang[m.lang] = code;
   for (const [lang, market] of Object.entries(byLang)) for (const c of concepts) {
     const { ctx, p } = await page({ ...devices["iPhone 13"] }, `concept=${c}&market=${market}`);
     const o = await overflow(p);
@@ -137,9 +146,9 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   }
 
   // 6b. a long name fits every lid it is shown on - also the ones that were hidden while it was typed: a phone's
-  // thumbnails during typing, and the collection until the result
-  {
-    const { ctx, p, host } = await page({ ...devices["iPhone 13"] }, "concept=logo-studio&market=dkk_dk_den");
+  // pieces during typing, the phone's hero and strip on the result, and the desktop's collection until the result
+  for (const [label, opts] of [["phone", { ...devices["iPhone 13"] }], ["desktop", { viewport: { width: 1440, height: 900 } }]]) {
+    const { ctx, p, host } = await page(opts, "concept=logo-studio&market=dkk_dk_den");
     await p.waitForTimeout(1500);
     await host.locator(".ls-name-input").fill("Smykkehuset Lund Copenhagen");
     await host.locator(".ls-name-input").blur();
@@ -148,12 +157,20 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
       const b = svg.querySelector("text").getBBox(), w = svg.viewBox.baseVal.width;
       return !b.width || b.x < -1 || b.x + b.width > w + 1 ? `${Math.round(b.x)}..${Math.round(b.x + b.width)} of ${w}` : "";
     }).filter(Boolean), sel);
-    const thumbsOver = await overflowing(".ls-thumb .ls-print");
-    check("a long name fits every thumbnail after typing on a phone", thumbsOver.length === 0, thumbsOver.join(", "));
+    if (label === "phone") {
+      const thumbsOver = await overflowing(".ls-thumb .ls-print");
+      check("a long name fits every thumbnail after typing on a phone", thumbsOver.length === 0, thumbsOver.join(", "));
+    }
     await host.locator(".ls-next").click();
-    await p.waitForTimeout(600);
-    const tilesOver = await overflowing(".ls-tile .ls-print");
-    check("a long name fits every lid in the collection", tilesOver.length === 0, tilesOver.join(", "));
+    await p.waitForTimeout(800);
+    if (label === "phone") {
+      const over = await overflowing(".ls-frame .ls-print, .ls-strip .ls-print");
+      const n = await host.locator(".ls-strip .ls-print").count();
+      check("phone: a long name fits the hero and every strip piece on the result", over.length === 0 && n === 7, `${n} strip prints${over.length ? `; ${over.join(", ")}` : ""}`);
+    } else {
+      const tilesOver = await overflowing(".ls-tile .ls-print");
+      check("desktop: a long name fits every lid in the collection", tilesOver.length === 0, tilesOver.join(", "));
+    }
     await ctx.close();
   }
 
@@ -168,10 +185,14 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await host.locator(".ls-name-input").blur();
     const pieces = await host.locator(".ls-thumb").count();
     check(`${label}: seven pieces, the carrier bag among them`, pieces === 7 && (await host.locator('.ls-thumb[data-box="bag"]').count()) === 1, `${pieces} thumbnails`);
+    // a phone shows one tool at a time: the pieces are under Packaging, the foils under Foil
+    const tool = async (k) => { if (label === "phone") { await host.locator(`.ls-tab[data-tool="${k}"]`).click(); await p.waitForTimeout(250); } };
+    await tool("box");
     await host.locator('.ls-thumb[data-box="bag"]').click();
     await p.waitForTimeout(1400);
     const onBag = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect(); return { inside: t.width > 20 && t.left > f.left && t.right < f.right && t.top > f.top && t.bottom < f.bottom, box: r.querySelector(".ls").dataset.box }; });
     check(`${label}: the name is printed on the bag`, onBag.inside && onBag.box === "bag", JSON.stringify(onBag));
+    await tool("foil");
     const picker = () => p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; return { finish: [...r.querySelectorAll(".ls-finish")].find((b) => b.getAttribute("aria-pressed") === "true").dataset.finish, shown: [...r.querySelectorAll(".ls-chip-foil")].filter((b) => !b.hidden).length, foil: r.querySelector(".ls").dataset.foil, name: r.querySelector(".ls-foil-now").textContent }; });
     let s = await picker();
     check(`${label}: the picker opens on the piece's own finish and shows only its colours`, s.finish === "metallic" && s.shown === 9 && s.foil === "metallic-gold" && s.name === "Metallisk guld", JSON.stringify(s));
@@ -187,9 +208,30 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     check(`${label}: the transparent foil is named alone`, s.name === "Gennemsigtig", JSON.stringify(s));
     await host.locator(".ls-next").click();
     await p.waitForTimeout(1400);
-    const col = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const tiles = [...r.querySelectorAll(".ls-tile")]; const area = (t) => { const b = t.querySelector(".ls-tile-frame").getBoundingClientRect(); return b.width * b.height; }; const chosen = r.querySelector(".ls-tile.is-chosen"); return { chosen: chosen && chosen.dataset.box, largest: chosen && tiles.every((t) => t === chosen || area(t) < area(chosen)), inside: tiles.every((t) => { const f = t.querySelector(".ls-tile-frame").getBoundingClientRect(), b = t.querySelector(".ls-print text").getBoundingClientRect(); return b.width > 2 && b.left >= f.left - 1 && b.right <= f.right + 1 && b.top >= f.top - 1 && b.bottom <= f.bottom + 1; }) }; });
-    check(`${label}: the chosen piece leads the collection, largest, and every print sits in its frame`, col.chosen === "bag" && col.largest && col.inside, JSON.stringify(col));
-    await p.screenshot({ path: path.join(outDir, `bag-collection-${label}.jpg`), type: "jpeg", quality: 75 });
+    if (label === "phone") {
+      // the phone's reward is the chosen piece large, with the seven in a strip under it, each carrying the name
+      const res = await p.evaluate(() => {
+        const r = document.querySelector("#westpack-signup").shadowRoot, ls = r.querySelector(".ls"), bag = r.querySelector('.ls-strip .ls-thumb[data-box="bag"]');
+        const strip = [...r.querySelectorAll(".ls-strip .ls-thumb")];
+        const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect();
+        return {
+          box: ls.dataset.box, pressed: Boolean(bag && bag.getAttribute("aria-pressed") === "true"), pieces: strip.length,
+          stripInside: strip.every((b) => { const o = b.getBoundingClientRect(), p = b.querySelector(".ls-print text").getBoundingClientRect(); return p.width > 1 && p.left >= o.left - 1 && p.right <= o.right + 1 && p.top >= o.top - 1 && p.bottom <= o.bottom + 1; }),
+          heroInside: t.width > 20 && t.left >= f.left && t.right <= f.right && t.top >= f.top && t.bottom <= f.bottom,
+        };
+      });
+      check("phone: the hero shows the chosen piece (bag), the bag is pressed in the strip, every strip print sits inside its button", res.box === "bag" && res.pressed && res.pieces === 7 && res.stripInside && res.heroInside, JSON.stringify(res));
+      await p.screenshot({ path: path.join(outDir, `bag-result-${label}.jpg`), type: "jpeg", quality: 75 });
+      // a tap on another piece in the strip makes it the hero
+      await host.locator('.ls-strip .ls-thumb[data-box="london"]').click();
+      await p.waitForTimeout(1200);
+      const swap = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect(); return { box: r.querySelector(".ls").dataset.box, inside: t.width > 20 && t.left >= f.left && t.right <= f.right && t.top >= f.top && t.bottom <= f.bottom }; });
+      check("phone: a tap on another piece in the strip makes it the hero, the print inside the window", swap.box === "london" && swap.inside, JSON.stringify(swap));
+    } else {
+      const col = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const tiles = [...r.querySelectorAll(".ls-tile")]; const area = (t) => { const b = t.querySelector(".ls-tile-frame").getBoundingClientRect(); return b.width * b.height; }; const chosen = r.querySelector(".ls-tile.is-chosen"); return { chosen: chosen && chosen.dataset.box, largest: chosen && tiles.every((t) => t === chosen || area(t) < area(chosen)), inside: tiles.every((t) => { const f = t.querySelector(".ls-tile-frame").getBoundingClientRect(), b = t.querySelector(".ls-print text").getBoundingClientRect(); return b.width > 2 && b.left >= f.left - 1 && b.right <= f.right + 1 && b.top >= f.top - 1 && b.bottom <= f.bottom + 1; }) }; });
+      check(`${label}: the chosen piece leads the collection, largest, and every print sits in its frame`, col.chosen === "bag" && col.largest && col.inside, JSON.stringify(col));
+      await p.screenshot({ path: path.join(outDir, `bag-collection-${label}.jpg`), type: "jpeg", quality: 75 });
+    }
     // after the signup the thank-you stands alone: the form, the promise list and the consent go (they once stayed,
     // because their own display beat the hidden attribute) and the thank-you is in view
     await host.locator(".ls-result .wps-input").fill("navn@firma.dk");
@@ -245,6 +287,9 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
+  // 9. Logo studio on phones and tablets: the studio (tmp/mobile-redesign/SPEC.md, section 10)
+  await phoneStudio({ browser, url, check, errors, outDir, devices, byLang, webkit });
+
   await browser.close();
   server.close();
   check("no JavaScript errors in any run", errors.length === 0, errors.slice(0, 3).join(" | "));
@@ -253,3 +298,407 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   console.log(`\n${results.length - failed}/${results.length} passed`);
   process.exit(failed ? 1 : 0);
 })().catch((e) => { console.error(e); process.exit(1); });
+
+// ---- 9. Logo studio on phones and tablets ----
+// The acceptance criteria of tmp/mobile-redesign/SPEC.md section 10 that run locally; the numbers in the check names
+// are the criteria's. Read in the page: rects as { l, t, r, b, w, h }, everything from the shadow root.
+function LS_HELPERS() {
+  const root = () => document.querySelector("#westpack-signup").shadowRoot;
+  const q = (s) => root().querySelector(s);
+  const qa = (s) => [...root().querySelectorAll(s)];
+  const rect = (n) => { if (typeof n === "string") n = q(n); if (!n || !n.getClientRects().length) return null; const b = n.getBoundingClientRect(); return { l: b.left, t: b.top, r: b.right, b: b.bottom, w: b.width, h: b.height }; };
+  const shown = (n) => n.getClientRects().length > 0 && (n.checkVisibility ? n.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true, opacityProperty: true, visibilityProperty: true }) : getComputedStyle(n).visibility !== "hidden");
+  const hit = (a, b) => Boolean(a && b && Math.min(a.r, b.r) - Math.max(a.l, b.l) > 0.5 && Math.min(a.b, b.b) - Math.max(a.t, b.t) > 0.5);
+  const inside = (a, b, tol = 0.5) => Boolean(a && b && a.l >= b.l - tol && a.r <= b.r + tol && a.t >= b.t - tol && a.b <= b.b + tol);
+  const inView = (a) => Boolean(a && a.t >= -0.5 && a.l >= -0.5 && a.b <= innerHeight + 0.5 && a.r <= innerWidth + 0.5);
+  const name = (n) => `${(n.className && n.className.baseVal === undefined ? n.className : n.tagName).toString().split(" ")[0] || n.tagName}${n.dataset && (n.dataset.tool || n.dataset.box || n.dataset.value) ? `[${n.dataset.tool || n.dataset.box || n.dataset.value}]` : ""}`;
+  // every visible control in the open sheet is a 44 x 44 target (the consent's inline link and the file input excepted)
+  function smallTargets() {
+    return qa(".wps-dialog button, .wps-dialog input, .wps-dialog [role=tab], .wps-dialog a").filter(shown)
+      .filter((n) => !(n.tagName === "A" && n.closest(".wps-consent")) && n.type !== "file")
+      .map((n) => { const b = n.getBoundingClientRect(); return b.width < 43.5 || b.height < 43.5 ? `${name(n)} ${Math.round(b.width)}x${Math.round(b.height)}` : ""; }).filter(Boolean);
+  }
+  // nothing visible sits on the close button, nor on the back button on the result (the photo and the print excepted)
+  function overClose() {
+    const c = rect(".wps-close"), back = q(".ls-back"), br = back && shown(back) ? rect(back) : null, out = [];
+    for (const n of qa(".wps-dialog button, .wps-dialog input, .wps-dialog a, .wps-dialog [role=tab], .wps-dialog p, .wps-dialog h2, .wps-dialog li, .wps-dialog label, .wps-dialog figcaption, .wps-dialog .ls-foil-now, .wps-dialog .ls-upload-hint")) {
+      if (n.closest(".wps-close") || !shown(n)) continue;
+      const r = rect(n);
+      if (!r || r.w * r.h < 4) continue;
+      if (hit(r, c)) out.push(`${name(n)} on close`);
+      if (br && !n.closest(".ls-back") && hit(r, br)) out.push(`${name(n)} on back`);
+    }
+    return out;
+  }
+  const overflowX = () => { const d = q(".wps-dialog"); return d.scrollWidth > d.clientWidth + 1 ? [`${d.scrollWidth}/${d.clientWidth}`] : []; };
+  // where the print's far corner really lands, against where the measured quad puts it, as a share of the scene
+  function far() {
+    const wrap = q(".ls-frame .ls-print-wrap"), sc = q(".ls-frame > .ls-scene");
+    const [x, y] = wrap.dataset.far.split(",").map(Number), w = parseFloat(wrap.style.width), h = parseFloat(wrap.style.height);
+    const probe = document.createElement("i");
+    probe.style.cssText = `position:absolute;left:${w - 1}px;top:${h - 1}px;width:2px;height:2px`;
+    wrap.appendChild(probe);
+    const r = probe.getBoundingClientRect(), f = sc.getBoundingClientRect();
+    probe.remove();
+    const k = f.width / 1000;
+    return Math.hypot((r.left + r.right) / 2 - f.left - x * k, (r.top + r.bottom) / 2 - f.top - y * k) / f.width;
+  }
+  function state() {
+    const sc = q(".ls-frame > .ls-scene");
+    return { k: sc.style.getPropertyValue("--k"), sceneW: sc.getBoundingClientRect().width, dialogW: q(".wps-dialog").getBoundingClientRect().width, frame: rect(".ls-frame"), print: rect(".ls-frame .ls-print text"), engine: q(".ls").dataset.engine, tool: q(".ls").dataset.tool, far: far(), kb: q(".wps").classList.contains("is-kb") };
+  }
+  window.__ls = { root, q, qa, rect, shown, hit, inside, inView, smallTargets, overClose, overflowX, far, state };
+}
+
+// one look at a store in a language at rest, on each of the four tools (criteria 1, 2, 3, 4, 7, 9, 10, 11, 12, 19)
+async function SWEEP() {
+  const L = window.__ls, wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const o = { c1: [], c2: [], c3: [], c4: [], c7: [], c9: [], c10: [], c11: [], c12: [], c19: [] };
+  const W = innerWidth, d = L.q(".wps-dialog");
+  if (L.q(".ls").dataset.engine !== "projective") o.c19.push(`engine ${L.q(".ls").dataset.engine}`);
+  const fr = L.rect(".ls-frame"), tb = L.rect(".ls-tabs"), ti = L.rect(".ls-edit .wps-title"), inp = L.rect(".ls-name-input"), cta = L.rect(".ls-next");
+  if (!(fr && tb && ti && inp && cta && fr.t < tb.t && tb.t < ti.t && ti.t < inp.t && inp.t < cta.t)) o.c1.push("order");
+  for (const [k, r] of [["question", ti], ["field", inp], ["button", cta]]) if (!L.inView(r)) o.c1.push(`${k} not in view`);
+  if (!fr || fr.h < 0.66 * W - 0.5) o.c4.push(`stage ${fr && fr.h.toFixed(0)} of ${W}`);
+  const bar = L.q(".ls-tabs");
+  if (bar.scrollWidth > bar.clientWidth + 1) o.c7.push(`strip ${bar.scrollWidth}/${bar.clientWidth}`);
+  for (const t of L.qa(".ls-tab")) { const lab = t.querySelector(".ls-tab-label"); if (lab.getClientRects().length !== 1 || t.scrollWidth > t.clientWidth + 1) o.c7.push(`"${lab.textContent}" wraps or is cut`); }
+  const dis = L.rect(".ls-illustration"), close = L.rect(".wps-close"), g = L.rect(".wps-grab");
+  const grab = g && { l: g.l + g.w / 2 - 18, r: g.l + g.w / 2 + 18, t: g.t + 8, b: g.t + 12 };
+  if (L.hit(dis, close)) o.c9.push("under the close button");
+  if (L.hit(dis, grab)) o.c9.push("under the grab bar");
+  const lines = Math.round(dis.h / parseFloat(getComputedStyle(L.q(".ls-illustration")).lineHeight));
+  if (lines > (W >= 360 ? 2 : 3)) o.c9.push(`${lines} lines`);
+  const snap = () => ({ frame: L.rect(".ls-frame"), cta: L.rect(".ls-next"), dh: d.getBoundingClientRect().height });
+  const same = (a, b) => a && b && ["l", "t", "w", "h"].every((k) => Math.abs(a[k] - b[k]) <= 0.5);
+  const base = snap();
+  for (const tool of ["brand", "box", "foil", "type", "brand"]) {
+    L.q(`.ls-tab[data-tool="${tool}"]`).click();
+    await wait(350);
+    const tl = L.q(".ls-tools");
+    if (d.scrollHeight > d.clientHeight + 1) o.c2.push(`${tool}: dialog ${d.scrollHeight}/${d.clientHeight}`);
+    if (tl.scrollHeight > tl.clientHeight + 1) o.c2.push(`${tool}: tool cell ${tl.scrollHeight}/${tl.clientHeight}`);
+    const s = snap();
+    if (!same(s.frame, base.frame) || !same(s.cta, base.cta) || Math.abs(s.dh - base.dh) > 0.5) o.c3.push(`${tool}: moved`);
+    o.c10.push(...L.overClose().map((x) => `${tool}: ${x}`));
+    o.c11.push(...L.smallTargets().map((x) => `${tool}: ${x}`));
+    o.c12.push(...L.overflowX().map((x) => `${tool}: ${x}`));
+  }
+  return o;
+}
+
+const PHONES = ["iPhone SE", "Galaxy S8", "iPhone 13", "iPhone 14 Pro Max"];
+// the view a phone keeps above its keyboard, simulated by shrinking the viewport once the field has focus
+const KB = { "iPhone SE": { width: 320, height: 250 }, "Galaxy S8": { width: 360, height: 440 }, "iPhone 13": { width: 390, height: 330 }, "iPhone 14 Pro Max": { width: 430, height: 390 } };
+const PIECES = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
+
+async function phoneStudio({ browser, url, check, errors, outDir, devices, byLang, webkit }) {
+  const markets = [...Object.values(byLang), "dkk_dk_den"];
+  // QA_SKIP=sweep,flow,perf,tablet,webkit leaves parts out while iterating; a full run runs them all
+  const skip = new Set((process.env.QA_SKIP || "").split(","));
+  const open = async (ctx, q, label) => {
+    const p = await ctx.newPage();
+    p.on("pageerror", (e) => errors.push(`${label}: ${e.message}`));
+    p.on("console", (m) => { if (m.type() === "error" && !/Failed to load resource/.test(m.text())) errors.push(`${label}: ${m.text()}`); });
+    await p.addInitScript(LS_HELPERS);
+    await p.goto(url(q));
+    await p.locator("#westpack-signup .ls-name-input").waitFor({ state: "attached", timeout: 15000 });
+    await p.evaluate(() => document.fonts.ready);
+    return p;
+  };
+  const report = (label, list) => check(label, list.length === 0, list.slice(0, 4).join("; ") + (list.length > 4 ? ` (+${list.length - 4})` : ""));
+  // compares two PNG screenshots in the browser: the share of pixels that differ
+  const pixelShare = (p, a, b) => p.evaluate(async ({ a, b }) => {
+    const load = (s) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = `data:image/png;base64,${s}`; });
+    const [ia, ib] = await Promise.all([load(a), load(b)]);
+    const px = (img) => { const c = document.createElement("canvas"); c.width = img.width; c.height = img.height; const g = c.getContext("2d"); g.drawImage(img, 0, 0); return g.getImageData(0, 0, c.width, c.height).data; };
+    const da = px(ia), db = px(ib);
+    let n = 0;
+    for (let i = 0; i < da.length; i += 4) if (Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]) > 30) n++;
+    return n / (da.length / 4);
+  }, { a: a.toString("base64"), b: b.toString("base64") });
+
+  // ---- A. every language on every phone, at rest and on each tool ----
+  for (const phone of skip.has("sweep") ? [] : PHONES) {
+    const ctx = await browser.newContext({ ...devices[phone], reducedMotion: "reduce" });
+    const agg = { c1: [], c2: [], c3: [], c4: [], c7: [], c9: [], c10: [], c11: [], c12: [], c19: [] };
+    for (const m of markets) {
+      const p = await open(ctx, `concept=logo-studio&market=${m}`, `${phone} ${m}`);
+      await p.waitForTimeout(500);
+      const r = await p.evaluate(SWEEP);
+      for (const k of Object.keys(agg)) for (const msg of r[k]) agg[k].push(`${m}: ${msg}`);
+      await p.close();
+    }
+    report(`${phone}, 18 stores: (1) stage < tabs < question < field < button, all three in the first screen`, agg.c1);
+    report(`${phone}, 18 stores: (2) no scrolling on any of the four tools`, agg.c2);
+    report(`${phone}, 18 stores: (3) the stage, the button and the sheet stay put across the four tools`, agg.c3);
+    report(`${phone}, 18 stores: (4) the stage at rest is at least 0.66 x the width`, agg.c4);
+    report(`${phone}, 18 stores: (7) the tabs fit, every label whole on one line`, agg.c7);
+    report(`${phone}, 18 stores: (9) the disclaimer clears the close button and the grab bar, in few lines`, agg.c9);
+    report(`${phone}, 18 stores: (10) nothing sits on the close button`, agg.c10);
+    report(`${phone}, 18 stores: (11) every control is a 44 x 44 target`, agg.c11);
+    report(`${phone}, 18 stores: (12) no sideways overflow on any tool`, agg.c12);
+    report(`${phone}, 18 stores: (19) the engine probe stays projective at rest`, agg.c19);
+    await ctx.close();
+  }
+
+  // ---- B. the whole flow on each phone, with the keyboard simulated ----
+  for (const phone of skip.has("flow") ? [] : PHONES.filter((x) => !process.env.QA_PHONES || process.env.QA_PHONES.split(",").includes(x))) {
+    const ctx = await browser.newContext({ ...devices[phone] });
+    const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", phone);
+    const host = p.locator("#westpack-signup");
+    const vp = devices[phone].viewport, kb = KB[phone];
+    const L = (fn, arg) => p.evaluate(fn, arg);
+    const st = () => L(() => window.__ls.state());
+    const shot = (s) => p.screenshot({ path: path.join(outDir, `studio-${phone.replace(/\s+/g, "-").toLowerCase()}-${s}.jpg`), type: "jpeg", quality: 72 });
+    const tab = async (k) => { await host.locator(`.ls-tab[data-tool="${k}"]`).click(); await p.waitForTimeout(300); };
+    const fails = { c3: [], c5: [], c6: [], c8: [], c10: [], c11: [], c12: [], c19: [] };
+    const states = () => L(() => ({ over: window.__ls.overClose(), small: window.__ls.smallTargets(), x: window.__ls.overflowX() }));
+    const sweepState = async (label) => { const s = await states(); fails.c10.push(...s.over.map((x) => `${label}: ${x}`)); fails.c11.push(...s.small.map((x) => `${label}: ${x}`)); fails.c12.push(...s.x.map((x) => `${label}: ${x}`)); };
+    await p.waitForTimeout(2800);
+    const rest = await st();
+    await shot("open");
+    if (rest.engine !== "projective") fails.c19.push(`rest: engine ${rest.engine}`);
+    if (rest.far > 0.015) fails.c19.push(`rest: far corner off by ${(rest.far * 100).toFixed(2)}%`);
+    if (Math.abs(rest.sceneW - rest.dialogW) > 0.5) fails.c5.push(`rest: scene ${rest.sceneW} vs sheet ${rest.dialogW}`);
+    const snap = () => L(() => { const l = window.__ls; return { frame: l.rect(".ls-frame"), cta: l.rect(".ls-next"), dh: l.rect(".wps-dialog").h }; });
+    const same = (a, b) => ["l", "t", "w", "h"].every((k) => Math.abs(a.frame[k] - b.frame[k]) <= 0.5 && Math.abs(a.cta[k] - b.cta[k]) <= 0.5) && Math.abs(a.dh - b.dh) <= 0.5;
+    const base = await snap();
+
+    // (8) the first blur with a name moves on to Packaging, once
+    const input = host.locator(".ls-name-input");
+    await input.focus(); await input.pressSequentially("Atelier Sever", { delay: 20 }); await input.blur(); await p.waitForTimeout(300);
+    const t1 = (await st()).tool;
+    await tab("brand");
+    await input.focus(); await input.pressSequentially(" Nord", { delay: 20 }); await input.blur(); await p.waitForTimeout(300);
+    const t2 = (await st()).tool;
+    if (t1 !== "box" || t2 !== "brand") fails.c8.push(`first blur ${t1}, second ${t2}`);
+
+    // (6) the print is whole in the window on every piece, with the default name and a long one, at rest; and (on the
+    // two phones the criterion names) while typing, with the field above the keyboard
+    const typingSizes = phone === "iPhone 13" || phone === "iPhone SE" ? [kb] : [];
+    for (const nm of ["", "Smykkehuset Lund Copenhagen"]) {
+      await tab("brand"); await input.fill(nm); await input.blur(); await p.waitForTimeout(200);
+      for (const id of PIECES) {
+        await tab("box");
+        await host.locator(`.ls-tool .ls-thumb[data-box="${id}"]`).click();
+        await p.waitForTimeout(900);
+        const s = await st();
+        if (!(s.print && s.print.w > 10 && await L((a) => window.__ls.inside(a.p, a.f), { p: s.print, f: s.frame }))) fails.c6.push(`${nm || "default"} ${id} at rest`);
+        for (const size of typingSizes) {
+          await tab("brand");
+          await input.focus();
+          await p.setViewportSize(size); await p.waitForTimeout(500);
+          const ty = await st();
+          const field = await L(() => window.__ls.rect(".ls-name-input"));
+          if (!ty.kb) fails.c6.push(`${id}: no typing layout at ${size.width}x${size.height}`);
+          if (!(ty.print && await L((a) => window.__ls.inside(a.p, a.f), { p: ty.print, f: ty.frame }))) fails.c6.push(`${nm || "default"} ${id} typing ${size.width}x${size.height}`);
+          if (!field || field.b > size.height + 0.5) fails.c6.push(`${id}: field under the keyboard`);
+          if (ty.k !== rest.k) fails.c5.push(`typing ${id}: --k ${ty.k} vs ${rest.k}`);
+          if (ty.far > 0.015) fails.c19.push(`typing ${id}: far corner ${(ty.far * 100).toFixed(2)}%`);
+          if (id === "seville" && nm) { await shot("typing"); await sweepState("typing"); }
+          await input.blur();
+          await p.setViewportSize(vp); await p.waitForTimeout(450);
+        }
+      }
+    }
+    if (!typingSizes.length) {
+      // one typing state on the other phones, for the scale and the engine
+      await tab("brand"); await input.focus(); await p.setViewportSize(kb); await p.waitForTimeout(500);
+      const ty = await st();
+      if (ty.k !== rest.k) fails.c5.push(`typing: --k ${ty.k} vs ${rest.k}`);
+      if (ty.far > 0.015) fails.c19.push(`typing: far corner ${(ty.far * 100).toFixed(2)}%`);
+      await shot("typing"); await sweepState("typing");
+      await input.blur(); await p.setViewportSize(vp); await p.waitForTimeout(450);
+    }
+    const back = await st();
+    if (back.far > 0.015) fails.c19.push(`rest again: far corner ${(back.far * 100).toFixed(2)}%`);
+    if (back.k !== rest.k) fails.c5.push(`rest again: --k ${back.k} vs ${rest.k}`);
+
+    // (3) a hint showing and an uploaded logo move nothing
+    await tab("brand");
+    const hinted = await snap();
+    const hintOn = await L(() => window.__ls.q(".ls-hint").textContent.length > 0);
+    if (!hintOn || !same(hinted, base)) fails.c3.push(`with a hint (${hintOn ? "shown" : "none"}): moved`);
+    const png = await p.evaluate(() => { const c = document.createElement("canvas"); c.width = 400; c.height = 160; const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, 400, 160); g.fillStyle = "#111"; g.font = "bold 90px Georgia"; g.fillText("Nord", 70, 115); return c.toDataURL("image/png").split(",")[1]; });
+    await host.locator('input[type="file"]').setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: Buffer.from(png, "base64") });
+    await p.waitForTimeout(900);
+    const logoed = await snap();
+    if (!same(logoed, base)) fails.c3.push("after a logo upload: moved");
+    const typeTab = await L(() => { const t = window.__ls.q('.ls-tab[data-tool="type"]'); t.click(); return { disabled: t.getAttribute("aria-disabled"), tool: window.__ls.q(".ls").dataset.tool }; });
+    if (typeTab.disabled !== "true" || typeTab.tool === "type") fails.c3.push(`Lettering with a logo: ${JSON.stringify(typeTab)}`);
+    await shot("logo"); await sweepState("logo");
+    await host.locator(".ls-use-name").click(); await p.waitForTimeout(300);
+    await input.blur(); await p.waitForTimeout(200);
+    for (const k of ["box", "foil", "type"]) { await tab(k); await shot(`tool-${k}`); await sweepState(`tool ${k}`); }
+
+    // (20) on the iPhone 13: after many changes the print is still drawn
+    if (phone === "iPhone 13") {
+      for (let i = 0; i < 10; i++) { await tab("brand"); await input.focus(); await p.setViewportSize(kb); await p.waitForTimeout(250); await input.blur(); await p.setViewportSize(vp); await p.waitForTimeout(250); }
+      for (const k of ["box", "foil", "type", "brand", "foil", "box", "type", "brand"]) await tab(k);
+      await tab("box");
+      for (const id of ["london", "torino", "bag", "seville"]) { await host.locator(`.ls-tool .ls-thumb[data-box="${id}"]`).click(); await p.waitForTimeout(900); }
+      await host.locator(".ls-zoom").click(); await p.waitForTimeout(1000); await host.locator(".ls-zoom").click(); await p.waitForTimeout(1200);
+      const box = await L(() => window.__ls.rect(".ls-frame .ls-print text"));
+      const clip = { x: box.l, y: box.t, width: box.w, height: box.h };
+      const withPrint = await p.screenshot({ clip });
+      await L(() => { window.__ls.q(".ls-frame .ls-print-wrap").style.visibility = "hidden"; });
+      const without = await p.screenshot({ clip });
+      await L(() => { window.__ls.q(".ls-frame .ls-print-wrap").style.visibility = ""; });
+      const share = await pixelShare(p, withPrint, without);
+      check("iPhone 13: (20) after 10 keyboard cycles, 8 tabs, 4 pieces and a zoom the print is still drawn", share >= 0.02, `${(share * 100).toFixed(1)}% of the print's box`);
+    }
+
+    // the result: the bag chosen, the button pressed
+    await tab("box");
+    await host.locator('.ls-tool .ls-thumb[data-box="bag"]').click(); await p.waitForTimeout(900);
+    await host.locator(".ls-next").click(); await p.waitForTimeout(1600);
+    await shot("result"); await sweepState("result");
+    const res = await L(() => {
+      const l = window.__ls, f = l.rect(".ls-frame"), card = l.rect(".ls-result"), consent = l.q(".ls-result .wps-consent");
+      const lh = parseFloat(getComputedStyle(consent).lineHeight), cr = l.rect(consent);
+      const strip = l.qa(".ls-strip .ls-thumb");
+      return {
+        box: l.q(".ls").dataset.box, bag: l.q('.ls-strip .ls-thumb[data-box="bag"]').getAttribute("aria-pressed"),
+        stripInside: strip.length === 7 && strip.every((b) => l.inside(l.rect(b.querySelector(".ls-print text")), l.rect(b), 1)),
+        email: l.inView(l.rect(".ls-result .wps-input")), submit: l.inView(l.rect(".ls-result .wps-form .wps-btn-primary")),
+        consent2: cr.t + 2 * lh <= Math.min(innerHeight, card.b) + 0.5, hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), state: l.state(),
+      };
+    });
+    const c13 = [];
+    if (!res.email || !res.submit) c13.push(`email ${res.email}, button ${res.submit}`);
+    if (vp.height >= 664 && !res.consent2) c13.push("consent's first two lines below the fold");
+    if (res.hero < 180) c13.push(`hero ${res.hero}`);
+    report(`${phone}: (13) on the result the email field and the button are in view${vp.height >= 664 ? ", and two lines of consent" : ""}, the hero at least 180px`, c13);
+    check(`${phone}: (14) the bag is the hero, pressed in the strip, every strip print inside its button`, res.box === "bag" && res.bag === "true" && res.stripInside && res.print, JSON.stringify({ box: res.box, bag: res.bag, strip: res.stripInside, print: res.print }));
+    if (res.state.k !== rest.k || Math.abs(res.state.sceneW - res.state.dialogW) > 0.5) fails.c5.push(`result: --k ${res.state.k}, scene ${res.state.sceneW}/${res.state.dialogW}`);
+    if (res.state.far > 0.015) fails.c19.push(`result: far corner ${(res.state.far * 100).toFixed(2)}%`);
+
+    // (15) the address typed with the keyboard up, and an error: field, error, button all in view, error between
+    const email = host.locator(".ls-result .wps-input");
+    await email.focus();
+    await p.setViewportSize(kb); await p.waitForTimeout(400);
+    await email.fill("navn@firma");
+    await host.locator(".ls-result .wps-form .wps-btn-primary").click();
+    await p.waitForTimeout(600);
+    await shot("email-error"); await sweepState("email error");
+    const err = await L(() => { const l = window.__ls, i = l.rect(".ls-result .wps-input"), e = l.rect(".ls-result .wps-error"), b = l.rect(".ls-result .wps-form .wps-btn-primary"); return { i: l.inView(i), e: l.inView(e), b: l.inView(b), between: Boolean(i && e && b && e.t >= i.b - 0.5 && e.b <= b.t + 0.5) }; });
+    check(`${phone}: (15) with the keyboard up (${kb.width}x${kb.height}) the field, its error and the button are in view, the error between them`, err.i && err.e && err.b && err.between, JSON.stringify(err));
+    // (16) one tap on the button with a good address signs up (dry run)
+    await email.fill("navn@firma.cz");
+    await host.locator(".ls-result .wps-form .wps-btn-primary").click();
+    let done = true;
+    try { await host.locator(".ls-success:not([hidden])").waitFor({ timeout: 8000 }); } catch (e) { done = false; }
+    check(`${phone}: (16) with the keyboard up the first tap on the button signs up`, done);
+    // (17) the thank-you alone, its title in view
+    await p.setViewportSize(vp); await p.waitForTimeout(1300);
+    await shot("success"); await sweepState("thank-you");
+    const ty = await L(() => {
+      const l = window.__ls, shownN = (n) => getComputedStyle(n).display !== "none" && n.getClientRects().length > 0;
+      return { leftovers: l.qa(".ls-result > *").filter((n) => !n.classList.contains("ls-success") && shownN(n)).map((n) => n.className || n.tagName), title: l.inView(l.rect(".ls-success-title")), state: l.state() };
+    });
+    check(`${phone}: (17) after the signup only the thank-you shows, its title in view`, ty.leftovers.length === 0 && ty.title, JSON.stringify({ leftovers: ty.leftovers, title: ty.title }));
+    if (ty.state.k !== rest.k || Math.abs(ty.state.sceneW - ty.state.dialogW) > 0.5) fails.c5.push(`thank-you: --k ${ty.state.k}, scene ${ty.state.sceneW}/${ty.state.dialogW}`);
+    if (ty.state.far > 0.015) fails.c19.push(`thank-you: far corner ${(ty.state.far * 100).toFixed(2)}%`);
+
+    report(`${phone}: (3) a hint and an uploaded logo move nothing, and Lettering steps back for a logo`, fails.c3);
+    report(`${phone}: (5) --k is the same at rest, typing, on the result and the thank-you, the scene as wide as the sheet`, fails.c5);
+    report(`${phone}: (6) the print is whole in the window on all seven pieces, default and long name${typingSizes.length ? ", at rest and typing" : ""}`, fails.c6);
+    report(`${phone}: (8) the first blur with a name moves on to Packaging, a second does not`, fails.c8);
+    report(`${phone}: (10) nothing sits on the close or back button while typing, with a logo, on the result, the error and the thank-you`, fails.c10);
+    report(`${phone}: (11) every control is a 44 x 44 target in those states`, fails.c11);
+    report(`${phone}: (12) no sideways overflow in those states`, fails.c12);
+    report(`${phone}: (19) the far print corner stays within 1.5% through rest, typing, rest, result and thank-you`, fails.c19);
+    await ctx.close();
+  }
+
+  // ---- C. fast enough on a slow phone (21): a Galaxy S8 at a quarter of the CPU ----
+  if (!skip.has("perf")) {
+    const ctx = await browser.newContext({ ...devices["Galaxy S8"] });
+    const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", "S8 throttled");
+    await p.waitForTimeout(2800);
+    const cdp = await ctx.newCDPSession(p);
+    await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
+    const tabMs = await p.evaluate(async () => {
+      const out = [];
+      for (const k of ["box", "foil", "type", "brand"]) {
+        const t0 = performance.now();
+        window.__ls.q(`.ls-tab[data-tool="${k}"]`).click();
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        out.push(performance.now() - t0);
+        await new Promise((r) => setTimeout(r, 300));
+      }
+      return out;
+    });
+    check("Galaxy S8, 4x slower CPU: (21) a tab tap paints within 100ms", Math.max(...tabMs) <= 100, tabMs.map((x) => `${Math.round(x)}ms`).join(", "));
+    await p.evaluate(() => window.__ls.q('.ls-tab[data-tool="foil"]').click());
+    await p.waitForTimeout(400);
+    const longest = await p.evaluate(async () => {
+      const tasks = [];
+      const po = new PerformanceObserver((l) => { for (const e of l.getEntries()) tasks.push(e.duration); });
+      po.observe({ type: "longtask" });
+      window.__ls.q('.ls-chip-foil[data-value="metallic-copper"]').click();
+      await new Promise((r) => setTimeout(r, 1500));
+      window.__ls.q('.ls-finish[data-finish="matt"]').click();
+      await new Promise((r) => setTimeout(r, 1500));
+      po.disconnect();
+      return tasks.length ? Math.max(...tasks) : 0;
+    });
+    check("Galaxy S8, 4x slower CPU: (21) a coin or finish tap causes no long task over 200ms", longest <= 200, `longest task ${Math.round(longest)}ms`);
+    await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
+    await ctx.close();
+  }
+
+  // ---- D. tablets and short landscape (18) ----
+  for (const [label, opts] of skip.has("tablet") ? [] : [
+    ["iPad Mini 768x1024", { viewport: { width: 768, height: 1024 }, hasTouch: true, deviceScaleFactor: 2 }],
+    ["tablet 712x1138", { viewport: { width: 712, height: 1138 }, hasTouch: true, deviceScaleFactor: 2 }],
+    ["landscape 844x390", { viewport: { width: 844, height: 390 }, hasTouch: true, deviceScaleFactor: 3 }],
+    ["landscape 568x320", { viewport: { width: 568, height: 320 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 }],
+  ]) {
+    const ctx = await browser.newContext(opts);
+    const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", label);
+    const host = p.locator("#westpack-signup");
+    await p.waitForTimeout(2600);
+    const out = [];
+    const fitsView = () => p.evaluate(() => { const l = window.__ls, d = l.rect(".wps-dialog"); return { inView: l.inView(d), x: l.overflowX() }; });
+    let v = await fitsView();
+    if (!v.inView) out.push("dialog outside the view");
+    if (v.x.length) out.push(`overflow ${v.x}`);
+    const input = host.locator(".ls-name-input");
+    try { await input.click({ timeout: 4000 }); await input.pressSequentially("Atelier", { delay: 20 }); } catch (e) { out.push("name field not reachable"); }
+    if ((await input.inputValue()) !== "Atelier") out.push("name field took no typing");
+    await input.blur();
+    for (const k of ["box", "foil", "type", "brand"]) {
+      try { await host.locator(`.ls-tab[data-tool="${k}"]`).click({ timeout: 4000 }); await p.waitForTimeout(300); } catch (e) { out.push(`tab ${k} not reachable`); continue; }
+      const ok = await p.evaluate((k) => { const l = window.__ls, t = l.q(`.ls-tool[data-tool="${k}"]`); return l.shown(t) && l.q(".ls").dataset.tool === k; }, k);
+      if (!ok) out.push(`tool ${k} did not open`);
+    }
+    await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-open.jpg`), type: "jpeg", quality: 72 });
+    try { await host.locator(".ls-next").click({ timeout: 4000 }); } catch (e) { out.push("button not reachable"); }
+    await p.waitForTimeout(1500);
+    const email = host.locator(".ls-result .wps-input");
+    try { await email.scrollIntoViewIfNeeded({ timeout: 4000 }); await email.click({ timeout: 4000 }); } catch (e) { out.push("email field not reachable"); }
+    v = await fitsView();
+    if (!v.inView) out.push("result outside the view");
+    if (v.x.length) out.push(`result overflow ${v.x}`);
+    await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-result.jpg`), type: "jpeg", quality: 72 });
+    report(`${label}: (18) the sheet fits, the name takes typing, all four tools and the result are reachable, no overflow`, out);
+    await ctx.close();
+  }
+
+  // ---- E. WebKit (19): Playwright's WebKit for Windows draws matrix3d flat, so the probe falls back, without errors ----
+  if (webkit && !skip.has("webkit")) {
+    const wb = await webkit.launch();
+    const ctx = await wb.newContext({ ...devices["iPhone 13"] });
+    const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", "webkit");
+    await p.waitForTimeout(3200);
+    const engine = await p.evaluate(() => window.__ls.q(".ls").dataset.engine);
+    await p.locator("#westpack-signup .ls-name-input").fill("Atelier Sever");
+    await p.locator("#westpack-signup .ls-next").click();
+    await p.waitForTimeout(1500);
+    await p.screenshot({ path: path.join(outDir, "studio-webkit-result.jpg"), type: "jpeg", quality: 72 });
+    check("WebKit, iPhone 13: (19) the probe falls back to the flat print", engine === "flat", `engine ${engine}`);
+    await wb.close();
+  }
+}

@@ -768,7 +768,7 @@ function renderPreview({ reload = false } = {}) {
   fitPreview();
 }
 
-const STEP_WORDS = { open: "Opened", peek_shown: "Phone card shown", peek_dismissed: "Card dismissed", email_focus: "Clicked into the email field", email_invalid: "Typed an address that is not valid", submit: "Pressed sign up", subscribed: "Signed up", submit_error: "Signup failed", name_typed: "Typed a brand name", result: "Reached the result" };
+const STEP_WORDS = { open: "Opened", peek_shown: "Phone card shown", peek_dismissed: "Card dismissed", email_focus: "Clicked into the email field", email_invalid: "Typed an address that is not valid", submit: "Pressed sign up", subscribed: "Signed up", submit_error: "Signup failed", name_typed: "Typed a brand name", result: "Reached the result", tool_brand: "Opened Your brand", tool_box: "Opened Packaging", tool_foil: "Opened Foil", tool_type: "Opened Lettering" };
 
 function onPreviewMessage(event) {
   const frame = byId("signup-lab-preview-stage")?.querySelector("iframe");

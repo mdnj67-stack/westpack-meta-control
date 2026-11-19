@@ -180,113 +180,365 @@
 .ls-success[hidden] { display: none; }
 .ls-success-title { font-size: clamp(30px, 7vw, 44px); }
 
-/* ---- phone: the photo runs the full width of the sheet, the controls sit under it on the dark stage ---- */
-@media (max-width: 759px) {
-  .ls-stage { padding: 0 0 14px; }
-  .ls-stage-inner > :not(.ls-frame):not(.ls-collection) { width: calc(100% - 28px); }
-  /* seven across a 360 px phone without scrolling */
-  .ls-thumbs { gap: 6px; justify-content: center; padding: 2px 0 4px; }
-  .ls-thumb { width: 42px; height: 42px; border-radius: 10px; }
-  .ls-thumb .ls-plate { transform: scale(0.038); }
-  .ls-light-hint { text-align: center; }
-  /* typing: the stage sticks to the top and the box shrinks, so box and field stay above the keyboard */
-  .ls.is-typing .ls-stage { position: sticky; top: 0; z-index: 3; padding: 12px 0 10px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); }
-  .ls.is-typing .ls-frame { width: min(100% - 28px, 30vh, 270px); border-radius: 14px; }
-  .ls.is-typing .ls-thumbs, .ls.is-typing .ls-light-hint, .ls.is-typing .ls-under, .ls.is-typing .ls-illustration, .ls.is-typing .ls-upload-row { display: none; }
-  /* the result: the collection replaces the single box */
-  .ls.is-result .ls-frame, .ls.is-result .ls-thumbs, .ls.is-result .ls-light-hint, .ls.is-result .ls-under, .ls.is-result .ls-name-block { display: none; }
-  .ls.is-result .ls-stage { padding: 30px 0 4px; }
-  .ls.is-result .ls-collection { padding: 12px 14px 10px; gap: 8px; }
-  .ls-tile-name { font-size: 11px; }
-}
-
-/* on a phone the name field sits on the dark stage, right under the box */
-.ls-stage .ls-name-block { width: 100%; }
-.ls-stage .ls-name-label { color: rgba(255, 255, 255, 0.6); }
-.ls-stage .ls-name-input { color: #fff; border-bottom-color: rgba(255, 255, 255, 0.28); height: 52px; font-size: 27px; }
-.ls-stage .ls-name-input::placeholder { color: rgba(255, 255, 255, 0.38); }
-.ls-stage .ls-name-input:focus { border-color: var(--wps-gold-hi); }
-.ls-stage .ls-upload { color: var(--wps-gold-hi); border-color: rgba(233, 211, 161, 0.55); height: 34px; font-size: 13px; }
-.ls-stage .ls-upload.is-active { background: var(--wps-gold-hi); color: #1b1a17; border-color: var(--wps-gold-hi); }
-.ls-stage .ls-upload-hint { color: rgba(255, 255, 255, 0.5); font-size: 11.5px; }
-.ls-stage .ls-use-name { color: rgba(255, 255, 255, 0.75); }
-.ls-stage .ls-hint { color: var(--wps-gold-hi); margin: 0; }
-
-/* the floating copy of the box on a phone: a zero-height sticky anchor, so it takes no space in the flow */
-.ls-pip-anchor { position: sticky; top: 10px; height: 0; z-index: 4; }
-.ls-pip {
-  position: absolute; right: -8px; top: 0; width: 108px; height: 108px; border-radius: 14px; overflow: hidden; background: #0d0d0d;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.9); opacity: 0; transform: translateY(-8px) scale(0.92);
-  transition: opacity 220ms ease, transform 300ms var(--wps-ease-out); pointer-events: none;
-}
-.ls-pip .ls-scene { position: absolute; inset: 0; }
-.ls-pip .ls-photo { width: 100%; height: 100%; }
-.ls.is-pip .ls-pip { opacity: 1; transform: none; }
-@media (max-width: 759px) {
-  .ls-edit .ls-options { padding-right: 104px; }
-  .ls-edit .ls-next { margin-top: 4px; }
-  /* beside the floating copy of the box the six coins a row get a little smaller, and the faces stack in rows */
-  .ls-coin { width: 29px; height: 29px; }
-  .ls-chips-foil { min-height: 82px; }
-  /* beside the floating box the switch is narrow: a smaller label keeps "Metaliczna" and "Brilhante" whole, and a
-     long foil name takes its own line under the label rather than an ellipsis */
-  .ls-finish { font-size: 11px; padding: 0 2px; letter-spacing: -0.01em; }
-  .ls-foil-head { flex-wrap: wrap; row-gap: 2px; }
-  .ls-foil-now { white-space: normal; font-size: 14px; }
-  .ls-chips-type { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .ls-chip-type { height: 48px; grid-template-columns: minmax(0, 1fr) auto; justify-items: start; align-items: center; padding: 0 14px; column-gap: 10px; }
-}
-/* the first iPhone SE and other 320 px phones: a smaller floating box leaves the switch room for its words */
-@media (max-width: 340px) {
-  .ls-pip { width: 84px; height: 84px; }
-  .ls-edit .ls-options { padding-right: 80px; }
-  .ls-finish { font-size: 10.5px; }
-}
-
 /* ---- desktop: a square stage that fills the dialog's height, and a 400 px panel ---- */
 @media (min-width: 760px) {
-  .wps[data-concept="logo-studio"] .wps-dialog {
+  .wps:where([data-device="desktop"])[data-concept="logo-studio"] .wps-dialog {
     --ls-s: min(780px, calc(100vh - 64px), calc(100vw - 448px));
     width: calc(var(--ls-s) + 400px); height: var(--ls-s); max-height: none; overflow: hidden; background: #0e1412;
   }
-  .ls { grid-template-columns: var(--ls-s) 400px; height: var(--ls-s); }
-  .ls-stage, .ls-stage-inner { height: var(--ls-s); }
-  .ls-stage-inner { display: block; position: relative; }
-  .ls-frame { width: var(--ls-s); height: var(--ls-s); }
-  .ls-bar {
+  :where(.wps[data-device="desktop"]) .ls { grid-template-columns: var(--ls-s) 400px; height: var(--ls-s); }
+  :where(.wps[data-device="desktop"]) .ls-stage, :where(.wps[data-device="desktop"]) .ls-stage-inner { height: var(--ls-s); }
+  :where(.wps[data-device="desktop"]) .ls-stage-inner { display: block; position: relative; }
+  :where(.wps[data-device="desktop"]) .ls-frame { width: var(--ls-s); height: var(--ls-s); }
+  :where(.wps[data-device="desktop"]) .ls-bar {
     position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: grid; gap: 12px; padding: 90px 22px 18px;
     background: linear-gradient(to top, rgba(8, 11, 10, 0.86), rgba(8, 11, 10, 0.5) 55%, rgba(8, 11, 10, 0)); cursor: default; transition: opacity 200ms;
   }
-  .ls-thumbs { justify-content: flex-start; padding-top: 4px; }
-  .ls.is-result .ls-collection { position: absolute; inset: 0; padding: 34px; gap: 18px 16px; background: radial-gradient(120% 85% at 50% 35%, #26332f 0%, #141c19 62%, #0e1412 100%); z-index: 5; }
+  :where(.wps[data-device="desktop"]) .ls-thumbs { justify-content: flex-start; padding-top: 4px; }
+  :where(.wps[data-device="desktop"]) .ls.is-result .ls-collection { position: absolute; inset: 0; padding: 34px; gap: 18px 16px; background: radial-gradient(120% 85% at 50% 35%, #26332f 0%, #141c19 62%, #0e1412 100%); z-index: 5; }
   /* the chosen piece takes the left half, three rows tall; the other six stand two by three beside it */
-  .ls.is-result .ls-collection { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .ls-tile.is-chosen { grid-column: 1 / span 2; grid-row: 1 / span 3; grid-template-rows: minmax(0, 1fr) auto; }
-  .ls-tile.is-chosen .ls-tile-frame { aspect-ratio: auto; height: 100%; }
-  .ls-tile.is-chosen .ls-tile-name { font-size: 17px; }
-  .ls-tile-name { font-size: 14px; }
+  :where(.wps[data-device="desktop"]) .ls.is-result .ls-collection { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  :where(.wps[data-device="desktop"]) .ls-tile.is-chosen { grid-column: 1 / span 2; grid-row: 1 / span 3; grid-template-rows: minmax(0, 1fr) auto; }
+  :where(.wps[data-device="desktop"]) .ls-tile.is-chosen .ls-tile-frame { aspect-ratio: auto; height: 100%; }
+  :where(.wps[data-device="desktop"]) .ls-tile.is-chosen .ls-tile-name { font-size: 17px; }
+  :where(.wps[data-device="desktop"]) .ls-tile-name { font-size: 14px; }
   /* the panel's content sits in the middle of the stage's height when it fits, and scrolls from the top when not */
-  .ls-side { padding: 40px 36px 28px; height: var(--ls-s); overflow-y: auto; background: var(--wps-paper); display: flex; flex-direction: column; }
-  .ls-side > .ls-panel { margin-block: auto; }
-  .ls-edit .wps-title { font-size: 33px; }
+  :where(.wps[data-device="desktop"]) .ls-side { padding: 40px 36px 28px; height: var(--ls-s); overflow-y: auto; background: var(--wps-paper); display: flex; flex-direction: column; }
+  :where(.wps[data-device="desktop"]) .ls-side > .ls-panel { margin-block: auto; }
+  :where(.wps[data-device="desktop"]) .ls-edit .wps-title { font-size: 33px; }
   /* the logo upload sits on the field's label line, so field, foils, faces and the button fit a laptop screen */
-  .ls-edit .ls-name-block { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-items: end; margin-bottom: 4px; }
-  .ls-edit .ls-name, .ls-edit .ls-upload-row { display: contents; }
-  .ls-edit .ls-name-label { grid-column: 1; grid-row: 1; padding-bottom: 6px; }
-  .ls-edit .ls-upload, .ls-edit .ls-use-name { grid-column: 2; grid-row: 1; justify-self: end; }
-  .ls-edit .ls-upload { height: 30px; padding: 0 11px; font-size: 12.5px; }
-  .ls-edit .ls-upload.is-active + .ls-use-name { grid-row: 3; }
-  .ls-edit .ls-name-input { grid-column: 1 / -1; grid-row: 2; }
-  .ls-edit .ls-upload-hint { grid-column: 1 / -1; grid-row: 3; margin-top: 6px; font-size: 11.5px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-name-block { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-items: end; margin-bottom: 4px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-name, :where(.wps[data-device="desktop"]) .ls-edit .ls-upload-row { display: contents; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-name-label { grid-column: 1; grid-row: 1; padding-bottom: 6px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload, :where(.wps[data-device="desktop"]) .ls-edit .ls-use-name { grid-column: 2; grid-row: 1; justify-self: end; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload { height: 30px; padding: 0 11px; font-size: 12.5px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload.is-active + .ls-use-name { grid-row: 3; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-name-input { grid-column: 1 / -1; grid-row: 2; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload-hint { grid-column: 1 / -1; grid-row: 3; margin-top: 6px; font-size: 11.5px; }
   /* with a logo in, "use the name instead" takes the end of that line, so the hint keeps to its own column */
-  .ls-edit .ls-upload.is-active ~ .ls-upload-hint { grid-column: 1; }
-  .ls-edit .ls-upload.is-active + .ls-use-name { margin-top: 6px; }
-  .ls-edit .ls-hint { grid-column: 1 / -1; grid-row: 4; margin: 4px 0 0; min-height: 0; }
-  .ls-edit .wps-lede { margin-bottom: 14px; }
-  .ls-options { gap: 14px; margin: 8px 0 18px; }
-  .ls-proof { margin: 0 -36px 16px; }
-  .ls-proof-track { padding: 0 36px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload.is-active ~ .ls-upload-hint { grid-column: 1; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-upload.is-active + .ls-use-name { margin-top: 6px; }
+  :where(.wps[data-device="desktop"]) .ls-edit .ls-hint { grid-column: 1 / -1; grid-row: 4; margin: 4px 0 0; min-height: 0; }
+  :where(.wps[data-device="desktop"]) .ls-edit .wps-lede { margin-bottom: 14px; }
+  :where(.wps[data-device="desktop"]) .ls-options { gap: 14px; margin: 8px 0 18px; }
+  :where(.wps[data-device="desktop"]) .ls-proof { margin: 0 -36px 16px; }
+  :where(.wps[data-device="desktop"]) .ls-proof-track { padding: 0 36px; }
 }
 .wps[data-reduced="true"] .ls-proof-track { animation: none; }
 .wps[data-reduced="true"] .ls-proof { overflow-x: auto; }
 .wps[data-reduced="true"] .ls-tile { animation: none; }
+
+/* ==== phone and tablet: the studio ====
+   A studio, not a page: the print on top, one tool at a time under it, and nothing scrolls while editing. The scene
+   stays a square as wide as the sheet (--k never changes); the frame is a window onto it, as tall as the layout leaves,
+   centred on the print by logo-studio.js (windowTop). The panel is the tabs, one grid cell holding all four tools (so
+   switching never moves the stage or the button) and the gold button. The result puts the chosen piece large on top,
+   the seven pieces in a strip, and the email ask on a paper card, the only bright surface on the screen.
+   Every selector starts with :where(.wps:not([data-device="desktop"])), so it weighs what the base rule it overrides
+   weighs and wins by coming later; desktop never matches. */
+:where(.wps:not([data-device="desktop"])) {
+  --ls-studio: #0f1513; --ls-raise: #18201d; --ls-tx: #f5f1ea; --ls-tx2: rgba(245, 241, 234, 0.74); --ls-tx3: rgba(245, 241, 234, 0.58);
+  --ls-gold: #E9D3A1; --ls-line: rgba(255, 255, 255, 0.14); --ls-fill: rgba(255, 255, 255, 0.07); --ls-error: #F2A097;
+  --ls-gut: max(16px, env(safe-area-inset-left, 0px));
+  --ls-sheet: calc(100vh - 10px);
+}
+@supports (height: 100dvh) { :where(.wps:not([data-device="desktop"])) { --ls-sheet: calc(100dvh - max(10px, env(safe-area-inset-top, 0px))); } }
+@media (min-width: 375px) { :where(.wps:not([data-device="desktop"])) { --ls-gut: max(20px, env(safe-area-inset-left, 0px)); } }
+:where(.wps:not([data-device="desktop"])) .ls button { -webkit-tap-highlight-color: transparent; }
+
+/* the sheet: as tall as the square stage plus the panel, never taller than the view; it does not scroll */
+:where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog {
+  display: flex; flex-direction: column; overflow: hidden; max-height: var(--ls-sheet); padding-bottom: 0;
+  background: var(--ls-studio); color: var(--ls-tx);
+}
+:where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-close {
+  top: 8px; right: 8px; width: 44px; height: 44px; background: rgba(12, 16, 15, 0.5); color: var(--ls-tx);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+:where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-close:hover { background: rgba(12, 16, 15, 0.72); }
+:where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-grab::before { width: 36px; margin-left: -18px; background: rgba(245, 241, 234, 0.5); }
+:where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-peek { background: var(--ls-studio); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08); }
+:where(.wps:not([data-device="desktop"])) .wps-stage { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+:where(.wps:not([data-device="desktop"])) .ls { --ls-w: 100vw; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+
+/* ---- the stage: a window onto the full-width square scene ---- */
+:where(.wps:not([data-device="desktop"])) .ls-stage { flex: 0 1 var(--ls-w); min-height: calc(0.56 * var(--ls-w)); display: flex; flex-direction: column; background: var(--ls-studio); color: var(--ls-tx); }
+:where(.wps:not([data-device="desktop"])) .ls-stage-inner { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 0; }
+:where(.wps:not([data-device="desktop"])) .ls-frame { flex: 1 1 auto; min-height: 0; width: 100%; aspect-ratio: auto; touch-action: none; cursor: default; }
+:where(.wps:not([data-device="desktop"])) .ls-frame > .ls-scene { inset: auto; left: 0; top: 0; transition: transform 380ms var(--wps-ease-out), opacity 220ms ease, top 240ms var(--wps-ease-out); }
+:where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-frame > .ls-scene { transition: transform 620ms var(--wps-ease-out), opacity 220ms ease, top 240ms var(--wps-ease-out); }
+/* a shade under the disclaimer, and the photo fading into the studio over its last 48px */
+:where(.wps:not([data-device="desktop"])) .ls-frame::before, :where(.wps:not([data-device="desktop"])) .ls-frame::after { content: ""; position: absolute; left: 0; right: 0; z-index: 1; pointer-events: none; transition: opacity 200ms; }
+:where(.wps:not([data-device="desktop"])) .ls-frame::before { top: 0; height: 84px; background: linear-gradient(rgba(8, 11, 10, 0.55), rgba(8, 11, 10, 0)); }
+:where(.wps:not([data-device="desktop"])) .ls-frame::after { bottom: 0; height: 48px; background: linear-gradient(rgba(15, 21, 19, 0), var(--ls-studio)); }
+:where(.wps:not([data-device="desktop"])) .ls-illustration {
+  top: 18px; left: var(--ls-gut); right: 64px; padding: 0; background: none; font-size: 11px; line-height: 15px;
+  color: rgba(245, 241, 234, 0.82); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55); z-index: 2;
+}
+:where(.wps:not([data-device="desktop"])) .ls-frame .ls-under { position: absolute; left: var(--ls-gut); right: 8px; bottom: 4px; z-index: 2; width: auto; gap: 8px; transition: opacity 200ms; }
+:where(.wps:not([data-device="desktop"])) .ls-box-name { min-width: 0; font-size: 16px; line-height: 20px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity 200ms; }
+:where(.wps:not([data-device="desktop"])) .ls-zoom {
+  width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; color: var(--ls-tx);
+  background: rgba(12, 16, 15, 0.5); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+:where(.wps:not([data-device="desktop"])) .ls-zoom[aria-pressed="true"] { background: var(--ls-gold); color: #1b1a17; }
+:where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-illustration, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-box-name, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-coach, :where(.wps:not([data-device="desktop"])) .ls.is-zoomed .ls-frame::before { opacity: 0; }
+/* the coach mark (the light under the finger, said once) and the live hint share the stage's foot */
+:where(.wps:not([data-device="desktop"])) .ls-coach, :where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint {
+  position: absolute; left: var(--ls-gut); right: 60px; bottom: 10px; z-index: 3; margin: 0; min-height: 0; padding: 7px 12px; border-radius: 12px;
+  font-size: 12px; line-height: 16px; color: var(--ls-tx); background: rgba(12, 16, 15, 0.66); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+:where(.wps:not([data-device="desktop"])) .ls-coach { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 200ms, visibility 0s linear 200ms; }
+:where(.wps:not([data-device="desktop"])) .ls.is-coach .ls-coach { opacity: 1; visibility: visible; transition: opacity 300ms, visibility 0s; }
+:where(.wps:not([data-device="desktop"])) .ls.is-coach .ls-box-name, :where(.wps:not([data-device="desktop"])) .ls.has-hint .ls-box-name { opacity: 0; }
+/* the live hint is a caption on the photo it is about, so it never moves the panel */
+:where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint { font-size: 12.5px; font-style: italic; color: var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint:empty { visibility: hidden; }
+:where(.wps:not([data-device="desktop"])) .ls-frame .ls-hint.is-error { color: var(--ls-error); font-style: normal; }
+:where(.wps:not([data-device="desktop"])) .ls-back {
+  position: absolute; top: 8px; left: 8px; z-index: 4; margin: 0; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%;
+  display: none; place-items: center; color: var(--ls-tx); background: rgba(12, 16, 15, 0.5); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer;
+}
+
+/* ---- the panel: tabs, one cell of tools, the button ---- */
+:where(.wps:not([data-device="desktop"])) .ls-side { flex: 0 0.0001 auto; min-height: 0; display: flex; flex-direction: column; padding: 0; background: var(--ls-studio); }
+:where(.wps:not([data-device="desktop"])) .ls-edit { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+:where(.wps:not([data-device="desktop"])) .ls-tabs {
+  position: relative; flex: none; display: flex; justify-content: space-between; padding: 0 max(0px, calc(var(--ls-gut) - 8px));
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none; box-shadow: inset 0 -1px 0 var(--ls-line);
+}
+:where(.wps:not([data-device="desktop"])) .ls-tabs::-webkit-scrollbar { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls-tab {
+  flex: none; height: 48px; min-width: 44px; padding: 0 8px; border: 0; border-radius: 0; background: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; color: var(--ls-tx2); transition: color 180ms, opacity 180ms;
+}
+:where(.wps:not([data-device="desktop"])) .ls-tab[aria-selected="true"] { color: var(--ls-tx); }
+:where(.wps:not([data-device="desktop"])) .ls-tab[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+:where(.wps:not([data-device="desktop"])) .ls-tab:focus-visible { outline-offset: -5px; }
+:where(.wps:not([data-device="desktop"])) .ls-tab-line {
+  position: absolute; left: 0; bottom: 0; width: 0; height: 2px; border-radius: 2px; background: var(--ls-gold); pointer-events: none;
+  transition: transform 240ms var(--wps-ease-out), width 240ms var(--wps-ease-out);
+}
+:where(.wps:not([data-device="desktop"])) .ls-tabs.is-tight .ls-tab { padding: 0 5px; font-size: 12px; }
+:where(.wps:not([data-device="desktop"])) .ls-tabs.is-tighter .ls-tab { padding: 0 3px; font-size: 11.5px; letter-spacing: 0; }
+:where(.wps:not([data-device="desktop"])) .ls-tools { flex: 1 1 auto; min-height: 0; display: grid; padding: 14px var(--ls-gut) 2px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+:where(.wps:not([data-device="desktop"])) .ls-tool {
+  grid-area: 1 / 1; min-width: 0; display: flex; flex-direction: column; visibility: hidden; opacity: 0; transform: translateX(var(--ls-dx, 12px));
+  transition: opacity 180ms ease, transform 180ms var(--wps-ease-out), visibility 0s linear 180ms;
+}
+:where(.wps:not([data-device="desktop"])) .ls-tool.is-leaving { transform: translateX(calc(-1 * var(--ls-dx, 12px))); }
+:where(.wps:not([data-device="desktop"])) .ls-tool.is-active { visibility: visible; opacity: 1; transform: none; transition: opacity 180ms ease, transform 220ms var(--wps-ease-out), visibility 0s; }
+:where(.wps:not([data-device="desktop"])) .ls-cta { flex: none; padding: 12px var(--ls-gut) max(12px, env(safe-area-inset-bottom, 0px)); }
+:where(.wps:not([data-device="desktop"])) .ls-next { height: 56px; border-radius: 14px; background: var(--ls-gold); color: #1b1a17; font-size: 16px; font-weight: 650; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35); }
+:where(.wps:not([data-device="desktop"])) .ls-next:hover { background: #f1dfb4; }
+
+/* your brand: the question first, then the field */
+:where(.wps:not([data-device="desktop"])) .ls-tool .wps-kicker { display: none; margin: 0 0 6px; color: var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-edit .wps-title { margin: 0 0 6px; font-size: 23px; line-height: 25px; letter-spacing: -0.01em; color: var(--ls-tx); }
+:where(.wps:not([data-device="desktop"])) .ls-edit .wps-lede { margin: 0 0 12px; font-size: 14.5px; line-height: 20px; color: var(--ls-tx2); }
+:where(.wps:not([data-device="desktop"])) .ls-name-block { display: grid; gap: 8px; }
+:where(.wps:not([data-device="desktop"])) .ls-name { margin: 0; gap: 6px; }
+:where(.wps:not([data-device="desktop"])) .ls-name-label, :where(.wps:not([data-device="desktop"])) .ls-tool .ls-group-label, :where(.wps:not([data-device="desktop"])) .ls-upload.is-active .ls-upload-label, :where(.wps:not([data-device="desktop"])) .ls-result .wps-label {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+:where(.wps:not([data-device="desktop"])) .ls-name-input {
+  height: 56px; padding: 0 16px; border: 1px solid var(--ls-line); border-radius: 14px; background: var(--ls-raise); color: var(--ls-tx);
+  font-size: 26px; transition: box-shadow 160ms, border-color 160ms;
+}
+:where(.wps:not([data-device="desktop"])) .ls-name-input::placeholder { color: var(--ls-tx3); }
+:where(.wps:not([data-device="desktop"])) .ls-name-input:focus { border-color: rgba(233, 211, 161, 0.45); box-shadow: inset 0 -2px 0 var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-upload-row { flex-wrap: nowrap; gap: 12px; margin: 0; min-height: 44px; }
+:where(.wps:not([data-device="desktop"])) .ls-upload {
+  flex: none; height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px dashed rgba(233, 211, 161, 0.55); background: transparent;
+  color: var(--ls-gold); font-size: 14px; white-space: nowrap;
+}
+:where(.wps:not([data-device="desktop"])) .ls-upload:hover { background: rgba(233, 211, 161, 0.08); }
+/* with a logo in, the pill becomes a gold "upload another" and the rest of the row says how to go back to the name */
+:where(.wps:not([data-device="desktop"])) .ls-upload.is-active { width: 44px; padding: 0; justify-content: center; border-style: solid; background: var(--ls-gold); border-color: var(--ls-gold); color: #1b1a17; }
+:where(.wps:not([data-device="desktop"])) .ls-upload-aside { flex: 1 1 auto; min-width: 0; min-height: 44px; display: flex; align-items: center; }
+:where(.wps:not([data-device="desktop"])) .ls-upload-hint { font-size: 11px; line-height: 14px; color: var(--ls-tx3); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+:where(.wps:not([data-device="desktop"])) .ls-upload.is-active ~ .ls-upload-aside .ls-upload-hint { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls-use-name { min-height: 44px; padding: 0; text-align: left; font-size: 13px; line-height: 16px; color: var(--ls-tx2); }
+
+/* packaging: the seven pieces, each with the name on it */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumbs {
+  display: grid; grid-template-columns: repeat(4, min(76px, calc((100% - 30px) / 4))); justify-content: space-between; gap: 10px;
+  width: auto; padding: 0; overflow: visible;
+}
+:where(.wps:not([data-device="desktop"])) .ls-thumb { width: auto; height: auto; aspect-ratio: 1 / 1; border-radius: 14px; opacity: 1; border: 2px solid rgba(255, 255, 255, 0.12); background: #1a1f1d; }
+:where(.wps:not([data-device="desktop"])) .ls-thumb:hover { transform: none; }
+:where(.wps:not([data-device="desktop"])) .ls-thumb[aria-pressed="true"] { border-color: var(--ls-gold); transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45); }
+/* the plate follows each thumbnail's own size (--k, set by fit()), in the tool and in the result's strip */
+:where(.wps:not([data-device="desktop"])) .ls-thumb .ls-plate { transform: scale(var(--k, 0.054)); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-light-hint { margin: 12px 0 0; font-size: 12px; line-height: 16px; color: var(--ls-tx3); }
+
+/* foil: the finish, then its colours; the chosen foil named above them, where nothing covers it */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-foils { gap: 10px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-foil-head { display: block; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-foil-now { display: block; font-size: 19px; line-height: 26px; color: var(--ls-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-finishes { gap: 3px; padding: 3px; border-radius: 16px; background: var(--ls-raise); box-shadow: inset 0 0 0 1px var(--ls-line); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-finish { height: 44px; padding: 0 4px; border-radius: 13px; font-size: 14px; font-weight: 600; color: var(--ls-tx2); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-finish:hover { color: var(--ls-tx); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-finish[aria-pressed="true"] { background: rgba(245, 241, 234, 0.12); color: var(--ls-tx); box-shadow: inset 0 0 0 1px rgba(233, 211, 161, 0.55); }
+/* as many 44px coins a row as fit, and two rows always kept, so a finish of eleven never moves anything */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chips-foil { grid-template-columns: repeat(auto-fill, 44px); justify-content: space-between; gap: 0; min-height: 88px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-foil { width: 44px; height: 44px; padding: 0; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-coin { width: 34px; height: 34px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-foil[aria-pressed="true"] .ls-coin {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22), inset 0 -4px 7px rgba(0, 0, 0, 0.22), inset 0 3px 5px rgba(255, 255, 255, 0.45), 0 0 0 3px var(--ls-studio), 0 0 0 5px var(--ls-gold);
+}
+/* black on the dark studio needs a light edge to be seen at all */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-foil[data-value$="-black"] .ls-coin { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), inset 0 -4px 7px rgba(0, 0, 0, 0.22), 0 3px 8px rgba(0, 0, 0, 0.16); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-foil[data-value$="-black"][aria-pressed="true"] .ls-coin { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 0 3px var(--ls-studio), 0 0 0 5px var(--ls-gold); }
+
+/* lettering: the visitor's name set in each face */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chips-type { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-type {
+  height: 52px; padding: 0 16px; border: 0; border-radius: 14px; background: var(--ls-raise); color: var(--ls-tx);
+  grid-template-columns: minmax(0, 1fr) auto; justify-items: start; align-items: center; column-gap: 12px;
+}
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-type:hover { background: #1d2622; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-type[aria-pressed="true"] { background: #1f2824; color: var(--ls-tx); box-shadow: inset 0 0 0 2px var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-label { font-size: 12px; color: var(--ls-tx3); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-chip-type[aria-pressed="true"] .ls-chip-label { color: var(--ls-gold); }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-type-classic { font-size: 15px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-type-script { font-size: 25px; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-type-clean { font-size: 14px; }
+
+/* opening: the tabs come in as the camera pushes, then the question, the field and the button rise */
+@keyframes ls-fade-in { from { opacity: 0; } to { opacity: 1; } }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-tabs { animation: ls-fade-in 400ms ease 240ms both; }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-edit .wps-kicker, :where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-edit .wps-title { animation: wps-rise 560ms var(--wps-ease-out) 300ms both; }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-edit .wps-lede { animation: wps-rise 560ms var(--wps-ease-out) 370ms both; }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-name { animation: wps-rise 560ms var(--wps-ease-out) 440ms both; }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-upload-row { animation: wps-rise 560ms var(--wps-ease-out) 510ms both; }
+:where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-cta { animation: wps-rise 560ms var(--wps-ease-out) 580ms both; }
+
+/* ---- typing: the field focused and the keyboard really up (the shell's is-kb). The sheet is the visual viewport,
+   the panel is the label and the field, and the stage takes the rest at the same scale ---- */
+@media (max-width: 759px) {
+  :where(.wps:not([data-device="desktop"])).is-kb[data-concept="logo-studio"] .wps-dialog { top: var(--wps-vvtop, 0px); bottom: auto; height: var(--wps-vvh, 100%); max-height: none; }
+}
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-tabs, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-cta, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-tool:not([data-tool="brand"]),
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-kicker, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-title, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-edit .wps-lede,
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-upload-row, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-illustration, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-under, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-coach { display: none; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-stage { min-height: 0; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-tools { padding: 12px var(--ls-gut) max(12px, env(safe-area-inset-bottom, 0px)); }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-name-label {
+  position: static; width: auto; height: auto; overflow: visible; clip: auto; font-size: 11px; line-height: 14px; letter-spacing: 0.16em; color: var(--ls-gold);
+}
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-frame .ls-hint { top: 14px; bottom: auto; right: 64px; }
+
+/* ---- the result: the chosen piece large, the seven in a strip, the ask on a paper card ---- */
+:where(.wps:not([data-device="desktop"])) .ls.is-result { flex: none; height: var(--ls-sheet); }
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-stage { flex: none; min-height: 0; }
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame { flex: none; height: clamp(180px, calc(0.4 * var(--ls-sheet)), calc(0.75 * var(--ls-w))); }
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-illustration, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-under, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-coach, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame .ls-hint { opacity: 0; visibility: hidden; }
+:where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-back { display: grid; }
+:where(.wps:not([data-device="desktop"])) .ls-strip { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-strip { display: block; flex: none; height: 60px; padding: 4px var(--ls-gut) 12px; }
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs { display: flex; justify-content: space-between; gap: 2px; width: 100%; height: 44px; padding: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; }
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumb {
+  flex: none; width: 44px; height: 44px; border-radius: 10px; scroll-snap-align: start;
+  animation: ls-strip-in 420ms var(--wps-ease-out) backwards; animation-delay: calc(140ms + var(--i, 0) * 40ms);
+}
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumb[aria-pressed="true"] { transform: none; box-shadow: none; }
+@keyframes ls-strip-in { from { opacity: 0; transform: translateY(10px); } }
+:where(.wps:not([data-device="desktop"])) .ls.is-result .ls-side { flex: 1 1 auto; min-height: 0; margin-top: -12px; position: relative; z-index: 2; background: none; }
+:where(.wps:not([data-device="desktop"])) .ls-result {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column;
+  padding: 20px var(--ls-gut) max(16px, env(safe-area-inset-bottom, 0px)); border-radius: 22px 22px 0 0; background: var(--wps-paper); color: var(--wps-ink);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35);
+}
+:where(.wps:not([data-device="desktop"])) .ls-result.is-rising { animation: ls-card-in 520ms var(--wps-ease-out) both; }
+@keyframes ls-card-in { from { opacity: 0; transform: translateY(56px); } to { opacity: 1; transform: none; } }
+:where(.wps:not([data-device="desktop"])) .ls-result > * { flex: none; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-kicker { margin: 0 0 6px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-title { margin: 0 0 6px; font-size: 26px; line-height: 28px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-lede { margin: 0 0 12px; font-size: 14.5px; line-height: 20px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-promise { margin: 0 0 12px; gap: 2px; font-size: 13px; line-height: 18px; }
+/* the shared form, in this card only: the field, then the error, then the button, then the consent */
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-form { gap: 8px; margin: 0 0 16px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-field { display: contents; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-input { order: 1; height: 52px; border-radius: 14px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-error { order: 2; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-form .wps-btn-primary { order: 3; width: 100%; height: 52px; border-radius: 14px; }
+:where(.wps:not([data-device="desktop"])) .ls-result .wps-consent { order: 4; }
+:where(.wps:not([data-device="desktop"])) .ls-proof-title { margin: 0 0 8px; }
+:where(.wps:not([data-device="desktop"])) .ls-proof { margin: 0 calc(-1 * var(--ls-gut)) 14px; }
+:where(.wps:not([data-device="desktop"])) .ls-proof-track { padding: 0 var(--ls-gut); }
+:where(.wps:not([data-device="desktop"])) .ls-result-note { margin: 0; font-size: 11px; line-height: 15px; color: var(--wps-muted); }
+@media (max-height: 719px) {
+  :where(.wps:not([data-device="desktop"])) .ls-result > .wps-promise { order: 1; }
+  :where(.wps:not([data-device="desktop"])) .ls-result > .ls-proof-title, :where(.wps:not([data-device="desktop"])) .ls-result > .ls-proof, :where(.wps:not([data-device="desktop"])) .ls-result > .ls-result-note { order: 2; }
+}
+/* typing the address: the card is the whole visual viewport, the field, its error and the button in view */
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) { flex: 1 1 auto; height: auto; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-stage, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result > .wps-kicker,
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result > .wps-lede, :where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result > .wps-promise { display: none; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-side { margin-top: 0; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result { border-radius: 0; padding-top: 14px; animation: none; box-shadow: none; }
+:where(.wps:not([data-device="desktop"])).is-kb .ls.is-result:not(.is-success) .ls-result .wps-title {
+  margin-right: 52px; min-height: 50px; font-size: 22px; line-height: 25px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+/* the thank-you: the piece grows back to the square, or as tall as fits, and the card shrinks to its words */
+:where(.wps:not([data-device="desktop"])) .ls.is-success { flex: 1 1 auto; height: auto; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-stage { flex: 0 1 var(--ls-w); min-height: 0; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-frame { flex: 1 1 auto; height: auto; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-strip { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-side { flex: 0 0.0001 auto; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-result { flex: none; overflow: visible; }
+:where(.wps:not([data-device="desktop"])) .ls-success { padding: 0; }
+:where(.wps:not([data-device="desktop"])) .ls-success-title { font-size: 30px; line-height: 32px; }
+:where(.wps:not([data-device="desktop"])) .ls-success .wps-lede { margin: 0 0 16px; }
+:where(.wps:not([data-device="desktop"])) .ls-success .wps-btn-ghost { width: 100%; height: 52px; border-radius: 14px; }
+
+/* ---- compact (short screens, the first iPhone SE): the question, the field and the button, nothing extra ---- */
+@media (max-height: 619px) {
+  :where(.wps:not([data-device="desktop"])) .ls-edit .wps-lede, :where(.wps:not([data-device="desktop"])) .ls-upload-hint, :where(.wps:not([data-device="desktop"])) .ls-result > .wps-kicker, :where(.wps:not([data-device="desktop"])) .ls-result > .wps-lede { display: none; }
+  :where(.wps:not([data-device="desktop"])) .ls-edit .wps-title { font-size: 22px; line-height: 24px; }
+  :where(.wps:not([data-device="desktop"])) .ls-name-input { height: 52px; }
+}
+/* tall screens: the kicker over the question, and (above) the promise list over the form */
+@media (min-height: 720px) {
+  :where(.wps:not([data-device="desktop"])) .ls-tool .wps-kicker { display: block; }
+}
+@media (max-width: 340px) {
+  :where(.wps:not([data-device="desktop"])) .ls-tab { padding: 0 6px; font-size: 12px; }
+  :where(.wps:not([data-device="desktop"])) .ls-edit .wps-title { font-size: 22px; line-height: 24px; }
+  :where(.wps:not([data-device="desktop"])) .ls-name-input { font-size: 24px; }
+  :where(.wps:not([data-device="desktop"])) .ls-result .wps-title { font-size: 24px; line-height: 26px; }
+  :where(.wps:not([data-device="desktop"])) .ls-success-title { font-size: 27px; line-height: 29px; }
+  :where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs { justify-content: flex-start; gap: 6px; }
+}
+
+/* ---- tablet: the same studio in a 480px card ---- */
+:where(.wps[data-device="tablet"]) { --ls-sheet: min(calc(100vh - 48px), 860px); }
+@supports (height: 100dvh) { :where(.wps[data-device="tablet"]) { --ls-sheet: min(calc(100dvh - 48px), 860px); } }
+:where(.wps[data-device="tablet"]) .ls { --ls-w: min(480px, calc(100vw - 48px)); }
+:where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { width: min(480px, calc(100vw - 48px)); margin-inline: auto; }
+@media (min-width: 760px) {
+  :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { margin-inline: 0; border-radius: var(--wps-radius); }
+}
+
+/* ---- short landscape (a phone or tablet on its side): the stage a square on the left, the panel on the right ---- */
+@media (max-height: 500px) and (min-aspect-ratio: 3/2) {
+  :where(.wps:not([data-device="desktop"])) { --ls-sheet: calc(100vh - 8px); }
+  @supports (height: 100dvh) { :where(.wps:not([data-device="desktop"])) { --ls-sheet: calc(100dvh - 8px); } }
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { width: min(calc(100vw - 16px), 900px); height: var(--ls-sheet); max-height: none; margin-inline: auto; }
+  :where(.wps:not([data-device="desktop"])) .ls { flex-direction: row; }
+  :where(.wps:not([data-device="desktop"])) .ls-stage, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-stage, :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-stage { flex: none; width: var(--ls-sheet); min-height: 0; }
+  :where(.wps:not([data-device="desktop"])) .ls-side { flex: 1 1 auto; min-width: 0; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result { flex: 1 1 auto; height: auto; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame { flex: 1 1 auto; height: auto; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-side { margin-top: 0; }
+  :where(.wps:not([data-device="desktop"])) .ls-result { border-radius: 0; padding-top: 60px; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-side { flex: 1 1 auto; }
+  :where(.wps:not([data-device="desktop"])) .ls-tools { padding-top: 10px; }
+  /* the close button sits at the panel's top right here: the tabs and the card keep clear of it */
+  :where(.wps:not([data-device="desktop"])) .ls-tabs { padding-right: 60px; }
+  @media (min-width: 760px) {
+    :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { margin-inline: 0; }
+  }
+}

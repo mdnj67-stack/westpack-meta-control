@@ -139,6 +139,9 @@
 .wps :focus { outline: none; }
 .wps :focus-visible { outline: 3px solid var(--wps-focus); outline-offset: 3px; border-radius: 10px; }
 .wps .wps-input:focus-visible { outline: none; }
+/* the dialog is a container: it takes focus so no keyboard pops up uninvited, and must not draw a frame round the
+   whole sheet when it does; the controls inside keep their rings */
+.wps .wps-dialog:focus-visible { outline: none; }
 
 /* ---------- shared motion ---------- */
 @keyframes wps-spin { to { transform: rotate(360deg); } }

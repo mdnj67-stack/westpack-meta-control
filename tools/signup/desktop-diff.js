@@ -1,10 +1,12 @@
 /**
- * Logo studio on a desktop must not change when the phone layout does. This records the desktop at 1440x900 and
- * 1280x720 with reduced motion (fixed light, no camera push), open and on the result, and compares a later run with
+ * Logo studio on a desktop must not change when the phone layout does. This records the desktop at 1440x900, 1366x860
+ * and 1280x720 with reduced motion (fixed light, no camera push), open and on the result, and compares a later run with
  * that record: the rects of the main blocks to the pixel, and the screenshots pixel by pixel.
  *
  *   node tools/signup/desktop-diff.js baseline [dir]   records into dir (default tmp/mobile-redesign/baseline-desktop)
  *   node tools/signup/desktop-diff.js compare [dir]    compares this checkout with the record; exits 1 on a difference
+ * SERVE_ROOT=<dir> serves another checkout's signup/ instead of this one, so the baseline can be recorded from an export
+ * of the base commit (git archive <commit> signup | tar -x -C <dir>) after this checkout has moved on.
  */
 const fs = require("fs");
 const path = require("path");
@@ -15,7 +17,7 @@ const { chromium } = require(path.join(RUNNER, "node_modules", "playwright"));
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".woff2": "font/woff2" };
 const mode = process.argv[2] === "compare" ? "compare" : "baseline";
 const dir = path.resolve(process.argv[3] || path.join(ROOT, "tmp", "mobile-redesign", "baseline-desktop"));
-const VIEWPORTS = [{ width: 1440, height: 900 }, { width: 1280, height: 720 }];
+const VIEWPORTS = [{ width: 1440, height: 900 }, { width: 1366, height: 860 }, { width: 1280, height: 720 }];
 const SELECTORS = [".ls-frame", ".ls-side", ".ls-next", ".ls-edit .wps-title", ".ls-collection", ".ls-result .wps-input"];
 // a pixel counts as different when a channel moves by more than this (anti-aliasing noise stays under it)
 const CHANNEL = 8;
@@ -23,8 +25,9 @@ const MAX_SHARE = 0.005;
 
 const serve = () => new Promise((resolve) => {
   const s = http.createServer((req, res) => {
-    const file = path.join(ROOT, decodeURIComponent(new URL(req.url, "http://x").pathname));
-    if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
+    const base = process.env.SERVE_ROOT ? path.resolve(process.env.SERVE_ROOT) : ROOT;
+    const file = path.join(base, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    if (!file.startsWith(base) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
     res.writeHead(200, { "content-type": TYPES[path.extname(file)] || "application/octet-stream" });
     fs.createReadStream(file).pipe(res);
   }).listen(0, () => resolve(s));

@@ -320,12 +320,74 @@
     ui.wrap.appendChild(ui.peek);
     startExposure("peek");
     track("peek_shown");
-    requestAnimationFrame(() => requestAnimationFrame(() => ui.peek && ui.peek.classList.add("is-in")));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!ui.peek) return;
+      ui.peek.classList.add("is-in");
+      // measured once the card has arrived: during its rise the corners are still over whatever is below
+      setTimeout(liftPeek, reducedMotion ? 0 : 600);
+    }));
+    window.addEventListener("resize", liftPeek);
   }
   function hidePeek() {
+    window.removeEventListener("resize", liftPeek);
     if (!ui.peek) return;
     const p = ui.peek; ui.peek = null; p.classList.remove("is-in");
     setTimeout(() => p.remove(), reducedMotion ? 0 : 320);
+  }
+  // A store widget fixed above us in the page's stack (Cookie Information's #Coi-Renew sits at the bottom left of
+  // every store at z-index 2147483647) must not be covered by a marketing card, and the card must not be cut by it.
+  // Each corner of the card is hit-tested; where something that is not ours answers, the card rises clear of that
+  // element's fixed box. Anything under us (a chat launcher at z 5000) never answers, so it is left alone.
+  function liftPeek() {
+    const p = ui.peek;
+    if (!p || !p.classList.contains("is-in")) return;
+    p.style.bottom = "";
+    const r = p.getBoundingClientRect();
+    let lift = 0;
+    for (const [x, y] of [[r.left + 4, r.top + 4], [r.right - 4, r.top + 4], [r.left + 4, r.bottom - 4], [r.right - 4, r.bottom - 4]]) {
+      const hit = document.elementFromPoint(x, y);
+      if (!hit || hit === root || root.contains(hit)) continue;
+      let n = hit;
+      while (n && n !== document.body && getComputedStyle(n).position !== "fixed") n = n.parentElement;
+      if (!n || n === document.body) continue;
+      const b = n.getBoundingClientRect();
+      lift = Math.max(lift, innerHeight - b.top + 8);
+    }
+    if (lift) p.style.bottom = `${Math.round(lift)}px`;
+  }
+
+  // ---------- the visual viewport: where the sheet can be while a phone's keyboard is up ----------
+  // A phone's keyboard shrinks the visual viewport, not the page, so a sheet pinned to the page's bottom ends up under
+  // it. While open on a phone or tablet the shell writes the visual viewport's height and offset on .wps, and sets
+  // is-kb while a field in the dialog has focus and the view is clearly shorter than it has been since opening. It
+  // clears only when the view grows back - never on blur, because a tap on a button blurs the field first, and a
+  // layout that jumped on that blur would move the button from under the finger.
+  let viewportOff = null;
+  function watchViewport() {
+    const vv = window.visualViewport;
+    if (!vv || device === "desktop" || viewportOff) return;
+    let maxH = 0, width = innerWidth;
+    const update = () => {
+      if (innerWidth !== width) { width = innerWidth; maxH = 0; }
+      maxH = Math.max(maxH, vv.height);
+      ui.wrap.style.setProperty("--wps-vvh", `${vv.height}px`);
+      ui.wrap.style.setProperty("--wps-vvtop", `${vv.offsetTop}px`);
+      const a = shadow.activeElement;
+      const typing = Boolean(a && a.tagName === "INPUT" && a.type !== "file" && ui.dialog.contains(a));
+      if (typing && vv.height < maxH - 120) ui.wrap.classList.add("is-kb");
+      else if (vv.height >= maxH - 60) ui.wrap.classList.remove("is-kb");
+    };
+    vv.addEventListener("resize", update); vv.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
+    ui.dialog.addEventListener("focusin", update);
+    update();
+    viewportOff = () => {
+      vv.removeEventListener("resize", update); vv.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      ui.dialog.removeEventListener("focusin", update);
+      ui.wrap.classList.remove("is-kb");
+      viewportOff = null;
+    };
   }
 
   // ---------- open / close ----------
@@ -342,6 +404,11 @@
     ui.wrap.setAttribute("data-concept", concept);
     mounted = concepts[concept].mount(ui.stage, context()) || {};
     lockScroll();
+    // while open nothing of the store's may sit on the sheet: the top z-index, and last in the body so that an
+    // element with the same z-index (the cookie button) paints under us. Closed, the host is 0 x 0 and covers nothing.
+    root.style.zIndex = "2147483647";
+    if (root.parentNode === document.body && document.body.lastElementChild !== root) document.body.appendChild(root);
+    watchViewport();
     ui.wrap.classList.add("is-open");
     track("open");
     emit("open", { concept });
@@ -359,7 +426,11 @@
     flush(subscribed ? "subscribed" : reason === "link" ? "link" : "closed");
     ui.wrap.classList.remove("is-open");
     unlockScroll();
-    setTimeout(() => { if (mounted && mounted.destroy) mounted.destroy(); mounted = null; ui.stage.textContent = ""; }, reducedMotion ? 0 : 420);
+    if (viewportOff) viewportOff();
+    setTimeout(() => {
+      if (mounted && mounted.destroy) mounted.destroy(); mounted = null; ui.stage.textContent = "";
+      if (!isOpen) root.style.zIndex = "2147483000";
+    }, reducedMotion ? 0 : 420);
     try { if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); } catch (e) { /* element gone */ }
     emit("close", { reason, subscribed });
   }

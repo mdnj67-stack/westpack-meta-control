@@ -158,6 +158,10 @@
     const h = Math.round((w * vbHeight(lid)) / VBW);
     return { q, w, h, transform: matrix3d(q, w, h), affine: affineMatrix(homography(q), w, h), centre: project(homography(lid.quad), lid.print.cx, lid.print.cy) };
   }
+  // On a phone the scene stays an S x S square as wide as the sheet, so the print never changes scale; the frame is a
+  // window H tall onto it. The window shows the band of the square round the print (centre cy, 0-1 down the photo):
+  // the print in the window's middle where the photo allows, and never past the photo's edge.
+  function windowTop(S, H, cy) { return Math.min(0, Math.max(H - S, H / 2 - cy * S)); }
 
   // the measured light across the print area as an image the filter can multiply by: grey 0.5 is the area's mean.
   // Drawn as SVG rather than canvas, so a browser that blocks canvas reads cannot turn it into noise.
@@ -387,6 +391,13 @@
     } finally { URL.revokeObjectURL(src); }
   }
 
+  // the phone's icons: drawn, never written, so they need no copy in any language
+  const ICON_ZOOM_IN = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5L20 20M7.5 10.5h6M10.5 7.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const ICON_ZOOM_OUT = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5L20 20M7.5 10.5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const ICON_BACK = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  // the four tools of the phone's studio, in the order the brief gives them
+  const TOOLS = ["brand", "box", "foil", "type"];
+
   function mount(stage, ctx) {
     const { el, copy, t } = ctx;
     const uid = `ls${Math.random().toString(36).slice(2, 7)}`;
@@ -398,6 +409,10 @@
     const img = (id, w) => ctx.asset(`logo/box-${id}-${w}.webp`);
     const hide = (e) => { e.target.style.visibility = "hidden"; };
     const fine = Boolean(window.matchMedia && matchMedia("(pointer: fine)").matches);
+    // Phones and tablets get the studio: the print on top, one tool at a time under it, nothing scrolls. Desktop keeps
+    // its own layout, untouched.
+    const onPhone = ctx.device !== "desktop";
+    const loupeOn = fine && !onPhone;
 
     // ---- the scene: the photo, the print, a light hint ----
     const photo = el("img", { class: "ls-photo", alt: "", src: img("seville", 720), srcset: `${img("seville", 720)} 720w, ${img("seville", 1200)} 1200w`, sizes: "(min-width: 760px) 520px, 100vw", decoding: "async", draggable: "false", onerror: hide });
@@ -405,53 +420,60 @@
     const printWrap = el("div", { class: "ls-print-wrap" }, [print.svg]);
     // the plate: the photo's 1000 x 1000 stand-in, scaled to the frame, so each lid's transform is a constant
     const plate = el("div", { class: "ls-plate" }, [printWrap]);
-    const loupe = el("div", { class: "ls-loupe", "aria-hidden": "true" });
+    const loupe = onPhone ? null : el("div", { class: "ls-loupe", "aria-hidden": "true" });
     // the camera: photo and print move together when it pushes in on opening
     const cam = el("div", { class: "ls-cam" }, [photo, plate]);
     // the heat of the press: a warm bloom over the print for a moment each time a name is stamped
     const heat = el("div", { class: "ls-heat", "aria-hidden": "true" });
-    const scene = el("div", { class: "ls-scene" }, [cam, heat]);
+    const scene = el("div", { class: "ls-scene", role: onPhone ? "img" : null }, [cam, heat]);
     const hintEl = el("p", { class: "ls-light-hint", "aria-hidden": "true", text: fine ? copy.lightHintMouse : copy.lightHintTouch });
-    const frame = el("figure", { class: "ls-frame", role: "img" }, [scene, loupe, el("figcaption", { class: "ls-illustration", text: copy.disclaimer })]);
-    const zoomBtn = el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", onclick: () => toggleZoom() }, [el("span", { text: copy.zoomIn })]);
+    const disclaimer = el("figcaption", { class: "ls-illustration", text: copy.disclaimer });
+    // on a phone the frame is a window onto the scene and carries buttons, so the picture's name sits on the scene
+    const frame = el("figure", { class: "ls-frame", role: onPhone ? null : "img" }, onPhone ? [scene, disclaimer] : [scene, loupe, disclaimer]);
+    const zoomBtn = onPhone
+      ? el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", "aria-label": copy.zoomIn, onclick: () => toggleZoom() }, [ctx.svg(ICON_ZOOM_IN)])
+      : el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", onclick: () => toggleZoom() }, [el("span", { text: copy.zoomIn })]);
     // every thumbnail carries the visitor's name too, so the six read as their own collection
     const thumbPrints = {};
     // projective: whether this engine draws matrix3d with its perspective; checked once the stage is laid out
     let projective = true;
     const lay = (wrap, lid) => { const p = placement(lid); wrap.style.width = `${p.w}px`; wrap.style.height = `${p.h}px`; wrap.style.transform = projective ? p.transform : p.affine; return p; };
-    const thumbs = BOX_ORDER.map((id) => {
+    const thumbs = BOX_ORDER.map((id, i) => {
       const p = (thumbPrints[id] = makePrint(`${uid}-${id}`, true)), wrap = el("div", { class: "ls-print-wrap" }, [p.svg]);
       lay(wrap, LIDS[id]);
-      return el("button", { type: "button", class: "ls-thumb", "data-box": id, "aria-pressed": "false", "aria-label": copy.boxes[id], title: copy.boxes[id], onclick: () => setBox(id, "thumb") }, [el("img", { src: img(id, 160), alt: "", loading: "lazy", decoding: "async", onerror: hide }), el("div", { class: "ls-plate" }, [wrap])]);
+      // a phone needs all seven at once (the Packaging tool, then the result), so they load with the sheet
+      return el("button", { type: "button", class: "ls-thumb", "data-box": id, "aria-pressed": "false", "aria-label": copy.boxes[id], title: copy.boxes[id], style: onPhone ? `--i:${i}` : null, onclick: () => setBox(id, "thumb") }, [el("img", { src: img(id, 160), alt: "", loading: onPhone ? "eager" : "lazy", decoding: "async", onerror: hide }), el("div", { class: "ls-plate" }, [wrap])]);
     });
     const boxName = el("p", { class: "ls-box-name", "aria-live": "polite" });
     const under = el("div", { class: "ls-under" }, [boxName, zoomBtn]);
     const thumbsEl = el("div", { class: "ls-thumbs", role: "group", "aria-label": copy.boxLabel }, thumbs);
     // on a desktop the lid's name, the zoom and the six lids float over the foot of the photo, so the photo can fill
-    // the whole stage; on a phone they sit under it, where they cover nothing
-    const onPhone = ctx.device !== "desktop";
-    const stageInner = el("div", { class: "ls-stage-inner" }, onPhone ? [frame, under, thumbsEl, hintEl] : [frame]);
+    // the whole stage; on a phone the name and the zoom sit on the photo's foot and the pieces are a tool of their own
+    const strip = onPhone ? el("div", { class: "ls-strip" }) : null;
+    const stageInner = el("div", { class: "ls-stage-inner" }, onPhone ? [frame, strip] : [frame]);
     if (!onPhone) frame.append(el("div", { class: "ls-bar" }, [under, thumbsEl, hintEl]));
 
-    // the reward: the name on all six lids at once, once the visitor is happy with it
+    // the reward on a desktop: the name on all six lids at once, once the visitor is happy with it. A phone shows the
+    // chosen piece large instead, with the seven in a strip under it, so the email ask stays on screen
     const tilePrints = {};
     const tileWraps = {};
-    const tiles = BOX_ORDER.map((id, i) => {
+    const tiles = onPhone ? [] : BOX_ORDER.map((id, i) => {
       const p = (tilePrints[id] = makePrint(`${uid}-c${id}`)), wrap = (tileWraps[id] = el("div", { class: "ls-print-wrap" }, [p.svg]));
       lay(wrap, LIDS[id]);
       const tileScene = el("div", { class: "ls-scene" }, [el("img", { class: "ls-photo", alt: "", src: img(id, 720), loading: "lazy", decoding: "async", onerror: hide }), el("div", { class: "ls-plate" }, [wrap])]);
       return el("figure", { class: "ls-tile", "data-box": id, style: `--i:${i}` }, [el("div", { class: "ls-tile-frame" }, [tileScene]), el("figcaption", { class: "ls-tile-name", text: copy.boxes[id] })]);
     });
-    const collection = el("div", { class: "ls-collection", "aria-hidden": "true" }, tiles);
-    stageInner.append(collection);
+    const collection = onPhone ? null : el("div", { class: "ls-collection", "aria-hidden": "true" }, tiles);
+    if (collection) stageInner.append(collection);
 
     // ---- the controls ----
     const nameId = `${uid}-name`;
     const nameInput = el("input", { id: nameId, class: "ls-name-input", type: "text", maxlength: String(MAX_NAME), autocomplete: "organization", autocapitalize: "words", spellcheck: "false", placeholder: copy.namePlaceholder, enterkeyhint: "done" });
     const fileInput = el("input", { type: "file", class: "wps-visually-hidden", accept: "image/png,image/jpeg,image/webp,image/svg+xml", tabindex: "-1", "aria-hidden": "true" });
-    const uploadBtn = el("button", { type: "button", class: "ls-upload", onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true", text: "↑" }), el("span", { text: copy.uploadCta })]);
+    const uploadBtn = el("button", { type: "button", class: "ls-upload", "aria-label": onPhone ? copy.uploadCta : null, onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true", text: "↑" }), el("span", { class: "ls-upload-label", text: copy.uploadCta })]);
     const useNameBtn = el("button", { type: "button", class: "wps-link ls-use-name", hidden: true, onclick: () => clearLogo(), text: copy.useName });
     const hint = el("p", { class: "ls-hint", "aria-live": "polite" });
+    const setHint = (text, error) => { hint.textContent = text || ""; hint.classList.toggle("is-error", Boolean(error)); layout.classList.toggle("has-hint", Boolean(text)); if (text) hideCoach(); };
     const group = (labelText, key, values, labels) => {
       const gid = `${uid}-${key}`;
       // each face shows the visitor's own name, so the choice is made on what will be printed
@@ -492,28 +514,60 @@
     const typeGroup = group(copy.typeLabel, "type", Object.keys(TYPES), copy.type);
     const nextBtn = el("button", { type: "button", class: "wps-btn wps-btn-primary ls-next", onclick: () => toResult() }, [el("span", { class: "wps-btn-label", text: `${copy.next} →` })]);
 
-    const nameBlock = el("div", { class: "ls-name-block" }, [
-      el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]),
-      el("div", { class: "ls-upload-row" }, [uploadBtn, useNameBtn, el("span", { class: "ls-upload-hint", text: copy.uploadHint })]),
-      fileInput,
-      hint,
-    ]);
-    // on a phone the field sits right under the box, so the first screen is the box and the field, and the box
-    // stays in view above the keyboard while the name is typed (see is-typing in the CSS)
-    if (onPhone) stageInner.insertBefore(nameBlock, thumbsEl);
-    // on a phone a small live copy of the box floats in the corner once the big one has scrolled away, so the
-    // foil is never chosen blind
-    const pip = onPhone ? el("div", { class: "ls-pip", "aria-hidden": "true" }) : null;
-    const editPanel = el("div", { class: "ls-panel ls-edit" }, [
-      el("p", { class: "wps-kicker wps-rise", text: copy.kicker }),
-      el("h2", { class: "wps-title wps-rise wps-rise-2", text: copy.title }),
-      el("p", { class: "wps-lede wps-rise wps-rise-3", text: copy.lede }),
-      // anchored beside the foil options, where the column keeps room for it
-      pip ? el("div", { class: "ls-pip-anchor" }, [pip]) : null,
-      onPhone ? null : nameBlock,
-      el("div", { class: "ls-options wps-rise wps-rise-4" }, [foilGroup.node, typeGroup.node]),
-      nextBtn,
-    ]);
+    let editPanel, nameBlock, tabBar = null, tabLine = null, tabs = [], toolEls = {}, toolsEl = null, coach = null, backBtn = null;
+    if (!onPhone) {
+      nameBlock = el("div", { class: "ls-name-block" }, [
+        el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]),
+        el("div", { class: "ls-upload-row" }, [uploadBtn, useNameBtn, el("span", { class: "ls-upload-hint", text: copy.uploadHint })]),
+        fileInput,
+        hint,
+      ]);
+      editPanel = el("div", { class: "ls-panel ls-edit" }, [
+        el("p", { class: "wps-kicker wps-rise", text: copy.kicker }),
+        el("h2", { class: "wps-title wps-rise wps-rise-2", text: copy.title }),
+        el("p", { class: "wps-lede wps-rise wps-rise-3", text: copy.lede }),
+        nameBlock,
+        el("div", { class: "ls-options wps-rise wps-rise-4" }, [foilGroup.node, typeGroup.node]),
+        nextBtn,
+      ]);
+    } else {
+      // ---- the phone's studio: the stage's own overlays, four tools in one cell, one button ----
+      // the light hint shows once as a coach mark over the stage; the live hint (a long name, the uploaded logo, an
+      // upload error) is a caption on the photo, so it never changes the panel's height
+      coach = el("p", { class: "ls-coach", "aria-hidden": "true", text: copy.lightHintTouch });
+      backBtn = el("button", { type: "button", class: "ls-back", "aria-label": copy.back, onclick: () => toEdit() }, [ctx.svg(ICON_BACK)]);
+      frame.append(coach, hint, under, backBtn);
+      nameBlock = el("div", { class: "ls-name-block" }, [
+        el("div", { class: "ls-name" }, [el("label", { class: "ls-name-label", for: nameId, text: copy.nameLabel }), nameInput]),
+        el("div", { class: "ls-upload-row" }, [uploadBtn, el("div", { class: "ls-upload-aside" }, [el("span", { class: "ls-upload-hint", text: copy.uploadHint }), useNameBtn])]),
+        fileInput,
+      ]);
+      const tabLabels = { brand: copy.defaultName, box: copy.boxLabel, foil: copy.foilLabel, type: copy.typeLabel };
+      tabs = TOOLS.map((k) => el("button", { type: "button", role: "tab", class: "ls-tab", "data-tool": k, id: `${uid}-tab-${k}`, "aria-controls": `${uid}-tool-${k}`, "aria-selected": "false", tabindex: "-1", onclick: () => tabTap(k) }, [el("span", { class: "ls-tab-label", text: tabLabels[k] })]));
+      tabLine = el("span", { class: "ls-tab-line", "aria-hidden": "true" });
+      tabBar = el("div", { class: "ls-tabs", role: "tablist" }, [...tabs, tabLine]);
+      tabBar.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        e.preventDefault();
+        const live = TOOLS.filter((k) => !(k === "type" && choice.logo));
+        const next = live[(live.indexOf(tool) + (e.key === "ArrowRight" ? 1 : live.length - 1)) % live.length];
+        tabTap(next); tabs[TOOLS.indexOf(next)].focus();
+      });
+      const panel = (k, kids) => el("div", { class: "ls-tool", "data-tool": k, role: "tabpanel", id: `${uid}-tool-${k}`, "aria-labelledby": `${uid}-tab-${k}` }, kids);
+      toolEls = {
+        brand: panel("brand", [
+          el("p", { class: "wps-kicker", text: copy.kicker }),
+          el("h2", { class: "wps-title", text: copy.title }),
+          el("p", { class: "wps-lede", text: copy.lede }),
+          nameBlock,
+        ]),
+        box: panel("box", [thumbsEl, hintEl]),
+        foil: panel("foil", [foilGroup.node]),
+        type: panel("type", [typeGroup.node]),
+      };
+      toolsEl = el("div", { class: "ls-tools" }, TOOLS.map((k) => toolEls[k]));
+      editPanel = el("div", { class: "ls-panel ls-edit" }, [tabBar, toolsEl, el("div", { class: "ls-cta" }, [nextBtn])]);
+    }
 
     const resultTitle = el("h2", { class: "wps-title" });
     const proof = el("div", { class: "ls-proof", "aria-hidden": "true" }, [el("div", { class: "ls-proof-track" },
@@ -527,13 +581,26 @@
       // the field and the button stacked, so a long button never squeezes the address
       compact: true,
     });
-    const resultPanel = el("div", { class: "ls-panel ls-result", hidden: true }, [
+    const promise = el("ul", { class: "wps-promise" }, ctx.shell.promise.map((p) => el("li", { text: p })));
+    // on a phone the card puts the ask first: the email field and the button come straight after the title, the
+    // promise list beside them only where the screen is tall, and the customers' logos after
+    const resultPanel = el("div", { class: "ls-panel ls-result", hidden: true }, onPhone ? [
+      el("p", { class: "wps-kicker", text: copy.kicker }),
+      resultTitle,
+      el("p", { class: "wps-lede", text: copy.resultLede }),
+      promise,
+      form.form,
+      el("p", { class: "ls-proof-title", text: copy.proofTitle }),
+      proof,
+      el("p", { class: "ls-result-note", text: copy.disclaimer }),
+      success,
+    ] : [
       el("p", { class: "wps-kicker", text: copy.kicker }),
       resultTitle,
       el("p", { class: "wps-lede", text: copy.resultLede }),
       el("p", { class: "ls-proof-title", text: copy.proofTitle }),
       proof,
-      el("ul", { class: "wps-promise" }, ctx.shell.promise.map((p) => el("li", { text: p }))),
+      promise,
       form.form,
       el("button", { type: "button", class: "wps-link ls-back", onclick: () => toEdit(), text: `← ${copy.back}` }),
       success,
@@ -542,29 +609,81 @@
     const layout = el("div", { class: "ls" }, [el("div", { class: "ls-stage" }, [stageInner]), el("div", { class: "ls-side" }, [editPanel, resultPanel])]);
     stage.appendChild(layout);
 
+    // ---- tools (phone) ----
+    let tool = "brand", movedOn = false;
+    function moveTabLine() {
+      if (!tabBar) return;
+      const label = tabs[TOOLS.indexOf(tool)].firstChild, r = label.getBoundingClientRect(), b = tabBar.getBoundingClientRect();
+      if (!r.width) return;
+      tabLine.style.width = `${r.width}px`;
+      tabLine.style.transform = `translateX(${(r.left - b.left + tabBar.scrollLeft).toFixed(1)}px)`;
+    }
+    // every label stays whole on one line: a tab strip that does not fit tightens its padding, then its type
+    function fitTabs() {
+      if (!tabBar || !tabBar.clientWidth) return;
+      tabBar.classList.remove("is-tight", "is-tighter");
+      if (tabBar.scrollWidth > tabBar.clientWidth + 1) tabBar.classList.add("is-tight");
+      if (tabBar.scrollWidth > tabBar.clientWidth + 1) tabBar.classList.add("is-tighter");
+      moveTabLine();
+    }
+    function setTool(k, how) {
+      if (!onPhone || (k === "type" && choice.logo)) return;
+      const dir = TOOLS.indexOf(k) >= TOOLS.indexOf(tool) ? 1 : -1, prev = toolEls[tool];
+      // the tool going out slides away from the one coming in
+      if (prev && tool !== k) { prev.classList.add("is-leaving"); setTimeout(() => prev.classList.remove("is-leaving"), 240); }
+      tool = k; layout.dataset.tool = k;
+      toolsEl.style.setProperty("--ls-dx", `${12 * dir}px`);
+      TOOLS.forEach((key, i) => {
+        const on = key === k;
+        tabs[i].setAttribute("aria-selected", String(on)); tabs[i].tabIndex = on ? 0 : -1;
+        toolEls[key].classList.toggle("is-active", on); toolEls[key].toggleAttribute("inert", !on);
+      });
+      if (k === "type") fitSamples();
+      moveTabLine();
+      if (how) hideCoach();
+      if (how === "tap") once(`tool_${k}`);
+    }
+    function tabTap(k) { if (k === tool) return; setTool(k, "tap"); }
+
+    // ---- the coach mark (phone): the light under the finger, said once ----
+    let coachDone = !onPhone, coachT1 = 0, coachT2 = 0;
+    function hideCoach() { if (coachDone) return; coachDone = true; clearTimeout(coachT1); clearTimeout(coachT2); layout.classList.remove("is-coach"); }
+    if (onPhone) coachT1 = setTimeout(() => { if (coachDone) return; layout.classList.add("is-coach"); coachT2 = setTimeout(hideCoach, 6000); }, 2200);
+
     // ---- rendering ----
     let placed = null;
     function place() {
       const lid = LIDS[choice.box];
       placed = lay(printWrap, lid);
+      printWrap.dataset.far = placed.q[2].map((v) => v.toFixed(2)).join(",");
       layout.dataset.tone = lid.tone;
       scene.style.setProperty("--zx", `${placed.centre[0]}%`); scene.style.setProperty("--zy", `${placed.centre[1]}%`);
     }
-    // the plate follows the frame's size; the loupe's copy shares it, the floating copy sets its own. Once a resize
-    // has settled, the print layer is nudged one pixel for a frame: Chrome can otherwise leave a perspective layer
-    // undrawn after its parent's scale has changed (seen when the frame shrinks for the keyboard)
-    let settle = 0;
+    // Once the frame has settled after a change of size, a piece or the zoom, the print layer is nudged one pixel for a
+    // frame: Chrome can otherwise leave a perspective layer undrawn after its parent's scale has changed
+    function nudge() {
+      if (!placed) return;
+      printWrap.style.width = `${placed.w + 1}px`;
+      requestAnimationFrame(() => { printWrap.style.width = `${placed.w}px`; });
+    }
+    // the plate follows the frame's width; the loupe's copy shares it. On a phone the scene stays the frame's width
+    // whatever its height, and the window onto it follows the print
+    let settle = 0, lastWidth = 0;
     function fit() {
       const w = frame.clientWidth;
       if (!w) return;
       scene.style.setProperty("--k", (w / 1000).toFixed(5));
+      if (onPhone) {
+        const h = frame.clientHeight;
+        layout.style.setProperty("--ls-w", `${w}px`);
+        Object.assign(scene.style, { width: `${w}px`, height: `${w}px` });
+        if (placed && h) scene.style.top = `${windowTop(w, h, placed.centre[1] / 100).toFixed(1)}px`;
+        for (const b of thumbs) { const tw = b.clientWidth; if (tw) b.style.setProperty("--k", (tw / 1000).toFixed(5)); }
+        if (w !== lastWidth) { lastWidth = w; fitTabs(); }
+      }
       for (const id of BOX_ORDER) thumbPrints[id].refit();
       clearTimeout(settle);
-      settle = setTimeout(() => {
-        if (!placed) return;
-        printWrap.style.width = `${placed.w + 1}px`;
-        requestAnimationFrame(() => { printWrap.style.width = `${placed.w}px`; });
-      }, 140);
+      settle = setTimeout(nudge, 140);
     }
     // each tile of the collection is its own small scene, scaled like the big one, and nudged like it once laid out
     let tileSettle = 0;
@@ -579,6 +698,7 @@
         Object.assign(sc.style, { width: `${S}px`, height: `${S}px`, left: `${at(w, cx)}px`, top: `${at(h, cy)}px` });
         sc.style.setProperty("--k", (S / 1000).toFixed(5));
       }
+      if (!tiles.length) return;
       for (const id of BOX_ORDER) tilePrints[id].refit();
       clearTimeout(tileSettle);
       tileSettle = setTimeout(() => {
@@ -587,7 +707,7 @@
     }
     const onResize = () => { fit(); fitTiles(); };
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
-    if (ro) { ro.observe(frame); ro.observe(collection); } else window.addEventListener("resize", onResize);
+    if (ro) { ro.observe(frame); if (collection) ro.observe(collection); if (onPhone) ro.observe(thumbs[0]); } else window.addEventListener("resize", onResize);
     function render() {
       layout.dataset.foil = choice.foil; layout.dataset.box = choice.box;
       print.set(choice.box, choice.foil);
@@ -600,14 +720,16 @@
       }
       layout.classList.toggle("is-placeholder", !choice.name.trim() && !choice.logo);
       boxName.textContent = copy.boxes[choice.box];
-      frame.setAttribute("aria-label", `${choice.logo ? copy.uploadCta : displayName()} – ${foilName(choice.foil)}, ${copy.boxes[choice.box]}`);
+      (onPhone ? scene : frame).setAttribute("aria-label", `${choice.logo ? copy.uploadCta : displayName()} – ${foilName(choice.foil)}, ${copy.boxes[choice.box]}`);
       thumbs.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.box === choice.box)));
-      if (pip) { pip.textContent = ""; const c = scene.cloneNode(true); c.style.setProperty("--tilt", "none"); c.style.setProperty("--k", ((pip.clientWidth || 108) / 1000).toFixed(5)); pip.appendChild(c); }
       const finish = FOILS[choice.foil].finish;
       foilGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.foil)); b.hidden = b.dataset.finish !== finish; });
       finishButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.finish === finish)));
       foilNow.textContent = foilName(choice.foil);
-      typeGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.type)); b.disabled = Boolean(choice.logo); fitSample(b.querySelector(".ls-type-sample"), displayName()); });
+      typeGroup.buttons.forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.value === choice.type)); b.disabled = Boolean(choice.logo); });
+      fitSamples();
+      // a face does not apply to a logo, so Lettering steps back while one is in use
+      if (tabBar) tabs[TOOLS.indexOf("type")].setAttribute("aria-disabled", String(Boolean(choice.logo)));
       refreshLoupe();
     }
     // a name set in a face is shrunk to its card rather than cut off, so every face shows the whole name
@@ -616,6 +738,7 @@
       const room = node.clientWidth - 2, need = node.scrollWidth;
       if (room > 0 && need > room) node.style.fontSize = `${Math.max(7, (parseFloat(getComputedStyle(node).fontSize) * room) / need).toFixed(1)}px`;
     }
+    function fitSamples() { typeGroup.buttons.forEach((b) => fitSample(b.querySelector(".ls-type-sample"), displayName())); }
     function setBox(id, how) {
       if (id === choice.box) return;
       choice.box = id; once("option_box");
@@ -626,6 +749,8 @@
       next.onload = next.onerror = () => {
         photo.src = img(id, 720); photo.srcset = `${img(id, 720)} 720w, ${img(id, 1200)} 1200w`;
         place(); render(); scene.classList.remove("is-swapping"); stamp();
+        // the window moves to the new print's band (its top follows in CSS)
+        if (onPhone) fit();
       };
       next.src = img(id, ctx.device === "desktop" ? 1200 : 720);
       if (how === "swipe") thumbs.find((b) => b.dataset.box === id).scrollIntoView({ inline: "nearest", block: "nearest" });
@@ -663,22 +788,23 @@
     // a visitor holding the light themselves keeps it: the sweep is for a scene nobody is touching
     function sweep() { if (ctx.reducedMotion) { print.setLight(0.52, -0.45); return; } if (interacting) return; sweepFrom = performance.now(); sweepUntil = sweepFrom + 950; schedule(); }
     function lightFromPointer(e) {
-      const r = frame.getBoundingClientRect();
+      // on a phone the frame is a window onto the scene, so the point is read on the scene itself
+      const r = (onPhone ? scene : frame).getBoundingClientRect();
       const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
       // the light hangs over the point on the lid under the pointer, so the foil lights up where it is touched
       if (placed) { const [pu, pv] = unproject(homography(placed.q), u * 1000, v * 1000); if (Number.isFinite(pu) && Number.isFinite(pv)) print.setLight(Math.max(-0.6, Math.min(1.6, pu)), Math.max(-0.8, Math.min(1.8, pv)) - 0.1, 0.24); }
       // a small tilt of the whole scene, as a box tilts in the hand. Only while a mouse is over it: at rest the scene
       // stays flat, because Chrome stops drawing the lid's perspective layer after a resize inside a 3D context
-      if (!ctx.reducedMotion && fine) scene.style.setProperty("--tilt", `perspective(900px) rotateX(${((0.5 - v) * 5).toFixed(2)}deg) rotateY(${((u - 0.5) * 6).toFixed(2)}deg)`);
+      if (!ctx.reducedMotion && loupeOn) scene.style.setProperty("--tilt", `perspective(900px) rotateX(${((0.5 - v) * 5).toFixed(2)}deg) rotateY(${((u - 0.5) * 6).toFixed(2)}deg)`);
       moveLoupe(e, u, v);
     }
     frame.addEventListener("pointermove", (e) => { interacting = true; sweepUntil = 0; once("light_moved"); lightFromPointer(e); });
-    frame.addEventListener("pointerleave", () => { interacting = false; scene.style.setProperty("--tilt", "none"); loupe.classList.remove("is-on"); schedule(); });
+    frame.addEventListener("pointerleave", () => { interacting = false; scene.style.setProperty("--tilt", "none"); if (loupe) loupe.classList.remove("is-on"); schedule(); });
 
     // ---- loupe (mouse) and zoom (touch): the foil up close ----
     let clone = null;
     function refreshLoupe() {
-      if (!fine) return;
+      if (!loupeOn) return;
       loupe.textContent = "";
       clone = scene.cloneNode(true);
       clone.classList.add("ls-loupe-scene");
@@ -686,7 +812,7 @@
       loupe.appendChild(clone);
     }
     function moveLoupe(e, u, v) {
-      if (!fine || !clone || layout.classList.contains("is-zoomed")) return;
+      if (!loupeOn || !clone || layout.classList.contains("is-zoomed")) return;
       if (e.target && e.target.closest && e.target.closest(".ls-bar")) { loupe.classList.remove("is-on"); return; }
       const r = frame.getBoundingClientRect(), z = 2.6, R = loupe.offsetWidth / 2 || 85;
       loupe.classList.add("is-on");
@@ -698,13 +824,21 @@
       const on = !layout.classList.contains("is-zoomed");
       layout.classList.toggle("is-zoomed", on);
       zoomBtn.setAttribute("aria-pressed", String(on));
-      zoomBtn.firstChild.textContent = on ? copy.zoomOut : copy.zoomIn;
+      if (onPhone) {
+        zoomBtn.setAttribute("aria-label", on ? copy.zoomOut : copy.zoomIn);
+        zoomBtn.replaceChildren(ctx.svg(on ? ICON_ZOOM_OUT : ICON_ZOOM_IN));
+        hideCoach();
+        // without motion the zoom has no transition to end, so the print is nudged at once
+        if (ctx.reducedMotion) setTimeout(nudge, 60);
+      } else zoomBtn.firstChild.textContent = on ? copy.zoomOut : copy.zoomIn;
       if (on) { ctx.track("zoom"); sweep(); }
     }
+    // the zoom is the one scale left on an ancestor of the print: once it has settled, in or out, nudge the print
+    scene.addEventListener("transitionend", (e) => { if (onPhone && e.target === scene && e.propertyName === "transform") nudge(); });
 
     // ---- swipe between boxes on the photo (touch) ----
     let sx = null;
-    frame.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") { sx = e.clientX; interacting = true; lightFromPointer(e); } });
+    frame.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") { sx = e.clientX; interacting = true; hideCoach(); lightFromPointer(e); } });
     frame.addEventListener("pointerup", (e) => {
       if (sx == null) return;
       const dx = e.clientX - sx; sx = null; interacting = false; schedule();
@@ -721,14 +855,31 @@
       once("name_typed");
       if (!choice.logo) render();
       const n = choice.name.trim();
-      hint.textContent = /^westpack$/i.test(n) ? copy.hintWestpack : n.length > 16 ? copy.hintLong : "";
+      setHint(/^westpack$/i.test(n) ? copy.hintWestpack : n.length > 16 ? copy.hintLong : "");
       clearTimeout(typingTimer);
       typingTimer = setTimeout(stamp, 420);
     });
     nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); nameInput.blur(); if (!onPhone) toResult(); } });
+    // Typing on a phone: is-typing marks the focused field, and the shell's is-kb says the keyboard is really up; the
+    // typing layout needs both, so a hardware keyboard never collapses the sheet. It ends when the field is left and
+    // the keyboard has gone, and the first time that happens with a name the panel moves on to Packaging, once.
+    const wrapEl = onPhone && ctx.root && ctx.root.querySelector ? ctx.root.querySelector(".wps") : null;
+    const kbUp = () => Boolean(wrapEl && wrapEl.classList.contains("is-kb"));
+    function restFromTyping() {
+      if (!layout.classList.contains("is-typing") || (ctx.root && ctx.root.activeElement === nameInput)) return;
+      layout.classList.remove("is-typing");
+      for (const id of BOX_ORDER) thumbPrints[id].refit();
+      fitSamples();
+      if (!movedOn && choice.name.trim() && !layout.classList.contains("is-result")) { movedOn = true; setTool("box"); }
+    }
+    let mo = null;
     if (onPhone) {
-      nameInput.addEventListener("focus", () => { layout.classList.add("is-typing"); ctx.dialog.scrollTo({ top: 0 }); });
-      nameInput.addEventListener("blur", () => { layout.classList.remove("is-typing"); for (const id of BOX_ORDER) thumbPrints[id].refit(); });
+      nameInput.addEventListener("focus", () => { layout.classList.add("is-typing"); hideCoach(); });
+      nameInput.addEventListener("blur", () => { if (!kbUp()) restFromTyping(); });
+      if (wrapEl && typeof MutationObserver !== "undefined") {
+        mo = new MutationObserver(() => { if (!kbUp()) restFromTyping(); });
+        mo.observe(wrapEl, { attributes: true, attributeFilter: ["class"] });
+      }
     }
     fileInput.addEventListener("change", async () => {
       const file = fileInput.files && fileInput.files[0];
@@ -738,22 +889,51 @@
         choice.logo = await logoMask(file);
         ctx.track("logo_uploaded");
         uploadBtn.classList.add("is-active"); useNameBtn.hidden = false;
-        hint.textContent = copy.uploadOneColour;
+        setHint(copy.uploadOneColour);
         render(); stamp();
       } catch (e) {
         ctx.track("logo_failed");
-        hint.textContent = copy.uploadError;
+        setHint(copy.uploadError, true);
       }
     });
     function clearLogo() {
-      choice.logo = null; uploadBtn.classList.remove("is-active"); useNameBtn.hidden = true; hint.textContent = "";
+      choice.logo = null; uploadBtn.classList.remove("is-active"); useNameBtn.hidden = true; setHint("");
       render(); sweep(); nameInput.focus();
     }
 
     // ---- result and success ----
+    // On a phone the stage's height changes at the result and the thank-you: it is animated as layout (the window's
+    // height), never as a scale, from where it was to where the new state's CSS puts it
+    let frameT = 0;
+    function animateFrame(change) {
+      const h0 = frame.offsetHeight;
+      change();
+      const h1 = frame.offsetHeight;
+      if (ctx.reducedMotion || Math.abs(h1 - h0) < 1) { fit(); return; }
+      clearTimeout(frameT);
+      Object.assign(frame.style, { transition: "none", flex: "none", height: `${h0}px` });
+      void frame.offsetHeight;
+      Object.assign(frame.style, { transition: "height 420ms var(--wps-ease-out)", height: `${h1}px` });
+      frameT = setTimeout(() => { Object.assign(frame.style, { transition: "", flex: "", height: "" }); fit(); }, 460);
+    }
     function toResult() {
       ctx.track("result");
       resultTitle.textContent = t(copy.resultTitle, { name: choice.logo && !choice.name.trim() ? copy.defaultName : displayName() });
+      if (onPhone) {
+        hideCoach();
+        if (layout.classList.contains("is-zoomed")) toggleZoom();
+        animateFrame(() => {
+          layout.classList.add("is-result");
+          strip.appendChild(thumbsEl);
+          editPanel.hidden = true; resultPanel.hidden = false;
+        });
+        resultPanel.classList.remove("is-rising"); void resultPanel.offsetWidth; resultPanel.classList.add("is-rising");
+        resultPanel.scrollTop = 0;
+        fit();
+        thumbsEl.querySelector('[aria-pressed="true"]').scrollIntoView({ inline: "nearest", block: "nearest" });
+        sweep();
+        return;
+      }
       layout.classList.add("is-result");
       for (const id of BOX_ORDER) {
         const p = tilePrints[id];
@@ -771,57 +951,79 @@
     }
     function toEdit() {
       ctx.track("back");
+      if (onPhone) {
+        animateFrame(() => {
+          layout.classList.remove("is-result");
+          toolEls.box.prepend(thumbsEl);
+          resultPanel.hidden = true; editPanel.hidden = false;
+          setTool("brand");
+        });
+        fit();
+        // the visitor asked to change the name: the field takes focus, which on a phone brings the keyboard
+        nameInput.focus();
+        return;
+      }
       layout.classList.remove("is-result");
       resultPanel.hidden = true; editPanel.hidden = false;
       nameInput.focus();
     }
     function showSuccess(result) {
-      layout.classList.add("is-success");
-      [...resultPanel.children].forEach((c) => { if (c !== success) c.hidden = true; });
-      success.hidden = false;
-      success.append(
-        el("p", { class: "wps-kicker", text: copy.kicker }),
-        el("h2", { class: "wps-title ls-success-title", text: result.doubleOptIn ? ctx.shell.doiTitle : t(copy.successTitle, { name: choice.name.trim() || copy.defaultName }) }),
-        el("p", { class: "wps-lede", text: result.doubleOptIn ? ctx.shell.doiBody : copy.successBody }),
-        el("button", { type: "button", class: "wps-btn wps-btn-ghost", onclick: () => ctx.close("done"), text: ctx.shell.close }),
-      );
-      success.focus();
+      const finish = () => {
+        layout.classList.add("is-success");
+        [...resultPanel.children].forEach((c) => { if (c !== success) c.hidden = true; });
+        success.hidden = false;
+        success.append(
+          el("p", { class: "wps-kicker", text: copy.kicker }),
+          el("h2", { class: "wps-title ls-success-title", text: result.doubleOptIn ? ctx.shell.doiTitle : t(copy.successTitle, { name: choice.name.trim() || copy.defaultName }) }),
+          el("p", { class: "wps-lede", text: result.doubleOptIn ? ctx.shell.doiBody : copy.successBody }),
+          el("button", { type: "button", class: "wps-btn wps-btn-ghost", onclick: () => ctx.close("done"), text: ctx.shell.close }),
+        );
+      };
+      if (onPhone) animateFrame(finish); else finish();
+      success.focus({ preventScroll: onPhone });
       sweep();
     }
 
-    let io = null;
-    if (pip && typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver((entries) => { for (const e of entries) layout.classList.toggle("is-pip", !e.isIntersecting && !layout.classList.contains("is-result")); }, { root: ctx.dialog, threshold: 0.3 });
-      io.observe(frame);
-    }
     place(); fit(); render();
+    if (onPhone) setTool("brand");
     // Some engines paint a matrix3d without its perspective when the layer is not composited (WebKit's software
     // path does): the print then lands as a skewed parallelogram. Measure where the far corner of the print really
     // is; if it is off, every lid uses the closest flat transform instead, which is right at the centre. Measured on
-    // the scene at rest - during the camera's push-in every corner is off by design.
+    // the scene at rest - during the camera's push-in every corner is off by design, and on a phone also not while
+    // zoomed, swapping a piece or typing, so a phone waits for a quiet moment.
     const checkEngine = () => requestAnimationFrame(() => {
-      if (!placed || !frame.clientWidth || layout.classList.contains("is-zoomed") || layout.classList.contains("is-intro")) return;
+      if (!placed || !frame.clientWidth || layout.classList.contains("is-intro")) return;
+      const busy = layout.classList.contains("is-zoomed") || (onPhone && (scene.classList.contains("is-swapping") || kbUp()));
+      if (busy) { if (onPhone && stage.isConnected) setTimeout(checkEngine, 500); return; }
       const probe = document.createElement("i");
       probe.style.cssText = `position:absolute;left:${placed.w - 1}px;top:${placed.h - 1}px;width:2px;height:2px`;
       printWrap.appendChild(probe);
-      const r = probe.getBoundingClientRect(), f = frame.getBoundingClientRect();
+      const r = probe.getBoundingClientRect(), f = (onPhone ? scene : frame).getBoundingClientRect();
       probe.remove();
       const k = f.width / 1000, dx = (r.left + r.right) / 2 - f.left - placed.q[2][0] * k, dy = (r.top + r.bottom) / 2 - f.top - placed.q[2][1] * k;
       if (Math.hypot(dx, dy) > f.width * 0.015) {
         projective = false;
         place();
         for (const b of thumbs) lay(b.querySelector(".ls-print-wrap"), LIDS[b.dataset.box]);
-        for (const id of BOX_ORDER) lay(tileWraps[id], LIDS[id]);
+        for (const id of Object.keys(tileWraps)) lay(tileWraps[id], LIDS[id]);
         render();
       }
+      layout.dataset.engine = projective ? "projective" : "flat";
     });
     // the fonts arrive after the first paint; measure the name again once they have
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!stage.isConnected) return; render(); if (onPhone) { lastWidth = 0; fit(); } });
     if (!ctx.reducedMotion) { layout.classList.add("is-intro"); setTimeout(() => { layout.classList.remove("is-intro"); fit(); checkEngine(); }, 1900); }
     else checkEngine();
     setTimeout(stamp, ctx.reducedMotion ? 0 : 1000);
     schedule();
-    return { initialFocus: ctx.device === "desktop" ? nameInput : null, destroy() { cancelAnimationFrame(raf); raf = 0; clearTimeout(typingTimer); if (io) io.disconnect(); clearTimeout(settle); clearTimeout(stampTimer); clearTimeout(sweepTimer); clearTimeout(tileSettle); if (ro) ro.disconnect(); else window.removeEventListener("resize", onResize); } };
+    return {
+      initialFocus: ctx.device === "desktop" ? nameInput : null,
+      destroy() {
+        cancelAnimationFrame(raf); raf = 0; clearTimeout(typingTimer); clearTimeout(settle); clearTimeout(stampTimer); clearTimeout(sweepTimer); clearTimeout(tileSettle);
+        clearTimeout(coachT1); clearTimeout(coachT2); clearTimeout(frameT); if (mo) mo.disconnect();
+        if (ro) ro.disconnect(); else window.removeEventListener("resize", onResize);
+      },
+    };
   }
 
   function peekVisual(ctx) {

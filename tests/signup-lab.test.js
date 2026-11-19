@@ -310,3 +310,23 @@ test("logo studio offers the 25 foils of Westpack's logo-print module, named in 
   }
   assert.doesNotMatch(LS_SRC, /deboss/);
 });
+
+// the phone's stage is a window onto the full-width square scene, placed so the print sits in its middle where the
+// photo allows; lifted from the shipped file like the homography
+const windowTop = Function(`${LS_SRC.slice(LS_SRC.indexOf("  function windowTop("), LS_SRC.indexOf("  // the measured light across the print area"))}; return windowTop;`)();
+
+test("logo studio on a phone: the stage window never runs past the photo, and centres the print where it can", () => {
+  for (const [id, l] of Object.entries(LIDS)) {
+    const cy = project(homography(l.quad), l.print.cx, l.print.cy)[1] / 100;
+    assert.ok(cy > 0.3 && cy < 0.7, `${id} print centre ${cy}`);
+    for (const S of [320, 360, 390, 430]) {
+      for (let H = 0.4 * S; H <= S + 1e-9; H += 0.05 * S) {
+        const top = windowTop(S, H, cy);
+        assert.ok(top >= H - S - 1e-9 && top <= 1e-9, `${id} at ${S}x${H.toFixed(0)}: top ${top}`);
+        const free = H / 2 - cy * S;
+        if (free <= 0 && free >= H - S) assert.ok(Math.abs(top + cy * S - H / 2) < 1e-6, `${id} at ${S}x${H.toFixed(0)}: the print centre sits at the window's middle`);
+      }
+      assert.equal(windowTop(S, S, cy), 0, `${id}: a square window shows the whole photo`);
+    }
+  }
+});
