@@ -76,6 +76,8 @@ async function main() {
     if (only && id !== only) continue;
     const S = scene.source;
     const plate = path.join(PLATES, `${id}-1200.webp`);
+    // a generated scene (source.generated) has no photo in Asana and no demo print: its plate and quad are set by hand
+    if (!S.asanaTask) { console.log(`${id}: generated scene, plate and quad set by hand - skipped`); continue; }
     if (mode === "clean" || mode === "all") {
       const file = await original(S);
       await page.goto(url.pathToFileURL(path.join(ROOT, "tools", "signup", "clean-plate.html")).href);
