@@ -9,7 +9,11 @@
  * playwright> (defaults are the local ones this was first built with). Writes server/email/name-print/:
  *   scene-<lid>.bin  - "WPSC", width, height (u16 LE), then the RGB rows deflated after an "up" filter
  *   glyphs.bin       - "WPGA", index length (u32 LE), index JSON, then every glyph's alpha deflated as one block
- *   lids.json        - LIDS as measured in signup/concepts/logo-studio.js (between lids:begin and lids:end)
+ *   lids.json        - LIDS as measured in signup/concepts/logo-studio.js (between lids:begin and lids:end), plus the
+ *                      email's own scenes from tools/email/name-print-extra.json (plates in tools/email/name-print-plates/,
+ *                      made and measured by tools/email/build-extra-plates.js)
+ *
+ * --no-atlas packs the scenes only and leaves glyphs.bin as it is.
  */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -21,6 +25,7 @@ const SHARP = process.env.SHARP || "C:/Users/mdj.WEP/AppData/Local/Temp/claude/c
 const PLAYWRIGHT = process.env.PLAYWRIGHT || path.join(ROOT, "tmp", "playwright-runner", "node_modules", "playwright");
 
 const SCENES = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
+const EXTRA = JSON.parse(fs.readFileSync(path.join(__dirname, "name-print-extra.json"), "utf8")).scenes;
 const EM = 240; // the atlas's font size in pixels
 // Upper case only: every name is set in spaced capitals, as a jewellery house sets its own. Latin and Latin
 // Extended-A cover the 18 stores' languages; Romanian's comma-below letters and the capital sharp s are added.
@@ -118,14 +123,17 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const lids = lidsFromLogoStudio();
   const keep = {};
-  for (const id of SCENES) keep[id] = lids[id];
+  const plates = {};
+  for (const id of SCENES) { keep[id] = lids[id]; plates[id] = path.join(ROOT, "signup", "assets", "logo", `box-${id}-1200.webp`); }
+  for (const [id, scene] of Object.entries(EXTRA)) { keep[id] = scene.lid; plates[id] = path.join(__dirname, "name-print-plates", `${id}-1200.webp`); }
   fs.writeFileSync(path.join(OUT, "lids.json"), JSON.stringify(keep));
-  for (const id of SCENES) {
-    const { data, info } = await sharp(path.join(ROOT, "signup", "assets", "logo", `box-${id}-1200.webp`)).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (const [id, plate] of Object.entries(plates)) {
+    const { data, info } = await sharp(plate).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const packed = packScene(data, info.width, info.height);
     fs.writeFileSync(path.join(OUT, `scene-${id}.bin`), packed);
     console.log(`scene-${id}.bin ${info.width}x${info.height} ${(packed.length / 1024).toFixed(0)} KB`);
   }
+  if (process.argv.includes("--no-atlas")) return;
   const atlas = await buildAtlas();
   fs.writeFileSync(path.join(OUT, "glyphs.bin"), atlas);
   console.log(`glyphs.bin ${CHARS.length} glyphs ${(atlas.length / 1024).toFixed(0)} KB`);

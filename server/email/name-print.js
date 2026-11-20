@@ -52,7 +52,10 @@ const FOILS = {
   "matt-white": matt("#FDFDFD", 0.22),
   "matt-oldrose": matt("#C09B8C", 0.2),
   "matt-darkblue": matt("#284467"),
-  "matt-winered": matt("#8C3039")
+  "matt-winered": matt("#8C3039"),
+  // bags have the logo module's own foil list (codes "... - BAGS"); the ones above that bags share keep their names,
+  // and these are the bags' own
+  "matt-red": matt("#F52516")
 };
 const GRAINS = {
   structured: { layers: [[0.14, 0.12]], metal: 0.05, pigment: 0.09 },

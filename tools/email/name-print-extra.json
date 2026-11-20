@@ -1,0 +1,95 @@
+{
+  "about": "Scenes the email name print has beyond the Logo studio's own lids. Each is a Content Library photo with its demo print removed and its front measured the way tools/signup/lid-geometry.js measures a lid. `source` is how the plate is made and measured (tools/email/build-extra-plates.js writes the plate to tools/email/name-print-plates/ and the measured quad and light back into `lid`); `lid` is what server/email/name-print.js reads, in the same shape as Logo studio's LIDS.",
+  "scenes": {
+    "bag-white": {
+      "product": "Luksus gavepose med hank, XXL, hvid (32573401301): 450 x 350 x 150 mm, logo print on one side, at most 150 x 150 mm; bags take the logo module's own bag foils (BLACK GLOSSY - BAGS, RED MATT - BAGS, ...), not the boxes'",
+      "source": {
+        "asanaTask": "1211894660006807",
+        "file": "XXL_Gaveposer_New-06.jpg",
+        "cropPx": [0,0,3516,3516],
+        "principal": [50,62.5],
+        "polygons": [
+          [
+            [37.5,46],
+            [43,43.5],
+            [45.5,40],
+            [51,40],
+            [56.8,41],
+            [57.2,47],
+            [52.8,49.6],
+            [52.8,52.8],
+            [46,54.8],
+            [37.3,51.6]
+          ]
+        ],
+        "texture": [60,48,8,8],
+        "edges": {
+          "top": [
+            [12,24.7],
+            [76,7.1]
+          ],
+          "right": [
+            [82.5,16],
+            [92.8,63]
+          ],
+          "bottom": [
+            [18,84.7],
+            [88,70]
+          ],
+          "left": [
+            [3.6,32],
+            [10.5,74]
+          ]
+        },
+        "polarity": {
+          "top": "light-in",
+          "right": "light-in",
+          "bottom": "light-in",
+          "left": "light-in"
+        },
+        "search": 2.4,
+        "searchByEdge": {
+          "bottom": 0.8
+        },
+        "minStep": 2,
+        "note": "The bottom edge is the crease between the white front and the bag's bottom fold, so it is searched narrowly: a wide search locks onto the fold's outer edge against the black bag behind. Measured 2026-11-20: top 12/47 points (the handles hide the rest), right 48/48 rms 0.23 px, bottom 48/48 rms 0.78 px, left 47/47 rms 0.61 px; the perspective gives the front an aspect of 1.301 against 1.2857 from its 450 x 350 mm."
+      },
+      "lid": {
+        "quad": [
+          [3.34,27.86],
+          [79.91,6.17],
+          [94.7,67.56],
+          [13.13,86.8]
+        ],
+        "aspect": 1.2857,
+        "print": {
+          "cx": 0.5,
+          "cy": 0.5,
+          "w": 0.333,
+          "h": 0.4286
+        },
+        "tone": "light",
+        "foil": "gloss-black",
+        "grain": null,
+        "exposure": {
+          "metal": 0.5,
+          "pigment": 0.9
+        },
+        "light": [
+          [1.022,1.025,1.025,1.025,1.025,1.022,1.022,1.019,1.015,1.012,1.012,1.015],
+          [1.022,1.022,1.022,1.021,1.019,1.018,1.016,1.015,1.011,1.008,1.009,1.011],
+          [1.017,1.015,1.015,1.015,1.013,1.011,1.009,1.007,1.004,1.001,1.005,1.008],
+          [1.013,1.011,1.009,1.007,1.007,1.004,1.001,1,0.997,0.997,0.999,1.004],
+          [1.009,1.006,1.006,1.003,1.002,1,0.996,0.994,0.993,0.991,0.995,1],
+          [1.007,1.006,1.003,1.002,1,0.996,0.994,0.993,0.991,0.992,0.996,0.998],
+          [1.007,1.003,1,1,1,0.996,0.994,0.991,0.991,0.993,0.996,0.996],
+          [1.007,1.003,1,1,1,0.997,0.995,0.991,0.991,0.993,0.996,0.996],
+          [1.008,1.004,1.001,1,1,0.997,0.995,0.991,0.991,0.992,0.996,0.996],
+          [1.006,1.003,1.003,1.001,1.001,0.998,0.995,0.991,0.991,0.992,0.996,0.998],
+          [1.006,1.004,1.004,1.005,1.003,0.999,0.995,0.991,0.991,0.992,0.996,0.996],
+          [1.003,1.003,1.004,1.006,1.006,1.002,0.996,0.991,0.991,0.994,0.995,0.995]
+        ]
+      }
+    }
+  }
+}

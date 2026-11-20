@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const { renderNamePrint, cleanName, toPrintable, scenes } = require("../server/email/name-print");
+const { renderNamePrint, cleanName, toPrintable, scenes, FOILS } = require("../server/email/name-print");
 const { encodeJpeg } = require("../server/email/jpeg-encode");
 const handler = require("../api/email/name-print");
 const { readQuery, chooseName } = handler.__internals;
@@ -69,6 +69,20 @@ test("a crop is a close-up of the lid at no more pixels than the photo has", () 
   const sof = r.jpeg.indexOf(Buffer.from([0xff, 0xc0]));
   assert.equal(r.jpeg.readUInt16BE(sof + 7), 1008); // 84 % of 1200: never upscaled
   assert.equal(r.jpeg.readUInt16BE(sof + 5), 756);
+});
+
+test("the email's own scenes are packed as measured, and a bag foil is a bag's", () => {
+  const extra = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "email", "name-print-extra.json"), "utf8")).scenes;
+  const packed = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "server", "email", "name-print", "lids.json"), "utf8"));
+  for (const [id, scene] of Object.entries(extra)) {
+    // a measurement written into the JSON reaches the server only when build-name-print-assets.js runs again
+    assert.deepEqual(packed[id], scene.lid, `${id}: rerun tools/email/build-name-print-assets.js --no-atlas`);
+    assert.ok(fs.existsSync(path.join(__dirname, "..", "server", "email", "name-print", `scene-${id}.bin`)), `${id} plate not packed`);
+  }
+  // RED MATT - BAGS, from the bag pages' logo module (bags have their own foil list)
+  assert.ok(FOILS["matt-red"]);
+  const r = renderNamePrint({ name: "Mocy", scene: "bag-white", foil: "matt-red", width: 600 });
+  assert.ok(r.size >= 24);
 });
 
 test("the function bundles its assets, and no npm package is needed", () => {
