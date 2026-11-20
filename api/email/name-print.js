@@ -118,13 +118,19 @@ module.exports = async function handler(req, res) {
   }
   const box = scenes().includes(q.box) ? q.box : "torino";
   const foil = FOILS[q.foil] ? q.foil : undefined;
-  const width = Number(q.w) === 1200 ? 1200 : 600;
+  const width = Math.max(200, Math.min(1200, Math.round(Number(q.w) || 600)));
+  // crop=x,y,w,h in % of the photo (a close-up of the lid); light=x,y,z where the light stands, in print units
+  const nums = (v, n) => { const a = String(v || "").split(",").map(Number); return a.length === n && a.every(Number.isFinite) ? a : null; };
+  const c = nums(q.crop, 4);
+  const crop = c && c[2] >= 10 && c[3] >= 10 ? [Math.max(0, c[0]), Math.max(0, c[1]), Math.min(100, c[2]), Math.min(100, c[3])] : null;
+  const l = nums(q.light, 3);
+  const light = l ? { x: Math.max(-2000, Math.min(3000, l[0])), y: Math.max(-2000, Math.min(3000, l[1])), z: Math.max(50, Math.min(3000, l[2])) } : null;
   let result;
   try {
-    result = renderNamePrint({ name: chooseName(q), scene: box, foil, width });
+    result = renderNamePrint({ name: chooseName(q), scene: box, foil, width, crop, light });
   } catch (error) {
     console.error("name-print", error);
-    result = renderNamePrint({ name: "", scene: box, width });
+    result = renderNamePrint({ name: "", scene: box, width, crop });
   }
   res.statusCode = 200;
   res.setHeader("Content-Type", "image/jpeg");

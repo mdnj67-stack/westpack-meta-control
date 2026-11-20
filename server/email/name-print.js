@@ -235,7 +235,7 @@ function invert3(m) {
 const apply = (m, x, y) => { const w = m[6] * x + m[7] * y + m[8]; return [(m[0] * x + m[1] * y + m[2]) / w, (m[3] * x + m[4] * y + m[5]) / w]; };
 
 // ---- the render ----
-function renderNamePrint({ name, scene: sceneId = "seville", foil: foilId, width = 1200, quality = 86, light = null } = {}) {
+function renderNamePrint({ name, scene: sceneId = "seville", foil: foilId, width = 1200, quality = 86, light = null, crop = null } = {}) {
   const started = Date.now();
   const L = lids()[sceneId];
   if (!L) throw new Error(`Unknown scene ${sceneId}`);
@@ -417,21 +417,26 @@ function renderNamePrint({ name, scene: sceneId = "seville", foil: foilId, width
     }
   }
 
-  // the size asked for: the plate is 1200 square; smaller is a box filter down from it
-  let rgb = out, W = S.w, Hh = S.h;
-  const target = Math.max(200, Math.min(S.w, Math.round(width)));
-  if (target < S.w) {
-    const f = S.w / target, tw = target, th = Math.round(S.h / f);
-    const small = Buffer.alloc(tw * th * 3);
+  // the part of the photo asked for (crop: x, y, w, h in % of the plate), at the size asked for - never larger than
+  // the plate has pixels for; smaller is an area average down from it
+  const [cx0, cy0, cw, ch] = Array.isArray(crop) && crop.length === 4 ? crop : [0, 0, 100, 100];
+  const rx = Math.max(0, Math.round((cx0 / 100) * S.w)), ry = Math.max(0, Math.round((cy0 / 100) * S.h));
+  const rw = Math.max(16, Math.min(S.w - rx, Math.round((cw / 100) * S.w))), rh = Math.max(16, Math.min(S.h - ry, Math.round((ch / 100) * S.h)));
+  const tw = Math.max(120, Math.min(rw, Math.round(width))), th = Math.max(1, Math.round((rh * tw) / rw));
+  let rgb;
+  if (tw === S.w && th === S.h) rgb = out;
+  else {
+    const fx = rw / tw, fy = rh / th;
+    rgb = Buffer.alloc(tw * th * 3);
     for (let y = 0; y < th; y++) for (let x = 0; x < tw; x++) {
-      const sx0 = Math.floor(x * f), sx1 = Math.max(sx0 + 1, Math.floor((x + 1) * f));
-      const sy0 = Math.floor(y * f), sy1 = Math.max(sy0 + 1, Math.floor((y + 1) * f));
+      const sx0 = rx + Math.floor(x * fx), sx1 = Math.max(sx0 + 1, rx + Math.floor((x + 1) * fx));
+      const sy0 = ry + Math.floor(y * fy), sy1 = Math.max(sy0 + 1, ry + Math.floor((y + 1) * fy));
       let r = 0, g = 0, b = 0, c = 0;
       for (let yy = sy0; yy < sy1; yy++) for (let xx = sx0; xx < sx1; xx++) { const o = (yy * S.w + xx) * 3; r += out[o]; g += out[o + 1]; b += out[o + 2]; c++; }
-      const o = (y * tw + x) * 3; small[o] = r / c; small[o + 1] = g / c; small[o + 2] = b / c;
+      const o = (y * tw + x) * 3; rgb[o] = r / c; rgb[o + 1] = g / c; rgb[o + 2] = b / c;
     }
-    rgb = small; W = tw; Hh = th;
   }
+  const W = tw, Hh = th;
   const jpeg = encodeJpeg(rgb, W, Hh, quality);
   return { jpeg, name: text, size: fitted ? Math.round(fitted.size) : 0, lines: fitted ? fitted.lines.length : 0, ms: Date.now() - started };
 }

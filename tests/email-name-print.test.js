@@ -64,6 +64,13 @@ test("every lid renders a name, a long name, and no name, as a JPEG of the asked
   }
 });
 
+test("a crop is a close-up of the lid at no more pixels than the photo has", () => {
+  const r = renderNamePrint({ name: "Mocy", scene: "torino", width: 1200, crop: [9, 31.5, 84, 63] });
+  const sof = r.jpeg.indexOf(Buffer.from([0xff, 0xc0]));
+  assert.equal(r.jpeg.readUInt16BE(sof + 7), 1008); // 84 % of 1200: never upscaled
+  assert.equal(r.jpeg.readUInt16BE(sof + 5), 756);
+});
+
 test("the function bundles its assets, and no npm package is needed", () => {
   const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
   assert.match(vercel.functions["api/email/name-print.js"].includeFiles, /server\/email\/name-print/);
