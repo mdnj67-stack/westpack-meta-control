@@ -1,10 +1,28 @@
 # Signup Lab – implementering
 
-Alt er bygget, testet og deployet. Der mangler to ting, og ingen af dem kræver kode:
+**Live i Tjekkiet siden 19/11. Klar til de andre 17 markeder (tjekket 20/11).** Der mangler kun to ting, og ingen
+af dem kræver kode:
 
-1. **Tagget på butikkerne** – én linje i Magento. Det kan sættes ind nu: indtil vi tænder, gør det ingenting.
-2. **At tænde** – én linje her i repoet og et script, der slukker The Insert-popupperne i Klaviyo. Det gør vi
-   samme dag, i de samme minutter.
+1. **Tagget på butikkerne** – én linje i Magento, i rækken **Global** (afsnit 1). Den gør ingenting, før et marked
+   er tændt i Control, så den kan sættes ind nu.
+2. **At tænde** – sæt flueben ved markederne i biblen: Signup Lab → Control → "Markets on the live stores". Siden
+   viser først, hvilke The Insert-popups den slukker, og gør det, når du bekræfter (afsnit 2).
+
+Tjekket for alle 18 markeder 20/11, så det ikke skal gøres igen ved lanceringen:
+
+- **Klaviyo:** den offentlige nøgle i `signup/core/markets.js` er kontoens egen, nyhedsbrevslisten findes og er
+  single opt-in, og et live velkomstflow starter fra listen. De to første tjekkiske tilmeldte fik velkomstmailen.
+- **Samtykketeksten** står ordret på hver butiks egen nyhedsbrevsside.
+- **The Insert-popupperne** kan læses i alle 18 konti (det kræver Control, før et marked tændes): 17 live, CZ slukket
+  af Control.
+- **Teksterne:** alle 15 oversatte sprog er læst igennem igen med de nyeste ændringer (folienavne, posen, resultatet),
+  38 rettelser. Stadig ikke læst af en med sproget som modersmål.
+- **På de 18 rigtige butikker** (`store-check.js --local --simulate-live`, desktop og telefon): oplevelsen åbner på
+  butikkens sprog med dens samtykketekst, kommer af sig selv, når markedet er tændt, aldrig i kurven, 0 fejl. Alle 251
+  browsertjek i `qa.js` består i alle sprog.
+- **De seks nye butikker** (Grækenland, Bulgarien, Estland, Kroatien, Letland, Litauen) er **ikke med**: de har ingen
+  nyhedsbrevsliste eller samtykketekst på deres eget sprog – deres nyhedsbrevsside tilmelder til EU-kontoens engelske
+  liste. Tagget gør ingenting dér, heller ikke i Grækenland, hvor det allerede sidder.
 
 ## 0. Staging først
 

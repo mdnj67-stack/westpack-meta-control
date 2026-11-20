@@ -5,11 +5,11 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 4 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
+    "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -24,7 +24,7 @@
     "promise": [
       "Novinky o krabičkách, taškách a displejích",
       "Užitečné tipy a návody",
-      "Upozornění na naše vzácné akce"
+      "Upozornění, když máme výprodej"
     ],
     "doiTitle": "Už jen kousek.",
     "doiBody": "Poslali jsme vám e-mail. Klikněte na odkaz a jste na seznamu.",
@@ -83,7 +83,7 @@
       "script": "Psací",
       "clean": "Čisté"
     },
-    "hintLong": "To je pořádná řádka písmen. Logo upravíme, aby se vešlo.",
+    "hintLong": "To je pořádná řádka písmen. Logo se zmenší, aby se vešlo.",
     "hintWestpack": "Dobrá volba. Tenhle název už je ale zabraný.",
     "disclaimer": "Vizualizace na skutečných obalech Westpack. Vaše logo se razí fólií v jedné barvě.",
     "lightHintMouse": "Přejeďte myší přes potisk a sledujte, jak fólie chytá světlo.",
@@ -154,7 +154,7 @@
     "noneLine": "Ti nejnáročnější zákazníci budují nejlepší značky. Krabiček máme mnohem víc, než se sem vejde.",
     "ctaTitle": "Chcete novinky ve svém stylu?",
     "restart": "Vybrat znovu",
-    "seeBoxes": "Prohlédnout krabičky",
+    "seeBoxes": "Zobrazit šperkové krabičky",
     "successTitle": "Zapsáno: {world}.",
     "successBody": "Ozveme se e-mailem."
   },
@@ -163,7 +163,7 @@
     "peekCta": "Otevřít",
     "kicker": "Newsletter",
     "title": "Posíláme novinky o balení. Ne šperky. Bohužel.",
-    "lede": "Nové krabičky, tipy a návody – a upozornění na naše vzácné akce. Napište adresu, my to zabalíme.",
+    "lede": "Nové krabičky, tipy a návody – a upozornění, když máme výprodej. Napište adresu, my to zabalíme.",
     "labelTo": "Komu",
     "labelFrom": "Od: Westpack, Holstebro, Dánsko",
     "labelContents": "Obsah: dobré nápady",

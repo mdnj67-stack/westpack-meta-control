@@ -4,8 +4,9 @@
  * only ever reach the test list (data-test="1"), and tracking is off.
  *
  * Scenarios, per store:
- *   tag      - the switch as it is: with LIVE = false the tag must do nothing at all; with LIVE = true (after launch)
- *              the experience must come by itself - so the same command checks the stores before and after launch
+ *   tag      - the switch as it is, per market, as Control serves it to the stores: where live is off the tag must do
+ *              nothing at all; where it is on the experience must come by itself - so the same command checks the
+ *              stores before and after a market is switched on
  *   preview  - ?wps=logo-studio: the experience opens at once, in the store's language, with its consent sentence
  *   live     - (--simulate-live) LIVE forced on for this browser only: the dialog must come by itself on the home
  *              page (desktop, about 11 s after the banner) and never on the cart
@@ -78,10 +79,15 @@ const state = (page) => page.evaluate(() => {
 
 (async () => {
   fs.mkdirSync(outDir, { recursive: true });
-  // the switch the stores will actually see: this checkout's with --local, production's otherwise
+  // The switch the stores actually see is Control's (the biblen's Signup Lab page), per market; markets.js's LIVE only
+  // decides when the app cannot answer, and stays false. Reading LIVE here made every store that Control had switched
+  // on read as a problem.
+  let served = null;
+  try { const r = await fetch(`${PROD}/api/signup/control?action=config&nocache=${Date.now()}`); const j = await r.json(); if (r.ok && j.v === 1) served = j; } catch (e) { /* falls back below */ }
   const marketsJs = local ? fs.readFileSync(path.join(ROOT, "signup", "core", "markets.js"), "utf8") : await (await fetch(`${PROD}/signup/core/markets.js?nocache=${Date.now()}`)).text();
-  const switchOn = /const LIVE = true;/.test(marketsJs);
-  console.log(`switch: LIVE = ${switchOn} (${local ? "this checkout" : "production"})`);
+  const fileLive = /const LIVE = true;/.test(marketsJs);
+  const liveIn = (market) => (served ? Boolean(served.live.on && served.live.markets[market]) : fileLive);
+  console.log(served ? `switch: Control serves live ${served.live.on ? `on in ${Object.keys(served.live.markets).filter((m) => served.live.markets[m]).join(", ") || "no market"}` : "off"}` : `switch: Control did not answer, so markets.js decides: LIVE = ${fileLive}`);
   const browser = await chromium.launch();
   const rows = [];
   for (const [code, m] of stores) {
@@ -105,6 +111,7 @@ const state = (page) => page.evaluate(() => {
       return { ...s, installed, errors };
     };
     const base = `https://www.westpack.com/${code}/`;
+    const switchOn = liveIn(m.market);
     const off = await run("tag", base, false, switchOn ? (mobile ? 12000 : 17000) : 14000);
     const pv = await run("preview", `${base}?wps=logo-studio`, false, 6000);
     const r = { market: m.market,
@@ -128,7 +135,7 @@ const state = (page) => page.evaluate(() => {
   }
   await browser.close();
   fs.writeFileSync(path.join(outDir, "store-check.json"), JSON.stringify(rows, null, 2));
-  const bad = rows.filter((r) => (installedOnly && r.installed !== "yes") || r.tag !== (switchOn ? "shows" : "silent") || r.preview !== "opens" || r.language !== "ok" || r.consent !== "ok" || r.errors || (simulateLive && (r.live === "NOTHING" || r.cart !== "silent")));
+  const bad = rows.filter((r) => (installedOnly && r.installed !== "yes") || r.tag !== (liveIn(r.market) ? "shows" : "silent") ||r.preview !== "opens" || r.language !== "ok" || r.consent !== "ok" || r.errors || (simulateLive && (r.live === "NOTHING" || r.cart !== "silent")));
   console.log(`${rows.length} stores, ${bad.length} with a problem${bad.length ? ": " + bad.map((r) => r.market).join(", ") : ""}`);
   process.exit(bad.length ? 1 : 0);
 })().catch((e) => { console.error(e); process.exit(1); });

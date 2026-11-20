@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 10 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 5 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -42,7 +42,7 @@
     "boxes": {
       "seville": "Plastic negru mat",
       "london": "Crem soft touch",
-      "bag": "Sacoșă de lux neagră",
+      "bag": "Pungă de lux neagră",
       "torino": "Negru cu margine aurie",
       "seoul": "Carton verde prăfuit",
       "madrid": "Maro deschis soft touch",
@@ -85,8 +85,8 @@
     "hintLong": "Sunt multe litere. Logoul este redimensionat ca să încapă.",
     "hintWestpack": "Bună alegere. Din păcate, numele e deja luat.",
     "disclaimer": "Ilustrație pe ambalaje reale de la Westpack. Logoul tău este imprimat cu folie într-o singură culoare.",
-    "lightHintMouse": "Mișcă mouse-ul peste imprimeu și vezi cum folia prinde lumina.",
-    "lightHintTouch": "Treci degetul peste imprimeu și vezi cum folia prinde lumina. Glisează pentru următorul.",
+    "lightHintMouse": "Treci cu mouse-ul peste zona imprimată și vezi cum folia prinde lumina.",
+    "lightHintTouch": "Treci cu degetul peste zona imprimată și vezi cum folia prinde lumina. Glisează pentru următoarea variantă.",
     "zoomIn": "Vezi imprimarea de aproape",
     "zoomOut": "Vezi tot",
     "uploadCta": "Folosește-ți logoul",
@@ -147,8 +147,8 @@
       }
     },
     "resultKicker": "Profilul ambalajului tău",
-    "resultTitle": "Ești {pct}% {world}.",
-    "resultSecond": "… și {pct}% {world}.",
+    "resultTitle": "Ești {pct} % {world}.",
+    "resultSecond": "… și {pct} % {world}.",
     "noneTitle": "Nicio inimă? Respect.",
     "noneLine": "Cei mai exigenți cumpărători construiesc cele mai bune branduri. Avem mult mai multe cutii decât încap aici.",
     "ctaTitle": "Îți trimitem noutăți pe stilul tău?",

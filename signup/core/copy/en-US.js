@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 0 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -91,7 +91,7 @@
     "zoomOut": "See it all",
     "uploadCta": "Use your logo",
     "uploadHint": "PNG, JPG, or SVG—your logo stays in your browser.",
-    "uploadOneColour": "Foil prints in one color—this is your logo in foil.",
+    "uploadOneColour": "Your logo is foil stamped in one color—this is how it looks in foil.",
     "uploadError": "We couldn't read that file. Try a PNG or JPG.",
     "useName": "Use the name instead",
     "next": "That looks good",

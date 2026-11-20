@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -84,7 +84,7 @@
     },
     "hintLong": "Ez jó sok betű. A logót a mérethez igazítjuk.",
     "hintWestpack": "Jó választás. Kár, hogy ez a név már foglalt.",
-    "disclaimer": "Illusztráció valódi Westpack-csomagolásokon. A logódat egyetlen fóliaszínnel nyomtatjuk.",
+    "disclaimer": "Illusztráció valódi Westpack-csomagolásokon. A logódat egyetlen fóliaszínnel prégeljük.",
     "lightHintMouse": "Mozgasd az egeret a nyomat fölött, és nézd, ahogy megcsillan a fólia.",
     "lightHintTouch": "Húzd végig az ujjad a nyomaton, és nézd, ahogy megcsillan a fólia. Lapozz a következőhöz.",
     "zoomIn": "Nyomat közelről",
@@ -152,7 +152,7 @@
     "noneTitle": "Egy szív sem? Tisztelet.",
     "noneLine": "Aki válogat, jó márkát épít. És van még jó pár dobozunk, ami ide nem fért be.",
     "ctaTitle": "Jöhetnek újdonságok a stílusodban?",
-    "restart": "Újra swipolok",
+    "restart": "Újra swipe-olok",
     "seeBoxes": "Ékszerdobozok",
     "successTitle": "Feljegyeztük: {world}.",
     "successBody": "E-mailben folytatjuk."

@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 2 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 7 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack-Newsletter",
@@ -33,7 +33,7 @@
     "peek": "Wie sieht Ihre Marke in Folie aus?",
     "peekCta": "Ausprobieren",
     "kicker": "Der Folientest",
-    "title": "Geben Sie Ihren Markennamen ein. Wir prägen ihn in Folie.",
+    "title": "Geben Sie Ihren Markennamen ein. Wir prägen ihn mit Folie.",
     "lede": "Live auf echter Verpackung. Kostet nichts – nicht mal Ihre E-Mail-Adresse.",
     "nameLabel": "Ihr Markenname",
     "namePlaceholder": "z. B. Atelier Nord",
@@ -41,11 +41,11 @@
     "boxLabel": "Verpackung",
     "boxes": {
       "seville": "Mattschwarzer Kunststoff",
-      "london": "Cremefarbenes Soft Touch",
+      "london": "Soft-Touch in Creme",
       "bag": "Schwarze Luxus-Tragetasche",
       "torino": "Schwarz mit Goldrand",
       "seoul": "Staubgrüner Karton",
-      "madrid": "Hellbraunes Soft Touch",
+      "madrid": "Soft-Touch in Hellbraun",
       "frankfurt": "Weißer Karton in Leinenoptik"
     },
     "foilLabel": "Folie",
@@ -84,7 +84,7 @@
     },
     "hintLong": "Ganz schön viele Buchstaben. Das Logo wird passend skaliert.",
     "hintWestpack": "Gute Wahl. Der Name ist leider schon weg.",
-    "disclaimer": "Darstellung auf echten Westpack-Verpackungen. Ihr Logo wird in einer Folienfarbe gedruckt.",
+    "disclaimer": "Darstellung auf echten Westpack-Verpackungen. Ihr Logo wird in einer Folienfarbe geprägt.",
     "lightHintMouse": "Bewegen Sie die Maus über den Druck und sehen Sie, wie die Folie das Licht einfängt.",
     "lightHintTouch": "Ziehen Sie einen Finger über den Druck und sehen Sie, wie die Folie das Licht einfängt. Wischen Sie zum nächsten Motiv.",
     "zoomIn": "Druck aus der Nähe",
@@ -103,7 +103,7 @@
     "successBody": "Wenn wir wieder etwas haben, das sich zu öffnen lohnt, finden Sie es in Ihrem Postfach."
   },
   "swipe-match": {
-    "peek": "Wischen Sie zu Ihrem Verpackungsstil",
+    "peek": "Swipen Sie sich zu Ihrem Verpackungsstil",
     "peekCta": "Starten",
     "kicker": "Schachtel-Match",
     "title": "Herz oder weiter?",
@@ -123,7 +123,7 @@
     "cards": {
       "torino": "Klappdeckel und Goldrand. Der Klassiker, der nie langweilt.",
       "seoul": "Ultraflache Schublade in Staubgrün. Zurückhaltend – bis sie geöffnet wird.",
-      "madrid": "Soft Touch außen, Velours innen und eine Hülle drumherum.",
+      "madrid": "Soft-Touch außen, Velours innen und eine Banderole drumherum.",
       "oslo": "Kunstleder und Velours. Ein Bestseller unter den Schmuckschachteln mit Klappdeckel.",
       "monaco": "Eine Geschenkbox, die wie eine kleine Handtasche aussieht. Mit Satinband.",
       "tokyo": "Ein abnehmbarer Deckel und viel Platz für Ihr Logo."
@@ -139,7 +139,7 @@
       },
       "forest": {
         "name": "Waldboden",
-        "line": "Grün, ruhig und durchdacht. Bis hinunter zum Geschenkband."
+        "line": "Grün, ruhig und durchdacht. Bis hin zum Geschenkband."
       },
       "sand": {
         "name": "Sand",

@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -30,7 +30,7 @@
     "peekDismiss": "Nie teraz"
   },
   "logo-studio": {
-    "peek": "Jak wygląda Twoja marka w folii?",
+    "peek": "Jak wygląda Twoja marka wytłoczona folią?",
     "peekCta": "Sprawdź",
     "kicker": "Próba folii",
     "title": "Wpisz nazwę marki. Wytłoczymy ją folią.",
@@ -85,7 +85,7 @@
     "hintLong": "Sporo liter! Logo zostanie zmniejszone, żeby się zmieściło.",
     "hintWestpack": "Dobry wybór. Niestety ta nazwa jest już zajęta.",
     "disclaimer": "Wizualizacja na prawdziwych opakowaniach Westpack. Twoje logo jest tłoczone folią w jednym kolorze.",
-    "lightHintMouse": "Przesuń mysz nad nadrukiem i zobacz, jak folia łapie światło.",
+    "lightHintMouse": "Najedź kursorem na nadruk i zobacz, jak folia łapie światło.",
     "lightHintTouch": "Przesuń palcem po nadruku i zobacz, jak folia łapie światło. Przesuń dalej, by zobaczyć następne.",
     "zoomIn": "Zobacz nadruk z bliska",
     "zoomOut": "Całość",
@@ -147,8 +147,8 @@
       }
     },
     "resultKicker": "Twój profil opakowań",
-    "resultTitle": "Twój wynik: {pct} % {world}.",
-    "resultSecond": "… i {pct} % {world}.",
+    "resultTitle": "Twój wynik: {world} – {pct} %.",
+    "resultSecond": "… i {world} – {pct} %.",
     "noneTitle": "Ani jednego serca? Szanujemy.",
     "noneLine": "Najbardziej wybredni kupujący tworzą najlepsze marki. Mamy znacznie więcej pudełek, niż da się tu zmieścić.",
     "ctaTitle": "Chcesz nowości w swoim stylu?",

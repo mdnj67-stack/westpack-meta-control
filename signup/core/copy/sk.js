@@ -5,10 +5,10 @@
     "model": "gpt-5.6-sol",
     "date": "2026-10-29",
     "needsNativeReview": true,
-    "proofread": "2026-10-29 gpt-5.6-sol, 3 fix(es)",
-    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
+    "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
+    "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpacku",
@@ -23,7 +23,7 @@
     "promise": [
       "Novinky a najdôležitejšie produkty",
       "Tipy a návody, ktoré využijete",
-      "Upozornenie pred zriedkavými akciami"
+      "Upozornenia na naše občasné výpredaje"
     ],
     "doiTitle": "Už len kúsok.",
     "doiBody": "Poslali sme vám e-mail. Kliknite na odkaz v ňom a odber je potvrdený.",
@@ -84,7 +84,7 @@
     },
     "hintLong": "To je poriadna nádielka písmen. Logo zmenšíme, aby sa zmestilo.",
     "hintWestpack": "Dobrá voľba. Žiaľ, tento názov je už obsadený.",
-    "disclaimer": "Vizualizácia na skutočných obaloch Westpack. Vaše logo sa tlačí jednou farbou fólie.",
+    "disclaimer": "Vizualizácia na skutočných obaloch Westpack. Vaše logo sa razí fóliou jednej farby.",
     "lightHintMouse": "Prejdite myšou po potlači a sledujte, ako fólia chytá svetlo.",
     "lightHintTouch": "Prejdite prstom po potlači a sledujte, ako fólia chytá svetlo. Potiahnutím prejdete na ďalší.",
     "zoomIn": "Pozrieť tlač zblízka",
