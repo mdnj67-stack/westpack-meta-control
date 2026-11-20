@@ -4,15 +4,18 @@ function sendJson(res, statusCode, payload) {
   res.end(JSON.stringify(payload));
 }
 
+// Collected as bytes and decoded once: decoding chunk by chunk splits a multi-byte character that straddles two
+// chunks into two U+FFFD (see server/lib/http.js).
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
-    let body = "";
+    const chunks = [];
 
     req.on("data", (chunk) => {
-      body += chunk;
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk), "utf8"));
     });
 
     req.on("end", () => {
+      const body = Buffer.concat(chunks).toString("utf8");
       if (!body) {
         resolve({});
         return;

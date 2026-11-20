@@ -28,9 +28,13 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 // roughly 3MB raw each -> ~24MB once base64-encoded), so real requests never trip this guard.
 const MAX_JSON_BODY_BYTES = 30 * 1024 * 1024;
 
+// The body is collected as bytes and decoded once at the end. Appending each chunk to a string decodes every
+// chunk on its own, so a multi-byte character that straddles two chunks became two U+FFFD: on 2026-11-20 the
+// ~1MB Klaviyo rollout of W47 reached Klaviyo's Romanian template with two replacement characters where
+// "urgență" had its "ț".
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
-    let body = "";
+    const chunks = [];
     let receivedBytes = 0;
     let settled = false;
 
@@ -51,12 +55,13 @@ function readJsonBody(req) {
         fail(error);
         return;
       }
-      body += chunk;
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk), "utf8"));
     };
 
     const onEnd = () => {
       if (settled) return;
       settled = true;
+      const body = Buffer.concat(chunks).toString("utf8");
       if (!body) {
         resolve({});
         return;
