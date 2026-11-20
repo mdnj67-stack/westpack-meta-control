@@ -388,13 +388,23 @@ async function SWEEP() {
 }
 
 const PHONES = ["iPhone SE", "Galaxy S8", "iPhone 13", "iPhone 14 Pro Max"];
+// the tall Androids most Czech visitors hold (round 2's review): there the edit sheet is shorter than the view, so the
+// sheet's own height can change between states. The flow and the motion check run on them too
+const TALL = ["Pixel 7 360x800", "Pixel 7 412x915"];
+const phoneOpts = (devices, name) => {
+  const m = /^(.+) (\d+)x(\d+)$/.exec(name);
+  return m && devices[m[1]] ? { ...devices[m[1]], viewport: { width: Number(m[2]), height: Number(m[3]) } } : { ...devices[name] };
+};
 // the view a phone keeps above its keyboard, simulated by shrinking the viewport once the field has focus
-const KB = { "iPhone SE": { width: 320, height: 250 }, "Galaxy S8": { width: 360, height: 440 }, "iPhone 13": { width: 390, height: 330 }, "iPhone 14 Pro Max": { width: 430, height: 390 } };
+const KB = {
+  "iPhone SE": { width: 320, height: 250 }, "Galaxy S8": { width: 360, height: 440 }, "iPhone 13": { width: 390, height: 330 }, "iPhone 14 Pro Max": { width: 430, height: 390 },
+  "Pixel 7 360x800": { width: 360, height: 440 }, "Pixel 7 412x915": { width: 412, height: 500 },
+};
 const PIECES = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
 
 async function phoneStudio({ browser, url, check, errors, outDir, devices, byLang, webkit }) {
   const markets = [...Object.values(byLang), "dkk_dk_den"];
-  // QA_SKIP=sweep,flow,perf,tablet,webkit leaves parts out while iterating; a full run runs them all
+  // QA_SKIP=sweep,flow,perf,tablet,motion,cover,webkit leaves parts out while iterating; a full run runs them all
   const skip = new Set((process.env.QA_SKIP || "").split(","));
   const open = async (ctx, q, label) => {
     const p = await ctx.newPage();
@@ -483,11 +493,12 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
   }
 
   // ---- B. the whole flow on each phone, with the keyboard simulated ----
-  for (const phone of skip.has("flow") ? [] : PHONES.filter((x) => !process.env.QA_PHONES || process.env.QA_PHONES.split(",").includes(x))) {
-    const ctx = await browser.newContext({ ...devices[phone] });
+  for (const phone of skip.has("flow") ? [] : [...PHONES, ...TALL].filter((x) => !process.env.QA_PHONES || process.env.QA_PHONES.split(",").includes(x))) {
+    const opts = phoneOpts(devices, phone);
+    const ctx = await browser.newContext(opts);
     const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", phone);
     const host = p.locator("#westpack-signup");
-    const vp = devices[phone].viewport, kb = KB[phone];
+    const vp = opts.viewport, kb = KB[phone];
     const L = (fn, arg) => p.evaluate(fn, arg);
     const st = () => L(() => window.__ls.state());
     const shot = (s) => p.screenshot({ path: path.join(outDir, `studio-${phone.replace(/\s+/g, "-").toLowerCase()}-${s}.jpg`), type: "jpeg", quality: 72 });
@@ -629,12 +640,15 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
         stripInside: strip.length === 7 && strip.every((b) => l.inside(l.rect(b.querySelector(".ls-print text")), l.rect(b), 1)),
         email: l.inView(l.rect(".ls-result .wps-input")), submit: l.inView(l.rect(".ls-result .wps-form .wps-btn-primary")),
         consent2: cr.t + 2 * lh <= Math.min(innerHeight, card.b) + 0.5, hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), state: l.state(),
+        // a strip wider than the sheet says so with a fade at the edge that has more
+        stripFade: (() => { const t = l.q(".ls-strip .ls-thumbs"); return t.scrollWidth <= t.clientWidth + 1 || t.classList.contains("has-more-end") || t.classList.contains("has-more-start"); })(),
       };
     });
     const c13 = [];
     if (!res.email || !res.submit) c13.push(`email ${res.email}, button ${res.submit}`);
     if (vp.height >= 664 && !res.consent2) c13.push("consent's first two lines below the fold");
     if (res.hero < 180) c13.push(`hero ${res.hero}`);
+    check(`${phone}: a result strip wider than the sheet fades at the edge that has more`, res.stripFade);
     report(`${phone}: (13) on the result the email field and the button are in view${vp.height >= 664 ? ", and two lines of consent" : ""}, the hero at least 180px`, c13);
     check(`${phone}: (14) the bag is the hero, pressed in the strip, every strip print inside its button`, res.box === "bag" && res.bag === "true" && res.stripInside && res.print, JSON.stringify({ box: res.box, bag: res.bag, strip: res.stripInside, print: res.print }));
     if (res.state.k !== rest.k || Math.abs(res.state.sceneW - res.state.dialogW) > 0.5) fails.c5.push(`result: --k ${res.state.k}, scene ${res.state.sceneW}/${res.state.dialogW}`);
@@ -759,6 +773,53 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-result.jpg`), type: "jpeg", quality: 72 });
     report(`${label}: (18) the sheet fits, the name takes typing, all four tools and the result are reachable, no overflow`, out);
     await ctx.close();
+  }
+
+  // ---- G. the sheet never jumps (round 2's review): motion on, the sheet's top sampled every frame through the button
+  // to the result, back, to the result again and the signup to the thank-you. A height change is animated, never cut:
+  // no two frames more than 24px apart (a frame that came late is judged per 16.7ms, so a dropped frame in a smooth
+  // glide is not a jump but a cut still is). From the edit sheet to the result and back the top does not move at all,
+  // and the thank-you's card reaches the sheet's foot all the way down, so no studio shows under it ----
+  if (!skip.has("motion")) {
+    for (const phone of [...PHONES, ...TALL].filter((x) => !process.env.QA_PHONES || process.env.QA_PHONES.split(",").includes(x))) {
+      const ctx = await browser.newContext(phoneOpts(devices, phone));
+      const p = await open(ctx, "concept=logo-studio&market=eur_eu_cze", `${phone} motion`);
+      const host = p.locator("#westpack-signup");
+      await p.waitForTimeout(2600);
+      await host.locator(".ls-name-input").fill("Atelier Sever"); await host.locator(".ls-name-input").blur(); await p.waitForTimeout(400);
+      const run = (sel) => p.evaluate(async (sel) => {
+        const l = window.__ls, rows = [], t0 = performance.now();
+        // on the thank-you: studio showing between the photo and the card, or under the card
+        const sample = () => {
+          const d = l.q(".wps-dialog").getBoundingClientRect(), card = l.q(".ls-result:not([hidden])"), f = l.q(".ls-frame").getBoundingClientRect();
+          const c = card && l.q(".ls").classList.contains("is-success") ? card.getBoundingClientRect() : null;
+          rows.push({ t: performance.now() - t0, top: d.top, gap: c ? Math.max(c.top - f.bottom, d.bottom - c.bottom) : 0 });
+        };
+        await new Promise((res) => { const loop = () => { sample(); if (performance.now() - t0 < 1600) requestAnimationFrame(loop); else res(); }; sample(); requestAnimationFrame(loop); l.q(sel).click(); });
+        let worst = 0, gap = 0;
+        for (let i = 1; i < rows.length; i++) {
+          const step = Math.abs(rows[i].top - rows[i - 1].top), dt = rows[i].t - rows[i - 1].t;
+          worst = Math.max(worst, dt > 34 ? step * (16.7 / dt) : step);
+          gap = Math.max(gap, rows[i].gap);
+        }
+        return { from: rows[0].top, to: rows[rows.length - 1].top, worst, gap };
+      }, sel);
+      const out = [], fixed = [], gaps = [];
+      const toResult = await run(".ls-next"); await p.waitForTimeout(400);
+      const back = await run(".ls-back"); await host.locator(".ls-name-input").blur(); await p.waitForTimeout(400);
+      const again = await run(".ls-next"); await p.waitForTimeout(400);
+      await host.locator(".ls-result .wps-input").fill("navn@firma.cz");
+      const thanks = await run(".ls-result .wps-form .wps-btn-primary");
+      for (const [label, r] of [["to the result", toResult], ["back", back], ["to the result again", again], ["to the thank-you", thanks]]) {
+        if (r.worst > 24) out.push(`${label}: ${r.worst.toFixed(1)}px in one frame (${Math.round(r.from)} -> ${Math.round(r.to)})`);
+        if (label !== "to the thank-you" && Math.abs(r.to - r.from) > 0.5) fixed.push(`${label}: ${Math.round(r.from)} -> ${Math.round(r.to)}`);
+      }
+      if (thanks.gap > 1) gaps.push(`${thanks.gap.toFixed(1)}px of studio round the card`);
+      report(`${phone}, motion on: (sheet) its top glides, never more than 24px a frame, to the result, back and to the thank-you (${Math.round(thanks.from)} -> ${Math.round(thanks.to)} there)`, out);
+      report(`${phone}, motion on: (sheet) its top stays put from the edit sheet to the result and back`, fixed);
+      report(`${phone}, motion on: (sheet) on the way to the thank-you the card meets the photo and the sheet's foot in every frame`, gaps);
+      await ctx.close();
+    }
   }
 
   // ---- F. nothing on the print, with motion on as a visitor gets it (round 2's review): the coach mark about three

@@ -1,11 +1,13 @@
 // The whole Logo studio flow on a phone, on the real store, as a visitor gets it: peek card, open, each of the four
 // tools, typing with the keyboard up, zoom, result, an email error with the keyboard up, thank-you. One frame per state.
 //   node tools/signup/mobile-walk.js <outDir> [--local] [--store=eur_eu_cze] [--device="iPhone 13"] [--name=Atelier Sever]
-//                                    [--engine=chromium|webkit] [--keyboard=390x330]
+//                                    [--engine=chromium|webkit] [--keyboard=390x330] [--viewport=412x915]
 // --local serves signup/ from this checkout instead of production. Tracking is blocked and Klaviyo's client
 // endpoints are answered with 202 here: nothing leaves the browser. Run it from the checkout's root.
 // --keyboard is the view a phone keeps above its keyboard (default per device), simulated by shrinking the viewport
 // once a field has focus; Playwright has no on-screen keyboard.
+// --viewport gives the device another view, for the tall Androids Playwright has no descriptor for (a Pixel 7 at
+// 412x915 or 360x800): there the edit sheet is shorter than the view, so the sheet's own height is in play.
 // It also prints what sits on the open sheet's corners (the store's cookie button must not), and on CZ, where the peek
 // card comes by itself, whether the peek clears that cookie button.
 const fs = require("fs");
@@ -21,7 +23,10 @@ const opt = (k, d) => { const a = args.find((x) => x.startsWith(`--${k}=`)); ret
 const local = args.includes("--local");
 const store = opt("store", "eur_eu_cze"), deviceName = opt("device", "iPhone 13"), name = opt("name", "Atelier Sever"), engine = opt("engine", "chromium");
 const KB = { "iPhone SE": "320x250", "Galaxy S8": "360x440", "iPhone 13": "390x330", "iPhone 14 Pro Max": "430x390" };
-const device = pw.devices[deviceName];
+const viewportOpt = opt("viewport", "");
+const device = viewportOpt
+  ? { ...pw.devices[deviceName], viewport: (([width, height]) => ({ width, height }))(viewportOpt.split("x").map(Number)) }
+  : pw.devices[deviceName];
 const [kbW, kbH] = opt("keyboard", KB[deviceName] || `${device.viewport.width}x${Math.round(device.viewport.height / 2)}`).split("x").map(Number);
 const PROD = "https://project-4fcxa.vercel.app";
 const TYPES = { ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".woff2": "font/woff2", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png" };
@@ -86,8 +91,10 @@ fs.mkdirSync(out, { recursive: true });
     }
   }
   await host.locator(".ls-name-input").waitFor({ state: "attached", timeout: 30000 });
-  await page.waitForTimeout(600); await shot("open-intro");
-  await page.waitForTimeout(2600); await shot("open");
+  // the camera's push-in takes 1.8s on an ease-out that has done most of its travel by 0.6s: the intro frame is shot
+  // while the sheet is still rising and the camera still pushing, or it is the same picture as "open"
+  await page.waitForTimeout(250); await shot("open-intro");
+  await page.waitForTimeout(2950); await shot("open");
   // nothing of the store's sits on the open sheet: the four corners, 20px in, answer with our host
   report.corners = await page.evaluate(() => {
     const d = document.querySelector("#westpack-signup").shadowRoot.querySelector(".wps-dialog").getBoundingClientRect();

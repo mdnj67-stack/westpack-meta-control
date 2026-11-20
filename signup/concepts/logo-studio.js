@@ -614,7 +614,8 @@
       success,
     ]);
 
-    const layout = el("div", { class: "ls" }, [el("div", { class: "ls-stage" }, [stageInner]), el("div", { class: "ls-side" }, [editPanel, resultPanel])]);
+    const stageBox = el("div", { class: "ls-stage" }, [stageInner]);
+    const layout = el("div", { class: "ls" }, [stageBox, el("div", { class: "ls-side" }, [editPanel, resultPanel])]);
     stage.appendChild(layout);
 
     // ---- tools (phone) ----
@@ -719,7 +720,8 @@
         Object.assign(scene.style, { width: `${w}px`, height: `${w}px` });
         if (placed && h) scene.style.top = `${windowTop(w, h, placed.centre[1] / 100, ...clearBands()).toFixed(1)}px`;
         for (const b of thumbs) { const tw = b.clientWidth; if (tw) b.style.setProperty("--k", (tw / 1000).toFixed(5)); }
-        if (w !== lastWidth) { lastWidth = w; fitTabs(); fitUpload(); }
+        // a new width (a turned phone) makes the edit sheet's height the result held on to meaningless
+        if (w !== lastWidth) { if (lastWidth) layout.style.removeProperty("--ls-hold"); lastWidth = w; fitTabs(); fitUpload(); stripEdges(); }
       }
       for (const id of BOX_ORDER) thumbPrints[id].refit();
       clearTimeout(settle);
@@ -981,26 +983,74 @@
     }
 
     // ---- result and success ----
-    // On a phone the stage's height changes at the result and the thank-you: it is animated as layout (the window's
-    // height), never as a scale, from where it was to where the new state's CSS puts it
-    let frameT = 0;
-    function animateFrame(change) {
-      const h0 = frame.offsetHeight;
-      change();
-      const h1 = frame.offsetHeight;
-      if (ctx.reducedMotion || Math.abs(h1 - h0) < 1) { fit(); return; }
+    // On a phone the stage's height changes at the result and the thank-you, and at the thank-you the sheet's height
+    // too. Both are animated as layout (heights), never as a scale, from where they were to where the new state's CSS
+    // puts them, together, so the sheet's top glides instead of jumping. `pin` carries the stage's height: the frame
+    // on the way to and from the result, the whole stage at the thank-you (where the strip leaves and the frame fills
+    // its place). While the keyboard is up the sheet is the visual viewport and nothing is animated.
+    //   The stage alone moves on the house's ease-out. When the sheet moves too, both take a gentler in-and-out curve
+    // over a little longer: the sheet's whole top edge is moving then, and the ease-out's first frame alone carried it
+    // 40px on a tall phone, which reads as a jump (round 2's review measured the cut it replaces at up to 305px).
+    let frameT = 0, pinned = [];
+    const MOVE = { ms: 420, ease: "var(--wps-ease-out)" }, GLIDE = { ms: 460, ease: "cubic-bezier(0.42, 0, 0.58, 1)" };
+    function unpin() {
       clearTimeout(frameT);
-      Object.assign(frame.style, { transition: "none", flex: "none", height: `${h0}px` });
-      void frame.offsetHeight;
-      Object.assign(frame.style, { transition: "height 420ms var(--wps-ease-out)", height: `${h1}px` });
-      frameT = setTimeout(() => { Object.assign(frame.style, { transition: "", flex: "", height: "" }); fit(); }, 460);
+      for (const n of pinned) for (const k of ["transition", "flex", "height", "maxHeight"]) n.style[k] = "";
+      pinned = [];
     }
+    // the sheet keeps the shell's own transitions (its rise and its fall) beside the height's
+    function addHeightTransition(n, m) {
+      const cs = getComputedStyle(n), prop = cs.transitionProperty;
+      if (!prop || prop === "none") { n.style.transition = `height ${m.ms}ms ${m.ease}`; return; }
+      n.style.transitionProperty = `${prop}, height`;
+      n.style.transitionDuration = `${cs.transitionDuration}, ${m.ms}ms`;
+      n.style.transitionTimingFunction = `${cs.transitionTimingFunction}, ${m.ease}`;
+      n.style.transitionDelay = `${cs.transitionDelay}, 0s`;
+    }
+    function animateFrame(change, pin = frame) {
+      const dlg = ctx.dialog, h0 = pin.offsetHeight, d0 = dlg.offsetHeight;
+      unpin();
+      change();
+      const h1 = pin.offsetHeight, d1 = dlg.offsetHeight;
+      const moveH = Math.abs(h1 - h0) >= 1, moveD = Math.abs(d1 - d0) >= 1;
+      if (ctx.reducedMotion || kbUp() || (!moveH && !moveD)) { fit(); return; }
+      const m = moveD ? GLIDE : MOVE;
+      if (moveH) { Object.assign(pin.style, { transition: "none", flex: "none", height: `${h0}px` }); pinned.push(pin); }
+      if (moveD) { Object.assign(dlg.style, { height: `${d0}px`, maxHeight: "none" }); pinned.push(dlg); }
+      void dlg.offsetHeight;
+      if (moveH) Object.assign(pin.style, { transition: `height ${m.ms}ms ${m.ease}`, height: `${h1}px` });
+      if (moveD) { addHeightTransition(dlg, m); dlg.style.height = `${d1}px`; }
+      frameT = setTimeout(() => { unpin(); fit(); }, m.ms + 40);
+    }
+    // the result's strip, where it is wider than the sheet, fades at the edge that has more pieces beyond it
+    function stripEdges() {
+      if (!onPhone) return;
+      const more = thumbsEl.parentNode === strip && thumbsEl.scrollWidth > thumbsEl.clientWidth + 1, sl = thumbsEl.scrollLeft;
+      thumbsEl.classList.toggle("has-more-start", more && sl > 1);
+      thumbsEl.classList.toggle("has-more-end", more && sl + thumbsEl.clientWidth < thumbsEl.scrollWidth - 1);
+    }
+    if (onPhone) thumbsEl.addEventListener("scroll", stripEdges, { passive: true });
+    // the tabs, the tool and the button fade out before the result comes in (spec 4.10, step 1)
+    let leaving = 0;
     function toResult() {
+      if (leaving) return;
+      if (onPhone && !ctx.reducedMotion && !layout.classList.contains("is-result")) {
+        editPanel.classList.remove("is-fading-in");
+        editPanel.classList.add("is-fading-out");
+        leaving = setTimeout(() => { leaving = 0; editPanel.classList.remove("is-fading-out"); enterResult(); }, 160);
+        return;
+      }
+      enterResult();
+    }
+    function enterResult() {
       ctx.track("result");
       resultTitle.textContent = t(copy.resultTitle, { name: choice.logo && !choice.name.trim() ? copy.defaultName : displayName() });
       if (onPhone) {
         hideCoach();
         if (layout.classList.contains("is-zoomed")) toggleZoom();
+        // the result is as tall as the edit sheet it replaces (never taller than the view), so on a tall phone the
+        // sheet's top stays where it is, there and back
+        if (kbUp()) layout.style.removeProperty("--ls-hold"); else layout.style.setProperty("--ls-hold", `${layout.offsetHeight}px`);
         animateFrame(() => {
           layout.classList.add("is-result");
           strip.appendChild(thumbsEl);
@@ -1010,6 +1060,7 @@
         resultPanel.scrollTop = 0;
         fit();
         thumbsEl.querySelector('[aria-pressed="true"]').scrollIntoView({ inline: "nearest", block: "nearest" });
+        stripEdges();
         sweep();
         return;
       }
@@ -1034,9 +1085,11 @@
         animateFrame(() => {
           layout.classList.remove("is-result");
           toolEls.box.prepend(thumbsEl);
+          stripEdges();
           resultPanel.hidden = true; editPanel.hidden = false;
           setTool("brand");
         });
+        if (!ctx.reducedMotion) { editPanel.classList.remove("is-fading-in"); void editPanel.offsetWidth; editPanel.classList.add("is-fading-in"); }
         fit();
         // the visitor asked to change the name: the field takes focus, which on a phone brings the keyboard
         nameInput.focus();
@@ -1058,7 +1111,7 @@
           el("button", { type: "button", class: "wps-btn wps-btn-ghost", onclick: () => ctx.close("done"), text: ctx.shell.close }),
         );
       };
-      if (onPhone) animateFrame(finish); else finish();
+      if (onPhone) animateFrame(finish, stageBox); else finish();
       success.focus({ preventScroll: onPhone });
       sweep();
     }
@@ -1099,7 +1152,7 @@
       initialFocus: ctx.device === "desktop" ? nameInput : null,
       destroy() {
         cancelAnimationFrame(raf); raf = 0; clearTimeout(typingTimer); clearTimeout(settle); clearTimeout(stampTimer); clearTimeout(sweepTimer); clearTimeout(tileSettle);
-        clearTimeout(coachT1); clearTimeout(coachT2); clearTimeout(frameT); if (mo) mo.disconnect();
+        clearTimeout(coachT1); clearTimeout(coachT2); clearTimeout(leaving); unpin(); if (mo) mo.disconnect();
         if (ro) ro.disconnect(); else window.removeEventListener("resize", onResize);
       },
     };

@@ -419,6 +419,9 @@
 :where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-name { animation: wps-rise 560ms var(--wps-ease-out) 440ms both; }
 :where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-upload-row { animation: wps-rise 560ms var(--wps-ease-out) 510ms both; }
 :where(.wps:not([data-device="desktop"])) .ls.is-intro .ls-cta { animation: wps-rise 560ms var(--wps-ease-out) 580ms both; }
+/* to the result the tabs, the tool and the button fade out first; back from it they fade in */
+:where(.wps:not([data-device="desktop"])) .ls-edit.is-fading-out { opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
+:where(.wps:not([data-device="desktop"])) .ls-edit.is-fading-in { animation: ls-fade-in 240ms ease both; }
 
 /* ---- typing: the field focused and the keyboard really up (the shell's is-kb). The sheet is the visual viewport,
    the panel is the label and the field, and the stage takes the rest at the same scale ---- */
@@ -450,7 +453,9 @@
 :where(.wps:not([data-device="desktop"])).is-kb .ls.is-typing .ls-frame::after { height: min(48px, 14%); }
 
 /* ---- the result: the chosen piece large, the seven in a strip, the ask on a paper card ---- */
-:where(.wps:not([data-device="desktop"])) .ls.is-result { flex: none; height: var(--ls-sheet); }
+/* as tall as the edit sheet it replaces (--ls-hold, measured as the result opens), never taller than the view: on a
+   tall phone the sheet's top does not move on the way to the result and back */
+:where(.wps:not([data-device="desktop"])) .ls.is-result { flex: none; height: min(var(--ls-sheet), var(--ls-hold, var(--ls-sheet))); }
 :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-stage { flex: none; min-height: 0; }
 :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame { flex: none; height: clamp(180px, calc(0.4 * var(--ls-sheet)), calc(0.75 * var(--ls-w))); }
 :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-illustration, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-under, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-coach, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-frame .ls-hint { opacity: 0; visibility: hidden; }
@@ -464,6 +469,10 @@
   animation: ls-strip-in 420ms var(--wps-ease-out) backwards; animation-delay: calc(140ms + var(--i, 0) * 40ms);
 }
 :where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumb[aria-pressed="true"] { transform: none; box-shadow: none; }
+/* a strip wider than the sheet (the narrowest phones) fades out at the edge that has more, so it reads as more */
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs.has-more-end { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs.has-more-start { -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px); mask-image: linear-gradient(90deg, transparent, #000 28px); }
+:where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs.has-more-start.has-more-end { -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
 @keyframes ls-strip-in { from { opacity: 0; transform: translateY(10px); } }
 :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-side { flex: 1 1 auto; min-height: 0; margin-top: -12px; position: relative; z-index: 2; background: none; }
 :where(.wps:not([data-device="desktop"])) .ls-result {
@@ -506,13 +515,19 @@
 :where(.wps:not([data-device="desktop"])).is-kb[data-concept="logo-studio"] .wps-dialog:has(.ls.is-result:not(.is-success)) .wps-close {
   background: var(--wps-paper); color: var(--wps-ink); box-shadow: 0 0 0 1px rgba(23, 22, 20, 0.18); backdrop-filter: none; -webkit-backdrop-filter: none;
 }
-/* the thank-you: the piece grows back to the square, or as tall as fits, and the card shrinks to its words */
+/* the thank-you: the piece grows back to the square, or as tall as fits, and the card shrinks to its words. The sheet
+   glides down to its new height (animateFrame); meanwhile the strip fades out over the photo's foot as the photo grows
+   into its place, and the card fills whatever the sheet still has under the stage, so no studio shows below it */
 :where(.wps:not([data-device="desktop"])) .ls.is-success { flex: 1 1 auto; height: auto; }
 :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-stage { flex: 0 1 var(--ls-w); min-height: 0; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-stage-inner { position: relative; }
 :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-frame { flex: 1 1 auto; height: auto; }
-:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-strip { display: none; }
-:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-side { flex: 0 0.0001 auto; }
-:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-result { flex: none; overflow: visible; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-strip {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+}
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-side { flex: 1 0.0001 auto; }
+:where(.wps:not([data-device="desktop"])) .ls.is-success .ls-result { flex: 1 0 auto; overflow: visible; }
 :where(.wps:not([data-device="desktop"])) .ls-success { padding: 0; }
 :where(.wps:not([data-device="desktop"])) .ls-success-title { font-size: 30px; line-height: 32px; }
 :where(.wps:not([data-device="desktop"])) .ls-success .wps-lede { margin: 0 0 16px; }
