@@ -154,11 +154,14 @@ function measureLine(text, size) {
   return { placed, width: x, inkL, inkR };
 }
 
-function layout(text, vbH) {
+// fit: a lid may let a short name grow past the Logo studio's limits (grow: times the type size, oneLine: share of the
+// print area's height) - a scene the size of a building wants the name as large as a billboard's
+function layout(text, vbH, fit0 = {}) {
+  const grow = fit0.grow || 1.3, oneLine = fit0.oneLine || 0.3;
   const fit = (lines) => {
     const m = lines.map((l) => measureLine(l, TYPE.size));
     const w = Math.max(...m.map((x) => x.width)), h = TYPE.size * TYPE.lineBox * (lines.length === 1 ? 1 : 1.75);
-    let size = Math.max(24, TYPE.size * Math.min(1.3, (VBW * 0.94) / w, (vbH * (lines.length === 1 ? 0.3 : 0.48)) / h));
+    let size = Math.max(24, TYPE.size * Math.min(grow, (VBW * 0.94) / w, (vbH * (lines.length === 1 ? oneLine : 0.48)) / h));
     const check = Math.max(...lines.map((l) => measureLine(l, size).width));
     if (check > VBW * 0.97) size = Math.max(24, (size * VBW * 0.94) / check);
     return { lines, size };
@@ -257,7 +260,7 @@ function renderNamePrint({ name, scene: sceneId = "seville", foil: foilId, width
 
   let fitted = null;
   if (text) {
-    const lay = layout(text, vbH);
+    const lay = layout(text, vbH, L.fit);
     fitted = lay;
     const s = Math.min(2.2, Math.max(0.8, pxPerUnit * 2)); // raster pixels per print unit: about twice the photo's
     const k = (lay.size / a.em) * s; // atlas pixels -> raster pixels
