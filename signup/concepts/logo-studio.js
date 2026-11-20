@@ -991,35 +991,30 @@
     //   The stage alone moves on the house's ease-out. When the sheet moves too, both take a gentler in-and-out curve
     // over a little longer: the sheet's whole top edge is moving then, and the ease-out's first frame alone carried it
     // 40px on a tall phone, which reads as a jump (round 2's review measured the cut it replaces at up to 305px).
-    let frameT = 0, pinned = [];
+    // The sheet is the shell's: its height glides as a Web Animation, which leaves the shell's own styles and
+    // transitions (its rise and its fall) untouched, and leaves nothing behind when it ends or is cancelled.
+    let frameT = 0, pinned = [], sheetGlide = null;
     const MOVE = { ms: 420, ease: "var(--wps-ease-out)" }, GLIDE = { ms: 460, ease: "cubic-bezier(0.42, 0, 0.58, 1)" };
     function unpin() {
       clearTimeout(frameT);
-      for (const n of pinned) for (const k of ["transition", "flex", "height", "maxHeight"]) n.style[k] = "";
+      for (const n of pinned) for (const k of ["transition", "flex", "height"]) n.style[k] = "";
       pinned = [];
-    }
-    // the sheet keeps the shell's own transitions (its rise and its fall) beside the height's
-    function addHeightTransition(n, m) {
-      const cs = getComputedStyle(n), prop = cs.transitionProperty;
-      if (!prop || prop === "none") { n.style.transition = `height ${m.ms}ms ${m.ease}`; return; }
-      n.style.transitionProperty = `${prop}, height`;
-      n.style.transitionDuration = `${cs.transitionDuration}, ${m.ms}ms`;
-      n.style.transitionTimingFunction = `${cs.transitionTimingFunction}, ${m.ease}`;
-      n.style.transitionDelay = `${cs.transitionDelay}, 0s`;
+      if (sheetGlide) { sheetGlide.cancel(); sheetGlide = null; }
     }
     function animateFrame(change, pin = frame) {
       const dlg = ctx.dialog, h0 = pin.offsetHeight, d0 = dlg.offsetHeight;
       unpin();
       change();
       const h1 = pin.offsetHeight, d1 = dlg.offsetHeight;
-      const moveH = Math.abs(h1 - h0) >= 1, moveD = Math.abs(d1 - d0) >= 1;
+      const moveH = Math.abs(h1 - h0) >= 1, moveD = Math.abs(d1 - d0) >= 1 && typeof dlg.animate === "function";
       if (ctx.reducedMotion || kbUp() || (!moveH && !moveD)) { fit(); return; }
       const m = moveD ? GLIDE : MOVE;
-      if (moveH) { Object.assign(pin.style, { transition: "none", flex: "none", height: `${h0}px` }); pinned.push(pin); }
-      if (moveD) { Object.assign(dlg.style, { height: `${d0}px`, maxHeight: "none" }); pinned.push(dlg); }
-      void dlg.offsetHeight;
-      if (moveH) Object.assign(pin.style, { transition: `height ${m.ms}ms ${m.ease}`, height: `${h1}px` });
-      if (moveD) { addHeightTransition(dlg, m); dlg.style.height = `${d1}px`; }
+      if (moveD) sheetGlide = dlg.animate([{ height: `${d0}px` }, { height: `${d1}px` }], { duration: m.ms, easing: m.ease });
+      if (moveH) {
+        Object.assign(pin.style, { transition: "none", flex: "none", height: `${h0}px` }); pinned.push(pin);
+        void pin.offsetHeight;
+        Object.assign(pin.style, { transition: `height ${m.ms}ms ${m.ease}`, height: `${h1}px` });
+      }
       frameT = setTimeout(() => { unpin(); fit(); }, m.ms + 40);
     }
     // the result's strip, where it is wider than the sheet, fades at the edge that has more pieces beyond it
