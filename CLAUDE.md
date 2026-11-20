@@ -1551,6 +1551,10 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   customer prints dropped there), so the sheet glides up at the result (taller than the edit sheet in most
   languages, `min-height` = `--ls-hold`) and back; the thank-you returns within the edit sheet. These rules are held
   to portrait by `@media (min-height: 501px), (max-aspect-ratio: 3/2)`; a phone on its side keeps its own layout.
+  **The light stands still on a phone or tablet** (`still`, `STILL_LIGHT`; the user: "vi skal jo ikke have noget hvor
+  mobil cpu er et issue"): every move of the light re-runs the foil's lighting filter, so the drifting light, the
+  sweep, the press flash and the light under the finger are desktop-only. Galaxy S8 at 1/4 CPU: 0% main thread at
+  rest (was 4%), a piece tap paints in 21-32ms; the still print measures as bright as the moving one averaged.
   The thank-you keeps the result's height (`--ls-ty`, set in `showSuccess`). `animateFrame` locks the studio at its
   new height while the pinned photo moves - without it, the photo at its old height plus the card at its new one
   swelled the sheet 64px for a frame on a tall Android. **With the keyboard up (`is-kb`) every height cap is off**
