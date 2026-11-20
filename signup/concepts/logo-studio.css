@@ -557,6 +557,12 @@
 @supports (height: 100dvh) { :where(.wps[data-device="tablet"]) { --ls-sheet: min(calc(100dvh - 48px), 860px); } }
 :where(.wps[data-device="tablet"]) .ls { --ls-w: min(480px, calc(100vw - 48px)); }
 :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { width: min(480px, calc(100vw - 48px)); margin-inline: auto; }
+/* a card narrower than the view floats clear of its foot, every corner round. Standing on the foot it read as a sheet
+   cut off by the browser's toolbar, as if there were more to scroll to (the user's phone, 2026-11-20, which reports a
+   tablet's width). Closed, it drops its own height and the air under it out of the view. */
+@media (max-width: 759px) {
+  :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); border-radius: var(--wps-radius); transform: translateY(calc(100% + 64px)); }
+}
 @media (min-width: 760px) {
   :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { margin-inline: 0; border-radius: var(--wps-radius); }
 }
@@ -566,6 +572,10 @@
   :where(.wps:not([data-device="desktop"])) { --ls-sheet: calc(100vh - 8px); }
   @supports (height: 100dvh) { :where(.wps:not([data-device="desktop"])) { --ls-sheet: calc(100dvh - 8px); } }
   :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { width: min(calc(100vw - 16px), 900px); height: var(--ls-sheet); max-height: none; margin-inline: auto; }
+  /* narrower than the view, so it floats like the tablet card: the 8px it leaves split above and below */
+  @media (max-width: 759px) {
+    :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { bottom: 4px; border-radius: var(--wps-radius); transform: translateY(calc(100% + 32px)); }
+  }
   :where(.wps:not([data-device="desktop"])) .ls { flex-direction: row; }
   :where(.wps:not([data-device="desktop"])) .ls-stage, :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-stage, :where(.wps:not([data-device="desktop"])) .ls.is-success .ls-stage { flex: none; width: var(--ls-sheet); min-height: 0; }
   :where(.wps:not([data-device="desktop"])) .ls-side { flex: 1 1 auto; min-width: 0; }

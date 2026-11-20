@@ -30,7 +30,7 @@
     foilLabel: "Foil",
     finish: { metallic: "Metallic", matt: "Matt", gloss: "Gloss" },
     colour: {
-      gold: "Gold", silver: "Silver", copper: "Copper", red: "Red", orange: "Orange", pink: "Pink", purple: "Purple", blue: "Blue", mint: "Mint",
+      gold: "Gold", silver: "Silver", copper: "Copper", red: "Red", winered: "Wine red", orange: "Orange", pink: "Pink", purple: "Purple", blue: "Blue", mint: "Mint",
       black: "Black", white: "White", darkblue: "Dark blue", green: "Green", oldrose: "Old rose", yellow: "Yellow", clear: "Transparent", grey: "Grey", brown: "Brown",
     },
     foilName: "{finish} {colour}",

@@ -30,7 +30,7 @@
     foilLabel: "Folie",
     finish: { metallic: "Metallisk", matt: "Mat", gloss: "Blank" },
     colour: {
-      gold: "Guld", silver: "Sølv", copper: "Kobber", red: "Rød", orange: "Orange", pink: "Pink", purple: "Lilla", blue: "Blå", mint: "Mint",
+      gold: "Guld", silver: "Sølv", copper: "Kobber", red: "Rød", winered: "Vinrød", orange: "Orange", pink: "Pink", purple: "Lilla", blue: "Blå", mint: "Mint",
       black: "Sort", white: "Hvid", darkblue: "Mørkeblå", green: "Grøn", oldrose: "Gammelrosa", yellow: "Gul", clear: "Gennemsigtig", grey: "Grå", brown: "Brun",
     },
     foilName: "{finish} {colour}",

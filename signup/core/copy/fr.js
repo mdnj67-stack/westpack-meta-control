@@ -7,7 +7,8 @@
     "needsNativeReview": true,
     "proofread": "2026-10-29 gpt-5.6-sol, 7 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js and not proofread",
-    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)"
+    "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude, not proofread)",
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude, not proofread)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -58,6 +59,7 @@
       "silver": "Argent",
       "copper": "Cuivre",
       "red": "Rouge",
+      "winered": "Rouge bordeaux",
       "orange": "Orange",
       "pink": "Rose",
       "purple": "Violet",

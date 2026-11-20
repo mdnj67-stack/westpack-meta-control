@@ -10,7 +10,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 
 | Oplevelse | Fil | Idé |
 |---|---|---|
-| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 25 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
+| Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 26 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
 | Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
 
@@ -148,9 +148,11 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
   i hankene (Content Library, "XXL Luxposer", XXL_Gaveposer_New-07, kundens guldtryk fjernet). Posens front er målt
   som lågene; trykfladen er XXL-posens største logo, 150×150 mm på en 450×350 mm front. Swipe eller thumbnails skifter;
   hvert stykke viser sin egen naturlige folie, til den besøgende vælger en.
-- **Folierne er de 25 fra Westpacks logomodul** (2026-10-30): metallisk guld, sølv, kobber, rød, orange, pink, lilla,
-  blå og mint; mat sort, hvid, mørkeblå, blå, grøn, gammelrosa, orange, rød, lilla, gul og gennemsigtig; blank sort,
-  grå, brun, pink og mint. Metallisk tegnes som metal, der fanger lyset; mat som flad farve med et blødt skær, der
+- **Folierne er de 26 fra Westpacks logomodul, i modulets egne farver** (2026-10-30; farverne læst ud af modulet på
+  produktsiderne 2026-11-20, hvor mat vinrød kom med): metallisk guld, sølv, kobber, rød, orange, pink, lilla,
+  blå og mint; mat sort, hvid, mørkeblå, blå, grøn, gammelrosa, orange, rød, vinrød, lilla, gul og gennemsigtig; blank
+  sort, grå, brun, pink og mint. Mat og blank har modulets farvekode; metallisk har farven fra modulets foliefoto, som er
+  det, kunden vælger ud fra i modulet (modulets farvekode for metallerne ligger langt fra den rigtige folie). Metallisk tegnes som metal, der fanger lyset; mat som flad farve med et blødt skær, der
   aldrig glimter; blank som et mørkt spejl med et skarpt glimt; gennemsigtig som en klar lak – kun præget, en svag
   mørkning og glimtet. Vælgeren viser én finish ad gangen (Metallisk · Mat · Blank) og navngiver den valgte folie med
   ord; skifter man finish, beholdes farven, hvor finishen har den (sort, mint, pink). Overskriften siger "folie", ikke

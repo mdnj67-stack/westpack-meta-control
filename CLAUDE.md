@@ -1529,6 +1529,12 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   `visualViewport` while a field has focus - **never cleared on blur**, or a tap on the button would move it from
   under the finger. Not yet checked on a real iPhone or Android (keyboard path, Safari's 3D). `tools/signup/mobile-walk.js`
   shoots the whole phone flow on the real store (`--local`, `--viewport=412x915`, `--keyboard=390x290`, `--engine=webkit`).
+  **A phone can report a tablet's width**: the user's Samsung (Samsung Internet) gets the 480px `tablet` card
+  (`deviceClass`: 640+ wide with a coarse pointer). Narrower than the view and standing on its foot, it read as cut off by
+  the browser's toolbar, so a card narrower than the view now floats (16px air under it, every corner round; landscape
+  4px), checked in qa.js section D. The same phone ran Samsung Internet's forced dark mode, which turned the gold button
+  khaki and would recolour the foil: `.wps` carries `color-scheme: only light` (reproduced in Chromium with
+  `--enable-features=WebContentsForceDark` and `--blink-settings=forceDarkModeEnabled=true`; the opt-out held there).
 - **Before CZ: not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
   the master switch: off, the store tag does nothing except answer `?wps=preview` / `?wps=<concept>`, which opens
   the experience at once in test mode (test list only) - so the tag can go in before launch and be checked on the
@@ -1630,8 +1636,16 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   front is measured like a lid: aspect 1.2857 from 450 x 350 mm (the perspective says 1.267), `principal` set in
   lid-geometry.json because the original is portrait, print area the XXL bag's maximum 150 x 150 mm. Exposure from
   that removed print: metal 1.3 (cores p90 247 real, 243 rendered), pigment 0.95. `FOIL_TABLE` in logo-studio.js holds
-  metallic 9 / matt 11 / gloss 5 exactly as the module lists them; ids are `<finish>-<colour>`, which is what
-  `wp_logo_finish` now records. Metallic keeps the calibrated metal; gloss is banded mirror stops with a hard glint;
+  metallic 9 / gloss 5 / matt 12 (incl. wine red, added 2026-11-20); ids are `<finish>-<colour>`, which is what
+  `wp_logo_finish` now records. **The colours come from the logo module itself** (2026-11-20, the user: "de tryk farver
+  vi viser skal jo være det korrekte som findes i logomodulet"): every product page carries `colorOptionsData`
+  (HTML-entity encoded in a data attribute; the same 27 options in all 18 stores, labels in each store's language),
+  each option a `hex_color` and a swatch image (`src`). The module's picker shows the swatch image for foil (the hex
+  only for digital print and its own product preview). Matt swatches are the hex; a metal's swatch is a photo of the
+  real foil and its hex is far off it (metallic mint is cyan in hex, teal in the photo). So matt and gloss are drawn
+  in the hex, a metal from its swatch photo's p10/p50/p90 tones lifted to the measured gold's light levels, which keeps
+  the lid exposures valid. The colour names in the 17 languages are ours (they agree in gender); wine red uses the
+  module's own word. Re-read `colorOptionsData` if the module changes. Metallic keeps the calibrated metal; gloss is banded mirror stops with a hard glint;
   matt is flat pigment with a soft sheen that never glints; the transparent foil is a glaze (edges, a faint darkening,
   the glint) with no colour. The picker shows one finish at a time and keeps the colour across finishes where it can.
   Headline and teaser say foil, not gold (a test checks every language); copy that said box or lid now says

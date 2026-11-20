@@ -289,16 +289,33 @@ test("the app's Signup page decides whether the stores run the Signup Lab, the f
   assert.match(goLive, /const apply = process\.argv\.includes\("--apply"\);/);
 });
 
-test("logo studio offers the 25 foils of Westpack's logo-print module, named in every language, and no deboss", () => {
-  // the module's three finishes and their colours (the user's screenshot of it, 2026-10-30)
+test("logo studio offers the 26 foils of Westpack's logo module in the module's own colours, named in every language, and no deboss", () => {
+  // the logo module on the product pages (colorOptionsData, the same in all 18 stores, read 2026-11-20): its three
+  // finishes in its order; matt and gloss in each foil's hex_color, a metal in the middle tone of its swatch photo
+  // (the module's picker shows the photo, and a metal's hex is far off it). "Debossing without foil" is the one left
+  // out (deboss removed 2026-10-29); "Debossing with foil" is the transparent foil.
   const want = {
-    metallic: ["blue", "copper", "gold", "mint", "orange", "pink", "purple", "red", "silver"],
-    matt: ["black", "blue", "darkblue", "green", "oldrose", "orange", "purple", "red", "white", "yellow", "clear"],
-    gloss: ["black", "brown", "grey", "mint", "pink"],
+    metallic: { gold: "#c29d2a", silver: "#c0c0c0", copper: "#b3744b", red: "#ac0101", orange: "#c17403", pink: "#bf39b1", purple: "#9e01ac", blue: "#016fc1", mint: "#03aa8d" },
+    gloss: { black: "#161616", grey: "#969595", brown: "#765341", pink: "#D88CBA", mint: "#33D3B9" },
+    matt: { black: "#141414", white: "#FDFDFD", darkblue: "#284467", blue: "#3C90C3", green: "#3D8F3B", oldrose: "#C09B8C", orange: "#F09031", red: "#F52516", winered: "#8C3039", purple: "#8C1CC6", yellow: "#F5E316", clear: null },
   };
   assert.deepEqual(Object.keys(FOIL_TABLE), Object.keys(want));
-  for (const [finish, colours] of Object.entries(want)) assert.deepEqual(Object.keys(FOIL_TABLE[finish]).sort(), colours.slice().sort(), finish);
-  const colourKeys = [...new Set(Object.values(want).flat())].sort();
+  for (const [finish, colours] of Object.entries(want)) {
+    assert.deepEqual(Object.keys(FOIL_TABLE[finish]).sort(), Object.keys(colours).sort(), finish);
+    for (const [colour, hexColor] of Object.entries(colours)) {
+      const f = FOIL_TABLE[finish][colour];
+      if (hexColor === null) { assert.equal(f.clear, true, `${finish}-${colour} is the clear glaze`); continue; }
+      assert.equal(f.base, hexColor, `${finish}-${colour} is the module's colour`);
+      // a matt foil is the module's colour flat; a metal or gloss foil runs its light levels through that colour
+      if (finish === "matt") assert.equal(f.color, hexColor);
+      else assert.ok(f.stops.length === 8 && (finish !== "gloss" || f.stops[1].toLowerCase() === hexColor.toLowerCase()), `${finish}-${colour} stops`);
+    }
+  }
+  // the module's gold renders as bright as the gold measured on Westpack's demo prints, which the lid exposures are
+  // calibrated against: its shadow, body and highlight
+  const lum = (c) => { const [r, g, b] = [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  ["#4a3214", "#9a7238", "#e6c27a"].forEach((m, i) => assert.ok(Math.abs(lum(FOIL_TABLE.metallic.gold.stops[i]) - lum(m)) < 3, `gold stop ${i}: ${FOIL_TABLE.metallic.gold.stops[i]} against ${m}`));
+  const colourKeys = [...new Set(Object.values(want).flatMap((c) => Object.keys(c)))].sort();
   for (const lang of fs.readdirSync(COPY_DIR).map((f) => f.replace(/\.js$/, ""))) {
     const c = loadCopy(lang)["logo-studio"];
     assert.deepEqual(Object.keys(c.finish).sort(), Object.keys(want).sort(), `${lang} names every finish`);
@@ -309,6 +326,9 @@ test("logo studio offers the 25 foils of Westpack's logo-print module, named in 
     for (const k of ["title", "peek"]) assert.ok(!c[k].toLocaleLowerCase().includes(gold.slice(0, 4)), `${lang} ${k} names gold: "${c[k]}"`);
   }
   assert.doesNotMatch(LS_SRC, /deboss/);
+  // a browser's forced dark mode must not recolour the foil or the buttons (Samsung Internet did, on the user's phone)
+  const shellCss = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.css"), "utf8");
+  assert.match(shellCss.slice(shellCss.indexOf(".wps {"), shellCss.indexOf("}", shellCss.indexOf(".wps {"))), /color-scheme: only light;/);
 });
 
 // the phone's stage is a window onto the full-width square scene, placed so the print sits in its middle where the

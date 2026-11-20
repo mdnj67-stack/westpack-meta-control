@@ -198,7 +198,7 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     check(`${label}: the picker opens on the piece's own finish and shows only its colours`, s.finish === "metallic" && s.shown === 9 && s.foil === "metallic-gold" && s.name === "Metallisk guld", JSON.stringify(s));
     await host.locator('.ls-finish[data-finish="matt"]').click(); await p.waitForTimeout(300);
     s = await picker();
-    check(`${label}: matt has eleven colours and gold falls back to its first`, s.shown === 11 && s.foil === "matt-black" && s.name === "Mat sort", JSON.stringify(s));
+    check(`${label}: matt has twelve colours (the module's wine red among them) and gold falls back to its first`, s.shown === 12 && s.foil === "matt-black" && s.name === "Mat sort", JSON.stringify(s));
     await host.locator('.ls-finish[data-finish="gloss"]').click(); await p.waitForTimeout(300);
     s = await picker();
     check(`${label}: black stays black from matt to gloss`, s.shown === 5 && s.foil === "gloss-black" && s.name === "Blank sort", JSON.stringify(s));
@@ -748,6 +748,11 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     let v = await fitsView();
     if (!v.inView) out.push("dialog outside the view");
     if (v.x.length) out.push(`overflow ${v.x}`);
+    // a card narrower than the view floats: air under it and round bottom corners. Standing on the view's foot it read
+    // as a sheet cut off by the browser's toolbar, as if there were more to scroll to (the user's phone, 2026-11-20,
+    // which reports a tablet's width)
+    const card = await p.evaluate(() => { const d = window.__ls.q(".wps-dialog"), r = d.getBoundingClientRect(); return { narrower: r.width < innerWidth - 1, gap: Math.round(innerHeight - r.bottom), radius: parseFloat(getComputedStyle(d).borderBottomLeftRadius) }; });
+    if (card.narrower && !(card.gap >= 4 && card.radius >= 8)) out.push(`a card narrower than the view stands on its foot: ${JSON.stringify(card)}`);
     // nothing sits on the close button here either (a narrow landscape panel once slid its last tab under it)
     const over = await p.evaluate(() => window.__ls.overClose());
     if (over.length) out.push(`on the close button: ${over.join(", ")}`);

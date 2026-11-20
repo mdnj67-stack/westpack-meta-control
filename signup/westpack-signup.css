@@ -5,6 +5,10 @@
    display: none, so Logo studio's thank-you once sat under the email field it had just hidden. */
 [hidden] { display: none !important; }
 .wps {
+  /* a browser's forced dark mode (Samsung Internet's, Chrome's) recolours a page it thinks is light: it turned the gold
+     button khaki with white text, and would recolour the foil, which must show the logo module's own colours. "only"
+     keeps it out of everything the Signup Lab draws; the store around it stays as the browser makes it */
+  color-scheme: only light;
   --wps-green: #34453F;
   --wps-green-deep: #22302B;
   --wps-green-soft: #E4EAE6;

@@ -31,52 +31,75 @@
   // lids:end
   const BOX_ORDER = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
 
-  // ---- the foils: the 25 of Westpack's logo-print module, by finish ----
+  // ---- the foils: the 26 of Westpack's logo module, by finish, in the module's own colours ----
+  // The logo module on the product pages (colorOptionsData, the same in all 18 stores, read 2026-11-20) gives every
+  // foil a swatch image, which is what its picker shows and a customer chooses from, and a hex_color, which its own
+  // preview paints. Matt and gloss are drawn in that hex: a matt swatch is the hex itself, a gloss swatch is mostly
+  // reflection around it. A metal's swatch is a photo of the real foil and its hex is far off it (mint cyan for a teal
+  // foil, red bright for a deep one), so a metal is drawn from its swatch photo. The comments name the module's code.
+  // Its "Debossing without foil" is left out: blind print (Blindpræg) was taken out at the user's request (2026-10-29).
   const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
   const toHex = (rgb) => `#${rgb.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join("")}`;
   const mix = (a, b, k) => toHex(hex(a).map((v, i) => v + (hex(b)[i] - v) * k));
+  // a colour times k; light past a channel's top spills into white, as it does on a bright metal
+  const scale = (c, k) => {
+    const v = hex(c).map((x) => x * k), over = Math.min(1, Math.max(0, Math.max(...v) - 255) / 255);
+    return toHex(v.map((x) => Math.min(255, x) + (255 - Math.min(255, x)) * over));
+  };
   // a metal's eight stops from its shadow, body and highlight, in the order the measured gold runs: dark, body,
   // light, and the same three again at other depths, so the gradient crosses the print as bands of reflection
   const metalStops = (dark, body, light) => [dark, body, light, mix(body, light, 0.42), mix(dark, body, 0.45), mix(body, light, 0.72), mix(dark, body, 0.78), mix(body, light, 0.86)];
+  // A metal is its swatch photo's dark, middle and light tones (10th, 50th and 90th percentile by luminance), each
+  // brought to the light level the gold measured on Westpack's demo prints has there (#4a3214, #9a7238, #e6c27a; the
+  // lid exposures are calibrated against that gold) by the factor that takes the gold swatch's tone to it. So gold
+  // renders exactly as bright as it was calibrated, and every other metal stands to it as the swatches do.
+  const METAL_LIGHT = [0.471, 0.756, 0.949];
+  const metal = (p10, p50, p90) => {
+    const [d, b, l] = [p10, p50, p90].map((c, i) => scale(c, METAL_LIGHT[i]));
+    return { base: p50, light: mix(l, "#ffffff", 0.5), stops: metalStops(d, b, l) };
+  };
   // a gloss foil is a dark mirror: deep body, hard bright streaks
   const glossStops = (deep, body, streak) => [deep, body, streak, mix(deep, body, 0.3), deep, mix(body, streak, 0.6), mix(deep, body, 0.5), streak];
+  const gloss = (c) => ({ base: c, light: mix(c, "#ffffff", 0.85), stops: glossStops(scale(c, 0.45), c, mix(c, "#ffffff", 0.8)) });
+  const matt = (c, spec) => ({ base: c, color: c, spec: spec || 0.16 });
   // Metallic is drawn as metal: a gradient that catches the light. Matt is flat pigment with only a soft sheen, so
   // the light moves over it without a glint. Gloss is a dark mirror with a sharp glint. The transparent foil is a
-  // clear glaze: a slight darkening, the pressed edges and the highlight, nothing else. The order in each finish
-  // puts the colours most often printed first.
+  // clear glaze: a slight darkening, the pressed edges and the highlight, nothing else. The finishes run in the
+  // module's order; inside each, the colours most often printed come first.
   const FOIL_TABLE = {
     metallic: {
-      // gold as saturated as real gold foil photographs: measured on Westpack's demo prints at a median of (131,103,69)
-      gold: { light: "#ffe2a8", stops: ["#4a3214", "#9a7238", "#e6c27a", "#b58a4a", "#6e4f22", "#d9b46c", "#8f6a33", "#e9c983"] },
-      silver: { light: "#ffffff", stops: ["#5a5e63", "#adb2b8", "#f8f9fa", "#989da3", "#6d7176", "#e5e8eb", "#888d93", "#f4f5f7"] },
-      copper: { light: "#fff0e6", stops: ["#683626", "#b8745f", "#f7cfb9", "#a96a53", "#7a4231", "#eab69c", "#91533d", "#f3c8af"] },
-      red: { light: "#ffd6d6", stops: metalStops("#4e050c", "#b5142a", "#ff8f95") },
-      orange: { light: "#ffe8c2", stops: metalStops("#6b3604", "#d9820f", "#ffd387") },
-      pink: { light: "#ffe0f8", stops: metalStops("#5c0f53", "#c73fb4", "#ffb4f0") },
-      purple: { light: "#f0dcff", stops: metalStops("#320848", "#7f22a6", "#d6a2f2") },
-      blue: { light: "#dcefff", stops: metalStops("#082f61", "#1d78cc", "#9ad6ff") },
-      mint: { light: "#dcfff8", stops: metalStops("#044a40", "#14a891", "#9ff0df") },
-    },
-    matt: {
-      black: { color: "#161616", spec: 0.3 },
-      white: { color: "#f3f4f4", spec: 0.22 },
-      darkblue: { color: "#22306e", spec: 0.16 },
-      blue: { color: "#3b8cc8", spec: 0.16 },
-      green: { color: "#3c8c3a", spec: 0.16 },
-      // the old rose Madrid's own demo print was made in
-      oldrose: { color: "#c4908a", spec: 0.2 },
-      orange: { color: "#e3921a", spec: 0.16 },
-      red: { color: "#ee2e1b", spec: 0.16 },
-      purple: { color: "#8a2cc4", spec: 0.16 },
-      yellow: { color: "#f2df1c", spec: 0.16 },
-      clear: { clear: true },
+      // the swatch photo's p10, p50, p90; the module's hex_color after the code
+      gold: metal("#936f18", "#c29d2a", "#e9d170"), // GOLD METALLIC, hex #B39B62
+      silver: metal("#8d8d8d", "#c0c0c0", "#eeeeee"), // SILVER METALLIC, hex #A5A9B4
+      copper: metal("#835536", "#b3744b", "#dd8f5c"), // COPPER METALLIC, hex #D59A6E
+      red: metal("#7e0101", "#ac0101", "#d30102"), // RED METALLIC, hex #F52516
+      orange: metal("#8e5502", "#c17403", "#ee8e03"), // ORANGE METALLIC, hex #DF7645
+      pink: metal("#8d2a83", "#bf39b1", "#ec48dc"), // PINK METALLIC, hex #DF3BD2
+      purple: metal("#74007d", "#9e01ac", "#c201d2"), // PURPLE METALLIC, hex #8C1CC6
+      blue: metal("#01518d", "#016fc1", "#0288ed"), // BLUE METALLIC, hex #4AB1E8
+      mint: metal("#017d67", "#03aa8d", "#02d2ad"), // MINT METALLIC, hex #5EEDEF
     },
     gloss: {
-      black: { light: "#ffffff", stops: glossStops("#050505", "#1c1c1c", "#bdbdbd") },
-      grey: { light: "#ffffff", stops: glossStops("#2a2a2c", "#7b7b80", "#f4f4f6") },
-      brown: { light: "#ffeedd", stops: glossStops("#1a0c04", "#5a3317", "#e7bb8a") },
-      pink: { light: "#fff2ff", stops: glossStops("#6a3074", "#c486d0", "#fff0ff") },
-      mint: { light: "#effffb", stops: glossStops("#05463c", "#1cbfa2", "#d6fff6") },
+      black: gloss("#161616"), // BLACK GLOSSY
+      grey: gloss("#969595"), // GREY GLOSSY
+      brown: gloss("#765341"), // BROWN GLOSSY
+      pink: gloss("#D88CBA"), // PINK GLOSSY
+      mint: gloss("#33D3B9"), // MINT GREEN
+    },
+    matt: {
+      black: matt("#141414", 0.3), // BLACK MATT
+      white: matt("#FDFDFD", 0.22), // WHITE
+      darkblue: matt("#284467"), // DARK BLUE
+      blue: matt("#3C90C3"), // BLUE MATT
+      green: matt("#3D8F3B"), // GREEN MATT
+      // the old rose Madrid's own demo print was made in
+      oldrose: matt("#C09B8C", 0.2), // ROSE OLD
+      orange: matt("#F09031"), // ORANGE
+      red: matt("#F52516"), // RED MATT
+      winered: matt("#8C3039"), // WINE RED
+      purple: matt("#8C1CC6"), // PURPLE MATT
+      yellow: matt("#F5E316"), // YELLOW MATT
+      clear: { clear: true }, // TRANSPARANT FOIL ("Debossing with foil")
     },
   };
   const FOILS = {};
