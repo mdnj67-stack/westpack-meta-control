@@ -94,7 +94,8 @@ const BLOCK = /(fuck|shit|cunt|nigg|fanculo|scheisse|scheiße|kurwa|pussy|dick|c
 
 function cleanName(raw) {
   let s = String(raw || "").normalize("NFC").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
-  if (!s || /@|https?:|www\.|\.(com|dk|de|se|no|nl|eu)\b/i.test(s)) return "";
+  // an unrendered template tag (an editor's canvas sends "{{ person.organization|base64_encode }}" as it stands)
+  if (!s || /[{}]|@|https?:|www\.|\.(com|dk|de|se|no|nl|eu)\b/i.test(s)) return "";
   s = s.replace(/\([^)]*\)/g, " ").replace(/\s+(v\/|c\/o|att\.?|attn\.?)\s.*$/i, "").replace(/\s+/g, " ").trim();
   for (let guard = 0; guard < 3; guard++) {
     const low = s.toLowerCase();
