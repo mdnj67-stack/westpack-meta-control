@@ -1334,6 +1334,17 @@ rollout means writing for these rules:
   context saying it is a product, and is Wien in German. The prompt also tells the model to keep
   city-named series names as written inside sentences.
 - Attribute values go back escaped for their own quote character. `tests/klaviyo-translation-integrity.test.js`.
+- **What ends a fragment after its last word is cut off before the model and put back unchanged** (2026-11-20): the
+  hidden preheader's filler (`&#8199;&#847;` x 40 in our builders, stored by Klaviyo as raw U+2007 U+034F) and
+  `&nbsp;&rarr;` after a link text. Sent with the preheader's words, a German dry run returned the filler as control
+  characters and visible "9"s - in the inbox preview.
+- **The model localises sentences about Danish.** "På dansk hedder insektet en guldsmed – samme ord som for en, der
+  laver smykker" came back as "In het Nederlands heet het insect een libel – hetzelfde woord ..." (false). A
+  `translate="no"` on the word made German print it twice (the model filled the word in before the protected span).
+  What worked in eight languages is the Duplicate & translate brief: say the sentence must still say *in Danish*,
+  translated (give "Auf Dänisch", "In het Deens"), keep the word there, and translate it normally everywhere else. A
+  brief that only says "keep the word" put it in the headline too; one that says "keep 'In Danish'" left it in English.
+- Danish "folie" stays "folie" in French (= madness) unless the brief says "marquage à chaud" - the FR store's own term.
 
 ## Campaign drafts from the app (2026-11-17)
 
