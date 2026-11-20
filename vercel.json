@@ -31,6 +31,10 @@
     },
     "api/signup/control.js": {
       "maxDuration": 120
+    },
+    "api/email/name-print.js": {
+      "maxDuration": 30,
+      "includeFiles": "server/email/name-print/**"
     }
   },
   "crons": [
