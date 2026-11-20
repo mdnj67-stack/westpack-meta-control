@@ -1516,6 +1516,19 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   popup. **Greece carries the tag but is not in `MARKETS`** (nor BG, EE, HR, LV, LT - the site has 24 stores now), and
   `resolveMarket` stops on an unknown store code before anything else, `?wps=preview` included. Check a store's tag
   with a cache-busting query string: a cached page hid CZ's tag on the first look.
+- **Logo studio on a phone is a studio, not a page** (live 2026-11-20, the user: "mobil ligner skrald"). The sheet
+  does not scroll while editing: the print stays on top at full width and **never shrinks** (short screens show a
+  band of the photo round it instead), four tabs (brand, packaging, foil, lettering) show one tool at a time, and
+  the gold "looks good" button is always on screen. The result keeps the edit sheet's height (`--ls-hold`), so that
+  tap never moves the sheet; the thank-you's height change is a Web Animation, never a cut. Desktop is unchanged:
+  `tools/signup/desktop-diff.js record|compare` pins its rects and pixels - run it after any Logo studio change.
+  `qa.js` section F checks nothing on the stage covers the print (pixel mask, motion on, 4 phones x 18 stores) and
+  section G samples the sheet's top every frame (fails above 24px a frame); its phones include a Pixel 7 at 360x800
+  and 412x915, because the jumps only showed on tall Androids. The shell now raises the open sheet above the store
+  (except while a consent banner shows), lifts the peek card clear of `#Coi-Renew`, and sets `is-kb` from
+  `visualViewport` while a field has focus - **never cleared on blur**, or a tap on the button would move it from
+  under the finger. Not yet checked on a real iPhone or Android (keyboard path, Safari's 3D). `tools/signup/mobile-walk.js`
+  shoots the whole phone flow on the real store (`--local`, `--viewport=412x915`, `--keyboard=390x290`, `--engine=webkit`).
 - **Before CZ: not live, and ready to go** (2026-10-29; `signup/IMPLEMENTERING.md`). `LIVE` in `signup/core/markets.js` is
   the master switch: off, the store tag does nothing except answer `?wps=preview` / `?wps=<concept>`, which opens
   the experience at once in test mode (test list only) - so the tag can go in before launch and be checked on the
