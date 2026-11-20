@@ -52,7 +52,9 @@ function readQuery(url) {
 }
 
 function fromBase64(value) {
-  const v = String(value || "").trim();
+  // line breaks are taken out (an encoder that wraps at 76 characters, or one that ends with a newline, would
+  // otherwise turn the name into its own base64 text), and a space is a + a proxy decoded
+  const v = String(value || "").replace(/[\r\n\t]/g, "").trim().replace(/ /g, "+");
   if (!v) return "";
   if (!/^[A-Za-z0-9+/_-]+={0,2}$/.test(v)) return v;
   const buf = Buffer.from(v.replace(/-/g, "+").replace(/_/g, "/"), "base64");

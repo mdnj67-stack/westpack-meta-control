@@ -33,6 +33,12 @@ test("base64 with + and / survives the query string, which URLSearchParams would
   assert.equal(chooseName(readQuery(`/x?o=${encoded}`)), "Ærø Smykker & Ure");
   // a proxy that turned + into a space
   assert.equal(chooseName(readQuery(`/x?o=${encoded.replace(/\+/g, " ")}`)), "Ærø Smykker & Ure");
+  // what other encoders write: the URL-safe alphabet, no padding, a line break inside or at the end
+  assert.equal(chooseName(readQuery(`/x?o=${encoded.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`)), "Ærø Smykker & Ure");
+  assert.equal(chooseName(readQuery(`/x?o=${encodeURIComponent(encoded.slice(0, 8) + "\n" + encoded.slice(8))}`)), "Ærø Smykker & Ure");
+  assert.equal(chooseName(readQuery(`/x?o=${encodeURIComponent(encoded + "\n")}`)), "Ærø Smykker & Ure");
+  // a template engine that writes a missing value as None
+  assert.equal(chooseName(readQuery(`/x?o=${b64("None")}&s=${b64("https://www.westpack.com/dkk_dk_den/")}`)), "Dit navn");
 });
 
 test("every letter of the 18 stores' languages prints, in capitals", () => {
