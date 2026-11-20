@@ -436,6 +436,8 @@
     // Phones and tablets get the studio: the print on top, one tool at a time under it, nothing scrolls. Desktop keeps
     // its own layout, untouched.
     const onPhone = ctx.device !== "desktop";
+    // ... and a print that is drawn once per change, under a light that stands still (see "light" below)
+    const still = onPhone;
     const loupeOn = fine && !onPhone;
 
     // ---- the scene: the photo, the print, a light hint ----
@@ -691,7 +693,8 @@
       if (short || !c.height || lines > 3 || onPrint || layout.classList.contains("is-zoomed") || kbUp()) { hideCoach(); return; }
       layout.classList.add("is-coach"); coachT2 = setTimeout(hideCoach, 6000);
     }
-    if (onPhone) coachT1 = setTimeout(showCoach, 2200);
+    // the coach mark says the foil catches the light under the finger; with the light still on a phone it is not said
+    if (onPhone && !still) coachT1 = setTimeout(showCoach, 2200);
 
     // ---- rendering ----
     let placed = null;
@@ -814,10 +817,16 @@
     }
 
     // ---- light: follows the pointer or finger, drifts on its own, and sweeps across on every change ----
+    // On a phone or tablet the light stands still and the print is drawn once per change (2026-11-20, the user: "vi
+    // skal jo ikke have noget hvor mobil cpu er et issue"). Every move of the light re-runs the foil's lighting filter
+    // over the print, so the drifting light, the sweep after each change, the press flash and the light under the
+    // finger kept a phone's CPU busy for as long as the sheet was open. The desktop keeps all of them (still is set
+    // beside onPhone, because the coach mark reads it earlier)
+    const STILL_LIGHT = [0.52, -0.45];
     let raf = 0, idleT = 0, interacting = false, sweepUntil = 0, sweepFrom = 0;
     function frameLight(now) {
       raf = 0;
-      if (!stage.isConnected) return;
+      if (!stage.isConnected || still) return;
       if (now < sweepUntil) {
         const k = 1 - (sweepUntil - now) / 950;
         print.setLight(-0.35 + k * 1.7, -0.55 + Math.sin(k * Math.PI) * 0.47); schedule(); return;
@@ -832,13 +841,13 @@
     // light sweeps across it once it has
     let stampTimer = 0, sweepTimer = 0;
     function stamp() {
-      if (ctx.reducedMotion) { sweep(); return; }
+      if (ctx.reducedMotion || still) { sweep(); return; }
       frame.classList.remove("is-stamping"); void frame.offsetWidth; frame.classList.add("is-stamping");
       clearTimeout(stampTimer); stampTimer = setTimeout(() => frame.classList.remove("is-stamping"), 900);
       clearTimeout(sweepTimer); sweepTimer = setTimeout(sweep, 240);
     }
     // a visitor holding the light themselves keeps it: the sweep is for a scene nobody is touching
-    function sweep() { if (ctx.reducedMotion) { print.setLight(0.52, -0.45); return; } if (interacting) return; sweepFrom = performance.now(); sweepUntil = sweepFrom + 950; schedule(); }
+    function sweep() { if (ctx.reducedMotion || still) { print.setLight(...STILL_LIGHT); return; } if (interacting) return; sweepFrom = performance.now(); sweepUntil = sweepFrom + 950; schedule(); }
     function lightFromPointer(e) {
       // on a phone the frame is a window onto the scene, so the point is read on the scene itself
       const r = (onPhone ? scene : frame).getBoundingClientRect();
@@ -850,7 +859,7 @@
       if (!ctx.reducedMotion && loupeOn) scene.style.setProperty("--tilt", `perspective(900px) rotateX(${((0.5 - v) * 5).toFixed(2)}deg) rotateY(${((u - 0.5) * 6).toFixed(2)}deg)`);
       moveLoupe(e, u, v);
     }
-    frame.addEventListener("pointermove", (e) => { interacting = true; sweepUntil = 0; once("light_moved"); lightFromPointer(e); });
+    frame.addEventListener("pointermove", (e) => { if (still) return; interacting = true; sweepUntil = 0; once("light_moved"); lightFromPointer(e); });
     frame.addEventListener("pointerleave", () => { interacting = false; scene.style.setProperty("--tilt", "none"); if (loupe) loupe.classList.remove("is-on"); schedule(); });
 
     // ---- loupe (mouse) and zoom (touch): the foil up close ----
@@ -904,7 +913,7 @@
 
     // ---- swipe between boxes on the photo (touch) ----
     let sx = null;
-    frame.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") { sx = e.clientX; interacting = true; hideCoach(); lightFromPointer(e); } });
+    frame.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") { sx = e.clientX; interacting = true; hideCoach(); if (!still) lightFromPointer(e); } });
     frame.addEventListener("pointerup", (e) => {
       if (sx == null) return;
       const dx = e.clientX - sx; sx = null; interacting = false; schedule();
@@ -1161,7 +1170,7 @@
     if (!ctx.reducedMotion) { layout.classList.add("is-intro"); setTimeout(() => { layout.classList.remove("is-intro"); fit(); checkEngine(); }, 1900); }
     else checkEngine();
     setTimeout(stamp, ctx.reducedMotion ? 0 : 1000);
-    schedule();
+    if (still) print.setLight(...STILL_LIGHT); else schedule();
     return {
       initialFocus: ctx.device === "desktop" ? nameInput : null,
       destroy() {
