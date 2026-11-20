@@ -104,6 +104,8 @@ fs.mkdirSync(out, { recursive: true });
     });
   });
   report.engineAtRest = await page.evaluate(() => document.querySelector("#westpack-signup").shadowRoot.querySelector(".ls").dataset.engine);
+  // the phone's studio has no tabs since 2026-11-20 (name and pieces in one view); a checkout from before still has
+  const hasTabs = (await host.locator(".ls-tab").count()) > 0;
   const tab = async (k) => { await host.locator(`.ls-tab[data-tool="${k}"]`).click(); await page.waitForTimeout(500); };
 
   await shot("edit-brand");
@@ -116,8 +118,8 @@ fs.mkdirSync(out, { recursive: true });
   await host.locator(".ls-name-input").blur();
   await page.setViewportSize(vp);
   await page.waitForTimeout(900); await shot("typed");
-  for (const k of ["box", "foil", "type"]) { await tab(k); await shot(`edit-${k}`); }
-  await tab("foil");
+  if (hasTabs) { for (const k of ["box", "foil", "type"]) { await tab(k); await shot(`edit-${k}`); } await tab("foil"); }
+  else { await host.locator('.ls-thumb[data-box="london"]').click(); await page.waitForTimeout(1400); await shot("edit-piece"); }
   await host.locator(".ls-zoom").click(); await page.waitForTimeout(1200); await shot("zoom");
   await host.locator(".ls-zoom").click(); await page.waitForTimeout(900);
 

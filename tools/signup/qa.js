@@ -164,9 +164,9 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await host.locator(".ls-next").click();
     await p.waitForTimeout(800);
     if (label === "phone") {
-      const over = await overflowing(".ls-frame .ls-print, .ls-strip .ls-print");
-      const n = await host.locator(".ls-strip .ls-print").count();
-      check("phone: a long name fits the hero and every strip piece on the result", over.length === 0 && n === 7, `${n} strip prints${over.length ? `; ${over.join(", ")}` : ""}`);
+      // the phone's result has no strip of pieces since 2026-11-20; its pieces stay in the hidden strip, unmeasured
+      const over = await overflowing(".ls-frame .ls-print");
+      check("phone: a long name fits the hero on the result", over.length === 0, over.join(", "));
     } else {
       const tilesOver = await overflowing(".ls-tile .ls-print");
       check("desktop: a long name fits every lid in the collection", tilesOver.length === 0, tilesOver.join(", "));
@@ -185,14 +185,16 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await host.locator(".ls-name-input").blur();
     const pieces = await host.locator(".ls-thumb").count();
     check(`${label}: seven pieces, the carrier bag among them`, pieces === 7 && (await host.locator('.ls-thumb[data-box="bag"]').count()) === 1, `${pieces} thumbnails`);
-    // a phone shows one tool at a time: the pieces are under Packaging, the foils under Foil
-    const tool = async (k) => { if (label === "phone") { await host.locator(`.ls-tab[data-tool="${k}"]`).click(); await p.waitForTimeout(250); } };
-    await tool("box");
     await host.locator('.ls-thumb[data-box="bag"]').click();
     await p.waitForTimeout(1400);
     const onBag = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect(); return { inside: t.width > 20 && t.left > f.left && t.right < f.right && t.top > f.top && t.bottom < f.bottom, box: r.querySelector(".ls").dataset.box }; });
     check(`${label}: the name is printed on the bag`, onBag.inside && onBag.box === "bag", JSON.stringify(onBag));
-    await tool("foil");
+    if (label === "phone") {
+      // a phone is the essentials since 2026-11-20: the name and the seven pieces in one view, no tabs, no foil or
+      // lettering to choose; each piece shows its own natural foil (the bag's is metallic gold)
+      const ess = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; return { tabs: r.querySelectorAll(".ls-tab").length, choices: r.querySelectorAll(".ls-chip-foil, .ls-chip-type, .ls-finish").length, foil: r.querySelector(".ls").dataset.foil }; });
+      check("phone: no tabs and no foil or lettering to choose; the bag shows its own foil", ess.tabs === 0 && ess.choices === 0 && ess.foil === "metallic-gold", JSON.stringify(ess));
+    } else {
     const picker = () => p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; return { finish: [...r.querySelectorAll(".ls-finish")].find((b) => b.getAttribute("aria-pressed") === "true").dataset.finish, shown: [...r.querySelectorAll(".ls-chip-foil")].filter((b) => !b.hidden).length, foil: r.querySelector(".ls").dataset.foil, name: r.querySelector(".ls-foil-now").textContent }; });
     let s = await picker();
     check(`${label}: the picker opens on the piece's own finish and shows only its colours`, s.finish === "metallic" && s.shown === 9 && s.foil === "metallic-gold" && s.name === "Metallisk guld", JSON.stringify(s));
@@ -206,27 +208,18 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await host.locator('.ls-chip-foil[data-value="matt-clear"]').click(); await p.waitForTimeout(400);
     s = await picker();
     check(`${label}: the transparent foil is named alone`, s.name === "Gennemsigtig", JSON.stringify(s));
+    }
     await host.locator(".ls-next").click();
     await p.waitForTimeout(1400);
     if (label === "phone") {
-      // the phone's reward is the chosen piece large, with the seven in a strip under it, each carrying the name
+      // the phone's reward is the chosen piece, the print whole in its window, and the card; no strip of pieces there
       const res = await p.evaluate(() => {
-        const r = document.querySelector("#westpack-signup").shadowRoot, ls = r.querySelector(".ls"), bag = r.querySelector('.ls-strip .ls-thumb[data-box="bag"]');
-        const strip = [...r.querySelectorAll(".ls-strip .ls-thumb")];
+        const r = document.querySelector("#westpack-signup").shadowRoot, ls = r.querySelector(".ls"), strip = r.querySelector(".ls-strip");
         const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect();
-        return {
-          box: ls.dataset.box, pressed: Boolean(bag && bag.getAttribute("aria-pressed") === "true"), pieces: strip.length,
-          stripInside: strip.every((b) => { const o = b.getBoundingClientRect(), p = b.querySelector(".ls-print text").getBoundingClientRect(); return p.width > 1 && p.left >= o.left - 1 && p.right <= o.right + 1 && p.top >= o.top - 1 && p.bottom <= o.bottom + 1; }),
-          heroInside: t.width > 20 && t.left >= f.left && t.right <= f.right && t.top >= f.top && t.bottom <= f.bottom,
-        };
+        return { box: ls.dataset.box, strip: Boolean(strip && strip.getClientRects().length), heroInside: t.width > 20 && t.left >= f.left && t.right <= f.right && t.top >= f.top && t.bottom <= f.bottom };
       });
-      check("phone: the hero shows the chosen piece (bag), the bag is pressed in the strip, every strip print sits inside its button", res.box === "bag" && res.pressed && res.pieces === 7 && res.stripInside && res.heroInside, JSON.stringify(res));
+      check("phone: the hero shows the chosen piece (bag), its print inside the window, and no strip of pieces", res.box === "bag" && !res.strip && res.heroInside, JSON.stringify(res));
       await p.screenshot({ path: path.join(outDir, `bag-result-${label}.jpg`), type: "jpeg", quality: 75 });
-      // a tap on another piece in the strip makes it the hero
-      await host.locator('.ls-strip .ls-thumb[data-box="london"]').click();
-      await p.waitForTimeout(1200);
-      const swap = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const f = r.querySelector(".ls-frame").getBoundingClientRect(), t = r.querySelector(".ls-frame .ls-print text").getBoundingClientRect(); return { box: r.querySelector(".ls").dataset.box, inside: t.width > 20 && t.left >= f.left && t.right <= f.right && t.top >= f.top && t.bottom <= f.bottom }; });
-      check("phone: a tap on another piece in the strip makes it the hero, the print inside the window", swap.box === "london" && swap.inside, JSON.stringify(swap));
     } else {
       const col = await p.evaluate(() => { const r = document.querySelector("#westpack-signup").shadowRoot; const tiles = [...r.querySelectorAll(".ls-tile")]; const area = (t) => { const b = t.querySelector(".ls-tile-frame").getBoundingClientRect(); return b.width * b.height; }; const chosen = r.querySelector(".ls-tile.is-chosen"); return { chosen: chosen && chosen.dataset.box, largest: chosen && tiles.every((t) => t === chosen || area(t) < area(chosen)), inside: tiles.every((t) => { const f = t.querySelector(".ls-tile-frame").getBoundingClientRect(), b = t.querySelector(".ls-print text").getBoundingClientRect(); return b.width > 2 && b.left >= f.left - 1 && b.right <= f.right + 1 && b.top >= f.top - 1 && b.bottom <= f.bottom + 1; }) }; });
       check(`${label}: the chosen piece leads the collection, largest, and every print sits in its frame`, col.chosen === "bag" && col.largest && col.inside, JSON.stringify(col));
@@ -356,34 +349,37 @@ async function SWEEP() {
   const o = { c1: [], c2: [], c3: [], c4: [], c7: [], c9: [], c10: [], c11: [], c12: [], c19: [] };
   const W = innerWidth, d = L.q(".wps-dialog");
   if (L.q(".ls").dataset.engine !== "projective") o.c19.push(`engine ${L.q(".ls").dataset.engine}`);
-  const fr = L.rect(".ls-frame"), tb = L.rect(".ls-tabs"), ti = L.rect(".ls-edit .wps-title"), inp = L.rect(".ls-name-input"), cta = L.rect(".ls-next");
-  if (!(fr && tb && ti && inp && cta && fr.t < tb.t && tb.t < ti.t && ti.t < inp.t && inp.t < cta.t)) o.c1.push("order");
-  for (const [k, r] of [["question", ti], ["field", inp], ["button", cta]]) if (!L.inView(r)) o.c1.push(`${k} not in view`);
-  if (!fr || fr.h < 0.66 * W - 0.5) o.c4.push(`stage ${fr && fr.h.toFixed(0)} of ${W}`);
-  const bar = L.q(".ls-tabs");
-  if (bar.scrollWidth > bar.clientWidth + 1) o.c7.push(`strip ${bar.scrollWidth}/${bar.clientWidth}`);
-  for (const t of L.qa(".ls-tab")) { const lab = t.querySelector(".ls-tab-label"); if (lab.getClientRects().length !== 1 || t.scrollWidth > t.clientWidth + 1) o.c7.push(`"${lab.textContent}" wraps or is cut`); }
+  // the phone's studio since 2026-11-20: stage, question, field, the seven pieces, button - all in view, no tabs
+  const fr = L.rect(".ls-frame"), ti = L.rect(".ls-edit .wps-title"), inp = L.rect(".ls-name-input"), row = L.rect(".ls-tool .ls-thumbs"), cta = L.rect(".ls-next");
+  if (!(fr && ti && inp && row && cta && fr.t < ti.t && ti.t < inp.t && inp.t < row.t && row.t < cta.t)) o.c1.push("order");
+  for (const [k, r] of [["question", ti], ["field", inp], ["pieces", row], ["button", cta]]) if (!L.inView(r)) o.c1.push(`${k} not in view`);
+  if (L.qa(".ls-tab").length) o.c1.push("a tab bar");
+  // the stage never goes below the window that holds the print on every piece (qa F checks the print in it)
+  if (!fr || fr.h < 0.56 * W - 0.5) o.c4.push(`stage ${fr && fr.h.toFixed(0)} of ${W}`);
+  // the sheet leaves the store in sight above it (the user: it filled an iPhone's screen); a view under 600px (the
+  // first iPhone SE) keeps nearly the whole height, because the print's window and the panel come first
+  const dr = L.rect(d);
+  if (innerHeight >= 600 && dr.t < 0.2 * innerHeight - 0.5) o.c3.push(`sheet top at ${Math.round(dr.t)} of ${innerHeight}`);
+  // the seven pieces in one row, scrolling at most a few pixels
+  const pieces = L.qa(".ls-tool .ls-thumb").map((b) => L.rect(b));
+  // (the chosen piece stands 2px proud of the row; under 360px seven 44px buttons cannot fit, and the row scrolls)
+  const mid = pieces.map((r) => r.t + r.h / 2).sort((x, y) => x - y)[3];
+  if (pieces.length !== 7 || pieces.some((r) => Math.abs(r.t + r.h / 2 - mid) > 3)) o.c7.push(`pieces ${pieces.length}, not one row`);
+  const thumbs = L.q(".ls-tool .ls-thumbs");
+  if (W >= 360 && thumbs.scrollWidth > thumbs.clientWidth + 8) o.c7.push(`row ${thumbs.scrollWidth}/${thumbs.clientWidth}`);
   const dis = L.rect(".ls-illustration"), close = L.rect(".wps-close"), g = L.rect(".wps-grab");
   const grab = g && { l: g.l + g.w / 2 - 18, r: g.l + g.w / 2 + 18, t: g.t + 8, b: g.t + 12 };
   if (L.hit(dis, close)) o.c9.push("under the close button");
   if (L.hit(dis, grab)) o.c9.push("under the grab bar");
   const lines = Math.round(dis.h / parseFloat(getComputedStyle(L.q(".ls-illustration")).lineHeight));
   if (lines > (W >= 360 ? 2 : 3)) o.c9.push(`${lines} lines`);
-  const snap = () => ({ frame: L.rect(".ls-frame"), cta: L.rect(".ls-next"), dh: d.getBoundingClientRect().height });
-  const same = (a, b) => a && b && ["l", "t", "w", "h"].every((k) => Math.abs(a[k] - b[k]) <= 0.5);
-  const base = snap();
-  for (const tool of ["brand", "box", "foil", "type", "brand"]) {
-    L.q(`.ls-tab[data-tool="${tool}"]`).click();
-    await wait(350);
-    const tl = L.q(".ls-tools");
-    if (d.scrollHeight > d.clientHeight + 1) o.c2.push(`${tool}: dialog ${d.scrollHeight}/${d.clientHeight}`);
-    if (tl.scrollHeight > tl.clientHeight + 1) o.c2.push(`${tool}: tool cell ${tl.scrollHeight}/${tl.clientHeight}`);
-    const s = snap();
-    if (!same(s.frame, base.frame) || !same(s.cta, base.cta) || Math.abs(s.dh - base.dh) > 0.5) o.c3.push(`${tool}: moved`);
-    o.c10.push(...L.overClose().map((x) => `${tool}: ${x}`));
-    o.c11.push(...L.smallTargets().map((x) => `${tool}: ${x}`));
-    o.c12.push(...L.overflowX().map((x) => `${tool}: ${x}`));
-  }
+  await wait(50);
+  const tl = L.q(".ls-tools");
+  if (d.scrollHeight > d.clientHeight + 1) o.c2.push(`dialog ${d.scrollHeight}/${d.clientHeight}`);
+  if (tl.scrollHeight > tl.clientHeight + 1) o.c2.push(`tools ${tl.scrollHeight}/${tl.clientHeight}`);
+  o.c10.push(...L.overClose());
+  o.c11.push(...L.smallTargets());
+  o.c12.push(...L.overflowX());
   return o;
 }
 
@@ -479,11 +475,11 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
       for (const k of Object.keys(agg)) for (const msg of r[k]) agg[k].push(`${m}: ${msg}`);
       await p.close();
     }
-    report(`${phone}, 18 stores: (1) stage < tabs < question < field < button, all three in the first screen`, agg.c1);
-    report(`${phone}, 18 stores: (2) no scrolling on any of the four tools`, agg.c2);
-    report(`${phone}, 18 stores: (3) the stage, the button and the sheet stay put across the four tools`, agg.c3);
-    report(`${phone}, 18 stores: (4) the stage at rest is at least 0.66 x the width`, agg.c4);
-    report(`${phone}, 18 stores: (7) the tabs fit, every label whole on one line`, agg.c7);
+    report(`${phone}, 18 stores: (1) stage < question < field < pieces < button, all in the first screen, no tabs`, agg.c1);
+    report(`${phone}, 18 stores: (2) nothing scrolls: the sheet and the panel fit`, agg.c2);
+    report(`${phone}, 18 stores: (3) the sheet leaves at least a fifth of the store in sight above it (views from 600px)`, agg.c3);
+    report(`${phone}, 18 stores: (4) the stage at rest is at least 0.56 x the width, the window that holds the print`, agg.c4);
+    report(`${phone}, 18 stores: (7) the seven pieces in one row`, agg.c7);
     report(`${phone}, 18 stores: (9) the disclaimer clears the close button and the grab bar, in few lines`, agg.c9);
     report(`${phone}, 18 stores: (10) nothing sits on the close button`, agg.c10);
     report(`${phone}, 18 stores: (11) every control is a 44 x 44 target`, agg.c11);
@@ -502,7 +498,8 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     const L = (fn, arg) => p.evaluate(fn, arg);
     const st = () => L(() => window.__ls.state());
     const shot = (s) => p.screenshot({ path: path.join(outDir, `studio-${phone.replace(/\s+/g, "-").toLowerCase()}-${s}.jpg`), type: "jpeg", quality: 72 });
-    const tab = async (k) => { await host.locator(`.ls-tab[data-tool="${k}"]`).click(); await p.waitForTimeout(300); };
+    // the phone has no tabs since 2026-11-20 (the name and the pieces share one view): a tab tap is a no-op there
+    const tab = async (k) => { const t = host.locator(`.ls-tab[data-tool="${k}"]`); if (await t.count()) { await t.click(); await p.waitForTimeout(300); } };
     const fails = { c3: [], c5: [], c6: [], c8: [], c10: [], c11: [], c12: [], c19: [] };
     const states = () => L(() => ({ over: window.__ls.overClose(), small: window.__ls.smallTargets(), x: window.__ls.overflowX() }));
     const sweepState = async (label) => { const s = await states(); fails.c10.push(...s.over.map((x) => `${label}: ${x}`)); fails.c11.push(...s.small.map((x) => `${label}: ${x}`)); fails.c12.push(...s.x.map((x) => `${label}: ${x}`)); };
@@ -516,14 +513,12 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     const same = (a, b) => ["l", "t", "w", "h"].every((k) => Math.abs(a.frame[k] - b.frame[k]) <= 0.5 && Math.abs(a.cta[k] - b.cta[k]) <= 0.5) && Math.abs(a.dh - b.dh) <= 0.5;
     const base = await snap();
 
-    // (8) the first blur with a name moves on to Packaging, once
+    // (8) typing a name and leaving the field moves nothing: the pieces were in view all along
     const input = host.locator(".ls-name-input");
     await input.focus(); await input.pressSequentially("Atelier Sever", { delay: 20 }); await input.blur(); await p.waitForTimeout(300);
-    const t1 = (await st()).tool;
-    await tab("brand");
-    await input.focus(); await input.pressSequentially(" Nord", { delay: 20 }); await input.blur(); await p.waitForTimeout(300);
-    const t2 = (await st()).tool;
-    if (t1 !== "box" || t2 !== "brand") fails.c8.push(`first blur ${t1}, second ${t2}`);
+    const named = await snap();
+    const piecesInView = await L(() => window.__ls.inView(window.__ls.rect(".ls-tool .ls-thumbs")));
+    if (!same(named, base) || !piecesInView) fails.c8.push(`after a name: ${same(named, base) ? "" : "moved, "}pieces ${piecesInView ? "in view" : "out of view"}`);
 
     // (6) the print is whole in the window on every piece, with the default name and a long one, at rest; and (on the
     // two phones the criterion names) while typing, with the field above the keyboard
@@ -580,12 +575,13 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await p.waitForTimeout(900);
     const logoed = await snap();
     if (!same(logoed, base)) fails.c3.push("after a logo upload: moved");
-    const typeTab = await L(() => { const t = window.__ls.q('.ls-tab[data-tool="type"]'); t.click(); return { disabled: t.getAttribute("aria-disabled"), tool: window.__ls.q(".ls").dataset.tool }; });
-    if (typeTab.disabled !== "true" || typeTab.tool === "type") fails.c3.push(`Lettering with a logo: ${JSON.stringify(typeTab)}`);
+    // with a logo in, "use the name" takes the field's place beside the gold upload button
+    const useName = await L(() => { const l = window.__ls, u = l.rect(".ls-use-name"), up = l.rect(".ls-upload"); return Boolean(u && up && l.shown(l.q(".ls-use-name")) && u.r <= up.l + 0.5 && Math.abs(u.t - up.t) <= 1); });
+    if (!useName) fails.c3.push("with a logo, 'use the name' is not beside the upload button");
     await shot("logo"); await sweepState("logo");
     await host.locator(".ls-use-name").click(); await p.waitForTimeout(300);
     await input.blur(); await p.waitForTimeout(200);
-    for (const k of ["box", "foil", "type"]) { await tab(k); await shot(`tool-${k}`); await sweepState(`tool ${k}`); }
+    await shot("tools"); await sweepState("tools");
 
     // (20) on the iPhone 13: after many changes the print is still drawn
     // the print's own pixels on Seville, fresh, before the many changes below (20)
@@ -632,25 +628,20 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await host.locator(".ls-next").click(); await p.waitForTimeout(1600);
     await shot("result"); await sweepState("result");
     const res = await L(() => {
-      const l = window.__ls, f = l.rect(".ls-frame"), card = l.rect(".ls-result"), consent = l.q(".ls-result .wps-consent");
-      const lh = parseFloat(getComputedStyle(consent).lineHeight), cr = l.rect(consent);
-      const strip = l.qa(".ls-strip .ls-thumb");
+      const l = window.__ls, f = l.rect(".ls-frame"), card = l.rect(".ls-result"), cr = l.rect(".ls-result .wps-consent"), strip = l.q(".ls-strip");
       return {
-        box: l.q(".ls").dataset.box, bag: l.q('.ls-strip .ls-thumb[data-box="bag"]').getAttribute("aria-pressed"),
-        stripInside: strip.length === 7 && strip.every((b) => l.inside(l.rect(b.querySelector(".ls-print text")), l.rect(b), 1)),
+        box: l.q(".ls").dataset.box, strip: Boolean(strip && strip.getClientRects().length),
         email: l.inView(l.rect(".ls-result .wps-input")), submit: l.inView(l.rect(".ls-result .wps-form .wps-btn-primary")),
-        consent2: cr.t + 2 * lh <= Math.min(innerHeight, card.b) + 0.5, hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), state: l.state(),
-        // a strip wider than the sheet says so with a fade at the edge that has more
-        stripFade: (() => { const t = l.q(".ls-strip .ls-thumbs"); return t.scrollWidth <= t.clientWidth + 1 || t.classList.contains("has-more-end") || t.classList.contains("has-more-start"); })(),
+        consent: Boolean(cr && cr.b <= Math.min(innerHeight, card.b) + 0.5), cardScroll: l.q(".ls-result").scrollHeight - l.q(".ls-result").clientHeight,
+        hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), top: l.rect(".wps-dialog").t, state: l.state(),
       };
     });
     const c13 = [];
     if (!res.email || !res.submit) c13.push(`email ${res.email}, button ${res.submit}`);
-    if (vp.height >= 664 && !res.consent2) c13.push("consent's first two lines below the fold");
-    if (res.hero < 180) c13.push(`hero ${res.hero}`);
-    check(`${phone}: a result strip wider than the sheet fades at the edge that has more`, res.stripFade);
-    report(`${phone}: (13) on the result the email field and the button are in view${vp.height >= 664 ? ", and two lines of consent" : ""}, the hero at least 180px`, c13);
-    check(`${phone}: (14) the bag is the hero, pressed in the strip, every strip print inside its button`, res.box === "bag" && res.bag === "true" && res.stripInside && res.print, JSON.stringify({ box: res.box, bag: res.bag, strip: res.stripInside, print: res.print }));
+    if (!res.consent) c13.push("the consent runs under the fold");
+    if (res.hero < 0.56 * vp.width - 0.5) c13.push(`hero ${res.hero}`);
+    report(`${phone}: (13) on the result the email field, the button and the whole consent are in view, the hero the print's window`, c13);
+    check(`${phone}: (14) the bag is the hero, its print whole in the window, no strip of pieces`, res.box === "bag" && !res.strip && res.print, JSON.stringify({ box: res.box, strip: res.strip, print: res.print }));
     if (res.state.k !== rest.k || Math.abs(res.state.sceneW - res.state.dialogW) > 0.5) fails.c5.push(`result: --k ${res.state.k}, scene ${res.state.sceneW}/${res.state.dialogW}`);
     if (res.state.far > 0.015) fails.c19.push(`result: far corner ${(res.state.far * 100).toFixed(2)}%`);
 
@@ -684,10 +675,10 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     if (ty.state.k !== rest.k || Math.abs(ty.state.sceneW - ty.state.dialogW) > 0.5) fails.c5.push(`thank-you: --k ${ty.state.k}, scene ${ty.state.sceneW}/${ty.state.dialogW}`);
     if (ty.state.far > 0.015) fails.c19.push(`thank-you: far corner ${(ty.state.far * 100).toFixed(2)}%`);
 
-    report(`${phone}: (3) a hint and an uploaded logo move nothing, and Lettering steps back for a logo`, fails.c3);
+    report(`${phone}: (3) a hint and an uploaded logo move nothing, and with a logo "use the name" stands beside the upload button`, fails.c3);
     report(`${phone}: (5) --k is the same at rest, typing, on the result and the thank-you, the scene as wide as the sheet`, fails.c5);
     report(`${phone}: (6) the print is whole in the window on all seven pieces, default and long name${typingSizes.length ? ", at rest and typing" : ""}`, fails.c6);
-    report(`${phone}: (8) the first blur with a name moves on to Packaging, a second does not`, fails.c8);
+    report(`${phone}: (8) a typed name moves nothing, and the pieces stay in view`, fails.c8);
     report(`${phone}: (10) nothing sits on the close or back button while typing, with a logo, on the result, the error and the thank-you`, fails.c10);
     report(`${phone}: (11) every control is a 44 x 44 target in those states`, fails.c11);
     report(`${phone}: (12) no sideways overflow in those states`, fails.c12);
@@ -702,32 +693,31 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     await p.waitForTimeout(2800);
     const cdp = await ctx.newCDPSession(p);
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
-    const tabMs = await p.evaluate(async () => {
+    // the phone has no tabs or coins since 2026-11-20: a tap on a piece is what a visitor does there
+    const tapMs = await p.evaluate(async () => {
       const out = [];
-      for (const k of ["box", "foil", "type", "brand"]) {
+      for (const k of ["london", "bag", "torino", "seville"]) {
         const t0 = performance.now();
-        window.__ls.q(`.ls-tab[data-tool="${k}"]`).click();
+        window.__ls.q(`.ls-tool .ls-thumb[data-box="${k}"]`).click();
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
         out.push(performance.now() - t0);
-        await new Promise((r) => setTimeout(r, 300));
+        await new Promise((r) => setTimeout(r, 900));
       }
       return out;
     });
-    check("Galaxy S8, 4x slower CPU: (21) a tab tap paints within 100ms", Math.max(...tabMs) <= 100, tabMs.map((x) => `${Math.round(x)}ms`).join(", "));
-    await p.evaluate(() => window.__ls.q('.ls-tab[data-tool="foil"]').click());
-    await p.waitForTimeout(400);
+    check("Galaxy S8, 4x slower CPU: (21) a tap on a piece paints within 100ms", Math.max(...tapMs) <= 100, tapMs.map((x) => `${Math.round(x)}ms`).join(", "));
     const longest = await p.evaluate(async () => {
       const tasks = [];
       const po = new PerformanceObserver((l) => { for (const e of l.getEntries()) tasks.push(e.duration); });
       po.observe({ type: "longtask" });
-      window.__ls.q('.ls-chip-foil[data-value="metallic-copper"]').click();
+      window.__ls.q('.ls-tool .ls-thumb[data-box="frankfurt"]').click();
       await new Promise((r) => setTimeout(r, 1500));
-      window.__ls.q('.ls-finish[data-finish="matt"]').click();
+      window.__ls.q('.ls-tool .ls-thumb[data-box="madrid"]').click();
       await new Promise((r) => setTimeout(r, 1500));
       po.disconnect();
       return tasks.length ? Math.max(...tasks) : 0;
     });
-    check("Galaxy S8, 4x slower CPU: (21) a coin or finish tap causes no long task over 200ms", longest <= 200, `longest task ${Math.round(longest)}ms`);
+    check("Galaxy S8, 4x slower CPU: (21) a piece tap causes no long task over 200ms", longest <= 200, `longest task ${Math.round(longest)}ms`);
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
     await ctx.close();
   }
@@ -760,13 +750,11 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     try { await input.click({ timeout: 4000 }); await input.pressSequentially("Atelier", { delay: 20 }); } catch (e) { out.push("name field not reachable"); }
     if ((await input.inputValue()) !== "Atelier") out.push("name field took no typing");
     await input.blur();
-    for (const k of ["box", "foil", "type", "brand"]) {
-      try { await host.locator(`.ls-tab[data-tool="${k}"]`).click({ timeout: 4000 }); await p.waitForTimeout(300); } catch (e) { out.push(`tab ${k} not reachable`); continue; }
-      const ok = await p.evaluate((k) => { const l = window.__ls, t = l.q(`.ls-tool[data-tool="${k}"]`); return l.shown(t) && l.q(".ls").dataset.tool === k; }, k);
-      if (!ok) out.push(`tool ${k} did not open`);
-      const ov = await p.evaluate(() => window.__ls.overClose());
-      if (ov.length) out.push(`${k}: on the close button: ${ov.join(", ")}`);
-    }
+    // the name and the pieces share one view (no tabs since 2026-11-20): both shown, a piece takes a tap
+    const both = await p.evaluate(() => { const l = window.__ls; return ["brand", "box"].every((k) => l.shown(l.q(`.ls-tool[data-tool="${k}"]`))) && !l.qa(".ls-tab").length; });
+    if (!both) out.push("the name and the pieces are not both in view, or a tab bar is there");
+    try { await host.locator('.ls-tool .ls-thumb[data-box="london"]').click({ timeout: 4000 }); await p.waitForTimeout(900); } catch (e) { out.push("a piece not reachable"); }
+    if ((await p.evaluate(() => window.__ls.q(".ls").dataset.box)) !== "london") out.push("a piece tap did not take");
     await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-open.jpg`), type: "jpeg", quality: 72 });
     try { await host.locator(".ls-next").click({ timeout: 4000 }); } catch (e) { out.push("button not reachable"); }
     await p.waitForTimeout(1500);
@@ -776,7 +764,7 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     if (!v.inView) out.push("result outside the view");
     if (v.x.length) out.push(`result overflow ${v.x}`);
     await p.screenshot({ path: path.join(outDir, `studio-${label.split(" ")[0].toLowerCase()}-${opts.viewport.width}-result.jpg`), type: "jpeg", quality: 72 });
-    report(`${label}: (18) the sheet fits, the name takes typing, all four tools and the result are reachable, no overflow`, out);
+    report(`${label}: (18) the sheet fits, the name takes typing, the name and the pieces share the view, the result is reachable, no overflow`, out);
     await ctx.close();
   }
 
@@ -817,11 +805,15 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
       const thanks = await run(".ls-result .wps-form .wps-btn-primary");
       for (const [label, r] of [["to the result", toResult], ["back", back], ["to the result again", again], ["to the thank-you", thanks]]) {
         if (r.worst > 24) out.push(`${label}: ${r.worst.toFixed(1)}px in one frame (${Math.round(r.from)} -> ${Math.round(r.to)})`);
-        if (label !== "to the thank-you" && Math.abs(r.to - r.from) > 0.5) fixed.push(`${label}: ${Math.round(r.from)} -> ${Math.round(r.to)}`);
       }
+      // the result is the edit sheet or taller (the card ends at the whole consent), so the top only ever rises to it;
+      // back in the edit sheet it is exactly where it was, and the result is the same height every time
+      if (toResult.to > toResult.from + 0.5) fixed.push(`to the result: sank ${Math.round(toResult.from)} -> ${Math.round(toResult.to)}`);
+      if (Math.abs(back.to - toResult.from) > 0.5) fixed.push(`back: ${Math.round(back.to)}, the edit sheet was at ${Math.round(toResult.from)}`);
+      if (Math.abs(again.to - toResult.to) > 0.5) fixed.push(`to the result again: ${Math.round(again.to)} vs ${Math.round(toResult.to)}`);
       if (thanks.gap > 1) gaps.push(`${thanks.gap.toFixed(1)}px of studio round the card`);
-      report(`${phone}, motion on: (sheet) its top glides, never more than 24px a frame, to the result, back and to the thank-you (${Math.round(thanks.from)} -> ${Math.round(thanks.to)} there)`, out);
-      report(`${phone}, motion on: (sheet) its top stays put from the edit sheet to the result and back`, fixed);
+      report(`${phone}, motion on: (sheet) its top glides, never more than 24px a frame, to the result, back and to the thank-you (${Math.round(toResult.from)} -> ${Math.round(toResult.to)} at the result, ${Math.round(thanks.to)} at the thank-you)`, out);
+      report(`${phone}, motion on: (sheet) its top only rises to the result, comes back to the edit sheet's, and the result is the same height each time`, fixed);
       report(`${phone}, motion on: (sheet) on the way to the thank-you the card meets the photo and the sheet's foot in every frame`, gaps);
       await ctx.close();
     }
@@ -850,7 +842,7 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
         }
         const input = p.locator("#westpack-signup .ls-name-input");
         for (const size of sizes) {
-          await p.locator('#westpack-signup .ls-tab[data-tool="brand"]').click(); await p.waitForTimeout(250);
+          if (await p.locator('#westpack-signup .ls-tab').count()) { await p.locator('#westpack-signup .ls-tab[data-tool="brand"]').click(); await p.waitForTimeout(250); }
           await input.focus(); await input.fill(""); await input.pressSequentially(LONG, { delay: 4 });
           await p.setViewportSize(size); await p.waitForTimeout(900);
           const ty = await coverage(p);

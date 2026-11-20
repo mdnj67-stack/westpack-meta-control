@@ -552,9 +552,83 @@
   :where(.wps:not([data-device="desktop"])) .ls-strip .ls-thumbs { justify-content: flex-start; gap: 6px; }
 }
 
-/* ---- tablet: the same studio in a 480px card ---- */
-:where(.wps[data-device="tablet"]) { --ls-sheet: min(calc(100vh - 48px), 860px); }
-@supports (height: 100dvh) { :where(.wps[data-device="tablet"]) { --ls-sheet: min(calc(100dvh - 48px), 860px); } }
+/* ---- the essentials on a phone (2026-11-20, the user, after an iPhone where the sheet filled the screen: "Kan vi
+   generelt bare sørge for den fylder mindre på mobil enheder", then "så fix det" to dropping foil and lettering
+   there). No tabs: the question, the name with a square upload button beside it, the seven pieces in one row and the
+   button, all in view at once. The sheet stops at 70% of the view so the store stays in sight above it, but never
+   below what the stage's smallest window (56% of the width, which holds a name on every piece) and this panel need:
+   a short phone keeps nearly the whole height. --ls-panel is the panel's height at rest with a two-line question and the
+   widest pieces (430px); the
+   tools scroll rather than lose the button if a language ever needs more ---- */
+:where(.wps[data-device="mobile"]) { --ls-panel: 280px; --ls-sheet: min(calc(100vh - 10px), max(70vh, calc(56vw + var(--ls-panel)))); }
+@supports (height: 100dvh) {
+  :where(.wps[data-device="mobile"]) { --ls-sheet: min(calc(100dvh - max(10px, env(safe-area-inset-top, 0px))), max(70dvh, calc(56vw + var(--ls-panel) + env(safe-area-inset-bottom, 0px)))); }
+}
+:where(.wps:not([data-device="desktop"])) .ls-tools { display: flex; flex-direction: column; gap: 14px; padding: 14px var(--ls-gut) 0; }
+:where(.wps:not([data-device="desktop"])) .ls-tool { flex: none; }
+:where(.wps:not([data-device="desktop"])) .ls-edit .wps-title {
+  margin: 0 0 10px; font-size: 20px; line-height: 23px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+/* the stage's line about the visualisation is read as it opens, over the demo print; once a name or a logo is in it
+   fades, because the lower stage brings the visitor's print up under it */
+:where(.wps:not([data-device="desktop"])) .ls-illustration { transition: opacity 260ms ease; }
+:where(.wps:not([data-device="desktop"])) .ls:not(.is-placeholder) .ls-illustration { opacity: 0; }
+/* the name and the upload button share one row; with a logo in, "use the name" takes the field's place */
+:where(.wps:not([data-device="desktop"])) .ls-name-block { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; row-gap: 0; align-items: start; }
+:where(.wps:not([data-device="desktop"])) .ls-name-block > .ls-name { grid-area: 1 / 1; }
+:where(.wps:not([data-device="desktop"])) .ls-upload-row, :where(.wps:not([data-device="desktop"])) .ls-upload-aside { display: contents; }
+:where(.wps:not([data-device="desktop"])) .ls-upload-hint { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls-upload, :where(.wps:not([data-device="desktop"])) .ls-upload.is-active.is-icon {
+  grid-area: 1 / 2; width: 52px; height: 52px; padding: 0; border-radius: 14px; justify-content: center; font-size: 18px;
+}
+:where(.wps:not([data-device="desktop"])) .ls-upload .ls-upload-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:where(.wps:not([data-device="desktop"])) .ls-use-name {
+  grid-area: 1 / 1; height: 52px; padding: 0 16px; border: 1px solid var(--ls-line); border-radius: 14px; background: var(--ls-raise);
+  color: var(--ls-tx); font-size: 14px; text-align: left; text-decoration: none;
+}
+:where(.wps:not([data-device="desktop"])) .ls-name-block:has(.ls-use-name:not([hidden])) > .ls-name { visibility: hidden; }
+/* the seven pieces in one row, edge to edge; a row too narrow for seven 44px buttons scrolls a few pixels */
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumbs {
+  display: flex; gap: 4px; justify-content: space-between; margin: 0 calc(-1 * var(--ls-gut)); padding: 4px var(--ls-gut) 6px;
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+}
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumbs::-webkit-scrollbar { display: none; }
+:where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumb { flex: none; width: clamp(44px, calc((100% - 24px) / 7), 56px); border-radius: 11px; }
+@media (max-width: 370px) { :where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumbs { gap: 3px; } }
+:where(.wps:not([data-device="desktop"])) .ls-cta { padding-top: 12px; padding-bottom: max(12px, env(safe-area-inset-bottom, 0px)); }
+:where(.wps:not([data-device="desktop"])) .ls-next { height: 52px; }
+/* The result shows the piece in the same window the name was set in (so the print stands whole there too) and the
+   card at its own height: the question, the field, the button and the whole consent in view, never under the fold.
+   That is taller than the edit sheet in most languages, so the sheet glides up at the result (animateFrame) - never
+   shorter than the edit sheet, never taller than the view - and the thank-you comes back within the edit sheet's
+   height. The card ends at the consent: the strip of pieces goes (the piece was chosen a moment ago, and the back arrow
+   is there), so do the kicker, the promise list and the customers' prints - the lede still says why to sign up. The
+   photo is the stage's smallest window, 56% of the width, which holds the print on every piece (qa section F) */
+/* (held upright: a phone or tablet on its side has its own layout below, and keeps it) */
+:where(.wps[data-device="mobile"]) { --ls-full: calc(100vh - 10px); }
+@supports (height: 100dvh) { :where(.wps[data-device="mobile"]) { --ls-full: calc(100dvh - max(10px, env(safe-area-inset-top, 0px))); } }
+@media (min-height: 501px), (max-aspect-ratio: 3/2) {
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog { max-height: var(--ls-full); }
+  :where(.wps:not([data-device="desktop"])) .ls:not(.is-result) { max-height: var(--ls-sheet); }
+  /* the thank-you keeps the result's height (--ls-ty, set as it comes), so the sheet does not move there */
+  :where(.wps:not([data-device="desktop"])) .ls.is-success { flex: none; height: var(--ls-ty, auto); max-height: var(--ls-full); }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) { height: auto; min-height: min(var(--ls-full), var(--ls-hold, var(--ls-sheet))); max-height: var(--ls-full); }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-frame { height: calc(0.56 * var(--ls-w)); }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-side { flex: 0 1 auto; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-strip { display: none; }
+  :where(.wps:not([data-device="desktop"])) .ls-result > .wps-kicker, :where(.wps:not([data-device="desktop"])) .ls-result > .wps-promise,
+  :where(.wps:not([data-device="desktop"])) .ls-result > .ls-proof-title, :where(.wps:not([data-device="desktop"])) .ls-result > .ls-proof,
+  :where(.wps:not([data-device="desktop"])) .ls-result > .ls-result-note { display: none; }
+  /* with the keyboard up the sheet is the visual viewport (the shell's is-kb), and none of these heights apply: a
+     real keyboard leaves 100dvh as it was, so the edit cap and the result's held height would overrun what is in view */
+  :where(.wps:not([data-device="desktop"])).is-kb .ls[class] { min-height: 0; max-height: none; }
+}
+
+/* ---- tablet: the same studio in a 480px card, at most 55% of the view where the stage and the panel allow (a phone
+   that reports a tablet's width, like the user's Samsung, is a tall view: the square stage made the card two thirds
+   of it) ---- */
+:where(.wps[data-device="tablet"]) { --ls-panel: 280px; --ls-full: min(calc(100vh - 48px), 860px); --ls-sheet: min(var(--ls-full), max(55vh, calc(0.56 * min(480px, 100vw - 48px) + var(--ls-panel)))); }
+@supports (height: 100dvh) { :where(.wps[data-device="tablet"]) { --ls-full: min(calc(100dvh - 48px), 860px); --ls-sheet: min(var(--ls-full), max(55dvh, calc(0.56 * min(480px, 100vw - 48px) + var(--ls-panel)))); } }
 :where(.wps[data-device="tablet"]) .ls { --ls-w: min(480px, calc(100vw - 48px)); }
 :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { width: min(480px, calc(100vw - 48px)); margin-inline: auto; }
 /* a card narrower than the view floats clear of its foot, every corner round. Standing on the foot it read as a sheet

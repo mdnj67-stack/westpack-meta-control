@@ -573,31 +573,18 @@
         el("div", { class: "ls-upload-row" }, [uploadBtn, el("div", { class: "ls-upload-aside" }, [el("span", { class: "ls-upload-hint", text: copy.uploadHint }), useNameBtn])]),
         fileInput,
       ]);
-      const tabLabels = { brand: copy.defaultName, box: copy.boxLabel, foil: copy.foilLabel, type: copy.typeLabel };
-      tabs = TOOLS.map((k) => el("button", { type: "button", role: "tab", class: "ls-tab", "data-tool": k, id: `${uid}-tab-${k}`, "aria-controls": `${uid}-tool-${k}`, "aria-selected": "false", tabindex: "-1", onclick: () => tabTap(k) }, [el("span", { class: "ls-tab-label", text: tabLabels[k] })]));
-      tabLine = el("span", { class: "ls-tab-line", "aria-hidden": "true" });
-      tabBar = el("div", { class: "ls-tabs", role: "tablist" }, [...tabs, tabLine]);
-      tabBar.addEventListener("keydown", (e) => {
-        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-        e.preventDefault();
-        const live = TOOLS.filter((k) => !(k === "type" && choice.logo));
-        const next = live[(live.indexOf(tool) + (e.key === "ArrowRight" ? 1 : live.length - 1)) % live.length];
-        tabTap(next); tabs[TOOLS.indexOf(next)].focus();
-      });
-      const panel = (k, kids) => el("div", { class: "ls-tool", "data-tool": k, role: "tabpanel", id: `${uid}-tool-${k}`, "aria-labelledby": `${uid}-tab-${k}` }, kids);
+      // The phone's studio is the essentials, all in view at once and no tabs (2026-11-20, the user, after an iPhone
+      // where the sheet filled the screen: "Kan vi generelt bare sørge for den fylder mindre på mobil enheder", then
+      // "så fix det" to dropping the foil and the lettering there): the question, the name or their own logo, the
+      // seven pieces in one row, the button. Each piece shows its own natural foil in the classic face; the desktop
+      // keeps every choice. With no tab bar, setTool and the tab line do nothing on a phone
+      const panel = (k, kids) => el("div", { class: "ls-tool is-active", "data-tool": k }, kids);
       toolEls = {
-        brand: panel("brand", [
-          el("p", { class: "wps-kicker", text: copy.kicker }),
-          el("h2", { class: "wps-title", text: copy.title }),
-          el("p", { class: "wps-lede", text: copy.lede }),
-          nameBlock,
-        ]),
-        box: panel("box", [thumbsEl, hintEl]),
-        foil: panel("foil", [foilGroup.node]),
-        type: panel("type", [typeGroup.node]),
+        brand: panel("brand", [el("h2", { class: "wps-title", text: copy.title }), nameBlock]),
+        box: panel("box", [thumbsEl]),
       };
-      toolsEl = el("div", { class: "ls-tools" }, TOOLS.map((k) => toolEls[k]));
-      editPanel = el("div", { class: "ls-panel ls-edit" }, [tabBar, toolsEl, el("div", { class: "ls-cta" }, [nextBtn])]);
+      toolsEl = el("div", { class: "ls-tools" }, [toolEls.brand, toolEls.box]);
+      editPanel = el("div", { class: "ls-panel ls-edit" }, [toolsEl, el("div", { class: "ls-cta" }, [nextBtn])]);
     }
 
     const resultTitle = el("h2", { class: "wps-title" });
@@ -660,7 +647,7 @@
       moveTabLine();
     }
     function setTool(k, how) {
-      if (!onPhone || (k === "type" && choice.logo)) return;
+      if (!onPhone || !tabBar || (k === "type" && choice.logo)) return;
       const dir = TOOLS.indexOf(k) >= TOOLS.indexOf(tool) ? 1 : -1, prev = toolEls[tool];
       // the tool going out slides away from the one coming in
       if (prev && tool !== k) { prev.classList.add("is-leaving"); setTimeout(() => prev.classList.remove("is-leaving"), 240); }
@@ -744,7 +731,7 @@
         if (placed && h) scene.style.top = `${windowTop(w, h, placed.centre[1] / 100, ...clearBands()).toFixed(1)}px`;
         for (const b of thumbs) { const tw = b.clientWidth; if (tw) b.style.setProperty("--k", (tw / 1000).toFixed(5)); }
         // a new width (a turned phone) makes the edit sheet's height the result held on to meaningless
-        if (w !== lastWidth) { if (lastWidth) layout.style.removeProperty("--ls-hold"); lastWidth = w; fitTabs(); fitUpload(); stripEdges(); }
+        if (w !== lastWidth) { if (lastWidth) { layout.style.removeProperty("--ls-hold"); layout.style.removeProperty("--ls-ty"); } lastWidth = w; fitTabs(); fitUpload(); stripEdges(); }
       }
       for (const id of BOX_ORDER) thumbPrints[id].refit();
       clearTimeout(settle);
@@ -1033,6 +1020,10 @@
       if (ctx.reducedMotion || kbUp() || (!moveH && !moveD)) { fit(); return; }
       const m = moveD ? GLIDE : MOVE;
       if (moveD) sheetGlide = dlg.animate([{ height: `${d0}px` }, { height: `${d1}px` }], { duration: m.ms, easing: m.ease });
+      // the studio holds its new height while the pinned part moves, so the card gives way and the sheet never swells:
+      // the result's height follows its content since 2026-11-20, and with the photo still at its old height the
+      // card at its new one once made the sheet 64px taller for a moment on a tall Android
+      if (moveH && pin !== layout) { layout.style.height = `${layout.offsetHeight}px`; pinned.push(layout); }
       if (moveH) {
         Object.assign(pin.style, { transition: "none", flex: "none", height: `${h0}px` }); pinned.push(pin);
         void pin.offsetHeight;
@@ -1129,7 +1120,12 @@
           el("button", { type: "button", class: "wps-btn wps-btn-ghost", onclick: () => ctx.close("done"), text: ctx.shell.close }),
         );
       };
-      if (onPhone) animateFrame(finish, stageBox); else finish();
+      // the thank-you keeps the result's height, so the sheet stays where it is: the piece grows into the room the card
+      // gives up (with the keyboard up the result is the visual viewport, so there it takes its own height)
+      if (onPhone) {
+        if (kbUp()) layout.style.removeProperty("--ls-ty"); else layout.style.setProperty("--ls-ty", `${layout.offsetHeight}px`);
+        animateFrame(finish, stageBox);
+      } else finish();
       success.focus({ preventScroll: onPhone });
       sweep();
     }

@@ -1362,6 +1362,25 @@ returns the template a message will send.
 market by comparing the message's own template copy with what was pushed and requesting each link on the account's
 `?organization=1` URL.
 
+## The reader's own name in foil, rendered at open (2026-11-20)
+
+`GET /api/email/name-print` draws a name on one of the Logo studio's measured lids and answers a JPEG, so a campaign
+email can show every reader their own company name foil-printed on a real Westpack box (first used in W49 "Sådan ser
+dit navn ud i guld"). `server/email/name-print.js` is the Logo studio's SVG filter written out step by step in plain
+Node (same plates, homographies, foils, exposures, light model); `server/email/jpeg-encode.js` is a baseline JPEG
+encoder; the assets in `server/email/name-print/` (plates as raw RGB, LIDS, a Fraunces 600 caps glyph atlas) are built by
+`tools/email/build-name-print-assets.js` with sharp and Playwright - rebuild them when Logo studio's plates or LIDS
+change. No npm package at runtime. Tests: `tests/email-name-print.test.js`.
+
+- Klaviyo fills the query with `base64_encode` (the encoding filter it documents; there is no urlencode):
+  `o={{ person.organization|base64_encode }}&f={{ person.first_name|base64_encode }}&s={{ organization.url|base64_encode }}`
+  plus `box`, `foil`, `crop=x,y,w,h` (% of the plate, never upscaled), `light=x,y,z`, `w`, `v`. The query is parsed by
+  hand: base64 carries `+`, which URLSearchParams turns into a space.
+- Organization (legal form stripped), else the first word of the first name, else "Dit navn"/"Your name"/... by store.
+- Public on purpose (an email image carries no session) and edge-cached a year by URL: bump `v` when the renderer
+  changes. It never answers a broken image. `?action=coverage&country=XX` (logged in) counts printable names, never lists them.
+- The carrier bag scene has no free logo print; the six boxes do.
+
 ## What Westpack's own website says — `knowledge/westpack-site/`
 
 Added 2026-09-30. A crawl of the whole UK English store (2,491 products, 322 content and category
@@ -1516,11 +1535,29 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
   popup. **Greece carries the tag but is not in `MARKETS`** (nor BG, EE, HR, LV, LT - the site has 24 stores now), and
   `resolveMarket` stops on an unknown store code before anything else, `?wps=preview` included. Check a store's tag
   with a cache-busting query string: a cached page hid CZ's tag on the first look.
-- **Logo studio on a phone is a studio, not a page** (live 2026-11-20, the user: "mobil ligner skrald"). The sheet
-  does not scroll while editing: the print stays on top at full width and **never shrinks** (short screens show a
-  band of the photo round it instead), four tabs (brand, packaging, foil, lettering) show one tool at a time, and
-  the gold "looks good" button is always on screen. The result keeps the edit sheet's height (`--ls-hold`), so that
-  tap never moves the sheet; the thank-you's height change is a Web Animation, never a cut. Desktop is unchanged:
+- **Logo studio on a phone is the essentials, in a sheet over the store** (2026-11-20). The morning's redesign (the
+  user: "mobil ligner skrald") was a full-height studio with four tabs; on an iPhone it filled the screen and the user
+  did not like it ("Kan vi generelt bare sørge for den fylder mindre på mobil enheder"). An objective look agreed the
+  deeper problem was too many choices before the email, and the user said "så fix det" to cutting them on phones.
+  Now, held upright (`mobile` and `tablet`): **no tabs** - the question, the name with a square upload button beside
+  it ("use the name" takes the field's place once a logo is in), the seven pieces in one row and the button, all in
+  view. **No foil or lettering choice on a phone**: each piece shows its own natural foil (`LIDS[id].foil`) in the
+  classic face; the desktop keeps every choice. The sheet stops at **70% of the view** (`--ls-sheet` on `mobile`,
+  never below the stage's 0.56 x width window + `--ls-panel` 262px, so an iPhone SE keeps ~86%); the tablet card at
+  55%. qa.js section A fails if the sheet leaves less than a fifth of the store in sight, or if the panel scrolls in
+  any of the 18 languages (the check on `--ls-panel`). The print **never shrinks**: the stage is a window onto the
+  full-width scene, at least 0.56 x the width, which holds a name on every piece (section F). **The result grows**:
+  the photo keeps that window and the card ends at the whole consent (strip of pieces, kicker, promise list and
+  customer prints dropped there), so the sheet glides up at the result (taller than the edit sheet in most
+  languages, `min-height` = `--ls-hold`) and back; the thank-you returns within the edit sheet. These rules are held
+  to portrait by `@media (min-height: 501px), (max-aspect-ratio: 3/2)`; a phone on its side keeps its own layout.
+  The thank-you keeps the result's height (`--ls-ty`, set in `showSuccess`). `animateFrame` locks the studio at its
+  new height while the pinned photo moves - without it, the photo at its old height plus the card at its new one
+  swelled the sheet 64px for a frame on a tall Android. **With the keyboard up (`is-kb`) every height cap is off**
+  (`.is-kb .ls[class]`): a real keyboard leaves `100dvh` as it was, so a cap or a held height would overrun the visual
+  viewport - and Playwright cannot show it, because it simulates the keyboard by shrinking the viewport, which shrinks
+  `dvh` too.
+  The tab machinery (`setTool`, `tabBar`) is still in logo-studio.js and does nothing without a tab bar. Desktop is unchanged:
   `tools/signup/desktop-diff.js record|compare` pins its rects and pixels - run it after any Logo studio change.
   `qa.js` section F checks nothing on the stage covers the print (pixel mask, motion on, 4 phones x 18 stores) and
   section G samples the sheet's top every frame (fails above 24px a frame); its phones include a Pixel 7 at 360x800

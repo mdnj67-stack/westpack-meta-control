@@ -173,8 +173,14 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
 - **Dit eget logo:** PNG, JPG eller SVG gøres til en én-farvet foliemaske i browseren (folie trykkes i én farve).
   Filen forlader aldrig browseren; kun `wp_logo_uploaded: yes` følger med en tilmelding.
 - **Lup** over æsken på desktop, **"Se trykket tæt på"** (zoom) overalt.
-- **På mobil** sidder navnefeltet lige under æsken; mens man skriver, ligger æsken fast øverst over tastaturet, og
-  når man scroller ned til folierne, svæver en lille levende kopi af æsken i hjørnet.
+- **På mobil kun det væsentlige** (2026-11-20, efter en iPhone hvor arket fyldte hele skærmen: "Kan vi generelt bare
+  sørge for den fylder mindre på mobil enheder"): arket stopper ved ca. 70 % af skærmen, så butikken kan ses over
+  det (tablet-kortet ved 55 %). Ingen faner: spørgsmålet, navnefeltet med en firkantet upload-knap ved siden af, de syv
+  stykker emballage på én række og knappen – alt på én gang. Folie og skrift kan ikke vælges på mobil; hvert stykke
+  viser sin egen naturlige folie i den klassiske skrift. Desktop har stadig alle valg. Trykket bliver aldrig mindre;
+  billedet er et vindue på mindst 56 % af bredden, som altid rummer navnet. Resultatet viser stykket, spørgsmålet,
+  feltet, knappen og hele samtykketeksten uden scroll (arket glider lidt op dér), og tak-skærmen er igen lav.
+  Mens man skriver, ligger æsken fast øverst over tastaturet.
 
 ### Designet (2026-10-30)
 
