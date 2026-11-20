@@ -191,8 +191,26 @@ test("layout entities are not sent for translation, but copy that starts with on
   // entity's name passed the "has letters" check, the model sometimes answered them blank, and Polish failed.
   const source = '<td>&nbsp;</td><a>&rarr;</a><p>&#9679;&nbsp;</p><p>&nbsp;Se pris&nbsp;&rarr;</p><p>Écrin</p>';
   const { tokens, segments } = extractHtmlSegments(source);
-  assert.deepEqual(segments, ["&nbsp;Se pris&nbsp;&rarr;", "Écrin"]);
-  assert.equal(rebuildHtml(tokens, ["&nbsp;Zobacz cenę&nbsp;&rarr;", "Etui"]), '<td>&nbsp;</td><a>&rarr;</a><p>&#9679;&nbsp;</p><p>&nbsp;Zobacz cenę&nbsp;&rarr;</p><p>Etui</p>');
+  assert.deepEqual(segments, ["&nbsp;Se pris", "Écrin"]);
+  assert.equal(rebuildHtml(tokens, ["&nbsp;Zobacz cenę", "Etui"]), '<td>&nbsp;</td><a>&rarr;</a><p>&#9679;&nbsp;</p><p>&nbsp;Zobacz cenę&nbsp;&rarr;</p><p>Etui</p>');
+});
+
+test("the invisible filler after a preheader never reaches the model, and comes back unchanged", () => {
+  // W48 Logotryk, 2026-11-20: sent with the preheader's words, the German translation returned the
+  // filler as control characters and visible "9"s. Builders write entities; Klaviyo stores raw characters.
+  const entities = "&#8199;&#847;".repeat(40);
+  const raw = " ͏".repeat(40);
+  for (const filler of [entities, raw]) {
+    const source = `<div style="display:none;">Vi har fundet luppen frem.${filler}</div><a>Se fristerne&nbsp;&rarr;</a>`;
+    const { tokens, segments } = extractHtmlSegments(source);
+    assert.deepEqual(segments, ["Vi har fundet luppen frem.", "Se fristerne"]);
+    assert.equal(
+      rebuildHtml(tokens, ["Wir haben die Lupe geholt.", "Fristen ansehen"]),
+      `<div style="display:none;">Wir haben die Lupe geholt.${filler}</div><a>Fristen ansehen&nbsp;&rarr;</a>`
+    );
+  }
+  // Plain trailing spaces stay with the fragment, as before.
+  assert.deepEqual(extractHtmlSegments("<p>Tak </p>").segments, ["Tak "]);
 });
 
 test("the missing-fragment error quotes the fragment as written", async () => {

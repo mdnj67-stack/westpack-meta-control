@@ -65,6 +65,20 @@ function pushMarkup(tokens, segments, markup, translatable) {
   tokens.push({ type: "markup", value: markup.slice(last) });
 }
 
+// What ends a fragment after its last word is layout, not copy: the invisible filler after a hidden
+// preheader ("&#8199;&#847;" x 40 in our builders, stored by Klaviyo as the raw U+2007 U+034F) and
+// "&nbsp;&rarr;" after a link text. Sent with the words, the filler came back from the German
+// translation as control characters and visible "9"s - in the inbox preview (W48, 2026-11-20).
+// So it is cut off before the model sees the fragment and put back unchanged.
+const TRAILING_LAYOUT = /(?:\s|&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);|[ ͏ -‏  ⁠﻿])+$/i;
+
+function splitTrailingLayout(text) {
+  const match = TRAILING_LAYOUT.exec(text);
+  // Plain trailing whitespace is already handled by restoreEdgeWhitespace.
+  if (!match || !match[0].trim()) return [text, ""];
+  return [text.slice(0, match.index), match[0]];
+}
+
 function escapeAttributeValue(value, quote) {
   return String(value)
     .replace(/</g, "&lt;")
@@ -102,9 +116,11 @@ function extractHtmlSegments(html = "") {
       continue;
     }
 
+    const [copy, layout] = splitTrailingLayout(part);
     const index = segments.length;
-    segments.push(part);
-    tokens.push({ type: "text", value: part, translatable: true, index });
+    segments.push(copy);
+    tokens.push({ type: "text", value: copy, translatable: true, index });
+    if (layout) tokens.push({ type: "text", value: layout, translatable: false });
   }
 
   return { tokens, segments };
