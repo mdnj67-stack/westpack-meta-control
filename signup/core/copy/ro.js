@@ -90,6 +90,7 @@
     "zoomIn": "Vezi imprimarea de aproape",
     "zoomOut": "Vezi tot",
     "uploadCta": "Folosește-ți logoul",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG sau SVG – logoul rămâne în browserul tău.",
     "uploadOneColour": "Imprimarea cu folie se face într-o singură culoare – așa va arăta logoul tău.",
     "uploadError": "Nu am putut citi fișierul. Încearcă un PNG sau JPG.",

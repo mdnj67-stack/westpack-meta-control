@@ -90,6 +90,7 @@
     "zoomIn": "Druck aus der Nähe",
     "zoomOut": "Gesamtansicht",
     "uploadCta": "Eigenes Logo verwenden",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG oder SVG – Ihr Logo bleibt in Ihrem Browser.",
     "uploadOneColour": "Folienprägung ist einfarbig – so sieht Ihr Logo aus.",
     "uploadError": "Diese Datei konnten wir nicht lesen. Versuchen Sie es mit PNG oder JPG.",

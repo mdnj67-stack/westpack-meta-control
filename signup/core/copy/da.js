@@ -44,6 +44,7 @@
     zoomIn: "Se trykket tæt på",
     zoomOut: "Se det hele",
     uploadCta: "Brug dit logo",
+    uploadShort: "Logo",
     uploadHint: "PNG, JPG eller SVG – dit logo bliver i din browser.",
     uploadOneColour: "Folie trykkes i én farve – sådan bliver dit logo.",
     uploadError: "Den fil kunne vi ikke læse. Prøv en PNG eller JPG.",

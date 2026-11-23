@@ -222,6 +222,10 @@ const FOIL_TABLE = Function(`${LS_SRC.slice(LS_SRC.indexOf("  const hex = "), LS
 test("logo studio: every lid is measured, lit and named in every language", () => {
   const order = JSON.parse(LS_SRC.match(/const BOX_ORDER = (\[[^\]]*\])/)[1]);
   assert.deepEqual(order.slice().sort(), Object.keys(LIDS).sort());
+  // the phone's own order (it opens on Torino) holds the same pieces, each once
+  const phoneOrder = JSON.parse(LS_SRC.match(/const PHONE_ORDER = (\[[^\]]*\])/)[1]);
+  assert.deepEqual(phoneOrder.slice().sort(), order.slice().sort());
+  assert.equal(phoneOrder[0], "torino");
   for (const lang of fs.readdirSync(COPY_DIR).map((f) => f.replace(/\.js$/, ""))) {
     assert.deepEqual(Object.keys(loadCopy(lang)["logo-studio"].boxes).sort(), order.slice().sort(), `${lang} names every lid`);
   }

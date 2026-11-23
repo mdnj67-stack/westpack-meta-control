@@ -569,10 +569,6 @@
 :where(.wps:not([data-device="desktop"])) .ls-edit .wps-title {
   margin: 0 0 10px; font-size: 20px; line-height: 23px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
 }
-/* the stage's line about the visualisation is read as it opens, over the demo print; once a name or a logo is in it
-   fades, because the lower stage brings the visitor's print up under it */
-:where(.wps:not([data-device="desktop"])) .ls-illustration { transition: opacity 260ms ease; }
-:where(.wps:not([data-device="desktop"])) .ls:not(.is-placeholder) .ls-illustration { opacity: 0; }
 /* the name and the upload button share one row; with a logo in, "use the name" takes the field's place */
 :where(.wps:not([data-device="desktop"])) .ls-name-block { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; row-gap: 0; align-items: start; }
 :where(.wps:not([data-device="desktop"])) .ls-name-block > .ls-name { grid-area: 1 / 1; }
@@ -580,7 +576,11 @@
 :where(.wps:not([data-device="desktop"])) .ls-upload-hint { display: none; }
 :where(.wps:not([data-device="desktop"])) .ls-upload, :where(.wps:not([data-device="desktop"])) .ls-upload.is-active.is-icon {
   grid-area: 1 / 2; width: 52px; height: 52px; padding: 0; border-radius: 14px; justify-content: center; font-size: 18px;
+  flex-direction: column; gap: 2px;
 }
+/* an upload icon over the word "Logo": the arrow alone did not say what the button was for */
+:where(.wps:not([data-device="desktop"])) .ls-upload-icon { display: grid; place-items: center; line-height: 0; }
+:where(.wps:not([data-device="desktop"])) .ls-upload-short { font-size: 11px; line-height: 12px; font-weight: 650; letter-spacing: 0.02em; }
 :where(.wps:not([data-device="desktop"])) .ls-upload .ls-upload-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 :where(.wps:not([data-device="desktop"])) .ls-use-name {
   grid-area: 1 / 1; height: 52px; padding: 0 16px; border: 1px solid var(--ls-line); border-radius: 14px; background: var(--ls-raise);
@@ -613,7 +613,10 @@
   /* the thank-you keeps the result's height (--ls-ty, set as it comes), so the sheet does not move there */
   :where(.wps:not([data-device="desktop"])) .ls.is-success { flex: none; height: var(--ls-ty, auto); max-height: var(--ls-full); }
   :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) { height: auto; min-height: min(var(--ls-full), var(--ls-hold, var(--ls-sheet))); max-height: var(--ls-full); }
-  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-frame { height: calc(0.56 * var(--ls-w)); }
+  /* the photo is at least that window and takes whatever the card leaves of the held height: on a tall Android the
+     sheet's dark floor showed under the card (2026-11-23) */
+  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-stage { flex: 1 0 auto; }
+  :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-frame { flex: 1 0 auto; height: auto; min-height: calc(0.56 * var(--ls-w)); }
   :where(.wps:not([data-device="desktop"])) .ls.is-result:not(.is-success) .ls-side { flex: 0 1 auto; }
   :where(.wps:not([data-device="desktop"])) .ls.is-result .ls-strip { display: none; }
   :where(.wps:not([data-device="desktop"])) .ls-result > .wps-kicker, :where(.wps:not([data-device="desktop"])) .ls-result > .wps-promise,

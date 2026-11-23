@@ -91,6 +91,7 @@
     "zoomIn": "Prohlédnout potisk zblízka",
     "zoomOut": "Celý pohled",
     "uploadCta": "Použít vlastní logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG nebo SVG – logo zůstane ve vašem prohlížeči.",
     "uploadOneColour": "Ražba fólií se provádí v jedné barvě – takhle bude vypadat vaše logo.",
     "uploadError": "Tenhle soubor se nám nepodařilo přečíst. Zkuste PNG nebo JPG.",

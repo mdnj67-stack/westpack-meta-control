@@ -181,6 +181,11 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
   billedet er et vindue på mindst 56 % af bredden, som altid rummer navnet. Resultatet viser stykket, spørgsmålet,
   feltet, knappen og hele samtykketeksten uden scroll (arket glider lidt op dér), og tak-skærmen er igen lav.
   Mens man skriver, ligger æsken fast øverst over tastaturet.
+- **Mobilen åbner på Torino** (2026-11-23): det sorte låg med guldkant ligner en æske, før man har læst noget, og
+  trykket står næsten vandret. Det mat-sorte Seville-låg, som desktop åbner på, var i mobilens lille vindue et sort felt
+  med navnet på skrå. Upload-knappen viser et upload-ikon over ordet "Logo" (en pil alene sagde ikke, hvad den var til),
+  og linjen om, at det er en illustration, står ikke længere hen over fotoet på mobil. På høje Android-telefoner fylder
+  fotoet nu resten af arket ved resultatet, så der ikke er en mørk stribe under kortet.
 
 ### Designet (2026-10-30)
 

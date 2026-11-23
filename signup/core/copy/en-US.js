@@ -90,6 +90,7 @@
     "zoomIn": "See the print up close",
     "zoomOut": "See it all",
     "uploadCta": "Use your logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG, or SVG—your logo stays in your browser.",
     "uploadOneColour": "Your logo is foil stamped in one color—this is how it looks in foil.",
     "uploadError": "We couldn't read that file. Try a PNG or JPG.",

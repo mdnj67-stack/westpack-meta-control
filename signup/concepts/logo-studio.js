@@ -30,6 +30,11 @@
   };
   // lids:end
   const BOX_ORDER = ["seville", "london", "bag", "torino", "seoul", "madrid", "frankfurt"];
+  // A phone opens on Torino (2026-11-23): in the phone's small window Seville's matt black lid is a black field with a
+  // name across it at 45 degrees, while Torino's gold frame says "a box" before anything is read, and its print runs
+  // nearly level. Desktop shows the whole scene and keeps its order.
+  const PHONE_ORDER = ["torino", "seville", "london", "bag", "seoul", "madrid", "frankfurt"];
+  const ICON_UPLOAD = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 15V4.5M7.5 9 12 4.5 16.5 9M4.5 14.5v3a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   // ---- the foils: the 26 of Westpack's logo module, by finish, in the module's own colours ----
   // The logo module on the product pages (colorOptionsData, the same in all 18 stores, read 2026-11-20) gives every
@@ -439,9 +444,11 @@
     // ... and a print that is drawn once per change, under a light that stands still (see "light" below)
     const still = onPhone;
     const loupeOn = fine && !onPhone;
+    const order = onPhone ? PHONE_ORDER : BOX_ORDER;
+    if (onPhone) Object.assign(choice, { box: order[0], foil: LIDS[order[0]].foil });
 
     // ---- the scene: the photo, the print, a light hint ----
-    const photo = el("img", { class: "ls-photo", alt: "", src: img("seville", 720), srcset: `${img("seville", 720)} 720w, ${img("seville", 1200)} 1200w`, sizes: "(min-width: 760px) 520px, 100vw", decoding: "async", draggable: "false", onerror: hide });
+    const photo = el("img", { class: "ls-photo", alt: "", src: img(choice.box, 720), srcset: `${img(choice.box, 720)} 720w, ${img(choice.box, 1200)} 1200w`, sizes: "(min-width: 760px) 520px, 100vw", decoding: "async", draggable: "false", onerror: hide });
     const print = makePrint(uid);
     const printWrap = el("div", { class: "ls-print-wrap" }, [print.svg]);
     // the plate: the photo's 1000 x 1000 stand-in, scaled to the frame, so each lid's transform is a constant
@@ -454,8 +461,10 @@
     const scene = el("div", { class: "ls-scene", role: onPhone ? "img" : null }, [cam, heat]);
     const hintEl = el("p", { class: "ls-light-hint", "aria-hidden": "true", text: fine ? copy.lightHintMouse : copy.lightHintTouch });
     const disclaimer = el("figcaption", { class: "ls-illustration", text: copy.disclaimer });
-    // on a phone the frame is a window onto the scene and carries buttons, so the picture's name sits on the scene
-    const frame = el("figure", { class: "ls-frame", role: onPhone ? null : "img" }, onPhone ? [scene, disclaimer] : [scene, loupe, disclaimer]);
+    // on a phone the frame is a window onto the scene and carries buttons, so the picture's name sits on the scene. The
+    // line about the visualisation is left off there: two lines of small print over the photo were what a phone saw
+    // first, next to the close button, before the print (2026-11-23)
+    const frame = el("figure", { class: "ls-frame", role: onPhone ? null : "img" }, onPhone ? [scene] : [scene, loupe, disclaimer]);
     const zoomBtn = onPhone
       ? el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", "aria-label": copy.zoomIn, onclick: () => toggleZoom() }, [ctx.svg(ICON_ZOOM_IN)])
       : el("button", { type: "button", class: "ls-zoom", "aria-pressed": "false", onclick: () => toggleZoom() }, [el("span", { text: copy.zoomIn })]);
@@ -464,7 +473,7 @@
     // projective: whether this engine draws matrix3d with its perspective; checked once the stage is laid out
     let projective = true;
     const lay = (wrap, lid) => { const p = placement(lid); wrap.style.width = `${p.w}px`; wrap.style.height = `${p.h}px`; wrap.style.transform = projective ? p.transform : p.affine; return p; };
-    const thumbs = BOX_ORDER.map((id, i) => {
+    const thumbs = order.map((id, i) => {
       const p = (thumbPrints[id] = makePrint(`${uid}-${id}`, true)), wrap = el("div", { class: "ls-print-wrap" }, [p.svg]);
       lay(wrap, LIDS[id]);
       // a phone needs all seven at once (the Packaging tool, then the result), so they load with the sheet
@@ -496,7 +505,10 @@
     const nameId = `${uid}-name`;
     const nameInput = el("input", { id: nameId, class: "ls-name-input", type: "text", maxlength: String(MAX_NAME), autocomplete: "organization", autocapitalize: "words", spellcheck: "false", placeholder: copy.namePlaceholder, enterkeyhint: "done" });
     const fileInput = el("input", { type: "file", class: "wps-visually-hidden", accept: "image/png,image/jpeg,image/webp,image/svg+xml", tabindex: "-1", "aria-hidden": "true" });
-    const uploadBtn = el("button", { type: "button", class: "ls-upload", "aria-label": onPhone ? copy.uploadCta : null, onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true", text: "↑" }), el("span", { class: "ls-upload-label", text: copy.uploadCta })]);
+    // a phone's square button says what it is for: an upload icon over the word "Logo" (an arrow alone read as nothing)
+    const uploadBtn = onPhone
+      ? el("button", { type: "button", class: "ls-upload", "aria-label": copy.uploadCta, onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true" }, [ctx.svg(ICON_UPLOAD)]), el("span", { class: "ls-upload-short", "aria-hidden": "true", text: copy.uploadShort }), el("span", { class: "ls-upload-label", text: copy.uploadCta })])
+      : el("button", { type: "button", class: "ls-upload", onclick: () => fileInput.click() }, [el("span", { class: "ls-upload-icon", "aria-hidden": "true", text: "↑" }), el("span", { class: "ls-upload-label", text: copy.uploadCta })]);
     const useNameBtn = el("button", { type: "button", class: "wps-link ls-use-name", hidden: true, onclick: () => clearLogo(), text: copy.useName });
     const hint = el("p", { class: "ls-hint", "aria-live": "polite" });
     const setHint = (text, error) => {
@@ -918,8 +930,8 @@
       if (sx == null) return;
       const dx = e.clientX - sx; sx = null; interacting = false; schedule();
       if (Math.abs(dx) > 60 && !layout.classList.contains("is-zoomed")) {
-        const i = BOX_ORDER.indexOf(choice.box);
-        setBox(BOX_ORDER[(i + (dx < 0 ? 1 : BOX_ORDER.length - 1)) % BOX_ORDER.length], "swipe");
+        const i = order.indexOf(choice.box);
+        setBox(order[(i + (dx < 0 ? 1 : order.length - 1)) % order.length], "swipe");
       }
     });
 

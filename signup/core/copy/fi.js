@@ -90,6 +90,7 @@
     "zoomIn": "Katso painatusta läheltä",
     "zoomOut": "Näytä kaikki",
     "uploadCta": "Käytä omaa logoasi",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG tai SVG – logosi pysyy selaimessasi.",
     "uploadOneColour": "Foliopainatus tehdään yhdellä värillä – tältä logosi näyttää foliossa.",
     "uploadError": "Emme saaneet tiedostoa auki. Kokeile PNG- tai JPG-tiedostoa.",

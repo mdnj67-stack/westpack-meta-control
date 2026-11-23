@@ -367,12 +367,11 @@ async function SWEEP() {
   if (pieces.length !== 7 || pieces.some((r) => Math.abs(r.t + r.h / 2 - mid) > 3)) o.c7.push(`pieces ${pieces.length}, not one row`);
   const thumbs = L.q(".ls-tool .ls-thumbs");
   if (W >= 360 && thumbs.scrollWidth > thumbs.clientWidth + 8) o.c7.push(`row ${thumbs.scrollWidth}/${thumbs.clientWidth}`);
-  const dis = L.rect(".ls-illustration"), close = L.rect(".wps-close"), g = L.rect(".wps-grab");
-  const grab = g && { l: g.l + g.w / 2 - 18, r: g.l + g.w / 2 + 18, t: g.t + 8, b: g.t + 12 };
-  if (L.hit(dis, close)) o.c9.push("under the close button");
-  if (L.hit(dis, grab)) o.c9.push("under the grab bar");
-  const lines = Math.round(dis.h / parseFloat(getComputedStyle(L.q(".ls-illustration")).lineHeight));
-  if (lines > (W >= 360 ? 2 : 3)) o.c9.push(`${lines} lines`);
+  // the photo carries no small print on a phone (2026-11-23: the visualisation line sat over it, beside the close
+  // button, as the first thing seen); the upload button says "Logo" under its icon, inside its square
+  if (L.q(".ls-frame .ls-illustration")) o.c9.push("the visualisation line is on the photo");
+  const up = L.rect(".ls-upload"), short = L.rect(".ls-upload-short");
+  if (!short || short.w < 8 || !L.inside(short, up, 0.5)) o.c9.push("the upload button's word is missing or spills out");
   await wait(50);
   const tl = L.q(".ls-tools");
   if (d.scrollHeight > d.clientHeight + 1) o.c2.push(`dialog ${d.scrollHeight}/${d.clientHeight}`);
@@ -480,7 +479,7 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     report(`${phone}, 18 stores: (3) the sheet leaves at least a fifth of the store in sight above it (views from 600px)`, agg.c3);
     report(`${phone}, 18 stores: (4) the stage at rest is at least 0.56 x the width, the window that holds the print`, agg.c4);
     report(`${phone}, 18 stores: (7) the seven pieces in one row`, agg.c7);
-    report(`${phone}, 18 stores: (9) the disclaimer clears the close button and the grab bar, in few lines`, agg.c9);
+    report(`${phone}, 18 stores: (9) no small print over the photo, and the upload button says "Logo" within its square`, agg.c9);
     report(`${phone}, 18 stores: (10) nothing sits on the close button`, agg.c10);
     report(`${phone}, 18 stores: (11) every control is a 44 x 44 target`, agg.c11);
     report(`${phone}, 18 stores: (12) no sideways overflow on any tool`, agg.c12);

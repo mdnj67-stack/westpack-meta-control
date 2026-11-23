@@ -90,6 +90,7 @@
     "zoomIn": "Stampa da vicino",
     "zoomOut": "Vista intera",
     "uploadCta": "Usa il tuo logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG o SVG: il tuo logo resta nel browser.",
     "uploadOneColour": "Il logo viene stampato a caldo in un solo colore: ecco come apparirà.",
     "uploadError": "Non riusciamo a leggere il file. Prova con un PNG o JPG.",

@@ -90,6 +90,7 @@
     "zoomIn": "Nyomat közelről",
     "zoomOut": "Teljes nézet",
     "uploadCta": "Saját logót használok",
+    "uploadShort": "Logó",
     "uploadHint": "PNG, JPG vagy SVG – a logód a böngésződben marad.",
     "uploadOneColour": "A fóliaprégelés egyszínű – így mutat a logód.",
     "uploadError": "Ezt a fájlt nem tudtuk beolvasni. Próbáld meg PNG-vel vagy JPG-vel.",

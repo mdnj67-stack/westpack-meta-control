@@ -90,6 +90,7 @@
     "zoomIn": "Ver a impressão de perto",
     "zoomOut": "Ver tudo",
     "uploadCta": "Usar o seu logótipo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG ou SVG — o seu logótipo fica no seu browser.",
     "uploadOneColour": "A estampagem a quente é feita numa só cor — assim fica o seu logótipo.",
     "uploadError": "Não conseguimos ler esse ficheiro. Experimente um PNG ou JPG.",

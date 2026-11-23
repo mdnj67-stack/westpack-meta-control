@@ -90,6 +90,7 @@
     "zoomIn": "Se trykket på nært hold",
     "zoomOut": "Se alt",
     "uploadCta": "Bruk logoen din",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG eller SVG – logoen din blir i nettleseren.",
     "uploadOneColour": "Ved folietrykk brukes én farge – slik blir logoen din.",
     "uploadError": "Vi klarte ikke å lese filen. Prøv en PNG eller JPG.",

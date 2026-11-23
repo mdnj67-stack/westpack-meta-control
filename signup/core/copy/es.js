@@ -90,6 +90,7 @@
     "zoomIn": "Ver la impresión de cerca",
     "zoomOut": "Ver todo",
     "uploadCta": "Usa tu logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG o SVG: tu logo se queda en tu navegador.",
     "uploadOneColour": "La estampación en caliente se hace en un solo color. Así queda tu logo.",
     "uploadError": "No hemos podido leer el archivo. Prueba con un PNG o JPG.",

@@ -90,6 +90,7 @@
     "zoomIn": "Zobacz nadruk z bliska",
     "zoomOut": "Całość",
     "uploadCta": "Użyj swojego logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG lub SVG – Twoje logo zostaje w przeglądarce.",
     "uploadOneColour": "Logo tłoczymy folią w jednym kolorze – tak będzie wyglądać Twoje logo.",
     "uploadError": "Nie udało się odczytać pliku. Spróbuj użyć PNG lub JPG.",

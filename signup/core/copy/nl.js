@@ -90,6 +90,7 @@
     "zoomIn": "Bekijk de bedrukking",
     "zoomOut": "Alles bekijken",
     "uploadCta": "Gebruik je logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG of SVG – je logo blijft in je browser.",
     "uploadOneColour": "Bij foliedruk wordt één kleur gebruikt – zo ziet je logo in folie eruit.",
     "uploadError": "We konden dat bestand niet lezen. Probeer een PNG of JPG.",

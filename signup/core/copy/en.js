@@ -44,6 +44,7 @@
     zoomIn: "See the print up close",
     zoomOut: "See it all",
     uploadCta: "Use your logo",
+    uploadShort: "Logo",
     uploadHint: "PNG, JPG or SVG – your logo stays in your browser.",
     uploadOneColour: "Foil prints in one colour – this is your logo in foil.",
     uploadError: "We couldn't read that file. Try a PNG or JPG.",

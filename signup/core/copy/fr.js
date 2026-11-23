@@ -90,6 +90,7 @@
     "zoomIn": "Voir le marquage de près",
     "zoomOut": "Voir l’ensemble",
     "uploadCta": "Utiliser votre logo",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG ou SVG – votre logo reste dans votre navigateur.",
     "uploadOneColour": "Le marquage à chaud se fait en une seule couleur. Voici le rendu de votre logo.",
     "uploadError": "Impossible de lire ce fichier. Essayez un PNG ou un JPG.",

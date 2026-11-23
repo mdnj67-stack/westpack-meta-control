@@ -90,6 +90,7 @@
     "zoomIn": "Se trycket på nära håll",
     "zoomOut": "Visa allt",
     "uploadCta": "Använd din logotyp",
+    "uploadShort": "Logo",
     "uploadHint": "PNG, JPG eller SVG – din logotyp stannar i din webbläsare.",
     "uploadOneColour": "Folietryck görs i en enda färg – så här ser din folietryckta logotyp ut.",
     "uploadError": "Vi kunde inte läsa filen. Prova en PNG eller JPG.",
