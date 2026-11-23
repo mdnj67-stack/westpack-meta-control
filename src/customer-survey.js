@@ -158,6 +158,7 @@ function render() {
   const max = Math.max(1, ...state.data.reasons.map((r) => r.count));
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
+    ${state.data.unreadable ? `<div class="wp-alert is-warning"><div><strong>${state.data.unreadable} saved ${state.data.unreadable === 1 ? "answer" : "answers"} could not be read just now</strong> and ${state.data.unreadable === 1 ? "is" : "are"} not in the figures below. Nothing is lost - press Read again.</div></div>` : ""}
     <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted · ${t.finished} finished</p>
     ${state.data.reasons.some((r) => r.count) ? `<div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>

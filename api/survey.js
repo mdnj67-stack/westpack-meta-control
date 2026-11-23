@@ -6,7 +6,8 @@
  *   GET  ?action=who&k=<token>     the company a personal link belongs to, so the post can greet it by name
  *
  * Logged in (the app):
- *   GET  ?action=results[&test=1]  recipients, answers (latest per customer) and the count per reason
+ *   GET  ?action=results[&test=1]  recipients, answers (one per customer) and the count per reason, plus `unreadable`:
+ *                                  saved answers that could not be read this time (never dropped in silence)
  *   POST ?action=recipients        replaces the recipient list: { recipients: [...] }
  *   POST ?action=mark_test         { answers: [{ sid, at }] } - marks those answers as a test, in place; deletes nothing
  *
@@ -87,9 +88,9 @@ module.exports = async function handler(req, res) {
   if (action === "results") {
     if (req.method !== "GET") return sendJson(res, 405, { error: "GET only." });
     try {
-      const [doc, responses] = await Promise.all([store.readRecipients(survey.SURVEY_ID), store.readResponses(survey.SURVEY_ID)]);
-      const summary = survey.summarize({ responses, recipients: doc.recipients, includeTest: q.get("test") === "1" });
-      return sendJson(res, 200, Object.assign(summary, { recipients: doc.recipients, recipientsUpdatedAt: doc.updatedAt, store: { mode: store.storeMode() } }));
+      const [doc, files] = await Promise.all([store.readRecipients(survey.SURVEY_ID), store.readResponseFiles(survey.SURVEY_ID)]);
+      const summary = survey.summarize({ responses: files.records, recipients: doc.recipients, includeTest: q.get("test") === "1" });
+      return sendJson(res, 200, Object.assign(summary, { unreadable: files.unreadable, recipients: doc.recipients, recipientsUpdatedAt: doc.updatedAt, store: { mode: store.storeMode() } }));
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
 

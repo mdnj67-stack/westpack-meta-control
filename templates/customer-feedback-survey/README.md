@@ -71,8 +71,14 @@ US. Linkene går dertil, så den skal være præcis sådan.
    answers".
 
 > **23/11:** Indlægget blev lagt op som "Churn survey" med URL-nøglen `churn-survey`. Alle mails linker til
-> `customer-feedback-2026`, så de gav 404, og "churn" står i adressen, som kunden ser. Ret URL-nøglen og titlen som
-> beskrevet ovenfor, før der sendes noget.
+> `customer-feedback-2026`, så de gav 404, og "churn" står i adressen, som kunden ser. Samme dag lå det på
+> `customer-feedback-2026` med titlen "Customer Feedback Survey" i alle 18 butikker - men med blokken fra før 23/11.
+> Den virker for kunderne, men sæt den nye ind: den gemmer testsvar som test, prøver kundens tekst igen, hvis første
+> gem fejler (ellers er svaret væk, hvis kunden lukker siden før kontaktspørgsmålet), og skriver "Tak, Perlove Sp. z
+> o.o." uden dobbelt punktum.
+>
+> Test af hele kæden gennem det rigtige indlæg med rigtige links (svaret gemmes som test, aldrig på kunden):
+> `node tmp/playwright-runner/survey-live-e2e.js`.
 
 Samme blok bruges i alle butikker. Den finder selv sproget ud fra butikkens adresse, og "Til webshoppen" peger på den
 butik, siden står i.

@@ -81,21 +81,38 @@ function storeMode() {
   return token() ? "blob" : "local_file";
 }
 
+// One more try after a short pause: one failed request to Blob must neither lose an answer nor hide one. Both are
+// safe to repeat - a write goes to its own fixed name, a read changes nothing.
+async function twice(fn, pauseMs = 400) {
+  try { return await fn(); } catch (e) {
+    await new Promise((r) => setTimeout(r, pauseMs));
+    return fn();
+  }
+}
+
 async function writeResponse(survey, record, now = Date.now()) {
   const pathname = `${prefix(survey)}/responses/${now}-${crypto.randomBytes(5).toString("hex")}.json`;
   if (!token()) { localWrite(pathname, record); return { mode: "local_file" }; }
-  await blobPut(pathname, record);
+  await twice(() => blobPut(pathname, record));
   return { mode: "blob" };
 }
 
-async function readResponses(survey) {
+// Every saved answer, read file by file. A file that cannot be read on the second try either is counted in
+// `unreadable`, never dropped in silence: biblen says so, so a short count is never taken for the real one.
+async function readResponseFiles(survey) {
   if (!token()) {
     const dir = localPath(`${prefix(survey)}/responses`);
-    if (!fs.existsSync(dir)) return [];
-    return fs.readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => localRead(`${prefix(survey)}/responses/${f}`)).filter(Boolean);
+    if (!fs.existsSync(dir)) return { records: [], unreadable: 0 };
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => localRead(`${prefix(survey)}/responses/${f}`));
+    return { records: files.filter(Boolean), unreadable: files.filter((r) => !r).length };
   }
   const blobs = await blobList(`${prefix(survey)}/responses/`);
-  return (await pool(blobs, 16, (b) => blobGet(b.pathname).catch(() => null))).filter(Boolean);
+  const got = await pool(blobs, 24, (b) => twice(() => blobGet(b.pathname)).then((record) => ({ record }), () => ({ failed: true })));
+  return { records: got.map((g) => g.record).filter(Boolean), unreadable: got.filter((g) => g.failed).length };
+}
+
+async function readResponses(survey) {
+  return (await readResponseFiles(survey)).records;
 }
 
 async function readRecipients(survey) {
@@ -118,7 +135,7 @@ async function markResponsesTest(survey, isMarked, now = Date.now()) {
   const stamp = new Date(now).toISOString();
   const dir = `${prefix(survey)}/responses`;
   const entries = token()
-    ? await pool(await blobList(`${dir}/`), 16, async (b) => ({ pathname: b.pathname, record: await blobGet(b.pathname).catch(() => null) }))
+    ? await pool(await blobList(`${dir}/`), 16, async (b) => ({ pathname: b.pathname, record: await twice(() => blobGet(b.pathname)).catch(() => null) }))
     : (fs.existsSync(localPath(dir)) ? fs.readdirSync(localPath(dir)).filter((n) => n.endsWith(".json")) : []).map((n) => ({ pathname: `${dir}/${n}`, record: localRead(`${dir}/${n}`) }));
   let marked = 0;
   for (const { pathname, record } of entries) {
@@ -131,4 +148,4 @@ async function markResponsesTest(survey, isMarked, now = Date.now()) {
   return { marked, files: entries.length };
 }
 
-module.exports = { storeMode, writeResponse, readResponses, readRecipients, writeRecipients, markResponsesTest };
+module.exports = { storeMode, writeResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest };

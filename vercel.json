@@ -35,6 +35,9 @@
     "api/email/name-print.js": {
       "maxDuration": 30,
       "includeFiles": "server/email/name-print/**"
+    },
+    "api/survey.js": {
+      "maxDuration": 60
     }
   },
   "crons": [

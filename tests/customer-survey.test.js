@@ -31,12 +31,17 @@ test("unknown reasons are refused; bots are swallowed, not refused", () => {
   assert.equal(survey.sanitizeSubmission(ok({ ms: 300 })).drop, "too_fast");
 });
 
-test("texts are capped and stripped of control characters and 4-byte characters", () => {
+test("texts are capped and stripped of control characters; emoji stay, half of one does not", () => {
   const { record } = survey.sanitizeSubmission(ok({ followup: "a\u0000b" + "x".repeat(3000) + "\u{1F600}" }));
   assert.equal(record.followup.includes("\u0000"), false);
   assert.equal(record.followup.length, 1500);
-  const r2 = survey.sanitizeSubmission(ok({ followup: "god \u{1F600} service" })).record;
-  assert.equal(/[\uD800-\uDFFF]/.test(r2.followup), false);
+  // found by the live end-to-end test on 23/11: a customer's emoji was removed from the answer
+  const r2 = survey.sanitizeSubmission(ok({ followup: "god \u{1F600} service, æøå ł ő" })).record;
+  assert.equal(r2.followup, "god \u{1F600} service, æøå ł ő");
+  // the cap falls in the middle of an emoji: the half left over goes, the text stays valid
+  const cut = survey.sanitizeSubmission(ok({ followup: "x".repeat(1499) + "\u{1F600}" })).record.followup;
+  assert.equal(cut, "x".repeat(1499));
+  assert.equal(survey.sanitizeSubmission(ok({ followup: "lone \uD83D half and \uDE00 tail" })).record.followup, "lone  half and  tail");
   assert.equal(survey.sanitizeSubmission(ok({ reason: "competitor", other: "ignored" })).record.other, "");
   assert.equal(survey.sanitizeSubmission(ok({ reason: "other", other: "Lukket" })).record.other, "Lukket");
 });
@@ -184,6 +189,71 @@ test("a visit saved after every question is one answer, on its latest save", () 
   assert.equal(competitor.count, 1);
   assert.equal(competitor.details.find((d) => d.id === "price").count, 1);
   assert.deepEqual(s.answers.find((a) => a.sid === "visit0001aa").detailLabels, ["Lower price", "Lower minimum order"]);
+});
+
+test("a slow first save arriving after the last does not undo a finished answer", () => {
+  const responses = [
+    // the customer finished at 09:00:05; the first save (cold start) reached the server at 09:00:07
+    { sid: "visit0003cc", token: "ab12cd34", at: "2026-11-24T09:00:05Z", followup: "For dyrt fragt", contact: "yes", step: 3 },
+    { sid: "visit0003cc", token: "ab12cd34", at: "2026-11-24T09:00:07Z", followup: "For dyrt fragt", contact: "", step: 1 },
+    // went back, rewrote, left before the contact question: the newest words of that visit count
+    { sid: "visit0004dd", token: null, at: "2026-11-24T10:00:00Z", followup: "Første udkast", step: 1 },
+    { sid: "visit0004dd", token: null, at: "2026-11-24T10:01:00Z", followup: "Andet udkast", step: 1 },
+  ];
+  const s = survey.summarize({ responses, recipients: [{ token: "ab12cd34", firma: "A" }] });
+  const a = s.answers.find((x) => x.sid === "visit0003cc");
+  assert.equal(a.step, 3);
+  assert.equal(a.contact, "yes");
+  assert.equal(s.totals.finished, 1);
+  assert.equal(s.totals.wantsContact, 1);
+  assert.equal(s.answers.find((x) => x.sid === "visit0004dd").followup, "Andet udkast");
+  // a customer's later visit still wins over an earlier finished one, timed by its last save
+  const later = survey.summarize({ responses: [...responses, { sid: "visit0005ee", token: "ab12cd34", at: "2026-11-25T08:00:00Z", followup: "Ny grund", step: 1 }] });
+  assert.equal(later.answers.find((x) => x.token === "ab12cd34").followup, "Ny grund");
+});
+
+test("Blob: a failed write or read gets a second try; a file that still fails is counted, not dropped", async () => {
+  const saved = process.env.BLOB_READ_WRITE_TOKEN;
+  const realFetch = global.fetch;
+  process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_unitstore_secret";
+  const store = require("../server/survey/survey-store");
+  const tries = {};
+  const reply = (status, body) => ({ ok: status < 300, status, json: async () => body, text: async () => (typeof body === "string" ? body : JSON.stringify(body)) });
+  global.fetch = async (url, opts = {}) => {
+    const u = String(url);
+    if ((opts.method || "GET") === "PUT") { tries.put = (tries.put || 0) + 1; return reply(tries.put === 1 ? 503 : 200, {}); }
+    if (u.startsWith("https://vercel.com/api/blob?")) return reply(200, { blobs: ["a", "b", "c", "d", "e"].map((n) => ({ pathname: `surveys/x/responses/${n}.json` })), hasMore: false });
+    const name = u.match(/responses\/(\w)\.json/)[1];
+    tries[name] = (tries[name] || 0) + 1;
+    if (name === "b" && tries.b === 1) return reply(500, "");
+    if (name === "c") return reply(500, "");
+    if (name === "d") return reply(200, "{not json");
+    if (name === "e") return reply(404, "");
+    return reply(200, { followup: `answer ${name}` });
+  };
+  try {
+    await store.writeResponse("x", { followup: "hej" });
+    assert.equal(tries.put, 2, "the write was tried again after a 503");
+    const { records, unreadable } = await store.readResponseFiles("x");
+    assert.deepEqual(records.map((r) => r.followup).sort(), ["answer a", "answer b"], "b came on the second try");
+    assert.equal(unreadable, 2, "c (500 twice) and d (not JSON) are counted; e (deleted since the list) is not");
+    assert.equal(tries.c, 2);
+  } finally {
+    global.fetch = realFetch;
+    if (saved) process.env.BLOB_READ_WRITE_TOKEN = saved; else delete process.env.BLOB_READ_WRITE_TOKEN;
+  }
+});
+
+test("biblen is told when saved answers could not be read, and the post retries its first save", () => {
+  const api = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
+  const view = fs.readFileSync(path.join(ROOT, "src", "customer-survey.js"), "utf8");
+  const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
+  assert.match(api, /readResponseFiles\(/);
+  assert.match(api, /unreadable: files\.unreadable/);
+  assert.match(view, /state\.data\.unreadable \?/);
+  assert.match(html, /save\(1\)\.catch\(function \(\) \{ setTimeout\(function \(\) \{ if \(S\.step < 3\) save\(1\)/);
+  const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
+  assert.ok(vercel.functions["api/survey.js"].maxDuration >= 60, "reading every answer file needs more than the default time");
 });
 
 test("the post asks for a written answer: no options to pick, and words are required", () => {

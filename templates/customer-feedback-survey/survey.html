@@ -224,7 +224,7 @@
     var h = q("[data-h]"), sub = q("[data-sub]");
     if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
     if (n === 2) { h.textContent = T.h2; sub.textContent = T.sub2; }
-    if (n === 3) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma) : T.thanks; sub.textContent = T.sub3; }
+    if (n === 3) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma.replace(/\.+$/, "")) : T.thanks; sub.textContent = T.sub3; }
     q("[data-meta]").textContent = n < 3 ? T.step.replace("{n}", n) : T.done_meta;
     qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 2)); });
   }
@@ -250,7 +250,8 @@
     S.text = ta.value.trim();
     if (letters(S.text) < MIN_CHARS) { err(T.err_short); ta.focus(); return; }
     q("[data-quote]").textContent = S.text;
-    save(1).catch(function () {});
+    // The words are the answer: if this first save fails, try once more, unless the last save has gone by then
+    save(1).catch(function () { setTimeout(function () { if (S.step < 3) save(1).catch(function () {}); }, 2500); });
     go(2);
   }
   function finish(btn) {

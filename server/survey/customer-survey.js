@@ -50,13 +50,15 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 // The first answer is saved on the first tap, so this only has to catch a script, not a fast reader.
 const MIN_FILL_MS = 1200;
 
+// An answer is kept as the customer wrote it, emoji included (they live in Blob, not in the store's utf8mb3 database).
+// Only half a surrogate pair goes - one the cap cut in two, or a broken client - since that is not text.
 function text(value, max) {
   return String(value ?? "")
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
-    .replace(/[\uD800-\uDFFF]/g, "")
     .replace(/\s+\n/g, "\n")
     .trim()
-    .slice(0, max);
+    .slice(0, max)
+    .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 
 /**
@@ -148,11 +150,27 @@ function detailLabel(reason, id) {
 /**
  * One row per answer. The post saves after every question, so a visit is one answer however many saves it made
  * (keyed on the visit), and a customer with a personal link counts once across visits and devices (keyed on the
- * token) - always on the latest save. Test answers are left out unless asked for.
+ * token). Test answers are left out unless asked for.
+ *
+ * Within a visit the save that got furthest wins, and among equals the latest: the last save carries the whole answer,
+ * and the first one can reach the server after it (a cold start on the first request while the customer taps "No"),
+ * which on time alone would turn a finished answer into one that stopped before the contact question. Between a
+ * customer's visits the later visit wins, timed by its last save.
  */
 function summarize({ responses = [], recipients = [], includeTest = false } = {}) {
   const byToken = new Map(recipients.map((r) => [r.token, r]));
-  const sorted = responses.filter((r) => r && (includeTest || !r.test)).sort((a, b) => String(b.at).localeCompare(String(a.at)));
+  const kept = responses.filter((r) => r && (includeTest || !r.test));
+  const stepOf = (r) => r.step || 3;
+  const visits = new Map();
+  const loose = [];
+  for (const r of kept) {
+    if (!r.sid) { loose.push({ r, at: String(r.at) }); continue; }
+    const v = visits.get(r.sid);
+    if (!v) { visits.set(r.sid, { r, at: String(r.at) }); continue; }
+    if (String(r.at) > v.at) v.at = String(r.at);
+    if (stepOf(r) > stepOf(v.r) || (stepOf(r) === stepOf(v.r) && String(r.at) > String(v.r.at))) v.r = r;
+  }
+  const sorted = [...visits.values(), ...loose].sort((a, b) => b.at.localeCompare(a.at)).map((x) => x.r);
   const latest = [];
   const seen = new Set();
   for (const r of sorted) {
