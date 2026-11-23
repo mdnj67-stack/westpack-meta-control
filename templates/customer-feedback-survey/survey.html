@@ -15,10 +15,6 @@
 #wpfb .wpfb-title{margin:0;padding:0;font-family:inherit;font-size:12.5px;line-height:1.3;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);-webkit-text-fill-color:var(--red);background:none}
 #wpfb .wpfb-panel{display:flex;flex-direction:column;min-width:0;padding:22px 20px 20px}
 #wpfb .wpfb-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:0 0 14px;min-height:18px}
-#wpfb .wpfb-meta{margin:0;display:flex;align-items:center;gap:10px;font-size:13px;line-height:1;font-weight:500;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
-#wpfb .wpfb-prog{display:flex;gap:4px}
-#wpfb .wpfb-prog i{display:block;width:28px;height:4px;border-radius:2px;background:#ebebeb;transition:background .35s}
-#wpfb .wpfb-prog i.on{background:var(--red)}
 #wpfb .wpfb-h{margin:0 0 10px;padding:0 0 .06em;font-family:inherit;font-size:25px;line-height:1.16;font-weight:700;letter-spacing:-.03em;color:var(--red);background:linear-gradient(0deg,#aa060b,#d10a11);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-transform:none;outline:none;text-wrap:balance}
 #wpfb .wpfb-sub{margin:0;font-size:15.5px;line-height:1.55;color:var(--text);max-width:52ch;text-wrap:pretty}
 #wpfb.is-intro .wpfb-row,#wpfb.is-intro .wpfb-hx,#wpfb.is-intro form{animation:wpfb-in .6s cubic-bezier(.2,.7,.2,1) both}
@@ -114,15 +110,15 @@
 <figcaption class="wpfb-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg><span data-t="chip">Vi læser hvert eneste svar</span></figcaption>
 </figure>
 <div class="wpfb-panel">
-<div class="wpfb-row"><h1 class="wpfb-title" data-t="title">Vi vil gerne høre fra dig</h1><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
+<div class="wpfb-row"><h1 class="wpfb-title" data-t="title">Vi vil gerne høre fra dig</h1></div>
 <div class="wpfb-hx" data-hx>
-<h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har vi ikke set dig i et stykke tid?</h2>
-<p class="wpfb-sub" data-sub>Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.</p>
+<h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har du ikke handlet hos os på det seneste?</h2>
+<p class="wpfb-sub" data-sub>Du har tidligere handlet hos Westpack, men det er noget tid siden sidst. Vi vil gerne forstå, hvad der har ændret sig.</p>
 </div>
 <form novalidate>
 <div class="wpfb-step" data-step="1">
-<label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har vi ikke set dig i et stykke tid?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
-<div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Det tager under et minut.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+<label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har du ikke handlet hos os på det seneste?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
+<div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Skriv med dine egne ord – én sætning er nok.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
 <div class="wpfb-step" data-step="2" hidden>
 <p class="wpfb-quote" data-quote></p>
@@ -148,12 +144,10 @@
     da: {
       title: "Vi vil gerne høre fra dig",
       chip: "Vi læser hvert eneste svar",
-      step: "{n} af 2",
-      done_meta: "Færdig",
-      h1: "Hvorfor har vi ikke set dig i et stykke tid?",
-      sub1: "Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.",
+      h1: "Hvorfor har du ikke handlet hos os på det seneste?",
+      sub1: "Du har tidligere handlet hos Westpack, men det er noget tid siden sidst. Vi vil gerne forstå, hvad der har ændret sig.",
       placeholder: "Skriv dit svar her …",
-      hint: "Det tager under et minut.",
+      hint: "Skriv med dine egne ord – én sætning er nok.",
       send: "Send svar",
       sending: "Sender …",
       err_short: "Skriv gerne en hel sætning – så kan vi bruge dit svar.",
@@ -175,12 +169,10 @@
     en: {
       title: "We'd like to hear from you",
       chip: "We read every single answer",
-      step: "{n} of 2",
-      done_meta: "Done",
-      h1: "Why haven't we seen you for a while?",
-      sub1: "Tell us in your own words. The more specific, the better – one sentence is enough.",
+      h1: "Why haven't you ordered from us lately?",
+      sub1: "You've ordered from Westpack before, but it's been a while. We'd like to understand what has changed.",
       placeholder: "Write your answer here …",
-      hint: "It takes under a minute.",
+      hint: "In your own words – one sentence is enough.",
       send: "Send answer",
       sending: "Sending …",
       err_short: "A whole sentence would help – then we can use your answer.",
@@ -264,8 +256,6 @@
     if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
     if (n === 2) { h.textContent = T.h2; sub.textContent = T.sub2; }
     if (n === 3) { h.textContent = T.thanks; sub.textContent = T.sub3; }
-    q("[data-meta]").textContent = n < 3 ? T.step.replace("{n}", n) : T.done_meta;
-    qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 2)); });
   }
   function go(n, silent) {
     S.step = n;
@@ -329,6 +319,22 @@
     if (S.step === 1) sendText();
     else if (S.step === 2) { S.email = q("input[name=email]").value; finish(q("[data-send2]")); }
   });
+
+  // The store's newsletter popup (Klaviyo's "The Insert") opens on every page a few seconds in. Over this page it took
+  // the keyboard while the customer was writing - 38 to 62 typed letters lost in DK, DE and PL on 23/11 - and locked the
+  // page's scrolling. So on this page it is never shown: one rule in the page's head keeps Klaviyo's full-screen popup
+  // out of the layout from the start (display:none, because Klaviyo's own CSS makes everything inside it visible and
+  // nothing weaker holds - and an element that is not laid out cannot take the keyboard), and the class Klaviyo puts on
+  // <body> to stop the page scrolling is taken off again. Nothing changes in Klaviyo; small flyouts are left alone.
+  if (!document.getElementById("wpfb-quiet")) {
+    var quiet = document.createElement("style");
+    quiet.id = "wpfb-quiet";
+    quiet.textContent = "div[data-kl-scroll-locking-modal]{display:none!important}";
+    (document.head || document.documentElement).appendChild(quiet);
+  }
+  function unlock() { if (document.body.classList.contains("klaviyo-prevent-body-scrolling")) document.body.classList.remove("klaviyo-prevent-body-scrolling"); }
+  if (window.MutationObserver) new MutationObserver(unlock).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  unlock();
 
   if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(3, true); }
   else { go(1, true); ready(); }

@@ -5,7 +5,8 @@ webshoppen** (en CMS-side), ikke på bloggen. Fra 23/11 er det en side: på blog
 og "Seneste indlæg", og det så forkert ud (Mads: "Det her kategori halløj osv ligner lort i siden").
 
 **Kunden svarer med egne ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og
-specifikke svar så har det mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen med "1 af 2" øverst.
+specifikke svar så har det mere værdi"). Det tager under et minut: ét spørgsmål at skrive et svar på, og bagefter ét tryk
+på Ja eller Nej. Der er ingen trintæller (Mads 23/11: "Der er vel kun et trin?").
 
 **Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto til venstre i en
 ramme inde i kortet: en medarbejder, der smiler med armene fulde af Westpack-æsker (fotoet fra "Om Westpack",
@@ -17,8 +18,9 @@ uden at scrolle. Fotoet toner langsomt frem, og ingen bevægelse vises for den, 
 er"). Der er ingen hilsen med firmanavn, takken er "Tak for dit svar.", og teksten om data nævner ikke, at vi kan se,
 hvem svaret er fra. Svaret bliver stadig knyttet til kunden via linket.
 
-1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Et stort tekstfelt. Under overskriften står: "Skriv det med dine
-   egne ord. Jo mere konkret, jo bedre – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
+1. **"Hvorfor har du ikke handlet hos os på det seneste?"** (Mads 23/11) Et stort tekstfelt. Under overskriften står:
+   "Du har tidligere handlet hos Westpack, men det er noget tid siden sidst. Vi vil gerne forstå, hvad der har ændret
+   sig." Ved knappen står "Skriv med dine egne ord – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
    først, når der står en sætning (mindst 12 bogstaver). **Svaret gemmes, så snart man trykker Send**, så det er med,
    selv om man stopper der. Der er bevidst ingen eksempelsvar, for folk skriver eksemplet af i stedet for deres egen
    grund.
@@ -52,21 +54,26 @@ Det er de 500 kunder med den største webshop-omsætning gennem tiden, som ikke 
 Navision-dataene indeholder kun DETAIL-kunder. Kontakt derfor ikke nogen fra listen, før et menneske har gennemgået den
 for KAS-kunder.
 
-Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=abc12345`.
+Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=abc12345`.
 Koden står efter `#`, og svaret bliver knyttet til kunden. Siden viser ikke, at den kender koden. Uden kode virker
 siden også, men så er svaret anonymt.
 
 ## Sådan laver du siden
 
-Siden skal have **URL-nøglen `customer-feedback-2026`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
-være præcis sådan. Den var ledig 23/11 (DK og UK svarede 404).
+> **Siden findes (23/11):** den blev lavet med URL-nøglen `Customer-Survey-2026`, som Magento viser som
+> **`customer-survey-2026`** i alle 18 butikker, med titlen "Customer Survey". Alle 3.393 links i biblen, i Excel-listerne
+> og i sendescriptet peger dertil. Ændr ikke URL-nøglen nu, for så holder alle links op med at virke. Vejledningen
+> herunder er til, hvis siden skal laves igen.
+
+Siden skal have **URL-nøglen `customer-survey-2026`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
+være præcis sådan.
 
 1. Gå til **Content → Elements → Pages** i admin, og tryk **Add New Page**.
 2. Udfyld felterne:
    - **Enable Page:** Yes
    - **Page Title:** Vi vil gerne høre fra dig. Titlen ses kun i browserfanen. Én side til alle butikker er nok. Vil I
      have en engelsk titel i de andre butikker, så lav to sider med samme URL-nøgle: én til DK og én til de 17 andre.
-   - Under **Search Engine Optimization:** URL Key `customer-feedback-2026` og Meta Title "Vi vil gerne høre fra dig |
+   - Under **Search Engine Optimization:** URL Key `customer-survey-2026` og Meta Title "Vi vil gerne høre fra dig |
      Westpack". Har I feltet **Meta Robots**, så vælg `NOINDEX,NOFOLLOW`, for siden er kun til dem, der får linket.
    - Under **Page in Websites:** alle 18 store views.
    - Under **Design:** Layout **1 column**, ligesom "Om Westpack" og FAQ. Så står siden uden kolonner og sidebar.
@@ -76,8 +83,8 @@ være præcis sådan. Den var ledig 23/11 (DK og UK svarede 404).
    elementer, heller ikke en overskrift: siden har sin egen. Brug **ikke** den almindelige teksteditor (WYSIWYG), for
    den fjerner `<script>` og `<style>`.
 4. Gem, og test i to butikker:
-   - `https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=test` – dansk tekst
-   - `https://www.westpack.com/gbp_uk_eng/customer-feedback-2026#k=test` – engelsk tekst
+   - `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=test` – dansk tekst
+   - `https://www.westpack.com/gbp_uk_eng/customer-survey-2026#k=test` – engelsk tekst
 
    Med `#k=test` bliver svaret gemt som en test. I biblen kan det ses med "Show test answers", men det tæller ikke med.
    Er et testsvar alligevel gemt som rigtigt, fx fordi nogen skrev "Test" uden `#k=test`, så tryk **Mark as test** ud
@@ -86,8 +93,13 @@ være præcis sådan. Den var ledig 23/11 (DK og UK svarede 404).
    givet dér, ligger stadig i biblen.
 
 > **23/11:** Først lå skemaet på bloggen: som "Churn survey" på `churn-survey`, så på `customer-feedback-2026` med
-> titlen "Customer Feedback Survey". Samme dag blev det flyttet til en side. Der var endnu ikke sendt nogen mails, så
-> intet link i en indbakke peger på bloggen. Biblen godtager stadig links af den gamle form.
+> titlen "Customer Feedback Survey". Samme dag blev det flyttet til en side, og siden fik adressen
+> `customer-survey-2026`. Der var endnu ikke sendt nogen mails, så intet link i en indbakke peger på en af de gamle
+> adresser. Biblen godtager stadig links af de gamle former, og sendescriptet skriver dem om til sidens adresse.
+>
+> **Mailen sendes fra den delte postkasse "Westpack" (`wpsales@westpack.com`).** Sendescriptet bruger den som
+> standard, og en test 23/11 kom frem som `From: Westpack <wpsales@westpack.com>`, ikke "på vegne af". Svarer en kunde
+> på mailen, lander svaret i den postkasses indbakke.
 >
 > Test af hele kæden gennem den rigtige side med rigtige links (svaret gemmes som test, aldrig på kunden):
 > `node tmp/playwright-runner/survey-live-e2e.js`. Før siden findes, viser `node tmp/playwright-runner/survey-page-preview.js`
@@ -112,6 +124,10 @@ feltet helt, og sæt filen ind igen.
 - **Beskyttelse mod spam.** Der er et skjult felt, som kun robotter udfylder. Desuden bliver et svar, der er sendt
   hurtigere end 1,2 sekunder efter, at siden blev åbnet, ignoreret.
 - **Går serveren ned,** står kunden stadig på sidste spørgsmål med en fejlbesked og kan prøve igen.
+- **Butikkens nyhedsbrev-popup vises ikke på siden.** Klaviyos "The Insert" åbner på alle sider efter ca. 5 sekunder.
+  På skemaet tog den tastaturet, mens kunden skrev (23/11 forsvandt 38-62 skrevne bogstaver i DK, DE og PL), og låste
+  siden, så man ikke kunne scrolle. Blokken holder den skjult og ophæver låsen. Der er ikke ændret noget i Klaviyo, og
+  andre sider viser den som før. Signup Lab kører heller ikke på siden.
 - **Tekst om data nederst:** "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre."
 - **Oversættelse:** al tekst ligger i `STR` i blokkens script, ét sæt pr. sprog. Butikken vælger sproget i
   `STORE_LANG`. Et nyt sprog tilføjes ved at oversætte `da` og indsætte det som fx `de` i `STR`. En test kræver, at

@@ -26,6 +26,18 @@ test("an e-mail is kept only when the person asked to be contacted - with a pers
   assert.equal(survey.sanitizeSubmission(ok({ k: "", email: "not an address" })).record.email, undefined);
 });
 
+test("the store's newsletter popup never shows over the survey, and never locks the page", () => {
+  // 23/11: Klaviyo's full-screen popup ("The Insert") opened ~5 s in, took the keyboard (38-62 typed letters lost in DK,
+  // DE and PL) and locked scrolling. Hiding it any weaker way fails: Klaviyo's CSS sets every element inside it visible,
+  // its focus guards then take the keyboard, an inert close button ignores a click, and clicking close brings a teaser
+  // that takes the focus in turn. Checked on the live page: tmp/playwright-runner/survey-focus-probe.js --local.
+  const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
+  assert.ok(html.includes('quiet.textContent = "div[data-kl-scroll-locking-modal]{display:none!important}";'), "Klaviyo's full-screen popup is kept out of the layout");
+  assert.ok(html.includes('document.body.classList.remove("klaviyo-prevent-body-scrolling")'), "Klaviyo's scroll lock is taken off");
+  assert.ok(html.includes('new MutationObserver(unlock).observe(document.body, { attributes: true, attributeFilter: ["class"] })'), "whenever Klaviyo puts it back");
+  assert.equal(/klaviyo-close-form|\.inert\b/.test(html), false, "the popup is kept out, not fought");
+});
+
 test("the page never tells the visitor we know who they are", () => {
   // the user, 2026-11-23: "Vi skal ikke fortælle kunden at vi ved hvem de er"
   const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
@@ -87,7 +99,7 @@ test("a customer answering twice counts once, on the latest answer; tests are le
 
 test("the recipient list keeps no e-mail or phone, and refuses bad tokens and links", () => {
   const { recipients } = survey.sanitizeRecipients([
-    { token: "ab12cd34", firma: "A", email: "x@y.dk", telefon: "+45 1234", link: "https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=ab12cd34" },
+    { token: "ab12cd34", firma: "A", email: "x@y.dk", telefon: "+45 1234", link: "https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=ab12cd34" },
     { token: "AB12CD34", firma: "dup" },
     { token: "bad token" },
     { token: "cd34ef56", link: "https://evil.example/x" },
@@ -97,7 +109,7 @@ test("the recipient list keeps no e-mail or phone, and refuses bad tokens and li
   assert.equal(recipients.length, 3);
   assert.equal(recipients[0].email, undefined);
   assert.equal(recipients[0].telefon, undefined);
-  assert.equal(recipients[0].link, "https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=ab12cd34");
+  assert.equal(recipients[0].link, "https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=ab12cd34");
   assert.equal(recipients[1].link, "");
   assert.equal(recipients[2].link, "https://www.westpack.com/gbp_uk_eng/blog/customer-feedback-2026#k=ef56ab12");
 });

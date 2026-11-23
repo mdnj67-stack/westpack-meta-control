@@ -18,7 +18,9 @@
   // (those belong to the "Always on sale" flyout). Outlet pages are named outlet-*.html in every store, and every
   // sale page sits under sale/ or is sale.html, whatever language the rest of the path is in.
   const EXCLUDED_PATHS = [/\/checkout/i, /\/onestepcheckout/i, /\/cart(\/|\.html|$)/i, /\/customer\/account/i,
-    /\/wishlist/i, /\/newsletter-signup/i, /\/sale\.html/i, /\/sale\//i, /\/outlet-/i, /\/search/i];
+    /\/wishlist/i, /\/newsletter-signup/i, /\/sale\.html/i, /\/sale\//i, /\/outlet-/i, /\/search/i,
+    // the lapsed-customer survey (templates/customer-feedback-survey): a popup there takes the keyboard from an answer
+    /\/customer-survey-2026/i];
 
   // One close means not now; a second means not this month; a third means leave them alone.
   const SUPPRESSION = { closedDays: [14, 45, 120], peekDismissedDays: 7, emailVisitorDays: 180 };
