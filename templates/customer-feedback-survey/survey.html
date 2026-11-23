@@ -38,23 +38,11 @@
 #wpfb .wpfb-btn:hover svg{transform:translateX(2px)}
 #wpfb .wpfb-btn.is-idle{opacity:.38;box-shadow:none}
 #wpfb .wpfb-btn[disabled]{opacity:.5;cursor:default}
-#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-yn button:focus-visible,#wpfb .wpfb-back:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-mail:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 #wpfb .wpfb-link{margin:0;padding:4px 2px;background:none;border:0;border-radius:2px;font:inherit;font-size:14px;line-height:1.3;color:var(--text);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 #wpfb .wpfb-link:hover{color:var(--ink)}
-#wpfb .wpfb-quote{position:relative;margin:0 0 18px;padding:14px 18px 14px 20px;background:var(--soft);border-radius:6px;font-size:15px;line-height:1.55;color:var(--text);max-height:8.2em;overflow:hidden;white-space:pre-wrap;word-break:break-word}
-#wpfb .wpfb-quote::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 2px 2px 0;background:var(--red)}
-#wpfb .wpfb-yn{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-#wpfb .wpfb-yn button{min-height:52px;margin:0;padding:12px 18px;border-radius:6px;font:inherit;font-size:16px;line-height:1.2;font-weight:600;text-transform:none;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s}
-#wpfb .wpfb-yes{background:var(--red);border:1px solid var(--red);color:#fff}
-#wpfb .wpfb-yes:hover{background:var(--red2);border-color:var(--red2)}
-#wpfb .wpfb-no{background:#fff;border:1px solid var(--line);color:var(--ink)}
-#wpfb .wpfb-no:hover{border-color:#a0a0a0}
-#wpfb .wpfb-yn button[aria-pressed=true]{box-shadow:0 0 0 4px rgba(209,10,17,.16)}
-#wpfb .wpfb-email{margin:18px 0 0}
-#wpfb .wpfb-field{display:block;margin:0}
-#wpfb .wpfb-field>span{display:block;margin:0 0 6px;font-size:14px;line-height:1.3;font-weight:500;color:var(--text)}
-#wpfb input[type=email]{display:block;width:100%;height:48px;margin:0;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:16px;color:var(--ink);box-shadow:none;transition:border-color .15s,box-shadow .15s}
-#wpfb input[type=email]:focus{outline:none;border-color:#1a1a1a;box-shadow:0 0 0 4px rgba(17,17,17,.06)}
+#wpfb .wpfb-mail{border-radius:2px;color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px;word-break:break-word}
+#wpfb .wpfb-mail:hover{color:var(--red2)}
 #wpfb .wpfb-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px;margin:18px 0 0}
 #wpfb .wpfb-actions .wpfb-btn{width:100%}
 #wpfb .wpfb-ok{display:flex;align-items:center;gap:14px;margin:0;padding:14px 18px 14px 14px;background:var(--soft);border-radius:6px}
@@ -69,9 +57,6 @@
 #wpfb .wpfb-err{margin:-8px 0 18px;font-size:14px;line-height:1.4;font-weight:500;color:var(--red)}
 #wpfb .wpfb-foot{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:auto 0 0;padding:16px 0 0;border-top:1px solid #eee}
 #wpfb .wpfb-foot p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted);max-width:68ch}
-#wpfb .wpfb-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;margin:0;padding:1px 0;background:none;border:0;border-radius:2px;font:inherit;font-size:13px;line-height:1.4;font-weight:500;color:var(--text);cursor:pointer}
-#wpfb .wpfb-back:hover{color:var(--ink)}
-#wpfb .wpfb-back svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @container (min-width:560px){
 #wpfb .wpfb-art{margin:14px 14px 0;aspect-ratio:2/1}
@@ -83,7 +68,6 @@
 #wpfb textarea{min-height:170px}
 #wpfb .wpfb-bar{flex-direction:row;align-items:center;justify-content:space-between;gap:12px 20px}
 #wpfb .wpfb-hint{text-align:left}
-#wpfb .wpfb-yn{grid-template-columns:repeat(2,minmax(0,1fr))}
 #wpfb .wpfb-actions{justify-content:flex-start}
 #wpfb .wpfb-actions .wpfb-btn{width:auto}
 #wpfb .wpfb-foot{flex-direction:row;gap:16px}
@@ -120,18 +104,13 @@
 <label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har du ikke handlet hos os på det seneste?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
 <div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Skriv med dine egne ord – én sætning er nok.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
-<div class="wpfb-step" data-step="2" hidden>
-<p class="wpfb-quote" data-quote></p>
-<div class="wpfb-yn"><button class="wpfb-yes" type="button" data-contact="yes" aria-pressed="false" data-t="yes">Ja, gerne</button><button class="wpfb-no" type="button" data-contact="no" aria-pressed="false" data-t="no">Nej tak</button></div>
-<div class="wpfb-email" data-emailbox hidden><label class="wpfb-field"><span data-t="email_label">Din e-mail, så vi ved, hvem vi skal svare</span><input type="email" name="email" maxlength="200" autocomplete="email"></label><div class="wpfb-actions"><button class="wpfb-btn" type="submit" data-send2><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
-</div>
 <div class="wpfb-step wpfb-done" data-step="3" hidden>
-<div class="wpfb-ok"><svg class="wpfb-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m21 33 7.5 7.5L44 25"/></svg><p data-done-text></p></div>
+<div class="wpfb-ok"><svg class="wpfb-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m21 33 7.5 7.5L44 25"/></svg><p data-help>Er der noget, vi kan hjælpe dig med, eller noget, der står i vejen for din næste bestilling? Så hører vi meget gerne fra dig på <a class="wpfb-mail" href="mailto:sales@westpack.com">sales@westpack.com</a>.</p></div>
 <div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/dkk_dk_den/"><span data-t="done_shop">Til webshoppen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Ret mit svar</button></div>
 </div>
 <div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="wpfb-err" role="alert" data-err hidden></p>
-<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Ret svaret</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre.</p></div>
+<div class="wpfb-foot"><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre.</p></div>
 </form>
 </div>
 </div>
@@ -151,17 +130,10 @@
       send: "Send svar",
       sending: "Sender …",
       err_short: "Skriv gerne en hel sætning – så kan vi bruge dit svar.",
-      h2: "Må vi vende tilbage til dig om det?",
-      sub2: "Tak – det er præcis den slags, vi har brug for at vide.",
-      yes: "Ja, gerne",
-      no: "Nej tak",
-      email_label: "Din e-mail, så vi ved, hvem vi skal svare",
-      back: "Ret svaret",
       err_send: "Svaret kunne ikke sendes. Prøv igen om et øjeblik.",
-      thanks: "Tak for dit svar.",
-      sub3: "Det er en stor hjælp for os.",
-      done_yes: "Vi vender tilbage til dig.",
-      done_no: "Tak, fordi du tog dig tiden.",
+      thanks: "Tak for dit svar!",
+      sub3: "Vi sætter stor pris på din feedback og håber, at vi får mulighed for at handle sammen igen.",
+      help: "Er der noget, vi kan hjælpe dig med, eller noget, der står i vejen for din næste bestilling? Så hører vi meget gerne fra dig på {mail}.",
       done_shop: "Til webshoppen",
       done_edit: "Ret mit svar",
       privacy: "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre."
@@ -176,17 +148,10 @@
       send: "Send answer",
       sending: "Sending …",
       err_short: "A whole sentence would help – then we can use your answer.",
-      h2: "May we get back to you about this?",
-      sub2: "Thank you – that is exactly what we need to know.",
-      yes: "Yes, please",
-      no: "No, thanks",
-      email_label: "Your email, so we know who to reply to",
-      back: "Edit answer",
       err_send: "Your answer could not be sent. Please try again in a moment.",
-      thanks: "Thank you for your answer.",
-      sub3: "It really helps us.",
-      done_yes: "We will get back to you.",
-      done_no: "Thank you for taking the time.",
+      thanks: "Thank you for your answer!",
+      sub3: "We really appreciate your feedback and hope we will have the chance to do business together again.",
+      help: "Is there anything we can help you with, or anything standing in the way of your next order? Then we would love to hear from you at {mail}.",
       done_shop: "Go to the webshop",
       done_edit: "Change my answer",
       privacy: "Your answer is kept by Westpack and used only to help us do better."
@@ -196,6 +161,8 @@
   var STORE_LANG = { dkk_dk_den: "da", gbp_uk_eng: "en", eur_eu_eng: "en", usd_us_eng: "en", eur_eu_ger: "de", eur_eu_fra: "fr", eur_eu_ita: "it", eur_eu_spa: "es", eur_eu_ned: "nl", eur_eu_por: "pt", sek_se_swe: "sv", nok_no_nor: "nb", eur_eu_fin: "fi", pln_pl_pol: "pl", eur_eu_rou: "ro", eur_eu_cze: "cs", eur_eu_svk: "sk", eur_eu_hun: "hu" };
   // An answer needs this many letters (spaces not counted) to be a sentence we can use.
   var MIN_CHARS = 12;
+  // where the thanks sends anyone who wants to talk: the sales team's own mailbox
+  var SALES = "sales@westpack.com";
   var seg = (location.pathname.split("/")[1] || "").toLowerCase();
   var store = STORE_LANG[seg] ? seg : "";
   var want = store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2);
@@ -223,7 +190,7 @@
     sid = ""; for (var i = 0; i < 16; i++) sid += abc[b[i] % 36];
     mem.set("wpfb-sid", sid);
   }
-  var S = { text: "", contact: "", email: "", step: 1 };
+  var S = { text: "", step: 1 };
   var ta = q("textarea[name=answer]");
   var panel = q(".wpfb-panel");
 
@@ -243,7 +210,7 @@
 
   function letters(s) { return String(s || "").replace(/\s/g, "").length; }
   function payload(step) {
-    return { k: token, sid: sid, store: store, lang: L, followup: S.text, contact: S.contact, email: S.email, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
+    return { k: token, sid: sid, store: store, lang: L, followup: S.text, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
   }
   function save(step) {
     if (!api || !window.fetch || letters(S.text) < 3) return Promise.reject(new Error("no"));
@@ -254,7 +221,6 @@
   function head(n) {
     var h = q("[data-h]"), sub = q("[data-sub]");
     if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
-    if (n === 2) { h.textContent = T.h2; sub.textContent = T.sub2; }
     if (n === 3) { h.textContent = T.thanks; sub.textContent = T.sub3; }
   }
   function go(n, silent) {
@@ -263,7 +229,6 @@
     qa("[data-step]").forEach(function (s) { var on = +s.getAttribute("data-step") === n; s.hidden = !on; if (on && !silent) restart(s); });
     head(n);
     if (!silent) restart(q("[data-hx]"));
-    q("[data-back]").hidden = n !== 2;
     q("[data-err]").hidden = true;
     if (silent) return;
     var target = n === 1 ? ta : q("[data-h]");
@@ -280,44 +245,32 @@
   function sendText() {
     S.text = ta.value.trim();
     if (letters(S.text) < MIN_CHARS) { err(T.err_short); ta.focus(); return; }
-    q("[data-quote]").textContent = S.text;
-    // The words are the answer: if this first save fails, try once more, unless the last save has gone by then
-    save(1).catch(function () { setTimeout(function () { if (S.step < 3) save(1).catch(function () {}); }, 2500); });
-    go(2);
+    var btn = q("[data-send1]"), label = btn.innerHTML;
+    btn.disabled = true; btn.textContent = T.sending;
+    // One send is the whole answer. A save that fails gets a second try before the customer is told; until a save has
+    // gone through, the words stay in the field.
+    save(3).catch(function () { return new Promise(function (ok) { setTimeout(ok, 1500); }).then(function () { return save(3); }); })
+      .then(function () { mem.set("wpfb-done-" + (token || sid), "1"); go(3); })
+      .catch(function () { err(T.err_send); })
+      .then(function () { btn.disabled = false; btn.innerHTML = label; });
   }
-  function finish(btn) {
-    var label = btn ? btn.innerHTML : "";
-    qa("[data-step='2'] button").forEach(function (x) { x.disabled = true; });
-    if (btn) btn.textContent = T.sending;
-    save(3).then(function () {
-      mem.set("wpfb-done-" + (token || sid), "1");
-      q("[data-done-text]").textContent = S.contact === "yes" ? T.done_yes : T.done_no;
-      go(3);
-    }).catch(function () { err(T.err_send); }).then(function () {
-      qa("[data-step='2'] button").forEach(function (x) { x.disabled = false; });
-      if (btn) btn.innerHTML = label;
-    });
-  }
+  // the thanks ends on the sales team's address, as a link
+  (function () {
+    var p = q("[data-help]"), parts = T.help.split("{mail}"), a = document.createElement("a");
+    a.className = "wpfb-mail"; a.href = "mailto:" + SALES; a.textContent = SALES;
+    p.textContent = parts[0]; p.appendChild(a); p.appendChild(document.createTextNode(parts[1] || ""));
+  })();
 
   ta.addEventListener("input", function () { grow(); ready(); if (letters(ta.value) >= MIN_CHARS) q("[data-err]").hidden = true; });
   ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendText(); } });
   root.addEventListener("click", function (e) {
     var t = e.target.closest ? e.target.closest("button") : null;
     if (!t || !root.contains(t)) return;
-    if (t.hasAttribute("data-back") || t.hasAttribute("data-edit")) { go(1); ta.value = S.text; grow(); ready(); }
-    var c = t.getAttribute("data-contact");
-    if (c) {
-      S.contact = c;
-      qa("[data-contact]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === t)); });
-      // a yes always asks where to reply: taking it without an address would say we know who they are already
-      if (c === "yes") { q("[data-emailbox]").hidden = false; q("input[name=email]").focus(); }
-      else { q("[data-emailbox]").hidden = true; finish(t); }
-    }
+    if (t.hasAttribute("data-edit")) { go(1); ta.value = S.text; grow(); ready(); }
   });
   q("form").addEventListener("submit", function (e) {
     e.preventDefault();
     if (S.step === 1) sendText();
-    else if (S.step === 2) { S.email = q("input[name=email]").value; finish(q("[data-send2]")); }
   });
 
   // The store's newsletter popup (Klaviyo's "The Insert") opens on every page a few seconds in. Over this page it took
@@ -336,7 +289,7 @@
   if (window.MutationObserver) new MutationObserver(unlock).observe(document.body, { attributes: true, attributeFilter: ["class"] });
   unlock();
 
-  if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(3, true); }
+  if (mem.get("wpfb-done-" + (token || sid))) go(3, true);
   else { go(1, true); ready(); }
 })();
 </script>

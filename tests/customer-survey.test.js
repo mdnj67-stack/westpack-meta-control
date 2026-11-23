@@ -47,7 +47,20 @@ test("the page never tells the visitor we know who they are", () => {
   for (const [lang, t] of Object.entries(STR)) {
     assert.equal(/hvilken kunde|which customer|via et link|through a link/i.test(Object.values(t).join(" ")), false, `${lang}: nothing about seeing who answered`);
   }
-  assert.match(html, /if \(c === "yes"\) \{ q\("\[data-emailbox\]"\)\.hidden = false;/, "a yes always asks where to reply");
+});
+
+test("one question, one send, then the thanks points to the sales team", () => {
+  // the user, 2026-11-23 ("i step 2"): no contact question; the thanks invites a mail to sales@westpack.com
+  const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
+  assert.equal(/data-contact|data-emailbox|type="email"|data-step="2"/.test(html), false, "no contact question and no e-mail field");
+  assert.match(html, /var SALES = "sales@westpack\.com";/);
+  assert.match(html, /a\.href = "mailto:" \+ SALES;/, "the address is a link");
+  assert.match(html, /save\(3\)\.catch\(/, "the one send saves the answer as finished, with a second try");
+  const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
+  for (const [lang, t] of Object.entries(STR)) assert.equal((t.help.match(/\{mail\}/g) || []).length, 1, `${lang}: the address appears once in the thanks`);
+  assert.equal(STR.da.thanks, "Tak for dit svar!");
+  assert.equal(STR.da.sub3, "Vi sætter stor pris på din feedback og håber, at vi får mulighed for at handle sammen igen.");
+  assert.equal(STR.da.help, "Er der noget, vi kan hjælpe dig med, eller noget, der står i vejen for din næste bestilling? Så hører vi meget gerne fra dig på {mail}.");
 });
 
 test("unknown reasons are refused; bots are swallowed, not refused", () => {
@@ -295,14 +308,15 @@ test("Blob: a failed write or read gets a second try; a file that still fails is
   }
 });
 
-test("biblen is told when saved answers could not be read, and the post retries its first save", () => {
+test("biblen is told when saved answers could not be read, and the page retries a failed save", () => {
   const api = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
   const view = fs.readFileSync(path.join(ROOT, "src", "customer-survey.js"), "utf8");
   const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
   assert.match(api, /readResponseFiles\(/);
   assert.match(api, /unreadable: files\.unreadable/);
   assert.match(view, /state\.data\.unreadable \?/);
-  assert.match(html, /save\(1\)\.catch\(function \(\) \{ setTimeout\(function \(\) \{ if \(S\.step < 3\) save\(1\)/);
+  // one send saves the whole answer since 23/11; a failed save is tried once more before the customer is told
+  assert.match(html, /save\(3\)\.catch\(function \(\) \{ return new Promise\(function \(ok\) \{ setTimeout\(ok, 1500\); \}\)\.then\(function \(\) \{ return save\(3\); \}\); \}\)/);
   const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
   assert.ok(vercel.functions["api/survey.js"].maxDuration >= 60, "reading every answer file needs more than the default time");
 });

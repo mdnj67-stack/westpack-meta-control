@@ -5,8 +5,9 @@ webshoppen** (en CMS-side), ikke på bloggen. Fra 23/11 er det en side: på blog
 og "Seneste indlæg", og det så forkert ud (Mads: "Det her kategori halløj osv ligner lort i siden").
 
 **Kunden svarer med egne ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og
-specifikke svar så har det mere værdi"). Det tager under et minut: ét spørgsmål at skrive et svar på, og bagefter ét tryk
-på Ja eller Nej. Der er ingen trintæller (Mads 23/11: "Der er vel kun et trin?").
+specifikke svar så har det mere værdi"). Det tager under et minut: ét spørgsmål, ét tryk på "Send svar", og så takken.
+Der er ingen trintæller og intet kontaktspørgsmål (Mads 23/11: "Der er vel kun et trin?"). Vil kunden tales ved, står
+sales@westpack.com i takken.
 
 **Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto til venstre i en
 ramme inde i kortet: en medarbejder, der smiler med armene fulde af Westpack-æsker (fotoet fra "Om Westpack",
@@ -15,20 +16,22 @@ gerne høre fra dig" som en rød overlinje og spørgsmålet i butikkens røde ov
 uden at scrolle. Fotoet toner langsomt frem, og ingen bevægelse vises for den, der har slået animationer fra.
 
 **Siden fortæller ikke kunden, at vi ved, hvem de er** (Mads 23/11: "Vi skal ikke fortælle kunden at vi ved hvem de
-er"). Der er ingen hilsen med firmanavn, takken er "Tak for dit svar.", og teksten om data nævner ikke, at vi kan se,
+er"). Der er ingen hilsen med firmanavn, takken nævner ingen navne, og teksten om data nævner ikke, at vi kan se,
 hvem svaret er fra. Svaret bliver stadig knyttet til kunden via linket.
 
 1. **"Hvorfor har du ikke handlet hos os på det seneste?"** (Mads 23/11) Et stort tekstfelt. Under overskriften står:
    "Du har tidligere handlet hos Westpack, men det er noget tid siden sidst. Vi vil gerne forstå, hvad der har ændret
    sig." Ved knappen står "Skriv med dine egne ord – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
-   først, når der står en sætning (mindst 12 bogstaver). **Svaret gemmes, så snart man trykker Send**, så det er med,
-   selv om man stopper der. Der er bevidst ingen eksempelsvar, for folk skriver eksemplet af i stedet for deres egen
-   grund.
-2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej. Nej afslutter
-   med ét tryk. Ja beder altid om en e-mail at svare på, også når kunden kom via et personligt link. Et ja uden e-mail
-   ville afsløre, at vi allerede ved, hvem de er. Feltet må gerne stå tomt.
+   først, når der står en sætning (mindst 12 bogstaver). **Svaret gemmes, når man trykker Send.** Går det ikke
+   igennem, prøver siden én gang til, før kunden får en fejlbesked, og teksten bliver stående i feltet. Der er bevidst
+   ingen eksempelsvar, for folk skriver eksemplet af i stedet for deres egen grund.
+2. **Takken** (Mads 23/11): "Tak for dit svar!" og "Vi sætter stor pris på din feedback og håber, at vi får mulighed
+   for at handle sammen igen." Derunder: "Er der noget, vi kan hjælpe dig med, eller noget, der står i vejen for din
+   næste bestilling? Så hører vi meget gerne fra dig på sales@westpack.com." Adressen er et link, der åbner en mail.
+   Så kommer knappen "Til webshoppen" og linket "Ret mit svar". Spørgsmålet "Må vi vende tilbage til dig om det?" med
+   Ja/Nej og e-mailfelt er fjernet.
 
-Til sidst står "Tak for dit svar." **Udseendet er butikkens eget**, så siden ligner resten af webshoppen og ikke en kampagne. Den bruger
+**Udseendet er butikkens eget**, så siden ligner resten af webshoppen og ikke en kampagne. Den bruger
 temaets skrift Inter, Westpack-rød `#d10a11` på knapper og detaljer, og temaets røde overskrifter. Blokken henter ingen
 skrifttyper selv.
 
@@ -113,17 +116,16 @@ feltet helt, og sæt filen ind igen.
 
 ## Godt at vide
 
-- **En kunde tæller én gang.** Svaret gemmes efter hvert spørgsmål, men ét besøg er ét svar. En kunde med personligt
-  link tæller én gang, også på tværs af besøg og enheder, og det er det nyeste svar, der gælder. I biblen står der
-  "Did not answer the contact question", hvis en kunde skrev sit svar, men ikke svarede på det sidste spørgsmål.
+- **En kunde tæller én gang.** Ét besøg er ét svar. En kunde med personligt link tæller én gang, også på tværs af
+  besøg og enheder, og det er det nyeste svar, der gælder. Svar fra før 23/11 kan have et kontaktsvar (Ja/Nej) og en
+  e-mail; nye svar har ingen.
 - **Genindlæser kunden siden** efter at have svaret, ser de takken med "Ret mit svar" i stedet for skemaet igen.
-  "Ret svaret" på spørgsmål 2 går tilbage til teksten, uden at den forsvinder.
-- **Tastatur:** Ctrl+Enter (Cmd+Enter på Mac) sender svaret, og fokus flytter til næste spørgsmål.
+- **Tastatur:** Ctrl+Enter (Cmd+Enter på Mac) sender svaret.
 - **Svar fra den første version** (med svarmuligheder) står stadig i biblen med deres grund. Tabellen med grunde vises
   kun, når der er sådanne svar.
 - **Beskyttelse mod spam.** Der er et skjult felt, som kun robotter udfylder. Desuden bliver et svar, der er sendt
   hurtigere end 1,2 sekunder efter, at siden blev åbnet, ignoreret.
-- **Går serveren ned,** står kunden stadig på sidste spørgsmål med en fejlbesked og kan prøve igen.
+- **Går serveren ned,** står kunden stadig ved spørgsmålet med sin tekst og en fejlbesked og kan prøve igen.
 - **Butikkens nyhedsbrev-popup vises ikke på siden.** Klaviyos "The Insert" åbner på alle sider efter ca. 5 sekunder.
   På skemaet tog den tastaturet, mens kunden skrev (23/11 forsvandt 38-62 skrevne bogstaver i DK, DE og PL), og låste
   siden, så man ikke kunne scrolle. Blokken holder den skjult og ophæver låsen. Der er ikke ændret noget i Klaviyo, og
