@@ -1,9 +1,10 @@
 /**
  * Customer feedback survey (server/survey/customer-survey.js).
  *
- * Public, called from the blog post on the stores:
+ * Public, called from the survey page on the stores:
  *   POST ?action=submit            one answer (text/plain JSON, so the browser sends no preflight)
- *   GET  ?action=who&k=<token>     the company a personal link belongs to, so the post can greet it by name
+ *   GET  ?action=who&k=<token>     the company a personal link belongs to, so the page can greet it by name, as a
+ *                                  person would write it (survey.greetingName: "Guldsmed Hugo Mortensen", not "... ApS")
  *
  * Logged in (the app):
  *   GET  ?action=results[&test=1]  recipients, answers (one per customer) and the count per reason, plus `unreadable`:
@@ -78,7 +79,7 @@ module.exports = async function handler(req, res) {
     try {
       const doc = await store.readRecipients(survey.SURVEY_ID);
       const hit = doc.recipients.find((r) => r.token === k);
-      return sendJson(res, 200, hit ? { known: true, firma: hit.firma } : { known: false });
+      return sendJson(res, 200, hit ? { known: true, firma: survey.greetingName(hit.firma) } : { known: false });
     } catch { return sendJson(res, 200, { known: false }); }
   }
 

@@ -95,7 +95,8 @@ const LEGAL = ["aps", "a/s", "i/s", "ivs", "k/s", "p/s", "smba", "amba", "fmba",
 const NOT_A_NAME = /^(privat|private|privé|privee|privato|test|testing|n\/?a|none|ingen|keine|kein|firma|company|-+|\.+|x+|\?+|na|null|undefined|tbd)$/i;
 const BLOCK = /(fuck|shit|cunt|nigg|fanculo|scheisse|scheiße|kurwa|pussy|dick|cock|porn|nazi|hitler|fisse|pik\b|lort\b|kneppe|hore\b|puta|merde|salope|connard)/i;
 
-function cleanName(raw) {
+// maxChars: what fits on the lid by default; the customer survey's greeting passes its own
+function cleanName(raw, maxChars = MAX_CHARS) {
   let s = String(raw || "").normalize("NFC").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
   // an unrendered template tag (an editor's canvas sends "{{ person.organization|base64_encode }}" as it stands)
   if (!s || /[{}]|@|https?:|www\.|\.(com|dk|de|se|no|nl|eu)\b/i.test(s)) return "";
@@ -111,12 +112,12 @@ function cleanName(raw) {
   s = s.replace(/^[\s.,;:\-–|/&+]+|[\s.,;:\-–|/&+]+$/g, "");
   if (NOT_A_NAME.test(s) || BLOCK.test(s)) return "";
   if ((s.match(/\p{L}/gu) || []).length < 2) return "";
-  if (s.length > MAX_CHARS) {
+  if (s.length > maxChars) {
     // a long registered name: keep the words that fit
     const words = s.split(" ");
     let kept = "";
-    for (const w of words) { if ((kept ? kept.length + 1 : 0) + w.length > MAX_CHARS) break; kept = kept ? `${kept} ${w}` : w; }
-    s = kept || s.slice(0, MAX_CHARS);
+    for (const w of words) { if ((kept ? kept.length + 1 : 0) + w.length > maxChars) break; kept = kept ? `${kept} ${w}` : w; }
+    s = kept || s.slice(0, maxChars);
   }
   return s;
 }

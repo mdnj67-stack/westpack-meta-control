@@ -1,8 +1,17 @@
-# Kundeundersøgelse – hvorfor har vi ikke set dig i et år? (blogindlæg)
+# Kundeundersøgelse – hvorfor har vi ikke set dig i et år? (side i webshoppen)
 
-Et kort spørgeskema på bloggen til kunder, der ikke har bestilt i webshoppen det seneste år. **Kunden svarer med egne
-ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og specifikke svar så har det
-mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen i et kort med "1 af 2" øverst.
+Et kort spørgeskema til kunder, der ikke har bestilt i webshoppen det seneste år. Det ligger på **sin egen side i
+webshoppen** (en CMS-side), ikke på bloggen. Fra 23/11 er det en side: på bloggen stod skemaet mellem kategorier, tags
+og "Seneste indlæg", og det så forkert ud (Mads: "Det her kategori halløj osv ligner lort i siden").
+
+**Kunden svarer med egne ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og
+specifikke svar så har det mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen med "1 af 2" øverst.
+
+**Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto af Westpacks egne
+smykkeæsker til venstre (fra butikkens eget billedarkiv, `Mail_Block-4.jpg`) med "Vi vil gerne høre fra dig" i hvidt.
+Til højre står hilsenen ("Hej Guldsmed Hugo Mortensen") og spørgsmålet i butikkens røde overskriftsstil. På telefon
+ligger fotoet som et bånd øverst, og spørgsmål, tekstfelt og knap kan ses uden at scrolle. Fotoet toner langsomt frem,
+og ingen bevægelse vises for den, der har slået animationer fra.
 
 1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Et stort tekstfelt. Under overskriften står: "Skriv det med dine
    egne ord. Jo mere konkret, jo bedre – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
@@ -11,13 +20,13 @@ mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen i 
    grund.
 2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej, med ét tryk.
 
-Til sidst takker skemaet med firmanavnet. **Udseendet er butikkens eget**, så kortet ligner en del af siden og ikke en
-kampagne. Det bruger temaets skrift Inter, Westpack-rød `#d10a11` på knapper og detaljer, og et hvidt kort med samme
-skygge og hjørner som "Seneste indlæg". En rød linje øverst på kortet binder det sammen med den røde titel. Blokken
-henter ingen skrifttyper selv.
+Til sidst takker skemaet med firmanavnet. Navnet skrives, som et menneske ville skrive det: "Tak, Irbis." og ikke "Tak,
+Irbis Sp. z o.o.". **Udseendet er butikkens eget**, så siden ligner resten af webshoppen og ikke en kampagne. Den bruger
+temaets skrift Inter, Westpack-rød `#d10a11` på knapper og detaljer, og temaets røde overskrifter. Blokken henter ingen
+skrifttyper selv.
 
-**Titlen på indlægget ses af kunden.** Den står med rødt over kortet og i brødkrummen. Kald det ikke "Churn survey".
-Brug "Vi vil gerne høre fra dig" og på engelsk "We'd like to hear from you".
+Butikkens CMS-sider viser ikke sidens titel, så overskriften på fotoet er sidens titel. Den står i blokken
+("Vi vil gerne høre fra dig" / "We'd like to hear from you"). Titlen, I skriver i Magento, ses kun i browserfanen.
 
 Svarene gemmes i biblens eget lager (Vercel Blob) og kan læses under **Klaviyo email → Customer survey**. Der ser du
 også hver kundes personlige link, og hvem der har svaret. Intet bliver skrevet til Klaviyo, Magento eller Navision.
@@ -38,50 +47,50 @@ Det er de 500 kunder med den største webshop-omsætning gennem tiden, som ikke 
 Navision-dataene indeholder kun DETAIL-kunder. Kontakt derfor ikke nogen fra listen, før et menneske har gennemgået den
 for KAS-kunder.
 
-Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/blog/customer-feedback-2026#k=abc12345`.
-Koden står efter `#`, fordi bloggen fjerner alt efter `?` i adressen. Den, der åbner et personligt link, bliver hilst
-med firmanavnet ("Til …"), og svaret bliver knyttet til kunden. Uden kode virker siden også, men så er svaret anonymt.
-Siger personen ja til at blive kontaktet, bliver de spurgt om deres e-mail.
+Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=abc12345`.
+Koden står efter `#`. Den, der åbner et personligt link, bliver hilst med firmanavnet ("Hej …"), og svaret bliver
+knyttet til kunden. Uden kode virker siden også, men så er svaret anonymt. Siger personen ja til at blive kontaktet,
+bliver de spurgt om deres e-mail.
 
-## Sådan lægger du indlægget op
+## Sådan laver du siden
 
-Indlægget skal have **URL-nøglen `customer-feedback-2026`** i alle butikker. Den var ledig 13/11 i DK, UK, EU, DE og
-US. Linkene går dertil, så den skal være præcis sådan.
+Siden skal have **URL-nøglen `customer-feedback-2026`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
+være præcis sådan. Den var ledig 23/11 (DK og UK svarede 404).
 
-1. Gå til indlæggene i Amasty Blog Pro i admin, og opret et nyt indlæg (Add New Post).
+1. Gå til **Content → Elements → Pages** i admin, og tryk **Add New Page**.
 2. Udfyld felterne:
-   - **Titel:** Vi vil gerne høre fra dig (engelske butikker: *We would like to hear from you*)
-   - **URL-nøgle:** `customer-feedback-2026`
-   - **Status:** *Hidden*, hvis jeres version har den. Så kan indlægget kun åbnes via linket og står ikke i
-     blogoversigten. Ellers *Enabled*.
-   - **Butikker (store views):** alle 18
-   - **Meta title:** Vi vil gerne høre fra dig | Westpack
-3. Indhold: åbn **Page Builder** (Edit with Page Builder). Træk ét element af typen **HTML Code** (under Elements)
-   ind. Klik i feltet, tryk **Ctrl+A** og **Delete**, så det er tomt, og sæt **hele** indholdet af `survey.html` ind.
-   Tilføj ikke andre elementer. Brug **ikke** den almindelige teksteditor (WYSIWYG): den fjerner `<script>` og
-   `<style>`.
+   - **Enable Page:** Yes
+   - **Page Title:** Vi vil gerne høre fra dig. Titlen ses kun i browserfanen. Én side til alle butikker er nok. Vil I
+     have en engelsk titel i de andre butikker, så lav to sider med samme URL-nøgle: én til DK og én til de 17 andre.
+   - Under **Search Engine Optimization:** URL Key `customer-feedback-2026` og Meta Title "Vi vil gerne høre fra dig |
+     Westpack". Har I feltet **Meta Robots**, så vælg `NOINDEX,NOFOLLOW`, for siden er kun til dem, der får linket.
+   - Under **Page in Websites:** alle 18 store views.
+   - Under **Design:** Layout **1 column**, ligesom "Om Westpack" og FAQ. Så står siden uden kolonner og sidebar.
+   - Siden skal **ikke** i menuen eller footeren.
+3. Indhold: åbn **Page Builder**. Træk ét element af typen **HTML Code** (under Elements) ind. Klik i feltet, tryk
+   **Ctrl+A** og **Delete**, så det er tomt, og sæt **hele** indholdet af `survey.html` ind. Tilføj ikke andre
+   elementer, heller ikke en overskrift: siden har sin egen. Brug **ikke** den almindelige teksteditor (WYSIWYG), for
+   den fjerner `<script>` og `<style>`.
 4. Gem, og test i to butikker:
-   - `https://www.westpack.com/dkk_dk_den/blog/customer-feedback-2026#k=test` – dansk tekst
-   - `https://www.westpack.com/gbp_uk_eng/blog/customer-feedback-2026#k=test` – engelsk tekst
+   - `https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=test` – dansk tekst
+   - `https://www.westpack.com/gbp_uk_eng/customer-feedback-2026#k=test` – engelsk tekst
 
    Med `#k=test` bliver svaret gemt som en test. I biblen kan det ses med "Show test answers", men det tæller ikke med.
-   (Før 23/11 virkede `#k=test` ikke: blokken læste kun koder på 6-16 tegn, så testsvar blev gemt som rigtige. Sæt
-   blokken ind igen, hvis den er fra før.) Er et testsvar alligevel gemt som rigtigt, fx fordi nogen skrev "Test" uden
-   `#k=test`, så tryk **Mark as test** ud for det i biblen. Det bliver ikke slettet, men flytter ned under "Show test
-   answers".
+   Er et testsvar alligevel gemt som rigtigt, fx fordi nogen skrev "Test" uden `#k=test`, så tryk **Mark as test** ud
+   for det i biblen. Det bliver ikke slettet, men flytter ned under "Show test answers".
+5. **Slå blogindlægget fra** (Status: Disabled), når siden virker. Ingen mails linker til det. Et svar, der allerede er
+   givet dér, ligger stadig i biblen.
 
-> **23/11:** Indlægget blev lagt op som "Churn survey" med URL-nøglen `churn-survey`. Alle mails linker til
-> `customer-feedback-2026`, så de gav 404, og "churn" står i adressen, som kunden ser. Samme dag lå det på
-> `customer-feedback-2026` med titlen "Customer Feedback Survey" i alle 18 butikker - men med blokken fra før 23/11.
-> Den virker for kunderne, men sæt den nye ind: den gemmer testsvar som test, prøver kundens tekst igen, hvis første
-> gem fejler (ellers er svaret væk, hvis kunden lukker siden før kontaktspørgsmålet), og skriver "Tak, Perlove Sp. z
-> o.o." uden dobbelt punktum.
+> **23/11:** Først lå skemaet på bloggen: som "Churn survey" på `churn-survey`, så på `customer-feedback-2026` med
+> titlen "Customer Feedback Survey". Samme dag blev det flyttet til en side. Der var endnu ikke sendt nogen mails, så
+> intet link i en indbakke peger på bloggen. Biblen godtager stadig links af den gamle form.
 >
-> Test af hele kæden gennem det rigtige indlæg med rigtige links (svaret gemmes som test, aldrig på kunden):
-> `node tmp/playwright-runner/survey-live-e2e.js`.
+> Test af hele kæden gennem den rigtige side med rigtige links (svaret gemmes som test, aldrig på kunden):
+> `node tmp/playwright-runner/survey-live-e2e.js`. Før siden findes, viser `node tmp/playwright-runner/survey-page-preview.js`
+> blokken på en af butikkens rigtige CMS-sider (computer, tablet og telefon, dansk og engelsk) uden at gemme noget.
 
 Samme blok bruges i alle butikker. Den finder selv sproget ud fra butikkens adresse, og "Til webshoppen" peger på den
-butik, siden står i.
+butik, siden står i. Den virker også, hvis den bliver sat ind i et blogindlæg.
 
 Får du **"Please remove invalid characters"**, er der kommet tegn med i feltet, som databasen ikke kan gemme. Tøm
 feltet helt, og sæt filen ind igen.

@@ -1,5 +1,5 @@
-// Klaviyo email → Customer survey: the answers to "why have we not seen you for a year", from the blog post
-// templates/customer-feedback-survey/survey.html, and the personal link each lapsed customer is sent.
+// Klaviyo email → Customer survey: the answers to "why have we not seen you for a year", from the survey page on the
+// stores (templates/customer-feedback-survey/survey.html), and the personal link each lapsed customer is sent.
 //
 // Read-only apart from copying links and "Mark as test": the recipient list is uploaded by the script that builds it,
 // and answers arrive from the store (api/survey.js). A test typed on the live post without #k=test is stored as a real
@@ -175,7 +175,7 @@ function render() {
       <button class="wp-button is-sm" type="button" data-survey-reload>Read again</button>
     </div>
     ${state.tab === "answers" ? renderAnswers() : renderRecipients()}
-    <p class="survey-muted">The post: <code>…/blog/customer-feedback-2026</code>. A personal link adds <code>#k=</code> and a code after the address; the store's blog drops anything after "?", so the code sits after "#". Each customer counts once, on their latest answer.</p>`;
+    <p class="survey-muted">The page: <code>…/customer-feedback-2026</code> in every store. A personal link adds <code>#k=</code> and a code after the address. Each customer counts once, on their latest answer.</p>`;
 }
 
 function exportCsv(kind) {

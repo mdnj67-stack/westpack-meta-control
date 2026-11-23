@@ -1,10 +1,13 @@
 /**
  * Customer feedback survey ("why have we not seen you for a year") - the pure domain, no I/O.
  *
- * The survey is a blog post on the stores (templates/customer-feedback-survey/), reached through a personal link
- * `…/blog/customer-feedback-2026#k=<token>`. The token sits after "#" because the store's blog redirects every URL
- * with a query string to itself without it. A token says which customer answered; it carries nothing else, and the
- * recipient list that resolves it lives only in this app's own store.
+ * The survey is a page on the stores (a Magento CMS page holding templates/customer-feedback-survey/survey.html),
+ * reached through a personal link `…/customer-feedback-2026#k=<token>`. It was a blog post until 2026-11-23, when the
+ * user had it moved: the blog's categories, tags and recent posts around it looked wrong. Links of the old form,
+ * `…/blog/customer-feedback-2026#k=`, are still accepted. The token sits after "#" because the store's blog redirects
+ * every URL with a query string to itself without it, and a hash works the same on a page. A token says which
+ * customer answered; it carries nothing else, and the recipient list that resolves it lives only in this app's own
+ * store.
  *
  * Every value a client sends goes through sanitizeSubmission: reasons are a closed list, texts are trimmed and
  * capped, and an e-mail address is kept only when the answer has no token (someone who found the post by
@@ -109,6 +112,20 @@ function sanitizeSubmission(input = {}, { now = Date.now() } = {}) {
   return { record };
 }
 
+/**
+ * The company name the page greets and thanks, as a person would write it: "Guldsmed Hugo Mortensen" for
+ * "Guldsmed Hugo Mortensen ApS" (name-print's cleanName, without the lid's length limit). cleanName also turns away a
+ * web address and a few words that would be ugly on a public image; these are our own customers' registered names,
+ * so a name it turns away is greeted as registered ("Fatima.dk"), and only a dash or an e-mail address greets no one.
+ */
+function greetingName(raw) {
+  const { cleanName } = require("../email/name-print");
+  const clean = cleanName(raw, 120);
+  if (clean) return clean;
+  const s = String(raw || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
+  return /@/.test(s) || (s.match(/\p{L}/gu) || []).length < 2 ? "" : s;
+}
+
 function sanitizeRecipient(r = {}) {
   const token = String(r.token || "").toLowerCase();
   if (!TOKEN.test(token)) return null;
@@ -125,7 +142,7 @@ function sanitizeRecipient(r = {}) {
     livstid: num(r.livstid),
     ordrer: num(r.ordrer),
     sidsteOrdre: /^\d{4}-\d{2}-\d{2}$/.test(String(r.sidsteOrdre || "")) ? String(r.sidsteOrdre) : "",
-    link: /^https:\/\/www\.westpack\.com\/[a-z_]+\/blog\/[a-z0-9-]+#k=[a-z0-9]+$/.test(String(r.link || "")) ? String(r.link) : "",
+    link: /^https:\/\/www\.westpack\.com\/[a-z_]+\/(?:blog\/)?[a-z0-9-]+#k=[a-z0-9]+$/.test(String(r.link || "")) ? String(r.link) : "",
   };
 }
 
@@ -241,4 +258,4 @@ function isMarkedBy(record, { sids, ats }) {
   return record.sid ? sids.has(record.sid) : ats.has(record.at);
 }
 
-module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy };
+module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy, greetingName };

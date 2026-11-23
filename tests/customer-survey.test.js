@@ -74,15 +74,30 @@ test("a customer answering twice counts once, on the latest answer; tests are le
 
 test("the recipient list keeps no e-mail or phone, and refuses bad tokens and links", () => {
   const { recipients } = survey.sanitizeRecipients([
-    { token: "ab12cd34", firma: "A", email: "x@y.dk", telefon: "+45 1234", link: "https://www.westpack.com/dkk_dk_den/blog/customer-feedback-2026#k=ab12cd34" },
+    { token: "ab12cd34", firma: "A", email: "x@y.dk", telefon: "+45 1234", link: "https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=ab12cd34" },
     { token: "AB12CD34", firma: "dup" },
     { token: "bad token" },
     { token: "cd34ef56", link: "https://evil.example/x" },
+    // the survey was a blog post until 23/11: a link made then still reads
+    { token: "ef56ab12", link: "https://www.westpack.com/gbp_uk_eng/blog/customer-feedback-2026#k=ef56ab12" },
   ]);
-  assert.equal(recipients.length, 2);
+  assert.equal(recipients.length, 3);
   assert.equal(recipients[0].email, undefined);
   assert.equal(recipients[0].telefon, undefined);
+  assert.equal(recipients[0].link, "https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=ab12cd34");
   assert.equal(recipients[1].link, "");
+  assert.equal(recipients[2].link, "https://www.westpack.com/gbp_uk_eng/blog/customer-feedback-2026#k=ef56ab12");
+});
+
+test("the page greets a company as a person would write it", () => {
+  assert.equal(survey.greetingName("Guldsmed Hugo Mortensen Aps"), "Guldsmed Hugo Mortensen");
+  assert.equal(survey.greetingName("Irbis Sp. z o.o."), "Irbis");
+  assert.equal(survey.greetingName("ROUGEMONT"), "ROUGEMONT", "a registered name keeps its own capitals");
+  // name-print turns these away from a public image; on the page they are our customers' own names
+  assert.equal(survey.greetingName("Fatima.dk"), "Fatima.dk");
+  assert.equal(survey.greetingName("durch dick und dünn - Bridal Store"), "durch dick und dünn - Bridal Store");
+  assert.equal(survey.greetingName("Smykkehuset ved Torvet i Holstebro og Omegn ApS"), "Smykkehuset ved Torvet i Holstebro og Omegn", "no lid to fit on");
+  for (const none of ["-", "", "sashastrends@gmail.com", "  "]) assert.equal(survey.greetingName(none), "", none);
 });
 
 function call(handler, { method = "GET", url, body, origin = "https://www.westpack.com", cookie = "" }) {
@@ -124,7 +139,7 @@ test("the route: a store answer is public, results are not", async () => {
   }
 });
 
-test("the blog block can be pasted into Magento and posts to the survey route", () => {
+test("the block can be pasted into a Magento page and posts to the survey route", () => {
   const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
   assert.equal(/[\u{10000}-\u{10FFFF}]/u.test(html), false, "no 4-byte characters: the store database is utf8mb3");
   assert.ok(Buffer.byteLength(html) < 62 * 1024, "under ~62 KB");
@@ -148,6 +163,16 @@ test("the blog block can be pasted into Magento and posts to the survey route", 
   for (const rule of css.replace(/@(container|media)[^{]*\{/g, "").split("}").map((s) => s.split("{")[0].trim()).filter(Boolean)) {
     for (const sel of rule.split(",")) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
   }
+  // The survey is a CMS page since 23/11 (the user: the blog's categories and tags around it "ligner lort"). The
+  // theme paints every h1/h2 as a red gradient clipped to the text: the photograph's title must undo that, or it is
+  // red on the photo, and the question sets the store's red itself rather than inheriting it by accident.
+  assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:#fff/);
+  assert.match(css, /#wpfb \.wpfb-h\{[^}]*background-clip:text[^}]*-webkit-text-fill-color:transparent/);
+  assert.match(html, /<h1 class="wpfb-title" data-t="title">/, "the page's one h1: CMS pages on this theme show no title of their own");
+  // the photograph is the store's own, from its own CDN: nothing new to host, nothing a store CSP would block
+  const photos = html.match(/https:\/\/[^\s",]+\.jpg[^\s",]*/g) || [];
+  assert.ok(photos.length >= 3, "a size for a phone, a tablet and a desktop");
+  for (const src of photos) assert.match(src, /^https:\/\/westpack\.b-cdn\.net\/media\//);
   // every language has every string
   const strBlock = html.match(/var STR = (\{[\s\S]*?\n  \});/)[1];
   const STR = Function(`return ${strBlock}`)();
