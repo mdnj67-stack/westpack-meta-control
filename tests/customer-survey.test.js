@@ -177,9 +177,9 @@ test("the block can be pasted into a Magento page and posts to the survey route"
     for (const sel of rule.split(",")) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
   }
   // The survey is a CMS page since 23/11 (the user: the blog's categories and tags around it "ligner lort"). The
-  // theme paints every h1/h2 as a red gradient clipped to the text: the photograph's title must undo that, or it is
-  // red on the photo, and the question sets the store's red itself rather than inheriting it by accident.
-  assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:#fff/);
+  // theme paints every h1/h2 as a red gradient clipped to the text: the page title (a small overline) must undo that,
+  // or its fill is the theme's gradient, and the question sets the store's red itself rather than inheriting it.
+  assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:var\(--red\);background:none/);
   assert.match(css, /#wpfb \.wpfb-h\{[^}]*background-clip:text[^}]*-webkit-text-fill-color:transparent/);
   assert.match(html, /<h1 class="wpfb-title" data-t="title">/, "the page's one h1: CMS pages on this theme show no title of their own");
   // the photograph is Westpack's own and permanently hosted (Klaviyo's image library or the store's CDN), never an

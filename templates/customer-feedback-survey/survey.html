@@ -4,15 +4,17 @@
 #wpfb *,#wpfb *::before,#wpfb *::after{box-sizing:border-box}
 #wpfb [hidden]{display:none!important}
 #wpfb .wpfb-page{display:grid;grid-template-columns:minmax(0,1fr);background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.05),0 24px 56px -30px rgba(0,0,0,.25)}
-#wpfb .wpfb-art{position:relative;margin:0;aspect-ratio:16/9;background:#161412;overflow:hidden}
-#wpfb .wpfb-art img{position:absolute;left:0;top:0;display:block;width:100%;height:100%;max-width:none;margin:0;object-fit:cover;object-position:50% 21%}
+#wpfb .wpfb-art{position:relative;margin:10px 10px 0;aspect-ratio:4/3;background:#ecebe9;border-radius:4px;overflow:hidden}
+#wpfb .wpfb-art img{position:absolute;left:0;top:0;display:block;width:100%;height:100%;max-width:none;margin:0;object-fit:cover;object-position:50% 8%}
 #wpfb.is-js .wpfb-art img{opacity:0;transform:scale(1.06);transition:opacity .9s ease,transform 2.6s cubic-bezier(.16,.7,.12,1)}
 #wpfb.is-js .wpfb-art.is-shown img{opacity:1;transform:none}
-#wpfb .wpfb-art::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(17,17,17,0) 30%,rgba(17,17,17,.34) 62%,rgba(17,17,17,.74) 100%);pointer-events:none}
-#wpfb .wpfb-cap{position:absolute;left:0;right:0;bottom:0;z-index:1;margin:0;padding:0 22px 18px}
-#wpfb .wpfb-title{margin:0;font-family:inherit;font-size:24px;line-height:1.1;font-weight:700;letter-spacing:-.025em;color:#fff;-webkit-text-fill-color:#fff;background:none;text-transform:none;text-wrap:balance;text-shadow:0 1px 24px rgba(0,0,0,.35)}
-#wpfb .wpfb-panel{display:flex;flex-direction:column;min-width:0;padding:24px 20px 20px}
-#wpfb .wpfb-row{display:flex;align-items:center;gap:16px;margin:0 0 16px;min-height:18px}
+#wpfb .wpfb-badge{position:absolute;left:12px;bottom:12px;z-index:1;display:inline-flex;align-items:center;gap:8px;max-width:calc(100% - 24px);margin:0;padding:8px 14px 8px 10px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:999px;box-shadow:0 6px 20px -6px rgba(0,0,0,.22);font-size:13px;line-height:1.2;font-weight:600;color:var(--ink);white-space:nowrap}
+#wpfb .wpfb-badge svg{flex:0 0 auto;width:18px;height:18px;fill:none;stroke:var(--red);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#wpfb.is-js .wpfb-badge{opacity:0;transform:translateY(6px);transition:opacity .5s ease .5s,transform .6s cubic-bezier(.2,.7,.2,1) .5s}
+#wpfb.is-js .wpfb-art.is-shown .wpfb-badge{opacity:1;transform:none}
+#wpfb .wpfb-title{margin:0;padding:0;font-family:inherit;font-size:12.5px;line-height:1.3;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);-webkit-text-fill-color:var(--red);background:none}
+#wpfb .wpfb-panel{display:flex;flex-direction:column;min-width:0;padding:22px 20px 20px}
+#wpfb .wpfb-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:0 0 14px;min-height:18px}
 #wpfb .wpfb-meta{margin:0;display:flex;align-items:center;gap:10px;font-size:13px;line-height:1;font-weight:500;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 #wpfb .wpfb-prog{display:flex;gap:4px}
 #wpfb .wpfb-prog i{display:block;width:28px;height:4px;border-radius:2px;background:#ebebeb;transition:background .35s}
@@ -24,7 +26,6 @@
 #wpfb.is-intro form{animation-delay:.16s}
 #wpfb .wpfb-hx.is-in,#wpfb .wpfb-step.is-in{animation:wpfb-in .35s ease-out both}
 @keyframes wpfb-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes wpfb-fade{from{opacity:0}to{opacity:1}}
 #wpfb form{display:flex;flex-direction:column;flex:1 1 auto;margin:0;padding:20px 0 0}
 #wpfb .wpfb-step{margin:0 0 22px}
 #wpfb .wpfb-write{position:relative;display:block;margin:0}
@@ -35,7 +36,6 @@
 #wpfb textarea:focus{outline:none;background:#fff;border-color:#1a1a1a;box-shadow:0 0 0 4px rgba(17,17,17,.06)}
 #wpfb .wpfb-bar{display:flex;flex-direction:column-reverse;align-items:stretch;gap:12px;margin:14px 0 0}
 #wpfb .wpfb-hint{margin:0;font-size:14px;line-height:1.45;color:var(--muted);text-align:center}
-#wpfb .wpfb-hint b{font-weight:600;color:var(--text)}
 #wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;margin:0;padding:12px 26px;background:var(--red);border:0;border-radius:6px;color:#fff;font:inherit;font-size:15.5px;line-height:1;font-weight:600;letter-spacing:0;text-transform:none;text-decoration:none;cursor:pointer;box-shadow:0 1px 2px rgba(209,10,17,.25);transition:background-color .15s,opacity .2s,box-shadow .15s}
 #wpfb .wpfb-btn:hover{background:var(--red2);color:#fff;box-shadow:0 6px 16px -6px rgba(209,10,17,.45)}
 #wpfb .wpfb-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
@@ -78,8 +78,9 @@
 #wpfb .wpfb-back svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @container (min-width:560px){
-#wpfb .wpfb-cap{padding:0 32px 26px}
-#wpfb .wpfb-title{font-size:30px}
+#wpfb .wpfb-art{margin:14px 14px 0;aspect-ratio:2/1}
+#wpfb .wpfb-art img{object-position:50% 14%}
+#wpfb .wpfb-badge{left:16px;bottom:16px}
 #wpfb .wpfb-panel{padding:34px 36px 26px}
 #wpfb .wpfb-h{font-size:30px}
 #wpfb .wpfb-sub{font-size:16.5px}
@@ -93,12 +94,11 @@
 }
 @container (min-width:820px){
 #wpfb .wpfb-page{grid-template-columns:minmax(0,42fr) minmax(0,58fr);min-height:640px}
-#wpfb .wpfb-art{aspect-ratio:auto}
-#wpfb .wpfb-art img{object-position:50% 27%}
-#wpfb .wpfb-cap{padding:0 40px 38px}
-#wpfb .wpfb-title{font-size:34px}
+#wpfb .wpfb-art{margin:14px 0 14px 14px;aspect-ratio:auto}
+#wpfb .wpfb-art img{object-position:50% 30%}
+#wpfb .wpfb-badge{left:18px;bottom:18px;font-size:13.5px}
 #wpfb .wpfb-panel{padding:52px 60px 34px}
-#wpfb .wpfb-row{margin-bottom:22px}
+#wpfb .wpfb-row{margin-bottom:20px}
 #wpfb .wpfb-h{font-size:38px;line-height:1.1;max-width:17ch}
 #wpfb .wpfb-sub{font-size:17px}
 #wpfb form{padding-top:26px}
@@ -106,15 +106,15 @@
 #wpfb .wpfb-step{margin-bottom:28px}
 }
 @media (max-width:640px){#wpfb{margin:12px auto 44px}}
-@media (prefers-reduced-motion:reduce){#wpfb *{animation:none!important;transition:none!important}#wpfb.is-js .wpfb-art img{opacity:1;transform:none}#wpfb .wpfb-check circle,#wpfb .wpfb-check path{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){#wpfb *{animation:none!important;transition:none!important}#wpfb.is-js .wpfb-art img,#wpfb.is-js .wpfb-badge{opacity:1;transform:none}#wpfb .wpfb-check circle,#wpfb .wpfb-check path{stroke-dashoffset:0}}
 </style>
 <div class="wpfb-page">
 <figure class="wpfb-art" data-art>
-<img src="https://cdn.klaviyomail.com/company/VRPp5S/images/9132f807-43cd-4fa4-bc38-7c5387f34487.jpeg" alt="" width="1200" height="1400" decoding="async" fetchpriority="high">
-<figcaption class="wpfb-cap"><h1 class="wpfb-title" data-t="title">Vi vil gerne høre fra dig</h1></figcaption>
+<img src="https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=1024" srcset="https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=640 640w, https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=1024 1024w" sizes="(min-width: 900px) 480px, 100vw" alt="" width="1024" height="1163" decoding="async" fetchpriority="high">
+<figcaption class="wpfb-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg><span data-t="chip">Vi læser hvert eneste svar</span></figcaption>
 </figure>
 <div class="wpfb-panel">
-<div class="wpfb-row"><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
+<div class="wpfb-row"><h1 class="wpfb-title" data-t="title">Vi vil gerne høre fra dig</h1><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
 <div class="wpfb-hx" data-hx>
 <h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har vi ikke set dig i et stykke tid?</h2>
 <p class="wpfb-sub" data-sub>Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.</p>
@@ -122,7 +122,7 @@
 <form novalidate>
 <div class="wpfb-step" data-step="1">
 <label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har vi ikke set dig i et stykke tid?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
-<div class="wpfb-bar"><p class="wpfb-hint" data-t-html="hint">Under et minut. <b>Vi læser hvert eneste svar.</b></p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+<div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Det tager under et minut.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
 <div class="wpfb-step" data-step="2" hidden>
 <p class="wpfb-quote" data-quote></p>
@@ -147,12 +147,13 @@
   var STR = {
     da: {
       title: "Vi vil gerne høre fra dig",
+      chip: "Vi læser hvert eneste svar",
       step: "{n} af 2",
       done_meta: "Færdig",
       h1: "Hvorfor har vi ikke set dig i et stykke tid?",
       sub1: "Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.",
       placeholder: "Skriv dit svar her …",
-      hint: "Under et minut. <b>Vi læser hvert eneste svar.</b>",
+      hint: "Det tager under et minut.",
       send: "Send svar",
       sending: "Sender …",
       err_short: "Skriv gerne en hel sætning – så kan vi bruge dit svar.",
@@ -164,7 +165,7 @@
       back: "Ret svaret",
       err_send: "Svaret kunne ikke sendes. Prøv igen om et øjeblik.",
       thanks: "Tak for dit svar.",
-      sub3: "Vi læser hvert eneste svar.",
+      sub3: "Det er en stor hjælp for os.",
       done_yes: "Vi vender tilbage til dig.",
       done_no: "Tak, fordi du tog dig tiden.",
       done_shop: "Til webshoppen",
@@ -173,12 +174,13 @@
     },
     en: {
       title: "We'd like to hear from you",
+      chip: "We read every single answer",
       step: "{n} of 2",
       done_meta: "Done",
       h1: "Why haven't we seen you for a while?",
       sub1: "Tell us in your own words. The more specific, the better – one sentence is enough.",
       placeholder: "Write your answer here …",
-      hint: "Under a minute. <b>We read every single answer.</b>",
+      hint: "It takes under a minute.",
       send: "Send answer",
       sending: "Sending …",
       err_short: "A whole sentence would help – then we can use your answer.",
@@ -190,7 +192,7 @@
       back: "Edit answer",
       err_send: "Your answer could not be sent. Please try again in a moment.",
       thanks: "Thank you for your answer.",
-      sub3: "We read every single answer.",
+      sub3: "It really helps us.",
       done_yes: "We will get back to you.",
       done_no: "Thank you for taking the time.",
       done_shop: "Go to the webshop",
@@ -244,7 +246,6 @@
   }
 
   qa("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (typeof T[k] === "string") el.textContent = T[k]; });
-  qa("[data-t-html]").forEach(function (el) { el.innerHTML = T[el.getAttribute("data-t-html")]; });
   ta.setAttribute("placeholder", T.placeholder);
   if (store) q("[data-shop]").setAttribute("href", "/" + store + "/");
 

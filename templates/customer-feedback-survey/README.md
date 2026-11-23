@@ -7,10 +7,10 @@ og "Seneste indlæg", og det så forkert ud (Mads: "Det her kategori halløj osv
 **Kunden svarer med egne ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og
 specifikke svar så har det mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen med "1 af 2" øverst.
 
-**Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto til venstre: en
-Oslo-ringæske med en guldring på en klar akrylsokkel mod en mørk baggrund, med "Vi vil gerne høre fra dig" i hvidt.
-Fotoet ligger i Klaviyos billedbibliotek (DK-kontoen), hvor det også bruges i mails. Til højre står spørgsmålet i
-butikkens røde overskriftsstil. På telefon ligger fotoet som et bånd øverst, og spørgsmål, tekstfelt og knap kan ses
+**Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto til venstre i en
+ramme inde i kortet: en medarbejder, der smiler med armene fulde af Westpack-æsker (fotoet fra "Om Westpack",
+`Jewellery-boxes_woman.jpg` på butikkens CDN), med et lille mærke "Vi læser hvert eneste svar". Til højre står "Vi vil
+gerne høre fra dig" som en rød overlinje og spørgsmålet i butikkens røde overskriftsstil. På telefon ligger fotoet som et bånd øverst, og spørgsmål, tekstfelt og knap kan ses
 uden at scrolle. Fotoet toner langsomt frem, og ingen bevægelse vises for den, der har slået animationer fra.
 
 **Siden fortæller ikke kunden, at vi ved, hvem de er** (Mads 23/11: "Vi skal ikke fortælle kunden at vi ved hvem de
