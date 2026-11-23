@@ -350,7 +350,9 @@
   height: 56px; padding: 0 16px; border: 1px solid var(--ls-line); border-radius: 14px; background: var(--ls-raise); color: var(--ls-tx);
   font-size: 26px; transition: box-shadow 160ms, border-color 160ms;
 }
-:where(.wps:not([data-device="desktop"])) .ls-name-input::placeholder { color: var(--ls-tx3); }
+/* the example name a size down from the visitor's own, so "např. Atelier Sever" stands whole beside the upload button
+   on a 360px phone; what is typed keeps 26px */
+:where(.wps:not([data-device="desktop"])) .ls-name-input::placeholder { color: var(--ls-tx3); font-size: 21px; }
 :where(.wps:not([data-device="desktop"])) .ls-name-input:focus { border-color: rgba(233, 211, 161, 0.45); box-shadow: inset 0 -2px 0 var(--ls-gold); }
 :where(.wps:not([data-device="desktop"])) .ls-upload-row { flex-wrap: nowrap; gap: 12px; margin: 0; min-height: 44px; }
 :where(.wps:not([data-device="desktop"])) .ls-upload {
@@ -642,6 +644,49 @@
 }
 @media (min-width: 760px) {
   :where(.wps[data-device="tablet"])[data-concept="logo-studio"] .wps-dialog { margin-inline: 0; border-radius: var(--wps-radius); }
+}
+
+/* ---- a normal popup on every phone and tablet, held upright (2026-11-23, the user: "på mobil vil jeg gerne have at den
+   ligner mere en normal pop-up som virker på alle typer på tværs"). One card, centred in the view, every corner round,
+   the store dimmed around it, fading and scaling in as on a desktop - the same on a phone, on a phone that reports a
+   tablet's width and on a tablet. It replaces the sheet that rose from the foot of the screen (and its grab bar and
+   swipe). The card is the stage (0.6 of its width: at 0.72 it was 81% of an iPhone 13's view; this is ~74%, what the
+   sheet was) and the panel, never taller than the view less 16px each side;
+   the result grows it to the whole consent, centred still; with the keyboard up it stands at the top of what is left. */
+:where(.wps:not([data-device="desktop"])) { --ls-cardw: min(440px, calc(100vw - 24px)); }
+@media (min-height: 501px), (max-aspect-ratio: 3/2) {
+  :where(.wps:not([data-device="desktop"])) { --ls-panel: 280px; --ls-full: calc(100vh - 32px); --ls-sheet: min(var(--ls-full), calc(0.6 * var(--ls-cardw) + var(--ls-panel))); }
+  @supports (height: 100dvh) {
+    :where(.wps:not([data-device="desktop"])) { --ls-full: calc(100dvh - max(32px, env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 16px)); }
+  }
+  :where(.wps:not([data-device="desktop"])) .ls { --ls-w: var(--ls-cardw); }
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-dialog {
+    left: 50%; right: auto; top: 50%; bottom: auto; width: var(--ls-cardw); margin: 0; border-radius: var(--wps-radius);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transform: translate(-50%, -47%) scale(0.96); opacity: 0;
+    transition: transform 420ms var(--wps-ease-out), opacity 260ms ease, visibility 0s linear 420ms;
+  }
+  :where(.wps:not([data-device="desktop"])).is-open[data-concept="logo-studio"] .wps-dialog {
+    transform: translate(-50%, -50%) scale(1); opacity: 1; transition: transform 520ms var(--wps-ease-out), opacity 300ms ease, visibility 0s;
+  }
+  :where(.wps:not([data-device="desktop"]))[data-concept="logo-studio"] .wps-grab { display: none; }
+  /* reduced motion: the shell takes every transform off the dialog (!important), and this card is centred by one */
+  .wps[data-reduced="true"]:not([data-device="desktop"])[data-concept="logo-studio"] .wps-dialog { transform: translate(-50%, -50%) !important; }
+  .wps[data-reduced="true"]:not([data-device="desktop"]).is-kb[data-concept="logo-studio"] .wps-dialog { transform: translateX(-50%) !important; }
+  /* no home indicator under a card in the middle of the view */
+  :where(.wps:not([data-device="desktop"])) .ls-cta { padding-bottom: 16px; }
+  /* the seven pieces span the card, 8px in from its edges, so a 360px phone holds all seven at 44px */
+  :where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumbs { gap: 2px; margin: 0 calc(5px - var(--ls-gut)); padding: 4px 3px 6px; }
+  :where(.wps:not([data-device="desktop"])) .ls-tool .ls-thumb { width: clamp(44px, calc((100% - 12px) / 7), 56px); }
+  /* a card under 336px (the first iPhone SE) gives the question a third line rather than cut it */
+  @media (max-width: 359px) {
+    :where(.wps:not([data-device="desktop"])) { --ls-panel: 300px; }
+    :where(.wps:not([data-device="desktop"])) .ls-edit .wps-title { -webkit-line-clamp: 3; }
+  }
+  /* typing: the card keeps its width and stands at the top of what the keyboard leaves, 8px clear of it */
+  :where(.wps:not([data-device="desktop"])).is-kb[data-concept="logo-studio"] .wps-dialog {
+    top: calc(var(--wps-vvtop, 0px) + 8px); height: calc(var(--wps-vvh, 100%) - 16px); transform: translateX(-50%); transition: opacity 300ms ease, visibility 0s;
+  }
 }
 
 /* ---- short landscape (a phone or tablet on its side): the stage a square on the left, the panel on the right ---- */

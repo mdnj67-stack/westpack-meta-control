@@ -181,6 +181,13 @@ en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?w
   billedet er et vindue på mindst 56 % af bredden, som altid rummer navnet. Resultatet viser stykket, spørgsmålet,
   feltet, knappen og hele samtykketeksten uden scroll (arket glider lidt op dér), og tak-skærmen er igen lav.
   Mens man skriver, ligger æsken fast øverst over tastaturet.
+- **Et almindeligt popup på alle telefoner og tablets** (2026-11-23, "på mobil vil jeg gerne have at den ligner mere
+  en normal pop-up som virker på alle typer på tværs"): ét kort midt på skærmen med runde hjørner hele vejen rundt,
+  12 px fri af kanterne (højst 440 px bredt) og butikken dæmpet rundt om. Det toner ind ligesom på desktop. Det gamle
+  ark nedefra med greb og swipe er væk. Kortet er cirka 74 % af en iPhones synlige skærm. Resultatet vokser til hele
+  samtykketeksten og bliver stadig i midten, og mens man skriver, står kortet øverst over tastaturet. Alle syv stykker
+  kan ses på en 360 px Android, og en lille iPhone SE giver overskriften en tredje linje i stedet for at skære den af.
+  Liggende telefoner beholder deres eget layout. Det lille kort nederst, der inviterer ind, er uændret.
 - **Mobilen åbner på Torino** (2026-11-23): det sorte låg med guldkant ligner en æske, før man har læst noget, og
   trykket står næsten vandret. Det mat-sorte Seville-låg, som desktop åbner på, var i mobilens lille vindue et sort felt
   med navnet på skrå. Upload-knappen viser et upload-ikon over ordet "Logo" (en pil alene sagde ikke, hvad den var til),

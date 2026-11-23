@@ -259,7 +259,8 @@
   // swipe the sheet down to close it on a phone, from the grab bar or the top edge
   function enableSheetDrag() {
     let y0 = null, dy = 0;
-    const start = (e) => { if (device === "desktop") return; const t = e.touches ? e.touches[0] : e; const r = ui.dialog.getBoundingClientRect(); if (t.clientY - r.top > 44) return; y0 = t.clientY; dy = 0; ui.dialog.classList.add("is-dragging"); };
+    // only where there is a sheet to pull: a card in the middle of the view (Logo studio on a phone) has no grab bar
+    const start = (e) => { if (device === "desktop" || getComputedStyle(ui.grab).display === "none") return; const t = e.touches ? e.touches[0] : e; const r = ui.dialog.getBoundingClientRect(); if (t.clientY - r.top > 44) return; y0 = t.clientY; dy = 0; ui.dialog.classList.add("is-dragging"); };
     const move = (e) => { if (y0 == null) return; const t = e.touches ? e.touches[0] : e; dy = Math.max(0, t.clientY - y0); ui.dialog.style.transform = `translateY(${dy}px)`; };
     const end = () => { if (y0 == null) return; ui.dialog.classList.remove("is-dragging"); ui.dialog.style.transform = ""; if (dy > 90) close("swipe"); y0 = null; };
     ui.dialog.addEventListener("touchstart", start, { passive: true });

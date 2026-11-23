@@ -355,11 +355,17 @@ async function SWEEP() {
   for (const [k, r] of [["question", ti], ["field", inp], ["pieces", row], ["button", cta]]) if (!L.inView(r)) o.c1.push(`${k} not in view`);
   if (L.qa(".ls-tab").length) o.c1.push("a tab bar");
   // the stage never goes below the window that holds the print on every piece (qa F checks the print in it)
-  if (!fr || fr.h < 0.56 * W - 0.5) o.c4.push(`stage ${fr && fr.h.toFixed(0)} of ${W}`);
-  // the sheet leaves the store in sight above it (the user: it filled an iPhone's screen); a view under 600px (the
-  // first iPhone SE) keeps nearly the whole height, because the print's window and the panel come first
   const dr = L.rect(d);
-  if (innerHeight >= 600 && dr.t < 0.2 * innerHeight - 0.5) o.c3.push(`sheet top at ${Math.round(dr.t)} of ${innerHeight}`);
+  if (!fr || fr.h < 0.56 * dr.w - 0.5) o.c4.push(`stage ${fr && fr.h.toFixed(0)} of ${Math.round(dr.w)}`);
+  // a normal popup since 2026-11-23: a card in the middle of the view, clear of every edge, with the store in sight
+  // around it (the user: the sheet filled an iPhone's screen); a view under 600px (the first iPhone SE) gives it
+  // nearly the whole height, because the print's window and the panel come first
+  if (dr.l < 8 || innerWidth - dr.r < 8 || dr.t < 8 || innerHeight - dr.b < 8) o.c3.push(`card at ${Math.round(dr.l)},${Math.round(dr.t)} ${Math.round(dr.w)}x${Math.round(dr.h)}: not clear of the edges`);
+  if (Math.abs(dr.t - (innerHeight - dr.b)) > 2) o.c3.push(`card not centred: ${Math.round(dr.t)} above, ${Math.round(innerHeight - dr.b)} below`);
+  if (innerHeight >= 600 && dr.h > 0.8 * innerHeight + 0.5) o.c3.push(`card ${Math.round(dr.h)} of ${innerHeight}`);
+  // the question is never cut to an ellipsis, in any language
+  const qn = L.q(".ls-edit .wps-title");
+  if (qn.scrollHeight > qn.clientHeight + 1) o.c9.push(`the question is cut: "${qn.textContent.slice(0, 40)}"`);
   // the seven pieces in one row, scrolling at most a few pixels
   const pieces = L.qa(".ls-tool .ls-thumb").map((b) => L.rect(b));
   // (the chosen piece stands 2px proud of the row; under 360px seven 44px buttons cannot fit, and the row scrolls)
@@ -476,10 +482,10 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
     }
     report(`${phone}, 18 stores: (1) stage < question < field < pieces < button, all in the first screen, no tabs`, agg.c1);
     report(`${phone}, 18 stores: (2) nothing scrolls: the sheet and the panel fit`, agg.c2);
-    report(`${phone}, 18 stores: (3) the sheet leaves at least a fifth of the store in sight above it (views from 600px)`, agg.c3);
+    report(`${phone}, 18 stores: (3) a popup card, centred and clear of every edge, at most 80% of the view (views from 600px)`, agg.c3);
     report(`${phone}, 18 stores: (4) the stage at rest is at least 0.56 x the width, the window that holds the print`, agg.c4);
     report(`${phone}, 18 stores: (7) the seven pieces in one row`, agg.c7);
-    report(`${phone}, 18 stores: (9) no small print over the photo, and the upload button says "Logo" within its square`, agg.c9);
+    report(`${phone}, 18 stores: (9) no small print over the photo, "Logo" within the upload button, the question never cut`, agg.c9);
     report(`${phone}, 18 stores: (10) nothing sits on the close button`, agg.c10);
     report(`${phone}, 18 stores: (11) every control is a 44 x 44 target`, agg.c11);
     report(`${phone}, 18 stores: (12) no sideways overflow on any tool`, agg.c12);
@@ -632,13 +638,14 @@ async function phoneStudio({ browser, url, check, errors, outDir, devices, byLan
         box: l.q(".ls").dataset.box, strip: Boolean(strip && strip.getClientRects().length),
         email: l.inView(l.rect(".ls-result .wps-input")), submit: l.inView(l.rect(".ls-result .wps-form .wps-btn-primary")),
         consent: Boolean(cr && cr.b <= Math.min(innerHeight, card.b) + 0.5), cardScroll: l.q(".ls-result").scrollHeight - l.q(".ls-result").clientHeight,
-        hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), top: l.rect(".wps-dialog").t, state: l.state(),
+        hero: f.h, print: l.inside(l.rect(".ls-frame .ls-print text"), f), top: l.rect(".wps-dialog").t, dw: l.rect(".wps-dialog").w, state: l.state(),
       };
     });
     const c13 = [];
     if (!res.email || !res.submit) c13.push(`email ${res.email}, button ${res.submit}`);
     if (!res.consent) c13.push("the consent runs under the fold");
-    if (res.hero < 0.56 * vp.width - 0.5) c13.push(`hero ${res.hero}`);
+    // the print's window is 0.56 of the card's width (a popup card since 2026-11-23, no longer the view's)
+    if (res.hero < 0.56 * res.dw - 0.5) c13.push(`hero ${res.hero} of a ${Math.round(res.dw)}px card`);
     report(`${phone}: (13) on the result the email field, the button and the whole consent are in view, the hero the print's window`, c13);
     check(`${phone}: (14) the bag is the hero, its print whole in the window, no strip of pieces`, res.box === "bag" && !res.strip && res.print, JSON.stringify({ box: res.box, strip: res.strip, print: res.print }));
     if (res.state.k !== rest.k || Math.abs(res.state.sceneW - res.state.dialogW) > 0.5) fails.c5.push(`result: --k ${res.state.k}, scene ${res.state.sceneW}/${res.state.dialogW}`);
