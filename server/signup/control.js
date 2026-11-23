@@ -229,7 +229,9 @@ function behaviour() {
   const days = rules.SUPPRESSION.closedDays;
   return [
     { label: "On a computer", text: `Opens after ${s(desktopFirst.delayMs)} on the first page and ${s(desktopLater.delayMs)} on later pages${desktopFirst.exitIntent ? ", or when the pointer leaves the window" : ""}.` },
-    { label: "On a phone or tablet", text: `Never opens by itself: a small card slides in after ${s(phoneFirst.delayMs)} (${s(phoneLater.delayMs)} on later pages) or ${Math.round(phoneFirst.scrollRatio * 100)}% down the page, and the experience opens when it is tapped. A dismissed card stays away ${rules.SUPPRESSION.peekDismissedDays} days.` },
+    { label: "On a phone or tablet", text: phoneFirst.mode === "dialog"
+      ? `Opens after ${s(phoneFirst.delayMs)} on the first page and ${s(phoneLater.delayMs)} on later pages, as a card in the middle of the screen.`
+      : `Never opens by itself: a small card slides in after ${s(phoneFirst.delayMs)} (${s(phoneLater.delayMs)} on later pages), and the experience opens when it is tapped. A dismissed card stays away ${rules.SUPPRESSION.peekDismissedDays} days.` },
     { label: "Never on", text: "Cart, checkout, the customer account, the wishlist, search, the newsletter page and sale or outlet pages." },
     { label: "Never for", text: `Someone who signed up, someone who came from one of our emails (and for ${rules.SUPPRESSION.emailVisitorDays} days after), someone Klaviyo already knows, and anyone who has seen it this session. It waits for the cookie banner to be answered.` },
     { label: "After a close", text: `Away ${days[0]} days, after a second close ${days[1]} days, after a third ${days[2]} days.` }

@@ -485,7 +485,9 @@
   async function readControl() {
     if (!OPTS.controlUrl || typeof fetch !== "function" || typeof AbortController !== "function") return null;
     const abort = new AbortController();
-    const timer = setTimeout(() => abort.abort(), 2500);
+    // 5 s (2.5 s until 2026-11-23): nothing is drawn while it waits and the popup waits 6 s anyway, so a slow answer
+    // costs nothing, while a timed-out one switches the visitor off silently - seen once on CZ in a handful of loads
+    const timer = setTimeout(() => abort.abort(), 5000);
     try {
       const res = await fetch(OPTS.controlUrl, { signal: abort.signal, credentials: "omit" });
       const json = res.ok ? await res.json() : null;

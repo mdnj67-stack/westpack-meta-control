@@ -94,13 +94,15 @@
   }
 
   /**
-   * How the experience is offered. Desktop gets the dialog after a pause or on exit intent. Phones and tablets
-   * never get a full-screen interruption on their own: a small card slides in, and the experience opens only
-   * when it is tapped.
+   * How the experience is offered: the popup opens by itself after a pause, on every device; a computer also opens it
+   * when the pointer leaves the window. Phones and tablets used to get a small card that opened the popup only when
+   * tapped: on CZ's first four days 8 of 204 cards were tapped (2026-11-23), so over half the traffic never saw the
+   * studio. Now that a phone gets a normal popup card, it opens like one - as The Insert did (5 s), so the two are
+   * compared on the experience rather than on how it is shown. (showPeek stays in the runtime, unused by the triggers.)
    */
   function triggerPlan(device, pageviews) {
     if (device === "desktop") return { mode: "dialog", delayMs: pageviews > 1 ? 6000 : 11000, exitIntent: true };
-    return { mode: "peek", delayMs: pageviews > 1 ? 4000 : 7000, scrollRatio: 0.3 };
+    return { mode: "dialog", delayMs: pageviews > 1 ? 4000 : 6000, exitIntent: false };
   }
 
   function enabledConcepts(weights) {

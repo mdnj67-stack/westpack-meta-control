@@ -112,9 +112,14 @@ test("checkout, cart, account, newsletter page, sale and outlet pages are exclud
   for (const p of ["/dkk_dk_den/", "/eur_eu_ger/schmuckschachteln.html", "/gbp_uk_eng/jewellery-boxes/cardboard-jewellery-boxes/boston.html"]) assert.equal(R.isExcludedPath(p), false, p);
 });
 
-test("phones get a card they choose to open; desktops get the dialog", () => {
-  assert.equal(R.triggerPlan("mobile", 1).mode, "peek");
-  assert.equal(R.triggerPlan("tablet", 1).mode, "peek");
+test("every device gets the popup by itself after a pause; only a computer also on exit intent", () => {
+  // phones too since 2026-11-23: the card that waited for a tap was tapped 8 times in 204 on CZ
+  for (const device of ["mobile", "tablet"]) {
+    const p = R.triggerPlan(device, 1);
+    assert.equal(p.mode, "dialog", device); assert.equal(p.exitIntent, false, device);
+    assert.ok(p.delayMs >= 5000 && p.delayMs <= 8000, `${device} waits ${p.delayMs} ms`);
+    assert.ok(R.triggerPlan(device, 2).delayMs < p.delayMs, `${device} is quicker on later pages`);
+  }
   const d = R.triggerPlan("desktop", 1);
   assert.equal(d.mode, "dialog"); assert.equal(d.exitIntent, true); assert.ok(d.delayMs >= 6000);
 });
@@ -279,8 +284,10 @@ test("the app's Signup page decides whether the stores run the Signup Lab, the f
   assert.match(runtime, /controlUrl: data\.control !== undefined \? data\.control : new URL\("\.\.\/api\/signup\/control\?action=config", BASE\)\.href/);
   assert.match(runtime, /const ctl = market && OPTS\.mode !== "preview" && !OPTS\.storePreview \? await readControl\(\) : null;/);
   assert.match(runtime, /const on = side \? Boolean\(side\.on && \(staging \|\| !side\.markets \|\| side\.markets\[market\.market\] !== false\)\) : M\.LIVE \|\| staging;/);
-  // a read that hangs is given up on, and anything but a v1 answer counts as no answer
-  assert.match(runtime, /setTimeout\(\(\) => abort\.abort\(\), 2500\)/);
+  // a read that hangs is given up on - within the popup's own pause, so a slow answer never shows it late - and
+  // anything but a v1 answer counts as no answer
+  const giveUp = Number((runtime.match(/setTimeout\(\(\) => abort\.abort\(\), (\d+)\)/) || [])[1]);
+  assert.ok(giveUp >= 2500 && giveUp <= R.triggerPlan("mobile", 1).delayMs, `the control read gives up after ${giveUp} ms`);
   assert.match(runtime, /return json && json\.v === 1 \? json : null;/);
   // off: the tag does nothing, except a store preview; a preview is always test mode, so it can only reach the test list
   assert.match(runtime, /if \(!market \|\| \(!\(on && market\.enabled\) && OPTS\.mode !== "preview" && !OPTS\.storePreview\)\) return;/);

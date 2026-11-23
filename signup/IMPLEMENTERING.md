@@ -28,7 +28,7 @@ Tjekket for alle 18 markeder 20/11, så det ikke skal gøres igen ved lanceringe
 
 Wexo har sat linjen ind på staging-butikken (`https://westpack-staging.wexohosting.com/`, bag basic auth), og dér
 kører Signup Lab **af sig selv, som den vil på de rigtige butikker**, uanset kontakten nedenfor: dialogen kommer på
-desktop efter en pause eller når musen forlader siden, kortet glider ind på mobilen, og den holder sig fra kurven.
+desktop efter en pause eller når musen forlader siden, på mobilen efter en pause, og den holder sig fra kurven.
 Forskellene er, at hver tilmelding kun går til testlisten "TEST - Signup Lab (preview only)" i DK-kontoen, at
 tragten registreres som `env=test` (ikke live), og at links bliver på staging. Hosten står i `STAGING_HOSTS` i
 `signup/core/markets.js`.

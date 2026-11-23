@@ -125,7 +125,8 @@ const state = (page) => page.evaluate(() => {
     if (simulateLive) {
       const live = await run("live", base, true, mobile ? 12000 : 17000);
       const cart = await run("cart", `${base}checkout/cart/`, true, 15000);
-      r.live = mobile ? (live.peek || live.open ? "peek" : "NOTHING") : live.open ? "opens" : "NOTHING";
+      // a phone gets the popup by itself since 2026-11-23 (a card that waits for a tap before that)
+      r.live = live.open ? "opens" : live.peek ? "peek" : "NOTHING";
       r.cart = cart.open || cart.peek ? "SHOWED" : "silent";
       r.klaviyoTooWhenLive = live.klaviyoPopup ? "yes" : "no";
       r.errors += live.errors.length + cart.errors.length;

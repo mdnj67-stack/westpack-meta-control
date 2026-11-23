@@ -66,9 +66,17 @@ fs.mkdirSync(out, { recursive: true });
   await page.waitForTimeout(1500);
   // a scroll down the page, as a visitor reads it (mobile WebKit takes no mouse wheel)
   await page.evaluate(() => window.scrollBy(0, 900));
-  let peeked = false;
-  try { await host.locator(".wps-peek.is-in").waitFor({ timeout: 15000 }); peeked = true; } catch (e) { /* live off here */ }
-  if (peeked) {
+  // since 2026-11-23 a phone gets the popup by itself after a pause; a card that waits for a tap is the older way
+  let peeked = false, autoOpened = false;
+  try {
+    await host.locator(".wps-peek.is-in, .wps.is-open").first().waitFor({ timeout: 15000 });
+    autoOpened = await host.locator(".wps.is-open").count() > 0; peeked = !autoOpened;
+  } catch (e) { /* live off here */ }
+  report.autoOpened = autoOpened;
+  if (autoOpened) {
+    await page.waitForTimeout(250); await shot("auto-open");
+    await page.waitForTimeout(1200);
+  } else if (peeked) {
     await page.waitForTimeout(1200);
     await shot("peek");
     // the peek must clear the store's cookie button, and that button must still answer a tap

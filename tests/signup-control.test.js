@@ -153,6 +153,8 @@ test("the page says how the script behaves from the script's own rules", () => {
   const text = control.behaviour().map((b) => `${b.label}: ${b.text}`).join("\n");
   const desktop = rules.triggerPlan("desktop", 1);
   assert.ok(text.includes(`Opens after ${desktop.delayMs / 1000} s`), text);
+  const phone = rules.triggerPlan("mobile", 1);
+  assert.ok(text.includes(`On a phone or tablet: Opens after ${phone.delayMs / 1000} s`), text);
   assert.ok(text.includes(`${rules.SUPPRESSION.closedDays[0]} days`));
   assert.ok(text.includes(`${rules.SUPPRESSION.emailVisitorDays} days`));
   assert.match(control.SNIPPET, /^<script src="https:\/\/project-4fcxa\.vercel\.app\/signup\/westpack-signup\.js" async><\/script>$/);

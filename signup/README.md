@@ -57,14 +57,15 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 ## Hvem ser hvad, og hvornår
 
 - **Desktop:** dialogen åbner efter 11 sekunder (6 på side to) eller når musen forlader vinduet.
-- **Mobil og tablet:** ingen automatisk fuldskærm. Et lille kort glider ind efter 7 sekunder eller 30 % scroll;
-  oplevelsen åbner kun, hvis man trykker på det.
+- **Mobil og tablet:** popuppen åbner af sig selv efter 6 sekunder (4 på de næste sider), som et kort midt på
+  skærmen – ligesom The Insert gjorde (5 sekunder). Indtil 23/11 kom der kun et lille kort nederst, som åbnede
+  oplevelsen, hvis man trykkede: i Tjekkiets første fire dage blev 8 af 204 kort trykket, så over halvdelen af
+  trafikken så aldrig studiet.
 - **Aldrig:** checkout, kurv, konto, nyhedsbrevssiden, udsalg og outlet (i alle butikkers sprog), eller mens
   cookie-banneret står åbent (den venter på valget).
 - **Aldrig for:** dem, der er tilmeldt via oplevelsen; dem, der kommer fra en af vores mails (`_kx`,
   `utm_medium=email`; 180 dage); besøgende, Klaviyo genkender.
-- **Én gang pr. besøg.** Lukket én gang: pause i 14 dage, to gange: 45 dage, tre gange: 120 dage. Peek-kortet
-  lukket: 7 dage.
+- **Én gang pr. besøg.** Lukket én gang: pause i 14 dage, to gange: 45 dage, tre gange: 120 dage.
 - Hukommelsen ligger i `localStorage`/`sessionStorage` uden identifikatorer (kun datoer og den tildelte
   oplevelse). Ingen cookies.
 
