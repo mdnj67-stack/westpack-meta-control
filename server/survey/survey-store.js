@@ -112,4 +112,23 @@ async function writeRecipients(survey, recipients, now = Date.now()) {
   return doc;
 }
 
-module.exports = { storeMode, writeResponse, readResponses, readRecipients, writeRecipients };
+// Marks answers as a test in place (the file keeps its name; nothing is deleted), so a test someone gave without
+// #k=test stops counting and stays readable under "Show test answers". `isMarked(record)` decides.
+async function markResponsesTest(survey, isMarked, now = Date.now()) {
+  const stamp = new Date(now).toISOString();
+  const dir = `${prefix(survey)}/responses`;
+  const entries = token()
+    ? await pool(await blobList(`${dir}/`), 16, async (b) => ({ pathname: b.pathname, record: await blobGet(b.pathname).catch(() => null) }))
+    : (fs.existsSync(localPath(dir)) ? fs.readdirSync(localPath(dir)).filter((n) => n.endsWith(".json")) : []).map((n) => ({ pathname: `${dir}/${n}`, record: localRead(`${dir}/${n}`) }));
+  let marked = 0;
+  for (const { pathname, record } of entries) {
+    if (!record || !isMarked(record)) continue;
+    const next = Object.assign({}, record, { test: true, markedTestAt: stamp });
+    if (token()) await blobPut(pathname, next);
+    else localWrite(pathname, next);
+    marked++;
+  }
+  return { marked, files: entries.length };
+}
+
+module.exports = { storeMode, writeResponse, readResponses, readRecipients, writeRecipients, markResponsesTest };

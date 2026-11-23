@@ -189,7 +189,8 @@
     set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   };
   var token = (function () {
-    var m = /(?:^|[#&])k=([a-z0-9]{6,16})/i.exec(location.hash || "");
+    // "test" is four letters, shorter than any customer's code: it must be named, or a test answer is stored as real
+    var m = /(?:^|[#&])k=(test|[a-z0-9]{6,16})(?![a-z0-9])/i.exec(location.hash || "");
     if (m) { mem.set("wpfb-k", m[1].toLowerCase()); return m[1].toLowerCase(); }
     return mem.get("wpfb-k");
   })();

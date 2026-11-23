@@ -1,8 +1,10 @@
 // Klaviyo email → Customer survey: the answers to "why have we not seen you for a year", from the blog post
 // templates/customer-feedback-survey/survey.html, and the personal link each lapsed customer is sent.
 //
-// Read-only apart from copying links: the recipient list is uploaded by the script that builds it, and answers
-// arrive from the store (api/survey.js). Nothing here writes to Klaviyo, Magento or Navision.
+// Read-only apart from copying links and "Mark as test": the recipient list is uploaded by the script that builds it,
+// and answers arrive from the store (api/survey.js). A test typed on the live post without #k=test is stored as a real
+// answer; "Mark as test" moves it under "Show test answers" (in place, nothing deleted). Nothing here writes to
+// Klaviyo, Magento or Navision.
 
 const DATE = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Copenhagen" });
 const KR = new Intl.NumberFormat("da-DK", { maximumFractionDigits: 0 });
@@ -36,6 +38,18 @@ async function request(action, params = "") {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload?.error || `Request failed (${response.status}).`);
   return payload;
+}
+
+async function markTest(sid, at) {
+  if (!window.confirm("Mark this answer as a test? It stops counting and moves under \"Show test answers\". Nothing is deleted.")) return;
+  try {
+    const response = await fetch("/api/survey?action=mark_test", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ answers: [sid ? { sid } : { at }] }) });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload?.error || `Request failed (${response.status}).`);
+  } catch (error) {
+    window.alert(`The answer could not be marked: ${error.message}`);
+  }
+  load();
 }
 
 // "eur_eu_ger" -> "EU store (ger)"; an answer without a personal link only knows which store it came from.
@@ -98,7 +112,7 @@ function renderAnswers() {
   return `<div class="wp-table-wrap"><table class="wp-table survey-table">
     <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Main reason</th><th>Picked</th><th>In their words</th><th>Contact</th></tr></thead>
     <tbody>${rows.map(({ a, who, picked, words }) => `<tr>
-      <td>${escapeHtml(when(a.at))}${a.test ? ' <span class="wp-badge">Test</span>' : ""}</td>
+      <td>${escapeHtml(when(a.at))}${a.test ? ' <span class="wp-badge">Test</span>' : `<br><button class="wp-button is-sm" type="button" data-survey-mark-test data-sid="${escapeHtml(a.sid || "")}" data-at="${escapeHtml(a.at || "")}">Mark as test</button>`}</td>
       <td>${escapeHtml(who)}${a.email ? `<br><span class="survey-muted">${escapeHtml(a.email)}</span>` : ""}</td>
       <td>${escapeHtml(a.recipient?.land || storeLabel(a.store))}</td>
       <td class="is-numeric">${a.recipient?.livstid != null ? KR.format(a.recipient.livstid) : ""}</td>
@@ -217,6 +231,8 @@ export function initCustomerSurvey() {
     if (exp) exportCsv(exp.dataset.surveyExport);
     const link = target.closest("[data-survey-copy]");
     if (link) copy(link.dataset.surveyCopy);
+    const mark = target.closest("[data-survey-mark-test]");
+    if (mark) markTest(mark.dataset.sid, mark.dataset.at);
   });
   node.addEventListener("change", (event) => {
     const box = event.target instanceof Element ? event.target.closest("[data-survey-test]") : null;

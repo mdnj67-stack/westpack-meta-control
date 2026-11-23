@@ -8,6 +8,7 @@
  * Logged in (the app):
  *   GET  ?action=results[&test=1]  recipients, answers (latest per customer) and the count per reason
  *   POST ?action=recipients        replaces the recipient list: { recipients: [...] }
+ *   POST ?action=mark_test         { answers: [{ sid, at }] } - marks those answers as a test, in place; deletes nothing
  *
  * Nothing here writes to Klaviyo, Magento or Navision. An answer is stored in this app's own Blob store only.
  */
@@ -101,6 +102,18 @@ module.exports = async function handler(req, res) {
     try {
       const doc = await store.writeRecipients(survey.SURVEY_ID, out.recipients);
       return sendJson(res, 200, { ok: true, count: doc.recipients.length, updatedAt: doc.updatedAt, store: { mode: store.storeMode() } });
+    } catch (e) { return sendJson(res, 502, { error: e.message }); }
+  }
+
+  if (action === "mark_test") {
+    if (req.method !== "POST") return sendJson(res, 405, { error: "POST only." });
+    let input;
+    try { input = await readJson(req, MAX_BYTES); } catch { return sendJson(res, 400, { error: "Expected a small JSON body." }); }
+    const sel = survey.sanitizeMarkTest(input);
+    if (sel.error) return sendJson(res, 400, { error: sel.error });
+    try {
+      const out = await store.markResponsesTest(survey.SURVEY_ID, (r) => survey.isMarkedBy(r, sel));
+      return sendJson(res, 200, Object.assign({ ok: true }, out));
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
 

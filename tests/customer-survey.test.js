@@ -126,7 +126,15 @@ test("the blog block can be pasted into Magento and posts to the survey route", 
   assert.match(html, /data-api="https:\/\/project-4fcxa\.vercel\.app\/api\/survey"/);
   assert.match(html, /\?action=submit/);
   assert.match(html, /text\/plain/, "a simple request, so the browser sends no preflight");
-  assert.match(html, /k=\(\[a-z0-9\]\{6,16\}\)/, "the token is read from the hash: the blog drops query strings");
+  // the token is read from the hash (the blog drops query strings); run the block's own pattern, not a copy of it
+  const tokenRe = new Function(`return ${html.match(/var m = (\/\(\?:\^\|\[#&\]\)k=[^\n]*?\/i)\.exec\(location\.hash/)[1]};`)();
+  const read = (hash) => { const m = tokenRe.exec(hash); return m ? m[1].toLowerCase() : ""; };
+  assert.equal(read("#k=test"), "test", "#k=test must reach the server as a test answer, not as an anonymous real one");
+  assert.equal(read("#k=AB12cd34"), "ab12cd34");
+  assert.equal(read("#x=1&k=f4c0b83ea7"), "f4c0b83ea7");
+  assert.equal(read("#k=tester"), "tester", "a code that merely starts with test is a code");
+  assert.equal(read("#k=abc"), "", "too short for a code");
+  assert.equal(read("#k=" + "a".repeat(17)), "", "too long for a code");
   // every rule is anchored on the block's id, since the theme's post typography beats class selectors
   const css = html.match(/<style>([\s\S]*?)<\/style>/)[1]
     .replace(/@import url\([^)]*\);/g, "")
@@ -197,4 +205,45 @@ test("the post asks for a written answer: no options to pick, and words are requ
   const s = survey.summarize({ responses: [written.record] });
   assert.equal(s.totals.written, 1);
   assert.equal(s.reasons.every((r) => r.count === 0), true, "a written answer is not counted under any reason");
+});
+
+test("mark as test: a visit by its id, an older answer by its time; nothing else, and never twice", async () => {
+  assert.ok(survey.sanitizeMarkTest({}).error);
+  assert.ok(survey.sanitizeMarkTest({ answers: [{ sid: "x" }] }).error, "neither a visit id nor a time");
+  assert.ok(survey.sanitizeMarkTest({ answers: Array.from({ length: 101 }, () => ({ sid: "abcdefgh12" })) }).error);
+  const sel = survey.sanitizeMarkTest({ answers: [{ sid: "RM1TVCI1YNYDWQ6Q" }, { at: "2026-11-13T08:51:25.326Z" }] });
+  assert.equal(sel.error, undefined);
+  assert.equal(survey.isMarkedBy({ sid: "rm1tvci1ynydwq6q", at: "2026-11-23T07:26:52.476Z" }, sel), true);
+  assert.equal(survey.isMarkedBy({ sid: null, at: "2026-11-13T08:51:25.326Z" }, sel), true);
+  assert.equal(survey.isMarkedBy({ sid: "othervisit1", at: "2026-11-13T08:51:25.326Z" }, sel), false, "a visit with an id is never marked by its time");
+  assert.equal(survey.isMarkedBy({ sid: "rm1tvci1ynydwq6q", test: true }, sel), false, "already a test");
+
+  const saved = process.env.BLOB_READ_WRITE_TOKEN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+  const store = require("../server/survey/survey-store");
+  const id = `unit-mark-${process.pid}-${Date.now()}`;
+  try {
+    await store.writeResponse(id, { sid: "rm1tvci1ynydwq6q", at: "2026-11-23T07:26:50.000Z", followup: "save 1", test: false }, 1);
+    await store.writeResponse(id, { sid: "rm1tvci1ynydwq6q", at: "2026-11-23T07:26:52.476Z", followup: "save 2", test: false }, 2);
+    await store.writeResponse(id, { sid: "customervisit1", at: "2026-11-23T09:00:00.000Z", followup: "a customer", test: false }, 3);
+    const out = await store.markResponsesTest(id, (r) => survey.isMarkedBy(r, sel));
+    assert.deepEqual(out, { marked: 2, files: 3 });
+    const after = await store.readResponses(id);
+    assert.equal(after.length, 3, "nothing deleted");
+    assert.deepEqual(after.filter((r) => r.test).map((r) => r.followup).sort(), ["save 1", "save 2"]);
+    assert.equal(survey.summarize({ responses: after }).totals.answers, 1, "only the customer still counts");
+    assert.equal(survey.summarize({ responses: after, includeTest: true }).totals.answers, 2);
+  } finally {
+    if (saved) process.env.BLOB_READ_WRITE_TOKEN = saved;
+    fs.rmSync(path.join(ROOT, "tmp", "surveys", id), { recursive: true, force: true });
+  }
+});
+
+test("the app view can mark an answer as a test, and says nothing is deleted", () => {
+  const view = fs.readFileSync(path.join(ROOT, "src", "customer-survey.js"), "utf8");
+  assert.match(view, /data-survey-mark-test/);
+  assert.match(view, /action=mark_test/);
+  assert.match(view, /Nothing is deleted/);
+  const route = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
+  assert.ok(route.indexOf('action === "mark_test"') > route.indexOf("requireAuth(req, res, config)"), "marking needs a login");
 });

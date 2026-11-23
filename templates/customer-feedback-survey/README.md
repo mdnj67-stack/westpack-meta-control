@@ -65,6 +65,14 @@ US. Linkene går dertil, så den skal være præcis sådan.
    - `https://www.westpack.com/gbp_uk_eng/blog/customer-feedback-2026#k=test` – engelsk tekst
 
    Med `#k=test` bliver svaret gemt som en test. I biblen kan det ses med "Show test answers", men det tæller ikke med.
+   (Før 23/11 virkede `#k=test` ikke: blokken læste kun koder på 6-16 tegn, så testsvar blev gemt som rigtige. Sæt
+   blokken ind igen, hvis den er fra før.) Er et testsvar alligevel gemt som rigtigt, fx fordi nogen skrev "Test" uden
+   `#k=test`, så tryk **Mark as test** ud for det i biblen. Det bliver ikke slettet, men flytter ned under "Show test
+   answers".
+
+> **23/11:** Indlægget blev lagt op som "Churn survey" med URL-nøglen `churn-survey`. Alle mails linker til
+> `customer-feedback-2026`, så de gav 404, og "churn" står i adressen, som kunden ser. Ret URL-nøglen og titlen som
+> beskrevet ovenfor, før der sendes noget.
 
 Samme blok bruges i alle butikker. Den finder selv sproget ud fra butikkens adresse, og "Til webshoppen" peger på den
 butik, siden står i.

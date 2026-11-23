@@ -198,4 +198,29 @@ function summarize({ responses = [], recipients = [], includeTest = false } = {}
   };
 }
 
-module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize };
+/**
+ * Which answers to mark as a test, from what the app sends: { answers: [{ sid, at }] }. A visit is marked by its id,
+ * so every save of it moves at once; an answer saved before visits had ids is marked by its exact time. Up to 100.
+ */
+const AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
+function sanitizeMarkTest(input = {}) {
+  const list = Array.isArray(input && input.answers) ? input.answers : null;
+  if (!list || !list.length) return { error: "Expected { answers: [{ sid, at }] }." };
+  if (list.length > 100) return { error: "At most 100 answers at a time." };
+  const sids = new Set();
+  const ats = new Set();
+  for (const a of list) {
+    const sid = String((a && a.sid) || "").toLowerCase();
+    const at = String((a && a.at) || "");
+    if (SID.test(sid)) sids.add(sid);
+    else if (AT.test(at)) ats.add(at);
+    else return { error: "Each answer needs its visit id or its time." };
+  }
+  return { sids, ats };
+}
+function isMarkedBy(record, { sids, ats }) {
+  if (!record || record.test) return false;
+  return record.sid ? sids.has(record.sid) : ats.has(record.at);
+}
+
+module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy };
