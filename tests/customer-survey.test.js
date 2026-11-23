@@ -8,21 +8,34 @@ const survey = require("../server/survey/customer-survey");
 
 const ok = (extra = {}) => Object.assign({ reason: "competitor", k: "ab12cd34", store: "eur_eu_ger", lang: "en", followup: "Cheaper", contact: "yes", ms: 9000 }, extra);
 
-test("a valid answer keeps only known fields, and a personal link drops any e-mail", () => {
+test("a valid answer keeps only known fields", () => {
   const { record } = survey.sanitizeSubmission(ok({ email: "a@b.dk", evil: "<script>" }), { now: Date.parse("2026-11-13T10:00:00Z") });
   assert.equal(record.reason, "competitor");
   assert.equal(record.token, "ab12cd34");
   assert.equal(record.store, "eur_eu_ger");
   assert.equal(record.contact, "yes");
-  assert.equal(record.email, undefined);
   assert.equal(record.evil, undefined);
   assert.equal(record.at, "2026-11-13T10:00:00.000Z");
 });
 
-test("an answer without a link keeps the e-mail only when the person asked to be contacted", () => {
+test("an e-mail is kept only when the person asked to be contacted - with a personal link too", () => {
+  // the page asks everyone who says yes where to reply, so it never shows that a link told us who they are (23/11)
+  assert.equal(survey.sanitizeSubmission(ok({ email: "a@b.dk" })).record.email, "a@b.dk");
   assert.equal(survey.sanitizeSubmission(ok({ k: "", email: "kunde@firma.dk" })).record.email, "kunde@firma.dk");
-  assert.equal(survey.sanitizeSubmission(ok({ k: "", contact: "no", email: "kunde@firma.dk" })).record.email, undefined);
+  assert.equal(survey.sanitizeSubmission(ok({ contact: "no", email: "kunde@firma.dk" })).record.email, undefined);
   assert.equal(survey.sanitizeSubmission(ok({ k: "", email: "not an address" })).record.email, undefined);
+});
+
+test("the page never tells the visitor we know who they are", () => {
+  // the user, 2026-11-23: "Vi skal ikke fortælle kunden at vi ved hvem de er"
+  const html = fs.readFileSync(path.join(ROOT, "templates", "customer-feedback-survey", "survey.html"), "utf8");
+  assert.equal(/action=who/.test(html), false, "the page does not look up whose link it is");
+  assert.equal(/\{firma\}|data-hi/.test(html), false, "no greeting or thanks by company name");
+  const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
+  for (const [lang, t] of Object.entries(STR)) {
+    assert.equal(/hvilken kunde|which customer|via et link|through a link/i.test(Object.values(t).join(" ")), false, `${lang}: nothing about seeing who answered`);
+  }
+  assert.match(html, /if \(c === "yes"\) \{ q\("\[data-emailbox\]"\)\.hidden = false;/, "a yes always asks where to reply");
 });
 
 test("unknown reasons are refused; bots are swallowed, not refused", () => {
@@ -169,10 +182,11 @@ test("the block can be pasted into a Magento page and posts to the survey route"
   assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:#fff/);
   assert.match(css, /#wpfb \.wpfb-h\{[^}]*background-clip:text[^}]*-webkit-text-fill-color:transparent/);
   assert.match(html, /<h1 class="wpfb-title" data-t="title">/, "the page's one h1: CMS pages on this theme show no title of their own");
-  // the photograph is the store's own, from its own CDN: nothing new to host, nothing a store CSP would block
-  const photos = html.match(/https:\/\/[^\s",]+\.jpg[^\s",]*/g) || [];
-  assert.ok(photos.length >= 3, "a size for a phone, a tablet and a desktop");
-  for (const src of photos) assert.match(src, /^https:\/\/westpack\.b-cdn\.net\/media\//);
+  // the photograph is Westpack's own and permanently hosted (Klaviyo's image library or the store's CDN), never an
+  // Asana link, which dies within the hour
+  const photos = html.match(/https:\/\/[^\s",]+\.jpe?g[^\s",]*/g) || [];
+  assert.ok(photos.length >= 1);
+  for (const src of photos) assert.match(src, /^https:\/\/(cdn\.klaviyomail\.com\/company\/|westpack\.b-cdn\.net\/media\/)/);
   // every language has every string
   const strBlock = html.match(/var STR = (\{[\s\S]*?\n  \});/)[1];
   const STR = Function(`return ${strBlock}`)();

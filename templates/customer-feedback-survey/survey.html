@@ -4,8 +4,8 @@
 #wpfb *,#wpfb *::before,#wpfb *::after{box-sizing:border-box}
 #wpfb [hidden]{display:none!important}
 #wpfb .wpfb-page{display:grid;grid-template-columns:minmax(0,1fr);background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.05),0 24px 56px -30px rgba(0,0,0,.25)}
-#wpfb .wpfb-art{position:relative;margin:0;aspect-ratio:16/7;background:#ece8e1;overflow:hidden}
-#wpfb .wpfb-art img{position:absolute;left:0;top:0;display:block;width:100%;height:100%;max-width:none;margin:0;object-fit:cover;object-position:50% 46%}
+#wpfb .wpfb-art{position:relative;margin:0;aspect-ratio:16/9;background:#161412;overflow:hidden}
+#wpfb .wpfb-art img{position:absolute;left:0;top:0;display:block;width:100%;height:100%;max-width:none;margin:0;object-fit:cover;object-position:50% 21%}
 #wpfb.is-js .wpfb-art img{opacity:0;transform:scale(1.06);transition:opacity .9s ease,transform 2.6s cubic-bezier(.16,.7,.12,1)}
 #wpfb.is-js .wpfb-art.is-shown img{opacity:1;transform:none}
 #wpfb .wpfb-art::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(17,17,17,0) 30%,rgba(17,17,17,.34) 62%,rgba(17,17,17,.74) 100%);pointer-events:none}
@@ -13,8 +13,7 @@
 #wpfb .wpfb-title{margin:0;font-family:inherit;font-size:24px;line-height:1.1;font-weight:700;letter-spacing:-.025em;color:#fff;-webkit-text-fill-color:#fff;background:none;text-transform:none;text-wrap:balance;text-shadow:0 1px 24px rgba(0,0,0,.35)}
 #wpfb .wpfb-panel{display:flex;flex-direction:column;min-width:0;padding:24px 20px 20px}
 #wpfb .wpfb-row{display:flex;align-items:center;gap:16px;margin:0 0 16px;min-height:18px}
-#wpfb .wpfb-hi{margin:0;min-width:0;font-size:15px;line-height:1.35;font-weight:600;letter-spacing:-.005em;color:var(--ink);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;animation:wpfb-fade .5s ease both}
-#wpfb .wpfb-meta{margin:0 0 0 auto;display:flex;align-items:center;gap:10px;font-size:13px;line-height:1;font-weight:500;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+#wpfb .wpfb-meta{margin:0;display:flex;align-items:center;gap:10px;font-size:13px;line-height:1;font-weight:500;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 #wpfb .wpfb-prog{display:flex;gap:4px}
 #wpfb .wpfb-prog i{display:block;width:28px;height:4px;border-radius:2px;background:#ebebeb;transition:background .35s}
 #wpfb .wpfb-prog i.on{background:var(--red)}
@@ -79,7 +78,6 @@
 #wpfb .wpfb-back svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @container (min-width:560px){
-#wpfb .wpfb-art{aspect-ratio:16/6}
 #wpfb .wpfb-cap{padding:0 32px 26px}
 #wpfb .wpfb-title{font-size:30px}
 #wpfb .wpfb-panel{padding:34px 36px 26px}
@@ -96,6 +94,7 @@
 @container (min-width:820px){
 #wpfb .wpfb-page{grid-template-columns:minmax(0,42fr) minmax(0,58fr);min-height:640px}
 #wpfb .wpfb-art{aspect-ratio:auto}
+#wpfb .wpfb-art img{object-position:50% 27%}
 #wpfb .wpfb-cap{padding:0 40px 38px}
 #wpfb .wpfb-title{font-size:34px}
 #wpfb .wpfb-panel{padding:52px 60px 34px}
@@ -111,11 +110,11 @@
 </style>
 <div class="wpfb-page">
 <figure class="wpfb-art" data-art>
-<img src="https://westpack.b-cdn.net/media/wysiwyg/Mail_Block-4.jpg?width=960" srcset="https://westpack.b-cdn.net/media/wysiwyg/Mail_Block-4.jpg?width=640 640w, https://westpack.b-cdn.net/media/wysiwyg/Mail_Block-4.jpg?width=960 960w, https://westpack.b-cdn.net/media/wysiwyg/Mail_Block-4.jpg?width=1280 1280w" sizes="(min-width: 900px) 500px, 100vw" alt="" width="1280" height="1280" decoding="async" fetchpriority="high">
+<img src="https://cdn.klaviyomail.com/company/VRPp5S/images/9132f807-43cd-4fa4-bc38-7c5387f34487.jpeg" alt="" width="1200" height="1400" decoding="async" fetchpriority="high">
 <figcaption class="wpfb-cap"><h1 class="wpfb-title" data-t="title">Vi vil gerne høre fra dig</h1></figcaption>
 </figure>
 <div class="wpfb-panel">
-<div class="wpfb-row"><p class="wpfb-hi" data-hi hidden></p><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
+<div class="wpfb-row"><p class="wpfb-meta"><span data-meta>1 af 2</span><span class="wpfb-prog" aria-hidden="true"><i class="on"></i><i></i></span></p></div>
 <div class="wpfb-hx" data-hx>
 <h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">Hvorfor har vi ikke set dig i et stykke tid?</h2>
 <p class="wpfb-sub" data-sub>Skriv det med dine egne ord. Jo mere konkret, jo bedre – én sætning er nok.</p>
@@ -136,7 +135,7 @@
 </div>
 <div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="wpfb-err" role="alert" data-err hidden></p>
-<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Ret svaret</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra.</p></div>
+<div class="wpfb-foot"><button class="wpfb-back" type="button" data-back hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="back">Ret svaret</span></button><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre.</p></div>
 </form>
 </div>
 </div>
@@ -148,7 +147,6 @@
   var STR = {
     da: {
       title: "Vi vil gerne høre fra dig",
-      hi: "Hej {firma}",
       step: "{n} af 2",
       done_meta: "Færdig",
       h1: "Hvorfor har vi ikke set dig i et stykke tid?",
@@ -166,17 +164,15 @@
       back: "Ret svaret",
       err_send: "Svaret kunne ikke sendes. Prøv igen om et øjeblik.",
       thanks: "Tak for dit svar.",
-      thanks_name: "Tak, {firma}.",
       sub3: "Vi læser hvert eneste svar.",
       done_yes: "Vi vender tilbage til dig.",
       done_no: "Tak, fordi du tog dig tiden.",
       done_shop: "Til webshoppen",
       done_edit: "Ret mit svar",
-      privacy: "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link fra os, kan vi se, hvilken kunde svaret er fra."
+      privacy: "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre."
     },
     en: {
       title: "We'd like to hear from you",
-      hi: "Hi {firma}",
       step: "{n} of 2",
       done_meta: "Done",
       h1: "Why haven't we seen you for a while?",
@@ -194,13 +190,12 @@
       back: "Edit answer",
       err_send: "Your answer could not be sent. Please try again in a moment.",
       thanks: "Thank you for your answer.",
-      thanks_name: "Thank you, {firma}.",
       sub3: "We read every single answer.",
       done_yes: "We will get back to you.",
       done_no: "Thank you for taking the time.",
       done_shop: "Go to the webshop",
       done_edit: "Change my answer",
-      privacy: "Your answer is kept by Westpack and used only to help us do better. If you came here through a link from us, we can see which customer the answer is from."
+      privacy: "Your answer is kept by Westpack and used only to help us do better."
     }
   };
   // Store path -> language. A store whose language is not in STR yet shows English.
@@ -227,7 +222,6 @@
     if (m) { mem.set("wpfb-k", m[1].toLowerCase()); return m[1].toLowerCase(); }
     return mem.get("wpfb-k");
   })();
-  var isTest = token === "test";
   var sid = mem.get("wpfb-sid");
   if (!/^[a-z0-9]{8,24}$/.test(sid)) {
     var abc = "abcdefghijklmnopqrstuvwxyz0123456789", b = new Uint8Array(16);
@@ -235,7 +229,7 @@
     sid = ""; for (var i = 0; i < 16; i++) sid += abc[b[i] % 36];
     mem.set("wpfb-sid", sid);
   }
-  var S = { text: "", contact: "", email: "", step: 1, firma: "" };
+  var S = { text: "", contact: "", email: "", step: 1 };
   var ta = q("textarea[name=answer]");
   var panel = q(".wpfb-panel");
 
@@ -268,7 +262,7 @@
     var h = q("[data-h]"), sub = q("[data-sub]");
     if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
     if (n === 2) { h.textContent = T.h2; sub.textContent = T.sub2; }
-    if (n === 3) { h.textContent = S.firma ? T.thanks_name.replace("{firma}", S.firma.replace(/\.+$/, "")) : T.thanks; sub.textContent = T.sub3; }
+    if (n === 3) { h.textContent = T.thanks; sub.textContent = T.sub3; }
     q("[data-meta]").textContent = n < 3 ? T.step.replace("{n}", n) : T.done_meta;
     qa(".wpfb-prog i").forEach(function (d, k) { d.classList.toggle("on", k < Math.min(n, 2)); });
   }
@@ -324,7 +318,8 @@
     if (c) {
       S.contact = c;
       qa("[data-contact]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === t)); });
-      if (c === "yes" && (!token || isTest)) { q("[data-emailbox]").hidden = false; q("input[name=email]").focus(); }
+      // a yes always asks where to reply: taking it without an address would say we know who they are already
+      if (c === "yes") { q("[data-emailbox]").hidden = false; q("input[name=email]").focus(); }
       else { q("[data-emailbox]").hidden = true; finish(t); }
     }
   });
@@ -334,14 +329,6 @@
     else if (S.step === 2) { S.email = q("input[name=email]").value; finish(q("[data-send2]")); }
   });
 
-  if (token && !isTest && api && window.fetch) {
-    fetch(api + "?action=who&k=" + encodeURIComponent(token)).then(function (r) { return r.json(); }).then(function (j) {
-      if (!j || !j.known || !j.firma) return;
-      S.firma = j.firma;
-      var hi = q("[data-hi]"); hi.textContent = T.hi.replace("{firma}", j.firma); hi.hidden = false;
-      if (S.step === 3) head(3);
-    }).catch(function () {});
-  }
   if (mem.get("wpfb-done-" + (token || sid))) { q("[data-done-text]").textContent = T.done_no; go(3, true); }
   else { go(1, true); ready(); }
 })();

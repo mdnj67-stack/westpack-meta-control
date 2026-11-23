@@ -7,21 +7,26 @@ og "Seneste indlæg", og det så forkert ud (Mads: "Det her kategori halløj osv
 **Kunden svarer med egne ord. Der er ingen svarmuligheder at vælge imellem** (Mads 13/11: "hvis vi får skrevne og
 specifikke svar så har det mere værdi"). Det tager under et minut, og man ser ét spørgsmål ad gangen med "1 af 2" øverst.
 
-**Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto af Westpacks egne
-smykkeæsker til venstre (fra butikkens eget billedarkiv, `Mail_Block-4.jpg`) med "Vi vil gerne høre fra dig" i hvidt.
-Til højre står hilsenen ("Hej Guldsmed Hugo Mortensen") og spørgsmålet i butikkens røde overskriftsstil. På telefon
-ligger fotoet som et bånd øverst, og spørgsmål, tekstfelt og knap kan ses uden at scrolle. Fotoet toner langsomt frem,
-og ingen bevægelse vises for den, der har slået animationer fra.
+**Sådan ser siden ud.** Ét stort kort mellem butikkens header og footer. På computer står et foto til venstre: en
+Oslo-ringæske med en guldring på en klar akrylsokkel mod en mørk baggrund, med "Vi vil gerne høre fra dig" i hvidt.
+Fotoet ligger i Klaviyos billedbibliotek (DK-kontoen), hvor det også bruges i mails. Til højre står spørgsmålet i
+butikkens røde overskriftsstil. På telefon ligger fotoet som et bånd øverst, og spørgsmål, tekstfelt og knap kan ses
+uden at scrolle. Fotoet toner langsomt frem, og ingen bevægelse vises for den, der har slået animationer fra.
+
+**Siden fortæller ikke kunden, at vi ved, hvem de er** (Mads 23/11: "Vi skal ikke fortælle kunden at vi ved hvem de
+er"). Der er ingen hilsen med firmanavn, takken er "Tak for dit svar.", og teksten om data nævner ikke, at vi kan se,
+hvem svaret er fra. Svaret bliver stadig knyttet til kunden via linket.
 
 1. **"Hvorfor har vi ikke set dig i et stykke tid?"** Et stort tekstfelt. Under overskriften står: "Skriv det med dine
    egne ord. Jo mere konkret, jo bedre – én sætning er nok." Feltet vokser, mens man skriver, og "Send svar" virker
    først, når der står en sætning (mindst 12 bogstaver). **Svaret gemmes, så snart man trykker Send**, så det er med,
    selv om man stopper der. Der er bevidst ingen eksempelsvar, for folk skriver eksemplet af i stedet for deres egen
    grund.
-2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej, med ét tryk.
+2. **"Må vi vende tilbage til dig om det?"** Kundens eget svar står citeret over to knapper, Ja og Nej. Nej afslutter
+   med ét tryk. Ja beder altid om en e-mail at svare på, også når kunden kom via et personligt link. Et ja uden e-mail
+   ville afsløre, at vi allerede ved, hvem de er. Feltet må gerne stå tomt.
 
-Til sidst takker skemaet med firmanavnet. Navnet skrives, som et menneske ville skrive det: "Tak, Irbis." og ikke "Tak,
-Irbis Sp. z o.o.". **Udseendet er butikkens eget**, så siden ligner resten af webshoppen og ikke en kampagne. Den bruger
+Til sidst står "Tak for dit svar." **Udseendet er butikkens eget**, så siden ligner resten af webshoppen og ikke en kampagne. Den bruger
 temaets skrift Inter, Westpack-rød `#d10a11` på knapper og detaljer, og temaets røde overskrifter. Blokken henter ingen
 skrifttyper selv.
 
@@ -48,9 +53,8 @@ Navision-dataene indeholder kun DETAIL-kunder. Kontakt derfor ikke nogen fra lis
 for KAS-kunder.
 
 Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-feedback-2026#k=abc12345`.
-Koden står efter `#`. Den, der åbner et personligt link, bliver hilst med firmanavnet ("Hej …"), og svaret bliver
-knyttet til kunden. Uden kode virker siden også, men så er svaret anonymt. Siger personen ja til at blive kontaktet,
-bliver de spurgt om deres e-mail.
+Koden står efter `#`, og svaret bliver knyttet til kunden. Siden viser ikke, at den kender koden. Uden kode virker
+siden også, men så er svaret anonymt.
 
 ## Sådan laver du siden
 
@@ -108,8 +112,7 @@ feltet helt, og sæt filen ind igen.
 - **Beskyttelse mod spam.** Der er et skjult felt, som kun robotter udfylder. Desuden bliver et svar, der er sendt
   hurtigere end 1,2 sekunder efter, at siden blev åbnet, ignoreret.
 - **Går serveren ned,** står kunden stadig på sidste spørgsmål med en fejlbesked og kan prøve igen.
-- **Tekst om data nederst:** "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre. Kom du hertil via et link
-  fra os, kan vi se, hvilken kunde svaret er fra."
+- **Tekst om data nederst:** "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre."
 - **Oversættelse:** al tekst ligger i `STR` i blokkens script, ét sæt pr. sprog. Butikken vælger sproget i
   `STORE_LANG`. Et nyt sprog tilføjes ved at oversætte `da` og indsætte det som fx `de` i `STR`. En test kræver, at
   hvert sprog har alle tekster.

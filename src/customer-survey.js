@@ -182,7 +182,7 @@ function exportCsv(kind) {
   if (!state.data) return;
   if (kind === "answers") {
     const rows = answerRows().map(({ a, who, picked }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
-    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email (no link)", "Questions answered", "Store", "Language"], ...rows]));
+    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
     return;
   }
   const answered = new Set(state.data.answered || []);

@@ -10,8 +10,9 @@
  * store.
  *
  * Every value a client sends goes through sanitizeSubmission: reasons are a closed list, texts are trimmed and
- * capped, and an e-mail address is kept only when the answer has no token (someone who found the post by
- * themselves and asked to be contacted). A personal link already says who the customer is.
+ * capped, and an e-mail address is kept only from someone who asked to be contacted. The page never tells a visitor
+ * that we know who they are (the user, 2026-11-23: "Vi skal ikke fortælle kunden at vi ved hvem de er"), so it asks
+ * everyone who says yes for an address, personal link or not, and the one they give is kept.
  */
 
 const SURVEY_ID = "customer-feedback-2026";
@@ -108,7 +109,7 @@ function sanitizeSubmission(input = {}, { now = Date.now() } = {}) {
     // how far the person got: 3 = finished; anything less stopped before the last question
     step: [1, 2, 3].includes(step) ? step : 3,
   };
-  if (!token && contact === "yes" && EMAIL.test(email)) record.email = email;
+  if (contact === "yes" && EMAIL.test(email)) record.email = email;
   return { record };
 }
 
