@@ -265,6 +265,8 @@ function assemble() {
     console.log(`${store.padEnd(11)} ${code.padEnd(6)} ${(kb / 1000).toFixed(1)} KB  ${issues.join("; ") || "ok"}`);
     if (issues.length) problems.push(`${store}: ${issues.join("; ")}`);
   }
+  const std = standard();
+  if (std) rows.unshift(std);
   const md = ["# Felter pr. store view - W47 Den store forsendelsesguide", "",
     "Sæt indholdet af hver fil ind i indlæggets HTML Code-element i det store view, og udfyld felterne herunder.",
     "URL-nøglen er den samme overalt: `the-complete-christmas-shipping-guide-2026` (lad \"Use Default Value\" stå på den).", ""];
@@ -274,10 +276,28 @@ function assemble() {
   if (problems.length) { console.log("\nPROBLEMS:\n" + problems.join("\n")); process.exitCode = 1; }
 }
 
+// All Store Views: the English text with Magento's {{store}} before every store link, so a store view without its own
+// file still sends its readers into its own shop. With the UK file there, EU and US readers of the email clicked into
+// the UK shop in pounds. {{store}} is the store's base URL with its slash; the team's own posts use it
+// (adventcalendar-2026: {{store}}christmas/advent-jewellery-boxes.html). The postal box category keeps the Danish file's
+// shipment-products/postal-boxes.html, which every store answers itself or redirects to its own category (checked
+// 24/11; the UK store's postal-packaging/postal-boxes.html is a 404 everywhere else).
+function standard() {
+  const en = tr("en");
+  if (!en) return null;
+  const { body, fields } = fromCarrier(en.body);
+  const html = body.replace('<div id="w47fs" class="w47fs" lang="da">', '<div id="w47fs" class="w47fs" lang="en">').replace(/"\/dkk_dk_den\//g, '"{{store}}');
+  const left = (html.match(/dkk_dk_den/g) || []).length, n = (html.match(/"\{\{store\}\}/g) || []).length;
+  if (left) throw new Error(`standard: ${left} store link(s) still name dkk_dk_den`);
+  fs.writeFileSync(path.join(OUT, "alle-store-views.html"), html);
+  console.log(`alle-store-views  en     ${(Buffer.byteLength(html) / 1000).toFixed(1)} KB  ${n} store links as {{store}}`);
+  return { store: "alle-store-views", name: "Alle store views (standard)", fields };
+}
+
 module.exports = { splitSource, toCarrier, fromCarrier, skeleton, STORES, LANGS };
 if (require.main === module) {
   const [cmd, ...args] = process.argv.slice(2);
-  const run = { build, names, translate: () => translate(args), links, assemble }[cmd];
-  if (!run) { console.log("usage: node sprog.js build | names | translate en|all|<codes> | links | assemble"); process.exit(1); }
+  const run = { build, names, translate: () => translate(args), links, assemble, standard }[cmd];
+  if (!run) { console.log("usage: node sprog.js build | names | translate en|all|<codes> | links | assemble | standard"); process.exit(1); }
   Promise.resolve(run()).catch((e) => { console.error(e.message); process.exit(1); });
 }

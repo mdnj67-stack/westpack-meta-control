@@ -50,9 +50,15 @@ afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 >
 > **Lagt op 24/11 i mailens markeder.** DK, UK, DE, FR, IT, ES, NL, PT, SE, NO, FI, PL og RO viser hver sin fil ord for
 > ord, med deres egne links, og mailens dybe links lander efter cookie-svaret (tjekket på de rigtige sider). Standardværdien
-> (All Store Views) er nu den britiske fil, så **EU og USA viser den britiske tekst med links til UK-butikken** (pund), indtil
-> `eur_eu_eng.html` og `usd_us_eng.html` sættes ind i deres store views. Det samme gælder de ni markeder uden mail (CZ, SK,
-> HU, GR, BG, EE, HR, LV, LT). Titler og SEO-felter er teamets egne pr. sprog, ikke dem i `felter.md`.
+> (All Store Views) er nu den britiske fil, så **EU og USA viser den britiske tekst med links til UK-butikken** (pund). Det
+> samme gælder de ni markeder uden mail (CZ, SK, HU, GR, BG, EE, HR, LV, LT). Titler og SEO-felter er teamets egne pr. sprog,
+> ikke dem i `felter.md`.
+>
+> **Løsningen er `sprog/alle-store-views.html` i All Store Views**: den engelske tekst med Magentos `{{store}}` foran hvert
+> butikslink, som teamets eget adventsindlæg bruger (`{{store}}christmas/advent-jewellery-boxes.html`). Magento sætter selv
+> butikkens adresse ind, så alle store views uden egen fil sender læseren ind i deres egen butik. Postæske-kategorien er
+> `shipment-products/postal-boxes.html`, som hver butik selv sender videre til sin egen (UK's `postal-packaging/…` giver 404
+> alle andre steder). `node sprog.js standard` laver filen, og `assemble` laver den med.
 
 ## Sådan lægger du indlægget op – på alle sprog
 
@@ -70,7 +76,8 @@ samme URL-nøgle, og hvert store view har sit eget sprog i indholdet.
 3. Indhold: åbn **Page Builder**, klik i **HTML Code**-elementet, tryk **Ctrl+A** og **Delete**, og sæt **hele** indholdet af
    store viewets fil ind (fx `sprog/eur_eu_ger.html`). Brug **ikke** den almindelige teksteditor (WYSIWYG): den fjerner
    `<script>`.
-4. Gem, og gentag for næste store view. Danmark er `sprog/dkk_dk_den.html`.
+4. Gem, og gentag for næste store view. Danmark er `sprog/dkk_dk_den.html`. **All Store Views** (standarden for alle
+   store views uden egen fil) er `sprog/alle-store-views.html`.
 5. Åbn indlægget på sitet, og tjek tre ting:
    - Øverst skifter de fem looks af sig selv, og knapperne under billedet skifter look.
    - I trin-for-trin kan du skifte til det andet look, og billederne skifter med.

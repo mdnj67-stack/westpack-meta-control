@@ -3,6 +3,15 @@
 Sæt indholdet af hver fil ind i indlæggets HTML Code-element i det store view, og udfyld felterne herunder.
 URL-nøglen er den samme overalt: `the-complete-christmas-shipping-guide-2026` (lad "Use Default Value" stå på den).
 
+## Alle store views (standard) - `alle-store-views`
+
+Indhold: [alle-store-views.html](alle-store-views.html)
+
+- **Titel:** The ultimate shipping guide: 5 Christmas looks for the postal box
+- **Kort beskrivelse:** Five Christmas looks for the postal box, five steps to pack them – and all the practical info on logo print, samples and deadlines.
+- **Meta title:** The ultimate shipping guide: 5 Christmas looks for the postal box | Westpack
+- **Meta description:** Five Christmas looks for the postal box with step by step, shopping lists, and everything practical about logo print, samples, and Christmas deadlines.
+
 ## Danmark - `dkk_dk_den`
 
 Indhold: [dkk_dk_den.html](dkk_dk_den.html)
