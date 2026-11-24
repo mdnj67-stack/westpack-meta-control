@@ -46,8 +46,13 @@ afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 >
 > Samme dag: **indlægget findes på alle 24 store views' sprog** (`sprog/`), oversat med Duplicate & translate via engelsk,
 > og design og script ligger nu på vores server, så alle sprog kan være i feltet. Alle links er afprøvet i hver butik, og
-> de fem smykkeæsker har tryk til 0 kr. i alle butikker (butikkens egen søgning, `print_fee`). Indtil et store view får sin
-> fil, viser det den danske tekst.
+> de fem smykkeæsker har tryk til 0 kr. i alle butikker (butikkens egen søgning, `print_fee`).
+>
+> **Lagt op 24/11 i mailens markeder.** DK, UK, DE, FR, IT, ES, NL, PT, SE, NO, FI, PL og RO viser hver sin fil ord for
+> ord, med deres egne links, og mailens dybe links lander efter cookie-svaret (tjekket på de rigtige sider). Standardværdien
+> (All Store Views) er nu den britiske fil, så **EU og USA viser den britiske tekst med links til UK-butikken** (pund), indtil
+> `eur_eu_eng.html` og `usd_us_eng.html` sættes ind i deres store views. Det samme gælder de ni markeder uden mail (CZ, SK,
+> HU, GR, BG, EE, HR, LV, LT). Titler og SEO-felter er teamets egne pr. sprog, ikke dem i `felter.md`.
 
 ## Sådan lægger du indlægget op – på alle sprog
 
