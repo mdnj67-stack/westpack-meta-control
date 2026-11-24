@@ -54,7 +54,7 @@
 #wpfb .wpfb-done:not(.is-in) .wpfb-check circle,#wpfb .wpfb-done:not(.is-in) .wpfb-check path{stroke-dashoffset:0}
 @keyframes wpfb-draw{to{stroke-dashoffset:0}}
 #wpfb .wpfb-done p{margin:0;font-size:16px;line-height:1.55;color:var(--text);max-width:52ch}
-#wpfb .wpfb-err{margin:-8px 0 18px;font-size:14px;line-height:1.4;font-weight:500;color:var(--red)}
+#wpfb .wpfb-err{margin:10px 0 0;font-size:14px;line-height:1.4;font-weight:500;color:var(--red)}
 #wpfb .wpfb-foot{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:auto 0 0;padding:16px 0 0;border-top:1px solid #eee}
 #wpfb .wpfb-foot p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted);max-width:68ch}
 #wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
@@ -102,6 +102,7 @@
 <form novalidate>
 <div class="wpfb-step" data-step="1">
 <label class="wpfb-write"><span class="wpfb-sr" data-t="h1">Hvorfor har du ikke handlet hos os på det seneste?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Skriv dit svar her …"></textarea></label>
+<p class="wpfb-err" role="alert" data-err hidden></p>
 <div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Skriv med dine egne ord – én sætning er nok.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Send svar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
 </div>
 <div class="wpfb-step wpfb-done" data-step="3" hidden>
@@ -109,7 +110,6 @@
 <div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/dkk_dk_den/"><span data-t="done_shop">Til webshoppen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Ret mit svar</button></div>
 </div>
 <div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
-<p class="wpfb-err" role="alert" data-err hidden></p>
 <div class="wpfb-foot"><p data-t="privacy">Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre.</p></div>
 </form>
 </div>
@@ -237,7 +237,13 @@
     var top = panel.getBoundingClientRect().top;
     if (top < 70) window.scrollTo({ top: window.pageYOffset + top - 90, behavior: reduce ? "auto" : "smooth" });
   }
-  function err(msg) { var e = q("[data-err]"); e.textContent = msg; e.hidden = false; }
+  // The message sits right under the answer field, where the eye and the phone's keyboard are (24/11: under the button
+  // it fell below a phone's screen, behind the store's cookie button, and a too-short answer looked like nothing happened)
+  function err(msg) {
+    var e = q("[data-err]"); e.textContent = msg; e.hidden = false;
+    var r = e.getBoundingClientRect();
+    if (r.top < 70 || r.bottom > window.innerHeight - 70) { try { e.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" }); } catch (x) { e.scrollIntoView(false); } }
+  }
   // The field grows with the answer, so a long answer never hides behind a scrollbar.
   function grow() { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 2, 420) + "px"; }
   function ready() { q("[data-send1]").classList.toggle("is-idle", letters(ta.value) < MIN_CHARS); }

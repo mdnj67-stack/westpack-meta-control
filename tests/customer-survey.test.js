@@ -56,6 +56,8 @@ test("one question, one send, then the thanks points to the sales team", () => {
   assert.match(html, /var SALES = "sales@westpack\.com";/);
   assert.match(html, /a\.href = "mailto:" \+ SALES;/, "the address is a link");
   assert.match(html, /save\(3\)\.catch\(/, "the one send saves the answer as finished, with a second try");
+  // 24/11: under the button the message fell below a phone's screen; it sits right under the answer field
+  assert.match(html, /<\/textarea><\/label>\r?\n<p class="wpfb-err" role="alert" data-err hidden><\/p>\r?\n<div class="wpfb-bar">/);
   const STR = Function(`return ${html.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)();
   for (const [lang, t] of Object.entries(STR)) assert.equal((t.help.match(/\{mail\}/g) || []).length, 1, `${lang}: the address appears once in the thanks`);
   assert.equal(STR.da.thanks, "Tak for dit svar!");
