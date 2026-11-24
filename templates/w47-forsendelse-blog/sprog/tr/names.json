@@ -1,0 +1,163 @@
+{
+ "fi": [
+  "Roosa &amp; kulta",
+  "Punainen joulu",
+  "Kultaiset tähdet",
+  "Vihreät oksat",
+  "Musta &amp; hopea",
+  "Luo oma yhdistelmä"
+ ],
+ "sk": [
+  "Ružová a zlatá",
+  "Červené Vianoce",
+  "Zlaté hviezdy",
+  "Zelené vetvičky",
+  "Čierna a strieborná",
+  "Vytvorte si vlastný"
+ ],
+ "de": [
+  "Rosa &amp; Gold",
+  "Rote Weihnachten",
+  "Goldsterne",
+  "Grüne Zweige",
+  "Schwarz &amp; Silber",
+  "Eigenen Look mixen"
+ ],
+ "lt": [
+  "Rožinė ir auksinė",
+  "Raudonos Kalėdos",
+  "Auksinės žvaigždės",
+  "Žalios šakelės",
+  "Juoda ir sidabrinė",
+  "Sukurk savo derinį"
+ ],
+ "nl": [
+  "Roze &amp; goud",
+  "Rode kerst",
+  "Gouden sterren",
+  "Groene takken",
+  "Zwart &amp; zilver",
+  "Maak je eigen mix"
+ ],
+ "es": [
+  "Rosa &amp; oro",
+  "Navidad roja",
+  "Estrellas doradas",
+  "Ramas verdes",
+  "Negro &amp; plata",
+  "Crea tu propio mix"
+ ],
+ "nb": [
+  "Rosa &amp; gull",
+  "Rød jul",
+  "Gullstjerner",
+  "Grønne grener",
+  "Sort &amp; sølv",
+  "Miks ditt eget"
+ ],
+ "ro": [
+  "Roz &amp; auriu",
+  "Crăciun în roșu",
+  "Stele aurii",
+  "Ramuri verzi",
+  "Negru &amp; argintiu",
+  "Creează-ți propriul mix"
+ ],
+ "hu": [
+  "Rózsaszín és arany",
+  "Piros karácsony",
+  "Arany csillagok",
+  "Zöld ágak",
+  "Fekete és ezüst",
+  "Keverd össze"
+ ],
+ "el": [
+  "Ροζ και χρυσό",
+  "Κόκκινα Χριστούγεννα",
+  "Χρυσά αστέρια",
+  "Πράσινα κλαδιά",
+  "Μαύρο και ασημί",
+  "Φτιάξτε το δικό σας"
+ ],
+ "hr": [
+  "Ružičasto i zlatno",
+  "Crveni Božić",
+  "Zlatne zvijezde",
+  "Zelene grančice",
+  "Crno i srebrno",
+  "Složi svoj stil"
+ ],
+ "et": [
+  "Roosa ja kuldne",
+  "Punased jõulud",
+  "Kuldsed tähed",
+  "Rohelised oksad",
+  "Must ja hõbedane",
+  "Kombineeri ise"
+ ],
+ "sv": [
+  "Rosa &amp; guld",
+  "Röd jul",
+  "Guldstjärnor",
+  "Gröna grenar",
+  "Svart &amp; silver",
+  "Blanda själv"
+ ],
+ "lv": [
+  "Rozā un zelts",
+  "Sarkanie Ziemassvētki",
+  "Zelta zvaigznes",
+  "Zaļie zari",
+  "Melns un sudrabs",
+  "Sajauc pats"
+ ],
+ "bg": [
+  "Розово и златно",
+  "Червена Коледа",
+  "Златни звезди",
+  "Зелени клонки",
+  "Черно и сребърно",
+  "Създай свой микс"
+ ],
+ "it": [
+  "Rosa &amp; oro",
+  "Natale rosso",
+  "Stelle d’oro",
+  "Rami verdi",
+  "Nero &amp; argento",
+  "Crea il tuo mix"
+ ],
+ "pl": [
+  "Róż i złoto",
+  "Czerwone święta",
+  "Złote gwiazdki",
+  "Zielone gałązki",
+  "Czerń i srebro",
+  "Stwórz własny miks"
+ ],
+ "cs": [
+  "Růžová a zlatá",
+  "Červené Vánoce",
+  "Zlaté hvězdy",
+  "Zelené větvičky",
+  "Černá a stříbrná",
+  "Vytvořte si vlastní"
+ ],
+ "fr": [
+  "Rose &amp; or",
+  "Noël rouge",
+  "Étoiles dorées",
+  "Branches vertes",
+  "Noir &amp; argent",
+  "Composez votre propre look"
+ ],
+ "pt": [
+  "Rosa e dourado",
+  "Natal em vermelho",
+  "Estrelas douradas",
+  "Ramos verdes",
+  "Preto e prateado",
+  "Crie a sua combinação"
+ ],
+ "_source": "The 11 mail languages use the names the W47 mail uses (tmp/w47-forsendelse-rollout-2026-11-24, proofread with gpt-5.6), so a click lands on the same name; the other languages from sprog.js names, with hand corrections (et, lv)."
+}

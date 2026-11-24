@@ -1,0 +1,75 @@
+{
+ "en": [
+  [
+   "</span> Jewellery box, ",
+   "</span> jewellery box, ",
+   "lower case after a series name"
+  ],
+  [
+   "Pink (&amp;|&) Gold",
+   "Pink $1 gold",
+   "one spelling of the look name"
+  ],
+  [
+   "Black (&amp;|&) Silver",
+   "Black $1 silver",
+   "one spelling"
+  ],
+  [
+   "Gold Stars",
+   "Gold stars",
+   "one spelling"
+  ],
+  [
+   "Green Branches",
+   "Green branches",
+   "one spelling"
+  ],
+  [
+   "Mix Your Own",
+   "Mix your own",
+   "one spelling"
+  ],
+  [
+   "The gift receiver will see your name.",
+   "Whoever gets the gift sees your name.",
+   "reads naturally"
+  ],
+  [
+   ">Jewellery boxes in.<",
+   ">In go the jewellery boxes.<",
+   "reads naturally"
+  ],
+  [
+   "Gold coloured satin ribbon with glitter|Gold glitter satin ribbon",
+   "Gold satin ribbon with glitter",
+   "one name for one product"
+  ],
+  [
+   "Green glitter satin ribbon",
+   "Green satin ribbon with glitter",
+   "one name for one product"
+  ]
+ ],
+ "fi": [
+  [
+   "satiinirusetti",
+   "satiininauha",
+   "rusetti is a bow; the product is a ribbon"
+  ]
+ ],
+ "fr": [
+  [
+   "Papier Cadeau",
+   "Papier cadeau",
+   "no capital mid-name"
+  ]
+ ],
+ "it": [
+  [
+   "Stelle d'oro",
+   "Stelle d’oro",
+   "one apostrophe in the look name (the mail uses the typographic one)"
+  ]
+ ]
+}

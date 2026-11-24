@@ -2,6 +2,8 @@
 <style>
 @import url(https://project-4fcxa.vercel.app/signup/assets/fonts/instrument-serif.css);
 #w47fs{--ink:#252725;--body:#2f312f;--muted:#73766f;--line:#dedfda;--pill:#d9d9d4;--box:#f5f4f0;--card:#f8f2ef;--link:#34453f;--btn:#222;--red:#d10a11;--edge:#aa8c6c;--acc:#9b3a32;--sans:Inter,'Helvetica Neue',Helvetica,Arial,sans-serif;--disp:'WP Instrument Serif',Georgia,'Times New Roman',serif;position:relative;container-type:inline-size;margin:32px 0 48px;color:var(--body);font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-align:left}
+/* Instrument Serif has no Greek or Cyrillic: there a heading would be half one face, half the fallback, so it is Georgia whole */
+#w47fs:lang(el),#w47fs:lang(bg){--disp:Georgia,'Times New Roman',serif}
 #w47fs *,#w47fs *::before,#w47fs *::after{box-sizing:border-box}
 #w47fs h1,#w47fs h2,#w47fs h3,#w47fs h4,#w47fs p,#w47fs ol,#w47fs ul,#w47fs li,#w47fs figure,#w47fs details,#w47fs summary,#w47fs nav,#w47fs article,#w47fs section{margin:0;padding:0;border:0}
 #w47fs li{list-style:none}
@@ -329,11 +331,13 @@
   // Hero: the five finished looks take turns until someone picks one.
   var hero = root.querySelector(".fs-hero"), frame = root.querySelector(".fs-stage"), chips = qsa(".fs-chip"), shots = qsa(".fs-shot"), cap = root.querySelector(".fs-cap");
   var tones = ["#eedcd6","#ead6cc","#ece1cb","#dadecf","#dde1e1"], cur = 0, timer = null, chosen = false, heroIn = true;
+  // The caption's word ("Look 01") comes from the markup, so it reads in the page's own language.
+  var capN = cap.querySelector(".fs-cap-n"), capT = capN.textContent;
   function show(i) {
     cur = i; frame.style.backgroundColor = tones[i];
     chips.forEach(function (c, k) { c.classList.toggle("is-on", k === i); c.setAttribute("aria-pressed", k === i ? "true" : "false"); });
     shots.forEach(function (s, k) { var on = k === i; s.classList.toggle("is-on", on); s.setAttribute("tabindex", on ? "0" : "-1"); if (on) s.removeAttribute("aria-hidden"); else s.setAttribute("aria-hidden", "true"); });
-    cap.querySelector(".fs-cap-n").textContent = "Look 0" + (i + 1);
+    capN.textContent = capT.replace(/\d+/, "0" + (i + 1));
     cap.querySelector("a").setAttribute("href", "#look-0" + (i + 1));
   }
   function stop() { clearInterval(timer); timer = null; }

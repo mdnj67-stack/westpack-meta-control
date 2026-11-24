@@ -1,0 +1,292 @@
+{
+ "dkk_dk_den": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_bgn": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "opakovki-za-pratki/kutii-za-pratki.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_cze": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_ell": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "syskevasia-apostolis/koutia-apostolis.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_eng": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_est": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "pakkematerjalid/postikarbid.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_fin": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_fra": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "emballages-expedition/boites-expedition.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_ger": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "versand/versandkartons.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_hrv": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "ambalaza-za-pakiranje/kutije-za-slanje-paketa.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_hun": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_ita": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "imballaggi-per-spedizioni/scatole-per-spedizioni.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_lav": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "iepakojums-sutijumiem/kartona-kastes-sutijumiem.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_lit": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "siuntimo-pakuotes/siuntu-dezes.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_ned": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_por": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_rou": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_spa": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "eur_eu_svk": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "gbp_uk_eng": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "postal-packaging/postal-boxes.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "nok_no_nor": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "fraktemballasje/postesker.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "pln_pl_pol": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "opakowania-wysylkowe/pudelka-fasonowe.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "sek_se_swe": {
+  "redirects": {},
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ },
+ "usd_us_eng": {
+  "redirects": {
+   "shipment-products/postal-boxes.html": "shipping-supplies/mailer-boxes.html"
+  },
+  "broken": [],
+  "fees": {
+   "Boston ECO": 0,
+   "Melbourne ECO": 0,
+   "Santorini ECO": 0,
+   "Seoul ECO": 0,
+   "Vienna": 0
+  }
+ }
+}
