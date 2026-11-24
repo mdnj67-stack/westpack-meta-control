@@ -1,6 +1,7 @@
 <div id="w47fs" class="w47fs" lang="da">
 <style>
-#w47fs{--ink:#252725;--body:#2f312f;--muted:#73766f;--line:#dedfda;--pill:#d9d9d4;--box:#f5f4f0;--card:#f8f2ef;--link:#34453f;--btn:#222;--red:#d10a11;--edge:#aa8c6c;--sans:Inter,'Helvetica Neue',Helvetica,Arial,sans-serif;position:relative;container-type:inline-size;margin:32px 0 48px;color:var(--body);font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-align:left}
+@import url(https://project-4fcxa.vercel.app/signup/assets/fonts/instrument-serif.css);
+#w47fs{--ink:#252725;--body:#2f312f;--muted:#73766f;--line:#dedfda;--pill:#d9d9d4;--box:#f5f4f0;--card:#f8f2ef;--link:#34453f;--btn:#222;--red:#d10a11;--edge:#aa8c6c;--acc:#9b3a32;--sans:Inter,'Helvetica Neue',Helvetica,Arial,sans-serif;--disp:'WP Instrument Serif',Georgia,'Times New Roman',serif;position:relative;container-type:inline-size;margin:32px 0 48px;color:var(--body);font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-align:left}
 #w47fs *,#w47fs *::before,#w47fs *::after{box-sizing:border-box}
 #w47fs h1,#w47fs h2,#w47fs h3,#w47fs h4,#w47fs p,#w47fs ol,#w47fs ul,#w47fs li,#w47fs figure,#w47fs details,#w47fs summary,#w47fs nav,#w47fs article,#w47fs section{margin:0;padding:0;border:0}
 #w47fs li{list-style:none}
@@ -13,14 +14,16 @@
 #w47fs b{font-weight:600;color:var(--ink)}
 #w47fs section,#w47fs article,#w47fs [id]{scroll-margin-top:110px}
 #w47fs .fs-sec{margin-top:clamp(40px,7cqw,56px);padding-top:clamp(40px,7cqw,56px);border-top:1px solid var(--line)}
-/* the house's heading, then the objection as a plain line and the answer in bold (Kick-off 5 Julelogotryk) */
-#w47fs .fs-h2{font-size:20px;line-height:1.2;letter-spacing:-.03em}
+/* the heading in the serif, then the objection as a plain line and the answer in lingonberry italic (Kick-off 5's order) */
+#w47fs .fs-h2{font-family:var(--disp);font-weight:400;font-size:clamp(30px,5.4cqw,40px);line-height:1.08;letter-spacing:-.01em}
+#w47fs .fs-look .fs-h2{font-size:clamp(26px,4.2cqw,32px)}
 #w47fs .fs-said,#w47fs .fs-ans{margin-top:8px}
-#w47fs .fs-said+.fs-ans{margin-top:4px}
+#w47fs .fs-said+.fs-ans{margin-top:2px}
+#w47fs .fs-ans,#w47fs .fs-ans b{font-family:var(--disp);font-style:italic;font-weight:400;font-size:clamp(21px,3.4cqw,26px);line-height:1.2;color:var(--acc)}
 /* the top as the house opens a post (Kick-off 9, Mix & Match): its own large heading, the intro, the contents pills */
 #w47fs .fs-h1{margin:0 0 16px;font-size:clamp(26px,6cqw,36px);line-height:1.25;letter-spacing:-.03em}
 #w47fs .fs-h3s{font-size:20px;line-height:1.3;letter-spacing:-.03em}
-#w47fs .fs-lead{margin-top:8px;max-width:44em}
+#w47fs .fs-lead{margin-top:8px}
 #w47fs .fs-n{display:block;font-size:14px;line-height:1.5;letter-spacing:.06em;color:var(--muted)}
 #w47fs .fs-ar{display:inline-block;padding:10px 0;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 #w47fs .fs-ar i{display:inline-block;margin-left:6px;font-style:normal}
@@ -104,7 +107,7 @@
 #w47fs .fs-mos img{aspect-ratio:1/1;object-fit:cover;height:100%}
 #w47fs .fs-m1{grid-column:1 / -1}
 @container (min-width:560px){#w47fs .fs-mos{grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr}#w47fs .fs-m1{grid-column:1;grid-row:1 / 3}}
-#w47fs .fs-ltx{margin-top:8px;max-width:44em}
+#w47fs .fs-ltx{margin-top:8px}
 #w47fs .fs-need{margin-top:24px;font-size:18px;line-height:1.3;letter-spacing:-.03em}
 #w47fs .fs-list{margin-top:8px;padding-left:18px}
 #w47fs .fs-list li{list-style:disc;margin:0 0 6px}
@@ -114,8 +117,23 @@
 #w47fs .fs-free{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;background:var(--box);color:#50534f;font-size:13px;line-height:1.4;white-space:nowrap}
 #w47fs .fs-lcta{margin-top:24px}
 #w47fs .fs-more{margin-top:8px}
-#w47fs .fs-mix-i{display:block;max-width:380px;margin-top:20px;border-radius:8px;overflow:hidden}
-#w47fs .fs-mix-i img{aspect-ratio:1/1}
+/* Look 06 in a box of its own, in the five looks' tones: a postal box + a paper + a ribbon, and "Bland igen" deals a new
+   three (Kirsten: "gør noget ;) ... en boks til netop denne og måske et par billeder mere") */
+#w47fs .fs-mix{padding:clamp(18px,4.6cqw,40px);border:0;border-radius:8px;background:linear-gradient(125deg,#f1dfd9,#efe5d2 38%,#e0e3d6 70%,#e1e5e5)}
+#w47fs .fs-look+.fs-mix{padding-top:clamp(18px,4.6cqw,40px);border-top:0}
+#w47fs .fs-mx{--g:20px;position:relative;container-type:inline-size;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 var(--g);margin-top:24px}
+#w47fs .fs-mx>i{position:absolute;top:calc((100cqw - 2*var(--g))/6);left:calc((100cqw - 2*var(--g))/3 + var(--g)/2);transform:translate(-50%,-55%);font:400 clamp(26px,9cqw,44px)/1 var(--disp);font-style:normal;color:var(--acc)}
+#w47fs .fs-mx>i+i{left:calc((100cqw - 2*var(--g))*2/3 + var(--g)*1.5)}
+@container (min-width:560px){#w47fs .fs-mx{--g:44px}}
+#w47fs .fs-mo{display:none}
+#w47fs .fs-mo.is-on{display:block;animation:fs-in .45s ease}
+#w47fs .fs-mo img{aspect-ratio:1/1;object-fit:cover;border-radius:8px;background:#fff}
+#w47fs .fs-mo span{display:block;margin-top:10px;font-weight:600;line-height:1.35;color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;overflow-wrap:anywhere;hyphens:auto}
+@keyframes fs-in{from{opacity:0;transform:translateY(6px)}}
+#w47fs .fs-shuf{display:none}
+#w47fs.is-js .fs-shuf{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border:1px solid var(--ink);border-radius:999px;background:#fff;font-size:15px;line-height:1;color:var(--ink);transition:background .2s,color .2s}
+@media (hover:hover){#w47fs.is-js .fs-shuf:hover{background:var(--ink);color:#fff}}
+@container (max-width:480px){#w47fs .fs-mo span{font-size:13px}#w47fs.is-js .fs-mix .fs-btns>*{flex:1 1 100%}}
 /* not only jewellery */
 #w47fs .fs-tiles{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:24px}
 #w47fs .fs-anim{aspect-ratio:1/1;background:var(--box);border-radius:8px;overflow:hidden}
@@ -123,7 +141,7 @@
 #w47fs .fs-tiles img{aspect-ratio:1/1;object-fit:cover;border-radius:8px}
 #w47fs .fs-tiles figcaption{display:grid;margin-top:8px;font-weight:600;color:var(--ink)}
 #w47fs .fs-cn span{grid-area:1/1}
-#w47fs .fs-andet .fs-note{max-width:44em;margin-top:24px}
+#w47fs .fs-andet .fs-note{margin-top:24px}
 
 #w47fs .fs-it,#w47fs .fs-cn span{opacity:0;animation:fs-in 16.8s infinite both;animation-delay:calc(var(--i)*2.4s)}
 #w47fs .fs-it:first-child,#w47fs .fs-cn span:first-child{opacity:1}
@@ -152,7 +170,7 @@
 #w47fs summary i::before,#w47fs summary i::after{content:"";position:absolute;left:1px;right:1px;top:7px;height:2px;background:var(--ink)}
 #w47fs summary i::after{transform:rotate(90deg);transition:transform .25s}
 #w47fs details[open] summary i::after{transform:rotate(0)}
-#w47fs .fs-qa-a{padding:0 0 18px;max-width:44em}
+#w47fs .fs-qa-a{padding:0 0 18px}
 #w47fs .fs-qa-a p+p{margin-top:10px}
 /* close: the house's ending box, in the house green */
 #w47fs .fs-close{margin-top:clamp(40px,7cqw,56px);padding:clamp(28px,6cqw,44px);border-radius:8px;background:var(--link);color:#dfe5e1;text-align:center}
@@ -256,8 +274,9 @@
 <article class="fs-look fs-mix" id="look-06">
 <h3 class="fs-h2">Look 06: Mix dit eget</h3>
 <p class="fs-ltx">Tag postæsken fra ét look og båndet fra et andet. Rosa æske, sort papir, guldbånd? Kør&nbsp;på.</p>
-<a class="fs-mix-i" href="/dkk_dk_den/shipment-products/postal-boxes.html"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/f28c87fc-a3c3-45ff-804f-927149b44ade.jpeg" alt="En lukket, sort postæske" width="700" height="700" loading="lazy"></a>
-<p class="fs-lcta"><a class="fs-btn" href="/dkk_dk_den/shipment-products/postal-boxes.html">Se alle postæsker</a></p><p class="fs-more"><a class="fs-ar" href="/dkk_dk_den/blog/9-inspirational-christmas-packaging-sets">Mere at stjæle: 9 juleemballage-sæt<i aria-hidden="true">&rarr;</i></a></p>
+<div class="fs-mx" aria-live="polite"><div class="fs-mc"><a class="fs-mo is-on" href="/dkk_dk_den/postal-box-236x181x54-mm-32372310341.html" data-l="1"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/36dd9f9c-c01d-4692-ad10-df447a511ab1.jpeg" alt="" loading="lazy"><span>Rosa postæske</span></a><a class="fs-mo" href="/dkk_dk_den/standard-postal-box-w-tape-closure-medium-32371310301.html" data-l="3" data-m="022b2aac-ed50-4869-948e-f51ecf05ef8a"><span>Hvid postæske</span></a><a class="fs-mo" href="/dkk_dk_den/postal-box-236x181x54-mm-32372310101.html" data-l="5" data-m="787d20e3-cec8-4802-aea7-d35949ea36c0"><span>Sort postæske</span></a><a class="fs-mo" href="/dkk_dk_den/postal-box-176x116x64-mm-32372300581.html" data-l="2" data-m="491a5659-4a98-412f-8542-9906e1746a63"><span>Postæske i kraft</span></a></div><div class="fs-mc"><a class="fs-mo is-on" href="/dkk_dk_den/fscr-certified-tissue-paper-chloride-acid-free-32721150100.html" data-l="5"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/d08a79b7-284c-4459-bb2d-22d1d30880bb.jpeg" alt="" loading="lazy"><span>Sort silkepapir</span></a><a class="fs-mo" href="/dkk_dk_den/fscr-certified-tissue-paper-chloride-acid-free-32721101340.html" data-l="1" data-m="6d23ccb3-6b79-440a-ab73-27909eb3f19f"><span>Lyserødt silkepapir</span></a><a class="fs-mo" href="/dkk_dk_den/fscr-certified-tissue-paper-chloride-acid-free-32721110400.html" data-l="2" data-m="3030b102-28b2-4891-ad11-39a4b86859af"><span>Rødt silkepapir</span></a><a class="fs-mo" href="/dkk_dk_den/fscr-certified-tissue-paper-chloride-acid-free-32721400000.html" data-l="3" data-m="2178afaf-2506-469e-99e5-b45a8b499234"><span>Silkepapir med guldstjerner</span></a><a class="fs-mo" href="/dkk_dk_den/fscr-certified-wrapping-paper-n-2821-33328210200.html" data-l="4" data-m="1f736407-5a25-414b-a76a-953ebb2b16f5"><span>Gavepapir med grønne grene</span></a></div><div class="fs-mc"><a class="fs-mo is-on" href="/dkk_dk_den/narrow-satin-ribbon-with-glitter-02353750020.html" data-l="34"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/9ab25453-874b-4dc3-8422-e1438038817f.jpeg" alt="" loading="lazy"><span>Guldfarvet satinbånd</span></a><a class="fs-mo" href="/dkk_dk_den/narrow-satin-ribbon-with-glitter-02353750680.html" data-l="12" data-m="51136f98-6974-4da9-a595-96fcc8780ded"><span>Grønt satinbånd</span></a><a class="fs-mo" href="/dkk_dk_den/satin-ribbon-narrow-02342430030.html" data-l="5" data-m="3f15dbaf-f080-4b17-b47e-9e0448810f24"><span>Satinbånd i sølv</span></a></div><i aria-hidden="true">+</i><i aria-hidden="true">+</i></div>
+<div class="fs-btns"><button type="button" class="fs-shuf">Bland igen</button><a class="fs-btn" href="/dkk_dk_den/shipment-products/postal-boxes.html">Se alle postæsker</a></div>
+<p class="fs-more"><a class="fs-ar" href="/dkk_dk_den/blog/9-inspirational-christmas-packaging-sets">Mere at stjæle: 9 juleemballage-sæt<i aria-hidden="true">&rarr;</i></a></p>
 </article>
 </section>
 <section class="fs-sec fs-andet" id="fs-andet">
@@ -280,7 +299,7 @@
 </section>
 <section class="fs-sec fs-faq" id="fs-praktisk">
 <h2 class="fs-h2">Alt det praktiske</h2>
-<p class="fs-lead">Syv svar, før du&nbsp;bestiller.</p>
+<p class="fs-ans">Syv svar, før du&nbsp;bestiller.</p>
 <div class="fs-qa"><details id="faq-postaeske" open><summary><span>Hvilken postæske skal jeg vælge?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Start med det, du sender: vælg en postæske med plads til det og papiret rundt om. De indvendige mål står på hver&nbsp;produktside.</p><p>Kraft, rosa og sort lukker du uden tape. Den hvide har tapelukning. Alle fem er naturbrune indeni, så det er papiret, der giver&nbsp;farven.</p><a class="fs-ar" href="/dkk_dk_den/shipment-products/postal-boxes.html">Se alle postæsker<i aria-hidden="true">&rarr;</i></a></div></details><details id="faq-antal"><summary><span>Hvor mange skal jeg købe – og hvor skal de stå?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Uden logo bestiller du postæsker i kolli à 50&nbsp;stk. De leveres flade og usamlede, så de fylder minimalt på lageret – og du folder dem uden&nbsp;værktøj.</p></div></details><details id="faq-logo"><summary><span>Kan jeg få mit logo på postæsken?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Ja – folie udenpå låget, digitaltryk inden i, eller begge dele. Det koster ekstra pr. æske, og med logo bestiller du fra 200&nbsp;stk. Skal logoet stå i guld, sølv eller hvidt, så vælg folie – det kan digitaltryk&nbsp;ikke.</p><p>Produktionen tager 4–5 hverdage, når du genbestiller med samme logo, og 7–8 hverdage med et nyt&nbsp;logo.</p></div></details><details id="faq-gratis"><summary><span>Er logotryk på smykkeæsker virkelig gratis?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Ja – alle fem smykkeæsker i looksene har gratis logotryk: <span translate="no" class="notranslate">Boston ECO</span>, <span translate="no" class="notranslate">Melbourne ECO</span>, <span translate="no" class="notranslate">Santorini ECO</span>, <span translate="no" class="notranslate">Seoul ECO</span> og <span translate="no" class="notranslate">Vienna</span>. På første ordre betaler du hverken for opstart eller&nbsp;kliché.</p><p>Vil du have jul på låget? Vælg et færdigt julemotiv i&nbsp;logomodulet.</p><a class="fs-ar" href="/dkk_dk_den/blog/christmas-logoprint">Se julemotiverne<i aria-hidden="true">&rarr;</i></a></div></details><details id="faq-silkepapir"><summary><span>Kan jeg få silkepapir og bånd med logo?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Ja, men ikke til denne jul. Med et nyt logo tager produktionen 6–7 uger, og silkepapir med logo bestiller du fra 5.000&nbsp;ark.</p><p>I år pakker du med papir og bånd fra lager – og til næste jul kan dit logo være på det&nbsp;hele.</p></div></details><details id="faq-proeve"><summary><span>Kan jeg få en prøve først?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Ja – af postæsker og smykkeæsker, også med dit logo. Prøver er ikke gratis: du betaler fragt og et lille beløb for hver prøve med&nbsp;logo.</p></div></details><details id="faq-frister"><summary><span>Hvornår skal jeg bestille til jul?</span><i aria-hidden="true"></i></summary><div class="fs-qa-a"><p>Skal der logo på, er svaret: nu. Uden logo er bearbejdningstiden 1 hverdag. Fristerne er forskellige fra land til land, så tjek dit&nbsp;eget.</p><a class="fs-ar" href="/dkk_dk_den/blog/christmas-delivery--opening-hours-2026">Se fristerne for dit land<i aria-hidden="true">&rarr;</i></a></div></details></div>
 </section>
 <section class="fs-close">
@@ -382,6 +401,25 @@
   }
   // A reader who came by a link came for something; the guide plays by itself only for one who scrolled to it.
   if (IO && !still && !location.hash) { var once = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { once.disconnect(); run(); } }, { threshold: .6 }); once.observe(stage); }
+  // Look 06: "Bland igen" shows another postal box + paper + ribbon, never all three from one look and never the same
+  // three twice running. The parts not shown yet get their photos the first time the button is touched.
+  var mx = root.querySelector(".fs-mx"), shuf = root.querySelector(".fs-shuf");
+  if (mx && shuf) {
+    var cols = qsa(".fs-mc", mx).map(function (c) { return qsa(".fs-mo", c); }), now = "0,0,0", base = mx.querySelector("img").src.replace(/[^\/]+$/, "");
+    var prime = function () { qsa("[data-m]", mx).forEach(function (a) { var im = new Image(); im.alt = ""; im.src = base + a.getAttribute("data-m") + ".jpeg"; a.prepend(im); a.removeAttribute("data-m"); }); };
+    ["pointerenter", "focus", "touchstart"].forEach(function (e) { shuf.addEventListener(e, prime, { passive: true }); });
+    shuf.addEventListener("click", function () {
+      prime();
+      var o, l;
+      do {
+        o = cols.map(function (c) { return Math.random() * c.length | 0; });
+        l = o.map(function (j, k) { return cols[k][j].getAttribute("data-l"); });
+      } while (o + "" === now || l[0].split("").some(function (d) { return l[1].indexOf(d) > -1 && l[2].indexOf(d) > -1; }));
+      now = o + "";
+      cols.forEach(function (c, k) { c.forEach(function (a, j) { a.classList.toggle("is-on", j === o[k]); }); });
+    });
+  }
+
   // Any other anchor in the post (#faq-logo, #look-06, #fs-logo …): open a question it names, and land on it again once
   // fonts and images have settled.
   var ht = location.hash && /^#[a-z0-9-]+$/.test(location.hash) && !m && !ts && location.hash !== "#trin-guldstjerner" ? root.querySelector(location.hash) : null;
