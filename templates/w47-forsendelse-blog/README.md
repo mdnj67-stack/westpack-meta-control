@@ -36,6 +36,13 @@ afslutningen er grøn, som husets mørke afslutningsbokse i fx Halloween.
 > dit eget" er blevet en boks i looksenes farver med en postæske + et papir + et bånd og knappen **Bland igen**. **Den
 > nye fil skal sættes ind i Magento** i stedet for den gamle (se nedenfor). URL-nøglen og alle mailens dybe links er de
 > samme.
+>
+> Samme dag, før mailen sendes: **produktionstiden er 8–9 hverdage med et nyt logo og 5–6 ved genbestilling**, som
+> postæskernes produktsider skriver siden 20/11 (før 7–8 / 4–5), i faktaboksen og i spørgsmålet om logo. Og **mailens dybe
+> links lander nu også ved første besøg**: butikkens cookie-banner låser siden, indtil man svarer, så hoppet til
+> `#look-03` gik tabt, og læseren stod øverst i artiklen efter "Accepter alle" eller "Afvis alle". Blokken lander igen,
+> når banneret slipper siden. Afprøvet på den rigtige side uden samtykke (Chromium og WebKit, begge svar, alle ti
+> ankre i mailen).
 
 ## Sådan lægger du indlægget op
 
