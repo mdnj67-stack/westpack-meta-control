@@ -118,7 +118,7 @@ function lastOrder(r) {
   const t = Date.parse(r?.sidsteOrdre || "");
   if (!Number.isFinite(t)) return "";
   const m = monthsSince(r.sidsteOrdre);
-  const ago = m >= 24 ? `${Math.floor(m / 12)} yr ${m % 12} mo ago` : `${m} mo ago`;
+  const ago = m >= 24 ? `${Math.floor(m / 12)} yr${m % 12 ? ` ${m % 12} mo` : ""} ago` : `${m} mo ago`;
   return `${escapeHtml(ORDER_DATE.format(t))}<br><span class="survey-muted">${ago}${r.ordrer ? ` · ${r.ordrer} order${r.ordrer === 1 ? "" : "s"}` : ""}</span>`;
 }
 
