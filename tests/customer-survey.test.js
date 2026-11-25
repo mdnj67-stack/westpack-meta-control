@@ -240,6 +240,29 @@ test("the block can be pasted into a Magento page and posts to the survey route"
   }
 });
 
+test("one paste file per store, made from survey.html, each in its own language only", () => {
+  // the user makes the survey one page per store (25/11) and pastes each store its own file, as with the blog posts
+  const dir = path.join(ROOT, "templates", "customer-feedback-survey");
+  const { buildForStore, readMaster, NAMES } = require(path.join(dir, "sprog.js"));
+  const { html, STR, STORE_LANG } = readMaster(fs.readFileSync(path.join(dir, "survey.html"), "utf8"));
+  assert.deepEqual(Object.keys(NAMES).sort(), Object.keys(STORE_LANG).sort(), "a file for every store the page knows");
+  for (const store of Object.keys(STORE_LANG)) {
+    const lang = STORE_LANG[store];
+    const file = fs.readFileSync(path.join(dir, "sprog", `${store}.html`), "utf8");
+    assert.equal(file, buildForStore(html, store), `sprog/${store}.html is what sprog.js makes from today's survey.html - run it again`);
+    const script = file.match(/<script>([\s\S]*?)<\/script>/)[1];
+    new Function(script);
+    assert.deepEqual(Object.keys(Function(`return ${file.match(/var STR = (\{[\s\S]*?\n  \});/)[1]}`)()), [lang], `${store}: one language`);
+    assert.match(script, new RegExp(`var L = "${lang}";`), `${store}: the language is fixed, not read from the address`);
+    assert.match(file, new RegExp(`data-shop href="/${store}/"`));
+    const T = STR[lang];
+    const unesc = (s) => s.replace(/&nbsp;/g, " ").replace(/&amp;/g, "&");
+    assert.ok(unesc(file).includes(`>${T.title}<`) && unesc(file).includes(`>${T.h1}<`) && unesc(file).includes(`>${T.sub1}<`), `${store}: the markup is in ${lang}`);
+    if (lang !== "da") for (const key of ["title", "h1", "sub1", "hint", "privacy"]) assert.ok(!file.includes(STR.da[key]), `${store}: no Danish ${key} left`);
+    assert.ok(!file.split("<script>")[0].includes("{mail}"), `${store}: the address is in the markup's help line`);
+  }
+});
+
 test("the app view is reachable from the Klaviyo rail", () => {
   const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");

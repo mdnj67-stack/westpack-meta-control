@@ -1,0 +1,288 @@
+<div id="wpfb" data-api="https://project-4fcxa.vercel.app/api/survey">
+<style>
+/* the page has its own title in the block; Magento's Content Heading, when someone fills it in, would sit above it as
+   a second h1 */
+h1.page-title{display:none!important}
+#wpfb{--red:#d10a11;--red2:#c30910;--ink:#111;--text:#3b3b3b;--muted:#707070;--line:#e2e2e2;--soft:#f6f6f6;container-type:inline-size;max-width:1160px;margin:40px auto 72px;color:var(--ink);font-family:inherit;scroll-margin-top:120px}
+#wpfb *,#wpfb *::before,#wpfb *::after{box-sizing:border-box}
+#wpfb [hidden]{display:none!important}
+#wpfb .wpfb-page{display:grid;grid-template-columns:minmax(0,1fr);background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.05),0 24px 56px -30px rgba(0,0,0,.25)}
+#wpfb .wpfb-art{position:relative;margin:10px 10px 0;aspect-ratio:4/3;background:#ecebe9;border-radius:4px;overflow:hidden}
+#wpfb .wpfb-art img{position:absolute;left:0;top:0;display:block;width:100%;height:100%;max-width:none;margin:0;object-fit:cover;object-position:50% 8%}
+#wpfb.is-js .wpfb-art img{opacity:0;transform:scale(1.06);transition:opacity .9s ease,transform 2.6s cubic-bezier(.16,.7,.12,1)}
+#wpfb.is-js .wpfb-art.is-shown img{opacity:1;transform:none}
+#wpfb .wpfb-badge{position:absolute;left:12px;bottom:12px;z-index:1;display:inline-flex;align-items:center;gap:8px;max-width:calc(100% - 24px);margin:0;padding:8px 14px 8px 10px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:999px;box-shadow:0 6px 20px -6px rgba(0,0,0,.22);font-size:13px;line-height:1.2;font-weight:600;color:var(--ink);white-space:nowrap}
+#wpfb .wpfb-badge svg{flex:0 0 auto;width:18px;height:18px;fill:none;stroke:var(--red);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#wpfb.is-js .wpfb-badge{opacity:0;transform:translateY(6px);transition:opacity .5s ease .5s,transform .6s cubic-bezier(.2,.7,.2,1) .5s}
+#wpfb.is-js .wpfb-art.is-shown .wpfb-badge{opacity:1;transform:none}
+#wpfb .wpfb-title{margin:0;padding:0;font-family:inherit;font-size:12.5px;line-height:1.3;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);-webkit-text-fill-color:var(--red);background:none}
+#wpfb .wpfb-panel{display:flex;flex-direction:column;min-width:0;padding:22px 20px 20px}
+#wpfb .wpfb-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:0 0 14px;min-height:18px}
+#wpfb .wpfb-h{margin:0 0 10px;padding:0 0 .06em;font-family:inherit;font-size:25px;line-height:1.16;font-weight:700;letter-spacing:-.03em;color:var(--red);background:linear-gradient(0deg,#aa060b,#d10a11);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-transform:none;outline:none;text-wrap:balance}
+#wpfb .wpfb-sub{margin:0;font-size:15.5px;line-height:1.55;color:var(--text);max-width:52ch;text-wrap:pretty}
+#wpfb.is-intro .wpfb-row,#wpfb.is-intro .wpfb-hx,#wpfb.is-intro form{animation:wpfb-in .6s cubic-bezier(.2,.7,.2,1) both}
+#wpfb.is-intro .wpfb-hx{animation-delay:.08s}
+#wpfb.is-intro form{animation-delay:.16s}
+#wpfb .wpfb-hx.is-in,#wpfb .wpfb-step.is-in{animation:wpfb-in .35s ease-out both}
+@keyframes wpfb-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#wpfb form{display:flex;flex-direction:column;flex:1 1 auto;margin:0;padding:20px 0 0}
+#wpfb .wpfb-step{margin:0 0 22px}
+#wpfb .wpfb-write{position:relative;display:block;margin:0}
+#wpfb .wpfb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#wpfb textarea{display:block;width:100%;min-height:150px;max-height:420px;margin:0;padding:15px 16px;background:#fbfbfb;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:16px;line-height:1.55;color:var(--ink);box-shadow:none;resize:none;overflow:auto;transition:border-color .15s,box-shadow .15s,background-color .15s}
+#wpfb textarea::placeholder{color:#9b9b9b}
+#wpfb textarea:hover{border-color:#cfcfcf}
+#wpfb textarea:focus{outline:none;background:#fff;border-color:#1a1a1a;box-shadow:0 0 0 4px rgba(17,17,17,.06)}
+#wpfb .wpfb-bar{display:flex;flex-direction:column-reverse;align-items:stretch;gap:12px;margin:14px 0 0}
+#wpfb .wpfb-hint{margin:0;font-size:14px;line-height:1.45;color:var(--muted);text-align:center}
+#wpfb .wpfb-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;margin:0;padding:12px 26px;background:var(--red);border:0;border-radius:6px;color:#fff;font:inherit;font-size:15.5px;line-height:1;font-weight:600;letter-spacing:0;text-transform:none;text-decoration:none;cursor:pointer;box-shadow:0 1px 2px rgba(209,10,17,.25);transition:background-color .15s,opacity .2s,box-shadow .15s}
+#wpfb .wpfb-btn:hover{background:var(--red2);color:#fff;box-shadow:0 6px 16px -6px rgba(209,10,17,.45)}
+#wpfb .wpfb-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+#wpfb .wpfb-btn:hover svg{transform:translateX(2px)}
+#wpfb .wpfb-btn.is-idle{opacity:.38;box-shadow:none}
+#wpfb .wpfb-btn[disabled]{opacity:.5;cursor:default}
+#wpfb .wpfb-btn:focus-visible,#wpfb .wpfb-link:focus-visible,#wpfb .wpfb-mail:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#wpfb .wpfb-link{margin:0;padding:4px 2px;background:none;border:0;border-radius:2px;font:inherit;font-size:14px;line-height:1.3;color:var(--text);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+#wpfb .wpfb-link:hover{color:var(--ink)}
+#wpfb .wpfb-mail{border-radius:2px;color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px;word-break:break-word}
+#wpfb .wpfb-mail:hover{color:var(--red2)}
+#wpfb .wpfb-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px;margin:18px 0 0}
+#wpfb .wpfb-actions .wpfb-btn{width:100%}
+#wpfb .wpfb-ok{display:flex;align-items:center;gap:14px;margin:0;padding:14px 18px 14px 14px;background:var(--soft);border-radius:6px}
+#wpfb .wpfb-check{display:block;flex:0 0 auto;width:40px;height:40px;margin:0;fill:none;stroke:var(--red);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#wpfb .wpfb-check circle{stroke:#f3c9cb;stroke-dasharray:176;stroke-dashoffset:176}
+#wpfb .wpfb-check path{stroke-dasharray:40;stroke-dashoffset:40}
+#wpfb .wpfb-done.is-in .wpfb-check circle{animation:wpfb-draw .6s ease-out .05s forwards}
+#wpfb .wpfb-done.is-in .wpfb-check path{animation:wpfb-draw .4s ease-out .45s forwards}
+#wpfb .wpfb-done:not(.is-in) .wpfb-check circle,#wpfb .wpfb-done:not(.is-in) .wpfb-check path{stroke-dashoffset:0}
+@keyframes wpfb-draw{to{stroke-dashoffset:0}}
+#wpfb .wpfb-done p{margin:0;font-size:16px;line-height:1.55;color:var(--text);max-width:52ch}
+#wpfb .wpfb-err{margin:10px 0 0;font-size:14px;line-height:1.4;font-weight:500;color:var(--red)}
+#wpfb .wpfb-foot{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:auto 0 0;padding:16px 0 0;border-top:1px solid #eee}
+#wpfb .wpfb-foot p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted);max-width:68ch}
+#wpfb .wpfb-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@container (min-width:560px){
+#wpfb .wpfb-art{margin:14px 14px 0;aspect-ratio:2/1}
+#wpfb .wpfb-art img{object-position:50% 14%}
+#wpfb .wpfb-badge{left:16px;bottom:16px}
+#wpfb .wpfb-panel{padding:34px 36px 26px}
+#wpfb .wpfb-h{font-size:30px}
+#wpfb .wpfb-sub{font-size:16.5px}
+#wpfb textarea{min-height:170px}
+#wpfb .wpfb-bar{flex-direction:row;align-items:center;justify-content:space-between;gap:12px 20px}
+#wpfb .wpfb-hint{text-align:left}
+#wpfb .wpfb-actions{justify-content:flex-start}
+#wpfb .wpfb-actions .wpfb-btn{width:auto}
+#wpfb .wpfb-foot{flex-direction:row;gap:16px}
+}
+@container (min-width:820px){
+#wpfb .wpfb-page{grid-template-columns:minmax(0,42fr) minmax(0,58fr);min-height:640px}
+#wpfb .wpfb-art{margin:14px 0 14px 14px;aspect-ratio:auto}
+#wpfb .wpfb-art img{object-position:50% 30%}
+#wpfb .wpfb-badge{left:18px;bottom:18px;font-size:13.5px}
+#wpfb .wpfb-panel{padding:52px 60px 34px}
+#wpfb .wpfb-row{margin-bottom:20px}
+#wpfb .wpfb-h{font-size:38px;line-height:1.1;max-width:17ch}
+#wpfb .wpfb-sub{font-size:17px}
+#wpfb form{padding-top:26px}
+#wpfb textarea{min-height:190px;padding:16px 18px}
+#wpfb .wpfb-step{margin-bottom:28px}
+}
+@media (max-width:640px){#wpfb{margin:12px auto 44px}}
+@media (prefers-reduced-motion:reduce){#wpfb *{animation:none!important;transition:none!important}#wpfb.is-js .wpfb-art img,#wpfb.is-js .wpfb-badge{opacity:1;transform:none}#wpfb .wpfb-check circle,#wpfb .wpfb-check path{stroke-dashoffset:0}}
+</style>
+<div class="wpfb-page">
+<figure class="wpfb-art" data-art>
+<img src="https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=1024" srcset="https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=640 640w, https://westpack.b-cdn.net/media/wysiwyg/Jewellery-boxes_woman.jpg?width=1024 1024w" sizes="(min-width: 900px) 480px, 100vw" alt="" width="1024" height="1163" decoding="async" fetchpriority="high">
+<figcaption class="wpfb-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg><span data-t="chip">Leemos cada una de las respuestas</span></figcaption>
+</figure>
+<div class="wpfb-panel">
+<div class="wpfb-row"><h1 class="wpfb-title" data-t="title">Nos gustaría saber de ti</h1></div>
+<div class="wpfb-hx" data-hx>
+<h2 class="wpfb-h" id="wpfb-h" data-h tabindex="-1">¿Por qué no nos has hecho ningún pedido últimamente?</h2>
+<p class="wpfb-sub" data-sub>Ya has comprado en Westpack antes, pero ha pasado un tiempo. Nos gustaría entender qué ha cambiado.</p>
+</div>
+<form novalidate>
+<div class="wpfb-step" data-step="1">
+<label class="wpfb-write"><span class="wpfb-sr" data-t="h1">¿Por qué no nos has hecho ningún pedido últimamente?</span><textarea name="answer" maxlength="1500" rows="5" placeholder="Escribe aquí tu respuesta…"></textarea></label>
+<p class="wpfb-err" role="alert" data-err hidden></p>
+<div class="wpfb-bar"><p class="wpfb-hint" data-t="hint">Con tus propias palabras: basta con una frase.</p><button class="wpfb-btn is-idle" type="submit" data-send1><span data-t="send">Enviar respuesta</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+</div>
+<div class="wpfb-step wpfb-done" data-step="3" hidden>
+<div class="wpfb-ok"><svg class="wpfb-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m21 33 7.5 7.5L44 25"/></svg><p data-help>¿Podemos ayudarte en algo o hay algo que te impida hacer tu próximo pedido? Escríbenos a <a class="wpfb-mail" href="mailto:sales@westpack.com">sales@westpack.com</a>: nos encantará saber de ti.</p></div>
+<div class="wpfb-actions"><a class="wpfb-btn" data-shop href="/eur_eu_spa/"><span data-t="done_shop">Ir a la tienda online</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="wpfb-link" type="button" data-edit data-t="done_edit">Cambiar mi respuesta</button></div>
+</div>
+<div class="wpfb-hp" aria-hidden="true"><label>Website<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
+<div class="wpfb-foot"><p data-t="privacy">Westpack guarda tu respuesta y solo la usa para mejorar.</p></div>
+</form>
+</div>
+</div>
+<script>
+(function () {
+  var root = document.getElementById("wpfb");
+  if (!root || root.getAttribute("data-ready")) return;
+  root.setAttribute("data-ready", "1");
+  // Spanien (eur_eu_spa): the es version of survey.html, made by sprog.js. Edit survey.html, not this.
+  var STR = {
+    es: {
+      title: "Nos gustaría saber de ti",
+      chip: "Leemos cada una de las respuestas",
+      h1: "¿Por qué no nos has hecho ningún pedido últimamente?",
+      sub1: "Ya has comprado en Westpack antes, pero ha pasado un tiempo. Nos gustaría entender qué ha cambiado.",
+      placeholder: "Escribe aquí tu respuesta…",
+      hint: "Con tus propias palabras: basta con una frase.",
+      send: "Enviar respuesta",
+      sending: "Enviando…",
+      err_short: "Por favor, escribe una frase completa: así podremos usar tu respuesta.",
+      err_send: "No se ha podido enviar tu respuesta. Inténtalo de nuevo en un momento.",
+      thanks: "¡Gracias por tu respuesta!",
+      sub3: "Valoramos mucho tu opinión y esperamos tener la oportunidad de volver a trabajar juntos.",
+      help: "¿Podemos ayudarte en algo o hay algo que te impida hacer tu próximo pedido? Escríbenos a {mail}: nos encantará saber de ti.",
+      done_shop: "Ir a la tienda online",
+      done_edit: "Cambiar mi respuesta",
+      privacy: "Westpack guarda tu respuesta y solo la usa para mejorar."
+    }
+  };
+  // Store path -> language: every store has its own language in STR (UK, US and EU read English).
+  var STORE_LANG = { dkk_dk_den: "da", gbp_uk_eng: "en", eur_eu_eng: "en", usd_us_eng: "en", eur_eu_ger: "de", eur_eu_fra: "fr", eur_eu_ita: "it", eur_eu_spa: "es", eur_eu_ned: "nl", eur_eu_por: "pt", sek_se_swe: "sv", nok_no_nor: "nb", eur_eu_fin: "fi", pln_pl_pol: "pl", eur_eu_rou: "ro", eur_eu_cze: "cs", eur_eu_svk: "sk", eur_eu_hun: "hu" };
+  // An answer needs this many letters (spaces not counted) to be a sentence we can use.
+  var MIN_CHARS = 12;
+  // where the thanks sends anyone who wants to talk: the sales team's own mailbox
+  var SALES = "sales@westpack.com";
+  var seg = (location.pathname.split("/")[1] || "").toLowerCase();
+  var store = STORE_LANG[seg] ? seg : "";
+  var want = store ? STORE_LANG[store] : (document.documentElement.lang || "en").slice(0, 2);
+  var L = "es";
+  var T = STR[L];
+  var api = root.getAttribute("data-api");
+  var started = Date.now();
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var q = function (s) { return root.querySelector(s); };
+  var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+  var mem = {
+    get: function (k) { try { return sessionStorage.getItem(k) || ""; } catch (e) { return ""; } },
+    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  };
+  var token = (function () {
+    // "test" is four letters, shorter than any customer's code: it must be named, or a test answer is stored as real
+    var m = /(?:^|[#&])k=(test|[a-z0-9]{6,16})(?![a-z0-9])/i.exec(location.hash || "");
+    if (m) { mem.set("wpfb-k", m[1].toLowerCase()); return m[1].toLowerCase(); }
+    return mem.get("wpfb-k");
+  })();
+  var sid = mem.get("wpfb-sid");
+  if (!/^[a-z0-9]{8,24}$/.test(sid)) {
+    var abc = "abcdefghijklmnopqrstuvwxyz0123456789", b = new Uint8Array(16);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(b); else for (var j = 0; j < 16; j++) b[j] = Math.random() * 256 | 0;
+    sid = ""; for (var i = 0; i < 16; i++) sid += abc[b[i] % 36];
+    mem.set("wpfb-sid", sid);
+  }
+  var S = { text: "", step: 1 };
+  var ta = q("textarea[name=answer]");
+  var panel = q(".wpfb-panel");
+
+  // The photograph fades in once it has arrived, and the card's content rises in once, on arrival
+  root.classList.add("is-js");
+  if (!reduce) { root.classList.add("is-intro"); setTimeout(function () { root.classList.remove("is-intro"); }, 1400); }
+  var art = q("[data-art]"), img = art && art.querySelector("img");
+  if (img) {
+    var shown = function () { art.classList.add("is-shown"); };
+    if (img.complete && img.naturalWidth) shown();
+    else { img.addEventListener("load", shown); img.addEventListener("error", shown); }
+  }
+
+  qa("[data-t]").forEach(function (el) { var k = el.getAttribute("data-t"); if (typeof T[k] === "string") el.textContent = T[k]; });
+  ta.setAttribute("placeholder", T.placeholder);
+  if (store) q("[data-shop]").setAttribute("href", "/" + store + "/");
+
+  function letters(s) { return String(s || "").replace(/\s/g, "").length; }
+  function payload(step) {
+    return { k: token, sid: sid, store: store, lang: L, followup: S.text, step: step, hp: q("input[name=hp]").value, ms: Date.now() - started };
+  }
+  function save(step) {
+    if (!api || !window.fetch || letters(S.text) < 3) return Promise.reject(new Error("no"));
+    return fetch(api + "?action=submit", { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload(step)), keepalive: true })
+      .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); });
+  }
+  function restart(el) { el.classList.remove("is-in"); void el.offsetWidth; el.classList.add("is-in"); }
+  function head(n) {
+    var h = q("[data-h]"), sub = q("[data-sub]");
+    if (n === 1) { h.textContent = T.h1; sub.textContent = T.sub1; }
+    if (n === 3) { h.textContent = T.thanks; sub.textContent = T.sub3; }
+  }
+  function go(n, silent) {
+    S.step = n;
+    if (!silent) root.classList.remove("is-intro");
+    qa("[data-step]").forEach(function (s) { var on = +s.getAttribute("data-step") === n; s.hidden = !on; if (on && !silent) restart(s); });
+    head(n);
+    if (!silent) restart(q("[data-hx]"));
+    q("[data-err]").hidden = true;
+    if (silent) return;
+    var target = n === 1 ? ta : q("[data-h]");
+    try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
+    // on a phone the question sits under the photograph: bring the card's text back into view, under the store's header
+    var top = panel.getBoundingClientRect().top;
+    if (top < 70) window.scrollTo({ top: window.pageYOffset + top - 90, behavior: reduce ? "auto" : "smooth" });
+  }
+  // The message sits right under the answer field, where the eye and the phone's keyboard are (24/11: under the button
+  // it fell below a phone's screen, behind the store's cookie button, and a too-short answer looked like nothing happened)
+  function err(msg) {
+    var e = q("[data-err]"); e.textContent = msg; e.hidden = false;
+    var r = e.getBoundingClientRect();
+    if (r.top < 70 || r.bottom > window.innerHeight - 70) { try { e.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" }); } catch (x) { e.scrollIntoView(false); } }
+  }
+  // The field grows with the answer, so a long answer never hides behind a scrollbar.
+  function grow() { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 2, 420) + "px"; }
+  function ready() { q("[data-send1]").classList.toggle("is-idle", letters(ta.value) < MIN_CHARS); }
+
+  function sendText() {
+    S.text = ta.value.trim();
+    if (letters(S.text) < MIN_CHARS) { err(T.err_short); ta.focus(); return; }
+    var btn = q("[data-send1]"), label = btn.innerHTML;
+    btn.disabled = true; btn.textContent = T.sending;
+    // One send is the whole answer. A save that fails gets a second try before the customer is told; until a save has
+    // gone through, the words stay in the field.
+    save(3).catch(function () { return new Promise(function (ok) { setTimeout(ok, 1500); }).then(function () { return save(3); }); })
+      .then(function () { mem.set("wpfb-done-" + (token || sid), "1"); go(3); })
+      .catch(function () { err(T.err_send); })
+      .then(function () { btn.disabled = false; btn.innerHTML = label; });
+  }
+  // the thanks ends on the sales team's address, as a link
+  (function () {
+    var p = q("[data-help]"), parts = T.help.split("{mail}"), a = document.createElement("a");
+    a.className = "wpfb-mail"; a.href = "mailto:" + SALES; a.textContent = SALES;
+    p.textContent = parts[0]; p.appendChild(a); p.appendChild(document.createTextNode(parts[1] || ""));
+  })();
+
+  ta.addEventListener("input", function () { grow(); ready(); if (letters(ta.value) >= MIN_CHARS) q("[data-err]").hidden = true; });
+  ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendText(); } });
+  root.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("button") : null;
+    if (!t || !root.contains(t)) return;
+    if (t.hasAttribute("data-edit")) { go(1); ta.value = S.text; grow(); ready(); }
+  });
+  q("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (S.step === 1) sendText();
+  });
+
+  // The store's newsletter popup (Klaviyo's "The Insert") opens on every page a few seconds in. Over this page it took
+  // the keyboard while the customer was writing - 38 to 62 typed letters lost in DK, DE and PL on 23/11 - and locked the
+  // page's scrolling. So on this page it is never shown: one rule in the page's head keeps Klaviyo's full-screen popup
+  // out of the layout from the start (display:none, because Klaviyo's own CSS makes everything inside it visible and
+  // nothing weaker holds - and an element that is not laid out cannot take the keyboard), and the class Klaviyo puts on
+  // <body> to stop the page scrolling is taken off again. Nothing changes in Klaviyo; small flyouts are left alone.
+  if (!document.getElementById("wpfb-quiet")) {
+    var quiet = document.createElement("style");
+    quiet.id = "wpfb-quiet";
+    quiet.textContent = "div[data-kl-scroll-locking-modal]{display:none!important}";
+    (document.head || document.documentElement).appendChild(quiet);
+  }
+  function unlock() { if (document.body.classList.contains("klaviyo-prevent-body-scrolling")) document.body.classList.remove("klaviyo-prevent-body-scrolling"); }
+  if (window.MutationObserver) new MutationObserver(unlock).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  unlock();
+
+  if (mem.get("wpfb-done-" + (token || sid))) go(3, true);
+  else { go(1, true); ready(); }
+})();
+</script>
+</div>

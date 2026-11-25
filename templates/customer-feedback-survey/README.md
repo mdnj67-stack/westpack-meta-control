@@ -76,6 +76,13 @@ siden også, men så er svaret anonymt.
 Hver butik skal have en side med **URL-nøglen `customer-survey-2026`**. Linkene i mailene går dertil, så den skal
 være præcis sådan.
 
+**Én fil pr. butik ligger i [`sprog/`](sprog/felter.md)**, ligesom ved blogindlæggene: `sprog/eur_eu_ger.html` er den
+tyske sides kode og så videre, og [`sprog/felter.md`](sprog/felter.md) har felterne og et forslag til fanens titel pr.
+butik. Hver fil har kun sit eget sprog, også i teksten, der vises, før scriptet kører. Filerne laves af `sprog.js` ud fra
+`survey.html`: ret altid i `survey.html`, og kør `node templates/customer-feedback-survey/sprog.js` bagefter (en test
+fejler, hvis en fil ikke passer til `survey.html`). `survey.html` selv virker også og kan sættes ind i en side for alle
+butikker, for den vælger sproget ud fra adressen.
+
 1. Gå til **Content → Elements → Pages** i admin, og tryk **Add New Page**.
 2. Udfyld felterne:
    - **Enable Page:** Yes
