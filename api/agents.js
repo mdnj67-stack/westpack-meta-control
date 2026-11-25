@@ -321,7 +321,7 @@ async function readSendHistory(now) {
   }
   const otherMarkets = {};
   for (const entry of entries) otherMarkets[entry.campaignId] = families.get(familyKeyForCampaign(entry.campaignName))?.size || 0;
-  return { entries, otherMarkets };
+  return { entries, otherMarkets, syncedAt: String(snapshot.markets.DK.syncedAt || "") };
 }
 
 function briefDeps(config, now = new Date()) {

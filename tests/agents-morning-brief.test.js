@@ -60,6 +60,9 @@ test("an Asana campaign card finds its DK campaign by week number and a shared w
   assert.equal(matchCardToCampaigns({ name: "W48: Logotryk fra produktionen" }, campaigns)?.id, "b");
   assert.equal(matchCardToCampaigns({ name: "W47 Forsendelse (den helt store)" }, campaigns)?.id, "c");
   assert.equal(matchCardToCampaigns({ name: "W49 Navn i guld" }, campaigns), null);
+  // One shared generic word is not a match (25/11: World Record Friday was read as the sent Pre Black Friday).
+  assert.equal(matchCardToCampaigns({ name: "W48: World Record Friday" }, campaigns), null);
+  assert.equal(matchCardToCampaigns({ name: "W48: World Record Friday" }, [...campaigns, { id: "d", name: "W48 World Record Friday - DK", status: "Draft" }])?.id, "d");
 
   const [card] = cardSignals({ cards: [{ gid: "1", name: "W49 Navn i guld", due: "2026-11-26", section: "Klar", link: "https://app.asana.com/x", openSubtasks: ["Emnelinjer (Kirsten)"] }], campaigns, today: "2026-11-25", now: at("06:05") });
   assert.equal(card.level, "warn");
@@ -76,11 +79,14 @@ test("an A/B test is one send, not one per arm", () => {
     { campaignId: "c1", campaignName: "W48 Pre BF", subject: "A", sentAt: "2026-11-24T09:00:00Z", received: 1000, openIndex: 1.1, clickIndex: 1.2 },
     { campaignId: "c1", campaignName: "W48 Pre BF", subject: "B", sentAt: "2026-11-24T09:00:00Z", received: 9000, openIndex: 0.9, clickIndex: 0.95 }
   ];
-  const signals = sendSignals({ entries, otherMarkets: { c1: 12 }, since: "2026-11-23T00:00:00Z", today: "2026-11-25" });
+  const signals = sendSignals({ entries, otherMarkets: { c1: 12 }, since: "2026-11-23T00:00:00Z", today: "2026-11-25", syncedAt: "2026-11-24T16:00:00Z" });
   assert.equal(signals.length, 1);
   assert.match(signals[0].detail, /10\.000/);
   assert.match(signals[0].detail, /"B"/);
   assert.match(signals[0].detail, /12 andre markeder/);
+  // Read seven hours after the send: early figures, and the signal says so.
+  assert.match(signals[0].detail, /Tidlige tal: målt 7 timer efter afsendelse/);
+  assert.doesNotMatch(sendSignals({ entries, since: "2026-11-23T00:00:00Z", today: "2026-11-25", syncedAt: "2026-11-25T10:00:00Z" })[0].detail, /Tidlige tal/);
 });
 
 test("the watchdog's open, unmuted findings become signals", () => {

@@ -339,8 +339,10 @@ function significantWords(name = "") {
     .filter((word) => word.length >= 4 && !STOP_WORDS.has(word));
 }
 
-// Which DK campaign in Klaviyo belongs to an Asana campaign card: same week number and at least one shared word, or,
-// without a week number on the card, two shared words. The best match is the one sharing the most words.
+// Which DK campaign in Klaviyo belongs to an Asana campaign card: the same week number and at least half of the card's
+// words, or, without a week number on the card, two shared words and half. Half, because one shared word is not enough:
+// on 25/11 "W48: World Record Friday" matched "W48: Pre Black Friday" on "friday" alone, and the brief then read the
+// World Record Friday mail as already sent.
 function matchCardToCampaigns(card, campaigns = []) {
   const week = String(card?.name || "").match(WEEK_TOKEN)?.[1] || "";
   const words = new Set(significantWords(card?.name));
@@ -348,8 +350,9 @@ function matchCardToCampaigns(card, campaigns = []) {
   for (const campaign of campaigns) {
     if (campaign.archived) continue;
     const campaignWeek = String(campaign.name || "").match(WEEK_TOKEN)?.[1] || "";
-    const shared = significantWords(campaign.name).filter((word) => words.has(word)).length;
-    const qualifies = week ? campaignWeek === week && shared >= 1 : shared >= 2;
+    const shared = new Set(significantWords(campaign.name).filter((word) => words.has(word))).size;
+    const enough = words.size > 0 && shared / words.size >= 0.5;
+    const qualifies = week ? campaignWeek === week && shared >= 1 && enough : shared >= 2 && enough;
     if (!qualifies) continue;
     if (!best || shared > best.shared) best = { campaign, shared };
   }
@@ -423,7 +426,8 @@ function scheduledTodaySignals({ campaigns = [], today, now }) {
 // Sends since the last brief, read from the subject line history (synced nightly at 04:50 UTC). Indexes are against
 // the market's own typical send in the weeks around it (1.00 = typical), never raw rates: Apple Mail inflates opens.
 // An A/B test is one row per arm; a campaign is one signal, described by its largest arm, with every arm's recipients.
-function sendSignals({ entries = [], otherMarkets = {}, since, today }) {
+// Figures read less than a day after the send are early (the history syncs at 04:50 UTC), and the signal says so.
+function sendSignals({ entries = [], otherMarkets = {}, since, today, syncedAt = "" }) {
   const campaigns = new Map();
   for (const entry of entries) {
     if (!entry.sentAt || entry.sentAt < since || !entry.campaignId) continue;
@@ -443,6 +447,8 @@ function sendSignals({ entries = [], otherMarkets = {}, since, today }) {
       else parts.push("For få modtagere eller for tidligt til et indeks.");
       const others = otherMarkets[entry.campaignId] || 0;
       if (others) parts.push(`Samme kampagne sendt i ${others} andre markeder.`);
+      const measuredAfter = (Date.parse(syncedAt) - Date.parse(entry.sentAt)) / 3600000;
+      if (Number.isFinite(measuredAfter) && measuredAfter < 24) parts.push(`Tidlige tal: målt ${Math.max(0, Math.round(measuredAfter))} timer efter afsendelse, så modtagere og indeks kan flytte sig.`);
       const weak = Number.isFinite(entry.clickIndex) && entry.clickIndex < 0.7;
       return signal({
         id: `klaviyo-sent:${entry.campaignId}`,
@@ -972,7 +978,7 @@ async function collectCloud({ deps, doc, now }) {
     klaviyoSummary = `${campaigns.length} DK-kampagner ændret de sidste tre uger; ${scheduled.length} planlagt i dag.`;
   }
   if (history.ok && history.result) {
-    const sends = sendSignals({ entries: history.result.entries || [], otherMarkets: history.result.otherMarkets || {}, since, today });
+    const sends = sendSignals({ entries: history.result.entries || [], otherMarkets: history.result.otherMarkets || {}, since, today, syncedAt: history.result.syncedAt || "" });
     signals.push(...sends);
     klaviyoSummary += ` ${sends.length} udsendelser siden sidst.`;
   }
