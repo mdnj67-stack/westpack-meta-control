@@ -821,6 +821,7 @@ async function sortAsanaSectionByDueDate(config, { projectKind = "campaign", sec
 module.exports = {
   addAsanaTaskComment,
   asanaGet,
+  collectAsanaPages,
   attachFileToAsanaTask,
   createAsanaContentRequest,
   createAsanaTask,

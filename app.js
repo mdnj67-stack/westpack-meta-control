@@ -9,7 +9,7 @@ import {
   loadCanvaLocalizer
 } from "./src/canva-localizer.js?v=20260921-canvalocalizer1";
 import { initSubjectLines, loadSubjectLines } from "./src/klaviyo-subject-lines.js?v=20261028-subjectlines6";
-import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261030-agents1";
+import { initAgents, refreshAgentsBadge, showAgentsView } from "./src/agents.js?v=20261125-brief1";
 import { initSignupLab, showSignupLabView, signupLabViewFromHash, leaveSignupLab } from "./src/signup-lab.js?v=20261030-signuplab1";
 import { loadKlaviyoSignupForms } from "./src/klaviyo-signup-forms.js?v=20261030-signupforms1";
 import { loadCustomerSurvey } from "./src/customer-survey.js?v=20261113-survey1";

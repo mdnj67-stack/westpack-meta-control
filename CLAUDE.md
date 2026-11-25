@@ -227,7 +227,8 @@ Asked for after the Content Agent was removed: "en helt ny ting i menuen omkring
 hjælpe mig". The design rule, from the critique that ended the Content Agent: **agents here watch
 and check; they never produce or change anything.** Their value is attention saved - a watchdog
 that says "nothing needs you" is worth more than one more draft to read. Nothing under Agents
-writes to Meta, Klaviyo or the stores; the only write is a mute, in this app's own store.
+writes to Meta, Klaviyo or the stores; the only writes are a mute, in this app's own store, and the
+morning brief's to-dos in the user's own Asana My Tasks (asked for by the user, switchable on the page).
 
 Files: `api/agents.js` (`?action=` dispatch), `server/agents/watchdog.js`,
 `server/agents/email-check.js`, `src/agents.js`, the `agents-product-panel` in `index.html`, the
@@ -288,6 +289,47 @@ Then a careful read on `CONTENT_AGENT_MODEL` (high, background job, ~60-90 s) ag
   `knowledge/westpack-site/README.md` out of the upload, so `includeFiles` bundled nothing and every
   production review ran on "(not available)" site facts, flagging true claims as unverifiable. It now has
   a `!` exception; any other README a function needs gets one too.
+
+### Morning brief (2026-11-25)
+
+Asked for on 24/11 after one to-do had been made by hand ("en agent der ... scanner min kalender, min asana, min
+mail alt hvad der nu findes, måske også ting som er lidt urgent i systemet ... klar når jeg møder kl 8") and built on
+25/11 ("Du skal bygge den agent som scanner det hele og opsnapper"). `server/agents/morning-brief.js` (all rules,
+pure where possible), `brief*` actions in `api/agents.js`, the "Morning brief" view in `src/agents.js`, Blob
+`agents/morning-brief.json` (private: it holds mail snippets). Tests: `tests/agents-morning-brief.test.js`.
+
+- **A day is a small state machine** (`runBriefTick`, phases idle → collected → writing → done/failed), advanced by
+  the cron `3,13,...,53 4-9 * * 1-5` → `GET ?action=brief_tick` (CRON_SECRET only), by the computer's POST and by the
+  page. From 06:00 Copenhagen the cloud sources are read once; the brief is written when the computer sends the
+  calendar and mail, or at 07:40 without them; a brief written without them is written again when they arrive.
+  Weekdays only for the cron; "Run again now" (`brief_run`) works any day.
+- **Cloud sources** (`collectCloud`): Asana (the user's own tasks due/late, campaign cards due from 7 days ago to 2
+  ahead with open subtasks, comments since the last brief that mention the user or sit on the user's task, content
+  requests without an assignee, creatives newly in Review/Done), Klaviyo DK (each card matched to its campaign by week
+  number + a shared word, today's scheduled sends, sends since last brief from the subject line history with open/
+  click index - an A/B test is one send), Meta (four calls, `maxRetries: 0`: last account day's spend vs the seven
+  before, and ad fatigue with **exactly the Monday report's rules** from `scripts/meta-ad-status.js`, on incremental
+  attribution), the watchdog's open findings, new survey answers.
+- **Calendar and mail come from the user's PC**: `scripts/morning-brief-local.ps1` (Outlook COM, read-only) →
+  `scripts/morning-brief-local.js` (logs in like smoke-local, `POST brief_local`, follows the writing). Task
+  Scheduler "Westpack Morgenbrief - kalender og mail" (`scripts/register-morning-brief-task.ps1`): weekdays from
+  06:00 every 20 min + at log-on, does nothing once today's is sent (`tmp/morning-brief/sent-<day>.txt`). The laptop
+  sleeps at night, so the cloud part cannot wait for it. **HR/candidate mail and meetings are never sent** (regex on
+  subject, body start and attachment names; counted only), private appointments go as "Privat aftale", newsletters
+  are dropped by List-Unsubscribe/Precedence headers, attachments are never read. The user keeps a near-empty inbox
+  (48 of a day's 49 mails were already in Deleted Items on 25/11), so mail is "what still sits in the inbox,
+  unread/flagged/addressed to you"; a quiet mail section is normal. Outlook started headless by COM sits in
+  `ExchangeConnectionMode` 400 (cached, disconnected) for ~10 s before it connects.
+- **The model arranges, it does not invent.** `CONTENT_AGENT_MODEL` on high as a background job writes `todos`
+  (title, why, steps, urgency, `sourceIds`) and `fyi`; `finalizeBrief` drops any to-do whose ids are not real signals
+  and takes links from the signals only. The prompt carries the user's standing decisions (never switch ads on,
+  budgets follow numbers, DE/FR/IT are investments, five ads per ad set, no discounts/DOI ...).
+- **Asana, once each.** `createAsanaTask` (assignee "me" only). The `ledger` maps each signal id to the task made
+  from it with the signal's fingerprint: made today → reused; still open → reused; closed and the signal unchanged →
+  not made again; signal changed → made anew. The user's own Asana tasks are never made again (`inAsana`). Just
+  before creating, open tasks touched since midnight with the same name are reused. Finishing a job takes a claim in
+  the document (`deps.claim`, write + read back) so the cron and the page cannot both create. Due today, or "this
+  week" on the source's own deadline / two working days. Notes end "Fra Morgenbriefen i biblen ...".
 
 Candidates for the next agents, not built: Asana "Review" creative -> paused ad in Placeholder;
 the Monday Meta status and ad-swap analysis (now local scripts mailed via Outlook) as in-app agents.
@@ -1379,7 +1421,14 @@ change. No npm package at runtime. Tests: `tests/email-name-print.test.js`.
 - Organization (legal form stripped), else the first word of the first name, else "Dit navn"/"Your name"/... by store.
 - Public on purpose (an email image carries no session) and edge-cached a year by URL: bump `v` when the renderer
   changes. It never answers a broken image. `?action=coverage&country=XX` (logged in) counts printable names, never lists them.
-- The carrier bag scene has no free logo print; the six boxes do.
+- The carrier bag scenes have no free logo print; the six boxes do. Bags also have their **own foil list** in the logo
+  module (codes "... - BAGS": no wine red, but red, silver, mint ...), so a bag tile takes a bag foil (`matt-red` exists
+  for that).
+- Scenes beyond the Logo studio's lids are the email's own: `tools/email/name-print-extra.json` (source photo, cleaning
+  polygon, rough edges, and the measured `lid`), plate in `tools/email/name-print-plates/`, made by
+  `tools/email/build-extra-plates.js clean|measure` with Logo studio's own clean-plate.html and lid-geometry.js page code,
+  then packed by `build-name-print-assets.js --no-atlas`. First one: `bag-white` (white XXL gift bag); its perspective
+  measured 1.301 against the bag's 1.2857. A test fails if a measurement is written but not packed.
 
 ## What Westpack's own website says — `knowledge/westpack-site/`
 
@@ -1705,19 +1754,55 @@ field prints onto a shipping label). One runtime, `signup/westpack-signup.js`, l
 
 Asked for as "et blogpost til amasty blog pro ... et spørgeskema med max 2-3 spørgsmål ... hvorfor de churner. OG så
 skal vi have et sted at gemme dataen", for the top 500 customers by lifetime webshop value with no webshop order in
-12 months. The post is one HTML Code block (`templates/customer-feedback-survey/survey.html`, README in Danish), URL
-key `customer-feedback-2026` in every store; answers go to `api/survey.js` and are read under Klaviyo email →
-**Customer survey** (`src/customer-survey.js`). Tests: `tests/customer-survey.test.js`.
+12 months. **Since 2026-11-23 it is a Magento CMS page, not a blog post** (the user: the blog's categories, tags and
+recent posts around it "ligner lort", and the page must be "død lækker"): one HTML Code block
+(`templates/customer-feedback-survey/survey.html`, README in Danish), URL key **`customer-survey-2026`** in every store
+(the team made the page as `Customer-Survey-2026`; the links followed it, the store was not changed), layout 1 column; answers go to `api/survey.js` and are read under Klaviyo email → **Customer survey**
+(`src/customer-survey.js`). Tests: `tests/customer-survey.test.js`.
 
-- **A personal link carries a token after `#`** (`…/blog/customer-feedback-2026#k=<token>`): the blog redirects any
-  URL with a query string to itself without it. `#k=test` stores a test answer, hidden in the view by default.
+- **A personal link carries a token after `#`** (`…/customer-survey-2026#k=<token>`; the blog, where it started,
+  redirects any URL with a query string to itself without it). No mail had gone out with the blog form or the planned
+  `customer-feedback-2026` page address when the links moved; all 3,393 in production were rewritten twice, and
+  `sanitizeRecipient` still accepts the old forms. The mail goes out from the shared mailbox `wpsales@westpack.com`
+  (Send As, verified 23/11) via the gitignored Outlook kit. `#k=test` stores
+  a test answer, hidden in the view by default.
+- **The page owns everything between header and footer.** This theme's CMS pages show no title and no crumbs, so the
+  block carries the page's h1 ("Vi vil gerne høre fra dig", a red overline beside a framed photo of a Westpack
+  employee with an armful of boxes - the About page's `Jewellery-boxes_woman.jpg`, `?width=` on `westpack.b-cdn.net`). **The theme paints every h1/h2 as a red gradient clipped to the
+  text** (`background-image` + `-webkit-text-fill-color: transparent`): any heading the block wants in another colour
+  must reset the fill, and the question sets the red gradient itself. `tmp/playwright-runner/survey-page-preview.js`
+  puts the block on a real CMS page of the store (who/submit answered locally, popups kept off) for six viewports.
+- **The page never tells the visitor we know who they are** (the user, 2026-11-23: "Vi skal ikke fortælle kunden at
+  vi ved hvem de er"): no greeting or thanks by company name, no `?action=who` call from the page, and the data line
+  no longer says a link shows which customer answered. There is no contact question any more (below); answers from
+  before it went still carry their yes/no and e-mail, which `sanitizeSubmission` keeps with a token too. `?action=who` (with `greetingName`, name-print's
+  `cleanName` without the lid's limit) stays for the send script's guard. A test pins all of it.
+- **The store's newsletter popup is kept off the page by the block** (0fbaf3a). Klaviyo's full-screen Insert popup opened
+  ~5 s in on desktop and phone, took the keyboard from the answer being written (38-62 letters lost in DK, DE, PL) and
+  locked scrolling (`body.klaviyo-prevent-body-scrolling { overflow: hidden !important }`). Only `display:none` holds:
+  Klaviyo's reset CSS sets everything inside visible, its focus guards take the keyboard from a merely hidden popup, an
+  inert close button ignores clicks, and a close brings a teaser that takes focus too. So the block adds
+  `div[data-kl-scroll-locking-modal]{display:none!important}` to the page's head and takes the class off `<body>`.
+  `tmp/playwright-runner/survey-focus-probe.js [--local] [--engine=webkit]` types for 28 s and logs every focus change;
+  `survey-live-e2e.js --local` runs the checkout's block on the live page. The Signup Lab excludes `/customer-survey-2026`.
+- **One question, one send, then the thanks** (23/11, the user's own wording for both). No step counter ("Der er vel
+  kun et trin?") and no contact question: the thanks ends "... Så hører vi meget gerne fra dig på sales@westpack.com"
+  (a mailto link; the Sales mailbox, checked in Outlook's address book). One send saves the answer as `step: 3` with a
+  second try before an error; the page collects no e-mail. The team's tries on the live page without `#k=test` were
+  marked as test on 23/11 - check the real count before the mail goes out.
+- **`tmp/playwright-runner/survey-deep-check.js [--local]`** walks every step on the live page with real wave-2 links
+  (code swapped to test in flight) and asks biblen for each answer: too-short refusal, typing through Klaviyo's popup
+  moment, "Sender …", thanks + sales@ + store link, edit and resend, reload, failed saves, anonymous + Ctrl+Enter,
+  WebKit, CZ without the Signup Lab (55 checks, 24/11). It found the error message under the Send button below a
+  phone's screen edge; it now sits under the field (41ec954). WebKit reports the store's own third-party frames
+  (cookie banner, Dixa chat, tracking) reading each other on every store page - not the survey's errors.
+  `survey-biblen-view.js` screenshots the view in biblen with Meta/Klaviyo calls blocked.
 - **The token resolves only in this app's store.** `surveys/customer-feedback-2026/recipients.json` (Blob) holds
   company, contact name, market, lifetime value and the link - never e-mail or phone; those stay in the local Excel
   list. `?action=who` (public) returns the company name for a token so the post can greet it.
 - **A written answer, nothing to pick** (the user, 2026-11-13: "Kan man få dem til at skrive et svar? Så man ikke kan
   vælge? ... skrevne og specifikke svar så har det mere værdi"). Question 1 is one large field ("in your own words; the
-  more specific the better; one sentence is enough"), sendable from 12 letters; question 2 is yes/no to being
-  contacted, under their own words quoted back. **No example answers** - examples get copied instead of the
+  more specific the better; one sentence is enough"), sendable from 12 letters. **No example answers** - examples get copied instead of the
   customer's own reason (a test checks the placeholder). The written answer is saved the moment it is sent (`step:
   1`, `reason: ""`, the words in `followup`); the server requires words when there is no reason. The first two
   versions (eight reason tiles, then one-tap follow-ups in `REASONS[].details`) were replaced the same day; their
@@ -1725,16 +1810,16 @@ key `customer-feedback-2026` in every store; answers go to `api/survey.js` and a
 - Every save carries the whole answer and a visit id (`sid`); the view keys on token, else visit, and keeps the latest
   save, so two saves are one answer. Saves use `keepalive`.
 - **It looks like the store, not a campaign** (the user: "passer lidt bedre ind på siden"): the theme's own Inter
-  (`font-family: inherit`, no font import), `--color-primary` red `#d10a11` / `#c30910`, a white card with the
-  "Recent posts" cards' 4px radius and `0 1px 4px rgba(0,0,0,.08)` shadow, inputs bordered `#e0e0e0`, 6px buttons.
-  Measured off the saved store page with Playwright; re-measure rather than guess if the theme changes.
+  (`font-family: inherit`, no font import), `--color-primary` red `#d10a11` / `#c30910`, the theme's red headings,
+  a white card on the page's `#f9f9f9`, inputs bordered `#e0e0e0`, 6px buttons. Measured off the live store with
+  Playwright; re-measure rather than guess if the theme changes.
 - **One Blob file per save** under `surveys/customer-feedback-2026/responses/`, so concurrent answers never overwrite
   each other. Local development writes `tmp/surveys/`.
 - Submit is public, posted as `text/plain` (no CORS preflight) from `www.westpack.com` or staging. A honeypot or a
   save within 1.2 s of page load is answered 200 and dropped. An e-mail is kept only for an answer without a token
   that asked to be contacted.
-- **The post's title is shown to the customer** (red, above the block, and in the breadcrumb). The team first
-  published it as "Churn survey"; it must be customer-facing ("Vi vil gerne høre fra dig").
+- As a blog post the title showed to the customer (red, above the block, and in the breadcrumb); the team first
+  published it as "Churn survey". On the CMS page the Magento title shows only in the browser tab.
 - **Key accounts are not the survey's to contact.** The list removes customers with an own Magento customer group
   (agreed prices) or a Navision fiscal year over 150,000 kr.; Navision's DETAIL data cannot see KAS departments
   (3200/3210/3300), so a person still reviews the list before anyone is contacted (the user, 2026-11-13).

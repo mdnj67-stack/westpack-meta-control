@@ -10,8 +10,15 @@
 //   GET  email_check       - { id } one check in full
 //   POST email_check       - { country, templateId } or { country, html, name } -> instant checks, review started
 //   POST email_check_poll  - { id } -> the review, once the model has finished
+//   GET  brief             - today's morning brief, as the page shows it
+//   GET  brief_tick        - the weekday-morning cron (CRON_SECRET only): collect, write, finish
+//   POST brief_tick        - the page following a brief being written: finishes it, starts nothing
+//   POST brief_run         - "Run again now": read every source afresh and write the brief at once
+//   POST brief_local       - { calendar, mail, heldBack, readAt } from the user's computer, then a tick
+//   POST brief_settings    - { createTasks } whether the to-dos go into Asana
 //
-// Read-only towards Meta, Klaviyo and the stores. Nothing here pauses, edits, creates or sends.
+// Read-only towards Meta, Klaviyo and the stores. Nothing here pauses, edits, creates or sends. The one write
+// outside this app is the morning brief's to-dos, in the Asana token owner's own My Tasks.
 
 const fs = require("fs");
 const path = require("path");
@@ -24,13 +31,22 @@ const { redisCommand } = require("../server/campaign/agent-store");
 const {
   getHistoricalStoreProfile,
   readAgentEmailChecks,
+  readAgentMorningBrief,
   readAgentWatchdog,
   readNightlySnapshotTimes,
+  readSubjectLineHistory,
   writeAgentEmailChecks,
+  writeAgentMorningBrief,
   writeAgentWatchdog
 } = require("../server/meta/historical-store");
 const { CHECKS, CHECK_DESCRIPTIONS, runWatchdog, withMute, withoutMute } = require("../server/agents/watchdog");
 const { MARKET_LANGUAGE, REVIEW_SCHEMA, analyseEmailHtml, buildReviewInput, finalizeReview } = require("../server/agents/email-check");
+const { copenhagen, describeBrief, rollOver, runBriefTick, sanitizeLocal } = require("../server/agents/morning-brief");
+const { asanaGet, collectAsanaPages, createAsanaTask } = require("../server/lib/asana");
+const { resolveObjectiveGroup } = require("../server/meta/budget-allocation");
+const { buildMarketEntries, familyKeyForCampaign } = require("../server/klaviyo/subject-line-history");
+const surveyStore = require("../server/survey/survey-store");
+const customerSurvey = require("../server/survey/customer-survey");
 const { readStructured, startStructured } = require("../server/klaviyo/subject-line-generator");
 const { MARKETS: STORES } = require("../signup/core/markets");
 
@@ -243,6 +259,167 @@ async function handleEmailCheckPoll(res, config, body) {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Morning brief
+
+const CAMPAIGN_API_REVISION = "2024-10-15";
+
+async function readGraphPages(config, graphPath, params, maxPages = 5) {
+  const rows = [];
+  let after = "";
+  for (let page = 0; page < maxPages; page += 1) {
+    const payload = await graphRequest(graphPath, config.metaAccessToken, { params: { ...params, ...(after ? { after } : {}) }, maxRetries: 0 });
+    rows.push(...(payload.data || []));
+    after = payload.paging?.next ? payload.paging?.cursors?.after || "" : "";
+    if (!after) break;
+  }
+  return rows;
+}
+
+// The DK account's email campaigns changed in the last three weeks: drafts, scheduled and sent.
+async function readKlaviyoDkCampaigns(config) {
+  const market = parseMarkets(config.klaviyoMarketsJson).find((item) => String(item?.country || "").trim().toUpperCase() === "DK");
+  if (!market?.privateKey) throw new Error("No Klaviyo DK account is configured.");
+  const since = new Date(Date.now() - 21 * 86400000).toISOString().slice(0, 19);
+  let next = `https://a.klaviyo.com/api/campaigns/?filter=and(equals(messages.channel,'email'),greater-than(updated_at,${since}))&sort=-updated_at&fields[campaign]=name,status,archived,scheduled_at,send_time,updated_at`;
+  const campaigns = [];
+  for (let page = 0; next && page < 4; page += 1) {
+    const response = await fetchWithTimeout(next, { headers: { Authorization: `Klaviyo-API-Key ${String(market.privateKey).trim()}`, Accept: "application/vnd.api+json", revision: CAMPAIGN_API_REVISION } }, 15000);
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload?.errors?.[0]?.detail || `Klaviyo campaigns request failed (${response.status}).`);
+    for (const item of payload.data || []) {
+      const attributes = item.attributes || {};
+      campaigns.push({
+        id: String(item.id || ""),
+        name: String(attributes.name || ""),
+        status: String(attributes.status || ""),
+        archived: Boolean(attributes.archived),
+        scheduledAt: String(attributes.scheduled_at || ""),
+        sendTime: String(attributes.send_time || "")
+      });
+    }
+    next = payload?.links?.next || null;
+  }
+  return campaigns;
+}
+
+// DK's sends in the last three days with their open and click index, and in how many other markets each campaign's
+// translation went out. Read from the subject line history, which the nightly sync writes at 04:50 UTC.
+async function readSendHistory(now) {
+  const snapshot = await readSubjectLineHistory();
+  if (!snapshot?.markets?.DK) return null;
+  const cutoff = new Date(now.getTime() - 72 * 3600000).toISOString();
+  const entries = buildMarketEntries(snapshot.markets.DK).filter((entry) => entry.sentAt >= cutoff);
+  const families = new Map();
+  for (const [country, market] of Object.entries(snapshot.markets)) {
+    if (country === "DK") continue;
+    for (const row of market?.messages || []) {
+      if (!row.sentAt || row.sentAt < cutoff) continue;
+      const key = familyKeyForCampaign(row.campaignName);
+      if (!families.has(key)) families.set(key, new Set());
+      families.get(key).add(country);
+    }
+  }
+  const otherMarkets = {};
+  for (const entry of entries) otherMarkets[entry.campaignId] = families.get(familyKeyForCampaign(entry.campaignName))?.size || 0;
+  return { entries, otherMarkets };
+}
+
+function briefDeps(config, now = new Date()) {
+  const metaReady = Boolean(config.metaAccessToken && config.metaAdAccountId);
+  const asanaReady = Boolean(config.asanaAccessToken);
+  let workspace = "";
+  const myWorkspace = async () => {
+    if (!workspace) workspace = String((await asanaGet(config, "/users/me", { opt_fields: "workspaces.gid" }))?.workspaces?.[0]?.gid || "");
+    return workspace;
+  };
+  return {
+    asana: asanaReady ? { get: (resourcePath, query) => asanaGet(config, resourcePath, query), pages: (resourcePath, query, maxPages) => collectAsanaPages(config, resourcePath, query, maxPages) } : null,
+    projects: {
+      campaign: config.asanaCampaignProjectGid,
+      production: config.asanaProductionProjectGid,
+      creatives: config.asanaCreativesProjectGid,
+      content: config.asanaContentProjectGid
+    },
+    klaviyo: klaviyoCountries(config).includes("DK") ? { campaigns: () => readKlaviyoDkCampaigns(config) } : null,
+    history: () => readSendHistory(now),
+    // Rate limits are never retried against this account: the dashboard's own quota is shared.
+    graph: metaReady ? (graphPath, params) => graphRequest(graphPath, config.metaAccessToken, { params, maxRetries: 0 }) : null,
+    pages: metaReady ? (graphPath, params) => readGraphPages(config, graphPath, params) : null,
+    accountId: metaReady ? ensureAccountId(config.metaAdAccountId) : "",
+    resolveObjectiveGroup,
+    readWatchdog: () => readAgentWatchdog(),
+    readSurvey: async () => {
+      const [recipients, files] = await Promise.all([surveyStore.readRecipients(customerSurvey.SURVEY_ID), surveyStore.readResponseFiles(customerSurvey.SURVEY_ID)]);
+      return customerSurvey.summarize({ responses: files.records, recipients: recipients.recipients });
+    },
+    startJob: ({ input, schemaName, schema }) => startStructured(config, { input, schemaName, schema, reasoningEffort: "high", writing: true }),
+    readJob: (id) => readStructured(config, id),
+    createTask: asanaReady ? (task) => createAsanaTask(config, task) : null,
+    // A task that no longer exists counts as closed, so a deleted to-do is not reused forever.
+    taskState: asanaReady ? async (gid) => {
+      try {
+        const task = await asanaGet(config, `/tasks/${gid}`, { opt_fields: "completed" });
+        return task?.completed ? "completed" : "open";
+      } catch (error) {
+        if (Number(error?.statusCode) === 404) return "completed";
+        throw error;
+      }
+    } : null,
+    // The user's open tasks touched since midnight, read fresh just before creating: a to-do with the same name that
+    // already exists is reused rather than made twice.
+    recentOpenTasks: asanaReady ? async () => {
+      const midnight = new Date(now.getTime() - (copenhagen(now).minutes + 1) * 60000).toISOString();
+      const rows = await collectAsanaPages(config, "/tasks", { assignee: "me", workspace: await myWorkspace(), completed_since: "now", modified_since: midnight, opt_fields: "gid,name,permalink_url,completed" }, 2);
+      return rows.filter((task) => task?.gid && !task.completed).map((task) => ({ gid: String(task.gid), name: String(task.name || ""), url: String(task.permalink_url || "") }));
+    } : null,
+    claim: async (doc) => {
+      await writeAgentMorningBrief(doc);
+      const stored = await readAgentMorningBrief();
+      return stored?.writing?.claim?.id === doc.writing?.claim?.id;
+    }
+  };
+}
+
+// The calendar and mail, and the settings, can be written by another request while a tick runs; the newer copy of
+// each wins, so a tick never puts back what the computer or the page has just replaced.
+async function saveBrief(next) {
+  const current = await readAgentMorningBrief().catch(() => null);
+  if (current && current.day === next.day) {
+    if ((current.local?.receivedAt || "") > (next.local?.receivedAt || "")) next.local = current.local;
+    if ((current.settings?.updatedAt || "") > (next.settings?.updatedAt || "")) next.settings = current.settings;
+  }
+  await writeAgentMorningBrief(next);
+  return next;
+}
+
+async function tickBrief(config, scope, prepare = null) {
+  const now = new Date();
+  let stored = await readAgentMorningBrief().catch(() => null);
+  if (prepare) {
+    stored = prepare(stored, now);
+    await writeAgentMorningBrief(stored);
+  }
+  const { doc, changed } = await runBriefTick({ deps: briefDeps(config, now), doc: stored, now, scope });
+  if (changed && doc) await saveBrief(doc);
+  return describeBrief(changed ? doc : stored, now);
+}
+
+function briefSummary(view) {
+  if (!view || view.empty) return null;
+  const todos = view.brief?.todos || [];
+  return {
+    day: view.day,
+    stale: view.stale,
+    phase: view.phase,
+    headline: view.brief?.headline || "",
+    todos: todos.length,
+    created: todos.filter((todo) => todo.asana?.status === "created").length,
+    writtenAt: view.brief?.writtenAt || "",
+    withLocal: Boolean(view.brief?.withLocal)
+  };
+}
+
+// ---------------------------------------------------------------------------------------------
 
 module.exports = async (req, res) => {
   const config = getConfig();
@@ -253,13 +430,20 @@ module.exports = async (req, res) => {
       if (!isAuthorizedCronRequest(req, config)) return sendJson(res, 401, { error: "The scheduled run needs the cron secret." });
       return await handleWatchdogRun(res, config, "auto");
     }
+    if (action === "brief_tick" && req.method === "GET") {
+      if (!isAuthorizedCronRequest(req, config)) return sendJson(res, 401, { error: "The scheduled run needs the cron secret." });
+      const view = await tickBrief(config, "cron");
+      return sendJson(res, 200, { ok: true, brief: briefSummary(view) });
+    }
     if (!requireAuth(req, res, config)) return;
 
     if (req.method === "GET") {
+      if (action === "brief") return sendJson(res, 200, { ok: true, brief: describeBrief(await readAgentMorningBrief().catch(() => null)), store: getHistoricalStoreProfile() });
       if (action === "overview") {
-        const [watchdog, checks] = await Promise.all([readAgentWatchdog().catch(() => null), readChecks()]);
+        const [watchdog, checks, brief] = await Promise.all([readAgentWatchdog().catch(() => null), readChecks(), readAgentMorningBrief().catch(() => null)]);
         return sendJson(res, 200, {
           ok: true,
+          brief: briefSummary(describeBrief(brief)),
           watchdog: watchdog ? { ranAt: watchdog.ranAt, lastDailyAt: watchdog.lastDailyAt, counts: watchdog.counts, checks: describeWatchdog(watchdog).checks.map(({ items, ...check }) => check), open: openItems(watchdog) } : null,
           emailChecks: checks.slice(0, 6).map(summaryRecord),
           markets: klaviyoCountries(config),
@@ -292,6 +476,24 @@ module.exports = async (req, res) => {
     }
     if (action === "email_check") return await handleEmailCheck(res, config, body);
     if (action === "email_check_poll") return await handleEmailCheckPoll(res, config, body);
+    if (action === "brief_tick") return sendJson(res, 200, { ok: true, brief: await tickBrief(config, "page") });
+    if (action === "brief_run") return sendJson(res, 200, { ok: true, brief: await tickBrief(config, "manual") });
+    if (action === "brief_local") {
+      if (!Array.isArray(body.calendar) || !Array.isArray(body.mail)) return sendJson(res, 400, { error: "Send { calendar: [...], mail: [...] }." });
+      const brief = await tickBrief(config, "local", (stored, now) => {
+        const doc = rollOver(stored, copenhagen(now).day);
+        doc.local = sanitizeLocal(body, now);
+        return doc;
+      });
+      return sendJson(res, 200, { ok: true, brief });
+    }
+    if (action === "brief_settings") {
+      const now = new Date();
+      const stored = rollOver(await readAgentMorningBrief().catch(() => null), copenhagen(now).day);
+      stored.settings = { ...(stored.settings || {}), createTasks: body.createTasks !== false, updatedAt: now.toISOString() };
+      await writeAgentMorningBrief(stored);
+      return sendJson(res, 200, { ok: true, brief: describeBrief(stored, now) });
+    }
     return sendJson(res, 400, { error: "Unsupported Agents POST action." });
   } catch (error) {
     return sendJson(res, Number(error?.statusCode) || 500, { error: error?.message || "The agent request failed." });

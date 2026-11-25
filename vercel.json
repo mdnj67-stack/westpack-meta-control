@@ -64,6 +64,10 @@
     {
       "path": "/api/agents?action=watchdog_run",
       "schedule": "7 * * * *"
+    },
+    {
+      "path": "/api/agents?action=brief_tick",
+      "schedule": "3,13,23,33,43,53 4-9 * * 1-5"
     }
   ],
   "rewrites": [

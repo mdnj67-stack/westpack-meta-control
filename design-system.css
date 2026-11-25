@@ -6368,6 +6368,99 @@ body[data-workspace="agents"] .subnav-button.active .wp-nav-icon {
   }
 }
 
+/* -- The morning brief ------------------------------------------------------
+
+   The day's headline leads and the to-dos are the page; what the agents read sits below them, for
+   when a to-do needs checking. Each to-do says where it came from and where it went in Asana. */
+
+.agents-brief-lead {
+  display: grid;
+  gap: var(--wp-space-1);
+  margin-bottom: var(--wp-space-4);
+}
+
+.agents-brief-headline {
+  margin: 0;
+  color: var(--wp-text);
+  font-size: var(--wp-text-xl);
+  font-weight: var(--wp-weight-semibold);
+  line-height: var(--wp-leading-tight);
+}
+
+.agents-brief-day {
+  margin: 0;
+  max-width: 96ch;
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+}
+
+.agents-brief-lead + .wp-alert,
+.agents-body > .wp-alert {
+  margin-bottom: var(--wp-space-4);
+}
+
+.agents-todo-steps {
+  margin: var(--wp-space-1) 0 0;
+  padding-left: var(--wp-space-5);
+  color: var(--wp-text);
+  font-size: var(--wp-text-sm);
+  line-height: var(--wp-leading-normal);
+}
+
+.agents-todo-steps li {
+  overflow-wrap: anywhere;
+}
+
+.agents-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-space-1) var(--wp-space-3);
+  margin: var(--wp-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.agents-sources li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.agents-sources a {
+  color: var(--wp-text-secondary);
+}
+
+.agents-when {
+  margin-left: auto;
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.agents-brief-settings {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--wp-space-2) var(--wp-space-4);
+  margin-top: var(--wp-space-3);
+  color: var(--wp-text-secondary);
+  font-size: var(--wp-text-sm);
+}
+
+.agents-log {
+  margin-top: var(--wp-space-3);
+  color: var(--wp-text-muted);
+  font-size: var(--wp-text-xs);
+}
+
+.agents-log ul {
+  margin: var(--wp-space-2) 0 0;
+  padding-left: var(--wp-space-5);
+}
+
 /* ---------------------------------------------------------------------------
    Signup Lab
 

@@ -1,14 +1,21 @@
-// Agents: the watchdog and the email check, plus an overview of what needs a person now.
+// Agents: the morning brief, the watchdog and the email check, plus an overview of what needs a
+// person now.
 //
 // Everything on these screens reads. The watchdog's only write is a mute, and that lives in this
-// app's own store; nothing here changes Meta, Klaviyo or the stores.
+// app's own store; nothing here changes Meta, Klaviyo or the stores. The morning brief puts its
+// to-dos in the user's own Asana, and the page can switch that off.
 
 const POLL_MS = 4000;
+const BRIEF_POLL_MS = 6000;
 
 const state = {
   view: "overview",
   overview: null,
   overviewError: "",
+  brief: null,
+  briefError: "",
+  briefRunning: false,
+  briefTimer: null,
   watchdog: null,
   watchdogError: "",
   running: false,
@@ -125,7 +132,22 @@ async function callAgents(action, { method = "GET", body = null, query = {} } = 
 // ---------------------------------------------------------------------------------------------
 // The rail
 
+// The morning brief's count is today's to-dos, once the brief is written; a brief from an earlier
+// day shows no count.
+function updateBriefBadge() {
+  const node = byId("agents-brief-count");
+  if (!node) return;
+  const full = state.brief && !state.brief.empty ? state.brief : null;
+  const summary = state.overview?.brief || null;
+  const fresh = full ? !full.stale && full.phase === "done" : summary ? !summary.stale && summary.phase === "done" : false;
+  const count = fresh ? (full ? full.brief?.todos?.length || 0 : summary.todos || 0) : 0;
+  node.hidden = !count;
+  node.textContent = count ? String(count) : "";
+  node.title = count ? `${plural(count, "to-do", "to-dos")} in today's brief` : "";
+}
+
 function updateBadge() {
+  updateBriefBadge();
   const node = byId("agents-watchdog-count");
   if (!node) return;
   const counts = state.watchdog?.counts || state.overview?.watchdog?.counts || null;
@@ -198,7 +220,20 @@ function renderOverview() {
   const watchdog = state.overview.watchdog;
   const counts = watchdog?.counts || {};
   const latestCheck = state.overview.emailChecks?.[0];
+  const brief = state.overview.brief;
+  const briefToday = brief && !brief.stale && brief.phase === "done";
   node.innerHTML = `
+    ${briefToday ? `
+    <section class="wp-section">
+      <div class="wp-section-header">
+        <div>
+          <h3 class="wp-section-title">Today's brief</h3>
+          <p class="wp-section-description">${escapeHtml(brief.headline)} ${escapeHtml(plural(brief.todos, "to-do", "to-dos"))}${brief.created ? `, ${brief.created} new in your Asana` : ""}.</p>
+        </div>
+        <button class="wp-button is-sm" type="button" data-agents-go="brief">Open the brief</button>
+      </div>
+    </section>` : ""}
+
     <section class="wp-section">
       <div class="wp-section-header"><div>
         <h3 class="wp-section-title">Needs attention</h3>
@@ -212,6 +247,13 @@ function renderOverview() {
       <div class="wp-table-wrap"><table class="wp-table agents-table">
         <thead><tr><th>Agent</th><th>What it does</th><th>Runs</th><th>Last run</th><th>Status</th></tr></thead>
         <tbody>
+          <tr class="agents-row" data-agents-go="brief" tabindex="0">
+            <td><strong>Morning brief</strong></td>
+            <td>What needs you today, from Asana, Klaviyo, Meta, the watchdog, the survey, your calendar and mail - into your Asana</td>
+            <td>Weekday mornings from 06:00</td>
+            <td>${escapeHtml(brief?.writtenAt ? formatAgo(brief.writtenAt) : "Not yet")}</td>
+            <td>${briefStatusLabel(brief)}</td>
+          </tr>
           <tr class="agents-row" data-agents-go="watchdog" tabindex="0">
             <td><strong>Watchdog</strong></td>
             <td>Ad account, rejected ads, landing pages, webshops, nightly jobs, Redis</td>
@@ -249,6 +291,243 @@ async function loadOverview() {
   }
   updateBadge();
   if (state.view === "overview") renderOverview();
+}
+
+// ---------------------------------------------------------------------------------------------
+// Morning brief
+
+const URGENCY = {
+  today: { label: "Today", tone: "is-warning" },
+  this_week: { label: "This week", tone: "is-info" }
+};
+
+const SOURCE_LABEL = {
+  asana: "Asana",
+  klaviyo: "Klaviyo",
+  meta: "Meta",
+  watchdog: "Watchdog",
+  survey: "Survey",
+  calendar: "Calendar",
+  mail: "Mail",
+  local: "Calendar and mail"
+};
+
+const SOURCE_STATUS = {
+  ok: { label: "Read", tone: "is-success" },
+  partial: { label: "Partly read", tone: "is-warning" },
+  error: { label: "Couldn't read", tone: "is-danger" },
+  skipped: { label: "Not set up", tone: "" },
+  waiting: { label: "Waiting", tone: "is-info" }
+};
+
+const DAY = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const SHORT_DAY = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+const CLOCK = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Copenhagen" });
+
+function formatDay(day, format = DAY) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(day || "")) ? format.format(new Date(`${day}T12:00:00Z`)) : String(day || "");
+}
+
+function formatClockTime(value) {
+  const parsed = Date.parse(value || "");
+  return Number.isFinite(parsed) ? CLOCK.format(new Date(parsed)) : "";
+}
+
+function briefStatusLabel(summary) {
+  if (!summary) return '<span class="wp-status">Not run yet</span>';
+  if (summary.stale) return '<span class="wp-status">Waiting for today</span>';
+  if (summary.phase === "writing") return '<span class="wp-status is-info">Writing</span>';
+  if (summary.phase === "failed") return '<span class="wp-status is-danger">Failed</span>';
+  if (summary.phase === "done") return summary.todos ? `<span class="wp-status is-warning">${plural(summary.todos, "to-do", "to-dos")}</span>` : '<span class="wp-status is-success">Nothing needs you</span>';
+  return '<span class="wp-status">Reading</span>';
+}
+
+function externalLink(url, text) {
+  return url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(text)}</a>` : escapeHtml(text);
+}
+
+function asanaLine(todo) {
+  const asana = todo.asana || {};
+  if (asana.status === "created") return externalLink(asana.url, "Created in your Asana");
+  if (asana.status === "reused") {
+    if (asana.reason === "still_open") return externalLink(asana.url, `Still open in your Asana since ${formatDay(asana.since, SHORT_DAY)}`);
+    return externalLink(asana.url, "In your Asana");
+  }
+  if (asana.status === "skipped") return asana.reason === "in_asana" ? "Already one of your Asana tasks" : "Not made again: you closed it earlier and nothing about it has changed";
+  if (asana.status === "off") return "Not put in Asana (switched off below)";
+  if (asana.status === "failed") return `Could not be put in Asana: ${escapeHtml(asana.note || "")}`;
+  return "";
+}
+
+function renderTodo(todo) {
+  return `
+    <li class="agents-item">
+      <div class="agents-item-head">${badge(URGENCY, todo.urgency)}<strong>${escapeHtml(todo.title)}</strong></div>
+      ${todo.why ? `<p class="agents-item-detail">${escapeHtml(todo.why)}</p>` : ""}
+      ${todo.steps?.length ? `<ol class="agents-todo-steps">${todo.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>` : ""}
+      ${todo.asana ? `<p class="agents-item-meta">${asanaLine(todo)}</p>` : ""}
+      ${todo.sources?.length ? `<ul class="agents-sources" aria-label="Read from">${todo.sources.map((source) => `<li>${escapeHtml(SOURCE_LABEL[source.source] || source.source)}: ${externalLink(source.link, source.title)}</li>`).join("")}</ul>` : ""}
+    </li>`;
+}
+
+function renderBriefStatus(view) {
+  if (view.stale) {
+    return `<div class="wp-alert is-info"><div><strong>This is ${escapeHtml(formatDay(view.day))}'s brief</strong>Today's is read from 06:00 on weekdays and written when your computer sends the calendar and mail, or at 07:40 without them.</div></div>`;
+  }
+  if (view.phase === "idle") {
+    return '<div class="wp-alert is-info"><div><strong>Not written yet today</strong>The sources are read from 06:00 on weekdays, and the brief is written when your computer sends the calendar and mail, or at 07:40 without them. Run it now to see it straight away.</div></div>';
+  }
+  if (view.phase === "collected") {
+    return `<div class="wp-alert is-info"><div><strong>Sources read at ${escapeHtml(formatClockTime(view.collectedAt))}</strong>The brief is written when your computer sends the calendar and mail, or at 07:40 without them.</div></div>`;
+  }
+  if (view.phase === "writing") {
+    return `<div class="wp-alert is-info agents-review-running"><div><strong><span class="wp-spinner"></span> Writing the brief</strong>Usually one to three minutes. ${view.writing?.withLocal ? "With your calendar and mail." : "Without your calendar and mail; it is written again when they arrive."}</div></div>`;
+  }
+  if (view.phase === "failed") {
+    return `<div class="wp-alert is-danger"><div><strong>The brief could not be written</strong>${escapeHtml(view.error || "")} It is tried again on the next run.</div></div>`;
+  }
+  if (view.brief && !view.brief.withLocal) {
+    return '<div class="wp-alert is-warning"><div><strong>Written without your calendar and mail</strong>Your computer has not sent them today. The brief is written again when it does.</div></div>';
+  }
+  return "";
+}
+
+function renderBriefSources(view) {
+  const order = ["asana", "klaviyo", "meta", "watchdog", "survey", "local"];
+  const rows = order.filter((id) => view.sources?.[id]).map((id) => {
+    const source = view.sources[id];
+    return `<tr><td>${escapeHtml(SOURCE_LABEL[id])}</td><td>${badge(SOURCE_STATUS, source.status)}</td><td>${escapeHtml(source.summary || "")}${source.error ? ` <span class="wp-error">${escapeHtml(source.error)}</span>` : ""}</td></tr>`;
+  }).join("");
+  return `
+    <section class="wp-section">
+      <div class="wp-section-header"><div><h3 class="wp-section-title">What the agents read</h3><p class="wp-section-description">${view.collectedAt ? `Read at ${escapeHtml(formatClockTime(view.collectedAt))}` : "Not read yet today"}${view.signalCount ? `, ${plural(view.signalCount, "signal", "signals")}` : ""}. A to-do the model could not tie to one of them is left out${view.brief?.dropped ? ` (${view.brief.dropped} today)` : ""}.</p></div></div>
+      ${rows ? `<div class="wp-table-wrap"><table class="wp-table agents-table"><thead><tr><th>Source</th><th>Status</th><th>What it read</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}
+      <div class="agents-brief-settings">
+        <label class="wp-check"><input type="checkbox" data-agents-brief-setting="createTasks"${view.settings?.createTasks !== false ? " checked" : ""}> Put the to-dos in my Asana (My Tasks)</label>
+        <span class="wp-help">Due today, or on the source's own deadline. A to-do you close is not made again unless what it came from changes.</span>
+      </div>
+      ${view.log?.length ? `<details class="agents-log"><summary>What happened this morning</summary><ul>${view.log.slice().reverse().map((entry) => `<li>${escapeHtml(formatClockTime(entry.at))} ${escapeHtml(entry.event)}</li>`).join("")}</ul></details>` : ""}
+    </section>`;
+}
+
+function renderBrief() {
+  const node = byId("agents-brief");
+  const note = byId("agents-brief-run-note");
+  const button = byId("agents-brief-run");
+  const view = state.brief;
+  if (button) {
+    button.disabled = state.briefRunning || view?.phase === "writing";
+    button.classList.toggle("is-loading", state.briefRunning);
+    button.textContent = state.briefRunning ? "Reading every source - about a minute" : "Run again now";
+  }
+  if (note) note.textContent = view?.brief?.writtenAt && !view.stale ? `Written ${formatAgo(view.brief.writtenAt)}` : "";
+  if (!node) return;
+  if (state.briefError && !view) {
+    node.innerHTML = `<div class="wp-state is-error"><p class="wp-state-title">The morning brief could not be loaded</p><p class="wp-state-body">${escapeHtml(state.briefError)}</p></div>`;
+    return;
+  }
+  if (!view) {
+    node.innerHTML = '<div class="wp-loading"><span class="wp-spinner"></span> Loading</div>';
+    return;
+  }
+  if (view.empty) {
+    node.innerHTML = `${state.briefError ? `<div class="wp-alert is-danger"><div><strong>The run did not finish</strong>${escapeHtml(state.briefError)}</div></div>` : ""}<div class="wp-state"><p class="wp-state-title">No brief yet</p><p class="wp-state-body">The first one is read from 06:00 on the next weekday, or now if you run it.</p></div>`;
+    return;
+  }
+  const brief = view.brief;
+  const todos = brief?.todos || [];
+  const ownToday = (view.openMine || []).filter((task) => task.due && task.due <= view.day);
+  node.innerHTML = `
+    ${state.briefError ? `<div class="wp-alert is-danger"><div><strong>The run did not finish</strong>${escapeHtml(state.briefError)}</div></div>` : ""}
+    ${brief ? `
+    <div class="agents-brief-lead">
+      <p class="wp-eyebrow">${escapeHtml(formatDay(view.day))}</p>
+      <h3 class="agents-brief-headline">${escapeHtml(brief.headline)}</h3>
+      ${brief.day ? `<p class="agents-brief-day">${escapeHtml(brief.day)}</p>` : ""}
+    </div>` : ""}
+    ${renderBriefStatus(view)}
+    ${brief ? `
+    <section class="wp-section">
+      <div class="wp-section-header"><div><h3 class="wp-section-title">To-dos</h3><p class="wp-section-description">Most urgent first. Each one says what it was read from and where it is in Asana.</p></div></div>
+      ${todos.length ? `<ul class="agents-items">${todos.map(renderTodo).join("")}</ul>` : '<div class="wp-state"><p class="wp-state-title">Nothing needs you today</p><p class="wp-state-body">The agents read every source and found nothing that needs your hand. What they saw is below.</p></div>'}
+    </section>` : ""}
+    ${ownToday.length ? `
+    <section class="wp-section">
+      <div class="wp-section-header"><div><h3 class="wp-section-title">Already in your Asana, due today or late</h3></div></div>
+      <ul class="agents-items">${ownToday.map((task) => `<li class="agents-item"><div class="agents-item-head"><strong>${externalLink(task.link, task.name)}</strong><span class="agents-when">${task.due < view.day ? `Due ${escapeHtml(formatDay(task.due, SHORT_DAY))}` : "Today"}</span></div></li>`).join("")}</ul>
+    </section>` : ""}
+    ${brief?.fyi?.length ? `
+    <section class="wp-section">
+      <div class="wp-section-header"><div><h3 class="wp-section-title">Worth knowing</h3></div></div>
+      <ul class="agents-items">${brief.fyi.map((item) => `<li class="agents-item"><p class="agents-item-detail">${escapeHtml(item.text)}${item.links?.length ? ` ${item.links.map((link) => externalLink(link, "Open")).join(" · ")}` : ""}</p></li>`).join("")}</ul>
+    </section>` : ""}
+    ${view.calendar?.length ? `
+    <section class="wp-section">
+      <div class="wp-section-header"><div><h3 class="wp-section-title">Calendar</h3></div></div>
+      <ul class="agents-items">${view.calendar.map((event) => `<li class="agents-item"><div class="agents-item-head"><strong>${escapeHtml(event.subject)}</strong><span class="agents-when">${escapeHtml(event.start.slice(0, 10) === view.day ? "" : formatDay(event.start.slice(0, 10), SHORT_DAY))} ${event.allDay ? "All day" : `${escapeHtml(event.start.slice(11, 16))}-${escapeHtml(event.end.slice(11, 16))}`}</span></div>${event.location ? `<p class="agents-item-meta">${escapeHtml(event.location)}</p>` : ""}</li>`).join("")}</ul>
+    </section>` : ""}
+    ${renderBriefSources(view)}`;
+}
+
+function followBrief() {
+  clearTimeout(state.briefTimer);
+  state.briefTimer = null;
+  if (state.brief?.phase !== "writing") return;
+  state.briefTimer = setTimeout(async () => {
+    try {
+      const payload = await callAgents("brief_tick", { method: "POST", body: {} });
+      state.brief = payload.brief;
+      state.briefError = "";
+    } catch (error) {
+      state.briefError = error.message;
+    }
+    updateBadge();
+    if (state.view === "brief") renderBrief();
+    if (state.brief?.phase === "writing") followBrief();
+    else loadOverview();
+  }, BRIEF_POLL_MS);
+}
+
+async function loadBrief() {
+  try {
+    const payload = await callAgents("brief");
+    state.brief = payload.brief;
+    state.briefError = "";
+  } catch (error) {
+    state.briefError = error.message;
+  }
+  updateBadge();
+  if (state.view === "brief") renderBrief();
+  followBrief();
+}
+
+async function runBriefNow() {
+  if (state.briefRunning) return;
+  state.briefRunning = true;
+  state.briefError = "";
+  renderBrief();
+  try {
+    const payload = await callAgents("brief_run", { method: "POST", body: {} });
+    state.brief = payload.brief;
+  } catch (error) {
+    state.briefError = error.message;
+  } finally {
+    state.briefRunning = false;
+    updateBadge();
+    renderBrief();
+    followBrief();
+  }
+}
+
+async function setBriefSetting(createTasks) {
+  try {
+    const payload = await callAgents("brief_settings", { method: "POST", body: { createTasks } });
+    state.brief = payload.brief;
+    state.briefError = "";
+  } catch (error) {
+    state.briefError = error.message;
+  }
+  renderBrief();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -654,6 +933,10 @@ function handleClick(event) {
     runWatchdogNow();
     return;
   }
+  if (target.closest("#agents-brief-run")) {
+    runBriefNow();
+    return;
+  }
   const draft = target.closest("[data-agents-mute-draft]");
   if (draft) {
     state.muteDraft = draft.dataset.agentsMuteDraft;
@@ -698,6 +981,12 @@ function handleKeydown(event) {
 }
 
 function handleInput(event) {
+  // A checkbox fires both input and change; the setting is sent once, on change.
+  const setting = event.target instanceof Element ? event.target.closest("[data-agents-brief-setting]") : null;
+  if (setting) {
+    if (event.type === "change") setBriefSetting(Boolean(setting.checked));
+    return;
+  }
   const field = event.target instanceof Element ? event.target.closest("[data-agents-field]") : null;
   if (!field) return;
   const name = field.dataset.agentsField;
@@ -736,11 +1025,14 @@ export function initAgents() {
 
 export function showAgentsView(view = "overview") {
   initAgents();
-  state.view = ["overview", "watchdog", "email_check"].includes(view) ? view : "overview";
+  state.view = ["overview", "brief", "watchdog", "email_check"].includes(view) ? view : "overview";
   showPanels();
   if (state.view === "overview") {
     renderOverview();
     loadOverview();
+  } else if (state.view === "brief") {
+    renderBrief();
+    loadBrief();
   } else if (state.view === "watchdog") {
     renderWatchdog();
     loadWatchdog();
@@ -757,4 +1049,4 @@ export function refreshAgentsBadge() {
   return loadOverview();
 }
 
-export const __agentsInternals = { state, renderOverview, renderWatchdog, renderEmailCheck };
+export const __agentsInternals = { state, renderOverview, renderBrief, renderWatchdog, renderEmailCheck };
