@@ -212,7 +212,7 @@ test("the block can be pasted into a Magento page and posts to the survey route"
   assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:var\(--red\);background:none/);
   assert.match(css, /#wpfb \.wpfb-h\{[^}]*background-clip:text[^}]*-webkit-text-fill-color:transparent/);
   assert.match(html, /<h1 class="wpfb-title" data-t="title">/, "the page's one h1: CMS pages on this theme show no title of their own");
-  // ... unless Magento's Content Heading is filled in (25/11: "Westpack Survey" in English above every store's page)
+  // ... unless Magento's Content Heading is filled in (25/11: an English "Westpack Survey" above the block)
   assert.match(html, /h1\.page-title\{display:none!important\}/);
   assert.doesNotMatch(html, /class="[^"]*page-title/, "the block's own heading never carries the class it hides");
   // the photograph is Westpack's own and permanently hosted (Klaviyo's image library or the store's CDN), never an

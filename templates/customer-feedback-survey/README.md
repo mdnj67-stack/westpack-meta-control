@@ -59,28 +59,31 @@ Det er de 500 kunder med den største webshop-omsætning gennem tiden, som ikke 
 Navision-dataene indeholder kun DETAIL-kunder. Kontakt derfor ikke nogen fra listen, før et menneske har gennemgået den
 for KAS-kunder.
 
-Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-survey#k=abc12345`.
+Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=abc12345`.
 Koden står efter `#`, og svaret bliver knyttet til kunden. Siden viser ikke, at den kender koden. Uden kode virker
 siden også, men så er svaret anonymt.
 
 ## Sådan laver du siden
 
-> **Siden findes (25/11):** teamet lavede den igen med URL-nøglen **`customer-survey`** i alle 18 butikker, med
-> titlen "Westpack Survey". Den gamle adresse `customer-survey-2026` svarer 404. Alle 3.390 links i biblen, i
-> Excel-listerne og i sendescriptet peger nu på den nye adresse. Ændr ikke URL-nøglen igen, når mailene er sendt, for
-> så holder alle links i kundernes indbakker op med at virke. Vejledningen herunder er til, hvis siden skal laves igen.
+> **Siden (25/11): én side pr. butik**, alle med URL-nøglen **`customer-survey-2026`** (Mads: "jeg har fjernet fra all
+> store views til kun eu for at kun oprette en på hvert site"). Den første side, "Customer Survey", ligger nu kun i EU;
+> de andre 17 butikker får hver sin. **Samme kode i alle sider**: blokken vælger selv sproget ud fra butikken, så der
+> er ingen version pr. sprog. Alle 3.390 links i biblen, i Excel-listerne og i sendescriptet peger på
+> `customer-survey-2026`. En tom side "Westpack Survey" på `customer-survey` dukkede op samme dag; den bruges ikke og
+> bør slås fra. Ændr ikke URL-nøglen, når mailene er sendt, for så holder alle links i kundernes indbakker op med at
+> virke.
 
-Siden skal have **URL-nøglen `customer-survey`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
+Hver butik skal have en side med **URL-nøglen `customer-survey-2026`**. Linkene i mailene går dertil, så den skal
 være præcis sådan.
 
 1. Gå til **Content → Elements → Pages** i admin, og tryk **Add New Page**.
 2. Udfyld felterne:
    - **Enable Page:** Yes
-   - **Page Title:** Vi vil gerne høre fra dig. Titlen ses kun i browserfanen. Én side til alle butikker er nok. Vil I
-     have en engelsk titel i de andre butikker, så lav to sider med samme URL-nøgle: én til DK og én til de 17 andre.
-   - Under **Search Engine Optimization:** URL Key `customer-survey` og Meta Title "Vi vil gerne høre fra dig |
+   - **Page Title:** Titlen ses kun i browserfanen, så den kan stå på butikkens sprog, når der er én side pr. butik.
+     Lad **Content Heading** være tom (blokken skjuler den alligevel, men den er en ekstra overskrift).
+   - Under **Search Engine Optimization:** URL Key `customer-survey-2026` og Meta Title "Vi vil gerne høre fra dig |
      Westpack". Har I feltet **Meta Robots**, så vælg `NOINDEX,NOFOLLOW`, for siden er kun til dem, der får linket.
-   - Under **Page in Websites:** alle 18 store views.
+   - Under **Page in Websites:** butikkens eget store view (én side pr. butik), eller alle 18 på én side.
    - Under **Design:** Layout **1 column**, ligesom "Om Westpack" og FAQ. Så står siden uden kolonner og sidebar.
    - Siden skal **ikke** i menuen eller footeren.
 3. Indhold: åbn **Page Builder**. Træk ét element af typen **HTML Code** (under Elements) ind. Klik i feltet, tryk
@@ -88,9 +91,9 @@ være præcis sådan.
    elementer, heller ikke en overskrift: siden har sin egen. Brug **ikke** den almindelige teksteditor (WYSIWYG), for
    den fjerner `<script>` og `<style>`.
 4. Gem, og test i tre butikker:
-   - `https://www.westpack.com/dkk_dk_den/customer-survey#k=test` – dansk tekst
-   - `https://www.westpack.com/gbp_uk_eng/customer-survey#k=test` – engelsk tekst
-   - `https://www.westpack.com/eur_eu_ger/customer-survey#k=test` – tysk tekst (alle butikker:
+   - `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=test` – dansk tekst
+   - `https://www.westpack.com/gbp_uk_eng/customer-survey-2026#k=test` – engelsk tekst
+   - `https://www.westpack.com/eur_eu_ger/customer-survey-2026#k=test` – tysk tekst (alle butikker:
      `node tmp/playwright-runner/survey-languages-check.js`)
 
    Med `#k=test` bliver svaret gemt som en test. I biblen kan det ses med "Show test answers", men det tæller ikke med.
