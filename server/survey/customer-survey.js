@@ -2,10 +2,10 @@
  * Customer feedback survey ("why have we not seen you for a year") - the pure domain, no I/O.
  *
  * The survey is a page on the stores (a Magento CMS page holding templates/customer-feedback-survey/survey.html),
- * reached through a personal link `…/customer-survey-2026#k=<token>` (the URL key the team gave the page). It was a
- * blog post until 2026-11-23, when the user had it moved: the blog's categories, tags and recent posts around it
- * looked wrong. Links of the older forms, `…/blog/customer-feedback-2026#k=` and `…/customer-feedback-2026#k=`, are
- * still accepted; no mail went out with either. The token sits after "#" because the store's blog redirects
+ * reached through a personal link `…/customer-survey#k=<token>` (the URL key the team gave the page on 2026-11-25;
+ * `…/customer-survey-2026` before that, now 404). It was a blog post until 2026-11-23, when the user had it moved: the
+ * blog's categories, tags and recent posts around it looked wrong. Links of the older forms (`…/blog/customer-feedback-2026#k=`,
+ * `…/customer-feedback-2026#k=`, `…/customer-survey-2026#k=`) are still accepted; no mail went out with any of them. The token sits after "#" because the store's blog redirects
  * every URL with a query string to itself without it, and a hash works the same on a page. A token says which
  * customer answered; it carries nothing else, and the recipient list that resolves it lives only in this app's own
  * store.

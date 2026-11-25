@@ -19,8 +19,9 @@
   // sale page sits under sale/ or is sale.html, whatever language the rest of the path is in.
   const EXCLUDED_PATHS = [/\/checkout/i, /\/onestepcheckout/i, /\/cart(\/|\.html|$)/i, /\/customer\/account/i,
     /\/wishlist/i, /\/newsletter-signup/i, /\/sale\.html/i, /\/sale\//i, /\/outlet-/i, /\/search/i,
-    // the lapsed-customer survey (templates/customer-feedback-survey): a popup there takes the keyboard from an answer
-    /\/customer-survey-2026/i];
+    // the lapsed-customer survey (templates/customer-feedback-survey): a popup there takes the keyboard from an answer.
+    // The page was …/customer-survey-2026, and since 25/11 …/customer-survey; this covers both.
+    /\/customer-survey(-2026)?(\/|\.html|$)/i];
 
   // One close means not now; a second means not this month; a third means leave them alone.
   const SUPPRESSION = { closedDays: [14, 45, 120], peekDismissedDays: 7, emailVisitorDays: 180 };

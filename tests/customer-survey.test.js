@@ -200,8 +200,11 @@ test("the block can be pasted into a Magento page and posts to the survey route"
     .replace(/@import url\([^)]*\);/g, "")
     .replace(/@keyframes[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, "");
   assert.equal(/@import/.test(html.replace(/@import url\('https:\/\/fonts\.googleapis\.com\/[^']*'\);/, "")), false, "the only import is the blog's own fonts");
-  for (const rule of css.replace(/@(container|media)[^{]*\{/g, "").split("}").map((s) => s.split("{")[0].trim()).filter(Boolean)) {
-    for (const sel of rule.split(",")) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
+  // One rule reaches outside on purpose: it hides Magento's own page title (Content Heading), which would otherwise sit
+  // above the block's title as a second h1. It is in the stylesheet rather than set by the script so it never flashes.
+  const OUTSIDE = ["h1.page-title"];
+  for (const rule of css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/@(container|media)[^{]*\{/g, "").split("}").map((s) => s.split("{")[0].trim()).filter(Boolean)) {
+    for (const sel of rule.split(",")) if (!OUTSIDE.includes(sel.trim())) assert.match(sel.trim(), /^#wpfb\b/, `unanchored selector: ${sel}`);
   }
   // The survey is a CMS page since 23/11 (the user: the blog's categories and tags around it "ligner lort"). The
   // theme paints every h1/h2 as a red gradient clipped to the text: the page title (a small overline) must undo that,
@@ -209,6 +212,9 @@ test("the block can be pasted into a Magento page and posts to the survey route"
   assert.match(css, /#wpfb \.wpfb-title\{[^}]*-webkit-text-fill-color:var\(--red\);background:none/);
   assert.match(css, /#wpfb \.wpfb-h\{[^}]*background-clip:text[^}]*-webkit-text-fill-color:transparent/);
   assert.match(html, /<h1 class="wpfb-title" data-t="title">/, "the page's one h1: CMS pages on this theme show no title of their own");
+  // ... unless Magento's Content Heading is filled in (25/11: "Westpack Survey" in English above every store's page)
+  assert.match(html, /h1\.page-title\{display:none!important\}/);
+  assert.doesNotMatch(html, /class="[^"]*page-title/, "the block's own heading never carries the class it hides");
   // the photograph is Westpack's own and permanently hosted (Klaviyo's image library or the store's CDN), never an
   // Asana link, which dies within the hour
   const photos = html.match(/https:\/\/[^\s",]+\.jpe?g[^\s",]*/g) || [];
@@ -219,6 +225,19 @@ test("the block can be pasted into a Magento page and posts to the survey route"
   const STR = Function(`return ${strBlock}`)();
   const keys = Object.keys(STR.da).sort();
   for (const [lang, table] of Object.entries(STR)) assert.deepEqual(Object.keys(table).sort(), keys, `${lang} has every string`);
+  // versioned 25/11: every store reads the page in its own language - none falls back to English unnoticed - and no
+  // translation is the Danish or the English left in place
+  const STORE_LANG = Function(`return ${html.match(/var STORE_LANG = (\{[^}]*\});/)[1]}`)();
+  assert.equal(Object.keys(STORE_LANG).length, 18);
+  for (const [store, lang] of Object.entries(STORE_LANG)) assert.ok(STR[lang], `${store} has its language (${lang}) in STR`);
+  const sameAsDanish = { nb: ["send", "sending"] }; // Norwegian "Send svar" / "Sender …" is the Danish word for word
+  for (const [lang, table] of Object.entries(STR)) {
+    if (lang === "da" || lang === "en") continue;
+    for (const key of keys) {
+      if (!(sameAsDanish[lang] || []).includes(key)) assert.notEqual(table[key], STR.da[key], `${lang}.${key} is not the Danish`);
+      assert.notEqual(table[key], STR.en[key], `${lang}.${key} is not the English`);
+    }
+  }
 });
 
 test("the app view is reachable from the Klaviyo rail", () => {

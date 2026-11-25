@@ -108,7 +108,7 @@ test("checkout, cart, account, newsletter page, sale and outlet pages are exclud
   for (const p of ["/eur_eu_ger/checkout/", "/dkk_dk_den/checkout/cart/", "/gbp_uk_eng/customer/account/login/", "/eur_eu_fra/newsletter-signup",
     "/dkk_dk_den/sale.html", "/eur_eu_ger/sale/jewellery-boxes.html", "/nok_no_nor/smykkeesker/outlet-jewellery-boxes.html", "/pln_pl_pol/pudelka-na-bizuterie/outlet-jewellery-boxes.html",
     // the lapsed-customer survey: a popup there took the keyboard from the answer being written (23/11)
-    "/eur_eu_cze/customer-survey-2026", "/dkk_dk_den/customer-survey-2026"]) {
+    "/eur_eu_cze/customer-survey-2026", "/dkk_dk_den/customer-survey-2026", "/eur_eu_cze/customer-survey", "/dkk_dk_den/customer-survey/"]) {
     assert.equal(R.isExcludedPath(p), true, p);
   }
   for (const p of ["/dkk_dk_den/", "/eur_eu_ger/schmuckschachteln.html", "/gbp_uk_eng/jewellery-boxes/cardboard-jewellery-boxes/boston.html"]) assert.equal(R.isExcludedPath(p), false, p);

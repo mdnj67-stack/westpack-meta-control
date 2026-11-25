@@ -175,7 +175,7 @@ function render() {
       <button class="wp-button is-sm" type="button" data-survey-reload>Read again</button>
     </div>
     ${state.tab === "answers" ? renderAnswers() : renderRecipients()}
-    <p class="survey-muted">The page: <code>…/customer-survey-2026</code> in every store. A personal link adds <code>#k=</code> and a code after the address. Each customer counts once, on their latest answer.</p>`;
+    <p class="survey-muted">The page: <code>…/customer-survey</code> in every store. A personal link adds <code>#k=</code> and a code after the address. Each customer counts once, on their latest answer.</p>`;
 }
 
 function exportCsv(kind) {

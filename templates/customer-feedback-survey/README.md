@@ -41,8 +41,10 @@ Butikkens CMS-sider viser ikke sidens titel, så overskriften på fotoet er side
 Svarene gemmes i biblens eget lager (Vercel Blob) og kan læses under **Klaviyo email → Customer survey**. Der ser du
 også hver kundes personlige link, og hvem der har svaret. Intet bliver skrevet til Klaviyo, Magento eller Navision.
 
-> **Status 13/11:** Dansk og engelsk. Alle andre butikker viser den engelske tekst, indtil oversættelserne er lavet.
-> Den danske tekst skal godkendes først.
+> **Status 25/11:** Den danske tekst er godkendt, og siden findes nu på alle butikkernes sprog: 16 sprog i 18 butikker
+> (UK, US og EU læser engelsk). Hvert land har sin egen tiltaleform, den samme som i vores andre mails: Sie på tysk,
+> vous på fransk, formelt på portugisisk, tjekkisk og slovakisk, du-form i resten. Oversættelserne er ikke læst af en
+> indfødt.
 
 ## Hvem får linket
 
@@ -57,18 +59,18 @@ Det er de 500 kunder med den største webshop-omsætning gennem tiden, som ikke 
 Navision-dataene indeholder kun DETAIL-kunder. Kontakt derfor ikke nogen fra listen, før et menneske har gennemgået den
 for KAS-kunder.
 
-Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=abc12345`.
+Hver kunde har et personligt link som `https://www.westpack.com/dkk_dk_den/customer-survey#k=abc12345`.
 Koden står efter `#`, og svaret bliver knyttet til kunden. Siden viser ikke, at den kender koden. Uden kode virker
 siden også, men så er svaret anonymt.
 
 ## Sådan laver du siden
 
-> **Siden findes (23/11):** den blev lavet med URL-nøglen `Customer-Survey-2026`, som Magento viser som
-> **`customer-survey-2026`** i alle 18 butikker, med titlen "Customer Survey". Alle 3.393 links i biblen, i Excel-listerne
-> og i sendescriptet peger dertil. Ændr ikke URL-nøglen nu, for så holder alle links op med at virke. Vejledningen
-> herunder er til, hvis siden skal laves igen.
+> **Siden findes (25/11):** teamet lavede den igen med URL-nøglen **`customer-survey`** i alle 18 butikker, med
+> titlen "Westpack Survey". Den gamle adresse `customer-survey-2026` svarer 404. Alle 3.390 links i biblen, i
+> Excel-listerne og i sendescriptet peger nu på den nye adresse. Ændr ikke URL-nøglen igen, når mailene er sendt, for
+> så holder alle links i kundernes indbakker op med at virke. Vejledningen herunder er til, hvis siden skal laves igen.
 
-Siden skal have **URL-nøglen `customer-survey-2026`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
+Siden skal have **URL-nøglen `customer-survey`** i alle 18 butikker. Linkene i mailene går dertil, så den skal
 være præcis sådan.
 
 1. Gå til **Content → Elements → Pages** i admin, og tryk **Add New Page**.
@@ -76,7 +78,7 @@ være præcis sådan.
    - **Enable Page:** Yes
    - **Page Title:** Vi vil gerne høre fra dig. Titlen ses kun i browserfanen. Én side til alle butikker er nok. Vil I
      have en engelsk titel i de andre butikker, så lav to sider med samme URL-nøgle: én til DK og én til de 17 andre.
-   - Under **Search Engine Optimization:** URL Key `customer-survey-2026` og Meta Title "Vi vil gerne høre fra dig |
+   - Under **Search Engine Optimization:** URL Key `customer-survey` og Meta Title "Vi vil gerne høre fra dig |
      Westpack". Har I feltet **Meta Robots**, så vælg `NOINDEX,NOFOLLOW`, for siden er kun til dem, der får linket.
    - Under **Page in Websites:** alle 18 store views.
    - Under **Design:** Layout **1 column**, ligesom "Om Westpack" og FAQ. Så står siden uden kolonner og sidebar.
@@ -85,9 +87,11 @@ være præcis sådan.
    **Ctrl+A** og **Delete**, så det er tomt, og sæt **hele** indholdet af `survey.html` ind. Tilføj ikke andre
    elementer, heller ikke en overskrift: siden har sin egen. Brug **ikke** den almindelige teksteditor (WYSIWYG), for
    den fjerner `<script>` og `<style>`.
-4. Gem, og test i to butikker:
-   - `https://www.westpack.com/dkk_dk_den/customer-survey-2026#k=test` – dansk tekst
-   - `https://www.westpack.com/gbp_uk_eng/customer-survey-2026#k=test` – engelsk tekst
+4. Gem, og test i tre butikker:
+   - `https://www.westpack.com/dkk_dk_den/customer-survey#k=test` – dansk tekst
+   - `https://www.westpack.com/gbp_uk_eng/customer-survey#k=test` – engelsk tekst
+   - `https://www.westpack.com/eur_eu_ger/customer-survey#k=test` – tysk tekst (alle butikker:
+     `node tmp/playwright-runner/survey-languages-check.js`)
 
    Med `#k=test` bliver svaret gemt som en test. I biblen kan det ses med "Show test answers", men det tæller ikke med.
    Er et testsvar alligevel gemt som rigtigt, fx fordi nogen skrev "Test" uden `#k=test`, så tryk **Mark as test** ud
@@ -132,7 +136,9 @@ feltet helt, og sæt filen ind igen.
   andre sider viser den som før. Signup Lab kører heller ikke på siden.
 - **Tekst om data nederst:** "Dit svar gemmes hos Westpack og bruges kun til at gøre os bedre."
 - **Oversættelse:** al tekst ligger i `STR` i blokkens script, ét sæt pr. sprog. Butikken vælger sproget i
-  `STORE_LANG`. Et nyt sprog tilføjes ved at oversætte `da` og indsætte det som fx `de` i `STR`. En test kræver, at
-  hvert sprog har alle tekster.
+  `STORE_LANG`. Ændres den danske tekst, skal alle sprog rettes med. En test kræver, at hvert sprog har alle tekster,
+  at hver butik har sit sprog, og at intet sprog står med den danske eller engelske tekst. Mailen findes på de samme
+  sprog (`mail-<sprog>.txt` ved sendescriptet), og scriptet vælger sproget ud fra butikken i kundens link, så mail og
+  side altid er på samme sprog.
 - **Kode:** `api/survey.js` (gemmer og læser), `server/survey/` (regler og lager), `src/customer-survey.js` (siden i
   biblen) og `tests/customer-survey.test.js`.
