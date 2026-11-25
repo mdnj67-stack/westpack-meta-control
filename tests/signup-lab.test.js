@@ -278,6 +278,36 @@ test("a staging store runs the Signup Lab whatever the switch says, and can only
   assert.match(runtime, /const storePreview = resetAsked \? "" : wps;/);
 });
 
+test("the six stores without a list of their own are closed: the script stops before it loads anything, preview included", () => {
+  const runtime = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
+  const { MARKETS } = require("../signup/core/markets");
+  const closed = ["eur_eu_ell", "eur_eu_bgn", "eur_eu_est", "eur_eu_hrv", "eur_eu_lav", "eur_eu_lit"];
+  // run the real runtime as a store page would load it, and count what it reaches for
+  const runOn = (pathname, search = "") => {
+    const created = [];
+    const document = {
+      currentScript: { src: "https://project-4fcxa.vercel.app/signup/westpack-signup.js", dataset: {} },
+      body: null, head: { appendChild() {} },
+      createElement(tag) { created.push(tag); return { dataset: {}, style: {}, setAttribute() {}, appendChild() {} }; },
+      querySelector() { return null; }, addEventListener() {},
+    };
+    const sandbox = { document, location: { pathname, search, hostname: "www.westpack.com", href: `https://www.westpack.com${pathname}${search}` },
+      URL, URLSearchParams, addEventListener() {}, setTimeout, clearTimeout, console };
+    sandbox.window = sandbox;
+    vm.runInNewContext(runtime, sandbox);
+    return { started: Boolean(sandbox.WestpackSignup), created };
+  };
+  for (const code of closed) {
+    assert.ok(!MARKETS[code], `${code} is closed, so it cannot also be a market`);
+    for (const search of ["", "?wps=preview", "?wps=logo-studio"]) {
+      const r = runOn(`/${code}/jewellery-boxes.html`, search);
+      assert.deepEqual(r, { started: false, created: [] }, `${code}${search} must do nothing`);
+    }
+  }
+  // an open store still starts (it waits for the page before booting)
+  assert.equal(runOn("/eur_eu_ger/").started, true);
+});
+
 test("the app's Signup page decides whether the stores run the Signup Lab, the file is the fallback, and ?wps= previews it", () => {
   const { LIVE } = require("../signup/core/markets");
   assert.equal(typeof LIVE, "boolean");

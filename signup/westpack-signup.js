@@ -17,6 +17,13 @@
   "use strict";
   if (window.WestpackSignup && window.WestpackSignup.version) return;
 
+  // Stores the Signup Lab never runs on, whatever Control, core/markets.js or ?wps= says (the user, 2026-11-25: "luk
+  // for dem"). The six stores the site gained in 2026 sit on the EUR website, whose HTML head carries the tag, but they
+  // have no newsletter list or consent sentence of their own: their signup page embeds the EU account's English form.
+  // The script stops here, before it reads or loads anything. Opening one means a MARKETS entry and taking it off here.
+  const CLOSED_STORES = ["eur_eu_ell", "eur_eu_bgn", "eur_eu_est", "eur_eu_hrv", "eur_eu_lav", "eur_eu_lit"];
+  if (CLOSED_STORES.includes(String(location.pathname).split("/").filter(Boolean)[0] || "")) return;
+
   const script = document.currentScript || document.querySelector('script[src*="westpack-signup.js"]');
   const BASE = new URL(".", (script && script.src) || location.href).href;
   const data = (script && script.dataset) || {};
