@@ -318,8 +318,12 @@ pure where possible), `brief*` actions in `api/agents.js`, the "Morning brief" v
   subject, body start and attachment names; counted only), private appointments go as "Privat aftale", newsletters
   are dropped by List-Unsubscribe/Precedence headers, attachments are never read. The user keeps a near-empty inbox
   (48 of a day's 49 mails were already in Deleted Items on 25/11), so mail is "what still sits in the inbox,
-  unread/flagged/addressed to you"; a quiet mail section is normal. Outlook started headless by COM sits in
-  `ExchangeConnectionMode` 400 (cached, disconnected) for ~10 s before it connects.
+  unread/flagged/addressed to you"; a quiet mail section is normal. **Outlook started headless by COM sits in
+  `ExchangeConnectionMode` 400 (cached, disconnected)** for ~10 s and reads only its stale cache, so the script waits
+  for >= 500 and 30 s more. It never calls Send/Receive: that would also send what waits in the Outbox (on 25/11 a
+  mail from 24/11 13:22 sat there unsubmitted).
+- UI check against production: `tmp/playwright-runner/brief-check.js <dir>` (one page load, Meta blocked, clicks
+  nothing that runs or changes anything). First production brief 25/11: 31 signals, 6 to-dos, 0 dropped, ~50 s.
 - **The model arranges, it does not invent.** `CONTENT_AGENT_MODEL` on high as a background job writes `todos`
   (title, why, steps, urgency, `sourceIds`) and `fyi`; `finalizeBrief` drops any to-do whose ids are not real signals
   and takes links from the signals only. The prompt carries the user's standing decisions (never switch ads on,

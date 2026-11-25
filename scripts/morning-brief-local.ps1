@@ -55,6 +55,15 @@ try {
   exit 1
 }
 
+# Outlook started by this script sits in "cached, disconnected" (ExchangeConnectionMode 400) for a few seconds and
+# reads only what its local cache held when it last ran - in the morning, without the night's mail. Wait for it to
+# connect, then give the cache time to take the mail in. Send/receive is never called: it would also send whatever
+# waits in the Outbox.
+$waited = 0
+while ([int]$ns.ExchangeConnectionMode -lt 500 -and $waited -lt 90) { Start-Sleep -Seconds 3; $waited += 3 }
+if ([int]$ns.ExchangeConnectionMode -lt 500) { Write-Log "Outlook did not connect within 90 s (mode $($ns.ExchangeConnectionMode)); reading the local cache as it is." }
+elseif ($waited -gt 0) { Start-Sleep -Seconds 30 }
+
 $myName = [string]$ns.CurrentUser.Name
 $myAddress = ""
 try { $myAddress = [string]$ns.CurrentUser.AddressEntry.GetExchangeUser().PrimarySmtpAddress } catch { }
