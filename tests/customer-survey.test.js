@@ -295,6 +295,16 @@ test("deleting test answers takes only answers marked as a test, and keeps what 
   assert.match(route, /input\.confirm !== "delete-test-answers"/);
 });
 
+test("each answer shows the customer's last order; the first versions' columns only while such answers exist", () => {
+  // 25/11, the user: "fedt hvis man lige havde overblik over sidste ordre"
+  const view = fs.readFileSync(path.join(ROOT, "src", "customer-survey.js"), "utf8");
+  assert.match(view, /<th>Last order<\/th>/);
+  assert.match(view, /lastOrder\(a\.recipient\)/);
+  assert.match(view, /r\.sidsteOrdre/);
+  assert.match(view, /const legacy = rows\.some\(/, "Main reason / Picked / Contact show only for answers from the versions that had them");
+  assert.match(view, /"Last order", "Months since", "Orders"/, "the answers CSV carries the last order too");
+});
+
 test("the app view is reachable from the Klaviyo rail", () => {
   const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");

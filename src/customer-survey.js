@@ -107,20 +107,39 @@ function stepNote(a) {
   return step >= 3 ? "" : `<br><span class="survey-muted">${a.reason ? `Stopped after question ${step}` : "Did not answer the contact question"}</span>`;
 }
 
+// The customer's last webshop order (from the recipient list: date and number of orders), and how long ago it was -
+// the user, 25/11: "fedt hvis man lige havde overblik over sidste ordre" next to what they wrote.
+const ORDER_DATE = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/Copenhagen" });
+function monthsSince(iso, now = Date.now()) {
+  const t = Date.parse(iso || "");
+  return Number.isFinite(t) ? Math.max(0, Math.floor((now - t) / (30.44 * 86400000))) : null;
+}
+function lastOrder(r) {
+  const t = Date.parse(r?.sidsteOrdre || "");
+  if (!Number.isFinite(t)) return "";
+  const m = monthsSince(r.sidsteOrdre);
+  const ago = m >= 24 ? `${Math.floor(m / 12)} yr ${m % 12} mo ago` : `${m} mo ago`;
+  return `${escapeHtml(ORDER_DATE.format(t))}<br><span class="survey-muted">${ago}${r.ordrer ? ` · ${r.ordrer} order${r.ordrer === 1 ? "" : "s"}` : ""}</span>`;
+}
+
 function renderAnswers() {
   const rows = answerRows().filter((r) => matches(`${r.who} ${r.picked} ${r.words} ${reasonLabel(r.a.reason)} ${r.a.recipient?.land || ""}`));
+  // The first versions of the survey had reasons to pick, one-tap follow-ups and a contact question; their columns show
+  // only while an answer from those versions is in the list.
+  const legacy = rows.some(({ a }) => a.reason || (a.detailLabels || []).length || a.contact);
+  const cols = legacy ? 9 : 6;
   return `<div class="wp-table-wrap"><table class="wp-table survey-table">
-    <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Main reason</th><th>Picked</th><th>In their words</th><th>Contact</th></tr></thead>
+    <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Last order</th>${legacy ? "<th>Main reason</th><th>Picked</th>" : ""}<th>In their words</th>${legacy ? "<th>Contact</th>" : ""}</tr></thead>
     <tbody>${rows.map(({ a, who, picked, words }) => `<tr>
       <td>${escapeHtml(when(a.at))}${a.test ? ' <span class="wp-badge">Test</span>' : `<br><button class="wp-button is-sm" type="button" data-survey-mark-test data-sid="${escapeHtml(a.sid || "")}" data-at="${escapeHtml(a.at || "")}">Mark as test</button>`}</td>
       <td>${escapeHtml(who)}${a.email ? `<br><span class="survey-muted">${escapeHtml(a.email)}</span>` : ""}</td>
       <td>${escapeHtml(a.recipient?.land || storeLabel(a.store))}</td>
       <td class="is-numeric">${a.recipient?.livstid != null ? KR.format(a.recipient.livstid) : ""}</td>
-      <td>${escapeHtml(reasonLabel(a.reason))}${stepNote(a)}</td>
-      <td>${escapeHtml(picked)}</td>
+      <td class="survey-last-order">${lastOrder(a.recipient)}</td>
+      ${legacy ? `<td>${escapeHtml(reasonLabel(a.reason))}${stepNote(a)}</td><td>${escapeHtml(picked)}</td>` : ""}
       <td class="survey-words">${escapeHtml(words)}</td>
-      <td>${a.contact === "yes" ? '<span class="wp-status is-success">Yes</span>' : a.contact === "no" ? '<span class="wp-status">No</span>' : ""}</td>
-    </tr>`).join("") || '<tr><td colspan="8">No answers yet.</td></tr>'}</tbody>
+      ${legacy ? `<td>${a.contact === "yes" ? '<span class="wp-status is-success">Yes</span>' : a.contact === "no" ? '<span class="wp-status">No</span>' : ""}</td>` : ""}
+    </tr>`).join("") || `<tr><td colspan="${cols}">No answers yet.</td></tr>`}</tbody>
   </table></div>`;
 }
 
@@ -181,8 +200,8 @@ function render() {
 function exportCsv(kind) {
   if (!state.data) return;
   if (kind === "answers") {
-    const rows = answerRows().map(({ a, who, picked }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
-    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
+    const rows = answerRows().map(({ a, who, picked }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", a.recipient?.sidsteOrdre || "", monthsSince(a.recipient?.sidsteOrdre) ?? "", a.recipient?.ordrer ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
+    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Last order", "Months since", "Orders", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
     return;
   }
   const answered = new Set(state.data.answered || []);

@@ -7088,6 +7088,11 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   white-space: pre-wrap;
 }
 
+.survey-table .survey-last-order {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .survey-muted {
   color: var(--wp-text-muted);
   font-size: var(--wp-text-xs);
