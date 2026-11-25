@@ -148,4 +148,30 @@ async function markResponsesTest(survey, isMarked, now = Date.now()) {
   return { marked, files: entries.length };
 }
 
-module.exports = { storeMode, writeResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest };
+async function blobDelete(urls) {
+  const r = await fetch(`${BLOB_API_URL}/delete`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token()}`, "x-api-version": BLOB_API_VERSION, "content-type": "application/json" },
+    body: JSON.stringify({ urls }),
+  });
+  if (!r.ok) throw new Error(`Blob delete failed (${r.status}).`);
+}
+
+// Deletes the answers marked as a test, for good (25/11, the user: "vil du i biblen fjerne alle test svar" - a clean
+// start before the mails go out). Only a file that reads back with test: true goes; one that cannot be read stays,
+// because it could be a customer's. `dryRun` counts without deleting.
+async function deleteTestResponses(survey, { dryRun = false } = {}) {
+  const dir = `${prefix(survey)}/responses`;
+  const entries = token()
+    ? await pool(await blobList(`${dir}/`), 16, async (b) => ({ pathname: b.pathname, url: b.url, record: await twice(() => blobGet(b.pathname)).catch(() => null) }))
+    : (fs.existsSync(localPath(dir)) ? fs.readdirSync(localPath(dir)).filter((n) => n.endsWith(".json")) : []).map((n) => ({ pathname: `${dir}/${n}`, record: localRead(`${dir}/${n}`) }));
+  const tests = entries.filter((e) => e.record && e.record.test === true);
+  const unreadable = entries.filter((e) => !e.record).length;
+  if (!dryRun && tests.length) {
+    if (token()) for (let i = 0; i < tests.length; i += 100) await twice(() => blobDelete(tests.slice(i, i + 100).map((e) => e.url)));
+    else for (const e of tests) fs.unlinkSync(localPath(e.pathname));
+  }
+  return { deleted: dryRun ? 0 : tests.length, testFiles: tests.length, kept: entries.length - tests.length, unreadable, files: entries.length, dryRun };
+}
+
+module.exports = { storeMode, writeResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest, deleteTestResponses };

@@ -263,6 +263,38 @@ test("one paste file per store, made from survey.html, each in its own language 
   }
 });
 
+test("deleting test answers takes only answers marked as a test, and keeps what cannot be read", async () => {
+  // 25/11, the user: "vil du i biblen fjerne alle test svar" - a clean start before the mails go out
+  const saved = process.env.BLOB_READ_WRITE_TOKEN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+  const store = require(path.join(ROOT, "server", "survey", "survey-store.js"));
+  const id = `delete-test-${process.pid}-${Date.now()}`;
+  const dir = path.join(ROOT, "tmp", "surveys", id, "responses");
+  try {
+    await store.writeResponse(id, { test: true, followup: "a team try" }, 1);
+    await store.writeResponse(id, { test: true, followup: "another" }, 2);
+    await store.writeResponse(id, { test: false, followup: "a customer" }, 3);
+    await store.writeResponse(id, { followup: "an older customer answer, no flag" }, 4);
+    fs.writeFileSync(path.join(dir, "5-broken.json"), "{not json");
+    const dry = await store.deleteTestResponses(id, { dryRun: true });
+    assert.deepEqual([dry.deleted, dry.testFiles, fs.readdirSync(dir).length], [0, 2, 5], "a dry run deletes nothing");
+    const out = await store.deleteTestResponses(id);
+    assert.deepEqual([out.deleted, out.kept, out.unreadable], [2, 3, 1]);
+    const left = fs.readdirSync(dir).sort();
+    assert.equal(left.length, 3);
+    assert.ok(left.includes("5-broken.json"), "an unreadable file could be a customer's: it stays");
+    const kept = left.filter((f) => f !== "5-broken.json").map((f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")).followup).sort();
+    assert.deepEqual(kept, ["a customer", "an older customer answer, no flag"]);
+  } finally {
+    fs.rmSync(path.join(ROOT, "tmp", "surveys", id), { recursive: true, force: true });
+    if (saved !== undefined) process.env.BLOB_READ_WRITE_TOKEN = saved;
+  }
+  // the route: behind the login, and only with the confirmation named in the body
+  const route = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
+  assert.ok(route.indexOf("requireAuth(req, res, config)") < route.indexOf('action === "delete_test"'));
+  assert.match(route, /input\.confirm !== "delete-test-answers"/);
+});
+
 test("the app view is reachable from the Klaviyo rail", () => {
   const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");

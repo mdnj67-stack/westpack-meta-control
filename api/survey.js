@@ -11,6 +11,8 @@
  *                                  saved answers that could not be read this time (never dropped in silence)
  *   POST ?action=recipients        replaces the recipient list: { recipients: [...] }
  *   POST ?action=mark_test         { answers: [{ sid, at }] } - marks those answers as a test, in place; deletes nothing
+ *   POST ?action=delete_test       { confirm: "delete-test-answers", dryRun? } - deletes every answer marked as a test,
+ *                                  for good; an answer that cannot be read is kept
  *
  * Nothing here writes to Klaviyo, Magento or Navision. An answer is stored in this app's own Blob store only.
  */
@@ -115,6 +117,18 @@ module.exports = async function handler(req, res) {
     if (sel.error) return sendJson(res, 400, { error: sel.error });
     try {
       const out = await store.markResponsesTest(survey.SURVEY_ID, (r) => survey.isMarkedBy(r, sel));
+      return sendJson(res, 200, Object.assign({ ok: true }, out));
+    } catch (e) { return sendJson(res, 502, { error: e.message }); }
+  }
+
+  if (action === "delete_test") {
+    if (req.method !== "POST") return sendJson(res, 405, { error: "POST only." });
+    let input;
+    try { input = await readJson(req, MAX_BYTES); } catch { return sendJson(res, 400, { error: "Expected a small JSON body." }); }
+    // named in the body, so no stray call can delete anything
+    if (input.confirm !== "delete-test-answers") return sendJson(res, 400, { error: 'Send { confirm: "delete-test-answers" } to delete the test answers.' });
+    try {
+      const out = await store.deleteTestResponses(survey.SURVEY_ID, { dryRun: input.dryRun === true });
       return sendJson(res, 200, Object.assign({ ok: true }, out));
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
