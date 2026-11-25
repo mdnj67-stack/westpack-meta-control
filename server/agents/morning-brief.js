@@ -101,6 +101,16 @@ function relativeDay(day, today) {
   return `${weekday} ${danishDate(day)}`;
 }
 
+// A time of day as the user reads it, in Copenhagen.
+function clockTime(iso) {
+  const parsed = Date.parse(iso || "");
+  return Number.isFinite(parsed) ? new Intl.DateTimeFormat("da-DK", { timeZone: TIME_ZONE, hour: "2-digit", minute: "2-digit" }).format(new Date(parsed)) : "";
+}
+
+function count(value, one, many) {
+  return `${value} ${value === 1 ? one : many}`;
+}
+
 function hash(...parts) {
   return crypto.createHash("sha1").update(parts.map((part) => String(part ?? "")).join("\n")).digest("hex").slice(0, 12);
 }
@@ -320,7 +330,7 @@ async function collectAsana({ asana, projects = {}, today, since }) {
     cards,
     signals,
     openMine: openMine.map((task) => ({ gid: String(task.gid), name: String(task.name || ""), due: dueOf(task), link: String(task.permalink_url || "") })),
-    summary: `${openMine.length} åbne opgaver til dig, ${cards.length} kampagnekort med deadline omkring nu, ${signals.filter((item) => item.id.startsWith("asana-comment:")).length} kommentarer til dig.`,
+    summary: `${count(openMine.length, "åben opgave", "åbne opgaver")} til dig, ${cards.length} kampagnekort med deadline omkring nu, ${count(signals.filter((item) => item.id.startsWith("asana-comment:")).length, "kommentar", "kommentarer")} til dig.`,
     notes
   };
 }
@@ -975,12 +985,12 @@ async function collectCloud({ deps, doc, now }) {
   if (campaigns) {
     const scheduled = scheduledTodaySignals({ campaigns, today, now });
     signals.push(...scheduled);
-    klaviyoSummary = `${campaigns.length} DK-kampagner ændret de sidste tre uger; ${scheduled.length} planlagt i dag.`;
+    klaviyoSummary = `${count(campaigns.length, "DK-kampagne", "DK-kampagner")} ændret de sidste tre uger; ${scheduled.length} planlagt i dag.`;
   }
   if (history.ok && history.result) {
     const sends = sendSignals({ entries: history.result.entries || [], otherMarkets: history.result.otherMarkets || {}, since, today, syncedAt: history.result.syncedAt || "" });
     signals.push(...sends);
-    klaviyoSummary += ` ${sends.length} udsendelser siden sidst.`;
+    klaviyoSummary += ` ${count(sends.length, "udsendelse", "udsendelser")} siden sidst.`;
   }
   sources.klaviyo = klaviyo.skipped ? status(klaviyo) : klaviyo.ok
     ? { status: history.ok ? "ok" : "partial", summary: klaviyoSummary.trim(), ...(history.ok ? {} : { error: `Udsendelser: ${history.error || "ikke sat op"}` }) }
@@ -992,7 +1002,7 @@ async function collectCloud({ deps, doc, now }) {
   if (watchdog.ok) {
     const found = watchdogSignals(watchdog.result);
     signals.push(...found);
-    sources.watchdog = { status: "ok", summary: watchdog.result?.ranAt ? `${found.length} åbne fund; sidst kørt ${watchdog.result.ranAt.slice(11, 16)} UTC.` : "Har ikke kørt endnu." };
+    sources.watchdog = { status: "ok", summary: watchdog.result?.ranAt ? `${count(found.length, "åbent fund", "åbne fund")}; sidst kørt kl. ${clockTime(watchdog.result.ranAt)}.` : "Har ikke kørt endnu." };
   } else {
     sources.watchdog = status(watchdog);
   }
@@ -1016,7 +1026,7 @@ function localStatus(doc) {
   if (!doc.local) return { status: "waiting", summary: "Ikke sendt fra din computer endnu i dag. Den sender, når den vågner." };
   return {
     status: "ok",
-    summary: `${doc.local.calendar.length} aftaler og ${doc.local.mail.length} mails læst ${doc.local.receivedAt.slice(11, 16)} UTC${doc.local.heldBack.hr ? `; ${doc.local.heldBack.hr} HR/kandidat-mails holdt tilbage` : ""}.`
+    summary: `${count(doc.local.calendar.length, "aftale", "aftaler")} og ${count(doc.local.mail.length, "mail", "mails")} modtaget kl. ${clockTime(doc.local.receivedAt)}${doc.local.heldBack.hr ? `; ${count(doc.local.heldBack.hr, "HR/kandidat-mail", "HR/kandidat-mails")} holdt tilbage` : ""}.`
   };
 }
 
