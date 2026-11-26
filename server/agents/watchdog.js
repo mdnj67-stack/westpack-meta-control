@@ -275,7 +275,9 @@ function judgeLanding({ clickUrl, result, ads }) {
   const landed = new URL(result.finalUrl).searchParams;
   const lost = [...asked.keys()].filter((key) => !landed.has(key));
   // The store's blog answers any URL with a query string by redirecting to itself without it
-  // (seen 2026-10-30; the trailing-slash variant does the same), so there is no better URL to give.
+  // (seen 2026-10-30; the trailing-slash variant does the same) - except fbclid on its own, which
+  // the store's cache layer removes before the blog sees it, so the visitor's address keeps it
+  // (2026-11-26, four blog pages). It is the ad's own URL parameters that cost the click ID.
   const sameAddress = shortUrl(clickUrl) === shortUrl(result.finalUrl);
   if (lost.length && sameAddress) {
     return {
@@ -404,7 +406,7 @@ async function checkLandingPages({ graph, accountId, fetchImpl, retryDelayMs, pa
       fingerprint: `stripped:${stripped.map((item) => item.key).sort().join("|")}`,
       status: "alert",
       title: `${plural(stripped.length, "page drops", "pages drop")} fbclid and UTM on every click (${plural(adCount, "ad", "ads")})`,
-      detail: "The store redirects these pages - the blog, every time - to themselves without the query string. Clicks still arrive, but Meta cannot match the visit to the click and GA4 records it without its campaign. No variant of the address keeps the parameters: accept it for these ads, or link a category or product page instead.",
+      detail: "The store redirects these pages - the blog, every time - to themselves without the query string. Clicks still arrive, but Meta cannot match the visit to the click and GA4 records it without its campaign. The blog keeps fbclid when it is the only parameter, so it is the ads' URL parameters (UTM) that cost the click ID: clear them on the ad and Meta gets fbclid back while GA4 sees the visit without its campaign, accept it, or link a category or product page instead.",
       list: stripped.map((item) => `${item.key} - ${plural((item.ads || []).length, "ad", "ads")}: ${(item.ads || []).slice(0, 4).join(", ")}${(item.ads || []).length > 4 ? ", ..." : ""}`)
     });
   }
