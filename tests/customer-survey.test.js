@@ -305,6 +305,48 @@ test("each answer shows the customer's last order; the first versions' columns o
   assert.match(view, /"Last order", "Months since", "Orders"/, "the answers CSV carries the last order too");
 });
 
+test("replies to the survey mail become answers of their own, once each, beside the page answer", async () => {
+  // 26/11, the user: "kan du tage de svar der er kommet på mail med i biblen"
+  const survey = require(path.join(ROOT, "server", "survey", "customer-survey.js"));
+  const recipients = [{ token: "abc12345", firma: "A", store: "eur_eu_ger", lang: "de" }];
+  const out = survey.sanitizeMailAnswers({ answers: [
+    { mailId: "0123456789abcdef0123", token: "abc12345", receivedAt: "2026-11-25T14:00:00.000Z", text: "Wir haben noch Lager.\u0000" },
+    { mailId: "fedcba9876543210fedc", token: "zzz99999", receivedAt: "2026-11-25T14:00:00.000Z", text: "unknown link" },
+    { mailId: "not-hex", token: "abc12345", receivedAt: "2026-11-25T14:00:00.000Z", text: "bad id" },
+    { mailId: "aaaaaaaaaaaaaaaa", token: "abc12345", receivedAt: "2026-11-25T14:00:00.000Z", text: "  " },
+  ] }, { recipients });
+  assert.equal(out.records.length, 1);
+  assert.deepEqual(out.skipped.map((s) => s.why), ["unknown link", "mail id", "no words"]);
+  const { name, record } = out.records[0];
+  assert.equal(name, "mail-0123456789abcdef0123");
+  assert.equal(record.source, "mail");
+  assert.equal(record.followup, "Wir haben noch Lager.");
+  assert.deepEqual([record.store, record.lang, record.step, record.test], ["eur_eu_ger", "de", 3, false]);
+  assert.match(record.sid, /^[a-z0-9]{8,24}$/, "a mail answer can be marked as a test like any other");
+  // the same customer on the page and by mail: two answers, not one replacing the other
+  const page = { survey: survey.SURVEY_ID, at: "2026-11-25T13:00:00.000Z", token: "abc12345", sid: "visit0001", followup: "Auf der Seite", step: 3 };
+  const s = survey.summarize({ responses: [page, record], recipients });
+  assert.equal(s.answers.length, 2);
+  assert.equal(s.totals.fromMail, 1);
+  assert.equal(s.totals.fromRecipients, 1, "still one customer");
+  // the store keeps one file per mail, so an import run twice is still one answer
+  const saved = process.env.BLOB_READ_WRITE_TOKEN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+  const store = require(path.join(ROOT, "server", "survey", "survey-store.js"));
+  const id = `mail-test-${process.pid}-${Date.now()}`;
+  try {
+    await store.writeNamedResponse(id, name, record);
+    await store.writeNamedResponse(id, name, record);
+    assert.equal((await store.readResponses(id)).length, 1);
+    await assert.rejects(() => store.writeNamedResponse(id, "../escape", record));
+  } finally {
+    fs.rmSync(path.join(ROOT, "tmp", "surveys", id), { recursive: true, force: true });
+    if (saved !== undefined) process.env.BLOB_READ_WRITE_TOKEN = saved;
+  }
+  const route = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
+  assert.ok(route.indexOf("requireAuth(req, res, config)") < route.indexOf('action === "import_mail"'), "importing is for the logged-in app only");
+});
+
 test("the app view is reachable from the Klaviyo rail", () => {
   const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");

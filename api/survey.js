@@ -11,6 +11,8 @@
  *                                  saved answers that could not be read this time (never dropped in silence)
  *   POST ?action=recipients        replaces the recipient list: { recipients: [...] }
  *   POST ?action=mark_test         { answers: [{ sid, at }] } - marks those answers as a test, in place; deletes nothing
+ *   POST ?action=import_mail       { answers: [{ mailId, token, receivedAt, text }] } - replies to the survey mail, as
+ *                                  answers marked "mail"; the same mail imported again rewrites its own answer
  *   POST ?action=delete_test       { confirm: "delete-test-answers", dryRun? } - deletes every answer marked as a test,
  *                                  for good; an answer that cannot be read is kept
  *
@@ -118,6 +120,19 @@ module.exports = async function handler(req, res) {
     try {
       const out = await store.markResponsesTest(survey.SURVEY_ID, (r) => survey.isMarkedBy(r, sel));
       return sendJson(res, 200, Object.assign({ ok: true }, out));
+    } catch (e) { return sendJson(res, 502, { error: e.message }); }
+  }
+
+  if (action === "import_mail") {
+    if (req.method !== "POST") return sendJson(res, 405, { error: "POST only." });
+    let input;
+    try { input = await readJson(req, MAX_RECIPIENT_BYTES); } catch { return sendJson(res, 400, { error: "Expected JSON under 2 MB." }); }
+    try {
+      const doc = await store.readRecipients(survey.SURVEY_ID);
+      const out = survey.sanitizeMailAnswers(input, { recipients: doc.recipients });
+      if (out.error) return sendJson(res, 400, { error: out.error });
+      for (const { name, record } of out.records) await store.writeNamedResponse(survey.SURVEY_ID, name, record);
+      return sendJson(res, 200, { ok: true, written: out.records.length, skipped: out.skipped });
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
 

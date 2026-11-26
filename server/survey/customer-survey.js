@@ -115,6 +115,43 @@ function sanitizeSubmission(input = {}, { now = Date.now() } = {}) {
 }
 
 /**
+ * Answers that came back as replies to the survey mail (26/11, the user: "kan du tage de svar der er kommet på mail med
+ * i biblen"). The app's import script reads the shared mailbox in Outlook, keeps written replies from people the mail
+ * went to (no bounces, no automatic replies), cuts the quoted mail off and sends { answers: [{ mailId, token,
+ * receivedAt, text }] }. Each becomes an answer with `source: "mail"`, stored under a name made from the mail's own id,
+ * so importing the same mail again rewrites the same file instead of adding a second answer. The token must be one the
+ * survey knows; store and language come from that recipient. Returns { records, skipped }.
+ */
+const MAIL_ID = /^[a-f0-9]{16,40}$/;
+function sanitizeMailAnswers(input = {}, { recipients = [] } = {}) {
+  const list = Array.isArray(input && input.answers) ? input.answers : null;
+  if (!list) return { error: "Expected { answers: [{ mailId, token, receivedAt, text }] }." };
+  if (list.length > 200) return { error: "At most 200 mail answers at a time." };
+  const byToken = new Map(recipients.map((r) => [r.token, r]));
+  const records = [];
+  const skipped = [];
+  for (const a of list) {
+    const mailId = String((a && a.mailId) || "").toLowerCase();
+    const token = String((a && a.token) || "").toLowerCase();
+    const at = String((a && a.receivedAt) || "");
+    const words = text(a && a.text, 4000);
+    if (!MAIL_ID.test(mailId)) { skipped.push({ mailId, why: "mail id" }); continue; }
+    if (!byToken.has(token)) { skipped.push({ mailId, why: "unknown link" }); continue; }
+    if (!AT.test(at)) { skipped.push({ mailId, why: "time" }); continue; }
+    if (words.replace(/\s/g, "").length < 3) { skipped.push({ mailId, why: "no words" }); continue; }
+    const r = byToken.get(token);
+    records.push({
+      name: `mail-${mailId}`,
+      record: {
+        survey: SURVEY_ID, at, token, sid: `m${mailId.slice(0, 23)}`, test: false, source: "mail", mailId,
+        store: r.store || "", lang: r.lang || "", reason: "", details: [], other: "", followup: words, contact: "", step: 3,
+      },
+    });
+  }
+  return { records, skipped };
+}
+
+/**
  * The company name the page greets and thanks, as a person would write it: "Guldsmed Hugo Mortensen" for
  * "Guldsmed Hugo Mortensen ApS" (name-print's cleanName, without the lid's length limit). cleanName also turns away a
  * web address and a few words that would be ugly on a public image; these are our own customers' registered names,
@@ -193,7 +230,8 @@ function summarize({ responses = [], recipients = [], includeTest = false } = {}
   const latest = [];
   const seen = new Set();
   for (const r of sorted) {
-    const key = r.token ? `t:${r.token}` : r.sid ? `s:${r.sid}` : "";
+    // a reply to the mail is an answer of its own, beside what the same customer wrote on the page
+    const key = r.source === "mail" ? `m:${r.sid}` : r.token ? `t:${r.token}` : r.sid ? `s:${r.sid}` : "";
     if (key) {
       if (seen.has(key)) continue;
       seen.add(key);
@@ -229,6 +267,7 @@ function summarize({ responses = [], recipients = [], includeTest = false } = {}
       unknownToken: latest.filter((r) => r.token && !r.recipient).length,
       wantsContact: latest.filter((r) => r.contact === "yes").length,
       written: latest.filter((r) => !r.reason).length,
+      fromMail: latest.filter((r) => r.source === "mail").length,
       finished: latest.filter((r) => (r.step || 3) >= 3).length,
     },
     answered: [...answeredTokens],
@@ -260,4 +299,4 @@ function isMarkedBy(record, { sids, ats }) {
   return record.sid ? sids.has(record.sid) : ats.has(record.at);
 }
 
-module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy, greetingName };
+module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy, greetingName, sanitizeMailAnswers };

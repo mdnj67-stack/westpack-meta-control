@@ -131,7 +131,7 @@ function renderAnswers() {
   return `<div class="wp-table-wrap"><table class="wp-table survey-table">
     <thead><tr><th>Answered</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Last order</th>${legacy ? "<th>Main reason</th><th>Picked</th>" : ""}<th>In their words</th>${legacy ? "<th>Contact</th>" : ""}</tr></thead>
     <tbody>${rows.map(({ a, who, picked, words }) => `<tr>
-      <td>${escapeHtml(when(a.at))}${a.test ? ' <span class="wp-badge">Test</span>' : `<br><button class="wp-button is-sm" type="button" data-survey-mark-test data-sid="${escapeHtml(a.sid || "")}" data-at="${escapeHtml(a.at || "")}">Mark as test</button>`}</td>
+      <td>${escapeHtml(when(a.at))}${a.source === "mail" ? ' <span class="wp-badge" title="A reply to the survey mail, read from the Westpack inbox">Mail</span>' : ""}${a.test ? ' <span class="wp-badge">Test</span>' : `<br><button class="wp-button is-sm" type="button" data-survey-mark-test data-sid="${escapeHtml(a.sid || "")}" data-at="${escapeHtml(a.at || "")}">Mark as test</button>`}</td>
       <td>${escapeHtml(who)}${a.email ? `<br><span class="survey-muted">${escapeHtml(a.email)}</span>` : ""}</td>
       <td>${escapeHtml(a.recipient?.land || storeLabel(a.store))}</td>
       <td class="is-numeric">${a.recipient?.livstid != null ? KR.format(a.recipient.livstid) : ""}</td>
@@ -178,7 +178,7 @@ function render() {
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
     ${state.data.unreadable ? `<div class="wp-alert is-warning"><div><strong>${state.data.unreadable} saved ${state.data.unreadable === 1 ? "answer" : "answers"} could not be read just now</strong> and ${state.data.unreadable === 1 ? "is" : "are"} not in the figures below. Nothing is lost - press Read again.</div></div>` : ""}
-    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link · <strong>${t.wantsContact}</strong> want to be contacted · ${t.finished} finished</p>
+    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"}${t.fromMail ? ` (${t.fromMail} by reply to the mail)` : ""} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link${t.wantsContact ? ` · <strong>${t.wantsContact}</strong> want to be contacted` : ""}</p>
     ${state.data.reasons.some((r) => r.count) ? `<div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>
       <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}${detailLine(r)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers - (t.written || 0) ? Math.round((r.count / (t.answers - (t.written || 0))) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
@@ -200,8 +200,8 @@ function render() {
 function exportCsv(kind) {
   if (!state.data) return;
   if (kind === "answers") {
-    const rows = answerRows().map(({ a, who, picked }) => [when(a.at), who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", a.recipient?.sidsteOrdre || "", monthsSince(a.recipient?.sidsteOrdre) ?? "", a.recipient?.ordrer ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
-    download("customer-survey-answers.csv", csv([["Answered", "Customer", "Country", "Market", "Lifetime DKK", "Last order", "Months since", "Orders", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
+    const rows = answerRows().map(({ a, who, picked }) => [when(a.at), a.source === "mail" ? "Mail reply" : "Survey page", who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", a.recipient?.sidsteOrdre || "", monthsSince(a.recipient?.sidsteOrdre) ?? "", a.recipient?.ordrer ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
+    download("customer-survey-answers.csv", csv([["Answered", "Via", "Customer", "Country", "Market", "Lifetime DKK", "Last order", "Months since", "Orders", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
     return;
   }
   const answered = new Set(state.data.answered || []);

@@ -97,6 +97,16 @@ async function writeResponse(survey, record, now = Date.now()) {
   return { mode: "blob" };
 }
 
+// An answer under a name of its own (a mail reply's id), so writing it again rewrites the one file: re-importing the
+// same mail never adds a second answer.
+async function writeNamedResponse(survey, name, record) {
+  if (!/^mail-[a-f0-9]{16,40}$/.test(String(name))) throw new Error("Bad answer name.");
+  const pathname = `${prefix(survey)}/responses/${name}.json`;
+  if (!token()) { localWrite(pathname, record); return { mode: "local_file" }; }
+  await twice(() => blobPut(pathname, record));
+  return { mode: "blob" };
+}
+
 // Every saved answer, read file by file. A file that cannot be read on the second try either is counted in
 // `unreadable`, never dropped in silence: biblen says so, so a short count is never taken for the real one.
 async function readResponseFiles(survey) {
@@ -174,4 +184,4 @@ async function deleteTestResponses(survey, { dryRun = false } = {}) {
   return { deleted: dryRun ? 0 : tests.length, testFiles: tests.length, kept: entries.length - tests.length, unreadable, files: entries.length, dryRun };
 }
 
-module.exports = { storeMode, writeResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest, deleteTestResponses };
+module.exports = { storeMode, writeResponse, writeNamedResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest, deleteTestResponses };
