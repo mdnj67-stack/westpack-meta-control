@@ -49,9 +49,10 @@ Indlægget skal have **URL-nøglen `world-record-friday-2026`**, altså `…/blo
    - **URL-nøgle:** `world-record-friday-2026`
    - **Kort beskrivelse (listen):** Traditionen tro holder vi ikke Black Friday. Fire kolleger gik efter hver sin rekord
      i stedet – her er alle fem videoer.
-   - **Meta title:** World Record Friday: resultaterne | Westpack
-   - **Meta description:** Fire kolleger fra Westpack gik efter fire verdensrekorder. Se videoerne, resultaterne og
-     rekorderne, de skulle slå.
+   - **Meta title:** World Record Friday 2026: Sådan gik det | Westpack
+   - **Meta description:** Vi holder ikke Black Friday. I stedet gik fire kolleger efter verdensrekorder med
+     smykkeæsker, M&M’s, elastik og tøjklemmer. Se alle fem videoer her.
+     (Ingen rabat i den, så den ikke er forældet, når tilbuddet slutter søndag.)
    - **Kategori:** Westpack
    - **Billede (listebillede):** `cover.jpg` fra denne mappe (1200 × 800, de fire deltagere, ingen tekst)
 3. Indhold: åbn **Page Builder** (Edit with Page Builder). Træk ét element af typen **HTML Code** (under Elements)
