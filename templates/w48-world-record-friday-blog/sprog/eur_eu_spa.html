@@ -1,0 +1,901 @@
+<div id="wrf26" class="wrf26" lang="es" data-until="2026-11-30T00:00:00+01:00">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;500&display=swap');
+
+#wrf26 {
+  --bg:#0a0a0a;
+  --card:#141414;
+  --line:#262626;
+  --ink:#fff;
+  --body:#b3b3b3;
+  --mut:#8c8c8c;
+  --dim:#5c5c5c;
+  --red:#e5392f;
+  --disp:'Inter Tight',Inter,'Helvetica Neue',Arial,sans-serif;
+  --sans:Inter,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --px:clamp(20px,6.5cqw,56px);
+  position:relative;
+  container-type:inline-size;
+  margin:0 0 48px;
+  background:var(--bg);
+  color:var(--body);
+  font:400 16px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-align:left;
+  overflow:hidden
+}
+#wrf26 *,#wrf26 *::before,#wrf26 *::after{box-sizing:border-box}
+#wrf26 h2,#wrf26 p,#wrf26 ol,#wrf26 ul,#wrf26 li,#wrf26 figure,#wrf26 dl,#wrf26 dt,#wrf26 dd,#wrf26 header,#wrf26 section,#wrf26 nav{margin:0;padding:0;border:0;background:none}
+#wrf26 li{list-style:none}
+#wrf26 li::before,#wrf26 li::marker{content:none}
+#wrf26 p,#wrf26 li,#wrf26 span,#wrf26 a,#wrf26 b,#wrf26 s,#wrf26 em,#wrf26 small,#wrf26 dt,#wrf26 dd{font-family:inherit;font-size:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;text-transform:none;font-style:normal}
+#wrf26 b{font-weight:500;color:var(--ink)}
+#wrf26 img{display:block;width:100%;height:auto;max-width:100%;border:0;border-radius:0}
+#wrf26 a{color:inherit;text-decoration:none;background:none}
+#wrf26 button{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#wrf26 a:focus-visible,#wrf26 button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#wrf26 [id]{scroll-margin-top:110px}
+#wrf26 .w-k{display:block;font:500 12px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+#wrf26 h2{font-family:var(--disp);font-weight:500;color:var(--ink);letter-spacing:-.035em;line-height:1;text-transform:none}
+#wrf26 .w-hero{padding:clamp(36px,8cqw,72px) var(--px) clamp(48px,9cqw,80px)}
+#wrf26 .w-hero-in{display:grid;gap:30px;grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "t" "r" "v"}
+#wrf26 .w-hero-h{grid-area:h}
+#wrf26 .w-hero-t{grid-area:t;align-self:center}
+#wrf26 .w-roster{grid-area:r;min-width:0}
+#wrf26 .w-hero-v{grid-area:v}
+#wrf26 .w-h1{margin-top:16px;font-size:clamp(42px,11.6cqw,96px);line-height:.92;letter-spacing:-.05em}
+#wrf26 .w-h1 s{color:#4f4f4f;text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:.075em;text-decoration-skip-ink:none}
+#wrf26 .w-said{font:400 clamp(20px,3.3cqw,26px)/1.25 var(--disp);letter-spacing:-.02em;color:var(--mut)}
+#wrf26 .w-ans{margin-top:4px;font:500 clamp(20px,3.3cqw,26px)/1.25 var(--disp);letter-spacing:-.02em;color:var(--ink)}
+#wrf26 .w-lead{margin-top:18px;max-width:34em;font-size:clamp(16.5px,2.2cqw,18px);line-height:1.6}
+#wrf26 .w-hero-v .w-cap{margin-top:12px;font-size:15px;line-height:1.5;color:var(--mut)}
+#wrf26 .w-hero-v .w-cap b{font-weight:500}
+#wrf26 .w-rl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+#wrf26 .w-rl a{display:block;position:relative;height:100%;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .25s}
+#wrf26 .w-rl img{aspect-ratio:5/6;object-fit:cover;transition:filter .7s ease}
+#wrf26 .w-rt{display:block;padding:12px 14px 16px}
+#wrf26 .w-rn{display:flex;align-items:baseline;gap:8px;font:500 18px/1.2 var(--disp);letter-spacing:-.02em;color:var(--ink)}
+#wrf26 .w-rn small{font:500 11px/1 var(--sans);letter-spacing:.16em;color:var(--mut)}
+#wrf26 .w-rr{display:block;margin-top:10px;font:500 clamp(36px,7cqw,46px)/.95 var(--disp);letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums}
+#wrf26 .w-rr small{font-size:.5em;margin-left:3px;letter-spacing:0}
+#wrf26 .w-ru{display:block;margin-top:6px;font-size:14px;line-height:1.35;color:var(--body)}
+#wrf26 .w-rc{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:13px;line-height:1.35;color:var(--mut)}
+#wrf26 .w-rl a:hover,#wrf26 .w-rl a:focus-visible,#wrf26 .w-rl li.is-cur a{box-shadow:inset 0 0 0 1.5px #fff;outline:0}
+#wrf26 .w-rl li.is-cur a::before{content:"P1";position:absolute;z-index:1;left:8px;top:8px;padding:4px 6px 3px;background:#fff;color:#0a0a0a;font:500 10px/1 var(--sans);letter-spacing:.16em}
+#wrf26 .w-rl.is-wait li:not(.is-lit) img{filter:grayscale(1) brightness(.45)}
+#wrf26 .w-hint{margin-top:12px;font-size:15px;line-height:1.5;color:var(--mut)}
+
+#wrf26 .w-vid{position:relative;aspect-ratio:4/5;background:#000;overflow:hidden}
+#wrf26 .w-play{display:block;position:absolute;inset:0;overflow:hidden}
+#wrf26 .w-play img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-play:hover img{transform:scale(1.035)}
+#wrf26 .w-play::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0) 52%,rgba(10,10,10,.82))}
+#wrf26 .w-pm{position:absolute;z-index:1;left:clamp(14px,3cqw,22px);right:14px;bottom:clamp(14px,3cqw,22px);display:flex;align-items:center;gap:14px;color:#fff;font:500 15px/1.25 var(--sans)}
+#wrf26 .w-pm i{position:relative;flex:none;width:56px;height:56px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+#wrf26 .w-pm i::before{content:"";position:absolute;left:22px;top:18px;border-left:15px solid #0a0a0a;border-top:10px solid transparent;border-bottom:10px solid transparent}
+#wrf26 .w-play:hover .w-pm i{transform:scale(1.08)}
+#wrf26 .w-pm em{display:block;margin-top:3px;font:500 11px/1.2 var(--sans);letter-spacing:.2em;color:rgba(255,255,255,.75);font-variant-numeric:tabular-nums}
+#wrf26 .w-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#wrf26 .w-vid.is-target .w-pm i{animation:w-pulse 1.6s ease 4}
+@keyframes w-pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}
+  100%{box-shadow:0 0 0 22px rgba(255,255,255,0)}
+}
+
+#wrf26 .w-p{position:relative;padding:clamp(56px,11cqw,96px) var(--px);border-top:1px solid var(--line)}
+#wrf26 .w-p-in{display:grid;gap:26px;grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "v" "d"}
+#wrf26 .w-p-h{grid-area:h;position:relative}
+#wrf26 .w-p-v{grid-area:v}
+#wrf26 .w-p-d{grid-area:d;min-width:0}
+#wrf26 .w-bgn{position:absolute;right:-.04em;top:-.12em;font:200 clamp(140px,30cqw,230px)/.8 var(--disp);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.17);pointer-events:none;user-select:none}
+#wrf26 .w-p-h .w-k,#wrf26 .w-name,#wrf26 .w-nick{position:relative}
+#wrf26 .w-name{margin-top:12px;font-size:clamp(56px,12cqw,88px);line-height:.9;letter-spacing:-.05em}
+#wrf26 .w-nick{margin-top:10px;font:400 clamp(19px,2.8cqw,23px)/1.25 var(--disp);letter-spacing:-.015em;color:var(--mut)}
+#wrf26 .w-score{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
+#wrf26 .w-score>div{padding:16px 14px 0 0}
+#wrf26 .w-score>div+div{padding-left:18px;border-left:1px solid var(--line)}
+#wrf26 .w-big{display:block;margin-top:10px;font:500 clamp(40px,9.5cqw,56px)/.92 var(--disp);letter-spacing:-.045em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+#wrf26 .w-big small{font-size:.42em;margin-left:4px;letter-spacing:0}
+#wrf26 .is-rec .w-big{color:var(--dim)}
+#wrf26 .w-unit{display:block;margin-top:10px;font-size:14px;line-height:1.45;color:var(--mut)}
+#wrf26 .w-meter{margin-top:30px}
+#wrf26 .w-mcap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin-top:12px;font:500 11px/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+#wrf26 .w-mcap b{font-size:13px;letter-spacing:.06em}
+#wrf26 .w-cells{display:grid}
+#wrf26 .w-cells i{display:block;transition:background-color .3s,box-shadow .3s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+#wrf26 .w-dots .w-cells{grid-template-columns:repeat(13,minmax(0,1fr));gap:clamp(4px,1.1cqw,8px)}
+#wrf26 .w-dots i{aspect-ratio:1;border-radius:50%;box-shadow:inset 0 0 0 1px #333}
+#wrf26 .w-dots i.on{box-shadow:none;background:#d8262d}
+#wrf26 .w-dots i.on:nth-child(6n+2){background:#f08a24}
+#wrf26 .w-dots i.on:nth-child(6n+3){background:#f5c916}
+#wrf26 .w-dots i.on:nth-child(6n+4){background:#2e9b4a}
+#wrf26 .w-dots i.on:nth-child(6n+5){background:#1f6fc9}
+#wrf26 .w-dots i.on:nth-child(6n){background:#7a4a2a}
+#wrf26 .w-pegs .w-cells{grid-template-columns:repeat(23,minmax(0,1fr));gap:4px 2px}
+#wrf26 .w-pegs i{width:42%;height:clamp(15px,3.2cqw,22px);margin:0 auto;border-radius:2px;background:#222}
+#wrf26 .w-pegs i.on{background:#f2a7c3}
+#wrf26 .w-pegs i.on:nth-child(5n+2){background:#b79be6}
+#wrf26 .w-pegs i.on:nth-child(5n+3){background:#a8d8a0}
+#wrf26 .w-pegs i.on:nth-child(5n+4){background:#7fd6d0}
+#wrf26 .w-pegs i.on:nth-child(5n){background:#f2f2f2}
+#wrf26 .w-meter.is-wait i.on{background:#222;transform:scale(.55)}
+#wrf26 .w-dots.is-wait i.on{background:transparent;box-shadow:inset 0 0 0 1px #333}
+#wrf26 .w-tower{display:flex;flex-direction:column-reverse;align-items:flex-start;gap:3px}
+#wrf26 .w-tower i{position:relative;display:block;width:clamp(56px,11cqw,72px);height:15px;margin-left:4px;background:#cfcfcf;transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .3s}
+#wrf26 .w-tower i::before{content:"";position:absolute;left:-3px;right:-3px;top:0;height:6px;background:#f2f2f2}
+#wrf26 .w-tower i:nth-child(3n){margin-left:7px}
+#wrf26 .w-tower i:nth-child(4n){margin-left:1px}
+#wrf26 .w-tower i:nth-child(5n){background:#3a3a3a}
+#wrf26 .w-tower i:nth-child(5n)::before{background:#555}
+#wrf26 .w-tw.is-wait i{opacity:0;transform:translateY(-36px)}
+#wrf26 .w-line{position:relative;height:52px}
+#wrf26 .w-line::before{content:"";position:absolute;left:0;right:0;top:34px;height:1px;background:#3a3a3a}
+#wrf26 .w-line::after{content:"";position:absolute;right:0;top:27px;width:1px;height:15px;background:var(--mut)}
+#wrf26 .w-line i{position:absolute;left:0;top:33px;height:3px;width:var(--at);background:#fff;transition:width 1.5s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-band{position:absolute;left:var(--at);top:26px;width:22px;height:16px;margin-left:-11px;border:2px solid #2aa37a;border-radius:50%;transition:left 1.5s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-lbl{position:absolute;left:var(--at);top:0;transform:translateX(-50%);font:500 13px/1 var(--sans);letter-spacing:.06em;color:#fff;white-space:nowrap;transition:left 1.5s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-ln.is-wait i{width:0}
+#wrf26 .w-ln.is-wait .w-band,#wrf26 .w-ln.is-wait .w-lbl{left:0}
+#wrf26 .w-ln.is-wait .w-lbl{opacity:0}
+#wrf26 .w-mk{margin-top:34px}
+#wrf26 .w-mom{margin-top:10px;border-top:1px solid var(--line)}
+#wrf26 .w-mom li{border-bottom:1px solid var(--line)}
+#wrf26 .w-mom button{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;align-items:baseline;width:100%;min-height:48px;padding:13px 0;transition:background-color .2s}
+#wrf26 .w-ts{display:inline-flex;align-items:center;gap:8px;font:500 13px/1.4 var(--sans);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums}
+#wrf26 .w-ts::before{content:"";border-left:7px solid currentColor;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;transition:transform .2s}
+#wrf26 .w-mt{font-size:15.5px;line-height:1.5;color:var(--body);transition:color .2s}
+#wrf26 .w-mom button:hover .w-mt,#wrf26 .w-mom button:focus-visible .w-mt{color:#fff}
+#wrf26 .w-mom button:hover .w-ts::before{transform:translateX(2px)}
+#wrf26 .w-pay{margin-top:24px;font-size:15.5px;line-height:1.55;color:var(--body)}
+#wrf26 .w-pay .w-k{margin-bottom:8px}
+#wrf26 .w-q{font:500 clamp(18px,2.6cqw,21px)/1.3 var(--disp);letter-spacing:-.02em;color:#fff}
+#wrf26 .w-sec{padding:clamp(56px,11cqw,96px) var(--px);border-top:1px solid var(--line)}
+#wrf26 .w-h2{margin-top:12px;font-size:clamp(40px,8.4cqw,64px);line-height:.98;letter-spacing:-.045em}
+#wrf26 .w-bars{margin-top:30px;border-top:1px solid var(--line)}
+#wrf26 .w-bars li{display:grid;grid-template-columns:minmax(72px,120px) minmax(0,1fr) 64px;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);font:500 20px/1.2 var(--disp);letter-spacing:-.02em;color:var(--body)}
+#wrf26 .w-bars b{text-align:right;color:inherit;font-variant-numeric:tabular-nums}
+#wrf26 .w-vt{display:block;height:6px;background:var(--line)}
+#wrf26 .w-vt i{display:block;height:100%;width:var(--v);background:var(--mut);transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-bars li.is-lead{color:#fff}
+#wrf26 .w-bars li.is-lead .w-vt i{background:#fff}
+#wrf26 .w-bars.is-wait .w-vt i{width:0}
+#wrf26 .w-verdict{margin-top:18px;font-size:16.5px;line-height:1.55}
+#wrf26 .w-offer-top{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px;margin-top:34px}
+#wrf26 .w-flap{display:flex;gap:5px}
+#wrf26 .w-flap span{position:relative;display:flex;align-items:center;justify-content:center;width:clamp(56px,15cqw,96px);aspect-ratio:3/4;background:#1c1c1c;color:#fff;font:500 clamp(46px,12cqw,82px)/1 var(--disp);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+#wrf26 .w-flap span::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:#0a0a0a}
+#wrf26 .w-flap span:last-child{background:#ececec;color:#0a0a0a}
+#wrf26 .w-burst{display:flex;align-items:center;justify-content:center;width:clamp(84px,19cqw,132px);aspect-ratio:1;padding:12px;background:#ffd23f;clip-path:polygon(100.0% 50.0%,90.6% 55.4%,98.3% 62.9%,87.9% 65.7%,93.3% 75.0%,82.5% 75.0%,85.4% 85.4%,75.0% 82.5%,75.0% 93.3%,65.7% 87.9%,62.9% 98.3%,55.4% 90.6%,50.0% 100.0%,44.6% 90.6%,37.1% 98.3%,34.3% 87.9%,25.0% 93.3%,25.0% 82.5%,14.6% 85.4%,17.5% 75.0%,6.7% 75.0%,12.1% 65.7%,1.7% 62.9%,9.4% 55.4%,0.0% 50.0%,9.4% 44.6%,1.7% 37.1%,12.1% 34.3%,6.7% 25.0%,17.5% 25.0%,14.6% 14.6%,25.0% 17.5%,25.0% 6.7%,34.3% 12.1%,37.1% 1.7%,44.6% 9.4%,50.0% 0.0%,55.4% 9.4%,62.9% 1.7%,65.7% 12.1%,75.0% 6.7%,75.0% 17.5%,85.4% 14.6%,82.5% 25.0%,93.3% 25.0%,87.9% 34.3%,98.3% 37.1%,90.6% 44.6%);transform:rotate(-12deg);font:500 clamp(17px,2.9cqw,21px)/1.02 var(--disp);letter-spacing:-.02em;color:#0a0a0a;text-align:center}
+#wrf26 .w-dates{margin-top:22px}
+#wrf26 .w-items{display:grid;margin-top:34px;border-top:1px solid var(--line)}
+#wrf26 .w-items a{display:grid;grid-template-columns:clamp(96px,30cqw,150px) minmax(0,1fr);gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+#wrf26 .w-items img{aspect-ratio:518/420;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+#wrf26 .w-items a:hover img{transform:scale(1.04)}
+#wrf26 .w-g{margin-left:.5em;color:#fff;white-space:nowrap}
+#wrf26 .w-in{display:block;margin-top:6px;font:500 22px/1.15 var(--disp);letter-spacing:-.025em;color:#fff}
+#wrf26 .w-is{display:block;margin-top:4px;font-size:15px;line-height:1.45;color:var(--body)}
+#wrf26 .w-is+.w-is{margin-top:0;color:var(--mut);white-space:nowrap}
+#wrf26 .w-go{display:inline-block;margin-top:8px;font-size:15px;font-weight:500;color:#fff;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+#wrf26 .w-items .is-wide a{grid-template-columns:minmax(0,1fr)}
+#wrf26 .w-items .is-wide img{aspect-ratio:1064/440}
+#wrf26 .w-btns{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin-top:32px}
+#wrf26 .w-btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 28px;background:#fff;color:#0a0a0a;font:500 15px/1.2 var(--sans);transition:transform .2s,background-color .2s}
+#wrf26 .w-btn:hover{transform:translateY(-2px);background:#e8e8e8}
+#wrf26 .w-ar{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#fff;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+#wrf26 .w-fine{margin-top:16px;font-size:15px;line-height:1.5;color:var(--mut)}
+#wrf26 .w-over{display:none}
+#wrf26.is-over .w-offer>*:not(.w-over){display:none}
+#wrf26.is-over .w-over{display:block}
+#wrf26 .w-close{padding-bottom:clamp(64px,12cqw,104px)}
+#wrf26 .w-close .w-h2 s{color:#4f4f4f;text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:.075em;text-decoration-skip-ink:none}
+#wrf26 .w-credit{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.55;color:var(--dim)}
+
+@container (min-width:700px){
+  #wrf26 .w-hero-in{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"h h" "t v" "r r";column-gap:44px;row-gap:40px;align-items:end}
+  #wrf26 .w-roster{margin-top:16px}
+  #wrf26 .w-rl{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  #wrf26 .w-p-in{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-areas:"v h" "v d";column-gap:44px;row-gap:30px;align-items:start}
+  #wrf26 .w-p.is-flip .w-p-in{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"h v" "d v"}
+  #wrf26 .w-p-v{position:sticky;top:120px}
+  #wrf26 .w-items{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:30px}
+  #wrf26 .w-items .is-wide{grid-column:1/-1}
+  #wrf26 .w-items .is-wide a{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+}
+@container (max-width:460px){
+  #wrf26 .w-items .w-k{letter-spacing:.12em}
+  #wrf26 .w-bars li{grid-template-columns:minmax(0,1fr) auto;row-gap:10px}
+  #wrf26 .w-vt{grid-column:1/-1;grid-row:2}
+}
+#wrf26.is-rv [data-r]{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+#wrf26.is-rv [data-r].is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  #wrf26 *{transition:none!important;animation:none!important}
+}
+</style>
+
+<!-- HERO -->
+<section class="w-hero" id="intro">
+<div class="w-hero-in">
+
+<div class="w-hero-h">
+  <p class="w-k" data-r>Westpack presenta</p>
+  <h2 class="w-h1" data-r>World Record<br><s>Black</s> Friday</h2>
+</div>
+
+<div class="w-hero-t">
+  <p class="w-said" data-r>“¿Así que todavía no hacéis Black Friday?”</p>
+  <p class="w-ans" data-r>No, en su lugar fuimos a por récords mundiales. Quizá fue un poco demasiado ambicioso…</p>
+  <p class="w-lead" data-r>Cuatro compañeros participaron, cada uno con su propio intento de récord, y, por supuesto, lo grabamos todo. No se batió ningún récord mundial oficial, pero conseguimos cinco vídeos y un poco más de respeto por la gente que se dedica a esto profesionalmente. Mira cómo fue.</p>
+</div>
+
+<div class="w-hero-v" data-r>
+  <figure class="w-vid" data-v="1247537412" data-h="2193656689" data-title="Ver la intro">
+    <button type="button" class="w-play" aria-label="Ver la intro, 0:49">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/43e7efd4-41d9-43a0-8967-b667f64453b1.jpeg" alt="La presentadora en el almacén delante de palés con cajas de Westpack" width="720" height="900" loading="lazy">
+      <span class="w-pm" aria-hidden="true"><i></i><span>Ver la intro<em>0:49</em></span></span>
+    </button>
+  </figure>
+  <p class="w-cap">La presentadora lo resumió muy bien: <b>“There were questionable techniques, definitely.”</b></p>
+</div>
+
+<div class="w-roster">
+  <p class="w-k">Cuatro intentos, cuatro resultados</p>
+  <ol class="w-rl">
+    <li>
+      <a href="#martin">
+        <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/c157394c-78b0-4b20-ab65-e54c1b7f7528.jpeg" alt="Martin" width="400" height="480" loading="lazy">
+        <span class="w-rt"><span class="w-rn"><small>01</small>Martin</span><span class="w-rr">12</span><span class="w-ru">cajas en una sola torre</span><span class="w-rc">Récord: ninguno</span></span>
+      </a>
+    </li>
+    <li>
+      <a href="#mia">
+        <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/016d324d-0cad-4998-8f4b-96cbce5aa3e2.jpeg" alt="Mia" width="400" height="480" loading="lazy">
+        <span class="w-rt"><span class="w-rn"><small>02</small>Mia</span><span class="w-rr">18</span><span class="w-ru">M&amp;M’s en un minuto</span><span class="w-rc">Récord: 65</span></span>
+      </a>
+    </li>
+    <li>
+      <a href="#cecilia">
+        <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/d02498c9-2f1e-4ace-bee7-79a1238b1ca3.jpeg" alt="Cecilia" width="400" height="480" loading="lazy">
+        <span class="w-rt"><span class="w-rn"><small>03</small>Cecilia</span><span class="w-rr">6,5<small>m</small></span><span class="w-ru">lanzamiento de una goma elástica en el almacén</span><span class="w-rc">Récord: 30,16 m</span></span>
+      </a>
+    </li>
+    <li>
+      <a href="#niklas">
+        <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/29e22141-2231-44a3-96e9-09c3184e6c17.jpeg" alt="Niklas" width="400" height="480" loading="lazy">
+        <span class="w-rt"><span class="w-rn"><small>04</small>Niklas</span><span class="w-rr">52</span><span class="w-ru">pinzas de ropa en la cara</span><span class="w-rc">Récord: 161</span></span>
+      </a>
+    </li>
+  </ol>
+  <p class="w-hint">Elige un participante y mira cómo fue el intento.</p>
+</div>
+
+</div>
+</section>
+
+<!-- MARTIN -->
+<section class="w-p" id="martin">
+<div class="w-p-in">
+
+<header class="w-p-h" data-r>
+  <span class="w-bgn" aria-hidden="true">01</span>
+  <p class="w-k">Concursante 01</p>
+  <h2 class="w-name">Martin</h2>
+  <p class="w-nick">El amo de la torre</p>
+</header>
+
+<div class="w-p-v" data-r>
+  <figure class="w-vid" data-v="1247537411" data-h="0a2711c7ae" data-title="Ver la torre de Martin">
+    <button type="button" class="w-play" aria-label="Ver la torre de Martin, 0:46">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/dd16b779-9f7c-484d-9992-673a502a56d5.jpeg" alt="Martin coloca una caja para joyería en la cima de una torre alta, con guantes desechables" width="720" height="900" loading="lazy">
+      <span class="w-pm" aria-hidden="true"><i></i><span>Ver la torre de Martin<em>0:46</em></span></span>
+    </button>
+  </figure>
+</div>
+
+<div class="w-p-d" data-r>
+  <dl class="w-score">
+    <div>
+      <dt class="w-k">Resultado</dt>
+      <dd><b class="w-big" data-to="12">12</b><span class="w-unit">cajas para joyería en una sola torre</span></dd>
+    </div>
+    <div class="is-rec">
+      <dt class="w-k">El récord</dt>
+      <dd><b class="w-big">Ninguno</b><span class="w-unit">Ningún récord oficial en la disciplina. A Martin le venía de maravilla.</span></dd>
+    </div>
+  </dl>
+
+  <div class="w-meter w-tw" role="img" aria-label="Una torre de 12 cajas para joyería">
+    <div class="w-tower">
+      <i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <p class="w-mcap"><span><b>12</b> cajas</span><span>Ningún récord con el que comparar</span></p>
+  </div>
+
+  <p class="w-k w-mk">De las grabaciones</p>
+  <ol class="w-mom">
+    <li><button type="button" data-t="2"><span class="w-ts">0:02</span><span class="w-mt">¿Sin récord oficial? “None!” Así que Martin tuvo que crear el suyo.</span></button></li>
+    <li><button type="button" data-t="7"><span class="w-ts">0:07</span><span class="w-mt">Se pone los guantes antes de apilar la primera caja. No deja nada al azar.</span></button></li>
+    <li><button type="button" data-t="17"><span class="w-ts">0:17</span><span class="w-mt">La primera torre se cae. Martin se ríe y sigue construyendo.</span></button></li>
+    <li><button type="button" data-t="42"><span class="w-ts">0:42</span><span class="w-mt">Doce cajas y una torre que sigue en pie. Nadie se atreve a estornudar.</span></button></li>
+  </ol>
+
+  <p class="w-pay"><span class="w-k">Nuestro veredicto</span><span class="w-q">12 cajas son 12 cajas.</span> Martin ahora tiene su propio récord personal en una disciplina que no existía hasta el lunes pasado. También es una forma de ganar.</p>
+</div>
+
+</div>
+</section>
+
+<!-- MIA -->
+<section class="w-p is-flip" id="mia">
+<div class="w-p-in">
+
+<header class="w-p-h" data-r>
+  <span class="w-bgn" aria-hidden="true">02</span>
+  <p class="w-k">Concursante 02</p>
+  <h2 class="w-name">Mia</h2>
+  <p class="w-nick">La experta en palillos</p>
+</header>
+
+<div class="w-p-v" data-r>
+  <figure class="w-vid" data-v="1247537438" data-h="949b9aafb2" data-title="Ver el minuto de Mia">
+    <button type="button" class="w-play" aria-label="Mira el minuto de Mia, 0:35">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/9458c0ad-0506-48d4-bbcb-8e11393ce63d.jpeg" alt="Mia acerca un M&amp;M a la boca con palillos, con el bol delante" width="720" height="900" loading="lazy">
+      <span class="w-pm" aria-hidden="true"><i></i><span>Mira el minuto de Mia<em>0:35</em></span></span>
+    </button>
+  </figure>
+</div>
+
+<div class="w-p-d" data-r>
+  <dl class="w-score">
+    <div>
+      <dt class="w-k">Resultado</dt>
+      <dd><b class="w-big" data-to="18">18</b><span class="w-unit">M&amp;M’s en un minuto – con palillos</span></dd>
+    </div>
+    <div class="is-rec">
+      <dt class="w-k">El récord</dt>
+      <dd><b class="w-big">65</b><span class="w-unit">récord mundial de 2011</span></dd>
+    </div>
+  </dl>
+
+  <div class="w-meter w-dots" role="img" aria-label="18 de 65">
+    <div class="w-cells">
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <p class="w-mcap"><span><b>18</b> de 65</span><span>Cada punto es un M&amp;M</span></p>
+  </div>
+
+  <p class="w-k w-mk">De las grabaciones</p>
+  <ol class="w-mom">
+    <li><button type="button" data-t="2"><span class="w-ts">0:02</span><span class="w-mt">Las reglas son sencillas: palillos, un bol de M&amp;M’s y un minuto. El récord mundial es 65.</span></button></li>
+    <li><button type="button" data-t="10"><span class="w-ts">0:10</span><span class="w-mt">Mia domina los palillos por completo. El ritmo es más de pausa para comer que de récord mundial.</span></button></li>
+    <li><button type="button" data-t="33"><span class="w-ts">0:33</span><span class="w-mt">18 en un minuto. “Pretty close”, opina la presentadora. Es muy amable por su parte.</span></button></li>
+  </ol>
+
+  <p class="w-pay"><span class="w-k">Nuestro veredicto</span><span class="w-q">18 M&amp;M’s en un minuto está bastante bien.</span> Eso pensábamos, hasta que alguien nos dijo que el récord mundial es 65.</p>
+</div>
+
+</div>
+</section>
+
+<!-- CECILIA -->
+<section class="w-p" id="cecilia">
+<div class="w-p-in">
+
+<header class="w-p-h" data-r>
+  <span class="w-bgn" aria-hidden="true">03</span>
+  <p class="w-k">Concursante 03</p>
+  <h2 class="w-name">Cecilia</h2>
+  <p class="w-nick">El brazo largo</p>
+</header>
+
+<div class="w-p-v" data-r>
+  <figure class="w-vid" data-v="1247537413" data-h="1e31bfbd8f" data-title="Ver el tiro de Cecilia">
+    <button type="button" class="w-play" aria-label="Mira el tiro de Cecilia, 0:33">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/0cf05ff6-4e8d-44e0-bd4c-53aae8fc1d51.jpeg" alt="Cecilia se ríe y mira la goma elástica en sus manos, en el almacén" width="720" height="900" loading="lazy">
+      <span class="w-pm" aria-hidden="true"><i></i><span>Mira el tiro de Cecilia<em>0:33</em></span></span>
+    </button>
+  </figure>
+</div>
+
+<div class="w-p-d" data-r>
+  <dl class="w-score">
+    <div>
+      <dt class="w-k">Resultado</dt>
+      <dd><b class="w-big" data-to="6.5">6,5<small>m</small></b><span class="w-unit">el más largo de tres lanzamientos</span></dd>
+    </div>
+    <div class="is-rec">
+      <dt class="w-k">La marca</dt>
+      <dd><b class="w-big">30,16<small>m</small></b><span class="w-unit">récord mundial de 1999</span></dd>
+    </div>
+  </dl>
+
+  <div class="w-meter w-ln" role="img" aria-label="6,5 metros de los 30,16 metros del récord" style="--at:21.55%">
+    <div class="w-line">
+      <i></i><span class="w-band"></span><span class="w-lbl">6,5&nbsp;m</span>
+    </div>
+    <p class="w-mcap"><span>0</span><span>Récord: 30,16&nbsp;m</span></p>
+  </div>
+
+  <p class="w-k w-mk">De las grabaciones</p>
+  <ol class="w-mom">
+    <li><button type="button" data-t="7"><span class="w-ts">0:07</span><span class="w-mt">Primer lanzamiento. Todavía hay mucho optimismo.</span></button></li>
+    <li><button type="button" data-t="16"><span class="w-ts">0:16</span><span class="w-mt">El segundo lanzamiento baja por el pasillo del almacén. Toman la medida.</span></button></li>
+    <li><button type="button" data-t="25"><span class="w-ts">0:25</span><span class="w-mt">El tercer lanzamiento cae junto a la línea amarilla del suelo del almacén.</span></button></li>
+    <li><button type="button" data-t="29"><span class="w-ts">0:29</span><span class="w-mt">6,5 metros. El veredicto: “Sadly just a tiny bit off”.</span></button></li>
+  </ol>
+
+  <p class="w-pay"><span class="w-k">Nuestro veredicto</span><span class="w-q">Lanzar una goma elástica 6,5 metros está bastante bien.</span> El récord mundial está 23,66 metros más abajo en el pasillo del almacén, así que Cecilia tendrá que intentarlo de nuevo.</p>
+</div>
+
+</div>
+</section>
+
+<!-- NIKLAS -->
+<section class="w-p is-flip" id="niklas">
+<div class="w-p-in">
+
+<header class="w-p-h" data-r>
+  <span class="w-bgn" aria-hidden="true">04</span>
+  <p class="w-k">Concursante 04</p>
+  <h2 class="w-name">Niklas</h2>
+  <p class="w-nick">El rey de las pinzas</p>
+</header>
+
+<div class="w-p-v" data-r>
+  <figure class="w-vid" data-v="1247537414" data-h="6c928e8f3b" data-title="Ver las pinzas de Niklas">
+    <button type="button" class="w-play" aria-label="Ver las pinzas de Niklas, 4:51">
+      <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/acc3b331-b101-45f4-af5f-e4c61723b06b.jpeg" alt="Niklas con la cara cubierta de pinzas de ropa de colores pastel" width="720" height="900" loading="lazy">
+      <span class="w-pm" aria-hidden="true"><i></i><span>Ver las pinzas de Niklas<em>4:51</em></span></span>
+    </button>
+  </figure>
+</div>
+
+<div class="w-p-d" data-r>
+  <dl class="w-score">
+    <div>
+      <dt class="w-k">Resultado</dt>
+      <dd><b class="w-big" data-to="52">52</b><span class="w-unit">pinzas de ropa en la cara</span></dd>
+    </div>
+    <div class="is-rec">
+      <dt class="w-k">La marca</dt>
+      <dd><b class="w-big">161</b><span class="w-unit">récord mundial de 2013</span></dd>
+    </div>
+  </dl>
+
+  <div class="w-meter w-pegs" role="img" aria-label="52 de 161">
+    <div class="w-cells">
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <p class="w-mcap"><span><b>52</b> de 161</span><span>Cada raya es una pinza</span></p>
+  </div>
+
+  <p class="w-k w-mk">De las grabaciones</p>
+  <ol class="w-mom">
+    <li><button type="button" data-t="8"><span class="w-ts">0:08</span><span class="w-mt">La primera pinza de ropa está en la mandíbula. Todavía hay mucho sitio.</span></button></li>
+    <li><button type="button" data-t="230"><span class="w-ts">3:50</span><span class="w-mt">Ya empezamos a tener dificultades para ver a Niklas detrás de todas las pinzas de ropa.</span></button></li>
+    <li><button type="button" data-t="260"><span class="w-ts">4:20</span><span class="w-mt">Le quitan las pinzas. Las marcas tardan un poco más en desaparecer.</span></button></li>
+    <li><button type="button" data-t="269"><span class="w-ts">4:29</span><span class="w-mt">52 pinzas de ropa. “Impressive … but not quite there.”</span></button></li>
+  </ol>
+
+  <p class="w-pay"><span class="w-k">Nuestro veredicto</span><span class="w-q">Lo más cerca de un récord de verdad y lo más lejos de un viernes agradable.</span> 52 pinzas de ropa son algo menos de un tercio del récord mundial. Estamos impresionados, pero preferimos no saber qué aspecto tendría Niklas con 161.</p>
+</div>
+
+</div>
+</section>
+
+<!-- TILBUDDET -->
+<section class="w-sec w-offer" id="tilbuddet">
+
+<p class="w-k" data-r>Oferta · hasta el domingo</p>
+<h2 class="w-h2" data-r>Los récords se escaparon, pero el descuento sigue</h2>
+
+<div class="w-offer-top" data-r>
+  <div class="w-flap" role="img" aria-label="20 %">
+    <span>2</span><span>0</span><span>%</span>
+  </div>
+  <p class="w-burst">Hasta<br>domingo</p>
+</div>
+
+<p class="w-lead w-dates" data-r>Por suerte, hay una cifra que no necesitamos comprobar dos veces: <b>20&nbsp;% de descuento en toda la serie WTP (World of Treasured Pieces)</b>. El descuento se aplica a los estuches para joyería, los estuches de viaje para joyería y los estuches apilables para joyería hasta el domingo 29&nbsp;de noviembre, para que aún puedas llenar tus estantes antes de las ventas navideñas.</p>
+
+<ul class="w-items" data-r>
+
+<li>
+  <a href="/eur_eu_spa/wtp-hawaii-jewellery-travel-case-02819140560.html">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/3f9a1703-8fb3-425d-8cec-9d74890f9ed8.jpeg" alt="WTP Hawaii, estuche de viaje redondo para joyería" width="518" height="420" loading="lazy">
+    <span>
+      <span class="w-k">Peso mosca<span class="w-g">·&nbsp;95&nbsp;g</span></span>
+      <span class="w-in"><span translate="no" class="notranslate">WTP Hawaii</span></span>
+      <span class="w-is">Estuche de viaje para joyería redondo con cremallera</span>
+      <span class="w-is">80 × 80 × 63&nbsp;mm</span>
+      <span class="w-go">Ver el estuche</span>
+    </span>
+  </a>
+</li>
+
+<li>
+  <a href="/eur_eu_spa/wtp-capri-jewellery-travel-case-02819130620.html">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/768c7e4b-08b9-477c-b544-12e310ff6e20.jpeg" alt="WTP Capri, estuche de viaje azul claro para joyería" width="518" height="420" loading="lazy">
+    <span>
+      <span class="w-k">Peso ligero<span class="w-g">·&nbsp;192&nbsp;g</span></span>
+      <span class="w-in"><span translate="no" class="notranslate">WTP Capri</span></span>
+      <span class="w-is">Estuche de viaje para joyería con cremallera</span>
+      <span class="w-is">115 × 115 × 63&nbsp;mm</span>
+      <span class="w-go">Ver el estuche</span>
+    </span>
+  </a>
+</li>
+
+<li>
+  <a href="/eur_eu_spa/wtp-bali-jewellery-travel-case-02819180560.html">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/243be399-962c-4d69-b771-00930751bf95.jpeg" alt="WTP Bali, estuche de viaje de dos niveles para joyería" width="518" height="420" loading="lazy">
+    <span>
+      <span class="w-k">Peso medio<span class="w-g">·&nbsp;487&nbsp;g</span></span>
+      <span class="w-in"><span translate="no" class="notranslate">WTP Bali</span></span>
+      <span class="w-is">Dos niveles con compartimentos</span>
+      <span class="w-is">145 × 182 × 103&nbsp;mm</span>
+      <span class="w-go">Ver el estuche</span>
+    </span>
+  </a>
+</li>
+
+<li>
+  <a href="/eur_eu_spa/wtp-tahiti-jewellery-case-02819171340.html">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/773a25b1-0f00-4100-aaca-bcc9527dbca5.jpeg" alt="WTP Tahiti, estuche para joyería rosa con espejo en la tapa" width="518" height="420" loading="lazy">
+    <span>
+      <span class="w-k">Peso pesado<span class="w-g">·&nbsp;992&nbsp;g</span></span>
+      <span class="w-in"><span translate="no" class="notranslate">WTP Tahiti</span></span>
+      <span class="w-is">Con espejo en la tapa</span>
+      <span class="w-is">180 × 250 × 121&nbsp;mm</span>
+      <span class="w-go">Ver el estuche</span>
+    </span>
+  </a>
+</li>
+
+<li class="is-wide">
+  <a href="/eur_eu_spa/cases/wtp-stackables.html">
+    <img src="https://d3k81ch9hvuctc.cloudfront.net/company/VRPp5S/images/0177230a-6c7a-4665-966f-47b43e5d34f8.jpeg" alt="WTP Stackables, estuche apilable para joyería de terciopelo verde con joyas" width="1064" height="440" loading="lazy">
+    <span>
+      <span class="w-k">Para los que disfrutan apilando</span>
+      <span class="w-in"><span translate="no" class="notranslate">WTP Stackables</span></span>
+      <span class="w-is">Estuches apilables para joyería con compartimentos flexibles.</span>
+      <span class="w-go">Ver <span translate="no" class="notranslate">WTP Stackables</span></span>
+    </span>
+  </a>
+</li>
+
+</ul>
+
+<div class="w-btns" data-r>
+  <a class="w-btn" href="/eur_eu_spa/cases/wtp-cases.html">Encuentra tus estuches WTP con un 20&nbsp;% de descuento</a>
+  <a class="w-ar" href="/eur_eu_spa/customer/account/login/">Inicia sesión para ver tus precios con el descuento</a>
+</div>
+
+<p class="w-fine" data-r>Lunes 23 – domingo 29&nbsp;de noviembre.</p>
+<p class="w-over">La oferta de los estuches WTP finalizó el domingo 29&nbsp;de noviembre, pero todavía puedes <a class="w-ar" href="/eur_eu_spa/cases/wtp-cases.html">ver toda la serie</a>.</p>
+
+</section>
+
+<!-- AFSLUTNING -->
+<section class="w-sec w-close">
+  <p class="w-k" data-r>Desde el almacén</p>
+  <h2 class="w-h2" data-r>“We might need another&nbsp;Friday.”</h2>
+  <p class="w-lead" data-r>Eso dijo la presentadora, y nos inclinamos a darle la razón. Cuatro intentos, cero récords mundiales oficiales y un consumo inusualmente alto de pinzas para la ropa. Esto casi exige una revancha.</p>
+  <p data-r><a class="w-ar" href="#intro">Ver la intro de nuevo</a></p>
+  <p class="w-credit" data-r>Grabado en Westpack, en una sala de reuniones, en el comedor y en el almacén. Black Friday seguía sin estar invitado.</p>
+</section>
+
+<!-- INTERAKTIONER OG ANIMATIONER -->
+<script>
+!function(){
+var R=document.getElementById("wrf26");
+if(!R||R.getAttribute("data-ready"))return;
+R.setAttribute("data-ready","1");
+
+var $=function(s,n){
+  return Array.prototype.slice.call((n||R).querySelectorAll(s))
+};
+
+var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,
+IO="IntersectionObserver"in window,
+AN=IO&&!RM;
+
+var st=location.pathname.split("/")[1]||"";
+
+if(/^[a-z]{3}_[a-z]{2}_[a-z]{3}$/.test(st)&&st!=="dkk_dk_den"){
+  $("a[href*='/dkk_dk_den/']").forEach(function(a){
+    a.setAttribute("href",a.getAttribute("href").replace("/eur_eu_spa/","/"+st+"/"))
+  })
+}
+
+var bl=function(){
+  R.style.marginLeft=R.style.marginRight="";
+  var p=R.parentElement,vw=document.documentElement.clientWidth;
+  if(!p||vw>600)return;
+  var r=p.getBoundingClientRect();
+  if(r.left<0||r.right>vw)return;
+  R.style.marginLeft=-r.left+"px";
+  R.style.marginRight=-(vw-r.right)+"px"
+},bt;
+
+bl();
+window.addEventListener("resize",function(){
+  clearTimeout(bt);
+  bt=setTimeout(bl,120)
+});
+
+var U=Date.parse(R.getAttribute("data-until"));
+if(U&&Date.now()>=U)R.classList.add("is-over");
+
+var O="https://player.vimeo.com";
+
+function post(f,m){
+  var i=f.querySelector("iframe");
+  if(i&&i.contentWindow)i.contentWindow.postMessage(JSON.stringify(m),O)
+}
+
+function play(f,t){
+  $(".w-vid").forEach(function(g){
+    g!==f&&post(g,{method:"pause"})
+  });
+
+  var i=f.querySelector("iframe");
+  if(i){
+    if(t!=null)post(f,{method:"setCurrentTime",value:t});
+    post(f,{method:"play"});
+    return
+  }
+
+  i=document.createElement("iframe");
+  i.src=O+"/video/"+f.getAttribute("data-v")+
+    "?h="+f.getAttribute("data-h")+
+    "&dnt=1&autoplay=1&title=0&byline=0&portrait=0&color=ffffff"+
+    (t?"#t="+t+"s":"");
+
+  i.setAttribute("allow","autoplay; fullscreen; picture-in-picture");
+  i.setAttribute("allowfullscreen","");
+  i.title=f.getAttribute("data-title");
+
+  f.innerHTML="";
+  f.appendChild(i);
+  f.classList.remove("is-target")
+}
+
+$(".w-vid").forEach(function(f){
+  var b=f.querySelector(".w-play");
+  b&&b.addEventListener("click",function(){
+    play(f,null)
+  })
+});
+
+$("[data-t]").forEach(function(b){
+  b.addEventListener("click",function(){
+    var s=b.closest(".w-p"),
+    f=s&&s.querySelector(".w-vid");
+    if(!f)return;
+
+    play(f,+b.getAttribute("data-t"));
+
+    var r=f.getBoundingClientRect();
+    if(r.top<0||r.bottom>innerHeight){
+      f.scrollIntoView({
+        block:"center",
+        behavior:RM?"auto":"smooth"
+      })
+    }
+  })
+});
+
+function num(el){
+  var to=parseFloat(el.getAttribute("data-to")),
+  d=String(to).indexOf(".")>-1?1:0,
+  sm=el.querySelector("small"),
+  sx=sm?sm.outerHTML:"",
+  t0=null;
+
+  function step(ts){
+    t0=t0||ts;
+    var k=Math.min(1,(ts-t0)/1100),
+    v=to*(1-Math.pow(1-k,3));
+
+    el.innerHTML=(d?v.toFixed(1).replace(".",","):Math.round(v))+sx;
+
+    if(k<1)requestAnimationFrame(step)
+  }
+  requestAnimationFrame(step)
+}
+
+if(AN){
+  var W=$(".w-meter,.w-bars,.w-rl");
+
+  W.forEach(function(m){
+    m.classList.add("is-wait");
+    $("i.on,.w-tower i",m).forEach(function(c,j){
+      c.style.transitionDelay=(
+        j*(m.classList.contains("w-pegs")?22:
+        m.classList.contains("w-tw")?110:70)
+      )+"ms"
+    })
+  });
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting)return;
+
+      var m=e.target;
+      io.unobserve(m);
+
+      if(m.classList.contains("w-rl")){
+        var L=$("li",m),j=0;
+
+        var tick=function(){
+          L.forEach(function(l,x){
+            l.classList.toggle("is-cur",x===j)
+          });
+
+          if(j<L.length){
+            L[j].classList.add("is-lit");
+            j++;
+            setTimeout(tick,420)
+          }else{
+            setTimeout(function(){
+              L.forEach(function(l){
+                l.classList.remove("is-cur")
+              });
+              m.classList.remove("is-wait")
+            },500)
+          }
+        };
+
+        tick();
+        return
+      }
+
+      if(m.classList.contains("w-big"))return num(m);
+
+      setTimeout(function(){
+        m.classList.remove("is-wait")
+      },120)
+    })
+  },{threshold:.35});
+
+  W.forEach(function(m){
+    io.observe(m)
+  });
+
+  $(".w-big[data-to]").forEach(function(b){
+    io.observe(b)
+  })
+}
+
+var H=location.hash.slice(1),
+T=/^[a-z]+$/.test(H)?
+  (document.getElementById(H)||
+  (H==="stemmerne"?R.querySelector(".w-roster"):null)):null;
+
+if(T&&R.contains(T)){
+  var v=T.querySelector(".w-vid");
+  v&&v.classList.add("is-target");
+
+  $("[data-r]",T).forEach(function(x){
+    x.classList.add("is-in")
+  });
+
+  var go=function(){
+    T.scrollIntoView({block:"start"})
+  };
+
+  go();
+
+  document.fonts&&document.fonts.ready&&document.fonts.ready.then(go);
+  window.addEventListener("load",go);
+
+  // The cookie banner locks html/body, and answering it puts the page back at the top.
+  // Land again when the lock lifts, unless the reader has scrolled by then.
+  var lk=function(){
+    return getComputedStyle(document.documentElement).overflowY==="hidden"||getComputedStyle(document.body).overflowY==="hidden"
+  },was=false,own=false,n=0;
+
+  ["wheel","touchmove"].forEach(function(e){
+    window.addEventListener(e,function(){
+      if(!lk())own=true
+    },{passive:true})
+  });
+
+  var iv=setInterval(function(){
+    n++;
+    if(lk())was=true;
+    else if(was){
+      clearInterval(iv);
+      if(!own)go()
+    }
+    if(n>240||(!was&&n>40))clearInterval(iv)
+  },250)
+}
+
+if(AN){
+  R.classList.add("is-rv");
+
+  var rv=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add("is-in");
+        rv.unobserve(e.target)
+      }
+    })
+  },{rootMargin:"0px 0px -8% 0px"});
+
+  $("[data-r]").forEach(function(x){
+    rv.observe(x)
+  })
+}
+
+var fl=R.querySelector(".w-flap");
+
+if(fl&&AN){
+  var D=$("span",fl).slice(0,2),
+  fin=["2","0"],
+  fo=new IntersectionObserver(function(es){
+    if(!es[0].isIntersecting)return;
+
+    fo.disconnect();
+
+    var n=0,
+    iv=setInterval(function(){
+      n++;
+
+      D.forEach(function(s,x){
+        s.textContent=n>8+x*4?
+          fin[x]:
+          String((n*7+x*3)%10)
+      });
+
+      if(n>16)clearInterval(iv)
+    },60)
+  },{threshold:.5});
+
+  fo.observe(fl)
+}
+}();
+</script>
+
+</div>

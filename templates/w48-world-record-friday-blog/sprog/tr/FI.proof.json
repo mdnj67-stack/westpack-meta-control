@@ -1,0 +1,222 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "“Eli ettekö te vieläkään pidä Black Fridayta?”",
+   "suggested": "“Eli etkö vieläkään vietä Black Fridayta?”",
+   "severity": "error",
+   "reason": "The plural form of address conflicts with the required singular sinä form."
+  },
+  {
+   "id": "t40",
+   "current": "Neljä kollegaa lähti mukaan omalla ennätysyrityksellään ja tottakai kuvasimme kaiken. Yhtäkään virallista maailmanennätystä ei rikottu, mutta saimme viisi videota ja vähän enemmän kunnioitusta heitä kohtaan, jotka tekevät tätä ammatikseen. Katso itse, miten kävi.",
+   "suggested": "Neljä kollegaa lähti mukaan kukin omalla ennätysyrityksellään, ja totta kai kuvasimme kaiken. Yhtäkään virallista maailmanennätystä ei rikottu, mutta saimme viisi videota ja opimme arvostamaan hieman enemmän niitä, jotka tekevät tätä ammatikseen. Katso itse, miten kävi.",
+   "severity": "error",
+   "reason": "“Totta kai” is written separately, and the latter construction is an unnatural calque."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s minuutissa",
+   "suggested": "M&M's minuutissa",
+   "severity": "error",
+   "reason": "The brand name must retain its exact apostrophe styling."
+  },
+  {
+   "id": "t184",
+   "current": "kuminauha-ammunta varastolla",
+   "suggested": "kuminauhalaukaus varastolla",
+   "severity": "improve",
+   "reason": "The singular “kuminauhalaukaus” is the natural term for this attempt."
+  },
+  {
+   "id": "t218",
+   "current": "vaatenauloja kasvoissa",
+   "suggested": "pyykkipoikia kasvoilla",
+   "severity": "error",
+   "reason": "“Vaatenaula” is not the Finnish word for a clothes peg."
+  },
+  {
+   "id": "t234",
+   "current": "Valitse kilpailija ja katso, miten yritys meni.",
+   "suggested": "Valitse kilpailija ja katso, miten yritys sujui.",
+   "severity": "improve",
+   "reason": "“Miten yritys meni” reads as a direct translation rather than idiomatic Finnish."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin laittaa korurasian korkeimman tornin päälle, kertakäyttökäsineet kädessä",
+   "suggested": "Martin asettaa korurasian korkean tornin päällimmäiseksi kertakäyttökäsineet kädessään",
+   "severity": "error",
+   "reason": "The source says a high tower, not the highest tower, and the current wording is awkward."
+  },
+  {
+   "id": "t316",
+   "current": "korurasiat yhdessä tornissa",
+   "suggested": "korurasiaa yhdessä tornissa",
+   "severity": "error",
+   "reason": "A counted item requires the partitive singular form here."
+  },
+  {
+   "id": "t332",
+   "current": "Ei mitään",
+   "suggested": "Ei ole",
+   "severity": "error",
+   "reason": "The current text means “nothing,” not that no record exists."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia vie M&M’sin suulle syömäpuikoilla, kulho edessään",
+   "suggested": "Mia vie syömäpuikoilla M&M's-karkin suuhunsa kulho edessään",
+   "severity": "error",
+   "reason": "The inflection and apostrophe are incorrect, and “suuhunsa” is idiomatic here."
+  },
+  {
+   "id": "t908",
+   "current": "Säännöt ovat yksinkertaiset: syömäpuikot, kulhollinen M&M’sejä ja yksi minuutti. Maailmanennätys on 65.",
+   "suggested": "Säännöt ovat yksinkertaiset: syömäpuikot, kulhollinen M&M's-karkkeja ja yksi minuutti. Maailmanennätys on 65.",
+   "severity": "error",
+   "reason": "The current inflection of M&M's is malformed and changes the required brand styling."
+  },
+  {
+   "id": "t924",
+   "current": "Mialla on täysi ote syömäpuikoista. Tahti on vain vähän enemmän lounastaukoa kuin maailmanennätystä.",
+   "suggested": "Mia hallitsee syömäpuikot täydellisesti. Tahti vain muistuttaa hieman enemmän lounastaukoa kuin maailmanennätystä.",
+   "severity": "improve",
+   "reason": "The current phrasing is a literal calque that makes the joke sound unnatural."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M's yhdessä minuutissa on oikeastaan aika hyvin.",
+   "suggested": "18 M&M's-karkkia yhdessä minuutissa on oikeastaan aika hyvä tulos.",
+   "severity": "error",
+   "reason": "The nominal subject requires a noun phrase such as “aika hyvä tulos,” not the adverb “hyvin.”"
+  },
+  {
+   "id": "t988",
+   "current": "Pitkä Käsi",
+   "suggested": "Pitkä käsi",
+   "severity": "error",
+   "reason": "Finnish headings and nicknames do not capitalize the second common noun."
+  },
+  {
+   "id": "a999.alt",
+   "current": "Cecilia nauraa ja katsoo alas kuminauhaan käsissään, varastossa",
+   "suggested": "Varastossa Cecilia nauraa ja katsoo käsissään olevaa kuminauhaa",
+   "severity": "error",
+   "reason": "“Katsoo alas kuminauhaan käsissään” is not idiomatic Finnish."
+  },
+  {
+   "id": "t1044",
+   "current": "pisimmälle kolmesta laukauksesta",
+   "suggested": "kolmesta laukauksesta pisin",
+   "severity": "error",
+   "reason": "The current superlative construction uses the wrong form."
+  },
+  {
+   "id": "t1140",
+   "current": "Toinen laukaus menee hyllykäytävän alas. Mittanauha otetaan esiin.",
+   "suggested": "Toinen laukaus lentää hyllykäytävää pitkin. Etäisyys mitataan.",
+   "severity": "error",
+   "reason": "“Menee hyllykäytävän alas” is an unidiomatic literal translation."
+  },
+  {
+   "id": "t1190",
+   "current": "Maailmanennätys on kuitenkin 23,66 metriä varastokäytävää pidemmällä, joten Cecilian täytyy yrittää uudestaan.",
+   "suggested": "Maailmanennätys on kuitenkin vain 23,66 metriä kauempana varastokäytävällä, joten Cecilian täytyy yrittää uudestaan.",
+   "severity": "improve",
+   "reason": "The current placement expression is awkward and obscures the aisle joke."
+  },
+  {
+   "id": "a1231.alt",
+   "current": "Niklas kasvot täynnä pastellivärisiä pyykkipoikia",
+   "suggested": "Niklas, jonka kasvot ovat täynnä pastellinvärisiä pyykkipoikia",
+   "severity": "error",
+   "reason": "The current noun sequence lacks the structure needed to connect Niklas with his face."
+  },
+  {
+   "id": "t1984",
+   "current": "Ensimmäinen pyykkipoika kiinnittyy leukaan. Tilaa on vielä paljon.",
+   "suggested": "Ensimmäinen pyykkipoika kiinnitetään leukaan. Tilaa on vielä paljon.",
+   "severity": "improve",
+   "reason": "“Kiinnittyy” incorrectly suggests that the peg attaches itself."
+  },
+  {
+   "id": "t2068",
+   "current": "Ennätykset jäivät rikkomatta, mutta alennus pitää",
+   "suggested": "Ennätykset jäivät rikkomatta, mutta alennus on voimassa",
+   "severity": "error",
+   "reason": "“Alennus pitää” is an unidiomatic calque in Finnish."
+  },
+  {
+   "id": "t2098",
+   "current": "Onneksi on yksi luku, jota sinun ei tarvitse tarkistaa kahdesti:",
+   "suggested": "Onneksi on yksi luku, jota meidän ei tarvitse tarkistaa kahdesti:",
+   "severity": "error",
+   "reason": "The source refers to what “we” do not need to check, not the reader."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% koko WTP-sarjasta (World of Treasured Pieces)",
+   "suggested": "20&nbsp;%:n alennus koko WTP-sarjasta (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "Finnish needs an explicit and correctly inflected expression for the discount."
+  },
+  {
+   "id": "t2216",
+   "current": "Kaksi kerrosta jaettuna lokeroihin",
+   "suggested": "Kaksi kerrosta lokeroineen",
+   "severity": "improve",
+   "reason": "The current participial construction reads as machine-translated Finnish."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, pinottava korukotelo vihreästä sametista, koruilla",
+   "suggested": "WTP Stackables, vihreä veluurinen pinottava korukotelo, jossa on koruja",
+   "severity": "error",
+   "reason": "“Koruilla” is unidiomatic here, and “veluurinen” accurately reflects the source material."
+  },
+  {
+   "id": "t2284",
+   "current": "Heille, jotka rakastavat pinoamista",
+   "suggested": "Sinulle, joka rakastat pinoamista",
+   "severity": "error",
+   "reason": "The third-person plural address conflicts with the required singular sinä form."
+  },
+  {
+   "id": "t2296",
+   "current": "Pinottavat korurasiat joustavilla lokeroilla.",
+   "suggested": "Pinottavat korukotelot muunneltavalla lokeroinnilla.",
+   "severity": "error",
+   "reason": "These are jewellery cases, not jewellery boxes, and the current compartment wording is unnatural."
+  },
+  {
+   "id": "t2318",
+   "current": "Löydä omat WTP-kotelosi 20&nbsp;% alennuksella",
+   "suggested": "Löydä omat WTP-kotelosi 20&nbsp;%:n alennuksella",
+   "severity": "error",
+   "reason": "The percentage requires a genitive ending before “alennuksella.”"
+  },
+  {
+   "id": "t2366",
+   "current": "Kuvattu Westpackin toimistolla neuvotteluhuoneessa, henkilöstöravintolassa ja varastolla. Black Friday ei vieläkään ollut kutsuttu.",
+   "suggested": "Kuvattu Westpackilla neuvotteluhuoneessa, ruokalassa ja varastossa. Black Fridayta ei vieläkään kutsuttu.",
+   "severity": "error",
+   "reason": "The current version adds an office and uses the wrong case for Black Friday."
+  },
+  {
+   "id": "t2384",
+   "current": "Katso Martin tornia",
+   "suggested": "Katso Martinin torni",
+   "severity": "error",
+   "reason": "Martin requires the genitive form, and the button should match the earlier title."
+  },
+  {
+   "id": "t2412",
+   "current": "Emme juhli Black Fridayta. Sen sijaan neljä kollegaa kokeili maailmanennätyksiä korurasioiden, M&M’sien, kuminauhan ja pyykkipoikien kanssa. Katso kaikki viisi videota tästä.",
+   "suggested": "Emme vietä Black Fridayta. Sen sijaan neljä kollegaa tavoitteli maailmanennätyksiä korurasioilla, M&M's-karkeilla, kuminauhalla ja pyykkipojilla. Katso kaikki viisi videota tästä.",
+   "severity": "error",
+   "reason": "The current wording is unidiomatic, and M&M's does not retain its required form."
+  }
+ ]
+}

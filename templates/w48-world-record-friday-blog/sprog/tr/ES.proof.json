@@ -1,0 +1,222 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "“¿Así que todavía no hacéis Black Friday?”",
+   "suggested": "“¿Así que todavía no haces Black Friday?”",
+   "severity": "error",
+   "reason": "The plural vosotros form conflicts with the required singular tú address."
+  },
+  {
+   "id": "t36",
+   "current": "No, apostamos por los récords mundiales en su lugar. Quizá fue un poco demasiado ambicioso…",
+   "suggested": "No, en su lugar fuimos a por récords mundiales. Quizá fue un poco demasiado ambicioso…",
+   "severity": "improve",
+   "reason": "The current wording and placement of “en su lugar” read like a literal translation."
+  },
+  {
+   "id": "t40",
+   "current": "Cuatro compañeros participaron con su propio intento de récord, y por supuesto grabamos todo. No se batió ningún récord mundial oficial, pero tenemos cinco vídeos y un poco más de respeto por la gente que se dedica a esto profesionalmente. Mira tú mismo cómo fue.",
+   "suggested": "Cuatro compañeros participaron, cada uno con su propio intento de récord, y, por supuesto, lo grabamos todo. No se batió ningún récord mundial oficial, pero conseguimos cinco vídeos y un poco más de respeto por la gente que se dedica a esto profesionalmente. Mira cómo fue.",
+   "severity": "error",
+   "reason": "Several phrases are unidiomatic, and “tú mismo” introduces an unnecessary masculine form."
+  },
+  {
+   "id": "t146",
+   "current": "M&amp;M’s en un minuto",
+   "suggested": "M&amp;M's en un minuto",
+   "severity": "error",
+   "reason": "The product name must use the specified straight apostrophe."
+  },
+  {
+   "id": "t184",
+   "current": "disparo de goma elástica en el almacén",
+   "suggested": "lanzamiento de una goma elástica en el almacén",
+   "severity": "improve",
+   "reason": "“Disparo de goma elástica” sounds unnatural for launching a rubber band."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin coloca una caja para joyas en la cima de una torre alta, con guantes desechables",
+   "suggested": "Martin coloca una caja para joyería en la cima de una torre alta, con guantes desechables",
+   "severity": "error",
+   "reason": "“Caja para joyería” is the appropriate trade term for Martin's jewellery boxes."
+  },
+  {
+   "id": "t316",
+   "current": "cajas para joyas en una sola torre",
+   "suggested": "cajas para joyería en una sola torre",
+   "severity": "error",
+   "reason": "“Cajas para joyería” is the appropriate B2B packaging term."
+  },
+  {
+   "id": "t332",
+   "current": "Ninguna",
+   "suggested": "Ninguno",
+   "severity": "error",
+   "reason": "The pronoun must agree with the masculine noun “récord”."
+  },
+  {
+   "id": "a345.aria-label",
+   "current": "Una torre de 12 cajas para joyas",
+   "suggested": "Una torre de 12 cajas para joyería",
+   "severity": "error",
+   "reason": "“Cajas para joyería” is the appropriate B2B packaging term."
+  },
+  {
+   "id": "t448",
+   "current": "Se pone los guantes antes de apilar la primera caja. No se arriesga nada.",
+   "suggested": "Se pone los guantes antes de apilar la primera caja. No deja nada al azar.",
+   "severity": "improve",
+   "reason": "“No se arriesga nada” is a literal and unidiomatic rendering here."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s en un minuto – con palillos",
+   "suggested": "M&M's en un minuto – con palillos",
+   "severity": "error",
+   "reason": "The product name must use the specified straight apostrophe."
+  },
+  {
+   "id": "t908",
+   "current": "Las reglas son sencillas: palillos, un bol de M&M’s y un minuto. El récord mundial es 65.",
+   "suggested": "Las reglas son sencillas: palillos, un bol de M&M's y un minuto. El récord mundial es 65.",
+   "severity": "error",
+   "reason": "The product name must use the specified straight apostrophe."
+  },
+  {
+   "id": "t924",
+   "current": "Mia domina totalmente los palillos. El ritmo es un poco más de descanso para comer que de récord mundial.",
+   "suggested": "Mia domina los palillos por completo. El ritmo es más de pausa para comer que de récord mundial.",
+   "severity": "improve",
+   "reason": "The current version is overly literal and weakens the joke."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s en un minuto está bastante bien.",
+   "suggested": "18 M&M's en un minuto está bastante bien.",
+   "severity": "error",
+   "reason": "The product name must use the specified straight apostrophe."
+  },
+  {
+   "id": "t1172",
+   "current": "6,5 metros. “Sadly just a tiny bit off”, dice el veredicto.",
+   "suggested": "6,5 metros. El veredicto: “Sadly just a tiny bit off”.",
+   "severity": "improve",
+   "reason": "“Dice el veredicto” is not idiomatic Spanish in this construction."
+  },
+  {
+   "id": "t1188",
+   "current": "6,5 metros es un disparo de goma elástica bastante bueno.",
+   "suggested": "Lanzar una goma elástica 6,5 metros está bastante bien.",
+   "severity": "improve",
+   "reason": "“Un disparo de goma elástica” sounds unnatural in Spanish."
+  },
+  {
+   "id": "t2016",
+   "current": "Las pinzas se quitan de nuevo. Las marcas se quedan un poco más.",
+   "suggested": "Le quitan las pinzas. Las marcas tardan un poco más en desaparecer.",
+   "severity": "improve",
+   "reason": "The current wording is a literal and awkward translation."
+  },
+  {
+   "id": "t2048",
+   "current": "El más cerca de un récord real y el más lejos de un viernes agradable.",
+   "suggested": "Lo más cerca de un récord de verdad y lo más lejos de un viernes agradable.",
+   "severity": "error",
+   "reason": "“El más cerca” is not grammatical in this elliptical construction."
+  },
+  {
+   "id": "t2050",
+   "current": "52 pinzas de ropa son apenas un tercio del récord mundial. Estamos impresionados, pero preferimos no saber cómo se ven 161.",
+   "suggested": "52 pinzas de ropa son algo menos de un tercio del récord mundial. Estamos impresionados, pero preferimos no saber qué aspecto tendría Niklas con 161.",
+   "severity": "error",
+   "reason": "“Cómo se ven 161” is unidiomatic, and “algo menos de” conveys the result more precisely."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% en toda la serie WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% de descuento en toda la serie WTP (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "The current wording does not explicitly state that the 20 % is a discount."
+  },
+  {
+   "id": "t2102",
+   "current": ". Aplica para estuches para joyería, estuches de viaje para joyería y estuches apilables hasta el domingo 29&nbsp;de noviembre, para que aún puedas llenar tus estantes antes de la campaña navideña.",
+   "suggested": ". El descuento se aplica a los estuches para joyería, los estuches de viaje para joyería y los estuches apilables para joyería hasta el domingo 29&nbsp;de noviembre, para que aún puedas llenar tus estantes antes de las ventas navideñas.",
+   "severity": "error",
+   "reason": "“Aplica para” is not idiomatic in Spain, and the stackable cases need the jewellery-specific term."
+  },
+  {
+   "id": "t2132",
+   "current": "Estuche de viaje redondo con cremallera",
+   "suggested": "Estuche de viaje para joyería redondo con cremallera",
+   "severity": "error",
+   "reason": "The product description must use the specified jewellery travel case term."
+  },
+  {
+   "id": "t2174",
+   "current": "Estuche de viaje con cremallera",
+   "suggested": "Estuche de viaje para joyería con cremallera",
+   "severity": "error",
+   "reason": "The product description must use the specified jewellery travel case term."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, estuche apilable para joyería en terciopelo verde con joyas",
+   "suggested": "WTP Stackables, estuche apilable para joyería de terciopelo verde con joyas",
+   "severity": "improve",
+   "reason": "“De terciopelo” is the idiomatic way to state the material."
+  },
+  {
+   "id": "t2318",
+   "current": "Encuentra tus estuches WTP con 20&nbsp;%",
+   "suggested": "Encuentra tus estuches WTP con un 20&nbsp;% de descuento",
+   "severity": "error",
+   "reason": "The heading must make clear that 20 % is the discount amount."
+  },
+  {
+   "id": "t2332",
+   "current": "La oferta en los estuches WTP finalizó el domingo 29&nbsp;de noviembre, pero todavía puedes",
+   "suggested": "La oferta de los estuches WTP finalizó el domingo 29&nbsp;de noviembre, pero todavía puedes",
+   "severity": "improve",
+   "reason": "“La oferta en los estuches” is not idiomatic Spanish from Spain."
+  },
+  {
+   "id": "t2346",
+   "current": "De parte de nosotros en el almacén",
+   "suggested": "Desde el almacén",
+   "severity": "improve",
+   "reason": "The current heading is a literal and unidiomatic translation."
+  },
+  {
+   "id": "t2354",
+   "current": "Eso lo dijo la presentadora y estamos de acuerdo. Cuatro intentos, cero récords mundiales oficiales y un consumo inusualmente alto de pinzas para la ropa. Suena a revancha.",
+   "suggested": "Eso dijo la presentadora, y nos inclinamos a darle la razón. Cuatro intentos, cero récords mundiales oficiales y un consumo inusualmente alto de pinzas para la ropa. Esto casi exige una revancha.",
+   "severity": "improve",
+   "reason": "The suggested wording is more idiomatic and preserves the understated joke."
+  },
+  {
+   "id": "t2366",
+   "current": "Grabado en Westpack, en una sala de reuniones, la cantina y el almacén. Black Friday seguía sin estar invitado.",
+   "suggested": "Grabado en Westpack, en una sala de reuniones, en el comedor y en el almacén. Black Friday seguía sin estar invitado.",
+   "severity": "improve",
+   "reason": "“Comedor” is the natural workplace term in Spain, and the repeated prepositions clarify the list."
+  },
+  {
+   "id": "t2404",
+   "current": "Como es tradición, no hacemos Black Friday. En cambio, cuatro colegas intentaron batir su propio récord: aquí tienes los cinco vídeos.",
+   "suggested": "Como es tradición, no hacemos Black Friday. En cambio, cuatro compañeros fueron a por un récord cada uno: aquí tienes los cinco vídeos.",
+   "severity": "error",
+   "reason": "The current version incorrectly says they tried to beat their own personal records."
+  },
+  {
+   "id": "t2412",
+   "current": "No hacemos Black Friday. En su lugar, cuatro colegas intentaron romper récords mundiales con cajas para joyas, M&M's, una goma elástica y pinzas para la ropa. Mira los cinco vídeos aquí.",
+   "suggested": "No hacemos Black Friday. En su lugar, cuatro compañeros intentaron batir récords mundiales con cajas para joyería, M&M's, una goma elástica y pinzas para la ropa. Mira los cinco vídeos aquí.",
+   "severity": "error",
+   "reason": "Spanish uses “batir récords”, and “cajas para joyería” is the appropriate packaging term."
+  }
+ ]
+}

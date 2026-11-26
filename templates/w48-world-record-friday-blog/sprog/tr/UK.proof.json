@@ -1,0 +1,166 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t40",
+   "current": "Four colleagues competed in their own record attempts – and of course we filmed everything. None of the official world records were broken, but we got five videos and a bit more respect for the professionals. See for yourself how it went.",
+   "suggested": "Four colleagues each made a record attempt – and of course we filmed everything. None of the official world records were broken, but we got five videos and a bit more respect for the professionals. See for yourself how it went.",
+   "severity": "error",
+   "reason": "Competing in an attempt is unidiomatic and wrongly suggests competition between the colleagues."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s in one minute",
+   "suggested": "M&M's in one minute",
+   "severity": "error",
+   "reason": "The required brand styling is M&M's."
+  },
+  {
+   "id": "t218",
+   "current": "clothes pegs on face",
+   "suggested": "clothes pegs on his face",
+   "severity": "error",
+   "reason": "The phrase needs the possessive determiner “his” in English."
+  },
+  {
+   "id": "t464",
+   "current": "The first tower falls over. Martin laughs and builds on.",
+   "suggested": "The first tower falls over. Martin laughs and keeps building.",
+   "severity": "error",
+   "reason": "“Builds on” has the wrong idiomatic meaning here."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s in one minute – with chopsticks",
+   "suggested": "M&M's in one minute – with chopsticks",
+   "severity": "error",
+   "reason": "The required brand styling is M&M's."
+  },
+  {
+   "id": "t908",
+   "current": "The rules are simple: chopsticks, a bowl of M&M’s and one minute. The world record is 65.",
+   "suggested": "The rules are simple: chopsticks, a bowl of M&M's and one minute. The world record is 65.",
+   "severity": "error",
+   "reason": "The required brand styling is M&M's."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s in one minute is actually pretty good.",
+   "suggested": "18 M&M's in one minute is actually pretty good.",
+   "severity": "error",
+   "reason": "The required brand styling is M&M's."
+  },
+  {
+   "id": "a1077.aria-label",
+   "current": "6.5 metres out of a record 30.16 metres",
+   "suggested": "6.5 metres compared with the record of 30.16 metres",
+   "severity": "error",
+   "reason": "“Out of a record” is unidiomatic for comparing distances."
+  },
+  {
+   "id": "t1188",
+   "current": "6.5 metres is a pretty good elastic band shot.",
+   "suggested": "6.5 metres is a pretty good shot with a rubber band.",
+   "severity": "improve",
+   "reason": "“Elastic band shot” reads like a literal translation rather than a natural English phrase."
+  },
+  {
+   "id": "t1220",
+   "current": "The Clamp King",
+   "suggested": "The Peg King",
+   "severity": "error",
+   "reason": "A clothes peg is not called a clamp in this context."
+  },
+  {
+   "id": "t1272",
+   "current": "clothes pegs on face",
+   "suggested": "clothes pegs on his face",
+   "severity": "error",
+   "reason": "The phrase needs the possessive determiner “his” in English."
+  },
+  {
+   "id": "t2064",
+   "current": "Offer · until Sunday",
+   "suggested": "Offer · ends Sunday",
+   "severity": "error",
+   "reason": "“Ends Sunday” makes clear that the offer remains valid on Sunday."
+  },
+  {
+   "id": "t2068",
+   "current": "The records fell short, but the discount holds",
+   "suggested": "The records fell short, but the discount stands",
+   "severity": "improve",
+   "reason": "A discount “stands” rather than “holds” in this sense."
+  },
+  {
+   "id": "t2090",
+   "current": "Until",
+   "suggested": "Ends",
+   "severity": "error",
+   "reason": "Together with “Sunday”, this makes the inclusive deadline unambiguous."
+  },
+  {
+   "id": "t2102",
+   "current": ". That includes jewellery cases, travel cases and stackable cases until Sunday 29 November, so you still have time to fill your shelves for Christmas sales.",
+   "suggested": ". The offer runs until the end of Sunday 29 November and covers jewellery cases, jewellery travel cases and stackable jewellery cases, so you still have time to fill your shelves for Christmas sales.",
+   "severity": "error",
+   "reason": "The correction uses the market’s product terms and makes the inclusive Sunday deadline explicit."
+  },
+  {
+   "id": "t2132",
+   "current": "Round zipper travel case",
+   "suggested": "Round jewellery travel case with zip",
+   "severity": "error",
+   "reason": "British English uses “zip”, and the store term is “jewellery travel case”."
+  },
+  {
+   "id": "t2174",
+   "current": "Zipper travel case",
+   "suggested": "Jewellery travel case with zip",
+   "severity": "error",
+   "reason": "British English uses “zip”, and the store term is “jewellery travel case”."
+  },
+  {
+   "id": "t2318",
+   "current": "Find your WTP cases with 20%",
+   "suggested": "Find your WTP cases with 20% off",
+   "severity": "error",
+   "reason": "The percentage requires “off” to express a discount."
+  },
+  {
+   "id": "t2322",
+   "current": "Log in to see your prices with the discount",
+   "suggested": "Log in to see your discounted prices",
+   "severity": "error",
+   "reason": "“Prices with the discount” is unidiomatic in English."
+  },
+  {
+   "id": "t2332",
+   "current": "The offer on WTP cases ended Sunday 29 November, but you can still",
+   "suggested": "The offer on WTP cases ended on Sunday 29 November, but you can still",
+   "severity": "error",
+   "reason": "British English normally requires “on” before this date."
+  },
+  {
+   "id": "t2354",
+   "current": "That was the comment from our presenter, and we tend to agree. Four attempts, zero official world records and an unusually high consumption of clothes pegs. That almost calls for a rematch.",
+   "suggested": "That’s what our presenter said, and we’re inclined to agree with her. Four attempts, zero official world records and an unusually high consumption of clothes pegs. That almost calls for a rematch.",
+   "severity": "improve",
+   "reason": "The opening reads as translated, while the revision is idiomatic and retains the reference to the female presenter."
+  },
+  {
+   "id": "t2404",
+   "current": "As always, we don't do Black Friday. Four colleagues went for their own record instead – here are all five videos.",
+   "suggested": "As always, we don't do Black Friday. Four colleagues each attempted a record instead – here are all five videos.",
+   "severity": "improve",
+   "reason": "“Went for their own record” is awkward and can suggest personal records."
+  },
+  {
+   "id": "t2412",
+   "current": "We don't do Black Friday. Instead, four colleagues aimed for world records with jewellery boxes, M&M’s, elastic bands and clothes pegs. Watch all five videos here.",
+   "suggested": "We don't do Black Friday. Instead, four colleagues aimed for world records with jewellery boxes, M&M's, a rubber band and clothes pegs. Watch all five videos here.",
+   "severity": "error",
+   "reason": "The brand styling is wrong, and the Danish source refers to a single rubber band."
+  }
+ ]
+}

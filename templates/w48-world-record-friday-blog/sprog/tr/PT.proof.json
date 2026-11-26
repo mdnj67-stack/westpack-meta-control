@@ -1,0 +1,131 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t40",
+   "current": "Quatro colegas participaram com as suas próprias tentativas de recorde, e claro que filmámos tudo. Nenhum dos recordes mundiais oficiais foi quebrado, mas conseguimos cinco vídeos e um pouco mais de respeito por quem faz isto profissionalmente. Veja você mesmo como correu.",
+   "suggested": "Quatro colegas participaram, cada qual com a sua tentativa de recorde, e, claro, filmámos tudo. Nenhum dos recordes mundiais oficiais foi batido, mas conseguimos cinco vídeos e um pouco mais de respeito por quem faz isto profissionalmente. Veja por si como correu.",
+   "severity": "error",
+   "reason": "The current wording is awkward and uses a Brazilian-sounding construction."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s em um minuto",
+   "suggested": "M&M's num minuto",
+   "severity": "error",
+   "reason": "The brand styling must be preserved, and European Portuguese normally contracts “em um” to “num”."
+  },
+  {
+   "id": "t498",
+   "current": "Agora Martin tem o seu próprio recorde pessoal numa disciplina que não existia até à última segunda-feira. Também é uma forma de ganhar.",
+   "suggested": "Agora, Martin tem o seu próprio recorde pessoal numa disciplina que não existia antes de segunda-feira passada. Também é uma forma de ganhar.",
+   "severity": "error",
+   "reason": "The current wording says the discipline existed until Monday, reversing the intended meaning."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s em um minuto – com pauzinhos",
+   "suggested": "M&M's num minuto – com pauzinhos",
+   "severity": "error",
+   "reason": "The brand styling must be preserved, and “num minuto” is idiomatic European Portuguese."
+  },
+  {
+   "id": "t908",
+   "current": "As regras são simples: pauzinhos, uma taça de M&M’s e um minuto. O recorde mundial é 65.",
+   "suggested": "As regras são simples: pauzinhos, uma taça de M&M's e um minuto. O recorde mundial é 65.",
+   "severity": "error",
+   "reason": "The protected brand name must retain its specified apostrophe."
+  },
+  {
+   "id": "t940",
+   "current": "18 em um minuto. “Pretty close”, afirma a apresentadora. Foi simpático da parte dela.",
+   "suggested": "18 num minuto. “Pretty close”, diz a apresentadora. É simpático da parte dela.",
+   "severity": "error",
+   "reason": "The contraction and tense should match natural European Portuguese and the source commentary."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s em um minuto é até bastante bom.",
+   "suggested": "18 M&M's num minuto é até bastante bom.",
+   "severity": "error",
+   "reason": "The brand styling must be preserved, and “num minuto” is idiomatic European Portuguese."
+  },
+  {
+   "id": "t958",
+   "current": "Pelo menos achávamos, até alguém nos contar que o recorde mundial é 65.",
+   "suggested": "Pelo menos, era o que achávamos até alguém nos dizer que o recorde mundial é 65.",
+   "severity": "error",
+   "reason": "The current sentence leaves the object of “achávamos” unstated and reads as incomplete."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% em toda a série WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% de desconto em toda a série WTP (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "European Portuguese requires “de desconto” to express the offer clearly."
+  },
+  {
+   "id": "t2132",
+   "current": "Estojo de viagem redondo com fecho de correr",
+   "suggested": "Estojo de viagem para joias redondo com fecho de correr",
+   "severity": "error",
+   "reason": "The product must use the established market term for a jewellery travel case."
+  },
+  {
+   "id": "t2174",
+   "current": "Estojo de viagem com fecho de correr",
+   "suggested": "Estojo de viagem para joias com fecho de correr",
+   "severity": "error",
+   "reason": "The product must use the established market term for a jewellery travel case."
+  },
+  {
+   "id": "a2237.alt",
+   "current": "WTP Tahiti, caixa para joias rosa com espelho na tampa",
+   "suggested": "WTP Tahiti, estojo para joias rosa com espelho na tampa",
+   "severity": "error",
+   "reason": "This product is a jewellery case, not a jewellery box."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, caixa empilhável para joias em veludo verde com joias",
+   "suggested": "WTP Stackables, estojo empilhável para joias em veludo verde com joias",
+   "severity": "error",
+   "reason": "The Danish “smykkeskrin” denotes a jewellery case, not a box."
+  },
+  {
+   "id": "t2296",
+   "current": "Caixas empilháveis para joias com compartimentos flexíveis.",
+   "suggested": "Estojos empilháveis para joias com compartimentos flexíveis.",
+   "severity": "error",
+   "reason": "These are stackable jewellery cases, not boxes."
+  },
+  {
+   "id": "t2318",
+   "current": "Encontre os seus estojos WTP com 20&nbsp;%",
+   "suggested": "Encontre os seus estojos WTP com 20&nbsp;% de desconto",
+   "severity": "error",
+   "reason": "The percentage needs “de desconto” to state the promotion correctly."
+  },
+  {
+   "id": "t2332",
+   "current": "A oferta nos estojos WTP terminou no domingo, 29&nbsp;de novembro, mas ainda pode",
+   "suggested": "A promoção dos estojos WTP terminou no domingo, 29&nbsp;de novembro, mas ainda pode",
+   "severity": "error",
+   "reason": "“A oferta nos estojos” is unidiomatic in European Portuguese."
+  },
+  {
+   "id": "t2354",
+   "current": "Quem disse isso foi a apresentadora, e estamos inclinados a concordar consigo. Quatro tentativas, zero recordes mundiais oficiais e um consumo invulgarmente alto de molas de roupa. Isto quase pede uma revanche.",
+   "suggested": "Quem disse isso foi a apresentadora, e estamos inclinados a concordar com ela. Quatro tentativas, zero recordes mundiais oficiais e um consumo invulgarmente alto de molas de roupa. Isto quase pede uma revanche.",
+   "severity": "error",
+   "reason": "“Consigo” incorrectly refers to the reader rather than to the female presenter."
+  },
+  {
+   "id": "t2412",
+   "current": "Nós não fazemos Black Friday. Em vez disso, quatro colegas tentaram bater recordes mundiais com Caixas para joias, M&M’s, elásticos e molas de roupa. Veja todos os cinco vídeos aqui.",
+   "suggested": "Nós não fazemos Black Friday. Em vez disso, quatro colegas tentaram bater recordes mundiais com caixas para joias, M&M's, um elástico e molas de roupa. Veja todos os cinco vídeos aqui.",
+   "severity": "error",
+   "reason": "The common noun is incorrectly capitalised, the brand styling is wrong, and the source refers to a rubber band in the singular."
+  }
+ ]
+}

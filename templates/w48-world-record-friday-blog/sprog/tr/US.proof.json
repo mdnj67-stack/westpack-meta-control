@@ -1,0 +1,250 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t40",
+   "current": "Four colleagues each tried to break their own record, and of course, we filmed everything. None of the official world records were broken, but we got five videos and a bit more respect for the people who do this professionally. See for yourself how it went.",
+   "suggested": "Four colleagues each made a different world record attempt, and of course we filmed everything. None of the official world records were broken, but we got five videos and a bit more respect for the people who do this professionally. See for yourself how it went.",
+   "severity": "error",
+   "reason": "“Their own record” incorrectly suggests that each colleague already held the record."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s in one minute",
+   "suggested": "M&M's in one minute",
+   "severity": "error",
+   "reason": "The brand name must be written as “M&M's.”"
+  },
+  {
+   "id": "t184",
+   "current": "rubber band shots in the warehouse",
+   "suggested": "rubber band shot in the warehouse",
+   "severity": "error",
+   "reason": "The label refers to the single measured result, not multiple shots."
+  },
+  {
+   "id": "t218",
+   "current": "clothes pegs on face",
+   "suggested": "clothespins on his face",
+   "severity": "error",
+   "reason": "“Clothespins” is the American term, and the possessive reference is needed."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s in one minute – with chopsticks",
+   "suggested": "M&M's in one minute – with chopsticks",
+   "severity": "error",
+   "reason": "The brand name must be written as “M&M's.”"
+  },
+  {
+   "id": "t908",
+   "current": "The rules are simple: chopsticks, a bowl of M&M’s and one minute. The world record is 65.",
+   "suggested": "The rules are simple: chopsticks, a bowl of M&M's and one minute. The world record is 65.",
+   "severity": "error",
+   "reason": "The brand name must be written as “M&M's.”"
+  },
+  {
+   "id": "t940",
+   "current": "18 in one minute. “Pretty close”, the host says. That’s kind of her.",
+   "suggested": "18 in one minute. “Pretty close,” the host says. That’s kind of her.",
+   "severity": "error",
+   "reason": "In American English, the comma belongs inside the closing quotation mark."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s in one minute is actually pretty good.",
+   "suggested": "18 M&M's in one minute is actually pretty good.",
+   "severity": "error",
+   "reason": "The brand name must be written as “M&M's.”"
+  },
+  {
+   "id": "a999.alt",
+   "current": "Cecilia laughs and looks down at the rubber band in her hands, in the warehouse",
+   "suggested": "Cecilia laughs in the warehouse and looks down at the rubber band in her hands",
+   "severity": "improve",
+   "reason": "The repeated, trailing “in” phrase reads awkwardly."
+  },
+  {
+   "id": "a1077.aria-label",
+   "current": "6.5 meters out of the record's 30.16 meters",
+   "suggested": "6.5 meters compared with the record of 30.16 meters",
+   "severity": "error",
+   "reason": "“Out of the record’s” is not idiomatic for comparing distances."
+  },
+  {
+   "id": "t1220",
+   "current": "the Clothes-Peg King",
+   "suggested": "the clothespin king",
+   "severity": "error",
+   "reason": "“Clothespin” is the American term."
+  },
+  {
+   "id": "a1229.aria-label",
+   "current": "Watch Niklas’s pegs, 4:51",
+   "suggested": "Watch Niklas’s clothespins, 4:51",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "a1231.alt",
+   "current": "Niklas with his face covered in pastel-colored clothes pegs",
+   "suggested": "Niklas with his face covered in pastel-colored clothespins",
+   "severity": "error",
+   "reason": "“Clothes pegs” is British English; American English uses “clothespins.”"
+  },
+  {
+   "id": "t1240",
+   "current": "Watch Niklas’s pegs",
+   "suggested": "Watch Niklas’s clothespins",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "t1272",
+   "current": "clothes pegs on face",
+   "suggested": "clothespins on his face",
+   "severity": "error",
+   "reason": "“Clothespins” is the American term, and the possessive reference is needed."
+  },
+  {
+   "id": "t1962",
+   "current": "Each line is one peg",
+   "suggested": "Each line is one clothespin",
+   "severity": "error",
+   "reason": "“Clothespin” is the natural American term in this context."
+  },
+  {
+   "id": "t1984",
+   "current": "The first peg goes on his jaw. Still plenty of space.",
+   "suggested": "The first clothespin goes on his jaw. Still plenty of space.",
+   "severity": "error",
+   "reason": "“Clothespin” is the natural American term in this context."
+  },
+  {
+   "id": "t2000",
+   "current": "It’s getting hard to see Niklas behind all the pegs.",
+   "suggested": "It’s getting hard to see Niklas behind all the clothespins.",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "t2016",
+   "current": "The pegs come off. The marks stay a bit longer.",
+   "suggested": "The clothespins come off. The marks stay a bit longer.",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "t2032",
+   "current": "52 pegs. “Impressive … but not quite there.”",
+   "suggested": "52 clothespins. “Impressive … but not quite there.”",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "t2050",
+   "current": "52 clothes pegs is barely a third of the world record. We’re impressed, but we’d really rather not see what 161 looks like.",
+   "suggested": "52 clothespins are barely a third of the world record. We’re impressed, but we’d really rather not see what 161 looks like.",
+   "severity": "error",
+   "reason": "American English uses “clothespins,” and the plural subject takes “are.”"
+  },
+  {
+   "id": "t2064",
+   "current": "The offer · until Sunday",
+   "suggested": "The offer · through Sunday",
+   "severity": "error",
+   "reason": "“Through Sunday” clearly includes Sunday, as the Danish source requires."
+  },
+  {
+   "id": "t2068",
+   "current": "The records didn’t make it, but the discount still stands",
+   "suggested": "The records eluded us, but the discount still stands",
+   "severity": "error",
+   "reason": "Records do not idiomatically “make it” when attempts fail."
+  },
+  {
+   "id": "t2090",
+   "current": "Until",
+   "suggested": "Through",
+   "severity": "error",
+   "reason": "“Through” makes clear that Sunday is included in the offer period."
+  },
+  {
+   "id": "t2102",
+   "current": ". This applies to jewelry cases, jewelry travel cases, and stackable cases until Sunday, November 29, so you can still stock up for holiday sales.",
+   "suggested": ". This applies to jewelry cases, jewelry travel cases, and stackable cases through Sunday, November 29, so you can still stock up for holiday sales.",
+   "severity": "error",
+   "reason": "“Through” accurately conveys that the offer includes Sunday, November 29."
+  },
+  {
+   "id": "t2132",
+   "current": "Round jewelry travel case with zipper",
+   "suggested": "Round jewelry travel case with a zipper",
+   "severity": "improve",
+   "reason": "“With a zipper” is more idiomatic American product copy."
+  },
+  {
+   "id": "t2174",
+   "current": "Jewelry travel case with zipper",
+   "suggested": "Jewelry travel case with a zipper",
+   "severity": "improve",
+   "reason": "“With a zipper” is more idiomatic American product copy."
+  },
+  {
+   "id": "t2258",
+   "current": "With mirror in the lid",
+   "suggested": "With a mirror in the lid",
+   "severity": "improve",
+   "reason": "The singular count noun “mirror” normally needs an article."
+  },
+  {
+   "id": "t2296",
+   "current": "Stackable jewelry cases with flexible compartments.",
+   "suggested": "Stackable jewelry cases with flexible compartment layouts.",
+   "severity": "improve",
+   "reason": "The Danish refers to flexible compartment arrangements, not flexible compartments themselves."
+  },
+  {
+   "id": "t2322",
+   "current": "Log in to see your prices with the discount",
+   "suggested": "Log in to see your discounted prices",
+   "severity": "improve",
+   "reason": "“Discounted prices” is more idiomatic and concise."
+  },
+  {
+   "id": "t2354",
+   "current": "That’s what the presenter said, and we’re inclined to agree with her. Four attempts, zero official world records, and an unusually high consumption of clothes pegs. That practically calls for a rematch.",
+   "suggested": "That’s what the presenter said, and we’re inclined to agree with her. Four attempts, zero official world records, and an unusually high consumption of clothespins. That practically calls for a rematch.",
+   "severity": "error",
+   "reason": "“Clothes pegs” is British English; American English uses “clothespins.”"
+  },
+  {
+   "id": "t2366",
+   "current": "Filmed at Westpack in a meeting room, the canteen, and the warehouse. Black Friday still wasn’t invited.",
+   "suggested": "Filmed at Westpack in a meeting room, the cafeteria, and the warehouse. Black Friday still wasn’t invited.",
+   "severity": "improve",
+   "reason": "“Cafeteria” is the usual American term for a workplace canteen."
+  },
+  {
+   "id": "t2396",
+   "current": "Watch Niklas's pegs",
+   "suggested": "Watch Niklas's clothespins",
+   "severity": "error",
+   "reason": "“Clothespins” is the natural American term in this context."
+  },
+  {
+   "id": "t2404",
+   "current": "As per tradition, we don’t do Black Friday. Instead, four colleagues tried for a record each – here are all five videos.",
+   "suggested": "As is tradition, we don’t do Black Friday. Instead, four colleagues each attempted a record – here are all five videos.",
+   "severity": "improve",
+   "reason": "The revised phrasing is more natural and avoids the awkward placement of “each.”"
+  },
+  {
+   "id": "t2412",
+   "current": "We don’t do Black Friday. Instead, four colleagues went for world records with jewelry cases, M&M’s, rubber bands, and clothes pegs. Watch all five videos here.",
+   "suggested": "We don’t do Black Friday. Instead, four colleagues went for world records with jewelry boxes, M&M's, a rubber band, and clothespins. Watch all five videos here.",
+   "severity": "error",
+   "reason": "Martin used jewelry boxes, and the brand spelling and American term for clothespins must be used."
+  }
+ ]
+}

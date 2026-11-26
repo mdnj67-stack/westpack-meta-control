@@ -1,0 +1,292 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "“Quindi non fate ancora Black Friday?”",
+   "suggested": "“Quindi continui a non fare Black Friday?”",
+   "severity": "error",
+   "reason": "“Fate” uses voi rather than tu, while “non… ancora” means “not yet” rather than “still not” here."
+  },
+  {
+   "id": "t36",
+   "current": "No, abbiamo puntato ai record mondiali invece. Forse siamo stati un po' troppo ambiziosi…",
+   "suggested": "No, abbiamo invece puntato ai record mondiali. Forse siamo stati un po' troppo ambiziosi…",
+   "severity": "improve",
+   "reason": "The current placement of “invece” sounds translated."
+  },
+  {
+   "id": "t40",
+   "current": "Quattro colleghi hanno tentato ciascuno il proprio record, naturalmente abbiamo filmato tutto. Nessun record mondiale ufficiale è stato battuto, ma ci siamo portati a casa cinque video e un po’ più di rispetto per chi fa queste cose in modo professionale. Guarda tu stesso com’è andata.",
+   "suggested": "Quattro colleghi si sono cimentati ciascuno in un tentativo di record e, naturalmente, abbiamo filmato tutto. Nessun record mondiale ufficiale è stato battuto, ma ci siamo portati a casa cinque video e un po’ più di rispetto per chi lo fa di mestiere. Guarda com’è andata.",
+   "severity": "error",
+   "reason": "The first sentence has a comma splice, and “tu stesso” unnecessarily assumes a male reader."
+  },
+  {
+   "id": "t112",
+   "current": "confezioni in una sola torre",
+   "suggested": "scatole in una sola torre",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not generic packages."
+  },
+  {
+   "id": "t146",
+   "current": "M&amp;M’s in un minuto",
+   "suggested": "M&amp;M's in un minuto",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t184",
+   "current": "lancio di elastico in magazzino",
+   "suggested": "tiro con l’elastico in magazzino",
+   "severity": "error",
+   "reason": "“Lancio di elastico” is unidiomatic for a rubber-band shot."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin mette una confezione per gioielli in cima a una torre alta, indossando guanti monouso",
+   "suggested": "Martin mette una scatola per gioielli in cima a una torre alta, indossando guanti monouso",
+   "severity": "error",
+   "reason": "Martin is stacking a jewellery box, not generic jewellery packaging."
+  },
+  {
+   "id": "t316",
+   "current": "confezioni per gioielli in una sola torre",
+   "suggested": "scatole per gioielli in una sola torre",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not generic packages."
+  },
+  {
+   "id": "t332",
+   "current": "Nessuna",
+   "suggested": "Nessuno",
+   "severity": "error",
+   "reason": "The pronoun must agree with the masculine noun “record”."
+  },
+  {
+   "id": "a345.aria-label",
+   "current": "Una torre di 12 astucci per gioielli",
+   "suggested": "Una torre di 12 scatole per gioielli",
+   "severity": "error",
+   "reason": "These are jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t406",
+   "current": "astucci",
+   "suggested": "scatole",
+   "severity": "error",
+   "reason": "This label refers to Martin’s jewellery boxes."
+  },
+  {
+   "id": "t432",
+   "current": "Nessun record ufficiale? “None!” Quindi Martin ha dovuto crearne uno suo.",
+   "suggested": "Nessun record ufficiale? “None!” Allora Martin dovrà crearne uno tutto suo.",
+   "severity": "error",
+   "reason": "The past tense changes the source’s present/future sense."
+  },
+  {
+   "id": "t448",
+   "current": "Si indossano i guanti prima di impilare il primo astuccio. Nessun rischio inutile.",
+   "suggested": "Si indossano i guanti prima di impilare la prima scatola. Nessun rischio inutile.",
+   "severity": "error",
+   "reason": "The item being stacked is a box, not a jewellery case."
+  },
+  {
+   "id": "t480",
+   "current": "Dodici astucci e una torre che è ancora in piedi. Nessuno osa starnutire.",
+   "suggested": "Dodici scatole e una torre che è ancora in piedi. Nessuno osa starnutire.",
+   "severity": "error",
+   "reason": "Martin’s items are jewellery boxes, not cases."
+  },
+  {
+   "id": "t496",
+   "current": "12 astucci sono 12 astucci.",
+   "suggested": "12 scatole sono 12 scatole.",
+   "severity": "error",
+   "reason": "Martin’s items are jewellery boxes, not cases."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia porta una M&M’s alla bocca con le bacchette, la ciotola davanti a sé",
+   "suggested": "Mia porta una M&M's alla bocca con le bacchette, la ciotola davanti a sé",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s in un minuto – con le bacchette",
+   "suggested": "M&M's in un minuto – con le bacchette",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t882",
+   "current": "di 65",
+   "suggested": "su 65",
+   "severity": "error",
+   "reason": "“18 su 65” is the idiomatic way to express this result."
+  },
+  {
+   "id": "t886",
+   "current": "Ogni punto rappresenta una M&M’s",
+   "suggested": "Ogni punto rappresenta una M&M's",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t908",
+   "current": "Le regole sono semplici: bacchette, una ciotola di M&M’s e un minuto. Il record mondiale è 65.",
+   "suggested": "Le regole sono semplici: bacchette, una ciotola di M&M's e un minuto. Il record mondiale è 65.",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t924",
+   "current": "Mia gestisce benissimo le bacchette. Il ritmo, però, è più da pausa pranzo che da record del mondo.",
+   "suggested": "Mia usa benissimo le bacchette. Il ritmo, però, è più da pausa pranzo che da record del mondo.",
+   "severity": "error",
+   "reason": "“Gestire le bacchette” sounds machine-translated in this context."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s in un minuto è comunque un bel risultato.",
+   "suggested": "18 M&M's in un minuto è comunque un bel risultato.",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t1068",
+   "current": "record mondiale dal 1999",
+   "suggested": "record mondiale del 1999",
+   "severity": "error",
+   "reason": "“Del 1999” identifies the year of the record; “dal 1999” is awkward in this label."
+  },
+  {
+   "id": "t1140",
+   "current": "Il secondo tiro scivola lungo il corridoio del magazzino. Si misura la distanza.",
+   "suggested": "Al secondo tiro, l’elastico vola lungo la corsia tra gli scaffali. Si misura la distanza.",
+   "severity": "error",
+   "reason": "A rubber band flies rather than slides, and the source specifies the aisle between the shelving."
+  },
+  {
+   "id": "t1156",
+   "current": "Il terzo tiro atterra sulla linea gialla del pavimento del magazzino.",
+   "suggested": "Il terzo tiro atterra vicino alla linea gialla sul pavimento del magazzino.",
+   "severity": "error",
+   "reason": "The source says it lands by the yellow line, not on it."
+  },
+  {
+   "id": "t1190",
+   "current": "Il record mondiale è solo 23,66 metri più lontano lungo il corridoio del magazzino, quindi Cecilia dovrà probabilmente riprovare.",
+   "suggested": "Il record mondiale è appena 23,66 metri più avanti lungo la corsia del magazzino, quindi Cecilia dovrà probabilmente riprovare.",
+   "severity": "improve",
+   "reason": "“Più lontano lungo il corridoio” is awkward and weakens the joke."
+  },
+  {
+   "id": "t1292",
+   "current": "record mondiale dal 2013",
+   "suggested": "record mondiale del 2013",
+   "severity": "error",
+   "reason": "“Del 2013” identifies the year of the record; “dal 2013” is awkward in this label."
+  },
+  {
+   "id": "t2050",
+   "current": "52 mollette sono poco meno di un terzo del record mondiale. Siamo impressionati, ma preferiamo non sapere come sono 161.",
+   "suggested": "52 mollette sono poco meno di un terzo del record mondiale. Siamo impressionati, ma preferiamo non sapere che aspetto avrebbe Niklas con 161.",
+   "severity": "error",
+   "reason": "“Come sono 161” is unidiomatic and does not clearly convey what Niklas would look like."
+  },
+  {
+   "id": "t2090",
+   "current": "Fino",
+   "suggested": "Fino a",
+   "severity": "error",
+   "reason": "Combined with the following label, Italian requires “Fino a domenica”."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% su tutta la serie WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% di sconto su tutta la serie WTP (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "“Di sconto” is required to state the 20% discount clearly."
+  },
+  {
+   "id": "t2116",
+   "current": "Pesi mosca",
+   "suggested": "Peso mosca",
+   "severity": "error",
+   "reason": "The label classifies one product, so the boxing weight class must be singular."
+  },
+  {
+   "id": "t2158",
+   "current": "Pesi leggeri",
+   "suggested": "Peso leggero",
+   "severity": "error",
+   "reason": "The label classifies one product, so it must be singular."
+  },
+  {
+   "id": "t2200",
+   "current": "Pesi medi",
+   "suggested": "Peso medio",
+   "severity": "error",
+   "reason": "The label classifies one product, so it must be singular."
+  },
+  {
+   "id": "t2242",
+   "current": "Pesi massimi",
+   "suggested": "Peso massimo",
+   "severity": "error",
+   "reason": "The label classifies one product, so the boxing weight class must be singular."
+  },
+  {
+   "id": "t2318",
+   "current": "Trova i tuoi portagioie WTP con il 20&nbsp;%",
+   "suggested": "Trova i tuoi portagioie WTP con il 20&nbsp;% di sconto",
+   "severity": "error",
+   "reason": "Without “di sconto,” the offer is incomplete and unidiomatic."
+  },
+  {
+   "id": "t2354",
+   "current": "Così ha detto la presentatrice e siamo inclini a darle ragione. Quattro tentativi, nessun record mondiale ufficiale e un consumo insolito di mollette da bucato. Quasi viene voglia di una rivincita.",
+   "suggested": "Lo ha detto la presentatrice e siamo propensi a darle ragione. Quattro tentativi, nessun record mondiale ufficiale e un consumo insolito di mollette da bucato. Quasi viene voglia di una rivincita.",
+   "severity": "error",
+   "reason": "“Così ha detto” is a calque, and “propensi” is more idiomatic than “inclini” here."
+  },
+  {
+   "id": "t2366",
+   "current": "Registrato da Westpack in una sala riunioni, nella mensa e in magazzino. Black Friday ancora non invitato.",
+   "suggested": "Girato presso Westpack in una sala riunioni, in mensa e in magazzino. Black Friday continuava a non essere tra gli invitati.",
+   "severity": "error",
+   "reason": "“Registrato da Westpack” changes the filming location, while the second sentence lacks a verb and loses the joke."
+  },
+  {
+   "id": "t2392",
+   "current": "Guarda il colpo di Cecilia",
+   "suggested": "Guarda il tiro di Cecilia",
+   "severity": "error",
+   "reason": "“Tiro” is the correct and consistently used term for Cecilia’s attempt."
+  },
+  {
+   "id": "t2404",
+   "current": "Come da tradizione, non facciamo Black Friday. Quattro colleghi hanno invece puntato ognuno a un record – qui trovi tutti e cinque i video.",
+   "suggested": "Come da tradizione, non facciamo Black Friday. Quattro colleghi hanno invece tentato ciascuno di battere un record – qui trovi tutti e cinque i video.",
+   "severity": "improve",
+   "reason": "“Puntato ognuno a un record” sounds translated and awkward."
+  },
+  {
+   "id": "t2408",
+   "current": "World Record Friday 2026: Ecco com’è andata | Westpack",
+   "suggested": "World Record Friday 2026: ecco com’è andata | Westpack",
+   "severity": "error",
+   "reason": "Italian does not capitalize a common word after a colon in this title."
+  },
+  {
+   "id": "t2412",
+   "current": "Non facciamo Black Friday. Invece, quattro colleghi hanno tentato di battere record mondiali con confezioni per gioielli, M&M’s, elastico e mollette. Guarda tutti e cinque i video qui.",
+   "suggested": "Non facciamo Black Friday. Invece, quattro colleghi hanno tentato di battere record mondiali con scatole per gioielli, M&M's, un elastico e mollette. Guarda tutti e cinque i video qui.",
+   "severity": "error",
+   "reason": "Martin used jewellery boxes, “un elastico” is required for the rubber band, and the brand spelling must be M&M's."
+  }
+ ]
+}

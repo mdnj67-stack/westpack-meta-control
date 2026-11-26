@@ -1,0 +1,35 @@
+{
+ "PT": [
+  [
+   "Então ainda não faz Black Friday[?]",
+   "Então ainda não fazem Black Friday?",
+   "The question is asked of Westpack (Danish 'I', plural), not of the reader"
+  ]
+ ],
+ "RO": [
+  [
+   "„Deci încă nu țineți Black Friday[?]”",
+   "“Deci tot nu participați la Black Friday?”",
+   "Plural: the question is asked of Westpack (Danish I); the proofreader made it singular, but its wording and quotes were right"
+  ]
+ ],
+ "NO": [
+  [
+   "Tilbuddet",
+   "Tilbudet",
+   "Norwegian spelling (Danish has two d)"
+  ]
+ ],
+ "SE": [
+  [
+   "Rekord: ingen",
+   "Rekord: inget",
+   "rekord is neuter in Swedish"
+  ],
+  [
+   ">Ingen<",
+   ">Inget<",
+   "the record (rekordet) is neuter: Inget"
+  ]
+ ]
+}

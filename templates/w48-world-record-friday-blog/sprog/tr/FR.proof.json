@@ -1,0 +1,243 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "“Alors vous ne faites toujours pas Black Friday ?”",
+   "suggested": "“Alors, vous ne faites toujours pas le Black Friday ?”",
+   "severity": "error",
+   "reason": "Black Friday requires an article after “faire” in French."
+  },
+  {
+   "id": "t112",
+   "current": "écrins à bijoux en une seule tour",
+   "suggested": "boîtes à bijoux empilées en une seule tour",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t146",
+   "current": "M&amp;M’s en une minute",
+   "suggested": "M&amp;M's en une minute",
+   "severity": "error",
+   "reason": "The brand name must retain the spelling “M&M's”."
+  },
+  {
+   "id": "t184",
+   "current": "lancer d’élastique dans l’entrepôt",
+   "suggested": "tir d’élastique dans l’entrepôt",
+   "severity": "error",
+   "reason": "The attempt is a rubber-band shot, not a throw."
+  },
+  {
+   "id": "t256",
+   "current": "Concurrent 01",
+   "suggested": "Participant 01",
+   "severity": "error",
+   "reason": "There is no competition between contestants, so “participant” is the accurate term."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin pose un écrin à bijoux tout en haut d’une haute tour, en portant des gants jetables",
+   "suggested": "Martin pose une boîte à bijoux au sommet d’une haute tour, en portant des gants jetables",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t316",
+   "current": "écrins à bijoux en une seule tour",
+   "suggested": "boîtes à bijoux empilées en une seule tour",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t332",
+   "current": "Aucune",
+   "suggested": "Aucun",
+   "severity": "error",
+   "reason": "“Record” is masculine in French."
+  },
+  {
+   "id": "a345.aria-label",
+   "current": "Une tour de 12 écrins à bijoux",
+   "suggested": "Une tour de 12 boîtes à bijoux",
+   "severity": "error",
+   "reason": "Martin’s tower consists of jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t406",
+   "current": "écrins",
+   "suggested": "boîtes",
+   "severity": "error",
+   "reason": "These are boxes rather than jewellery cases."
+  },
+  {
+   "id": "t448",
+   "current": "Les gants sont mis avant d’empiler la première boîte. Aucun risque n’est pris.",
+   "suggested": "Martin enfile ses gants avant d’empiler la première boîte à bijoux. Il ne prend aucun risque.",
+   "severity": "error",
+   "reason": "The current passive construction leaves the person stacking the box grammatically unclear."
+  },
+  {
+   "id": "t480",
+   "current": "Douze écrins et une tour encore debout. Personne n’ose éternuer.",
+   "suggested": "Douze boîtes à bijoux et une tour encore debout. Personne n’ose éternuer.",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t496",
+   "current": "12 écrins, c'est 12 écrins.",
+   "suggested": "12 boîtes à bijoux, c’est 12 boîtes à bijoux.",
+   "severity": "error",
+   "reason": "Martin’s items are jewellery boxes rather than cases."
+  },
+  {
+   "id": "t520",
+   "current": "Concurrent 02",
+   "suggested": "Participant 02",
+   "severity": "error",
+   "reason": "There is no competition between contestants, so “participant” is the accurate term."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia porte une M&M’s à sa bouche avec des baguettes, bol devant elle",
+   "suggested": "Mia porte un M&M's à sa bouche avec des baguettes, le bol devant elle",
+   "severity": "error",
+   "reason": "“M&M's” is masculine and must retain its specified spelling."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s en une minute – avec des baguettes",
+   "suggested": "M&M's en une minute – avec des baguettes",
+   "severity": "error",
+   "reason": "The brand name must retain the spelling “M&M's”."
+  },
+  {
+   "id": "t886",
+   "current": "Chaque point représente un M&M",
+   "suggested": "Chaque point représente un M&M's",
+   "severity": "error",
+   "reason": "The brand name must retain the spelling “M&M's”."
+  },
+  {
+   "id": "t908",
+   "current": "Les règles sont simples : des baguettes, un bol de M&M’s et une minute. Le record du monde est de 65.",
+   "suggested": "Les règles sont simples : des baguettes, un bol de M&M's et une minute. Le record du monde est de 65.",
+   "severity": "error",
+   "reason": "The brand name must retain the spelling “M&M's”."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s en une minute, c’est déjà pas mal.",
+   "suggested": "18 M&M's en une minute, c’est déjà pas mal.",
+   "severity": "error",
+   "reason": "The brand name must retain the spelling “M&M's”."
+  },
+  {
+   "id": "t980",
+   "current": "Concurrent 03",
+   "suggested": "Participant 03",
+   "severity": "error",
+   "reason": "There is no competition between contestants, so “participant” is the accurate term."
+  },
+  {
+   "id": "t988",
+   "current": "Le Long Bras",
+   "suggested": "Le bras long",
+   "severity": "improve",
+   "reason": "The current wording and capitalization read as a literal calque rather than a French nickname."
+  },
+  {
+   "id": "t1172",
+   "current": "6,5 mètres. “Sadly just a tiny bit off”, dit le verdict.",
+   "suggested": "6,5 mètres. “Sadly just a tiny bit off” : tel est le verdict.",
+   "severity": "error",
+   "reason": "“Dit le verdict” is not idiomatic French."
+  },
+  {
+   "id": "t1190",
+   "current": "Le record du monde n’est qu’à 23,66 mètres plus loin dans l’allée de l’entrepôt, donc Cecilia devra sûrement réessayer.",
+   "suggested": "Le record du monde se trouve seulement 23,66 mètres plus loin dans l’allée de l’entrepôt, donc Cecilia devra sûrement réessayer.",
+   "severity": "error",
+   "reason": "“À 23,66 mètres plus loin” is an incorrect distance construction."
+  },
+  {
+   "id": "t1212",
+   "current": "Concurrent 04",
+   "suggested": "Participant 04",
+   "severity": "error",
+   "reason": "There is no competition between contestants, so “participant” is the accurate term."
+  },
+  {
+   "id": "t2050",
+   "current": "52 pinces à linge, c’est à peine un tiers du record du monde. Nous sommes impressionnés, mais préférons ne pas savoir à quoi ressemble 161.",
+   "suggested": "52 pinces à linge, c’est à peine un tiers du record du monde. Nous sommes impressionnés, mais préférons ne pas savoir à quoi on peut bien ressembler avec 161 pinces à linge.",
+   "severity": "error",
+   "reason": "The literal phrase “à quoi ressemble 161” is not meaningful in French."
+  },
+  {
+   "id": "t2068",
+   "current": "Les records n’ont pas tenu, mais la remise oui",
+   "suggested": "Les records nous ont échappé, mais la remise tient bon",
+   "severity": "error",
+   "reason": "In French, saying that records did not hold implies that they were broken."
+  },
+  {
+   "id": "t2098",
+   "current": "Heureusement, il y a un chiffre que nous n'avons pas besoin de revérifier9:",
+   "suggested": "Heureusement, il y a un nombre que nous n’avons pas besoin de revérifier :",
+   "severity": "error",
+   "reason": "The fragment contains a stray 9, and 20 is a number rather than a digit."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% sur toute la série WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% de remise sur toute la série WTP (World of Treasured Pieces)",
+   "severity": "improve",
+   "reason": "Adding “de remise” makes the offer explicit and idiomatic."
+  },
+  {
+   "id": "t2132",
+   "current": "Écrin de voyage rond avec fermeture éclair",
+   "suggested": "Écrin de voyage pour bijoux rond avec fermeture éclair",
+   "severity": "error",
+   "reason": "The specified store term is “écrin de voyage pour bijoux”."
+  },
+  {
+   "id": "t2174",
+   "current": "Écrin de voyage avec fermeture éclair",
+   "suggested": "Écrin de voyage pour bijoux avec fermeture éclair",
+   "severity": "error",
+   "reason": "The specified store term is “écrin de voyage pour bijoux”."
+  },
+  {
+   "id": "t2318",
+   "current": "Trouvez vos écrins WTP avec 20&nbsp;%",
+   "suggested": "20&nbsp;% de remise sur vos écrins WTP",
+   "severity": "error",
+   "reason": "“Avec 20 %” is incomplete and unidiomatic for a discount."
+  },
+  {
+   "id": "t2354",
+   "current": "C’est ce qu’a dit la présentatrice, et nous sommes enclins à lui donner raison. Quatre tentatives, zéro record du monde officiel, et une consommation inhabituelle de pinces à linge. Cela appelle presque une revanche.",
+   "suggested": "C’est ce qu’a dit la présentatrice, et nous sommes enclins à lui donner raison. Quatre tentatives, zéro record du monde officiel, et une consommation inhabituelle de pinces à linge. Cela mérite presque une revanche.",
+   "severity": "improve",
+   "reason": "“Appeler une revanche” reads as a literal translation in French."
+  },
+  {
+   "id": "t2404",
+   "current": "Comme le veut la tradition, nous ne faisons pas Black Friday. Quatre collègues ont chacun tenté de battre un record à la place – voici les cinq vidéos.",
+   "suggested": "Comme le veut la tradition, nous ne faisons pas le Black Friday. Quatre collègues ont chacun tenté de battre un record à la place – voici les cinq vidéos.",
+   "severity": "error",
+   "reason": "Black Friday requires an article after “faire” in French."
+  },
+  {
+   "id": "t2412",
+   "current": "Nous ne faisons pas Black Friday. À la place, quatre collègues ont tenté des records du monde avec des écrins à bijoux, des M&M’s, un élastique et des pinces à linge. Découvrez les cinq vidéos ici.",
+   "suggested": "Pas de Black Friday : quatre collègues ont tenté des records du monde avec des boîtes à bijoux, des M&M's, un élastique et des pinces à linge. Voir les cinq vidéos.",
+   "severity": "error",
+   "reason": "The current meta description uses the wrong box term and brand spelling and is substantially longer than the requested length."
+  }
+ ]
+}

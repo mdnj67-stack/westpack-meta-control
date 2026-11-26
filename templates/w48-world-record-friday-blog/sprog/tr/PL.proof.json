@@ -1,0 +1,348 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "„Więc nadal nie robicie Black Friday?”",
+   "suggested": "“Czyli nadal nie obchodzicie Black Friday?”",
+   "severity": "error",
+   "reason": "The current wording is a calque, and the quotation marks do not follow the required style."
+  },
+  {
+   "id": "t36",
+   "current": "Nie, tym razem poszliśmy za rekordami Guinnessa. To chyba było trochę zbyt ambitne…",
+   "suggested": "Nie, zamiast tego postanowiliśmy pobić rekordy świata. To chyba było trochę zbyt ambitne…",
+   "severity": "error",
+   "reason": "The source refers to world records, not specifically Guinness records."
+  },
+  {
+   "id": "t40",
+   "current": "Czworo kolegów podjęło się własnych prób bicia rekordu, a my oczywiście wszystko nagraliśmy. Żadnego oficjalnego rekordu świata nie pobiliśmy, ale powstało pięć filmów i trochę większy szacunek dla tych, którzy robią to zawodowo. Zobacz sam, jak nam poszło.",
+   "suggested": "Czworo współpracowników podjęło po jednej próbie bicia rekordu, a my oczywiście wszystko nagraliśmy. Nie pobiliśmy żadnego oficjalnego rekordu świata, ale mamy pięć filmów i trochę więcej szacunku do tych, którzy robią to zawodowo. Zobacz, jak nam poszło.",
+   "severity": "improve",
+   "reason": "The revision removes awkward phrasing and the unnecessarily gendered form of address."
+  },
+  {
+   "id": "a51.alt",
+   "current": "Prowadząca na magazynie, przed paletami z pudełkami Westpack",
+   "suggested": "Prowadząca w magazynie przed paletami z pudełkami firmy Westpack",
+   "severity": "error",
+   "reason": "Standard Polish uses „w magazynie”, not „na magazynie”."
+  },
+  {
+   "id": "t112",
+   "current": "pudełka w jednej wieży",
+   "suggested": "pudełek na biżuterię w jednej wieży",
+   "severity": "error",
+   "reason": "The displayed number requires the genitive, and these are jewellery boxes."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s w jedną minutę",
+   "suggested": "drażetek M&M's w ciągu jednej minuty",
+   "severity": "error",
+   "reason": "The current phrase is unidiomatic and does not preserve the required spelling of M&M's."
+  },
+  {
+   "id": "t184",
+   "current": "strzał z gumki na magazynie",
+   "suggested": "strzał gumką recepturką w magazynie",
+   "severity": "error",
+   "reason": "The prepositions and the expression for shooting a rubber band are unidiomatic."
+  },
+  {
+   "id": "t218",
+   "current": "klamerki do ubrań na twarzy",
+   "suggested": "klamerki do bielizny na twarzy",
+   "severity": "improve",
+   "reason": "„Klamerki do bielizny” is the usual Polish term for clothes pegs."
+  },
+  {
+   "id": "t264",
+   "current": "Mistrz Wież",
+   "suggested": "Mistrz wież",
+   "severity": "error",
+   "reason": "Polish headings normally capitalize only the first word."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin układa opakowanie jubilerskie na szczycie wysokiej wieży, mając na rękach jednorazowe rękawiczki",
+   "suggested": "Martin układa pudełko na biżuterię na szczycie wysokiej wieży, mając na rękach jednorazowe rękawiczki",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not generic jewellery packaging."
+  },
+  {
+   "id": "t316",
+   "current": "opakowania jubilerskie w jednej wieży",
+   "suggested": "pudełek na biżuterię w jednej wieży",
+   "severity": "error",
+   "reason": "The displayed number requires the genitive, and the product is a jewellery box."
+  },
+  {
+   "id": "a345.aria-label",
+   "current": "Wieża z 12 opakowań jubilerskich",
+   "suggested": "Wieża z 12 pudełek na biżuterię",
+   "severity": "error",
+   "reason": "The attempt uses jewellery boxes rather than generic jewellery packaging."
+  },
+  {
+   "id": "t406",
+   "current": "opakowania",
+   "suggested": "pudełek na biżuterię",
+   "severity": "error",
+   "reason": "The displayed number requires the genitive, and the items are jewellery boxes."
+  },
+  {
+   "id": "t410",
+   "current": "Brak rekordu do porównania",
+   "suggested": "Brak rekordu odniesienia",
+   "severity": "improve",
+   "reason": "The current wording is a literal and awkward calque."
+  },
+  {
+   "id": "t448",
+   "current": "Rękawiczki założone, zanim pierwsze opakowanie zostaje ustawione. Ryzyko wykluczone.",
+   "suggested": "Martin zakłada rękawiczki, zanim ustawi pierwsze pudełko na biżuterię. Nie ryzykuje.",
+   "severity": "error",
+   "reason": "The current tense sequence is awkward, and „opakowanie” is the wrong item term."
+  },
+  {
+   "id": "t480",
+   "current": "Dwanaście opakowań i wciąż stojąca wieża. Nikt nie odważy się kichnąć.",
+   "suggested": "Dwanaście pudełek na biżuterię i wciąż stojąca wieża. Nikt nie odważy się kichnąć.",
+   "severity": "error",
+   "reason": "Martin stacked jewellery boxes, not generic packages."
+  },
+  {
+   "id": "t496",
+   "current": "12 opakowań to 12 opakowań.",
+   "suggested": "12 pudełek na biżuterię to 12 pudełek na biżuterię.",
+   "severity": "error",
+   "reason": "The joke must refer to the jewellery boxes used in the attempt."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia prowadzi M&M’s pałeczkami do ust, miska przed nią",
+   "suggested": "Mia podnosi drażetkę M&M's pałeczkami do ust, a przed nią stoi miska",
+   "severity": "error",
+   "reason": "The current sentence is machine-translated and uses the wrong spelling of M&M's."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s w jedną minutę – pałeczkami",
+   "suggested": "drażetek M&M's w ciągu jednej minuty – pałeczkami",
+   "severity": "error",
+   "reason": "The wording is unidiomatic and does not preserve the required spelling of M&M's."
+  },
+  {
+   "id": "t600",
+   "current": "rekord świata z 2011",
+   "suggested": "rekord świata z 2011 roku",
+   "severity": "error",
+   "reason": "A year used this way requires „roku” in Polish."
+  },
+  {
+   "id": "t886",
+   "current": "Każda kropka to jedno M&M",
+   "suggested": "Każda kropka to jedna drażetka M&M's",
+   "severity": "error",
+   "reason": "The candy needs a natural classifier and the required brand spelling."
+  },
+  {
+   "id": "t908",
+   "current": "Zasady są proste: pałeczki, miska M&M’s i jedna minuta. Rekord świata to 65.",
+   "suggested": "Zasady są proste: pałeczki, miska drażetek M&M's i jedna minuta. Rekord świata to 65.",
+   "severity": "error",
+   "reason": "The revision supplies the natural noun and preserves the required spelling of M&M's."
+  },
+  {
+   "id": "t924",
+   "current": "Mia świetnie panuje nad pałeczkami. Tempo jest jednak bardziej lunchowe niż rekordowe.",
+   "suggested": "Mia świetnie panuje nad pałeczkami. Tempo przypomina jednak bardziej przerwę na lunch niż próbę bicia rekordu.",
+   "severity": "improve",
+   "reason": "„Bardziej lunchowe niż rekordowe” reads as a machine-translated joke."
+  },
+  {
+   "id": "t940",
+   "current": "18 w jedną minutę. “Pretty close”, mówi prowadząca. Miło z jej strony.",
+   "suggested": "18 w ciągu jednej minuty. “Pretty close”, stwierdza prowadząca. Miło z jej strony.",
+   "severity": "error",
+   "reason": "„W jedną minutę” is unidiomatic in this context."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s w jedną minutę to całkiem nieźle.",
+   "suggested": "18 drażetek M&M's w ciągu jednej minuty to całkiem nieźle.",
+   "severity": "error",
+   "reason": "The sentence needs a natural classifier and the required spelling of M&M's."
+  },
+  {
+   "id": "t988",
+   "current": "Długa Ręka",
+   "suggested": "Długa ręka",
+   "severity": "error",
+   "reason": "Polish headings normally capitalize only the first word."
+  },
+  {
+   "id": "a999.alt",
+   "current": "Cecilia śmieje się i patrzy na gumkę w dłoniach, na magazynie",
+   "suggested": "Cecilia w magazynie śmieje się i patrzy na gumkę trzymaną w dłoniach",
+   "severity": "error",
+   "reason": "Standard Polish uses „w magazynie”, and the original word order is awkward."
+  },
+  {
+   "id": "t1068",
+   "current": "rekord świata z 1999",
+   "suggested": "rekord świata z 1999 roku",
+   "severity": "error",
+   "reason": "A year used this way requires „roku” in Polish."
+  },
+  {
+   "id": "a1077.aria-label",
+   "current": "6,5 metra z rekordu 30,16 metra",
+   "suggested": "6,5 metra wobec rekordu wynoszącego 30,16 metra",
+   "severity": "error",
+   "reason": "The current construction is unidiomatic and obscures the comparison."
+  },
+  {
+   "id": "t1190",
+   "current": "Rekord świata jest jeszcze 23,66 metra dalej wzdłuż magazynu, więc Cecilia musi spróbować ponownie.",
+   "suggested": "Rekord świata znajduje się zaledwie 23,66 metra dalej wzdłuż alejki magazynowej, więc Cecilia musi chyba spróbować ponownie.",
+   "severity": "error",
+   "reason": "The source refers to the warehouse aisle, not the length of the warehouse."
+  },
+  {
+   "id": "t1292",
+   "current": "rekord świata z 2013",
+   "suggested": "rekord świata z 2013 roku",
+   "severity": "error",
+   "reason": "A year used this way requires „roku” in Polish."
+  },
+  {
+   "id": "t2000",
+   "current": "Zaczynamy mieć trudności z zauważeniem Niklasa za tymi wszystkimi klamerkami.",
+   "suggested": "Coraz trudniej dostrzec Niklasa zza tych wszystkich klamerek.",
+   "severity": "improve",
+   "reason": "The current sentence is grammatically possible but distinctly machine-translated."
+  },
+  {
+   "id": "t2050",
+   "current": "52 klamerki to niecała jedna trzecia rekordu świata. Jesteśmy pod wrażeniem, ale nie chcemy widzieć, jak wygląda 161.",
+   "suggested": "52 klamerki to niecała jedna trzecia rekordu świata. Jesteśmy pod wrażeniem, ale wolelibyśmy nie wiedzieć, jak wyglądałoby 161 klamerek.",
+   "severity": "error",
+   "reason": "The bare numeral 161 is grammatically incomplete and makes the joke unclear."
+  },
+  {
+   "id": "t2068",
+   "current": "Rekordów nie było, ale zniżka obowiązuje",
+   "suggested": "Rekordy nie padły, ale zniżka obowiązuje",
+   "severity": "improve",
+   "reason": "„Rekordy nie padły” is the idiomatic way to say that no records were broken."
+  },
+  {
+   "id": "t2092",
+   "current": "niedziela",
+   "suggested": "niedzieli",
+   "severity": "error",
+   "reason": "The preceding „Do” requires the genitive form „niedzieli”."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% na całą serię WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% rabatu na całą serię WTP (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "A percentage discount requires „rabatu” unless it is written with a minus sign."
+  },
+  {
+   "id": "t2102",
+   "current": ". Obejmuje etui na biżuterię, etui podróżne na biżuterię i etui do układania w stos do niedzieli 29&nbsp;listopada, więc wciąż zdążysz uzupełnić półki na świąteczną sprzedaż.",
+   "suggested": ". Rabat obejmuje etui na biżuterię, etui podróżne na biżuterię i etui na biżuterię do układania jedno na drugim. Obowiązuje do niedzieli 29&nbsp;listopada włącznie, więc wciąż zdążysz uzupełnić półki na świąteczną sprzedaż.",
+   "severity": "error",
+   "reason": "The current wording is awkward and makes the end date appear to modify only the last product type."
+  },
+  {
+   "id": "t2132",
+   "current": "Okrągłe etui podróżne na zamek",
+   "suggested": "Okrągłe etui podróżne na biżuterię z zamkiem błyskawicznym",
+   "severity": "error",
+   "reason": "The store term is „etui podróżne na biżuterię”, and „na zamek” is imprecise here."
+  },
+  {
+   "id": "t2174",
+   "current": "Etui podróżne na zamek",
+   "suggested": "Etui podróżne na biżuterię z zamkiem błyskawicznym",
+   "severity": "error",
+   "reason": "The required store term is „etui podróżne na biżuterię”."
+  },
+  {
+   "id": "t2216",
+   "current": "Dwa poziomy z podziałami na przegródki",
+   "suggested": "Dwa poziomy z przegródkami",
+   "severity": "improve",
+   "reason": "„Podziały na przegródki” is redundant and sounds machine-translated."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, zielone stabelowane etui na biżuterię z weluru z biżuterią",
+   "suggested": "WTP Stackables, zielone welurowe etui na biżuterię do układania jedno na drugim, z biżuterią",
+   "severity": "error",
+   "reason": "„Stabelowane” is not a Polish word."
+  },
+  {
+   "id": "t2296",
+   "current": "Stabelowane etui na biżuterię z elastycznymi podziałami na przegródki.",
+   "suggested": "Etui na biżuterię do układania jedno na drugim, z elastycznymi przegródkami.",
+   "severity": "error",
+   "reason": "„Stabelowane” is not Polish, and „podziały na przegródki” is redundant."
+  },
+  {
+   "id": "t2318",
+   "current": "Znajdź swoje etui WTP z 20&nbsp;%",
+   "suggested": "Znajdź swoje etui WTP z rabatem 20&nbsp;%",
+   "severity": "improve",
+   "reason": "The discount percentage needs „rabatem” in this construction."
+  },
+  {
+   "id": "t2346",
+   "current": "Od nas z magazynu",
+   "suggested": "Prosto z naszego magazynu",
+   "severity": "improve",
+   "reason": "The current heading is an unnatural calque."
+  },
+  {
+   "id": "t2366",
+   "current": "Nagrane w Westpack w sali konferencyjnej, stołówce i na magazynie. Black Friday wciąż nie został zaproszony.",
+   "suggested": "Nagrane w Westpack w sali konferencyjnej, stołówce i w magazynie. Black Friday wciąż nie został zaproszony.",
+   "severity": "error",
+   "reason": "Standard Polish uses „w magazynie”, not „na magazynie”."
+  },
+  {
+   "id": "t2396",
+   "current": "Obejrzyj spinacze Niklasa",
+   "suggested": "Obejrzyj klamerki Niklasa",
+   "severity": "error",
+   "reason": "„Spinacze” are clips or paper clips, not clothes pegs."
+  },
+  {
+   "id": "t2404",
+   "current": "Zgodnie z tradycją nie obchodzimy Black Friday. Zamiast tego czterech kolegów próbowało pobić własne rekordy – oto wszystkie pięć nagrań.",
+   "suggested": "Zgodnie z tradycją nie obchodzimy Black Friday. Zamiast tego czworo współpracowników podjęło po jednej próbie pobicia rekordu świata – oto wszystkie pięć filmów.",
+   "severity": "error",
+   "reason": "„Czterech kolegów” wrongly implies four men, and „własne rekordy” changes the meaning."
+  },
+  {
+   "id": "t2408",
+   "current": "World Record Friday 2026: Tak poszło | Westpack",
+   "suggested": "World Record Friday 2026: jak nam poszło | Westpack",
+   "severity": "improve",
+   "reason": "„Tak poszło” is an unidiomatic calque in this title."
+  },
+  {
+   "id": "t2412",
+   "current": "Nie obchodzimy Black Friday. Zamiast tego cztery osoby próbowały pobić rekordy świata używając opakowań jubilerskich, M&M’s, gumek recepturek i klamerek do ubrań. Zobacz wszystkie pięć filmów tutaj.",
+   "suggested": "Nie obchodzimy Black Friday. Cztery osoby próbowały pobić rekordy świata z użyciem pudełek na biżuterię, M&M's, gumki i klamerek. Zobacz pięć filmów.",
+   "severity": "error",
+   "reason": "The current meta description uses the wrong box term and brand spelling and is too long for the requested length."
+  }
+ ]
+}

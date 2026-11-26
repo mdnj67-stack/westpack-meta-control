@@ -1,0 +1,131 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t36",
+   "current": "Nee, we gingen voor wereldrecords in plaats daarvan. Misschien iets te ambitieus…",
+   "suggested": "Nee, in plaats daarvan gingen we voor wereldrecords. Misschien iets te ambitieus…",
+   "severity": "improve",
+   "reason": "The placement of “in plaats daarvan” sounds translated and is more natural at the start."
+  },
+  {
+   "id": "t40",
+   "current": "Vier collega’s probeerden elk hun eigen record te breken, en natuurlijk hebben we alles gefilmd. Geen enkele officiële wereldrecord werd verbroken, maar we hebben wel vijf video’s en wat meer respect voor mensen die dit professioneel doen. Kijk zelf maar hoe het is gegaan.",
+   "suggested": "Vier collega’s probeerden elk hun eigen record te breken, en natuurlijk hebben we alles gefilmd. Geen enkel officieel wereldrecord werd verbroken, maar we hebben wel vijf video’s en wat meer respect voor mensen die dit professioneel doen. Kijk zelf maar hoe het is gegaan.",
+   "severity": "error",
+   "reason": "“Wereldrecord” is neuter, so the adjectives must be “enkel officieel”."
+  },
+  {
+   "id": "t264",
+   "current": "De Torenmeester",
+   "suggested": "De torenmeester",
+   "severity": "error",
+   "reason": "The second word of this Dutch title should not be capitalized."
+  },
+  {
+   "id": "t336",
+   "current": "Geen officiële record in deze discipline. Daar was Martin best tevreden mee.",
+   "suggested": "Geen officieel record in deze discipline. Daar was Martin best tevreden mee.",
+   "severity": "error",
+   "reason": "“Record” is neuter, so the adjective must be “officieel”."
+  },
+  {
+   "id": "t410",
+   "current": "Geen record om mee te meten",
+   "suggested": "Geen record ter vergelijking",
+   "severity": "error",
+   "reason": "“Om mee te meten” is a Danish calque and does not mean a record to compare against."
+  },
+  {
+   "id": "t528",
+   "current": "De eetstokjes-expert",
+   "suggested": "De eetstokjesexpert",
+   "severity": "error",
+   "reason": "This Dutch compound is written without a hyphen."
+  },
+  {
+   "id": "t924",
+   "current": "Mia beheerst de eetstokjes helemaal. Het tempo ligt alleen meer bij lunchpauze dan wereldrecord.",
+   "suggested": "Mia heeft de eetstokjes volledig onder controle. Het tempo doet alleen meer denken aan een lunchpauze dan aan een wereldrecord.",
+   "severity": "improve",
+   "reason": "Both expressions are overly literal and unidiomatic in Dutch."
+  },
+  {
+   "id": "t1140",
+   "current": "Tweede schot schiet de gang in. Even meten.",
+   "suggested": "Bij het tweede schot vliegt het elastiekje door de magazijngang. Even meten.",
+   "severity": "error",
+   "reason": "A “schot” cannot itself “schieten,” making the current wording awkward and illogical."
+  },
+  {
+   "id": "t2016",
+   "current": "De knijpers worden weer verwijderd. De imprints blijven nog even zichtbaar.",
+   "suggested": "De knijpers gaan er weer af. De afdrukken blijven nog even zichtbaar.",
+   "severity": "improve",
+   "reason": "“Imprints” is an unnatural English loanword in this context."
+  },
+  {
+   "id": "t2068",
+   "current": "De records gingen mis, maar de korting blijft",
+   "suggested": "De records werden niet gebroken, maar de korting blijft",
+   "severity": "improve",
+   "reason": "Records themselves cannot “gaan mis”; attempts can fail or records can remain unbroken."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% op de hele WTP-serie (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% korting op de hele WTP-serie (World of Treasured Pieces)",
+   "severity": "improve",
+   "reason": "Standard Dutch promotional copy uses “korting op” rather than just “op”."
+  },
+  {
+   "id": "t2102",
+   "current": ". Geldig op sieradencases, sieraden reisetuis en stapelbare cases tot en met zondag 29&nbsp;november, zodat je nog snel je schappen kunt vullen voor de feestdagen.",
+   "suggested": ". Dit geldt voor sieradencases, sieraden reisetuis en stapelbare cases tot en met zondag 29&nbsp;november, zodat je je schappen nog kunt vullen voor de kerstverkoop.",
+   "severity": "error",
+   "reason": "The sentence fragment is unidiomatic and “feestdagen” changes the specific reference to Christmas sales."
+  },
+  {
+   "id": "a2195.alt",
+   "current": "WTP Bali sieradencase, tweelaags",
+   "suggested": "WTP Bali sieraden reisetui, tweelaags",
+   "severity": "error",
+   "reason": "The Danish source identifies this product as a travel case, requiring the store term “sieraden reisetui”."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, stapelbare sieradencase in groene velours met sieraden",
+   "suggested": "WTP Stackables, stapelbare sieradencase van groen velours met sieraden",
+   "severity": "improve",
+   "reason": "“Van groen velours” is the natural Dutch construction for the material."
+  },
+  {
+   "id": "t2354",
+   "current": "Dat zei de presentator, en wij geven haar groot gelijk. Vier pogingen, nul officiële wereldrecords en een buitengewoon hoog verbruik van wasknijpers. Tijd voor revanche, haast wel.",
+   "suggested": "Dat zei de presentatrice, en wij zijn geneigd haar gelijk te geven. Vier pogingen, nul officiële wereldrecords en een buitengewoon hoog verbruik van wasknijpers. Dat vraagt bijna om een revanche.",
+   "severity": "error",
+   "reason": "The presenter is a woman, and the remaining wording is a more accurate and natural rendering of the source."
+  },
+  {
+   "id": "t2396",
+   "current": "Bekijk Niklas’ klemmen",
+   "suggested": "Bekijk Niklas’ knijpers",
+   "severity": "error",
+   "reason": "“Klemmen” means clamps, while the attempt uses clothes pegs."
+  },
+  {
+   "id": "t2404",
+   "current": "Zoals gewoonlijk doen we niet aan Black Friday. Vier collega's gingen in plaats daarvan voor hun eigen recordpoging – hier zijn alle vijf video's.",
+   "suggested": "Zoals gewoonlijk doen we niet aan Black Friday. Vier collega's deden in plaats daarvan elk een recordpoging – hier zijn alle vijf video's.",
+   "severity": "improve",
+   "reason": "“Voor hun eigen recordpoging gaan” sounds translated and does not clearly express that each colleague made an attempt."
+  },
+  {
+   "id": "t2412",
+   "current": "Wij doen niet mee met Black Friday. In plaats daarvan probeerden vier collega’s wereldrecords te breken met sieradendoosjes, M&M’s, elastiek en wasknijpers. Bekijk hier alle vijf video's.",
+   "suggested": "Geen Black Friday bij Westpack: vier collega’s proberen wereldrecords met sieradendoosjes, M&M’s, elastiek en wasknijpers te breken. Bekijk de vijf video's.",
+   "severity": "improve",
+   "reason": "The current meta description is considerably longer than the requested roughly 150 characters."
+  }
+ ]
+}

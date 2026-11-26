@@ -1,0 +1,166 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "„Deci încă nu țineți Black Friday?”",
+   "suggested": "“Deci tot nu participi la Black Friday?”",
+   "severity": "error",
+   "reason": "The current text uses the wrong quotation style, an unidiomatic calque, and plural address instead of tu."
+  },
+  {
+   "id": "t40",
+   "current": "Patru colegi au încercat fiecare propriul record, iar noi bineînțeles am filmat totul. Niciunul dintre recordurile mondiale oficiale nu a fost doborât, dar am obținut cinci videoclipuri și puțin mai mult respect pentru cei care fac asta profesionist. Vezi tu însuți cum a fost.",
+   "suggested": "Patru colegi au încercat să doboare câte un record, iar noi, bineînțeles, am filmat totul. Niciunul dintre recordurile mondiale oficiale nu a fost doborât, dar ne-am ales cu cinci videoclipuri și cu ceva mai mult respect față de cei care fac asta profesionist. Vezi cu ochii tăi cum a fost.",
+   "severity": "error",
+   "reason": "Several constructions are literal or unidiomatic, and “tu însuți” unnecessarily addresses the reader as male."
+  },
+  {
+   "id": "t146",
+   "current": "M&M’s într-un minut",
+   "suggested": "M&M's într-un minut",
+   "severity": "error",
+   "reason": "The protected brand spelling requires the straight apostrophe in M&M's."
+  },
+  {
+   "id": "t336",
+   "current": "Nicio record oficial în această disciplină. Martin a fost destul de mulțumit cu asta.",
+   "suggested": "Niciun record oficial în această disciplină. Lui Martin i-a convenit de minune.",
+   "severity": "error",
+   "reason": "“Record” is masculine, and the second sentence is a literal, weaker rendering of the joke."
+  },
+  {
+   "id": "t410",
+   "current": "Nicio record cu care să fie comparat",
+   "suggested": "Niciun record pentru comparație",
+   "severity": "error",
+   "reason": "“Record” is masculine, and the existing comparison construction is awkward."
+  },
+  {
+   "id": "t432",
+   "current": "Nicio record oficială? “None!” Atunci Martin și-a făcut propriul record.",
+   "suggested": "Niciun record oficial? “None!” Atunci Martin trebuie să-și stabilească propriul record.",
+   "severity": "error",
+   "reason": "The noun and adjective have the wrong gender, and records are established rather than made."
+  },
+  {
+   "id": "t528",
+   "current": "Experta în bețișoare pentru mâncat",
+   "suggested": "Experta în mânuirea bețișoarelor",
+   "severity": "improve",
+   "reason": "The current title sounds machine-translated rather than like a natural Romanian nickname."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s într-un minut – cu bețișoare",
+   "suggested": "M&M's într-un minut – cu bețișoare",
+   "severity": "error",
+   "reason": "The protected brand spelling requires the straight apostrophe in M&M's."
+  },
+  {
+   "id": "t908",
+   "current": "Regulile sunt simple: bețișoare, un bol cu M&M’s și un minut. Recordul mondial este 65.",
+   "suggested": "Regulile sunt simple: bețișoare, un bol cu M&M's și un minut. Recordul mondial este 65.",
+   "severity": "error",
+   "reason": "The protected brand spelling requires the straight apostrophe in M&M's."
+  },
+  {
+   "id": "t924",
+   "current": "Mia stăpânește perfect bețișoarele. Ritmul e doar puțin mai degrabă de pauză de masă decât de record mondial.",
+   "suggested": "Mia stăpânește perfect bețișoarele. Ritmul amintește însă ceva mai mult de pauza de masă decât de un record mondial.",
+   "severity": "error",
+   "reason": "The comparative construction in the second sentence is unidiomatic in Romanian."
+  },
+  {
+   "id": "a997.alt",
+   "current": "Cecilia râde și privește la elasticul din mâinile ei, în depozit",
+   "suggested": "În depozit, Cecilia râde și se uită la elasticul pe care îl ține în mâini",
+   "severity": "error",
+   "reason": "Standard Romanian uses “se uită la” or transitive “privește”, not “privește la” here."
+  },
+  {
+   "id": "a1231.alt",
+   "current": "Niklas cu fața acoperită de cleme colorate pastel",
+   "suggested": "Niklas cu fața acoperită de cleme în culori pastelate",
+   "severity": "error",
+   "reason": "“Colorate pastel” is not a natural adjectival construction in Romanian."
+  },
+  {
+   "id": "t1272",
+   "current": "cleme pe față",
+   "suggested": "cleme de rufe pe față",
+   "severity": "error",
+   "reason": "The source specifically refers to clothes pegs, so “de rufe” must not be omitted."
+  },
+  {
+   "id": "t2016",
+   "current": "Clemenele sunt scoase. Urmele rămân ceva timp.",
+   "suggested": "Clemele sunt scoase. Urmele rămân ceva timp.",
+   "severity": "error",
+   "reason": "The correct definite plural of “clemă” is “clemele”."
+  },
+  {
+   "id": "t2048",
+   "current": "Cea mai aproape de un record adevărat și cea mai departe de o zi de vineri plăcută.",
+   "suggested": "Cel mai aproape de un record adevărat și cel mai departe de o zi de vineri plăcută.",
+   "severity": "error",
+   "reason": "The adverbial superlatives require “cel mai”, not the feminine “cea mai”."
+  },
+  {
+   "id": "t2100",
+   "current": "20&nbsp;% la toată seria WTP (World of Treasured Pieces)",
+   "suggested": "20&nbsp;% reducere la întreaga serie WTP (World of Treasured Pieces)",
+   "severity": "error",
+   "reason": "Romanian needs “reducere” to state the offer clearly and idiomatically."
+  },
+  {
+   "id": "t2102",
+   "current": ". Se aplică la etuiuri pentru bijuterii, etuiuri de călătorie pentru bijuterii și etuiuri stivuibile până duminică, 29&nbsp;noiembrie, ca să poți încă aproviziona rafturile pentru vânzările de Crăciun.",
+   "suggested": ". Se aplică etuiurilor pentru bijuterii, etuiurilor de călătorie pentru bijuterii și etuiurilor pentru bijuterii stivuibile până duminică, 29&nbsp;noiembrie, ca să mai ai timp să aprovizionezi rafturile pentru vânzările de Crăciun.",
+   "severity": "error",
+   "reason": "The current text uses the wrong government after “se aplică”, omits the store term for stackable jewellery cases, and has awkward word order."
+  },
+  {
+   "id": "t2132",
+   "current": "Etui rotund de călătorie cu fermoar",
+   "suggested": "Etui de călătorie pentru bijuterii, rotund și cu fermoar",
+   "severity": "error",
+   "reason": "The product description must use the established store term for a jewellery travel case."
+  },
+  {
+   "id": "t2174",
+   "current": "Etui de călătorie cu fermoar",
+   "suggested": "Etui de călătorie pentru bijuterii, cu fermoar",
+   "severity": "error",
+   "reason": "The product description must use the established store term for a jewellery travel case."
+  },
+  {
+   "id": "t2318",
+   "current": "Găsește etuiurile tale WTP cu 20&nbsp;% reducere",
+   "suggested": "Găsește-ți etuiurile WTP cu 20&nbsp;% reducere",
+   "severity": "improve",
+   "reason": "Romanian naturally uses the possessive clitic in this type of call to action."
+  },
+  {
+   "id": "t2354",
+   "current": "Așa a spus prezentatoarea, și suntem înclinați să-i dăm dreptate. Patru încercări, zero recorduri mondiale oficiale și un consum neobișnuit de mare de cleme de rufe. Aproape că cere o revanșă.",
+   "suggested": "Asta a spus prezentatoarea și tindem să-i dăm dreptate. Patru încercări, zero recorduri mondiale oficiale și un consum neobișnuit de mare de cleme de rufe. Aproape că se cere o revanșă.",
+   "severity": "improve",
+   "reason": "The current phrasing is overly literal and leaves the subject of the final sentence unclear."
+  },
+  {
+   "id": "t2404",
+   "current": "Ca de obicei, nu ținem Black Friday. Patru colegi au încercat să bată fiecare un record în schimb – aici sunt toate cele cinci videoclipuri.",
+   "suggested": "Ca de obicei, nu participăm la Black Friday. În schimb, patru colegi au încercat să doboare câte un record – vezi aici toate cele cinci videoclipuri.",
+   "severity": "error",
+   "reason": "“Ținem Black Friday” and the placement of “fiecare” are calques that sound unnatural in Romanian."
+  },
+  {
+   "id": "t2412",
+   "current": "Nu ținem Black Friday. În schimb, patru colegi au încercat recorduri mondiale cu cutii de bijuterii, M&M's, elastic și cleme de rufe. Vezi toate cele cinci videoclipuri aici.",
+   "suggested": "Fără Black Friday, patru colegi au încercat să bată recorduri mondiale cu cutii de bijuterii, M&M's, un elastic și cleme de rufe. Vezi cele cinci videoclipuri.",
+   "severity": "error",
+   "reason": "The current text uses two unidiomatic calques, while the correction also keeps the meta description concise."
+  }
+ ]
+}

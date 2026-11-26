@@ -1,0 +1,166 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t146",
+   "current": "M&amp;M’s på ett minutt",
+   "suggested": "M&amp;M's på ett minutt",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t184",
+   "current": "strikk-skudd på lageret",
+   "suggested": "strikkskudd på lageret",
+   "severity": "error",
+   "reason": "Native Norwegian compounds are written without this hyphen."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin legger et smykkeskrin øverst på et høyt tårn, med engangshansker på",
+   "suggested": "Martin legger en smykkeeske øverst på et høyt tårn mens han har på seg engangshansker",
+   "severity": "error",
+   "reason": "Martin is stacking jewellery boxes, not jewellery cases, and the modifier is awkwardly placed."
+  },
+  {
+   "id": "t316",
+   "current": "smykkeskrin i ett tårn",
+   "suggested": "smykkeesker i ett tårn",
+   "severity": "error",
+   "reason": "Martin stacked jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t410",
+   "current": "Ingen rekord å måle mot",
+   "suggested": "Ingen rekord å måle seg mot",
+   "severity": "error",
+   "reason": "The idiomatic Norwegian expression requires the reflexive pronoun."
+  },
+  {
+   "id": "t498",
+   "current": "Martin har nå sin egen personlige rekord i en disiplin som ikke fantes før forrige mandag. Det er også en måte å vinne på.",
+   "suggested": "Martin har nå sin egen personlige rekord i en disiplin som ikke fantes før i mandags. Det er også en måte å vinne på.",
+   "severity": "error",
+   "reason": "The current wording refers to the previous Monday rather than Monday of that week."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia fører en M&M opp til munnen med spisepinner, med skålen foran seg",
+   "suggested": "Mia fører en M&M's opp til munnen med spisepinner, med skålen foran seg",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s på ett minutt – med spisepinner",
+   "suggested": "M&M's på ett minutt – med spisepinner",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t886",
+   "current": "Hver prikk er én M&M",
+   "suggested": "Hver prikk er én M&M's",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t908",
+   "current": "Reglene er enkle: spisepinner, en bolle med M&M’s og ett minutt. Verdensrekorden er 65.",
+   "suggested": "Reglene er enkle: spisepinner, en bolle med M&M's og ett minutt. Verdensrekorden er 65.",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s på ett minutt er egentlig ganske bra.",
+   "suggested": "18 M&M's på ett minutt er egentlig ganske bra.",
+   "severity": "error",
+   "reason": "The brand name must be written exactly as M&M's."
+  },
+  {
+   "id": "t988",
+   "current": "Den Lange Armen",
+   "suggested": "Den lange armen",
+   "severity": "error",
+   "reason": "Norwegian does not capitalize every word in a title or nickname."
+  },
+  {
+   "id": "t1140",
+   "current": "Andre skudd fyker nedover reolgangen. Det måles etter.",
+   "suggested": "Andre skudd fyker nedover reolgangen. Så blir det målt.",
+   "severity": "error",
+   "reason": "“Det måles etter” is an unidiomatic Danish calque here."
+  },
+  {
+   "id": "t1220",
+   "current": "Klesklype-kongen",
+   "suggested": "Klesklypekongen",
+   "severity": "error",
+   "reason": "This native Norwegian compound should be written as one word."
+  },
+  {
+   "id": "t1984",
+   "current": "Første klesklype festes til kjevebenet. Det er fortsatt god plass.",
+   "suggested": "Den første klesklypen festes på kjeven. Det er fortsatt god plass.",
+   "severity": "error",
+   "reason": "The ordinal requires definite form, and the peg is attached to the jaw rather than the jawbone."
+  },
+  {
+   "id": "t2102",
+   "current": ". Gjelder smykkeskrin, smykkeskrin til reise og stablingsskrin til og med søndag 29.&nbsp;november, så du fortsatt kan fylle opp hyllene til julesalget.",
+   "suggested": ". Det gjelder smykkeskrin, smykkeskrin til reise og stablebare smykkeskrin til og med søndag 29.&nbsp;november, så du fortsatt kan fylle opp hyllene til julesalget.",
+   "severity": "error",
+   "reason": "The sentence needs a subject, and “stablingsskrin” is not idiomatic Norwegian."
+  },
+  {
+   "id": "t2132",
+   "current": "Rundt reiseskrin med glidelås",
+   "suggested": "Rundt smykkeskrin til reise med glidelås",
+   "severity": "error",
+   "reason": "The webshop term is “smykkeskrin til reise”."
+  },
+  {
+   "id": "t2174",
+   "current": "Reiseskrin med glidelås",
+   "suggested": "Smykkeskrin til reise med glidelås",
+   "severity": "error",
+   "reason": "The webshop term is “smykkeskrin til reise”."
+  },
+  {
+   "id": "a2279.alt",
+   "current": "WTP Stackables, stablingsbart smykkeskrin i grønn velur med smykker",
+   "suggested": "WTP Stackables, stablebart smykkeskrin i grønn velur med smykker",
+   "severity": "error",
+   "reason": "“Stablebart” is the idiomatic Norwegian form."
+  },
+  {
+   "id": "t2296",
+   "current": "Stablingsbare smykkeskrin med fleksible rominndelinger.",
+   "suggested": "Stablebare smykkeskrin med fleksible rominndelinger.",
+   "severity": "error",
+   "reason": "“Stablebare” is the idiomatic Norwegian form."
+  },
+  {
+   "id": "t2318",
+   "current": "Finn dine WTP-skrin med 20&nbsp;%",
+   "suggested": "Finn dine WTP-skrin med 20&nbsp;% rabatt",
+   "severity": "error",
+   "reason": "The current wording is incomplete and does not clearly state that 20% is a discount."
+  },
+  {
+   "id": "t2404",
+   "current": "Tradisjon tro arrangerer vi ikke Black Friday. Fire kollegaer gikk i stedet etter hver sin rekord – her er alle fem videoer.",
+   "suggested": "Tradisjonen tro arrangerer vi ikke Black Friday. Fire kollegaer gikk i stedet etter hver sin rekord – her er alle fem videoene.",
+   "severity": "error",
+   "reason": "The fixed expression is “tradisjonen tro”, and the videos require definite form."
+  },
+  {
+   "id": "t2412",
+   "current": "Vi arrangerer ikke Black Friday. I stedet gikk fire kollegaer etter verdensrekorder med smykkeskrin, M&M’s, strikk og klesklyper. Se alle fem videoer her.",
+   "suggested": "Vi arrangerer ikke Black Friday. I stedet gikk fire kollegaer etter verdensrekorder med smykkeesker, M&M's, strikk og klesklyper. Se alle fem videoene her.",
+   "severity": "error",
+   "reason": "Martin used jewellery boxes, the brand spelling must be retained, and the videos require definite form."
+  }
+ ]
+}

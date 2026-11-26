@@ -1,0 +1,124 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t40",
+   "current": "Four colleagues took on their own record attempts, and of course we filmed everything. None of the official world records were broken, but we got five videos and a little more respect for people who do this professionally. See for yourself how it went.",
+   "suggested": "Four colleagues each took on a different record challenge, and of course we filmed everything. None of the official world records were broken, but we got five videos and a little more respect for people who do this professionally. See for yourself how it went.",
+   "severity": "improve",
+   "reason": "“Took on their own record attempts” is unidiomatic."
+  },
+  {
+   "id": "a51.alt",
+   "current": "The presenter in the warehouse in front of pallets with Westpack boxes",
+   "suggested": "The presenter in the warehouse in front of pallets of Westpack boxes",
+   "severity": "improve",
+   "reason": "Boxes stacked on pallets are described as “pallets of boxes”."
+  },
+  {
+   "id": "t218",
+   "current": "clothes pegs on face",
+   "suggested": "clothes pegs on his face",
+   "severity": "improve",
+   "reason": "English normally requires a possessive before “face” here."
+  },
+  {
+   "id": "t464",
+   "current": "The first tower collapses. Martin laughs and builds on.",
+   "suggested": "The first tower collapses. Martin laughs and carries on building.",
+   "severity": "improve",
+   "reason": "“Builds on” sounds incomplete and does not idiomatically mean that he continues building."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s in one minute – with chopsticks",
+   "suggested": "M&M's in one minute – with chopsticks",
+   "severity": "error",
+   "reason": "The required brand styling is “M&M's”, not “M&M’s”."
+  },
+  {
+   "id": "t908",
+   "current": "The rules are simple: chopsticks, a bowl of M&M’s and one minute. The world record is 65.",
+   "suggested": "The rules are simple: chopsticks, a bowl of M&M's and one minute. The world record is 65.",
+   "severity": "error",
+   "reason": "The required brand styling is “M&M's”, not “M&M’s”."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s in one minute is actually pretty good.",
+   "suggested": "18 M&M's in one minute is actually pretty good.",
+   "severity": "error",
+   "reason": "The required brand styling is “M&M's”, not “M&M’s”."
+  },
+  {
+   "id": "a1077.aria-label",
+   "current": "6.5 metres out of the record’s 30.16 metres",
+   "suggested": "6.5 metres compared with the record distance of 30.16 metres",
+   "severity": "error",
+   "reason": "“Out of” is not idiomatic when comparing two distances."
+  },
+  {
+   "id": "t1172",
+   "current": "6.5 metres. “Sadly just a tiny bit off,” is the verdict.",
+   "suggested": "6.5 metres. “Sadly just a tiny bit off” is the verdict.",
+   "severity": "error",
+   "reason": "The comma incorrectly forms part of the quoted video wording."
+  },
+  {
+   "id": "t1272",
+   "current": "clothes pegs on face",
+   "suggested": "clothes pegs on his face",
+   "severity": "improve",
+   "reason": "English normally requires a possessive before “face” here."
+  },
+  {
+   "id": "t2102",
+   "current": ". This applies to jewellery cases, jewellery travel cases and stackable cases until Sunday 29&nbsp;November, so you can still stock up the shelves for the Christmas sales.",
+   "suggested": ". This applies to jewellery cases, jewellery travel cases and stackable cases until Sunday 29&nbsp;November, so you can still stock your shelves for the Christmas sales.",
+   "severity": "error",
+   "reason": "The correct expression is “stock your shelves”, not “stock up the shelves”."
+  },
+  {
+   "id": "t2132",
+   "current": "Round travel case with zipper",
+   "suggested": "Round jewellery travel case with zip",
+   "severity": "error",
+   "reason": "“Zip” is British English, and the store term is “jewellery travel case”."
+  },
+  {
+   "id": "t2174",
+   "current": "Travel case with zipper",
+   "suggested": "Jewellery travel case with zip",
+   "severity": "error",
+   "reason": "“Zip” is British English, and the store term is “jewellery travel case”."
+  },
+  {
+   "id": "t2258",
+   "current": "With mirror in the lid",
+   "suggested": "With a mirror in the lid",
+   "severity": "error",
+   "reason": "The singular countable noun “mirror” requires an article."
+  },
+  {
+   "id": "t2318",
+   "current": "Find your WTP cases with 20&nbsp;%",
+   "suggested": "Find your WTP cases with 20&nbsp;% off",
+   "severity": "error",
+   "reason": "The percentage needs “off” to express the discount."
+  },
+  {
+   "id": "t2322",
+   "current": "Log in to see your prices with the discount",
+   "suggested": "Log in to see your discounted prices",
+   "severity": "improve",
+   "reason": "“Prices with the discount” reads as a literal translation."
+  },
+  {
+   "id": "t2412",
+   "current": "We don’t do Black Friday. Instead, four colleagues attempted world records with jewellery boxes, M&M’s, a rubber band and clothes pegs. Watch all five videos here.",
+   "suggested": "We don’t do Black Friday. Instead, four colleagues attempted world records with jewellery boxes, M&M's, a rubber band and clothes pegs. Watch all five videos here.",
+   "severity": "error",
+   "reason": "The required brand styling is “M&M's”, not “M&M’s”."
+  }
+ ]
+}

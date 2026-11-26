@@ -1,0 +1,236 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t32",
+   "current": "“Halten Sie immer noch kein Black Friday?”",
+   "suggested": "“Machen Sie immer noch nicht beim Black Friday mit?”",
+   "severity": "error",
+   "reason": "The current wording has incorrect agreement and is not idiomatic German."
+  },
+  {
+   "id": "t40",
+   "current": "Vier Kolleg*innen haben sich jeweils einer Rekorddisziplin gestellt, und natürlich haben wir alles gefilmt. Keine der offiziellen Weltrekorde wurde gebrochen, aber wir haben fünf Videos aufgenommen – und noch mehr Respekt für diejenigen gewonnen, die das professionell machen. Sehen Sie selbst, wie es lief.",
+   "suggested": "Vier Kolleg*innen haben sich jeweils einer Rekorddisziplin gestellt, und natürlich haben wir alles gefilmt. Keiner der offiziellen Weltrekorde wurde gebrochen, aber wir haben fünf Videos aufgenommen – und noch mehr Respekt für diejenigen gewonnen, die das professionell machen. Sehen Sie selbst, wie es lief.",
+   "severity": "error",
+   "reason": "The pronoun must agree with the masculine noun “Weltrekord”."
+  },
+  {
+   "id": "t112",
+   "current": "Schachteln als ein Turm",
+   "suggested": "Schachteln in einem Turm",
+   "severity": "error",
+   "reason": "“Als ein Turm” is not idiomatic for boxes stacked in one tower."
+  },
+  {
+   "id": "t116",
+   "current": "Rekord: keine",
+   "suggested": "Rekord: keiner",
+   "severity": "error",
+   "reason": "The pronoun must agree with the masculine noun “Rekord”."
+  },
+  {
+   "id": "t146",
+   "current": "M&amp;M’s in einer Minute",
+   "suggested": "M&amp;M's in einer Minute",
+   "severity": "error",
+   "reason": "The specified brand spelling uses a straight apostrophe."
+  },
+  {
+   "id": "t234",
+   "current": "Wählen Sie eine Teilnehmer*in und sehen Sie, wie der Versuch gelaufen ist.",
+   "suggested": "Wählen Sie eine Teilnehmerin oder einen Teilnehmer aus und sehen Sie, wie der Versuch gelaufen ist.",
+   "severity": "error",
+   "reason": "The article does not work grammatically with this gender-star form."
+  },
+  {
+   "id": "t520",
+   "current": "Teilnehmer 02",
+   "suggested": "Teilnehmerin 02",
+   "severity": "error",
+   "reason": "The label refers specifically to Mia and therefore requires the feminine form."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin platziert ein Schmucketui oben auf einen hohen Turm, mit Einweghandschuhen",
+   "suggested": "Martin setzt mit Einweghandschuhen eine Schmuckschachtel auf die Spitze eines hohen Turms",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, not jewellery cases, and the current modifier is awkwardly attached."
+  },
+  {
+   "id": "t316",
+   "current": "Schmucketuis als ein Turm",
+   "suggested": "Schmuckschachteln in einem Turm",
+   "severity": "error",
+   "reason": "Martin stacks jewellery boxes, and “als ein Turm” is unidiomatic here."
+  },
+  {
+   "id": "t332",
+   "current": "Keine",
+   "suggested": "Keiner",
+   "severity": "error",
+   "reason": "The value refers to the masculine noun “Rekord”."
+  },
+  {
+   "id": "a345.aria-label",
+   "current": "Ein Turm aus 12 Schmucketuis",
+   "suggested": "Ein Turm aus 12 Schmuckschachteln",
+   "severity": "error",
+   "reason": "Martin's objects are jewellery boxes, not jewellery cases."
+  },
+  {
+   "id": "t406",
+   "current": "Etuis",
+   "suggested": "Schachteln",
+   "severity": "error",
+   "reason": "This label refers to Martin's boxes, not cases."
+  },
+  {
+   "id": "t448",
+   "current": "Die Handschuhe kommen an, bevor das erste Etui gestapelt wird. Es werden keine Risiken eingegangen.",
+   "suggested": "Die Handschuhe werden angezogen, bevor die erste Schmuckschachtel gestapelt wird. Man geht kein Risiko ein.",
+   "severity": "error",
+   "reason": "“Die Handschuhe kommen an” is unidiomatic, and the object is a jewellery box rather than a case."
+  },
+  {
+   "id": "t480",
+   "current": "Zwölf Etuis und ein Turm, der noch steht. Niemand wagt es zu niesen.",
+   "suggested": "Zwölf Schachteln und ein Turm, der noch steht. Niemand wagt es zu niesen.",
+   "severity": "error",
+   "reason": "Martin stacks boxes, not cases."
+  },
+  {
+   "id": "t496",
+   "current": "12 Etuis sind 12 Etuis.",
+   "suggested": "12 Schachteln sind 12 Schachteln.",
+   "severity": "error",
+   "reason": "Martin's objects are boxes, not cases."
+  },
+  {
+   "id": "t498",
+   "current": "Martin hat jetzt seinen eigenen persönlichen Rekord in einer Disziplin, die erst seit letztem Montag existiert. Das ist auch eine Art zu gewinnen.",
+   "suggested": "Martin hat jetzt seinen persönlichen Rekord in einer Disziplin, die erst seit letztem Montag existiert. Das ist auch eine Art zu gewinnen.",
+   "severity": "improve",
+   "reason": "“Eigenen persönlichen Rekord” is unnecessarily redundant."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia führt ein M&M mit Essstäbchen zum Mund, mit der Schüssel vor sich",
+   "suggested": "Mia führt mit Essstäbchen ein M&M zum Mund; die Schüssel steht vor ihr",
+   "severity": "improve",
+   "reason": "The final modifier is awkwardly attached in the current version."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s in einer Minute – mit Essstäbchen",
+   "suggested": "M&M's in einer Minute – mit Essstäbchen",
+   "severity": "error",
+   "reason": "The specified brand spelling uses a straight apostrophe."
+  },
+  {
+   "id": "t908",
+   "current": "Die Regeln sind einfach: Essstäbchen, eine Schale M&M’s und eine Minute. Der Weltrekord liegt bei 65.",
+   "suggested": "Die Regeln sind einfach: Essstäbchen, eine Schale M&M's und eine Minute. Der Weltrekord liegt bei 65.",
+   "severity": "error",
+   "reason": "The specified brand spelling uses a straight apostrophe."
+  },
+  {
+   "id": "t924",
+   "current": "Mia hat die Essstäbchen komplett im Griff. Das Tempo entspricht jedoch eher der Mittagspause als einem Weltrekord.",
+   "suggested": "Mia hat die Essstäbchen komplett im Griff. Das Tempo ist allerdings eher Mittagspause als Weltrekord.",
+   "severity": "improve",
+   "reason": "The revised comparison preserves the joke more naturally in German."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s in einer Minute sind eigentlich ziemlich gut.",
+   "suggested": "18 M&M's in einer Minute sind eigentlich ziemlich gut.",
+   "severity": "error",
+   "reason": "The specified brand spelling uses a straight apostrophe."
+  },
+  {
+   "id": "t980",
+   "current": "Teilnehmer 03",
+   "suggested": "Teilnehmerin 03",
+   "severity": "error",
+   "reason": "The label refers specifically to Cecilia and therefore requires the feminine form."
+  },
+  {
+   "id": "t988",
+   "current": "Der Lange Arm",
+   "suggested": "Der lange Arm",
+   "severity": "error",
+   "reason": "A declined adjective is lowercase in this German title."
+  },
+  {
+   "id": "a999.alt",
+   "current": "Cecilia lacht und blickt auf das Gummiband in ihren Händen, im Lager",
+   "suggested": "Cecilia lacht im Lager und blickt auf das Gummiband in ihren Händen",
+   "severity": "improve",
+   "reason": "The location phrase is awkwardly stranded at the end."
+  },
+  {
+   "id": "t1190",
+   "current": "Der Weltrekord liegt allerdings 23,66 Meter weiter den Lagergang hinunter, also muss Cecilia wohl nochmal üben.",
+   "suggested": "Der Weltrekord liegt allerdings 23,66 Meter weiter den Lagergang hinunter, also muss Cecilia es wohl noch einmal versuchen.",
+   "severity": "error",
+   "reason": "The source says Cecilia must try again, not practise."
+  },
+  {
+   "id": "a1231.alt",
+   "current": "Niklas mit dem Gesicht voll bunter Wäscheklammern",
+   "suggested": "Niklas mit pastellfarbenen Wäscheklammern im ganzen Gesicht",
+   "severity": "error",
+   "reason": "The source specifically describes pastel-coloured pegs covering his face."
+  },
+  {
+   "id": "t2016",
+   "current": "Die Klammern kommen wieder ab. Die Abdrücke bleiben noch etwas.",
+   "suggested": "Die Klammern kommen wieder ab. Die Abdrücke bleiben noch eine Weile.",
+   "severity": "improve",
+   "reason": "“Noch eine Weile” expresses the duration more idiomatically."
+  },
+  {
+   "id": "t2068",
+   "current": "Die Rekorde blieben aus, aber der Rabatt zählt",
+   "suggested": "Die Rekorde blieben aus, aber der Rabatt gilt",
+   "severity": "error",
+   "reason": "A discount “gilt” in German; “zählt” changes the intended meaning."
+  },
+  {
+   "id": "t2322",
+   "current": "Melden Sie sich an, um Ihre Preise mit dem Rabatt zu sehen",
+   "suggested": "Melden Sie sich an, um Ihre rabattierten Preise zu sehen",
+   "severity": "improve",
+   "reason": "“Preise mit dem Rabatt” reads like a literal translation."
+  },
+  {
+   "id": "t2332",
+   "current": "Das Angebot auf die WTP-Etuis endete am Sonntag, den 29.&nbsp;November, aber Sie können weiterhin",
+   "suggested": "Das Angebot für die WTP-Etuis endete am Sonntag, den 29.&nbsp;November, aber Sie können weiterhin",
+   "severity": "error",
+   "reason": "The correct collocation is “Angebot für”, not “Angebot auf”."
+  },
+  {
+   "id": "t2354",
+   "current": "So sagte es die Moderatorin, und wir neigen dazu, ihr zuzustimmen. Vier Versuche, null offizielle Weltrekorde und ein ungewöhnlich hoher Verbrauch an Wäscheklammern. Das ruft fast nach einer Revanche.",
+   "suggested": "Das sagte die Moderatorin, und wir sind geneigt, ihr recht zu geben. Vier Versuche, null offizielle Weltrekorde und ein ungewöhnlich hoher Verbrauch an Wäscheklammern. Das schreit beinahe nach einer Revanche.",
+   "severity": "improve",
+   "reason": "The opening and closing phrases currently read as calques rather than idiomatic German."
+  },
+  {
+   "id": "t2404",
+   "current": "Wie immer nehmen wir nicht an Black Friday teil. Stattdessen jagten vier Kollegen jeweils einen Rekord – hier sind alle fünf Videos.",
+   "suggested": "Wie immer machen wir beim Black Friday nicht mit. Stattdessen versuchten sich vier Kolleg*innen jeweils an einem Rekord – hier sind alle fünf Videos.",
+   "severity": "error",
+   "reason": "“An Black Friday teilnehmen” and “einen Rekord jagen” are unidiomatic in this context."
+  },
+  {
+   "id": "t2412",
+   "current": "Wir nehmen nicht an Black Friday teil. Stattdessen haben vier Kollegen Weltrekorde mit Schmucketuis, M&M’s, Gummiband und Wäscheklammern versucht. Sehen Sie hier alle fünf Videos.",
+   "suggested": "Kein Black Friday: Vier Kolleg*innen versuchten sich mit Schmuckschachteln, M&M's, Gummiband und Wäscheklammern an Weltrekorden. Sehen Sie alle fünf Videos.",
+   "severity": "error",
+   "reason": "The current version has two unidiomatic constructions and incorrectly calls Martin's boxes cases."
+  }
+ ]
+}

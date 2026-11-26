@@ -22,6 +22,53 @@ del af én kampagne og skal ligne den. Butikkens hvide side står rundt om blokk
 >
 > **Byg den ikke igen med builderen** (`bf/friday.js`, `bf/blog/build.js`): den kender ikke Kirstens tekst og ville
 > skrive den gamle oven på. Ret i denne fil. Afsnittet nedenfor om at tælle stemmerne fredag morgen gælder ikke længere.
+>
+> **26/11, eftermiddag: indlægget findes nu på sproget i alle 15 butikker, mailen går til** (`sprog/`). Indtil de er sat
+> ind, viser alle 24 butikker den danske tekst, fordi den ligger i All Store Views. Se "Sådan lægger du sprogene op"
+> nedenfor.
+
+## Sådan lægger du sprogene op
+
+Der er **én fil pr. store view i `sprog/`** (fx `sprog/eur_eu_ger.html`), og titel, kort beskrivelse, meta title og meta
+description for hvert sprog står i [`sprog/felter.md`](sprog/felter.md). Samme fremgangsmåde som W47-forsendelsesguiden.
+
+**Rækkefølgen er vigtig.** Lige nu ligger den danske tekst i **All Store Views**, og Danmark bruger den derfra. Skifter du
+All Store Views til engelsk først, bliver det danske indlæg engelsk.
+
+1. **Danmark først.** Åbn indlægget i Amasty Blog Pro, og vælg store view **Denmark** øverst. Fjern fluebenet i
+   **Use Default Value** ved titel, kort beskrivelse, indhold, meta title og meta description. Sæt
+   `sprog/dkk_dk_den.html` ind i HTML Code-elementet (Page Builder, Ctrl+A, Delete, Ctrl+V), og udfyld felterne fra
+   `felter.md`. Filen er præcis den blok, der ligger live nu. Gem.
+2. **All Store Views** (standarden): `sprog/alle-store-views.html` og de engelske felter. Det er den britiske tekst med
+   Magentos `{{store}}` foran hvert butikslink, så de ni butikker uden egen fil (CZ, SK, HU, GR, BG, EE, HR, LV, LT)
+   viser engelsk og sender læseren ind i deres egen butik. Gem.
+3. **De andre 13 store views**, ét ad gangen: vælg store view, fjern fluebenet i **Use Default Value** ved de fem felter,
+   sæt store viewets fil ind, udfyld felterne, og gem. URL-nøglen beholder **Use Default Value** overalt.
+4. **Datoen**: sæt udgivelsesdatoen til **27. november**. Det er feltet, temaet skriver over blokken ("18. november 2026"
+   i dag). Den står ikke i blokken.
+5. Tjek et par sprog på sitet: overskriften står på sproget, "Til og med søndag"-tavlen står på sproget, og
+   `…/eur_eu_ger/blog/world-record-friday-2026#niklas` lander på Niklas.
+
+Brug **ikke** den almindelige teksteditor (WYSIWYG): den fjerner `<script>` og `<style>`. Design og script ligger i hver
+fil (45–46 KB, under feltets 64 KB), så indlægget henter intet fra vores server.
+
+### Sådan blev sprogene lavet
+
+`sprog.js` (se toppen af filen): `prep` → `translate all` → `proofread all` → `apply all` → `links` → `assemble`.
+Oversættelsen er appens egen Duplicate & translate direkte fra dansk til hvert marked, som mailen W48 Pre Black Friday,
+med butikkens egne ord for WTP-skrinene. Derefter en uafhængig korrektur pr. sprog på den stærke model (`proofread`), som
+kun kan ændre tekst. Den fandt fx, at Martins æsker er smykkeæsker og ikke skrin, "clothespins" på amerikansk og
+"Peso mosca" i ental på italiensk.
+
+- `sprog/tr/rejected.json` er korrekturforslag, der ikke er taget med. Fem af dem ville gøre "Så **I** holder stadig ikke
+  Black Friday?" til ental. Spørgsmålet stilles til Westpack, ikke til læseren, så det skal være flertal på alle sprog.
+- `sprog/tr/fixes.json` er rettelser i hånden: flertal i PT/RO, norsk "Tilbudet", svensk "inget" (rekord er intetkøn).
+- `sprog/tr/same-ok.json` er tekster, der er gennemlæst og står ens på dansk og sproget (norsk "Se introen", tysk "Rekord: 65").
+- `assemble` tjekker hvert sprog: alle tal fra den danske tekst er med, ingen dansk tilbage, ingen 4-byte-tegn, under
+  62 KB, og alle butikslinks svarer 200 i butikken (`links`). På engelsk tæller tallene op med punktum ("6.5 m").
+- Ingen af oversættelserne er læst af en indfødt.
+
+Ændres den danske tekst, skal sprogene laves igen: `assemble` nægter at bygge fra en ældre dansk tekst.
 
 ## Hvornår den skal lægges op
 
@@ -134,14 +181,16 @@ virke her.
 
 ## Oversættelse
 
-Kun dansk indtil videre. Al tekst ligger i HTML'en, så indlægget kan oversættes som normalt. Husk også teksten i
-`aria-label` og `data-title` på videoerne (fx "Se Martins tårn"). Citaterne fra videoerne (“Pretty close”, “We might
-need another Friday.”) er engelske i originalen og kan blive stående. Links til butikken peger automatisk på den butik,
-indlægget ligger i.
+Se "Sådan lægger du sprogene op" øverst. `sprog.js` oversætter også `aria-label`, `alt` og videoernes `data-title`.
+Citaterne fra videoerne (“Pretty close”, “We might need another Friday.”) er engelske i originalen og står på engelsk i
+alle sprog. Links til butikken peger på den butik, indlægget ligger i (i filen og igen i scriptet).
 
 ## Filer
 
-- `world-record-friday-da.html` – blokken, der sættes ind (ca. 40 KB).
-- `cover.jpg` – listebilledet.
+- `world-record-friday-da.html` – den danske master (= den live blok, ca. 45 KB).
+- `sprog/` – én fil pr. store view, `alle-store-views.html` og `felter.md`. `sprog/tr/` er oversættelserne, korrekturen
+  og rettelserne, som `sprog.js` bygger filerne af.
+- `sprog.js` – laver sprogfilerne (se "Sådan blev sprogene lavet").
+- `cover.jpg` – listebilledet. `post-image-600.jpg` – Niklas med klemmer, 600 × 600.
 
 Billederne ligger i Klaviyos billedbibliotek (DK). Produktbillederne er de samme som i Pre Black Friday-mailen.

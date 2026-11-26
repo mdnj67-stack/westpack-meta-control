@@ -1,0 +1,229 @@
+{
+ "model": "gpt-5.6-sol",
+ "issues": [
+  {
+   "id": "t146",
+   "current": "M&M’s på en minut",
+   "suggested": "M&M's på en minut",
+   "severity": "error",
+   "reason": "The brand name must retain its specified apostrophe."
+  },
+  {
+   "id": "a275.alt",
+   "current": "Martin lägger en smyckesask överst på ett högt torn, med engångshandskar på",
+   "suggested": "Med engångshandskar på lägger Martin en smyckesask överst på ett högt torn",
+   "severity": "error",
+   "reason": "The dangling final phrase makes it sound as though the tower is wearing the gloves."
+  },
+  {
+   "id": "t336",
+   "current": "Ingen officiell rekord i grenen. Det passade Martin alldeles utmärkt.",
+   "suggested": "Inget officiellt rekord i grenen. Det passade Martin alldeles utmärkt.",
+   "severity": "error",
+   "reason": "The neuter noun “rekord” requires “inget officiellt”."
+  },
+  {
+   "id": "t410",
+   "current": "Ingen rekord att mäta mot",
+   "suggested": "Inget rekord att jämföra med",
+   "severity": "error",
+   "reason": "“Rekord” is neuter, and “jämföra med” is the idiomatic phrasing here."
+  },
+  {
+   "id": "t432",
+   "current": "Ingen officiell rekord? “None!” Då får Martin helt enkelt skapa sin egen.",
+   "suggested": "Inget officiellt rekord? “None!” Då får Martin helt enkelt skapa sitt eget.",
+   "severity": "error",
+   "reason": "The neuter noun “rekord” requires “inget” and “sitt eget”."
+  },
+  {
+   "id": "t528",
+   "current": "Ätpinneexperten",
+   "suggested": "Ätpinnsexperten",
+   "severity": "error",
+   "reason": "The Swedish compound form is “ätpinnsexperten”."
+  },
+  {
+   "id": "a539.alt",
+   "current": "Mia för upp ett M&M till munnen med ätpinnar, med skålen framför sig",
+   "suggested": "Med skålen framför sig för Mia upp en M&M till munnen med ätpinnar",
+   "severity": "error",
+   "reason": "An individual M&M takes the common-gender article “en”, and the original construction is awkward."
+  },
+  {
+   "id": "t580",
+   "current": "M&M’s på en minut – med ätpinnar",
+   "suggested": "M&M's på en minut – med ätpinnar",
+   "severity": "error",
+   "reason": "The brand name must retain its specified apostrophe."
+  },
+  {
+   "id": "t908",
+   "current": "Reglerna är enkla: ätpinnar, en skål M&M’s och en minut. Världsrekordet är 65.",
+   "suggested": "Reglerna är enkla: ätpinnar, en skål M&M's och en minut. Världsrekordet är 65.",
+   "severity": "error",
+   "reason": "The brand name must retain its specified apostrophe."
+  },
+  {
+   "id": "t956",
+   "current": "18 M&M’s på en minut är faktiskt ganska bra.",
+   "suggested": "18 M&M's på en minut är faktiskt ganska bra.",
+   "severity": "error",
+   "reason": "The brand name must retain its specified apostrophe."
+  },
+  {
+   "id": "t1140",
+   "current": "Andra skottet flyger nerför hyllgången. Det mäts efter.",
+   "suggested": "Andra skottet flyger längs hyllgången. Sedan mäts avståndet.",
+   "severity": "error",
+   "reason": "“Nerför” suggests a slope, while “det mäts efter” is an unidiomatic Danish calque."
+  },
+  {
+   "id": "t1190",
+   "current": "Världsrekordet ligger bara 23,66 meter längre ner i lagret, så Cecilia får nog försöka igen.",
+   "suggested": "Världsrekordet ligger bara 23,66 meter längre bort i lagergången, så Cecilia får nog försöka igen.",
+   "severity": "error",
+   "reason": "The source refers specifically to the warehouse aisle, which is also needed for the joke."
+  },
+  {
+   "id": "a1229.aria-label",
+   "current": "Se Niklas klämmor, 4:51",
+   "suggested": "Se Niklas klädnypor, 4:51",
+   "severity": "error",
+   "reason": "Niklas uses clothes pegs, not generic clips or clamps."
+  },
+  {
+   "id": "t1240",
+   "current": "Se Niklas klämmor",
+   "suggested": "Se Niklas klädnypor",
+   "severity": "error",
+   "reason": "Niklas uses clothes pegs, not generic clips or clamps."
+  },
+  {
+   "id": "t1962",
+   "current": "Varje streck är en klämma",
+   "suggested": "Varje streck är en klädnypa",
+   "severity": "error",
+   "reason": "Each line represents a clothes peg specifically."
+  },
+  {
+   "id": "t1984",
+   "current": "Den första klädnypan sitter på hakan. Det finns fortfarande gott om plats.",
+   "suggested": "Den första klädnypan sitter på käken. Det finns fortfarande gott om plats.",
+   "severity": "error",
+   "reason": "The Danish source says jaw, not chin."
+  },
+  {
+   "id": "t2048",
+   "current": "Närmast en riktig rekord och längst från en behaglig fredag.",
+   "suggested": "Närmast ett riktigt rekord och längst från en behaglig fredag.",
+   "severity": "error",
+   "reason": "The neuter noun “rekord” requires “ett riktigt”."
+  },
+  {
+   "id": "t2068",
+   "current": "Rekorden sprack, men rabatten håller",
+   "suggested": "Rekordförsöken sprack, men rabatten håller",
+   "severity": "error",
+   "reason": "It was the record attempts that failed; no records were broken."
+  },
+  {
+   "id": "t2102",
+   "current": ". Gäller smyckeskrin, reseetuier för smycken och stapelbara smyckeskrin till och med söndag 29.&nbsp;november, så du fortfarande hinner fylla hyllorna inför julförsäljningen.",
+   "suggested": ". Det gäller smyckeskrin, reseetuier för smycken och stapelbara smyckeskrin till och med söndag 29&nbsp;november, så du fortfarande hinner fylla hyllorna inför julförsäljningen.",
+   "severity": "error",
+   "reason": "The sentence needs a subject, and Swedish dates do not take a full stop after the day number."
+  },
+  {
+   "id": "t2140",
+   "current": "Se skrinet",
+   "suggested": "Se reseetuiet",
+   "severity": "error",
+   "reason": "WTP Hawaii is a travel case, not a jewellery case."
+  },
+  {
+   "id": "t2182",
+   "current": "Se skrinet",
+   "suggested": "Se reseetuiet",
+   "severity": "error",
+   "reason": "WTP Capri is a travel case, not a jewellery case."
+  },
+  {
+   "id": "a2195.alt",
+   "current": "WTP Bali, tvåvånings reseetui för smycken",
+   "suggested": "WTP Bali, reseetui för smycken i två våningar",
+   "severity": "improve",
+   "reason": "The current compound sounds machine-translated in Swedish."
+  },
+  {
+   "id": "t2224",
+   "current": "Se skrinet",
+   "suggested": "Se reseetuiet",
+   "severity": "error",
+   "reason": "WTP Bali is a travel case, not a jewellery case."
+  },
+  {
+   "id": "t2318",
+   "current": "Hitta dina WTP-skrin med 20&nbsp;%",
+   "suggested": "Hitta dina favoriter i WTP-serien med 20&nbsp;% rabatt",
+   "severity": "error",
+   "reason": "The offer covers the entire WTP series, including travel cases, and “rabatt” is needed for clarity."
+  },
+  {
+   "id": "t2328",
+   "current": "Måndag 23 – söndag 29.&nbsp;november.",
+   "suggested": "Måndag 23 – söndag 29&nbsp;november.",
+   "severity": "error",
+   "reason": "Swedish dates do not take a full stop after the day number."
+  },
+  {
+   "id": "t2332",
+   "current": "Erbjudandet på WTP-skrinen avslutades söndag 29.&nbsp;november, men du kan fortfarande",
+   "suggested": "Erbjudandet på WTP-serien avslutades söndag 29&nbsp;november, men du kan fortfarande",
+   "severity": "error",
+   "reason": "The offer covered the whole WTP series, and Swedish dates do not take a full stop after the day number."
+  },
+  {
+   "id": "t2354",
+   "current": "Det sa studiovärden, och vi är benägna att hålla med henne. Fyra försök, noll officiella världsrekord och en ovanligt hög åtgång av klädnypor. Det nästan kräver revansch.",
+   "suggested": "Det sa programledaren, och vi är benägna att hålla med henne. Fyra försök, noll officiella världsrekord och en ovanligt hög åtgång av klädnypor. Det kräver nästan en revansch.",
+   "severity": "error",
+   "reason": "“Programledaren” is the correct term, and the final sentence has incorrect word order."
+  },
+  {
+   "id": "t2360",
+   "current": "Se introen igen",
+   "suggested": "Se introt igen",
+   "severity": "error",
+   "reason": "“Introen” is Danish; the Swedish definite form is “introt”."
+  },
+  {
+   "id": "t2380",
+   "current": "Se introen",
+   "suggested": "Se introt",
+   "severity": "error",
+   "reason": "“Introen” is Danish; the Swedish definite form is “introt”."
+  },
+  {
+   "id": "t2396",
+   "current": "Se Niklas’ klämmor",
+   "suggested": "Se Niklas klädnypor",
+   "severity": "error",
+   "reason": "Swedish does not use an apostrophe for this genitive, and Niklas uses clothes pegs."
+  },
+  {
+   "id": "t2404",
+   "current": "Traditionsenligt kör vi inte Black Friday. Fyra kollegor siktade istället på varsin rekord – här hittar du alla fem videor.",
+   "suggested": "Traditionsenligt kör vi inte Black Friday. Fyra kollegor siktade istället på varsitt rekord – här hittar du alla fem videor.",
+   "severity": "error",
+   "reason": "The neuter noun “rekord” requires “varsitt”."
+  },
+  {
+   "id": "t2412",
+   "current": "Vi kör inte Black Friday. Istället kämpade fyra kollegor för världsrekord med smyckesaskar, M&amp;M’s, gummisnodd och klädnypor. Se alla fem videor här.",
+   "suggested": "Vi kör inte Black Friday. Istället siktade fyra kollegor på världsrekord med smyckesaskar, M&amp;M's, gummiband och klädnypor. Se alla fem videor här.",
+   "severity": "error",
+   "reason": "“Kämpade för” changes the meaning, the brand spelling is wrong, and “gummiband” matches the attempt."
+  }
+ ]
+}
