@@ -547,11 +547,13 @@ async function collectMeta({ graph, pages, accountId, now, resolveObjectiveGroup
     limit: 200
   });
   const adById = new Map(ads.map((ad) => [String(ad.id), ad]));
+  // Every ad that delivered, not only the live ones: an ad set's spend in a week includes ads paused since, or an ad
+  // that kept its spend while a paused neighbour's share vanished from the total reads as "Meta moves budget away"
+  // (26/11: EU AD19 and IT AD22 were called tired on that alone). Only live ads are judged, below.
   const weekly = await pages(`/${accountId}/insights`, {
     level: "ad",
     time_increment: 7,
     time_range: JSON.stringify({ since: blocks[0].since, until: yesterday }),
-    filtering: JSON.stringify([{ field: "ad.effective_status", operator: "IN", value: ["ACTIVE", "WITH_ISSUES", "PENDING_REVIEW", "IN_PROCESS"] }]),
     fields: "campaign_name,adset_id,adset_name,ad_id,ad_name,spend,impressions,frequency,cpm,inline_link_click_ctr,actions",
     action_attribution_windows: JSON.stringify(["incrementality"]),
     limit: 500
@@ -589,7 +591,8 @@ async function collectMeta({ graph, pages, accountId, now, resolveObjectiveGroup
       id: `meta-fatigue:${adId}`,
       source: "meta",
       level: judged.verdict === "swap_now" || judged.verdict === "abandoned" ? "warn" : "info",
-      title: `${FATIGUE_WORDS[judged.verdict]}: ${entry.name}`,
+      // The ad set in the title: the same ad runs in several sets (AD18 en_GB is in both LAL - EU and LAL - UK).
+      title: `${FATIGUE_WORDS[judged.verdict]}: ${entry.name} (${entry.adset})`,
       detail: `${entry.campaign} > ${entry.adset}. Tegn: ${judged.signals.join(", ") || "ingen"}. Sidste uge: ${Math.round(last.share)} % af ad settets forbrug, CTR ${decimal(last.ctr)} %, frekvens ${decimal(last.freq, 1)}${awareness ? "" : `, nye kunder (inkrementelt) to uger: ${decimal((weeks[1]?.nc || 0) + last.nc, 1)}`}. Signal, ikke dom.`,
       fingerprint: judged.verdict
     }));
@@ -728,7 +731,9 @@ const BRIEF_SCHEMA = {
           why: { type: "string" },
           steps: { type: "array", maxItems: 5, items: { type: "string" } },
           urgency: { type: "string", enum: ["today", "this_week"] },
-          sourceIds: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } }
+          // 16, not 8: the 26/11 fatigue to-do counted ten ads and could cite only eight (it cited seven), so three
+          // ads were missing from the to-do and from the ledger that keeps them from becoming a to-do again.
+          sourceIds: { type: "array", minItems: 1, maxItems: 16, items: { type: "string" } }
         }
       }
     },

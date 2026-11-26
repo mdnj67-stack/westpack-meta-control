@@ -4,8 +4,12 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const {
+  BRIEF_SCHEMA,
+  accountDay,
+  addDays,
   buildBriefInput,
   cardSignals,
+  collectMeta,
   copenhagen,
   describeBrief,
   finalizeBrief,
@@ -49,6 +53,46 @@ test("fatigue: the same rules as the Monday status report", () => {
   assert.equal(judgeAdFatigue([null, null, null]).verdict, "no_delivery");
   // The rules are written out once, in the module the report's rules came from.
   assert.match(read("server", "agents", "morning-brief.js"), /same rules as the Monday status report \(scripts\/meta-ad-status\.js\)/);
+});
+
+test("fatigue: a share counts the ad set's paused ads too, and the signal names the ad set", async () => {
+  const now = at("06:05", "2026-11-26");
+  const yesterday = accountDay(now, -1);
+  const starts = [2, 1, 0].map((back) => addDays(yesterday, -7 * back - 6));
+  const ad = (id, name, set) => ({ id, name, status: "ACTIVE", effective_status: "ACTIVE", campaign: { id: "c", name: "BA - Reach", objective: "OUTCOME_AWARENESS" }, adset: { id: set, name: set === "eu" ? "LAL - EU" : "LAL - UK", effective_status: "ACTIVE" } });
+  const rows = (id, name, set, spends, ctrs, live = true) => spends.map((spend, week) => ({
+    live, date_start: starts[week], ad_id: id, ad_name: name, adset_id: set, adset_name: set === "eu" ? "LAL - EU" : "LAL - UK", campaign_name: "BA - Reach",
+    spend: String(spend), impressions: String(spend * 100), cpm: "10", frequency: "1.2", inline_link_click_ctr: String(ctrs[week]), actions: []
+  }));
+  // LAL - EU: A keeps 30 % of the set every week while a neighbour paused since gives way to B. Counted over the live
+  // ads only, A's share would fall 75 -> 60 -> 40 % and, with its falling CTR, read as tired. It is only "watch".
+  const insights = [
+    ...rows("A", "AD19 - Short co-worker - en_GB", "eu", [30, 30, 30], [1.0, 0.9, 0.7]),
+    ...rows("B", "AD27 - Easy peasy - en_GB", "eu", [10, 20, 45], [1, 1, 1]),
+    ...rows("P", "AD15 - Glittery bow - en_GB", "eu", [60, 50, 25], [1, 1, 1], false),
+    // LAL - UK: the same AD18 en_GB, which Meta has given up on there.
+    ...rows("C", "AD18 - It doesnt take two - en_GB", "uk", [5, 5, 3], [1, 1, 1]),
+    ...rows("D", "AD27 - Easy peasy - en_GB", "uk", [95, 95, 97], [1, 1, 1])
+  ];
+  const result = await collectMeta({
+    accountId: "act_1",
+    now,
+    resolveObjectiveGroup: () => "awareness",
+    graph: async () => ({ data: [] }),
+    pages: async (resourcePath, params) => {
+      if (resourcePath.endsWith("/ads")) return [ad("A", "AD19", "eu"), ad("B", "AD27", "eu"), ad("C", "AD18", "uk"), ad("D", "AD27", "uk")];
+      const liveOnly = /ad\.effective_status/.test(params.filtering || "");
+      return insights.filter((row) => row.live || !liveOnly);
+    }
+  });
+  const fatigue = result.signals.filter((item) => item.id.startsWith("meta-fatigue:"));
+  assert.deepEqual(fatigue.map((item) => item.id), ["meta-fatigue:C"]);
+  assert.equal(fatigue[0].title, "Opgivet af Meta - kan slukkes: AD18 - It doesnt take two - en_GB (LAL - UK)");
+  assert.ok(result.signals.some((item) => item.id.startsWith("meta-watch:") && /^1 annoncer/.test(item.title)));
+});
+
+test("brief schema: a to-do can cite every ad a fatigue review counts", () => {
+  assert.ok(BRIEF_SCHEMA.properties.todos.items.properties.sourceIds.maxItems >= 16);
 });
 
 test("an Asana campaign card finds its DK campaign by week number and a shared word", () => {
