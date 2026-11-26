@@ -37,8 +37,6 @@
 #wrf26 [id]{scroll-margin-top:110px}
 #wrf26 .w-k{display:block;font:500 12px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 #wrf26 h2{font-family:var(--disp);font-weight:500;color:var(--ink);letter-spacing:-.035em;line-height:1;text-transform:none}
-#wrf26 .w-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;padding:16px var(--px);border-bottom:1px solid var(--line);font:500 12px/1.5 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
-#wrf26 .w-meta a{display:inline-block;margin:-12px 0;padding:12px 0;color:var(--ink)}
 #wrf26 .w-hero{padding:clamp(36px,8cqw,72px) var(--px) clamp(48px,9cqw,80px)}
 #wrf26 .w-hero-in{display:grid;gap:30px;grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "t" "r" "v"}
 #wrf26 .w-hero-h{grid-area:h}
@@ -186,7 +184,7 @@
 #wrf26 .w-ar{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#fff;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
 #wrf26 .w-fine{margin-top:16px;font-size:15px;line-height:1.5;color:var(--mut)}
 #wrf26 .w-over{display:none}
-#wrf26.is-over .w-offer>*:not(.w-over),#wrf26.is-over .w-meta a{display:none}
+#wrf26.is-over .w-offer>*:not(.w-over){display:none}
 #wrf26.is-over .w-over{display:block}
 #wrf26 .w-close{padding-bottom:clamp(64px,12cqw,104px)}
 #wrf26 .w-close .w-h2 s{color:#4f4f4f;text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:.075em;text-decoration-skip-ink:none}
@@ -214,11 +212,6 @@
   #wrf26 *{transition:none!important;animation:none!important}
 }
 </style>
-
-<p class="w-meta">
-  <span>27. november · Resultaterne</span>
-  <a href="#tilbuddet">20&nbsp;% til og med søndag</a>
-</p>
 
 <!-- HERO -->
 <section class="w-hero" id="intro">
