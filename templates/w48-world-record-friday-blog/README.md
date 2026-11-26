@@ -9,8 +9,14 @@ fredagsmailen: sort flade, Inter Tight i overskrifterne, de store tal 01–04 og
 Forsendelsesguiden fra W47 blev tonet ned til butikkens hvide udtryk efter Kirstens korrektur, men det her indlæg er en
 del af én kampagne og skal ligne den. Butikkens hvide side står rundt om blokken.
 
-> **Status 18/11:** Bygget, ikke lagt op. Kun dansk. Afstemningen fra mandagens mail er ikke talt endnu, så filen her
-> er **uden** afsnittet "Jeres favorit". Fredag morgen tæller Claude stemmerne og bygger filen igen med dem.
+> **Status 26/11:** Live på DK under `world-record-friday-2026` med Kirstens egen redigering af teksten.
+> `world-record-friday-da.html` er nu **den live blok** plus hendes tre punkter fra korrekturen i Asana: indledningen
+> ("Det var muligvis lidt for ambitiøst…" i stedet for "Det var muligvis en fejl.", som kunne læses, som om det var en
+> fejl ikke at holde Black Friday), og studieværten er "hende" to steder. Den skal sættes ind i stedet for den live blok.
+> Kun dansk, og uden afsnittet "Jeres favorit".
+>
+> **Byg den ikke igen med builderen** (`bf/friday.js`, `bf/blog/build.js`): den kender ikke Kirstens tekst og ville
+> skrive den gamle oven på. Ret i denne fil. Afsnittet nedenfor om at tælle stemmerne fredag morgen gælder ikke længere.
 
 ## Hvornår den skal lægges op
 
