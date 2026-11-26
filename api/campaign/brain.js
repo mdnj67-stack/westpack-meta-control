@@ -15,7 +15,8 @@ const {
   getAsanaTaskTemplates,
   getAsanaWorkspaceProjects,
   resolveAsanaProjectGid,
-  sortAsanaSectionByDueDate
+  sortAsanaSectionByDueDate,
+  updateAsanaTask
 } = require("../../server/lib/asana");
 const { assembleCampaignObject } = require("../../server/campaign/object");
 const {
@@ -335,6 +336,22 @@ module.exports = async (req, res) => {
       sendJson(res, 200, { ok: true, task: await createAsanaTask(config, input || {}) });
     } catch (error) {
       sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the Asana task." });
+    }
+    return;
+  }
+
+  // A change to one of the token owner's own to-dos: name, notes, due date or a time block. Anyone else's
+  // task is refused (403) - see updateAsanaTask.
+  if (requestedAction === "asana_task_update") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, task: await updateAsanaTask(config, input || {}) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not change the Asana task." });
     }
     return;
   }

@@ -428,6 +428,87 @@ async function createAsanaTask(config, { name, notes, dueOn, projectKind } = {})
   };
 }
 
+// An instant with its offset (2026-12-14T08:00:00+01:00), returned as UTC ISO. A bare local time is refused:
+// "08:00" means a different instant on Vercel (UTC) than in Copenhagen.
+function validDateTime(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/.test(text)) return null;
+  const date = new Date(text);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+// The seventh write: a change to one of the token owner's own to-dos - its name, its notes, a due date, or a
+// time block (startAt + dueAt) that reserves part of a day in Asana's calendar. A task assigned to anyone else,
+// or to no one (a project card), is refused with 403, so this can never edit a colleague's task.
+async function updateAsanaTask(config, { taskGid, name, notes, dueOn, startAt, dueAt } = {}) {
+  const gid = String(taskGid || "").trim();
+  const refuse = (message, statusCode = 400) => {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
+  };
+  if (!/^\d+$/.test(gid)) throw refuse("A valid Asana task GID is required.");
+  const data = {};
+  if (name !== undefined) {
+    const taskName = String(name || "").trim();
+    if (!taskName || taskName.length > MAX_TASK_NAME_CHARS) throw refuse(`A task name needs between 1 and ${MAX_TASK_NAME_CHARS} characters.`);
+    data.name = taskName;
+  }
+  if (notes !== undefined) {
+    const taskNotes = String(notes || "").trim();
+    if (taskNotes.length > MAX_TASK_NOTES_CHARS) throw refuse(`Task notes can be at most ${MAX_TASK_NOTES_CHARS} characters.`);
+    data.notes = taskNotes;
+  }
+  const day = dueOn === undefined ? undefined : validDueOn(dueOn);
+  const start = startAt === undefined ? undefined : validDateTime(startAt);
+  const end = dueAt === undefined ? undefined : validDateTime(dueAt);
+  if (day === null) throw refuse("dueOn must be a real date written YYYY-MM-DD.");
+  if (start === null || end === null) throw refuse("startAt and dueAt must be date-times with an offset, e.g. 2026-12-14T08:00:00+01:00.");
+  if (start && !end) throw refuse("A start time needs a due time.");
+  if (start && end && start >= end) throw refuse("The start time must be before the due time.");
+  if (end && day) throw refuse("Give a due date or a due time, not both.");
+  if (end) {
+    data.due_at = end;
+    data.start_at = start || null;
+  } else if (day !== undefined) {
+    // A date clears any time block: Asana refuses a start time without a due time.
+    data.due_on = day || null;
+    data.start_at = null;
+  }
+  if (!Object.keys(data).length) throw refuse("Nothing to change.");
+
+  const [task, profile] = await Promise.all([
+    asanaGet(config, `/tasks/${gid}`, { opt_fields: "gid,assignee.gid" }),
+    getAsanaConnectionProfile(config)
+  ]);
+  const assigneeGid = String(task?.assignee?.gid || "");
+  if (!assigneeGid || !profile.gid || assigneeGid !== profile.gid) {
+    throw refuse("Only your own Asana to-dos can be changed here.", 403);
+  }
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}/tasks/${gid}?opt_fields=gid,name,due_on,due_at,start_at,permalink_url`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.asanaAccessToken}`
+    },
+    body: JSON.stringify({ data })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return {
+    gid,
+    name: String(payload?.data?.name || ""),
+    dueOn: String(payload?.data?.due_on || ""),
+    dueAt: String(payload?.data?.due_at || ""),
+    startAt: String(payload?.data?.start_at || ""),
+    permalinkUrl: String(payload?.data?.permalink_url || "")
+  };
+}
+
 // Workspace members whose name starts with or contains the query, so a content request can name who it is for.
 // Read-only (Asana's typeahead).
 async function findAsanaUsers(config, query) {
@@ -825,6 +906,7 @@ module.exports = {
   attachFileToAsanaTask,
   createAsanaContentRequest,
   createAsanaTask,
+  updateAsanaTask,
   findAsanaUsers,
   toAsanaHtml,
   createAsanaTaskFromTemplate,
