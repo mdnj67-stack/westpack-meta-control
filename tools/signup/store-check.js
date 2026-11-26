@@ -37,6 +37,13 @@ function loadCopy(lang) {
 }
 
 async function route(page, forceLive) {
+  // the store's own tag (--installed) carries no data-track="", so it would count this check's exposures - a simulated
+  // launch as live ones - in the funnel. Tracking never leaves this browser.
+  await page.addInitScript(() => {
+    const beacon = navigator.sendBeacon && navigator.sendBeacon.bind(navigator);
+    if (beacon) navigator.sendBeacon = (url, data) => (String(url).includes("/api/signup/track") ? false : beacon(url, data));
+  });
+  await page.route(`${PROD}/api/signup/track*`, (r) => r.fulfill({ status: 204, body: "", headers: { "access-control-allow-origin": "*" } }));
   // what runs comes from the app's Signup page; a simulated launch answers for it, in this browser only
   if (forceLive) await page.route(`${PROD}/api/signup/control?action=config*`, (r) => r.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" },
     body: JSON.stringify({ v: 1, live: { on: true, current: CURRENT, markets: {} }, staging: { on: true, current: CURRENT } }) }));
