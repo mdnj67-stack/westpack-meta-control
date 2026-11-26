@@ -80,6 +80,11 @@ For a new quarter, move those constants forward rather than reading the old numb
   ordinary first order, so "first order is not a sample" drops 25–35 % at that date and 2024 reads −44 % on it.
   Across 2024 compare all first orders. A first invoice between 0 and 300 kr. tracks the E series closely
   (Jan 2025: 452 against 465) if a sample proxy is needed before 2024.
+  There are two E series, both pure sample orders (the user, 2026-11-26): **EW = sample with Westpack's logo**, **EO =
+  sample with the customer's own logo**. In the web orders, 1 Feb 2024 - 4 Nov 2026: 8,144 EW (median 52 kr. ex VAT;
+  10 % still carry a logo-sample line) and 10,592 EO (96 % carry "Sample with own logo print", 82 % a cliché; median
+  134 kr.). Magento stores them in lower case (`ew…`/`eo…`), so match case-insensitively. The other letter prefixes
+  (R, S, SR, RS) are not E series; 20 orders in 2024 carry `samwp_`/`samown_`, the same split under test names.
 - **The DETAIL workbook refused a ten-month custom period** (1 Jan–8 Nov 2026: VBA 0x800A9C68 at once) and hung
   on May–Aug 2026 (no dialog, no CPU for ten minutes; the Excel instance had to be stopped). The full run
   (`c<date>`, `Nye_kunder_SQL_login.xlsm`) holds exactly the same customers as a DETAIL run of the same months
