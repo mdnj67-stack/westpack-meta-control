@@ -510,7 +510,7 @@
       <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
       <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
       <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i>
     </div>
     <p class="w-mcap"><span><b>52</b> af 161</span><span>Hver streg er én klemme</span></p>
   </div>
@@ -834,7 +834,29 @@ if(T&&R.contains(T)){
   go();
 
   document.fonts&&document.fonts.ready&&document.fonts.ready.then(go);
-  window.addEventListener("load",go)
+  window.addEventListener("load",go);
+
+  // The cookie banner locks html/body, and answering it puts the page back at the top.
+  // Land again when the lock lifts, unless the reader has scrolled by then.
+  var lk=function(){
+    return getComputedStyle(document.documentElement).overflowY==="hidden"||getComputedStyle(document.body).overflowY==="hidden"
+  },was=false,own=false,n=0;
+
+  ["wheel","touchmove"].forEach(function(e){
+    window.addEventListener(e,function(){
+      if(!lk())own=true
+    },{passive:true})
+  });
+
+  var iv=setInterval(function(){
+    n++;
+    if(lk())was=true;
+    else if(was){
+      clearInterval(iv);
+      if(!own)go()
+    }
+    if(n>240||(!was&&n>40))clearInterval(iv)
+  },250)
 }
 
 if(AN){

@@ -15,6 +15,11 @@ del af én kampagne og skal ligne den. Butikkens hvide side står rundt om blokk
 > fejl ikke at holde Black Friday), og studieværten er "hende" to steder. Den skal sættes ind i stedet for den live blok.
 > Kun dansk, og uden afsnittet "Jeres favorit".
 >
+> **26/11, senere:** To kodefejl er rettet. Mailens links landede øverst på siden for nye besøgende, fordi cookiebanneret
+> låser siden og sender læseren til toppen, når det besvares. Nu lander siden igen, når låsen slipper (samme løsning som
+> W47). Og Niklas' mål havde 164 streger, nu 161. I Amasty skal **datoen sættes til 27. november** (temaet skriver
+> "18. november 2026" lige over blokken), og meta description stod på "Default Description". Brug teksten nedenfor.
+>
 > **Byg den ikke igen med builderen** (`bf/friday.js`, `bf/blog/build.js`): den kender ikke Kirstens tekst og ville
 > skrive den gamle oven på. Ret i denne fil. Afsnittet nedenfor om at tælle stemmerne fredag morgen gælder ikke længere.
 
