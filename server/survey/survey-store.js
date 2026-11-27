@@ -184,4 +184,18 @@ async function deleteTestResponses(survey, { dryRun = false } = {}) {
   return { deleted: dryRun ? 0 : tests.length, testFiles: tests.length, kept: entries.length - tests.length, unreadable, files: entries.length, dryRun };
 }
 
-module.exports = { storeMode, writeResponse, writeNamedResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest, deleteTestResponses };
+// What came back from the survey mail (bounces and automatic replies, per customer): one document, replaced whole by
+// each import. The import always sends the full picture read from the mailbox, so a merge could only keep stale rows.
+async function readDelivery(survey) {
+  const pathname = `${prefix(survey)}/delivery.json`;
+  return token() ? twice(() => blobGet(pathname)) : localRead(pathname);
+}
+
+async function writeDelivery(survey, doc) {
+  const pathname = `${prefix(survey)}/delivery.json`;
+  if (!token()) localWrite(pathname, doc);
+  else await twice(() => blobPut(pathname, doc));
+  return doc;
+}
+
+module.exports = { storeMode, writeResponse, writeNamedResponse, readResponses, readResponseFiles, readRecipients, writeRecipients, markResponsesTest, deleteTestResponses, readDelivery, writeDelivery };

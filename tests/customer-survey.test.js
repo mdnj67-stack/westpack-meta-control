@@ -347,6 +347,71 @@ test("replies to the survey mail become answers of their own, once each, beside 
   assert.ok(route.indexOf("requireAuth(req, res, config)") < route.indexOf('action === "import_mail"'), "importing is for the logged-in app only");
 });
 
+test("what came back from the mail: one row per mailed customer, the strongest sign wins, no address kept", async () => {
+  // 27/11, the user: "tælle hvor mange gange vi bliver afvist i indbakken ... om de er lukket eller der er skiftet
+  // rundt i ansvar"
+  const recipients = [
+    { token: "aaaa1111", firma: "Closed shop", sidsteOrdre: "2025-09-01" },
+    { token: "bbbb2222", firma: "New person", sidsteOrdre: "2024-01-15" },
+    { token: "cccc3333", firma: "On leave", sidsteOrdre: "2025-10-01" },
+    { token: "dddd4444", firma: "Answered", sidsteOrdre: "2025-08-01" },
+    { token: "eeee5555", firma: "Not mailed", sidsteOrdre: "2022-01-01" },
+  ];
+  const at = "2026-11-26T09:00:00.000Z";
+  const out = survey.sanitizeDelivery({
+    sentTokens: ["aaaa1111", "bbbb2222", "cccc3333", "dddd4444", "zzzz9999"],
+    items: [
+      { token: "aaaa1111", kind: "receipt", source: "autoreply", at },
+      { token: "aaaa1111", kind: "domain_gone", source: "bounce", at, email: "info@gone.example" },
+      { token: "bbbb2222", kind: "contact_left", source: "autoreply", at },
+      { token: "cccc3333", kind: "away", source: "autoreply", at },
+      { token: "eeee5555", kind: "domain_gone", source: "bounce", at },
+      { token: "bbbb2222", kind: "made_up", source: "bounce", at },
+      { token: "cccc3333", kind: "typo", source: "smoke", at },
+    ],
+  }, { recipients, now: Date.parse("2026-11-27T10:00:00Z") });
+  assert.deepEqual(out.doc.sentTokens, ["aaaa1111", "bbbb2222", "cccc3333", "dddd4444"], "an unknown link is not counted as mailed");
+  assert.deepEqual(out.doc.items.map((i) => `${i.token}:${i.kind}`), ["aaaa1111:domain_gone", "bbbb2222:contact_left", "cccc3333:away"]);
+  assert.deepEqual(out.skipped.map((s) => s.why), ["not mailed", "kind", "source"]);
+  assert.equal(JSON.stringify(out.doc).includes("@"), false, "no address reaches biblen");
+  assert.ok(survey.sanitizeDelivery({ items: [] }).error);
+
+  const d = survey.summarizeDelivery(out.doc, { recipients, answered: ["dddd4444", "eeee5555"], now: Date.parse("2026-11-27T10:00:00Z") });
+  assert.equal(d.mailed, 4);
+  assert.equal(d.answered, 1, "only answers from mailed customers count against the mailing");
+  assert.equal(d.notReached, 2, "out of office and receipts arrived; they are not rejections");
+  const group = (id) => d.groups.find((g) => g.id === id);
+  assert.deepEqual([group("closed").count, group("moved").count, group("arrived").count], [1, 1, 1]);
+  assert.equal(group("closed").kinds.find((k) => k.id === "domain_gone").count, 1);
+  const band = (id) => d.bands.find((b) => b.id === id) || { mailed: 0 };
+  assert.deepEqual([band("m12_18").mailed, band("m12_18").notReached, band("m12_18").closed], [3, 1, 1]);
+  assert.deepEqual([band("m30_48").mailed, band("m30_48").notReached], [1, 1]);
+  assert.equal(survey.summarizeDelivery(null, { recipients }), null);
+
+  // stored as one document, replaced by each import
+  const saved = process.env.BLOB_READ_WRITE_TOKEN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+  const store = require(path.join(ROOT, "server", "survey", "survey-store.js"));
+  const id = `delivery-test-${process.pid}-${Date.now()}`;
+  try {
+    assert.equal(await store.readDelivery(id), null);
+    await store.writeDelivery(id, out.doc);
+    await store.writeDelivery(id, Object.assign({}, out.doc, { items: out.doc.items.slice(0, 1) }));
+    assert.equal((await store.readDelivery(id)).items.length, 1);
+  } finally {
+    fs.rmSync(path.join(ROOT, "tmp", "surveys", id), { recursive: true, force: true });
+    if (saved !== undefined) process.env.BLOB_READ_WRITE_TOKEN = saved;
+  }
+  const route = fs.readFileSync(path.join(ROOT, "api", "survey.js"), "utf8");
+  assert.ok(route.indexOf("requireAuth(req, res, config)") < route.indexOf('action === "import_delivery"'), "importing is for the logged-in app only");
+  assert.match(route, /readDelivery\(survey\.SURVEY_ID\)\.catch\(/, "an unreadable delivery document never fails the answers");
+  const view = fs.readFileSync(path.join(ROOT, "src", "customer-survey.js"), "utf8");
+  assert.match(view, /What came back from the mail/);
+  assert.match(view, /data-survey-tab="\$\{id\}"/);
+  assert.match(view, /\["returned", `Mail that came back/);
+  assert.match(view, /Not reached/);
+});
+
 test("the app view is reachable from the Klaviyo rail", () => {
   const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");

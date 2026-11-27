@@ -143,8 +143,65 @@ function renderAnswers() {
   </table></div>`;
 }
 
+// What came back from the survey mail (27/11, the user: "tælle hvor mange gange vi bliver afvist i indbakken ... om de
+// er lukket eller der er skiftet rundt i ansvar"): bounces and automatic replies, one row per customer, sorted by the
+// script that reads the Westpack inbox (mail-afvisninger.js). The groups answer that question; "Arrived" is not a
+// rejection and is shown so the count is complete.
+const pct = (n, d) => (d ? `${Math.round((n / d) * 1000) / 10}%` : "");
+
+function renderDelivery() {
+  const d = state.data?.delivery;
+  if (!d) return state.data?.deliveryUnreadable ? '<p class="survey-muted">What came back from the mail could not be read just now. Press Read again.</p>' : "";
+  const max = Math.max(1, ...d.groups.map((g) => g.count));
+  const kindLine = (g) => {
+    const used = g.kinds.filter((k) => k.count);
+    return used.length ? `<br><span class="survey-muted">${used.map((k) => `${escapeHtml(k.label)} ${k.count}`).join(" · ")}</span>` : "";
+  };
+  return `<h3 class="survey-subhead">What came back from the mail</h3>
+    <p class="survey-summary"><strong>${KR.format(d.mailed)}</strong> customers mailed · <strong>${d.answered}</strong> answered (${pct(d.answered, d.mailed)}) · <strong>${d.notReached}</strong> reached no one (${pct(d.notReached, d.mailed)})${d.updatedAt ? ` <span class="survey-muted">· read from the Westpack inbox ${escapeHtml(when(d.updatedAt))}</span>` : ""}</p>
+    <div class="survey-delivery">
+      <div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
+        <thead><tr><th>What came back</th><th class="is-numeric">Customers</th><th class="is-numeric">Of mailed</th><th aria-hidden="true"></th></tr></thead>
+        <tbody>${d.groups.map((g) => `<tr><td>${escapeHtml(g.label)}${kindLine(g)}</td><td class="is-numeric">${g.count}</td><td class="is-numeric">${pct(g.count, d.mailed)}</td><td class="survey-bar-cell"><span class="survey-bar${g.id === "arrived" ? " is-muted" : ""}" style="width:${Math.round((g.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
+      </table></div>
+      ${d.bands.length ? `<div class="wp-table-wrap"><table class="wp-table survey-table">
+        <thead><tr><th>Silent for, at the mail</th><th class="is-numeric">Mailed</th><th class="is-numeric">Reached no one</th><th class="is-numeric">Closed, or probably</th></tr></thead>
+        <tbody>${d.bands.map((b) => `<tr><td>${escapeHtml(b.label)}</td><td class="is-numeric">${b.mailed}</td><td class="is-numeric">${b.notReached} <span class="survey-muted">${pct(b.notReached, b.mailed)}</span></td><td class="is-numeric">${b.closed} <span class="survey-muted">${pct(b.closed, b.mailed)}</span></td></tr>`).join("")}</tbody>
+      </table></div>` : ""}
+    </div>`;
+}
+
+function returnedRows() {
+  return (state.data?.delivery?.items || []).filter((i) => matches(`${i.recipient?.firma || ""} ${i.recipient?.land || ""} ${i.label}`));
+}
+
+function renderReturned() {
+  const groupLabel = new Map((state.data?.delivery?.groups || []).map((g) => [g.id, g.label]));
+  const tone = { closed: "is-danger", moved: "is-warning", abandoned: "is-warning", data: "is-info", arrived: "is-success" };
+  const rows = returnedRows();
+  return `<div class="wp-table-wrap"><table class="wp-table survey-table">
+    <thead><tr><th>Came back</th><th>Customer</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Last order</th><th>What came back</th></tr></thead>
+    <tbody>${rows.map((i) => `<tr>
+      <td>${escapeHtml(when(i.at))}<br><span class="survey-muted">${i.source === "bounce" ? "Bounce" : "Automatic reply"}</span></td>
+      <td>${escapeHtml(i.recipient?.firma || "")}</td>
+      <td>${escapeHtml(i.recipient?.land || "")}</td>
+      <td class="is-numeric">${i.recipient?.livstid != null ? KR.format(i.recipient.livstid) : ""}</td>
+      <td class="survey-last-order">${lastOrder(i.recipient)}</td>
+      <td><span class="wp-status ${tone[i.group] || ""}">${escapeHtml(groupLabel.get(i.group) || "")}</span><br><span class="survey-muted">${escapeHtml(i.label)}</span></td>
+    </tr>`).join("") || '<tr><td colspan="6">Nothing has come back.</td></tr>'}</tbody>
+  </table></div>`;
+}
+
 function renderRecipients() {
   const answered = new Set(state.data?.answered || []);
+  const mailed = state.data?.delivery ? new Set(state.data.delivery.mailedTokens || []) : null;
+  const returned = new Map((state.data?.delivery?.items || []).filter((i) => i.group !== "arrived").map((i) => [i.token, i]));
+  const status = (r) => {
+    if (answered.has(r.token)) return '<span class="wp-status is-success">Answered</span>';
+    if (returned.has(r.token)) return `<span class="wp-status is-warning" title="${escapeHtml(returned.get(r.token).label)}">Not reached</span>`;
+    if (mailed && !mailed.has(r.token)) return '<span class="wp-status">Not mailed yet</span>';
+    return '<span class="wp-status">Not yet</span>';
+  };
   const rows = (state.data?.recipients || []).filter((r) => matches(`${r.firma} ${r.kontakt} ${r.land} ${r.marked}`));
   return `<div class="wp-table-wrap"><table class="wp-table survey-table">
     <thead><tr><th class="is-numeric">#</th><th>Company</th><th>Contact</th><th>Country</th><th class="is-numeric">Lifetime, DKK</th><th>Last order</th><th>Answered</th><th>Personal link</th></tr></thead>
@@ -155,7 +212,7 @@ function renderRecipients() {
       <td>${escapeHtml(r.land)}</td>
       <td class="is-numeric">${r.livstid != null ? KR.format(r.livstid) : ""}</td>
       <td>${escapeHtml(r.sidsteOrdre)}</td>
-      <td>${answered.has(r.token) ? '<span class="wp-status is-success">Answered</span>' : '<span class="wp-status">Not yet</span>'}</td>
+      <td>${status(r)}</td>
       <td><button class="wp-button is-sm" type="button" data-survey-copy="${escapeHtml(r.link)}">${state.copied === r.link ? "Copied" : "Copy link"}</button></td>
     </tr>`).join("") || '<tr><td colspan="8">No recipients match.</td></tr>'}</tbody>
   </table></div>`;
@@ -174,26 +231,29 @@ function render() {
   }
   const t = state.data.totals;
   const rate = t.recipients ? Math.round((t.fromRecipients / t.recipients) * 1000) / 10 : 0;
+  const returnedCount = state.data.delivery?.items?.length || 0;
+  const tabs = [["answers", "Answers"], ["returned", `Mail that came back${returnedCount ? ` (${returnedCount})` : ""}`], ["recipients", "Customers and links"]];
+  const exportLabel = { answers: "answers", returned: "what came back", recipients: "links" };
   const max = Math.max(1, ...state.data.reasons.map((r) => r.count));
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
     ${state.data.unreadable ? `<div class="wp-alert is-warning"><div><strong>${state.data.unreadable} saved ${state.data.unreadable === 1 ? "answer" : "answers"} could not be read just now</strong> and ${state.data.unreadable === 1 ? "is" : "are"} not in the figures below. Nothing is lost - press Read again.</div></div>` : ""}
     <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"}${t.fromMail ? ` (${t.fromMail} by reply to the mail)` : ""} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link${t.wantsContact ? ` · <strong>${t.wantsContact}</strong> want to be contacted` : ""}</p>
+    ${renderDelivery()}
     ${state.data.reasons.some((r) => r.count) ? `<div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>
       <tbody>${state.data.reasons.map((r) => `<tr><td>${escapeHtml(r.label)}${detailLine(r)}</td><td class="is-numeric">${r.count}</td><td class="is-numeric">${t.answers - (t.written || 0) ? Math.round((r.count / (t.answers - (t.written || 0))) * 100) : 0}%</td><td class="survey-bar-cell"><span class="survey-bar" style="width:${Math.round((r.count / max) * 100)}%"></span></td></tr>`).join("")}</tbody>
     </table></div>` : ""}
     <div class="signup-toolbar survey-toolbar">
       <div class="wp-tabs" role="tablist">
-        <button type="button" role="tab" class="wp-tab" aria-selected="${state.tab === "answers"}" data-survey-tab="answers">Answers</button>
-        <button type="button" role="tab" class="wp-tab" aria-selected="${state.tab === "recipients"}" data-survey-tab="recipients">Customers and links</button>
+        ${tabs.map(([id, label]) => `<button type="button" role="tab" class="wp-tab" aria-selected="${state.tab === id}" data-survey-tab="${id}">${escapeHtml(label)}</button>`).join("")}
       </div>
       <input class="wp-input signup-filter" type="search" placeholder="Filter by company, country or words" aria-label="Filter" value="${escapeHtml(state.filter)}" data-survey-filter>
       <label class="wp-check"><input type="checkbox" data-survey-test ${state.showTest ? "checked" : ""}> Show test answers</label>
-      <button class="wp-button is-sm" type="button" data-survey-export="${state.tab}">Download ${state.tab === "answers" ? "answers" : "links"} (CSV)</button>
+      <button class="wp-button is-sm" type="button" data-survey-export="${state.tab}">Download ${exportLabel[state.tab] || "answers"} (CSV)</button>
       <button class="wp-button is-sm" type="button" data-survey-reload>Read again</button>
     </div>
-    ${state.tab === "answers" ? renderAnswers() : renderRecipients()}
+    ${state.tab === "answers" ? renderAnswers() : state.tab === "returned" ? renderReturned() : renderRecipients()}
     <p class="survey-muted">The page: <code>…/customer-survey-2026</code> in every store. A personal link adds <code>#k=</code> and a code after the address. Each customer counts once, on their latest answer.</p>`;
 }
 
@@ -202,6 +262,12 @@ function exportCsv(kind) {
   if (kind === "answers") {
     const rows = answerRows().map(({ a, who, picked }) => [when(a.at), a.source === "mail" ? "Mail reply" : "Survey page", who, a.recipient?.land || "", a.recipient?.marked || "", a.recipient?.livstid ?? "", a.recipient?.sidsteOrdre || "", monthsSince(a.recipient?.sidsteOrdre) ?? "", a.recipient?.ordrer ?? "", reasonLabel(a.reason), picked, a.other, a.followup, a.contact, a.email || "", a.step || 3, a.store, a.lang]);
     download("customer-survey-answers.csv", csv([["Answered", "Via", "Customer", "Country", "Market", "Lifetime DKK", "Last order", "Months since", "Orders", "Main reason", "Picked", "Other reason", "In their words", "Contact", "Email given", "Questions answered", "Store", "Language"], ...rows]));
+    return;
+  }
+  if (kind === "returned") {
+    const groupLabel = new Map((state.data.delivery?.groups || []).map((g) => [g.id, g.label]));
+    const rows = returnedRows().map((i) => [when(i.at), i.source === "bounce" ? "Bounce" : "Automatic reply", i.recipient?.firma || "", i.recipient?.land || "", i.recipient?.marked || "", i.recipient?.livstid ?? "", i.recipient?.sidsteOrdre || "", monthsSince(i.recipient?.sidsteOrdre) ?? "", groupLabel.get(i.group) || "", i.label]);
+    download("customer-survey-mail-came-back.csv", csv([["Came back", "As", "Customer", "Country", "Market", "Lifetime DKK", "Last order", "Months since", "Group", "What came back"], ...rows]));
     return;
   }
   const answered = new Set(state.data.answered || []);

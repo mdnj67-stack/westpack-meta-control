@@ -7097,3 +7097,32 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
   color: var(--wp-text-muted);
   font-size: var(--wp-text-xs);
 }
+
+/* What came back from the survey mail: the groups beside how long the customers had been silent. */
+.survey-subhead {
+  margin: var(--wp-space-4) 0 var(--wp-space-2);
+  font-size: var(--wp-text-md);
+  font-weight: 600;
+}
+
+.survey-delivery {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--wp-space-4);
+  align-items: start;
+  margin-bottom: var(--wp-space-4);
+}
+
+.survey-delivery .survey-reasons {
+  margin-bottom: 0;
+}
+
+.survey-bar.is-muted {
+  background: var(--wp-border-strong);
+}
+
+@media (max-width: 960px) {
+  .survey-delivery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

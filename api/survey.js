@@ -15,6 +15,9 @@
  *                                  answers marked "mail"; the same mail imported again rewrites its own answer
  *   POST ?action=delete_test       { confirm: "delete-test-answers", dryRun? } - deletes every answer marked as a test,
  *                                  for good; an answer that cannot be read is kept
+ *   POST ?action=import_delivery   { sentTokens, items: [{ token, kind, source, at }] } - who was mailed, and what came
+ *                                  back (bounces, automatic replies) sorted per customer; replaces the last import.
+ *                                  `results` returns it as `delivery`
  *
  * Nothing here writes to Klaviyo, Magento or Navision. An answer is stored in this app's own Blob store only.
  */
@@ -93,9 +96,15 @@ module.exports = async function handler(req, res) {
   if (action === "results") {
     if (req.method !== "GET") return sendJson(res, 405, { error: "GET only." });
     try {
-      const [doc, files] = await Promise.all([store.readRecipients(survey.SURVEY_ID), store.readResponseFiles(survey.SURVEY_ID)]);
+      // what came back from the mail is a side panel: if it cannot be read, the answers still show, and the page says so
+      const [doc, files, deliveryDoc] = await Promise.all([
+        store.readRecipients(survey.SURVEY_ID),
+        store.readResponseFiles(survey.SURVEY_ID),
+        store.readDelivery(survey.SURVEY_ID).catch(() => ({ unreadable: true })),
+      ]);
       const summary = survey.summarize({ responses: files.records, recipients: doc.recipients, includeTest: q.get("test") === "1" });
-      return sendJson(res, 200, Object.assign(summary, { unreadable: files.unreadable, recipients: doc.recipients, recipientsUpdatedAt: doc.updatedAt, store: { mode: store.storeMode() } }));
+      const delivery = deliveryDoc && deliveryDoc.unreadable ? null : survey.summarizeDelivery(deliveryDoc, { recipients: doc.recipients, answered: summary.answered });
+      return sendJson(res, 200, Object.assign(summary, { unreadable: files.unreadable, recipients: doc.recipients, recipientsUpdatedAt: doc.updatedAt, delivery, deliveryUnreadable: Boolean(deliveryDoc && deliveryDoc.unreadable), store: { mode: store.storeMode() } }));
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
 
@@ -133,6 +142,19 @@ module.exports = async function handler(req, res) {
       if (out.error) return sendJson(res, 400, { error: out.error });
       for (const { name, record } of out.records) await store.writeNamedResponse(survey.SURVEY_ID, name, record);
       return sendJson(res, 200, { ok: true, written: out.records.length, skipped: out.skipped });
+    } catch (e) { return sendJson(res, 502, { error: e.message }); }
+  }
+
+  if (action === "import_delivery") {
+    if (req.method !== "POST") return sendJson(res, 405, { error: "POST only." });
+    let input;
+    try { input = await readJson(req, MAX_RECIPIENT_BYTES); } catch { return sendJson(res, 400, { error: "Expected JSON under 2 MB." }); }
+    try {
+      const doc = await store.readRecipients(survey.SURVEY_ID);
+      const out = survey.sanitizeDelivery(input, { recipients: doc.recipients });
+      if (out.error) return sendJson(res, 400, { error: out.error });
+      await store.writeDelivery(survey.SURVEY_ID, out.doc);
+      return sendJson(res, 200, { ok: true, mailed: out.doc.sentTokens.length, items: out.doc.items.length, skipped: out.skipped });
     } catch (e) { return sendJson(res, 502, { error: e.message }); }
   }
 

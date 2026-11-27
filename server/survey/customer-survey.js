@@ -299,4 +299,110 @@ function isMarkedBy(record, { sids, ats }) {
   return record.sid ? sids.has(record.sid) : ats.has(record.at);
 }
 
-module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy, greetingName, sanitizeMailAnswers };
+/**
+ * What came back from the survey mail, per customer (27/11, the user: "tælle hvor mange gange vi bliver afvist i
+ * indbakken ... om de er lukket eller der er skiftet rundt i ansvar"). The app's script (mail-afvisninger.js) reads the
+ * shared mailbox, matches every bounce and automatic reply to the customer it was sent to, sorts it into one kind and
+ * sends the whole picture each time: { sentTokens, items: [{ token, kind, source, at }] }. The document is replaced,
+ * never merged, so a customer the script has re-sorted cannot keep an old row. No address is sent or kept here - which
+ * mailbox bounced, and the new contact an automatic reply names, stay in the local list.
+ *
+ * A bounce is read from the receiving server's own words, so "the domain does not exist" is a fact about DNS, not a
+ * guess; the script checks it in DNS once more. Grouped for the question that was asked: closed, or a new person.
+ */
+const DELIVERY_GROUPS = [
+  { id: "closed", label: "Closed, or probably closed" },
+  { id: "moved", label: "The contact has changed" },
+  { id: "abandoned", label: "The mail is abandoned" },
+  { id: "data", label: "Our data, or a passing error" },
+  { id: "arrived", label: "Arrived: away, or a helpdesk's receipt" },
+];
+const DELIVERY_KINDS = [
+  { id: "closed", group: "closed", label: "Automatic reply: the shop has closed" },
+  { id: "domain_gone", group: "closed", label: "The company's domain no longer exists" },
+  { id: "contact_left", group: "moved", label: "Automatic reply: the person has left (often naming a new contact)" },
+  { id: "mailbox_gone", group: "moved", label: "The address no longer exists, but the company's domain works" },
+  { id: "no_mail_server", group: "abandoned", label: "The domain has no mail server any more" },
+  { id: "mailbox_full", group: "abandoned", label: "The mailbox is full and not emptied" },
+  { id: "private_gone", group: "data", label: "A private address (gmail, orange …) that no longer exists" },
+  { id: "typo", group: "data", label: "The address in our data is broken" },
+  { id: "blocked", group: "data", label: "Refused by the recipient's server on policy grounds" },
+  { id: "temporary", group: "data", label: "A passing error - the mail can be sent again" },
+  { id: "away", group: "arrived", label: "Out of office or on leave" },
+  { id: "receipt", group: "arrived", label: "A helpdesk's \"we have received your email\"" },
+];
+const KIND_RANK = new Map(DELIVERY_KINDS.map((k, i) => [k.id, i]));
+const KIND_BY_ID = new Map(DELIVERY_KINDS.map((k) => [k.id, k]));
+
+function sanitizeDelivery(input = {}, { recipients = [], now = Date.now() } = {}) {
+  const sent = Array.isArray(input && input.sentTokens) ? input.sentTokens : null;
+  const items = Array.isArray(input && input.items) ? input.items : null;
+  if (!sent || !items) return { error: "Expected { sentTokens: [...], items: [{ token, kind, source, at }] }." };
+  if (sent.length > 5000 || items.length > 5000) return { error: "At most 5,000 customers." };
+  const known = new Set(recipients.map((r) => r.token));
+  const sentTokens = [...new Set(sent.map((t) => String(t || "").toLowerCase()).filter((t) => known.has(t)))];
+  const mailed = new Set(sentTokens);
+  const byToken = new Map();
+  const skipped = [];
+  for (const it of items) {
+    const token = String((it && it.token) || "").toLowerCase();
+    const kind = String((it && it.kind) || "");
+    const at = String((it && it.at) || "");
+    const source = it && (it.source === "bounce" || it.source === "autoreply") ? it.source : "";
+    if (!mailed.has(token)) { skipped.push({ token, why: "not mailed" }); continue; }
+    if (!KIND_BY_ID.has(kind)) { skipped.push({ token, why: "kind" }); continue; }
+    if (!source) { skipped.push({ token, why: "source" }); continue; }
+    if (!AT.test(at)) { skipped.push({ token, why: "time" }); continue; }
+    // one row per customer: the strongest sign wins (a bounce from one address, a receipt from another)
+    const prev = byToken.get(token);
+    if (!prev || KIND_RANK.get(kind) < KIND_RANK.get(prev.kind)) byToken.set(token, { token, kind, source, at });
+  }
+  return { doc: { survey: SURVEY_ID, updatedAt: new Date(now).toISOString(), sentTokens, items: [...byToken.values()] }, skipped };
+}
+
+// How long the customer had been silent when mailed, from the last webshop order on the recipient list.
+const SILENCE_BANDS = [
+  { id: "m12_18", label: "12-18 months", below: 18 },
+  { id: "m18_30", label: "18-30 months", below: 30 },
+  { id: "m30_48", label: "2½-4 years", below: 48 },
+  { id: "m48", label: "4 years or more", below: Infinity },
+];
+
+function summarizeDelivery(doc, { recipients = [], answered = [], now = Date.now() } = {}) {
+  if (!doc || !Array.isArray(doc.sentTokens)) return null;
+  const byToken = new Map(recipients.map((r) => [r.token, r]));
+  const mailed = new Set(doc.sentTokens);
+  const items = (Array.isArray(doc.items) ? doc.items : [])
+    .filter((i) => i && KIND_BY_ID.has(i.kind) && mailed.has(i.token))
+    .map((i) => Object.assign({}, i, { label: KIND_BY_ID.get(i.kind).label, group: KIND_BY_ID.get(i.kind).group, recipient: byToken.get(i.token) || null }))
+    .sort((a, b) => KIND_RANK.get(a.kind) - KIND_RANK.get(b.kind) || String(a.recipient?.firma || "").localeCompare(String(b.recipient?.firma || "")));
+  const notReached = new Set(items.filter((i) => i.group !== "arrived").map((i) => i.token));
+  const closed = new Set(items.filter((i) => i.group === "closed").map((i) => i.token));
+  const bands = SILENCE_BANDS.map((b) => ({ id: b.id, label: b.label, mailed: 0, notReached: 0, closed: 0 }));
+  for (const token of mailed) {
+    const t = Date.parse(byToken.get(token)?.sidsteOrdre || "");
+    if (!Number.isFinite(t)) continue;
+    const months = (now - t) / (30.44 * 86400000);
+    const band = bands[SILENCE_BANDS.findIndex((b) => months < b.below)];
+    band.mailed++;
+    if (notReached.has(token)) band.notReached++;
+    if (closed.has(token)) band.closed++;
+  }
+  return {
+    updatedAt: doc.updatedAt || null,
+    mailed: mailed.size,
+    mailedTokens: [...mailed],
+    answered: answered.filter((t) => mailed.has(t)).length,
+    notReached: notReached.size,
+    groups: DELIVERY_GROUPS.map((g) => ({
+      id: g.id,
+      label: g.label,
+      count: items.filter((i) => i.group === g.id).length,
+      kinds: DELIVERY_KINDS.filter((k) => k.group === g.id).map((k) => ({ id: k.id, label: k.label, count: items.filter((i) => i.kind === k.id).length })),
+    })),
+    bands: bands.filter((b) => b.mailed),
+    items,
+  };
+}
+
+module.exports = { SURVEY_ID, REASONS, MIN_FILL_MS, sanitizeSubmission, sanitizeRecipients, summarize, sanitizeMarkTest, isMarkedBy, greetingName, sanitizeMailAnswers, DELIVERY_GROUPS, DELIVERY_KINDS, sanitizeDelivery, summarizeDelivery };
