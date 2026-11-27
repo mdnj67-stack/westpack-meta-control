@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 0 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Sendt.",
     "successBody": "Den dukker opp i innboksen når vi har noe som er verdt å åpne."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nye esker, frister og nyttårssalget. Vi sier fra i god tid.",
+        "dock": "Nytt fra Westpack"
+      },
+      "sale": {
+        "title": "Nyttårssalget starter i januar. Vi sier fra når det skjer.",
+        "dock": "Få beskjed om nyttårssalget"
+      }
+    },
+    "proof": "Over 20 000 mennesker i Europa og USA får allerede nyhetsbrevet.",
+    "successTitle": "Du er med.",
+    "askTitle": "Én ting til: Hva selger du?",
+    "askLede": "Da sender vi deg det som passer. Helt frivillig.",
+    "types": {
+      "jewellery": "Smykker",
+      "watches": "Klokker",
+      "fashion": "Mote og tilbehør",
+      "beauty": "Skjønnhet og kosmetikk",
+      "gifts": "Gaver og interiør",
+      "other": "Noe annet"
+    },
+    "skip": "Hopp over",
+    "thanks": "Takk, notert. Vi sees i innboksen.",
+    "dockOpen": "Meld deg på nyhetsbrevet",
+    "dockHide": "Skjul"
   }
 };

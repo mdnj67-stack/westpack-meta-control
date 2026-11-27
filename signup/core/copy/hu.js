@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Feladva.",
     "successBody": "Ha lesz valami, amit érdemes megnyitni, e-mailben küldjük."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Új dobozok, határidők és az újévi kiárusítás. Időben szólunk.",
+        "dock": "Hírek a Westpacktől"
+      },
+      "sale": {
+        "title": "Az újévi kiárusítás januárban indul. Szólunk, amikor kezdődik.",
+        "dock": "Hír az újévi kiárusításról"
+      }
+    },
+    "proof": "Több mint 20 000 ember Európában és az USA-ban már kapja a hírlevelet.",
+    "successTitle": "Feliratkoztál.",
+    "askTitle": "Még valami: mit árulsz?",
+    "askLede": "Így azt küldjük, ami neked való. A válasz nem kötelező.",
+    "types": {
+      "jewellery": "Ékszerek",
+      "watches": "Órák",
+      "fashion": "Divat és kiegészítők",
+      "beauty": "Szépségápolás és kozmetikumok",
+      "gifts": "Ajándékok és lakberendezés",
+      "other": "Valami más"
+    },
+    "skip": "Kihagyom",
+    "thanks": "Köszi, felírtuk. Találkozunk a postaládádban.",
+    "dockOpen": "Hírlevél-feliratkozás megnyitása",
+    "dockHide": "Elrejtés"
   }
 };

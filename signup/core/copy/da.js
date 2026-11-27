@@ -109,4 +109,19 @@
     successTitle: "Afsendt.",
     successBody: "Den lander i din indbakke, når vi har noget, der er værd at åbne.",
   },
+  direct: {
+    seasons: {
+      default: { title: "Nye æsker, frister og nytårsudsalget. Vi siger til i god tid.", dock: "Få nyt fra Westpack" },
+      sale: { title: "Nytårsudsalget starter i januar. Vi siger til, når det sker.", dock: "Få besked, når udsalget starter" },
+    },
+    proof: "Over 20.000 i Europa og USA får allerede nyhedsbrevet.",
+    successTitle: "Du er med.",
+    askTitle: "Én ting mere: Hvad sælger I?",
+    askLede: "Så sender vi det, der passer til jer. Helt frivilligt.",
+    types: { jewellery: "Smykker", watches: "Ure", fashion: "Mode og accessories", beauty: "Beauty og kosmetik", gifts: "Gaver og interiør", other: "Noget andet" },
+    skip: "Spring over",
+    thanks: "Tak – noteret. Vi ses i indbakken.",
+    dockOpen: "Tilmeld dig nyhedsbrevet",
+    dockHide: "Skjul",
+  },
 };

@@ -109,4 +109,19 @@
     successTitle: "Shipped.",
     successBody: "It lands in your inbox whenever we have something worth opening.",
   },
+  direct: {
+    seasons: {
+      default: { title: "New boxes, deadlines and the New Year sale. We'll tell you in good time.", dock: "Get news from Westpack" },
+      sale: { title: "The New Year sale starts in January. We'll tell you when it does.", dock: "Hear when the New Year sale starts" },
+    },
+    proof: "Over 20,000 people in Europe and the US already get the newsletter.",
+    successTitle: "You're in.",
+    askTitle: "One more thing: what do you sell?",
+    askLede: "Then we'll send you what fits. Entirely optional.",
+    types: { jewellery: "Jewellery", watches: "Watches", fashion: "Fashion and accessories", beauty: "Beauty and cosmetics", gifts: "Gifts and interiors", other: "Something else" },
+    skip: "Skip",
+    thanks: "Thanks, noted. See you in your inbox.",
+    dockOpen: "Sign up for the newsletter",
+    dockHide: "Hide",
+  },
 };

@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 3 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "C’est parti.",
     "successBody": "Quand on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nouvelles boîtes, dates limites et soldes du Nouvel An. On vous prévient à temps.",
+        "dock": "Recevoir la newsletter"
+      },
+      "sale": {
+        "title": "Les soldes du Nouvel An commencent en janvier. On vous dit quand c’est parti.",
+        "dock": "Alerte soldes du Nouvel An"
+      }
+    },
+    "proof": "Plus de 20 000 personnes en Europe et aux États-Unis reçoivent déjà la newsletter.",
+    "successTitle": "C’est fait.",
+    "askTitle": "Une dernière chose. Que vendez-vous",
+    "askLede": "Pour vous envoyer ce qui vous correspond. C’est facultatif.",
+    "types": {
+      "jewellery": "Bijoux",
+      "watches": "Montres",
+      "fashion": "Mode et accessoires",
+      "beauty": "Beauté et cosmétiques",
+      "gifts": "Cadeaux et déco",
+      "other": "Autre chose"
+    },
+    "skip": "Passer la question",
+    "thanks": "Merci, c’est noté. On se retrouve dans votre boîte mail.",
+    "dockOpen": "Ouvrir l’inscription à la newsletter",
+    "dockHide": "Masquer"
   }
 };

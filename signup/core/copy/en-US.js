@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Shipped.",
     "successBody": "We'll write when we have something worth opening."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "New boxes, deadlines and the New Year sale. We'll tell you in good time.",
+        "dock": "Get news from Westpack"
+      },
+      "sale": {
+        "title": "The New Year sale starts in January. We'll tell you when it does.",
+        "dock": "Hear when the New Year sale starts"
+      }
+    },
+    "proof": "Over 20,000 people in Europe and the US already get the newsletter.",
+    "successTitle": "You're in.",
+    "askTitle": "One more thing: what do you sell?",
+    "askLede": "Then we'll send you what fits. Entirely optional.",
+    "types": {
+      "jewellery": "Jewelry",
+      "watches": "Watches",
+      "fashion": "Fashion and accessories",
+      "beauty": "Beauty and cosmetics",
+      "gifts": "Gifts and interiors",
+      "other": "Something else"
+    },
+    "skip": "Skip",
+    "thanks": "Thanks, noted. See you in your inbox.",
+    "dockOpen": "Sign up for the newsletter",
+    "dockHide": "Hide"
   }
 };

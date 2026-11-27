@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpacku",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Odoslané.",
     "successBody": "Keď budeme mať niečo, čo stojí za otvorenie, ozveme sa e-mailom."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nové krabičky, termíny a novoročný výpredaj. Dáme vám vedieť včas.",
+        "dock": "Novinky z Westpacku"
+      },
+      "sale": {
+        "title": "Novoročný výpredaj sa začne v januári. Dáme vám vedieť, keď to vypukne.",
+        "dock": "Keď sa začne výpredaj"
+      }
+    },
+    "proof": "Viac ako 20 000 ľudí v Európe a USA už dostáva newsletter.",
+    "successTitle": "Ste v tom.",
+    "askTitle": "Ešte jedna vec: čo predávate?",
+    "askLede": "Tak vám pošleme to, čo sa vám hodí. Úplne dobrovoľné.",
+    "types": {
+      "jewellery": "Šperky",
+      "watches": "Hodinky",
+      "fashion": "Móda a doplnky",
+      "beauty": "Krása a kozmetika",
+      "gifts": "Darčeky a interiér",
+      "other": "Niečo iné"
+    },
+    "skip": "Preskočiť",
+    "thanks": "Vďaka, poznačené. Uvidíme sa v schránke.",
+    "dockOpen": "Prihlásiť sa na newsletter",
+    "dockHide": "Skryť"
   }
 };

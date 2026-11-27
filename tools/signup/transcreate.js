@@ -113,7 +113,9 @@ Return only the JSON object with the same four top-level keys.`;
   throw new Error(`${lang}: no valid transcreation after 3 attempts`);
 }
 
-(async () => {
+// the targets and rules are shared with the one-off block transcreations (copy-direct-2026-11-27.js)
+module.exports = { TARGETS, RULES, loadLang, readEnv, shapeOf, placeholders };
+if (require.main === module) (async () => {
   const env = readEnv();
   if (!env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not set");
   const want = (process.argv[2] || Object.keys(TARGETS).join(",")).split(",");

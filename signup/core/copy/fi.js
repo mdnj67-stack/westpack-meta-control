@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Lähetetty.",
     "successBody": "Se löytyy sähköpostilaatikostasi, kun meillä on jotain avaamisen arvoista."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Uudet rasiat, määräajat ja uudenvuoden ale. Kerromme hyvissä ajoin.",
+        "dock": "Uutisia Westpackilta"
+      },
+      "sale": {
+        "title": "Uudenvuoden ale alkaa tammikuussa. Kerromme, kun se alkaa.",
+        "dock": "Kerro, kun uudenvuoden ale alkaa"
+      }
+    },
+    "proof": "Yli 20 000 ihmistä Euroopassa ja Yhdysvalloissa saa jo uutiskirjeen.",
+    "successTitle": "Olet mukana.",
+    "askTitle": "Vielä yksi juttu: mitä myyt?",
+    "askLede": "Näin lähetämme sinulle sopivia juttuja. Täysin vapaaehtoista.",
+    "types": {
+      "jewellery": "Korut",
+      "watches": "Kellot",
+      "fashion": "Muoti ja asusteet",
+      "beauty": "Kauneus ja kosmetiikka",
+      "gifts": "Lahjat ja sisustus",
+      "other": "Jotain muuta"
+    },
+    "skip": "Ohita",
+    "thanks": "Kiitos – laitettu muistiin. Nähdään sähköpostissa.",
+    "dockOpen": "Avaa uutiskirjeen tilaus",
+    "dockHide": "Piilota"
   }
 };

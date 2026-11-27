@@ -1,0 +1,102 @@
+/* Direct. The ask is the first frame: a wall of real customers' logo boxes in colour, and beside it (under it on a
+   phone) the reason, the field, the button and the consent - nothing to do before the email. On a phone it is a normal
+   popup card in the middle of the view, small enough to leave the store in sight (the user's rule since 2026-11-20). */
+.dr { display: grid; grid-template-columns: minmax(0, 1fr); }
+
+/* ---- the wall ---- */
+.dr-wall { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; background: var(--wps-paper); }
+.dr-tile { position: relative; display: block; overflow: hidden; aspect-ratio: 1 / 1; background: var(--wps-paper-2); }
+.dr-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.04); animation: dr-tile-in 900ms var(--wps-ease-out) both; animation-delay: calc(var(--i) * 70ms); }
+@keyframes dr-tile-in { from { opacity: 0; transform: scale(1.14); } to { opacity: 1; transform: scale(1.04); } }
+
+/* ---- the ask ---- */
+.dr-side { padding: 18px 20px 20px; min-width: 0; }
+.dr-title { font-size: clamp(24px, 6.6vw, 30px); margin-bottom: 10px; }
+.dr-proof { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 13.5px; font-weight: 550; color: var(--wps-body); }
+.dr-faces { display: inline-flex; flex: none; }
+.dr-faces img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; display: block; box-shadow: 0 0 0 2px var(--wps-paper); }
+.dr-faces img + img { margin-left: -8px; }
+.dr-form .wps-consent { font-size: 11px; }
+
+/* ---- after the signup: the check, and one optional question ---- */
+.dr-done { outline: none; display: grid; justify-items: start; }
+.dr-check { color: var(--wps-green); margin-bottom: 8px; }
+.dr-check-path { stroke-dasharray: 34; stroke-dashoffset: 34; animation: dr-draw 520ms var(--wps-ease-out) 120ms forwards; }
+@keyframes dr-draw { to { stroke-dashoffset: 0; } }
+.dr-done-title { font-size: clamp(30px, 8vw, 40px); margin-bottom: 14px; }
+.dr-ask-title { margin: 0 0 2px; font-weight: 650; font-size: 16px; color: var(--wps-ink); }
+.dr-ask-lede { font-size: 14px; margin-bottom: 12px; }
+.dr-types { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.dr-type {
+  min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--wps-line); border-radius: 12px; background: #fff; cursor: pointer;
+  font-size: 14.5px; font-weight: 550; text-align: left; line-height: 1.2; color: var(--wps-ink);
+  transition: border-color 160ms, background 160ms, transform 140ms var(--wps-ease-out);
+}
+.dr-type:hover:not([disabled]) { border-color: var(--wps-green); }
+.dr-type:active:not([disabled]) { transform: scale(0.98); }
+.dr-type[disabled] { cursor: default; opacity: 0.5; }
+.dr-type.is-picked { opacity: 1; background: var(--wps-green); border-color: var(--wps-green); color: #fff; }
+.dr-thanks { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: var(--wps-green); }
+.dr-done-foot { margin-top: 10px; display: flex; gap: 12px; align-items: center; }
+.dr-done-close { height: 44px; margin-top: 6px; }
+
+/* ---- the dock's faces: two customers' boxes, overlapping, ringed in the pill's green ---- */
+.wps-dock .dr-faces img { width: 30px; height: 30px; box-shadow: 0 0 0 2px var(--wps-green); }
+.wps-dock .dr-faces img + img { margin-left: -9px; }
+
+/* ---- a phone or tablet: a normal popup card in the middle of the view ---- */
+:where(.wps:not([data-device="desktop"]))[data-concept="direct"] .wps-dialog {
+  left: 50%; right: auto; top: 50%; bottom: auto; width: min(420px, calc(100vw - 24px)); margin: 0;
+  max-height: calc(100vh - 32px); border-radius: var(--wps-radius); padding-bottom: 0;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -47%) scale(0.96); opacity: 0;
+  transition: transform 420ms var(--wps-ease-out), opacity 260ms ease, visibility 0s linear 420ms;
+}
+@supports (height: 100dvh) {
+  :where(.wps:not([data-device="desktop"]))[data-concept="direct"] .wps-dialog { max-height: calc(100dvh - 32px); }
+}
+:where(.wps:not([data-device="desktop"])).is-open[data-concept="direct"] .wps-dialog {
+  transform: translate(-50%, -50%) scale(1); opacity: 1; transition: transform 520ms var(--wps-ease-out), opacity 300ms ease, visibility 0s;
+}
+:where(.wps:not([data-device="desktop"]))[data-concept="direct"] .wps-grab { display: none; }
+:where(.wps:not([data-device="desktop"]))[data-concept="direct"] .wps-close { top: 8px; right: 8px; }
+.wps[data-reduced="true"]:not([data-device="desktop"])[data-concept="direct"] .wps-dialog { transform: translate(-50%, -50%) !important; }
+/* the wall is a band of three on a phone, the kicker goes (the title and a button that says newsletter are enough) */
+:where(.wps:not([data-device="desktop"])) .dr-wall { height: 84px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+:where(.wps:not([data-device="desktop"])) .dr-tile { aspect-ratio: auto; height: 84px; }
+:where(.wps:not([data-device="desktop"])) .dr-kicker { display: none; }
+/* the field's placeholder says what goes in it; the label stays for screen readers */
+:where(.wps:not([data-device="desktop"])) .dr-form .wps-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:where(.wps:not([data-device="desktop"])) .dr.is-done .dr-wall { display: none; }
+:where(.wps:not([data-device="desktop"])) .dr.is-done .dr-side { padding-top: 26px; }
+/* typing: the card stands at the top of what the keyboard leaves, and may scroll there */
+:where(.wps:not([data-device="desktop"])).is-kb[data-concept="direct"] .wps-dialog {
+  top: calc(var(--wps-vvtop, 0px) + 8px); max-height: calc(var(--wps-vvh, 100%) - 16px); transform: translateX(-50%); transition: opacity 300ms ease, visibility 0s;
+}
+.wps[data-reduced="true"]:not([data-device="desktop"]).is-kb[data-concept="direct"] .wps-dialog { transform: translateX(-50%) !important; }
+/* a short view (a 360x640 Android, an iPhone SE): a lower band and a smaller headline, so the longest language (German)
+   still leaves a quarter of the store in sight */
+@media (max-height: 700px) {
+  :where(.wps:not([data-device="desktop"])) .dr-wall, :where(.wps:not([data-device="desktop"])) .dr-tile { height: 62px; }
+  :where(.wps:not([data-device="desktop"])) .dr-side { padding-top: 14px; }
+  :where(.wps:not([data-device="desktop"])) .dr-title { font-size: 22px; margin-bottom: 8px; }
+  :where(.wps:not([data-device="desktop"])) .dr-proof { font-size: 12.5px; margin-bottom: 12px; }
+  :where(.wps:not([data-device="desktop"])) .dr-faces img { width: 22px; height: 22px; }
+}
+@media (max-width: 359px) {
+  :where(.wps:not([data-device="desktop"])) .dr-side { padding: 14px 16px 18px; }
+  :where(.wps:not([data-device="desktop"])) .dr-wall, :where(.wps:not([data-device="desktop"])) .dr-tile { height: 56px; }
+}
+
+/* ---- a computer: the wall on the left, two by three, the ask beside it ---- */
+@media (min-width: 760px) {
+  .wps[data-device="desktop"][data-concept="direct"] .wps-dialog { width: min(860px, calc(100vw - 48px)); }
+  :where(.wps[data-device="desktop"]) .dr { grid-template-columns: 340px minmax(0, 1fr); min-height: 510px; }
+  :where(.wps[data-device="desktop"]) .dr-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; align-content: stretch; }
+  :where(.wps[data-device="desktop"]) .dr-tile { aspect-ratio: auto; min-height: 168px; }
+  :where(.wps[data-device="desktop"]) .dr-side { align-self: center; padding: 44px 44px 40px 40px; }
+  :where(.wps[data-device="desktop"]) .dr-title { font-size: 34px; }
+  :where(.wps[data-device="desktop"]) .dr-types { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.wps[data-reduced="true"] .dr-tile img { transform: none; }
+.wps[data-reduced="true"] .dr-check-path { stroke-dashoffset: 0; }

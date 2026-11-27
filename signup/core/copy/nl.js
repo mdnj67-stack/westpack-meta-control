@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Verzonden.",
     "successBody": "Hebben we iets dat het openen waard is, dan komt het in je inbox."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nieuwe doosjes, deadlines en de nieuwjaarsuitverkoop. We geven je op tijd een seintje.",
+        "dock": "Nieuws van Westpack"
+      },
+      "sale": {
+        "title": "De nieuwjaarsuitverkoop start in januari. We geven je een seintje als het zover is.",
+        "dock": "Seintje bij nieuwjaarsuitverkoop"
+      }
+    },
+    "proof": "Meer dan 20.000 mensen in Europa en de VS krijgen de nieuwsbrief al.",
+    "successTitle": "Je bent erbij.",
+    "askTitle": "Nog één ding: wat verkoop je?",
+    "askLede": "Dan sturen we je wat past. Helemaal vrijblijvend.",
+    "types": {
+      "jewellery": "Sieraden",
+      "watches": "Horloges",
+      "fashion": "Mode en accessoires",
+      "beauty": "Beauty en cosmetica",
+      "gifts": "Cadeaus en interieur",
+      "other": "Iets anders"
+    },
+    "skip": "Overslaan",
+    "thanks": "Bedankt, genoteerd. Tot in je inbox.",
+    "dockOpen": "Nieuwsbriefaanmelding openen",
+    "dockHide": "Verbergen"
   }
 };

@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Wysłane.",
     "successBody": "Gdy mamy coś wartego otwarcia, znajdziesz to w swojej skrzynce."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nowe pudełka, terminy i wyprzedaż noworoczna. Damy Ci znać odpowiednio wcześnie.",
+        "dock": "Wieści od Westpack"
+      },
+      "sale": {
+        "title": "Wyprzedaż noworoczna rusza w styczniu. Damy Ci znać, gdy wystartuje.",
+        "dock": "Info, gdy ruszy wyprzedaż"
+      }
+    },
+    "proof": "Ponad 20 000 osób w Europie i USA już otrzymuje newsletter.",
+    "successTitle": "Jesteś na liście.",
+    "askTitle": "Jeszcze jedno: co sprzedajesz?",
+    "askLede": "Dzięki temu wyślemy Ci to, co pasuje. Ale nie musisz odpowiadać.",
+    "types": {
+      "jewellery": "Biżuteria",
+      "watches": "Zegarki",
+      "fashion": "Moda i akcesoria",
+      "beauty": "Uroda i kosmetyki",
+      "gifts": "Prezenty i wnętrza",
+      "other": "Coś innego"
+    },
+    "skip": "Pomiń",
+    "thanks": "Dzięki, zapisane. Do zobaczenia w skrzynce.",
+    "dockOpen": "Otwórz zapis do newslettera",
+    "dockHide": "Ukryj"
   }
 };

@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -174,5 +175,33 @@
     "tape": "Westpack",
     "successTitle": "Odesláno.",
     "successBody": "Až budeme mít něco, co stojí za otevření, ozveme se e-mailem."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nové krabičky, termíny a novoroční výprodej. Dáme vám včas vědět.",
+        "dock": "Novinky od Westpacku"
+      },
+      "sale": {
+        "title": "Novoroční výprodej začne v lednu. Dáme vám vědět, až to vypukne.",
+        "dock": "Upozornit na novoroční výprodej"
+      }
+    },
+    "proof": "Přes 20 000 lidí v Evropě a USA už newsletter dostává.",
+    "successTitle": "A jste tam.",
+    "askTitle": "Ještě něco: Co prodáváte?",
+    "askLede": "Ať vám posíláme, co se vám hodí. Odpověď je dobrovolná.",
+    "types": {
+      "jewellery": "Šperky",
+      "watches": "Hodinky",
+      "fashion": "Móda a doplňky",
+      "beauty": "Krása a kosmetika",
+      "gifts": "Dárky a bytové doplňky",
+      "other": "Něco jiného"
+    },
+    "skip": "Přeskočit",
+    "thanks": "Díky, máme poznamenáno. Uvidíme se ve schránce.",
+    "dockOpen": "Otevřít přihlášení k newsletteru",
+    "dockHide": "Skrýt"
   }
 };

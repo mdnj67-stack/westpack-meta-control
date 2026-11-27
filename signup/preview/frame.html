@@ -48,6 +48,7 @@
       W.ready.then(function () {
         var mode = q.get("open") || "1";
         if (mode === "peek") W.peek(q.get("concept"));
+        else if (mode === "dock") W.dock(q.get("concept"));
         else if (mode !== "0") setTimeout(function () { W.open(q.get("concept"), "preview"); }, Number(q.get("delay") || 400));
       });
     };

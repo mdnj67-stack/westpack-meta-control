@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Spedito.",
     "successBody": "Finisce nella tua casella di posta quando abbiamo qualcosa che vale la pena aprire."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Nuove scatole, scadenze e saldi di Capodanno. Ti avvisiamo per tempo.",
+        "dock": "Novità da Westpack"
+      },
+      "sale": {
+        "title": "I saldi di Capodanno iniziano a gennaio. Ti avvisiamo quando partono.",
+        "dock": "Avvisami: saldi di Capodanno"
+      }
+    },
+    "proof": "Oltre 20.000 persone in Europa e negli Stati Uniti ricevono già la newsletter.",
+    "successTitle": "Ci sei.",
+    "askTitle": "Un’ultima cosa: cosa vendi?",
+    "askLede": "Così ti mandiamo ciò che fa al caso tuo. È del tutto facoltativo.",
+    "types": {
+      "jewellery": "Gioielli",
+      "watches": "Orologi",
+      "fashion": "Moda e accessori",
+      "beauty": "Bellezza e cosmetici",
+      "gifts": "Regali e arredamento",
+      "other": "Altro"
+    },
+    "skip": "Salta",
+    "thanks": "Grazie, segnato. Ci vediamo nella posta in arrivo.",
+    "dockOpen": "Apri l’iscrizione alla newsletter",
+    "dockHide": "Nascondi"
   }
 };

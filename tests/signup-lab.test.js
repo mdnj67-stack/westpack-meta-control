@@ -401,3 +401,77 @@ test("logo studio on a phone: the stage window never runs past the photo, and ce
     }
   }
 });
+
+// ---- Direct (2026-11-27): permission first, a dock after "not now", one question after the signup ----
+
+test("direct: the dock follows a seen and closed popup, never a subscriber, an excluded page or another experience", () => {
+  const now = Date.parse("2026-11-27T12:00:00Z");
+  const seen = { v: 1, closes: 1, views: 1, lastCloseAt: now - DAY };
+  const base = { now, excludedPath: false, emailVisit: false, identified: false, shownThisSession: false, consentBannerOpen: false };
+  const cooling = R.eligibility(seen, base);
+  assert.equal(cooling.reason, "cooling_down");
+  assert.equal(R.dockAllowed(seen, cooling, now, "direct"), true, "the popup cools down, the pill stays");
+  assert.equal(R.dockAllowed(seen, { reason: "shown_this_session" }, now, "direct"), true, "the next page of the same visit");
+  // only Direct docks: Logo studio, live in IT and CZ, behaves exactly as before
+  for (const id of ["logo-studio", "swipe-match", "pack-and-ship"]) assert.equal(R.dockAllowed(seen, cooling, now, id), false, id);
+  // the reasons that come before the cool-down are never docked over
+  for (const ctx of [{ excludedPath: true }, { emailVisit: true }, { identified: true }]) {
+    const v = R.eligibility(seen, { ...base, ...ctx });
+    assert.equal(R.dockAllowed(seen, v, now, "direct"), false, v.reason);
+  }
+  assert.equal(R.dockAllowed({ ...seen, subscribedAt: now - DAY }, { reason: "shown_this_session" }, now, "direct"), false, "subscribed");
+  assert.equal(R.dockAllowed({ v: 1, closes: 0 }, { reason: "cooling_down" }, now, "direct"), false, "never before the popup was seen");
+  assert.equal(R.dockAllowed(seen, { ok: true, reason: "eligible" }, now, "direct"), false, "the popup itself comes first");
+  // its own cross: two weeks
+  assert.equal(R.dockAllowed({ ...seen, dockDismissedAt: now - 13 * DAY }, cooling, now, "direct"), false);
+  assert.equal(R.dockAllowed({ ...seen, dockDismissedAt: now - 15 * DAY }, cooling, now, "direct"), true);
+});
+
+test("direct: the New Year sale leads from 15 December to 3 January, news and deadlines the rest of the year", () => {
+  const at = (s) => R.directSeason(new Date(s));
+  assert.equal(at("2026-12-14T12:00:00"), "default");
+  assert.equal(at("2026-12-15T08:00:00"), "sale");
+  assert.equal(at("2027-01-03T20:00:00"), "sale");
+  assert.equal(at("2027-01-04T08:00:00"), "default");
+  assert.equal(at("2026-06-01T12:00:00"), "default");
+  // both reasons exist in every language, with a dock line short enough for the pill
+  for (const f of fs.readdirSync(COPY_DIR)) {
+    const c = loadCopy(f.replace(/\.js$/, "")).direct;
+    for (const s of ["default", "sale"]) {
+      assert.ok(c.seasons[s].title.length <= 110, `${f} ${s} title`);
+      assert.ok(c.seasons[s].dock.length <= 40, `${f} ${s} dock line`);
+    }
+    // the count is a fact: 25,239 on the 18 lists on 24/11/2026; "over 20,000" stays true with room to spare
+    assert.match(c.proof, /20[ .,\u00a0\u202f]?000/, `${f} proof`);
+    assert.doesNotMatch(JSON.stringify(c), /%|\b\d{1,2}\.?\s?(januar|january|janvier|gennaio|enero|januari|janeiro|ledna|január)/i, `${f}: no discount or date`);
+    assert.deepEqual(Object.keys(c.types).sort(), R.BUSINESS_TYPES.slice().sort(), `${f} answers`);
+  }
+});
+
+test("direct: the answer after the signup is its own event, known answers only, never the consent", () => {
+  const m = MARKETS.eur_eu_ita;
+  const ev = R.buildAnswerEvent({ market: m, email: " a@b.co ", concept: "direct", businessType: "jewellery" });
+  const a = ev.body.data.attributes;
+  assert.equal(ev.url, `https://a.klaviyo.com/client/events?company_id=${m.companyId}`);
+  assert.equal(a.metric.data.attributes.name, "Signup Lab Answered");
+  assert.deepEqual(a.properties, { wp_business_type: "jewellery", wp_signup_concept: "direct", wp_signup_market: "IT", wp_signup_list: m.listId });
+  assert.equal(a.profile.data.attributes.email, "a@b.co");
+  assert.ok(!JSON.stringify(ev).includes("subscriptions"), "an answer never touches consent");
+  assert.equal(R.buildAnswerEvent({ market: m, email: "a@b.co", concept: "direct", businessType: "<script>" }), null);
+  const t = R.buildAnswerEvent({ market: m, target: TEST_TARGET, email: "a@b.co", concept: "direct", businessType: "other" });
+  assert.equal(t.body.data.attributes.properties.wp_signup_list, TEST_TARGET.listId, "a preview answer goes to the test account");
+  // what rides along with Direct's signup
+  const sub = R.buildSubscription({ market: m, email: "a@b.co", concept: "direct", properties: { wp_signup_season: "sale", wp_signup_trigger: "dock" } });
+  const p = sub.body.data.attributes.profile.data.attributes.properties;
+  assert.equal(p.wp_signup_season, "sale"); assert.equal(p.wp_signup_trigger, "dock");
+  // a reopen from the dock is tracked as its own trigger
+  assert.equal(R.sanitizeTracking({ market: "IT", concept: "direct", trigger: "dock", steps: [{ n: "answer_jewellery", t: 1 }] }).trigger, "dock");
+});
+
+test("direct: no step before the email field, and the cursor waits in it on a computer", () => {
+  const src = fs.readFileSync(path.join(ROOT, "signup", "concepts", "direct.js"), "utf8");
+  assert.match(src, /initialFocus: ctx\.device === "desktop" \? form\.input : null/);
+  // the form is in the first view: the ask holds the form, and nothing in it waits for a click first
+  assert.match(src, /const ask = el\("div", \{ class: "dr-ask" \}[\s\S]*?el\("div", \{ class: "dr-form[^"]*" \}, \[form\.form\]\)/);
+  assert.doesNotMatch(src, /checked:\s*true|"checked"/, "nothing pre-ticked");
+});

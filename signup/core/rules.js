@@ -8,7 +8,11 @@
 (function (root) {
   const VERSION = "1.0.0";
   const SOURCE = "Westpack Signup Lab";
-  const CONCEPT_IDS = ["logo-studio", "swipe-match", "pack-and-ship"];
+  const CONCEPT_IDS = ["logo-studio", "swipe-match", "pack-and-ship", "direct"];
+  // What an experience asks of the shell beyond the popup. Direct (2026-11-27, "hardcore med permission indsamling")
+  // docks a small pill at the foot of the page when its popup is closed, instead of disappearing until the cool-down
+  // ends; the popup itself backs off exactly as the others do.
+  const CONCEPT_FEATURES = { direct: { dock: true } };
   const STATE_KEY = "wps:v1";
   const SESSION_KEY = "wps:session:v1";
   const KLAVIYO_REVISION = "2026-10-15";
@@ -24,7 +28,7 @@
     /\/customer-survey(-2026)?(\/|\.html|$)/i];
 
   // One close means not now; a second means not this month; a third means leave them alone.
-  const SUPPRESSION = { closedDays: [14, 45, 120], peekDismissedDays: 7, emailVisitorDays: 180 };
+  const SUPPRESSION = { closedDays: [14, 45, 120], peekDismissedDays: 7, emailVisitorDays: 180, dockDismissedDays: 14 };
 
   function resolveMarket(pathname, markets) {
     const code = String(pathname || "").split("/").filter(Boolean)[0] || "";
@@ -97,6 +101,32 @@
   }
 
   /**
+   * The dock: once a visitor has seen the popup of an experience that docks, a "not now" is not the end. The popup
+   * keeps its cool-down, but a small pill stays at the foot of the page, one tap from the email field, on this page and
+   * the next ones. Only where the popup itself was turned away for showing too often - this visit already, or the
+   * cool-down - never for a subscriber, someone from our mails, someone Klaviyo knows or an excluded page (those
+   * reasons come first in eligibility). Its own cross hides it for two weeks.
+   */
+  function dockAllowed(state, verdict, now, concept) {
+    if (!(CONCEPT_FEATURES[concept] && CONCEPT_FEATURES[concept].dock)) return false;
+    if (state.subscribedAt || !(state.views >= 1)) return false;
+    if (!verdict || !["shown_this_session", "cooling_down"].includes(verdict.reason)) return false;
+    return !(state.dockDismissedAt && now - state.dockDismissedAt < SUPPRESSION.dockDismissedDays * DAY);
+  }
+
+  /**
+   * Which reason leads Direct's popup. From 15 December to 3 January the New Year sale is days away - the one sale of
+   * discontinued products the business runs (first mail 4 January 2027) - and it is the strongest reason Westpack has
+   * to give an address without a discount; the rest of the year it is news, deadlines and the sale together. Read in
+   * the visitor's own calendar, which is the store's within a day.
+   */
+  function directSeason(date) {
+    const d = date instanceof Date ? date : new Date(date);
+    const m = d.getMonth() + 1, day = d.getDate();
+    return (m === 12 && day >= 15) || (m === 1 && day <= 3) ? "sale" : "default";
+  }
+
+  /**
    * How the experience is offered: the popup opens by itself after a pause, on every device; a computer also opens it
    * when the pointer leaves the window. Phones and tablets used to get a small card that opened the popup only when
    * tapped: on CZ's first four days 8 of 204 cards were tapped (2026-11-23), so over half the traffic never saw the
@@ -143,7 +173,10 @@
   const PROPERTY_WHITELIST = ["wp_signup_concept", "wp_signup_variant", "wp_signup_market", "wp_signup_lang",
     "wp_signup_version", "wp_signup_page_type", "wp_consent_text", "wp_consent_page", "wp_brand_name",
     "wp_logo_finish", "wp_logo_lid", "wp_logo_type", "wp_logo_uploaded", "wp_style_profile", "wp_style_scores", "wp_liked_boxes",
-    "wp_signup_list"];
+    "wp_signup_list", "wp_signup_season", "wp_signup_trigger", "wp_business_type"];
+
+  // Direct's one question after the signup, as ids: what the reader asks for segments and flows, in every language.
+  const BUSINESS_TYPES = ["jewellery", "watches", "fashion", "beauty", "gifts", "other"];
 
   function cleanProperties(props) {
     const out = {};
@@ -218,11 +251,36 @@
     };
   }
 
+  /**
+   * What a subscriber told us after signing up (Direct's one question), as a second timeline event on the profile:
+   * "Signup Lab Answered" with wp_business_type. Klaviyo segments and flow splits read event properties, which is the
+   * client API path already proven by "Signup Lab Subscribed". Only a known answer is sent; anything else is dropped.
+   */
+  function buildAnswerEvent(o) {
+    const target = o.target || o.market;
+    const type = BUSINESS_TYPES.includes(o.businessType) ? o.businessType : "";
+    if (!type) return null;
+    return {
+      url: `https://a.klaviyo.com/client/events?company_id=${encodeURIComponent(target.companyId)}`,
+      headers: { "content-type": "application/vnd.api+json", accept: "application/vnd.api+json", revision: KLAVIYO_REVISION },
+      body: {
+        data: {
+          type: "event",
+          attributes: {
+            properties: cleanProperties({ wp_business_type: type, wp_signup_concept: o.concept, wp_signup_market: o.market.market, wp_signup_list: target.listId }),
+            metric: { data: { type: "metric", attributes: { name: "Signup Lab Answered" } } },
+            profile: { data: { type: "profile", attributes: { email: normaliseEmail(o.email) } } },
+          },
+        },
+      },
+    };
+  }
+
   // ---- tracking: counts only, never a person ----
   const ENUMS = {
     env: ["live", "preview", "test"],
     device: ["mobile", "tablet", "desktop"],
-    trigger: ["delay", "exit", "peek", "manual", "preview"],
+    trigger: ["delay", "exit", "peek", "manual", "preview", "dock"],
     outcome: ["subscribed", "closed", "abandoned", "error", "link", "peek_dismissed", "not_opened"],
   };
   const TOKEN = /^[a-z0-9][a-z0-9_.-]{0,47}$/i;
@@ -266,10 +324,10 @@
   }
 
   const api = {
-    VERSION, SOURCE, CONCEPT_IDS, STATE_KEY, SESSION_KEY, KLAVIYO_REVISION, SUPPRESSION, PROPERTY_WHITELIST,
-    resolveMarket, isExcludedPath, pageType, isEmailVisit, deviceClass, freshState, parseState, cooldownDays,
-    eligibility, peekAllowed, triggerPlan, pickConcept, assignConcept, isValidEmail, normaliseEmail,
-    cleanProperties, buildSubscription, buildCompletionEvent, sanitizeTracking, consentParts, stripUrl,
+    VERSION, SOURCE, CONCEPT_IDS, CONCEPT_FEATURES, STATE_KEY, SESSION_KEY, KLAVIYO_REVISION, SUPPRESSION, PROPERTY_WHITELIST,
+    BUSINESS_TYPES, resolveMarket, isExcludedPath, pageType, isEmailVisit, deviceClass, freshState, parseState, cooldownDays,
+    eligibility, peekAllowed, dockAllowed, directSeason, triggerPlan, pickConcept, assignConcept, isValidEmail, normaliseEmail,
+    cleanProperties, buildSubscription, buildCompletionEvent, buildAnswerEvent, sanitizeTracking, consentParts, stripUrl,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.WestpackSignupRules = api;

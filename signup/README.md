@@ -13,6 +13,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 | Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 26 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
 | Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
+| Direkte | `concepts/direct.js/.css` | Permission først (2026-11-27): grund, felt og knap i første billede; lukket bliver den til en pille nederst; "Hvad sælger I?" efter tilmeldingen. Se `CONCEPTS.md`, koncept 4. Ikke live. |
 
 ## Sådan virker det
 
@@ -66,6 +67,9 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 - **Aldrig for:** dem, der er tilmeldt via oplevelsen; dem, der kommer fra en af vores mails (`_kx`,
   `utm_medium=email`; 180 dage); besøgende, Klaviyo genkender.
 - **Én gang pr. besøg.** Lukket én gang: pause i 14 dage, to gange: 45 dage, tre gange: 120 dage.
+- **Direkte efterlader en pille** (`CONCEPT_FEATURES` i `core/rules.js`): når dens popup er set og lukket, står en lille
+  pille nederst på siden – resten af besøget og under pausen – ét tryk fra e-mailfeltet. Aldrig for dem ovenfor, aldrig
+  på de udelukkede sider; dens eget kryds skjuler den i 14 dage. De andre oplevelser har ingen pille.
 - Hukommelsen ligger i `localStorage`/`sessionStorage` uden identifikatorer (kun datoer og den tildelte
   oplevelse). Ingen cookies.
 

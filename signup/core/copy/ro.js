@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 5 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Expediat.",
     "successBody": "Ajunge în inbox când avem ceva care merită deschis."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Cutii noi, termene-limită și reducerile de Anul Nou. Te anunțăm din timp.",
+        "dock": "Noutăți de la Westpack"
+      },
+      "sale": {
+        "title": "Reducerile de Anul Nou încep în ianuarie. Te anunțăm când încep.",
+        "dock": "Află când încep reducerile"
+      }
+    },
+    "proof": "Peste 20.000 de oameni din Europa și SUA primesc deja newsletterul.",
+    "successTitle": "Gata, ești pe listă.",
+    "askTitle": "Încă ceva: ce vinzi?",
+    "askLede": "Așa îți trimitem ce ți se potrivește. E complet opțional.",
+    "types": {
+      "jewellery": "Bijuterii",
+      "watches": "Ceasuri",
+      "fashion": "Modă și accesorii",
+      "beauty": "Frumusețe și cosmetice",
+      "gifts": "Cadouri și interioare",
+      "other": "Altceva"
+    },
+    "skip": "Sari peste",
+    "thanks": "Mersi, am notat. Ne vedem în inbox.",
+    "dockOpen": "Deschide abonarea la newsletter",
+    "dockHide": "Ascunde"
   }
 };

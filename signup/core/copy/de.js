@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 7 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpack-Newsletter",
@@ -173,5 +174,33 @@
     "tape": "Westpack",
     "successTitle": "Abgeschickt.",
     "successBody": "Wenn wir etwas haben, das sich zu öffnen lohnt, kommt es in Ihr Postfach."
+  },
+  "direct": {
+    "seasons": {
+      "default": {
+        "title": "Neue Schachteln, Fristen und der Neujahrs-Sale. Wir sagen Ihnen rechtzeitig Bescheid.",
+        "dock": "Neues von Westpack"
+      },
+      "sale": {
+        "title": "Der Neujahrs-Sale startet im Januar. Wir sagen Ihnen, wenn es so weit ist.",
+        "dock": "Start des Neujahrs-Sales"
+      }
+    },
+    "proof": "Über 20.000 Menschen in Europa und den USA bekommen bereits den Newsletter.",
+    "successTitle": "Sie sind dabei.",
+    "askTitle": "Noch eine Frage: Was verkaufen Sie?",
+    "askLede": "Dann schicken wir Ihnen, was zu Ihnen passt. Ganz freiwillig.",
+    "types": {
+      "jewellery": "Schmuck",
+      "watches": "Uhren",
+      "fashion": "Mode und Accessoires",
+      "beauty": "Beauty und Kosmetik",
+      "gifts": "Geschenke und Interieur",
+      "other": "Etwas anderes"
+    },
+    "skip": "Überspringen",
+    "thanks": "Danke, notiert. Wir sehen uns im Postfach.",
+    "dockOpen": "Newsletter-Anmeldung öffnen",
+    "dockHide": "Ausblenden"
   }
 };
