@@ -1061,8 +1061,10 @@ async function buildAsanaProject(config, input = {}, { now = Date.now, budgetMs 
         remaining += 1;
         continue;
       }
+      // `memberships` alone is refused ("You should specify one of workspace, parent, projects"), seen 27/11.
       const created = await asanaSend(config, "POST", "/tasks", {
         name: task.name,
+        workspace: workspaceGid,
         html_notes: taskHtml[sectionIndex][taskIndex],
         memberships: [{ project: projectGid, section: sectionGids[sectionIndex] }]
       }, "opt_fields=gid");

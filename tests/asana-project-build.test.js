@@ -80,6 +80,10 @@ function fakeAsana({ projects = [] } = {}) {
       })));
     }
     if (method === "POST" && route === "/tasks") {
+      // Real Asana answers 400 to a task with only `memberships`.
+      if (!body.workspace && !body.projects && !body.parent) {
+        return new Response(JSON.stringify({ errors: [{ message: "You should specify one of workspace, parent, projects" }] }), { status: 400 });
+      }
       const [membership] = body.memberships;
       state.tasks.unshift({ gid: gid(), name: body.name, notes: body.html_notes, project: membership.project, section: membership.section });
       return ok({ gid: state.tasks[0].gid });
