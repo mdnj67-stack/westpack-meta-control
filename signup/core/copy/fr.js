@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 3 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "C’est parti.",
     "successBody": "Quand on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
+  },
+  "new-year-sale": {
+    "peek": "Alerte soldes du Nouvel An",
+    "peekCta": "Ouvrir",
+    "title": "On vous dit quand les soldes du Nouvel An commencent, directement dans votre boîte mail.",
+    "proof": "Plus de 20 000 personnes en Europe et aux États-Unis reçoivent déjà la newsletter.",
+    "successTitle": "C’est fait.",
+    "done": "On vous écrit quand les soldes du Nouvel An commencent.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Les soldes du Nouvel An ont commencé",
+    "mailPreview": "Les produits en fin de série sont soldés, dans la limite des stocks disponibles.",
+    "mailTime": "janvier"
   }
 };

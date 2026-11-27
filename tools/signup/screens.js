@@ -31,7 +31,7 @@ function serve() {
   const server = await serve();
   const base = `http://127.0.0.1:${server.address().port}/signup/preview/frame.html`;
   const browser = await chromium.launch();
-  const concepts = conceptArg ? [conceptArg] : ["logo-studio", "pack-and-ship"];
+  const concepts = conceptArg ? [conceptArg] : ["logo-studio", "pack-and-ship", "new-year-sale"];
   const viewports = [
     { name: "mobile", ...devices["iPhone 13"] },
     { name: "desktop", viewport: { width: 1440, height: 900 } },

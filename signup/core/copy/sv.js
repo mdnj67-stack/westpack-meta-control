@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 0 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Skickat.",
     "successBody": "När vi har något värt att öppna hamnar det i din inkorg."
+  },
+  "new-year-sale": {
+    "peek": "Få besked när nyårsrean börjar",
+    "peekCta": "Öppna",
+    "title": "Få besked när nyårsrean börjar – direkt i din inkorg.",
+    "proof": "Över 20 000 personer i Europa och USA får redan nyhetsbrevet.",
+    "successTitle": "Du är med.",
+    "done": "Vi skriver när nyårsrean börjar.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Nyårsrean har börjat",
+    "mailPreview": "Produkter som utgår är nedsatta – så långt lagret räcker.",
+    "mailTime": "januari"
   }
 };

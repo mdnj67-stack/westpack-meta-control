@@ -35,7 +35,7 @@ tragten registreres som `env=test` (ikke live), og at links bliver på staging. 
 
 - **Se den igen:** tilføj `?wps=reset` bag adressen. Så glemmer browseren, at du har lukket den eller tilmeldt dig,
   og du er en ny besøgende igen.
-- **En bestemt oplevelse:** `?wps=logo-studio` eller `?wps=pack-and-ship` åbner den med det samme.
+- **En bestemt oplevelse:** `?wps=logo-studio`, `?wps=pack-and-ship` eller `?wps=new-year-sale` åbner den med det samme.
 - **Tragten fra staging:** i biblen, Signup Lab → Signups → "Staging & tests" (eller
   `GET /api/signup/track?action=report&env=test&from=<dato>`).
 - **Hvad staging kører:** Signup Lab → Control. Staging har sin egen tænd/sluk og sin egen oplevelse, uafhængigt af

@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Shipped.",
     "successBody": "We'll write when we have something worth opening."
+  },
+  "new-year-sale": {
+    "peek": "Hear when the sale starts",
+    "peekCta": "Open",
+    "title": "Hear when the New Year sale starts – straight to your inbox.",
+    "proof": "Over 20,000 people in Europe and the US already get the newsletter.",
+    "successTitle": "You're in.",
+    "done": "We'll write when the New Year sale starts.",
+    "mailFrom": "Westpack",
+    "mailSubject": "The New Year sale has started",
+    "mailPreview": "Discontinued products are reduced – while stocks last.",
+    "mailTime": "January"
   }
 };

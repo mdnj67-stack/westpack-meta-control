@@ -59,16 +59,16 @@ function setAt(o, p, v) { const ks = p.split("."); const last = ks.pop(); const 
 async function read(lang, env, en, da) {
   const model = env.CONTENT_AGENT_MODEL || "gpt-5.6";
   const copy = loadLang(lang);
-  const body = { shell: copy.shell, "logo-studio": copy["logo-studio"], "pack-and-ship": copy["pack-and-ship"] };
+  const body = { shell: copy.shell, "logo-studio": copy["logo-studio"], "pack-and-ship": copy["pack-and-ship"], "new-year-sale": copy["new-year-sale"] };
   const prompt = `${BRIEF}
 
 Language: ${LANGS[lang]}.
 
 English master, for meaning:
-${JSON.stringify({ shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"] })}
+${JSON.stringify({ shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"], "new-year-sale": en["new-year-sale"] })}
 
 Danish master, for tone:
-${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"] })}
+${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"], "new-year-sale": da["new-year-sale"] })}
 
 The ${LANGS[lang]} text to check:
 ${JSON.stringify(body)}`;

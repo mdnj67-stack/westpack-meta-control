@@ -1,6 +1,6 @@
 # Westpack Signup Lab
 
-To tilmeldingsoplevelser til Westpacks nyhedsbrev, bygget som ét system, der kører på alle 18 webshops via én
+Tilmeldingsoplevelser til Westpacks nyhedsbrev, bygget som ét system, der kører på alle 18 webshops via én
 script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10-28/29.
 
 - **Preview (desktop og mobil):** https://project-4fcxa.vercel.app/signup/preview/
@@ -12,6 +12,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 |---|---|---|
 | Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 26 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
+| Nytårsudsalg | `concepts/new-year-sale.js/.css` | "Få besked, når nytårsudsalget starter – direkte i din indbakke." En indbakke, hvor mailen lander; e-mailfeltet i første billede. Kører live kun 1/11–3/1 (`CONCEPT_SEASONS`), derefter falder butikkerne tilbage til Logo-studiet. Aldrig "eksklusivt" eller "først". Se `CONCEPTS.md`. |
 
 ## Sådan virker det
 
@@ -110,7 +111,7 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 Besluttet 2026-10-30: vi kører ikke oplevelserne mod hinanden, men én ad gangen. **Logo-studiet** kører, til vi
 vurderer, at den er slidt op; så kommer **Pakket & sendt**, som får sit designløft, når det bliver dens tur, ikke før.
 **Æske-match** blev fjernet 2026-11-27 efter ønske. Skiftet er én linje: `CURRENT` i `core/markets.js`. Besøgende, der havde fået
-en anden oplevelse, får den nye på næste side. Den anden åbner stadig med `?wps=pack-and-ship`.
+en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?wps=pack-and-ship` / `?wps=new-year-sale`.
 
 - **Hvornår er den slidt op:** bekræftede tilmeldinger pr. visning, uge for uge, sammenlignet med dens egne første
   fire uger. Ligger den mindst 30 % under i to uger i træk, er det tid. Sæsonen (jul, januar) flytter alle tal, så

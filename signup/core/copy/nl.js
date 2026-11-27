@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Verzonden.",
     "successBody": "Hebben we iets dat het openen waard is, dan komt het in je inbox."
+  },
+  "new-year-sale": {
+    "peek": "Seintje bij nieuwjaarsuitverkoop",
+    "peekCta": "Openen",
+    "title": "Krijg een seintje als de nieuwjaarsuitverkoop start – direct in je inbox.",
+    "proof": "Meer dan 20.000 mensen in Europa en de VS krijgen de nieuwsbrief al.",
+    "successTitle": "Je bent erbij.",
+    "done": "We sturen je een bericht als de nieuwjaarsuitverkoop start.",
+    "mailFrom": "Westpack",
+    "mailSubject": "De nieuwjaarsuitverkoop is gestart",
+    "mailPreview": "Uitlopende producten zijn afgeprijsd – zolang de voorraad strekt.",
+    "mailTime": "januari"
   }
 };

@@ -78,7 +78,7 @@ function readEnv() {
 
 async function transcreate(lang, target, da, en, env) {
   const model = env.CONTENT_AGENT_MODEL || env.OPENAI_MODEL || "gpt-4.1";
-  const master = { shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"] };
+  const master = { shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"], "new-year-sale": en["new-year-sale"] };
   const prompt = `${RULES}
 
 Target: ${target.name}. Form of address: ${target.address}. The store's own word for a jewellery box: ${target.box}.
@@ -87,12 +87,12 @@ ${target.promises}
 ${target.notes ? `Also: ${target.notes}` : ""}
 
 The Danish master (for tone):
-${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"] })}
+${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"], "new-year-sale": da["new-year-sale"] })}
 
 The English master (structure to return, every key filled in ${target.name}):
 ${JSON.stringify(master)}
 
-Return only the JSON object with the same three top-level keys.`;
+Return only the JSON object with the same four top-level keys.`;
   for (let attempt = 1; attempt <= 3; attempt++) {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",

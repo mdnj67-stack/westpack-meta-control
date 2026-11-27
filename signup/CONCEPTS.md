@@ -80,3 +80,23 @@ størst wow og mindst relevans: et spil, der lærer folk at fange smykker, sælg
   mod nul friktion), og svaret fortæller, hvilken vej næste koncept skal gå.
 - Forvent ærligt, at Pakket & sendt giver flest tilmeldinger pr. visning og Logo-studiet de mest relevante. Det
   er derfor, målingen også følger kvaliteten (se README, "A/B-test").
+
+## Nytårsudsalg (2026-11-27)
+
+Brugerens idé: "Tilmeld dig og få besked når nytårsudsalget starter direkte i din indbakke ... sådan 10. dec agtigt, når
+vi lige er totalt ovre det her bf" – som en selvstændig oplevelse ("en specifik og separat"). Kode:
+`concepts/new-year-sale.js/.css`, preview: "New Year sale" i Lab'ens Preview eller `?wps=new-year-sale` på en butik.
+
+- **Ét løfte, sagt ligeud:** "Få besked, når nytårsudsalget starter – direkte i din indbakke." Første billede er
+  overskriften, e-mailfeltet, knappen og butikkens egen samtykketekst – intet før e-mailen. Knappen siger stadig
+  "Tilmeld nyhedsbrevet": det er nyhedsbrevet, de siger ja til.
+- **Billedet er løftet:** en indbakke, hvor mailen "Nytårsudsalget er startet" lander øverst, med det ærlige preview
+  "Varer, der udgår, er sat ned – så længe lager haves." Efter tilmeldingen: "Vi skriver, når nytårsudsalget starter."
+- **Aldrig "eksklusivt", "først", "før alle andre", "VIP" eller "early access"** (brugeren: "vi ikke siger eksklusivt
+  nytår på email for det er det ikke"). Udsalget ligger i butikken for alle; mailen siger bare, hvornår det starter. En
+  test fejler, hvis et af de 17 sprog siger det.
+- **Den kan ikke stå forkert:** live kører den kun 1. november – 3. januar (`CONCEPT_SEASONS` i `core/rules.js`). Står
+  Control stadig på den 4. januar, viser butikkerne Logo-studiet af sig selv, for "når det starter" er ikke sandt, når
+  det er startet. Preview viser den alle dage.
+- Højst 72 % af en 360×640-skærm i det længste sprog; emnelinjen i indbakken klippes aldrig.
+- Teksterne er gpt-5.6's, ingen modersmålslæsning endnu.

@@ -73,4 +73,16 @@
     successTitle: "Shipped.",
     successBody: "It lands in your inbox whenever we have something worth opening.",
   },
+  "new-year-sale": {
+    peek: "Hear when the New Year sale starts",
+    peekCta: "Open",
+    title: "Hear when the New Year sale starts – straight to your inbox.",
+    proof: "Over 20,000 people in Europe and the US already get the newsletter.",
+    successTitle: "You're in.",
+    done: "We'll write when the New Year sale starts.",
+    mailFrom: "Westpack",
+    mailSubject: "The New Year sale has started",
+    mailPreview: "Discontinued products are reduced – while stocks last.",
+    mailTime: "January",
+  },
 };

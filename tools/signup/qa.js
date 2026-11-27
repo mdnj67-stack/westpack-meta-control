@@ -42,7 +42,7 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     return { ctx, p, host: p.locator("#westpack-signup"), flushes };
   }
   const overflow = (p) => p.evaluate(() => { const d = document.querySelector("#westpack-signup").shadowRoot.querySelector(".wps-dialog"); return { sw: d.scrollWidth, cw: d.clientWidth }; });
-  const concepts = ["logo-studio", "pack-and-ship"];
+  const concepts = ["logo-studio", "pack-and-ship", "new-year-sale"];
   const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
   const byLang = {};
   for (const [code, m] of Object.entries(MARKETS)) if (!byLang[m.lang] && m.lang !== "da") byLang[m.lang] = code;

@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Feladva.",
     "successBody": "Ha lesz valami, amit érdemes megnyitni, e-mailben küldjük."
+  },
+  "new-year-sale": {
+    "peek": "Szólj, ha indul a kiárusítás",
+    "peekCta": "Kinyitom",
+    "title": "Szólunk, amikor elindul az újévi kiárusítás – egyenesen a postaládádba.",
+    "proof": "Több mint 20 000 ember Európában és az USA-ban már kapja a hírlevelet.",
+    "successTitle": "Feliratkoztál.",
+    "done": "Írunk, amikor elindul az újévi kiárusítás.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Elindult az újévi kiárusítás",
+    "mailPreview": "A kifutó termékek leárazva – a készlet erejéig.",
+    "mailTime": "január"
   }
 };

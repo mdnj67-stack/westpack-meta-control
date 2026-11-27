@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Newsletter de Westpack",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Enviado.",
     "successBody": "Cuando tengamos algo que merezca abrirse, te escribiremos."
+  },
+  "new-year-sale": {
+    "peek": "Avísame cuando empiecen",
+    "peekCta": "Abrir",
+    "title": "Entérate cuando empiecen las rebajas de Año Nuevo, directamente en tu bandeja de entrada.",
+    "proof": "Más de 20.000 personas de Europa y Estados Unidos ya reciben el newsletter.",
+    "successTitle": "Ya estás dentro.",
+    "done": "Te escribiremos cuando empiecen las rebajas de Año Nuevo.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Han empezado las rebajas de Año Nuevo",
+    "mailPreview": "Los productos descatalogados están rebajados, hasta agotar existencias.",
+    "mailTime": "enero"
   }
 };

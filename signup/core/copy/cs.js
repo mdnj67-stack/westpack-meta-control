@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -119,5 +120,17 @@
     "tape": "Westpack",
     "successTitle": "Odesláno.",
     "successBody": "Až budeme mít něco, co stojí za otevření, ozveme se e-mailem."
+  },
+  "new-year-sale": {
+    "peek": "Upozornit na výprodej",
+    "peekCta": "Otevřít",
+    "title": "Dáme vám vědět, až začne novoroční výprodej – přímo do vaší schránky.",
+    "proof": "Přes 20 000 lidí v Evropě a USA už newsletter dostává.",
+    "successTitle": "A jste tam.",
+    "done": "Napíšeme vám, až začne novoroční výprodej.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Novoroční výprodej začal",
+    "mailPreview": "Produkty, které vyřazujeme z nabídky, jsou zlevněné – do vyprodání zásob.",
+    "mailTime": "leden"
   }
 };

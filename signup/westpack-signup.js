@@ -27,7 +27,7 @@
   const script = document.currentScript || document.querySelector('script[src*="westpack-signup.js"]');
   const BASE = new URL(".", (script && script.src) || location.href).href;
   const data = (script && script.dataset) || {};
-  // ?wps=preview on any store page (or ?wps=logo-studio, pack-and-ship) opens the experience at once in
+  // ?wps=preview on any store page (or ?wps=logo-studio, pack-and-ship, new-year-sale) opens the experience at once in
   // test mode: signups go to the test list, tracking is marked test, and it works whether or not the experience is
   // live. It is how the store's tag is checked on the real store before launch.
   // ?wps=reset forgets this browser's answers (closed, subscribed, shown this session), so a tester sees it as a new visitor
@@ -519,7 +519,9 @@
     const ctl = market && OPTS.mode !== "preview" && !OPTS.storePreview ? await readControl() : null;
     const side = ctl && (staging ? ctl.staging : ctl.live);
     const on = side ? Boolean(side.on && (staging || !side.markets || side.markets[market.market] !== false)) : M.LIVE || staging;
-    const weights = side && R.CONCEPT_IDS.includes(side.current) ? { [side.current]: 1 } : market && market.concepts;
+    // an experience out of its season (the New Year sale after 3 January) gives way to the file's CURRENT
+    const runs = side && R.CONCEPT_IDS.includes(side.current) && R.inSeason(side.current, new Date()) ? side.current : "";
+    const weights = runs ? { [runs]: 1 } : market && market.concepts;
     if (!market || (!(on && market.enabled) && OPTS.mode !== "preview" && !OPTS.storePreview)) return;
     state = R.parseState(local.get(R.STATE_KEY));
     reducedMotion = Boolean(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);

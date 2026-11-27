@@ -8,7 +8,8 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 5 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
+    "newYearSaleUpdate": "2026-11-27: the New Year sale block, from Direct's New Year version (transcreated by gpt-5.6-sol, checked for exclusive/first wording; no native read)"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -118,5 +119,17 @@
     "tape": "Westpack",
     "successTitle": "Expediat.",
     "successBody": "Ajunge în inbox când avem ceva care merită deschis."
+  },
+  "new-year-sale": {
+    "peek": "Află când încep reducerile",
+    "peekCta": "Deschide",
+    "title": "Te anunțăm când încep reducerile de Anul Nou – direct în inbox.",
+    "proof": "Peste 20.000 de oameni din Europa și SUA primesc deja newsletterul.",
+    "successTitle": "Gata, ești pe listă.",
+    "done": "Îți scriem când încep reducerile de Anul Nou.",
+    "mailFrom": "Westpack",
+    "mailSubject": "Au început reducerile de Anul Nou",
+    "mailPreview": "Produsele scoase din gamă sunt reduse – în limita stocului.",
+    "mailTime": "ianuarie"
   }
 };

@@ -73,4 +73,16 @@
     successTitle: "Afsendt.",
     successBody: "Den lander i din indbakke, når vi har noget, der er værd at åbne.",
   },
+  "new-year-sale": {
+    peek: "Få besked, når udsalget starter",
+    peekCta: "Åbn",
+    title: "Få besked, når nytårsudsalget starter – direkte i din indbakke.",
+    proof: "Over 20.000 i Europa og USA får allerede nyhedsbrevet.",
+    successTitle: "Du er med.",
+    done: "Vi skriver, når nytårsudsalget starter.",
+    mailFrom: "Westpack",
+    mailSubject: "Nytårsudsalget er startet",
+    mailPreview: "Varer, der udgår, er sat ned – så længe lager haves.",
+    mailTime: "januar",
+  },
 };

@@ -8,7 +8,12 @@
 (function (root) {
   const VERSION = "1.0.0";
   const SOURCE = "Westpack Signup Lab";
-  const CONCEPT_IDS = ["logo-studio", "pack-and-ship"];
+  const CONCEPT_IDS = ["logo-studio", "pack-and-ship", "new-year-sale"];
+  // An experience whose promise holds only part of the year, as [month, day] from and to (inclusive). The New Year sale
+  // says "get told when it starts" - false once it has (first mail 4 January) - so on a live store it runs only from
+  // 1 November to 3 January; outside that a store left on it gets CURRENT. A preview (?wps=, the preview page) shows it
+  // any day.
+  const CONCEPT_SEASONS = { "new-year-sale": { from: [11, 1], to: [1, 3] } };
   const STATE_KEY = "wps:v1";
   const SESSION_KEY = "wps:session:v1";
   const KLAVIYO_REVISION = "2026-10-15";
@@ -90,6 +95,16 @@
     if (cd && state.lastCloseAt && now - state.lastCloseAt < cd * DAY) return { ok: false, reason: "cooling_down" };
     if (ctx.consentBannerOpen) return { ok: false, reason: "consent_banner_open", retry: true };
     return { ok: true, reason: "eligible" };
+  }
+
+  function inSeason(concept, date) {
+    const s = CONCEPT_SEASONS[concept];
+    if (!s) return true;
+    const d = date instanceof Date ? date : new Date(date);
+    const md = (d.getMonth() + 1) * 100 + d.getDate();
+    const from = s.from[0] * 100 + s.from[1], to = s.to[0] * 100 + s.to[1];
+    // a window that crosses New Year (from November to January) wraps round the end of the year
+    return from <= to ? md >= from && md <= to : md >= from || md <= to;
   }
 
   function peekAllowed(state, now) {
@@ -266,7 +281,7 @@
   }
 
   const api = {
-    VERSION, SOURCE, CONCEPT_IDS, STATE_KEY, SESSION_KEY, KLAVIYO_REVISION, SUPPRESSION, PROPERTY_WHITELIST,
+    VERSION, SOURCE, CONCEPT_IDS, CONCEPT_SEASONS, inSeason, STATE_KEY, SESSION_KEY, KLAVIYO_REVISION, SUPPRESSION, PROPERTY_WHITELIST,
     resolveMarket, isExcludedPath, pageType, isEmailVisit, deviceClass, freshState, parseState, cooldownDays,
     eligibility, peekAllowed, triggerPlan, pickConcept, assignConcept, isValidEmail, normaliseEmail,
     cleanProperties, buildSubscription, buildCompletionEvent, sanitizeTracking, consentParts, stripUrl,

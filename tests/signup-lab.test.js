@@ -401,3 +401,42 @@ test("logo studio on a phone: the stage window never runs past the photo, and ce
     }
   }
 });
+
+// ---- New Year sale (2026-11-27): its own experience - "get told when the New Year sale starts, straight to your inbox" ----
+
+test("new year sale: a live store runs it from 1 November to 3 January only; a preview shows it any day", () => {
+  const at = (s) => R.inSeason("new-year-sale", new Date(s));
+  assert.equal(at("2026-10-31T12:00:00"), false);
+  assert.equal(at("2026-11-01T08:00:00"), true);
+  assert.equal(at("2026-12-10T08:00:00"), true);
+  assert.equal(at("2027-01-03T20:00:00"), true);
+  // the first sale mail goes on 4 January: "when it starts" is no longer true
+  assert.equal(at("2027-01-04T08:00:00"), false);
+  assert.equal(at("2027-06-01T12:00:00"), false);
+  for (const id of ["logo-studio", "pack-and-ship"]) assert.equal(R.inSeason(id, new Date("2027-06-01T12:00:00")), true, id);
+  // out of season the store gets the file's CURRENT; a forced preview still opens it
+  const src = fs.readFileSync(path.join(ROOT, "signup", "westpack-signup.js"), "utf8");
+  assert.match(src, /R\.inSeason\(side\.current, new Date\(\)\) \? side\.current : ""/);
+  assert.deepEqual(R.assignConcept({}, { "logo-studio": 1 }, 0.5, "new-year-sale"), { concept: "new-year-sale", assigned: false });
+});
+
+test("new year sale: never exclusive, early or first - the sale is on the store for everyone - in every language", () => {
+  // the user, 2026-11-27: "Vigtigt er at vi ikke siger eksklusivt nytår på email for det er det ikke"
+  const EXCLUSIVE = /e(x|ks|s)[ck]lu[sz][iíy]|\bvip\b|early access|before anyone|\bfirst\b|vorab|avant-premi|en premier|in anteprima|per primi|in anticipo|antes que nadie|als eerste|jako pierwsi|elsőként|ensimmäis|primeir|primii|prv[ií]|ennakk|z wyprzedzeniem|\bførst|\bförst/i;
+  for (const f of fs.readdirSync(COPY_DIR)) {
+    const c = loadCopy(f.replace(/\.js$/, ""))["new-year-sale"];
+    assert.doesNotMatch(JSON.stringify(c), EXCLUSIVE, `${f}: says exclusive, early or first`);
+    // no discount, percentage or date is promised; the count is a fact (25,239 on the 18 lists on 24/11/2026)
+    assert.doesNotMatch(JSON.stringify(c), /%|\b\d{1,2}\.?\s?(januar|january|janvier|gennaio|enero|januari|janeiro|ledna|január)/i, `${f}: a discount or a date`);
+    assert.match(c.proof, /20[ .,  ]?000/, `${f} proof`);
+    assert.equal(c.mailFrom, "Westpack", `${f}: the sender is Westpack`);
+    assert.ok(c.title.length <= 110, `${f} title`);
+  }
+});
+
+test("new year sale: nothing before the email field, and the cursor waits in it on a computer", () => {
+  const src = fs.readFileSync(path.join(ROOT, "signup", "concepts", "new-year-sale.js"), "utf8");
+  assert.match(src, /initialFocus: ctx\.device === "desktop" \? form\.input : null/);
+  assert.match(src, /const ask = el\("div", \{ class: "ny-ask" \}[\s\S]*?el\("div", \{ class: "ny-form[^"]*" \}, \[form\.form\]\)/);
+  assert.doesNotMatch(src, /checked:\s*true|"checked"/, "nothing pre-ticked");
+});

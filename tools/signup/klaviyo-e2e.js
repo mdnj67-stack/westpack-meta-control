@@ -50,7 +50,7 @@ async function findProfile(email) {
   const browser = await chromium.launch();
   const stamp = Date.now();
   const results = [];
-  for (const concept of (process.env.E2E_ONLY ? process.env.E2E_ONLY.split(",") : ["logo-studio", "pack-and-ship"])) {
+  for (const concept of (process.env.E2E_ONLY ? process.env.E2E_ONLY.split(",") : ["logo-studio", "pack-and-ship", "new-year-sale"])) {
     const email = `signup-lab+${concept}-${stamp}@westpack.com`;
     const ctx = await browser.newContext({ ...devices["iPhone 13"] });
     const page = await ctx.newPage();
