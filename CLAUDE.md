@@ -257,7 +257,10 @@ webshops (200 + `GTM-5QRXWTJ`). About 3-4 Graph calls an hour, `maxRetries: 0`.
   later; one that recovers is a note, not an alert.
 - Landing page findings worth knowing (2026-10-30): **the store's blog redirects any URL with a
   query string to itself without it** (no variant keeps it), so every click on a blog-linked ad
-  arrives without fbclid and UTM - 11 pages, 11 ads, grouped as one finding. The IT
+  arrives without fbclid and UTM - 11 pages, 11 ads, grouped as one finding. **Except fbclid on its own**
+  (2026-11-26, four blog pages): the cache layer removes it before the blog sees it, so a blog-linked ad with no URL
+  parameters keeps its click ID - the UTM tags are what trigger the redirect. The same layer is why the old IT paths'
+  301 keeps UTM but drops fbclid. Decided then: blog-linked conversion ads lose their UTM, awareness ads keep it. The IT
   `jewellery-boxes.html` 301 drops fbclid. AD07 Adventskalender links `eur_eu_eng//blog/...` (a
   double slash). Advice is always about the ad, never "fix the store".
 - Items have a `key` and a `fingerprint`; a mute holds only while the fingerprint is unchanged.
@@ -1466,7 +1469,7 @@ language move Drafts → To Do → In progress → Review. The user's rule: crea
 be used in ads, and so may those in **Done** (the user, 2026-11-02). An unknown kind is a 400, never a fallback. `action=asana_task&taskGid=…&comments=true`
 also returns the task's comments, which is where reviewers leave feedback on a creative.
 
-Six Asana writes, all dispatched before the OpenAI check and all acting as the production token's owner (Mads,
+Eight Asana writes, all dispatched before the OpenAI check and all acting as the production token's owner (Mads,
 workspace westpack.com):
 - `POST /api/campaign/brain?action=asana_comment` with `{ taskGid, text }` posts a comment on a task in one of those
   three projects and refuses any other task (403). Used to tell the designer why a creative was not taken into an ad.
@@ -1474,6 +1477,11 @@ workspace westpack.com):
   (added 2026-11-09, the user: "Du har min fulde tilladelse") creates a to-do **always assigned to the token's owner**
   - in My Tasks, or in one of the three projects when `projectKind` is given. The caller cannot choose the assignee,
   workspace or another project, so it can never fill a colleague's list. `tests/asana-task-create.test.js`.
+- `POST /api/campaign/brain?action=asana_task_update` with `{ taskGid, name?, notes?, dueOn?, startAt?, dueAt? }` (added
+  2026-11-26, to move a to-do and "reserve the whole day" for it) changes one of the token owner's **own** to-dos; a task
+  assigned to anyone else or to no one (a project card) is 403. `startAt`/`dueAt` must carry an offset
+  (`2026-12-14T08:00:00+01:00` - Vercel runs in UTC) and make a time block in Asana's calendar; a `dueOn` alone clears
+  one. `tests/asana-task-update.test.js`.
 - `POST /api/campaign/brain?action=asana_task_from_template` with `{ templateGid, name, dueOn?, projectKind? }` (added
   2026-11-10) makes a card from one of the project's own Asana **task templates** - every email campaign card starts
   from the campaign project's template "W??", which gives it the subtasks (Opsæt i Klaviyo, Billeder, Korrektur,
@@ -1495,6 +1503,15 @@ workspace westpack.com):
 - `POST /api/campaign/brain?action=asana_task_attach&taskGid=&name=` with the file as the raw body (mp4, mov, jpeg,
   png, pdf; at most 4 MB, under Vercel's request limit) attaches it to a task in one of the app's projects - send a
   compressed preview for video. `tests/asana-content-request.test.js`.
+- `POST /api/campaign/brain?action=asana_project_build` with `{ name, notes?, team, members?, view?, color?, sections:
+  [{ name, tasks: [{ name, notes? }] }] }` (added 2026-11-27, the user: "opret en asana project ... martin skal være en
+  del af projektet") makes a **new project** in one of the token owner's own teams (name or GID; "Marketing"), with
+  board columns, cards (unassigned) and members as editors (workspace members only, up to 10). Notes take `**bold**`
+  and `@{userGid}` mentions of the owner or a member. It writes only inside a project the token owner owns: a
+  same-named project owned by anyone else is 409; one the owner has is filled in by name, never duplicated, so a build
+  that stopped (Asana error, 200 s budget, `done: false`) is the same request sent again. Asana's deprecated `team` on
+  project create is still what an organization requires (checked against the OpenAPI spec 27/11); members go through
+  `POST /memberships`. `tests/asana-project-build.test.js`.
 Asana's signed attachment URLs expire within the hour, so re-read a task right before downloading its files.
 
 The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns
@@ -1760,9 +1777,13 @@ Asked for as "et blogpost til amasty blog pro ... et spørgeskema med max 2-3 sp
 skal vi have et sted at gemme dataen", for the top 500 customers by lifetime webshop value with no webshop order in
 12 months. **Since 2026-11-23 it is a Magento CMS page, not a blog post** (the user: the blog's categories, tags and
 recent posts around it "ligner lort", and the page must be "død lækker"): one HTML Code block
-(`templates/customer-feedback-survey/survey.html`, README in Danish), URL key **`customer-survey-2026`** in every store
-(the team made the page as `Customer-Survey-2026`; the links followed it, the store was not changed), layout 1 column; answers go to `api/survey.js` and are read under Klaviyo email → **Customer survey**
-(`src/customer-survey.js`). Tests: `tests/customer-survey.test.js`.
+(`templates/customer-feedback-survey/survey.html`, README in Danish), URL key **`customer-survey-2026`** in every
+store - since 25/11 **one page per store** (the user moved the first page to EU only "for at kun oprette en på hvert
+site"), the same block in each; layout 1 column; answers go to `api/survey.js` and are read under Klaviyo email →
+**Customer survey** (`src/customer-survey.js`). Tests: `tests/customer-survey.test.js`. An empty "Westpack Survey" page
+at `…/customer-survey` also appeared on 25/11; the links went there for an hour and came back when the user said which
+page is the survey. **Ask which page before moving links** - a page answering 404 in 17 stores was the user building
+per-store pages, not a move. The send script refuses a page without the block.
 
 - **A personal link carries a token after `#`** (`…/customer-survey-2026#k=<token>`; the blog, where it started,
   redirects any URL with a query string to itself without it). No mail had gone out with the blog form or the planned
@@ -1788,7 +1809,9 @@ recent posts around it "ligner lort", and the page must be "død lækker"): one 
   inert close button ignores clicks, and a close brings a teaser that takes focus too. So the block adds
   `div[data-kl-scroll-locking-modal]{display:none!important}` to the page's head and takes the class off `<body>`.
   `tmp/playwright-runner/survey-focus-probe.js [--local] [--engine=webkit]` types for 28 s and logs every focus change;
-  `survey-live-e2e.js --local` runs the checkout's block on the live page. The Signup Lab excludes `/customer-survey-2026`.
+  `survey-live-e2e.js --local` runs the checkout's block on the live page. The Signup Lab excludes `/customer-survey` and `/customer-survey-2026`.
+  Magento's Content Heading, when filled in, renders as `h1.page-title` above the block (seen on 25/11 as "Westpack
+  Survey"); the block hides it (the one CSS rule not anchored on `#wpfb`, whitelisted in the test).
 - **One question, one send, then the thanks** (23/11, the user's own wording for both). No step counter ("Der er vel
   kun et trin?") and no contact question: the thanks ends "... Så hører vi meget gerne fra dig på sales@westpack.com"
   (a mailto link; the Sales mailbox, checked in Outlook's address book). One send saves the answer as `step: 3` with a
@@ -1801,6 +1824,21 @@ recent posts around it "ligner lort", and the page must be "død lækker"): one 
   phone's screen edge; it now sits under the field (41ec954). WebKit reports the store's own third-party frames
   (cookie banner, Dixa chat, tracking) reading each other on every store page - not the survey's errors.
   `survey-biblen-view.js` screenshots the view in biblen with Meta/Klaviyo calls blocked.
+- **What came back from the mail is counted per customer** (27/11, the user: "tælle hvor mange gange vi bliver afvist
+  i indbakken ... om de er lukket eller der er skiftet rundt i ansvar"). In the gitignored send kit:
+  `.\mail-svar-hent.ps1` (reads the wpsales inbox, read-only) → `node mail-svar-importer.js --apply` (written replies
+  become answers; a reply must carry our subject line, or a company's own newsletter from a domain we wrote to reads as
+  one) → `node mail-afvisninger.js --biblen` (every bounce and automatic reply sorted per customer: closed / domain gone
+  / contact left / address gone / no mail server / full / our data / passing error / away / receipt, the dead domains
+  checked in DNS once more, posted to `?action=import_delivery`, which replaces the last import). Biblen shows it as
+  "What came back from the mail" with a band by how long the customer had been silent, a "Mail that came back" tab, and
+  Not reached / Not mailed yet on the links tab. No address reaches biblen; `mail-afvisninger.csv` keeps the address
+  and the new contact an auto-reply names, for cleaning the lists. Read a bounce without the original message's
+  headers appended to it: they carry "X-MS-Exchange-AntiSpam", which first read every connection failure as spam.
+  "The DNS query failed" is not "the domain does not exist" - the DNS check decides. 27/11: 60 of 1,021 reached no one
+  (5.9 %): 2.2 % of those silent 12-18 months, 7.2 % at 18-30, 15.8 % at 2½-4 years. wpsales also has an Exchange
+  mail-flow rule that writes a postmaster "Notification:" ("not monitored") for every mail it receives; the copies are
+  addressed to wpsales itself and are skipped.
 - **The token resolves only in this app's store.** `surveys/customer-feedback-2026/recipients.json` (Blob) holds
   company, contact name, market, lifetime value and the link - never e-mail or phone; those stay in the local Excel
   list. `?action=who` (public) returns the company name for a token so the post can greet it.
@@ -1827,8 +1865,14 @@ recent posts around it "ligner lort", and the page must be "død lækker"): one 
 - **Key accounts are not the survey's to contact.** The list removes customers with an own Magento customer group
   (agreed prices) or a Navision fiscal year over 150,000 kr.; Navision's DETAIL data cannot see KAS departments
   (3200/3210/3300), so a person still reviews the list before anyone is contacted (the user, 2026-11-13).
-- Languages: `da` and `en` in `STR`; every other store shows English until the Danish is approved and translated
-  (the user's rule: finish the Danish master before translating). A test requires every language to carry every string.
+- **Every store's language since 25/11** (the Danish was approved that morning, then "versioneret"): 16 languages in
+  `STR` for 18 stores, each in the market's form of address (`server/lib/form-of-address.js`; CS/SK formal and HU
+  informal as the Signup Lab's copy). One independent review pass, no native read. Tests require every language to
+  carry every string, every store in `STORE_LANG` to have its language, and no translation to equal the Danish or the
+  English (Norwegian "Send svar"/"Sender …" are listed exceptions). The mails are `mail-<lang>.txt` beside the
+  gitignored send script, which takes the language from the store in the link, so mail and page always match.
+  `tmp/playwright-runner/survey-languages-check.js` walks all 18 stores (phone + laptop) with the checkout's block.
+  Change the Danish and every language changes with it.
 
 ## Agent workflow for this subsystem
 

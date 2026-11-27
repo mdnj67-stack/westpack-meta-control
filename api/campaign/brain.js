@@ -4,6 +4,7 @@ const { readJsonBody, readRawBody, sendJson } = require("../../server/lib/http")
 const {
   addAsanaTaskComment,
   attachFileToAsanaTask,
+  buildAsanaProject,
   createAsanaContentRequest,
   createAsanaTask,
   createAsanaTaskFromTemplate,
@@ -400,6 +401,22 @@ module.exports = async (req, res) => {
       sendJson(res, 200, { ok: true, task: await createAsanaTaskFromTemplate(config, input || {}) });
     } catch (error) {
       sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not create the task from the template." });
+    }
+    return;
+  }
+
+  // A new project in one of the token owner's teams, with columns, cards and members. Only ever writes inside a
+  // project the token owner owns; sending the same outline again continues a build that stopped - see buildAsanaProject.
+  if (requestedAction === "asana_project_build") {
+    if (!config.asanaAccessToken) {
+      sendJson(res, 503, { ok: false, error: "ASANA_ACCESS_TOKEN is not configured." });
+      return;
+    }
+    try {
+      const input = await readJsonBody(req);
+      sendJson(res, 200, { ok: true, ...(await buildAsanaProject(config, input || {})) });
+    } catch (error) {
+      sendJson(res, Number(error?.statusCode) || 502, { ok: false, error: error?.message || "Could not build the Asana project." });
     }
     return;
   }

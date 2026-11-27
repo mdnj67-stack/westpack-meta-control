@@ -899,8 +899,231 @@ async function sortAsanaSectionByDueDate(config, { projectKind = "campaign", sec
   };
 }
 
+// The eighth write: a new project in one of the token owner's own teams, with board columns, cards and colleagues as
+// members (asked for 2026-11-27: "opret en asana project hvor vi kan få alle ideer ind ... martin skal være en del af
+// projektet"). It only ever writes inside a project the token owner owns. A project of the same name in that team
+// owned by someone else is refused (409); one the owner already has is filled in, never duplicated, so a call that
+// stopped part-way (Asana error, time budget) is simply sent again and continues - starting and continuing are the
+// same request. Columns and cards are matched by name; nothing that exists is renamed, edited or deleted, except the
+// empty "Untitled section" Asana may put in a new project. Members must be in the token's workspace.
+const PROJECT_VIEWS = new Set(["board", "list", "calendar", "timeline"]);
+const PROJECT_COLORS = new Set([
+  "dark-pink", "dark-green", "dark-blue", "dark-red", "dark-teal", "dark-brown", "dark-orange", "dark-purple", "dark-warm-gray",
+  "light-pink", "light-green", "light-blue", "light-red", "light-teal", "light-brown", "light-orange", "light-purple", "light-warm-gray"
+]);
+const MAX_PROJECT_NAME_CHARS = 200;
+const MAX_SECTION_NAME_CHARS = 100;
+const MAX_PROJECT_SECTIONS = 12;
+const MAX_PROJECT_TASKS = 80;
+const MAX_PROJECT_MEMBERS = 10;
+const PROJECT_BUILD_BUDGET_MS = 200000;
+
+async function asanaSend(config, method, resourcePath, data, query = "") {
+  const response = await fetchWithTimeout(`${ASANA_API_BASE_URL}${resourcePath}${query ? `?${query}` : ""}`, {
+    method,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.asanaAccessToken}`
+    },
+    ...(data === undefined ? {} : { body: JSON.stringify({ data }) })
+  }, 20000);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw normalizeAsanaError(payload, response.status);
+  }
+  return payload?.data;
+}
+
+// Plain text with **bold** and @{userGid} mentions to Asana rich text. Only the given people may be mentioned.
+function toAsanaHtmlWithMentions(text, allowedGids) {
+  return toAsanaHtml(text).replace(/@\{(\d+)\}/g, (match, gid) => {
+    if (!allowedGids.has(gid)) {
+      const error = new Error(`@{${gid}} is not the owner or a member of this project, so it cannot be mentioned.`);
+      error.statusCode = 400;
+      throw error;
+    }
+    return `<a data-asana-gid="${gid}"/>`;
+  });
+}
+
+function normalizeProjectOutline({ name, notes, team, members = [], view = "board", color = "", sections = [] } = {}) {
+  const refuse = (message) => { const error = new Error(message); error.statusCode = 400; throw error; };
+  const projectName = String(name || "").trim();
+  const projectNotes = String(notes || "").trim();
+  const teamRef = String(team || "").trim();
+  const projectView = String(view || "board").trim().toLowerCase();
+  const projectColor = String(color || "").trim().toLowerCase();
+  if (!projectName || projectName.length > MAX_PROJECT_NAME_CHARS) refuse(`A project name needs between 1 and ${MAX_PROJECT_NAME_CHARS} characters.`);
+  if (projectNotes.length > MAX_TASK_NOTES_CHARS) refuse(`Project notes can be at most ${MAX_TASK_NOTES_CHARS} characters.`);
+  if (!teamRef) refuse("Name the team the project belongs to (its name or GID).");
+  if (!PROJECT_VIEWS.has(projectView)) refuse(`view must be one of ${[...PROJECT_VIEWS].join(", ")}.`);
+  if (projectColor && !PROJECT_COLORS.has(projectColor)) refuse(`color must be one of ${[...PROJECT_COLORS].join(", ")}.`);
+  const memberGids = [...new Set((Array.isArray(members) ? members : []).map((gid) => String(gid || "").trim()).filter(Boolean))];
+  if (memberGids.length > MAX_PROJECT_MEMBERS || memberGids.some((gid) => !/^\d+$/.test(gid))) refuse(`members must be up to ${MAX_PROJECT_MEMBERS} Asana user GIDs.`);
+  if (!Array.isArray(sections) || !sections.length || sections.length > MAX_PROJECT_SECTIONS) refuse(`A project needs between 1 and ${MAX_PROJECT_SECTIONS} sections.`);
+  const seenSections = new Set();
+  let taskCount = 0;
+  const outline = sections.map((section) => {
+    const sectionName = String(section?.name || "").trim();
+    if (!sectionName || sectionName.length > MAX_SECTION_NAME_CHARS) refuse(`A section name needs between 1 and ${MAX_SECTION_NAME_CHARS} characters.`);
+    if (seenSections.has(sectionName.toLowerCase())) refuse(`The section "${sectionName}" is named twice.`);
+    seenSections.add(sectionName.toLowerCase());
+    const seenTasks = new Set();
+    const tasks = (Array.isArray(section?.tasks) ? section.tasks : []).map((task) => {
+      const taskName = String(task?.name || "").trim();
+      const taskNotes = String(task?.notes || "").trim();
+      if (!taskName || taskName.length > MAX_TASK_NAME_CHARS) refuse(`A task name needs between 1 and ${MAX_TASK_NAME_CHARS} characters.`);
+      if (taskNotes.length > MAX_TASK_NOTES_CHARS) refuse(`Task notes can be at most ${MAX_TASK_NOTES_CHARS} characters.`);
+      if (seenTasks.has(taskName.toLowerCase())) refuse(`The card "${taskName}" is named twice in "${sectionName}".`);
+      seenTasks.add(taskName.toLowerCase());
+      return { name: taskName, notes: taskNotes };
+    });
+    taskCount += tasks.length;
+    return { name: sectionName, tasks };
+  });
+  if (taskCount > MAX_PROJECT_TASKS) refuse(`A project can be built with at most ${MAX_PROJECT_TASKS} cards at a time.`);
+  return { name: projectName, notes: projectNotes, team: teamRef, members: memberGids, view: projectView, color: projectColor, sections: outline };
+}
+
+async function buildAsanaProject(config, input = {}, { now = Date.now, budgetMs = PROJECT_BUILD_BUDGET_MS } = {}) {
+  const outline = normalizeProjectOutline(input);
+  const started = now();
+  const refuse = (message, statusCode) => { const error = new Error(message); error.statusCode = statusCode; throw error; };
+
+  const profile = await getAsanaConnectionProfile(config);
+  const workspaceGid = profile.workspaces?.[0]?.gid || "";
+  if (!workspaceGid || !profile.gid) refuse("The Asana token has no workspace.", 503);
+  const teams = await collectAsanaPages(config, `/users/${profile.gid}/teams`, { organization: workspaceGid, opt_fields: "gid,name" }, 2);
+  const team = teams.find((item) => String(item?.gid || "") === outline.team)
+    || teams.find((item) => String(item?.name || "").trim().toLowerCase() === outline.team.toLowerCase());
+  if (!team) refuse(`"${outline.team}" is not one of ${profile.name || "the token owner"}'s teams. Teams: ${teams.map((item) => item.name).join(", ")}.`, 403);
+
+  const people = {};
+  for (const gid of outline.members.filter((gid) => gid !== profile.gid)) {
+    const user = await asanaGet(config, `/users/${gid}`, { opt_fields: "gid,name,workspaces.gid" });
+    if (!(user?.workspaces || []).some((workspace) => String(workspace?.gid || "") === workspaceGid)) {
+      refuse(`User ${gid} is not a member of the ${profile.workspaces[0].name || "Asana"} workspace.`, 403);
+    }
+    people[gid] = String(user?.name || "");
+  }
+  const mentionable = new Set([profile.gid, ...Object.keys(people)]);
+  const projectHtml = `<body>${toAsanaHtmlWithMentions(outline.notes, mentionable)}</body>`;
+  const taskHtml = outline.sections.map((section) => section.tasks.map((task) => `<body>${toAsanaHtmlWithMentions(task.notes, mentionable)}</body>`));
+
+  const sameName = (await collectAsanaPages(config, `/teams/${team.gid}/projects`, { archived: "false", opt_fields: "gid,name,owner.gid,permalink_url" }))
+    .filter((item) => String(item?.name || "").trim().toLowerCase() === outline.name.toLowerCase());
+  if (sameName.length > 1) refuse(`The team already has ${sameName.length} projects named "${outline.name}". Choose another name.`, 409);
+  if (sameName.length && String(sameName[0]?.owner?.gid || "") !== profile.gid) {
+    refuse(`The team already has a project named "${outline.name}" owned by someone else. Choose another name.`, 409);
+  }
+  let project = sameName[0] || null;
+  const createdProject = !project;
+  if (!project) {
+    const data = { name: outline.name, workspace: workspaceGid, team: String(team.gid), default_view: outline.view, html_notes: projectHtml };
+    if (outline.color) data.color = outline.color;
+    project = await asanaSend(config, "POST", "/projects", data, "opt_fields=gid,name,permalink_url");
+  }
+  const projectGid = String(project?.gid || "");
+  if (!projectGid) refuse("Asana did not return the new project.", 502);
+
+  const memberships = await collectAsanaPages(config, "/memberships", { parent: projectGid, opt_fields: "member.gid" }, 2);
+  const already = new Set(memberships.map((item) => String(item?.member?.gid || "")));
+  const addedMembers = [];
+  for (const gid of Object.keys(people)) {
+    if (already.has(gid)) continue;
+    await asanaSend(config, "POST", "/memberships", { parent: projectGid, member: gid, access_level: "editor" });
+    addedMembers.push(people[gid]);
+  }
+
+  const existingSections = await collectAsanaPages(config, `/projects/${projectGid}/sections`, { opt_fields: "gid,name" }, 2);
+  const sectionGids = [];
+  const createdSections = [];
+  for (const section of outline.sections) {
+    let match = existingSections.find((item) => String(item?.name || "").trim().toLowerCase() === section.name.toLowerCase());
+    if (!match) {
+      match = await asanaSend(config, "POST", `/projects/${projectGid}/sections`, { name: section.name }, "opt_fields=gid,name");
+      createdSections.push(section.name);
+    }
+    sectionGids.push(String(match.gid));
+  }
+
+  const existingTasks = await collectAsanaPages(config, `/projects/${projectGid}/tasks`, { opt_fields: "gid,name,memberships.project.gid,memberships.section.gid" });
+  const sectionOf = (task) => String((task?.memberships || []).find((item) => String(item?.project?.gid || "") === projectGid)?.section?.gid || "");
+  const found = new Map(existingTasks.map((task) => [`${sectionOf(task)}\n${String(task?.name || "").trim().toLowerCase()}`, String(task.gid)]));
+  let createdTasks = 0;
+  let remaining = 0;
+  for (const [sectionIndex, section] of outline.sections.entries()) {
+    for (const [taskIndex, task] of section.tasks.entries()) {
+      const key = `${sectionGids[sectionIndex]}\n${task.name.toLowerCase()}`;
+      if (found.has(key)) continue;
+      if (now() - started > budgetMs) {
+        remaining += 1;
+        continue;
+      }
+      const created = await asanaSend(config, "POST", "/tasks", {
+        name: task.name,
+        html_notes: taskHtml[sectionIndex][taskIndex],
+        memberships: [{ project: projectGid, section: sectionGids[sectionIndex] }]
+      }, "opt_fields=gid");
+      found.set(key, String(created?.gid || ""));
+      createdTasks += 1;
+    }
+  }
+
+  // Cards in the outline's order, the column's other cards after them in their own order. Only when this call
+  // finished adding cards (a build that stopped part-way may have filled a column in an earlier call), and never
+  // when it added none, so a board someone has since rearranged by hand is left alone by a repeat call.
+  let moved = 0;
+  if (!remaining && createdTasks) {
+    for (const sectionIndex of outline.sections.keys()) {
+      if (!outline.sections[sectionIndex].tasks.length) continue;
+      const sectionGid = sectionGids[sectionIndex];
+      const current = (await collectAsanaPages(config, `/sections/${sectionGid}/tasks`, { opt_fields: "gid" })).map((task) => String(task.gid));
+      const wanted = outline.sections[sectionIndex].tasks.map((task) => found.get(`${sectionGid}\n${task.name.toLowerCase()}`)).filter((gid) => current.includes(gid));
+      const target = [...wanted, ...current.filter((gid) => !wanted.includes(gid))];
+      for (const move of planSectionMoves(current, target)) {
+        await asanaSend(config, "POST", `/sections/${sectionGid}/addTask`, move);
+        moved += 1;
+      }
+    }
+  }
+
+  // A new project may come with an empty "Untitled section"; it goes once the outline's columns exist.
+  const removedSections = [];
+  if (createdProject) {
+    for (const section of existingSections) {
+      const sectionName = String(section?.name || "").trim();
+      if (sectionName.toLowerCase() !== "untitled section" || outline.sections.some((item) => item.name.toLowerCase() === "untitled section")) continue;
+      if (existingTasks.some((task) => sectionOf(task) === String(section.gid))) continue;
+      try {
+        await asanaSend(config, "DELETE", `/sections/${section.gid}`);
+        removedSections.push(sectionName);
+      } catch {
+        // Not worth failing the build over: the column is empty and can be deleted by hand.
+      }
+    }
+  }
+
+  return {
+    project: {
+      gid: projectGid,
+      name: String(project?.name || outline.name),
+      permalinkUrl: String(project?.permalink_url || ""),
+      created: createdProject
+    },
+    team: { gid: String(team.gid), name: String(team.name || "") },
+    members: { added: addedMembers, all: Object.values(people) },
+    sections: { created: createdSections, removed: removedSections, order: outline.sections.map((section) => section.name) },
+    tasks: { created: createdTasks, existing: outline.sections.reduce((sum, section) => sum + section.tasks.length, 0) - createdTasks - remaining, remaining, moved },
+    done: remaining === 0
+  };
+}
+
 module.exports = {
   addAsanaTaskComment,
+  buildAsanaProject,
+  normalizeProjectOutline,
   asanaGet,
   collectAsanaPages,
   attachFileToAsanaTask,
