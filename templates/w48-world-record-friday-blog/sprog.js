@@ -371,8 +371,13 @@ function assemble() {
   const uk = tr("UK");
   if (uk) {
     const { body, fields } = fromCarrier(uk.body);
-    const html = finish("UK", body).replace('lang="en-GB"', 'lang="en"').replace(/"\/dkk_dk_den\//g, '"{{store}}');
-    if (/"\/?dkk_dk_den\//.test(html.replace(/<script>[\s\S]*<\/script>/, ""))) throw new Error("standard: a store link still names dkk_dk_den");
+    // Only the markup: the script's own "/dkk_dk_den/" (the link re-pointing) must stay as it is.
+    const full = finish("UK", body).replace('lang="en-GB"', 'lang="en"');
+    const at = full.indexOf("<script>");
+    const markup = full.slice(0, at).replace(/"\/dkk_dk_den\//g, '"{{store}}'), script = full.slice(at);
+    if (/dkk_dk_den/.test(markup)) throw new Error("standard: a store link still names dkk_dk_den");
+    if (/\{\{store\}\}/.test(script) || !script.includes('.replace("/dkk_dk_den/","/"+st+"/")')) throw new Error("standard: the script's link re-pointing changed");
+    const html = markup + script;
     fs.writeFileSync(path.join(OUT, "alle-store-views.html"), html);
     rows.unshift({ store: "alle-store-views", name: "Alle store views (standard)", fields });
     console.log(`alle-store-views UK ${(Buffer.byteLength(html) / 1000).toFixed(1)} KB  ${(html.match(/"\{\{store\}\}/g) || []).length} store links as {{store}}`);

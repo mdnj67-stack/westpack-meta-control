@@ -643,7 +643,7 @@ var st=location.pathname.split("/")[1]||"";
 
 if(/^[a-z]{3}_[a-z]{2}_[a-z]{3}$/.test(st)&&st!=="dkk_dk_den"){
   $("a[href*='/dkk_dk_den/']").forEach(function(a){
-    a.setAttribute("href",a.getAttribute("href").replace("{{store}}","/"+st+"/"))
+    a.setAttribute("href",a.getAttribute("href").replace("/dkk_dk_den/","/"+st+"/"))
   })
 }
 
