@@ -1511,7 +1511,10 @@ workspace westpack.com):
   same-named project owned by anyone else is 409; one the owner has is filled in by name, never duplicated, so a build
   that stopped (Asana error, 200 s budget, `done: false`) is the same request sent again. Asana's deprecated `team` on
   project create is still what an organization requires (checked against the OpenAPI spec 27/11); members go through
-  `POST /memberships`. `tests/asana-project-build.test.js`.
+  `POST /memberships`. A card needs `workspace` beside `memberships` - without it the first live build made the
+  project and columns and failed at the cards; the repeat call finished it and removed the empty "Untitled section"
+  Asana puts in a new project. First use: "E-mail automation: Klaviyo, HubSpot og permissions" (1220950619656786,
+  Marketing, Martin mpe@ as member). `tests/asana-project-build.test.js`.
 Asana's signed attachment URLs expire within the hour, so re-read a task right before downloading its files.
 
 The local `ASANA_ACCESS_TOKEN` in `.vercel.live.env` is expired, and `vercel env pull` returns
