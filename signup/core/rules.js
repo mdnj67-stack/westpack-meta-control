@@ -115,15 +115,17 @@
   }
 
   /**
-   * Which reason leads Direct's popup. From 15 December to 3 January the New Year sale is days away - the one sale of
-   * discontinued products the business runs (first mail 4 January 2027) - and it is the strongest reason Westpack has
-   * to give an address without a discount; the rest of the year it is news, deadlines and the sale together. Read in
-   * the visitor's own calendar, which is the store's within a day.
+   * Which reason leads Direct's popup. From 10 December to 3 January it is the New Year sale alone - the one sale of
+   * discontinued products the business runs (first mail 4 January 2027) - "get told when it starts, straight to your
+   * inbox" (the user, 2026-11-27: "sådan 10. dec agtigt. når vi lige er totalt ovre det her bf"). It stops on 3 January
+   * because "when it starts" is no longer true once it has. Never "exclusive" or "first": the sale is on the store for
+   * everyone, the email only says when (the user, same day). The rest of the year: news, deadlines and the sale together.
+   * Read in the visitor's own calendar, which is the store's within a day.
    */
   function directSeason(date) {
     const d = date instanceof Date ? date : new Date(date);
     const m = d.getMonth() + 1, day = d.getDate();
-    return (m === 12 && day >= 15) || (m === 1 && day <= 3) ? "sale" : "default";
+    return (m === 12 && day >= 10) || (m === 1 && day <= 3) ? "sale" : "default";
   }
 
   /**

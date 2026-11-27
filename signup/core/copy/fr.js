@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -182,8 +183,13 @@
         "dock": "Recevoir la newsletter"
       },
       "sale": {
-        "title": "Les soldes du Nouvel An commencent en janvier. On vous dit quand c’est parti.",
-        "dock": "Alerte soldes du Nouvel An"
+        "title": "On vous dit quand les soldes du Nouvel An commencent, directement dans votre boîte mail.",
+        "dock": "Alerte soldes du Nouvel An",
+        "done": "On vous écrit quand les soldes du Nouvel An commencent.",
+        "mailFrom": "Westpack",
+        "mailSubject": "Les soldes du Nouvel An ont commencé",
+        "mailPreview": "Les produits en fin de série sont soldés, dans la limite des stocks disponibles.",
+        "mailTime": "janvier"
       }
     },
     "proof": "Plus de 20 000 personnes en Europe et aux États-Unis reçoivent déjà la newsletter.",

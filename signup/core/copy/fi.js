@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -182,8 +183,13 @@
         "dock": "Uutisia Westpackilta"
       },
       "sale": {
-        "title": "Uudenvuoden ale alkaa tammikuussa. Kerromme, kun se alkaa.",
-        "dock": "Kerro, kun uudenvuoden ale alkaa"
+        "title": "Saat tiedon, kun uudenvuoden ale alkaa – suoraan sähköpostiisi.",
+        "dock": "Tieto uudenvuoden alen alusta",
+        "done": "Kirjoitamme, kun uudenvuoden ale alkaa.",
+        "mailFrom": "Westpack",
+        "mailSubject": "Uudenvuoden ale on alkanut",
+        "mailPreview": "Valikoimasta poistuvat tuotteet on alennettu – niin kauan kuin varastoa riittää.",
+        "mailTime": "tammikuu"
       }
     },
     "proof": "Yli 20 000 ihmistä Euroopassa ja Yhdysvalloissa saa jo uutiskirjeen.",

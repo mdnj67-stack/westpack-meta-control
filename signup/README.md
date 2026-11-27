@@ -13,7 +13,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 | Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 26 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
 | Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
-| Direkte | `concepts/direct.js/.css` | Permission først (2026-11-27): grund, felt og knap i første billede; lukket bliver den til en pille nederst; "Hvad sælger I?" efter tilmeldingen. Se `CONCEPTS.md`, koncept 4. Ikke live. |
+| Direkte | `concepts/direct.js/.css` | Permission først (2026-11-27): grund, felt og knap i første billede; lukket bliver den til en pille nederst; "Hvad sælger I?" efter tilmeldingen. 10/12–3/1 sin egen nytårsudsalgs-version ("Få besked, når nytårsudsalget starter – direkte i din indbakke"), aldrig "eksklusivt". Se `CONCEPTS.md`, koncept 4. Ikke live. |
 
 ## Sådan virker det
 

@@ -112,7 +112,15 @@
   direct: {
     seasons: {
       default: { title: "Nye æsker, frister og nytårsudsalget. Vi siger til i god tid.", dock: "Få nyt fra Westpack" },
-      sale: { title: "Nytårsudsalget starter i januar. Vi siger til, når det sker.", dock: "Få besked, når udsalget starter" },
+      sale: {
+        title: "Få besked, når nytårsudsalget starter – direkte i din indbakke.",
+        dock: "Få besked, når udsalget starter",
+        done: "Vi skriver, når nytårsudsalget starter.",
+        mailFrom: "Westpack",
+        mailSubject: "Nytårsudsalget er startet",
+        mailPreview: "Varer, der udgår, er sat ned – så længe lager haves.",
+        mailTime: "januar",
+      },
     },
     proof: "Over 20.000 i Europa og USA får allerede nyhedsbrevet.",
     successTitle: "Du er med.",

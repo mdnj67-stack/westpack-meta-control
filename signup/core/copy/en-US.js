@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -182,8 +183,13 @@
         "dock": "Get news from Westpack"
       },
       "sale": {
-        "title": "The New Year sale starts in January. We'll tell you when it does.",
-        "dock": "Hear when the New Year sale starts"
+        "title": "Hear when the New Year sale starts – straight to your inbox.",
+        "dock": "Hear when the sale starts",
+        "done": "We'll write when the New Year sale starts.",
+        "mailFrom": "Westpack",
+        "mailSubject": "The New Year sale has started",
+        "mailPreview": "Discontinued products are reduced – while stocks last.",
+        "mailTime": "January"
       }
     },
     "proof": "Over 20,000 people in Europe and the US already get the newsletter.",

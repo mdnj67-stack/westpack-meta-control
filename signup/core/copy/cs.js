@@ -10,7 +10,8 @@
     "goLiveRead": "2026-11-19: the Logo studio and shell strings read before going live in CZ (Claude, not a native speaker); the promise list followed the master instead of 'must-haves' -> 'nezbytnosti', 'tisk' -> 'potisk' as in the light hints",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -183,8 +184,13 @@
         "dock": "Novinky od Westpacku"
       },
       "sale": {
-        "title": "Novoroční výprodej začne v lednu. Dáme vám vědět, až to vypukne.",
-        "dock": "Upozornit na novoroční výprodej"
+        "title": "Dáme vám vědět, až začne novoroční výprodej – přímo do vaší schránky.",
+        "dock": "Upozornit na výprodej",
+        "done": "Napíšeme vám, až začne novoroční výprodej.",
+        "mailFrom": "Westpack",
+        "mailSubject": "Novoroční výprodej začal",
+        "mailPreview": "Produkty, které vyřazujeme z nabídky, jsou zlevněné – do vyprodání zásob.",
+        "mailTime": "leden"
       }
     },
     "proof": "Přes 20 000 lidí v Evropě a USA už newsletter dostává.",

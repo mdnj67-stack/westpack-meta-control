@@ -99,22 +99,30 @@ Hardcore på **hvor tidligt, hvor tit og hvor let** spørgsmålet stilles – al
 1. **E-mailen står i første billede.** Grund, felt, knap og butikkens egen samtykkesætning – intet før. På en computer
    står markøren allerede i feltet.
 2. **Grunden er konkret og følger kalenderen** (`rules.directSeason`): resten af året "Nye æsker, frister og
-   nytårsudsalget. Vi siger til i god tid." Fra 15. december til 3. januar alene nytårsudsalget, fordi det er dage væk.
-   Ingen rabat, ingen procent, ingen dato.
-3. **Rigtigt bevis:** seks kunders egne logo-æsker som billedvæg, og "Over 20.000 i Europa og USA får allerede
+   nytårsudsalget. Vi siger til i god tid." Ingen rabat, ingen procent, ingen dato.
+3. **Nytårsudsalget har sin egen version, 10. december – 3. januar** (brugeren 27/11: "sådan 10. dec agtigt. når vi lige
+   er totalt ovre det her bf"): "Få besked, når nytårsudsalget starter – direkte i din indbakke." Billedvæggen bliver til
+   en indbakke, hvor mailen "Nytårsudsalget er startet" lander øverst, med det ærlige preview "Varer, der udgår, er sat
+   ned – så længe lager haves." Efter tilmeldingen: "Vi skriver, når nytårsudsalget starter." Pillen siger "Få besked,
+   når udsalget starter". Den stopper 3. januar, fordi "når det starter" ikke er sandt, når det er startet (første mail
+   4/1). Knappen siger stadig "Tilmeld nyhedsbrevet" – det er nyhedsbrevet, de siger ja til.
+   **Aldrig "eksklusivt", "først", "før alle andre", "VIP" eller "early access"** (brugeren: "vi ikke siger eksklusivt
+   nytår på email for det er det ikke"): udsalget ligger i butikken for alle, mailen siger bare, hvornår det starter. En
+   test fejler, hvis et af de 17 sprog siger det, og oversættelsesværktøjet afviser det.
+4. **Rigtigt bevis:** seks kunders egne logo-æsker som billedvæg, og "Over 20.000 i Europa og USA får allerede
    nyhedsbrevet" (25.239 på de 18 lister 24/11; "over 20.000" holder med god margin).
-4. **Et "nej tak" er ikke slutningen.** Lukkes popuppen, bliver en lille pille stående nederst på siden – på denne og de
+5. **Et "nej tak" er ikke slutningen.** Lukkes popuppen, bliver en lille pille stående nederst på siden – på denne og de
    næste sider – ét tryk fra feltet (`rules.dockAllowed`). Popuppen selv holder samme pause som alle andre (14/45/120
    dage); pillen har sit eget kryds (14 dage). Den løfter sig over butikkens egne faste elementer (cookie-knap, chat,
    en klæbende kurv-bjælke).
-5. **Det, vi vil vide, kommer efter tilladelsen, aldrig før:** "Hvad sælger I?" med seks svar på ét tryk, frivilligt,
+6. **Det, vi vil vide, kommer efter tilladelsen, aldrig før:** "Hvad sælger I?" med seks svar på ét tryk, frivilligt,
    sendt som sin egen hændelse ("Signup Lab Answered", `wp_business_type`). Et oversprunget spørgsmål koster intet.
 
 Det, den ikke gør: intet forudkrydset, intet samtykke i et klik på noget andet, ingen cookie-mur eller mur foran
 indholdet, altid et synligt kryds, ingen skyld i et nej, og ingen e-mail opsamlet, før knappen er trykket.
 
-På en telefon er den et normalt popup-kort midt på skærmen: højst 74 % af en 360×640-skærm på det længste sprog, 67 % på
-en iPhone 13 – intet skal scrolles.
+På en telefon er den et normalt popup-kort midt på skærmen: højst 73 % af en 360×640-skærm på det længste sprog, 67 % på
+en iPhone 13, i begge versioner – intet skal scrolles, og mailens emnelinje klippes aldrig.
 
 ### Sådan bliver den målt
 

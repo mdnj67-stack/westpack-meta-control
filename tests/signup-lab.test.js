@@ -427,10 +427,11 @@ test("direct: the dock follows a seen and closed popup, never a subscriber, an e
   assert.equal(R.dockAllowed({ ...seen, dockDismissedAt: now - 15 * DAY }, cooling, now, "direct"), true);
 });
 
-test("direct: the New Year sale leads from 15 December to 3 January, news and deadlines the rest of the year", () => {
+test("direct: the New Year sale has its own version from 10 December to 3 January, news and deadlines the rest of the year", () => {
+  // the user, 2026-11-27: "sådan 10. dec agtigt. når vi lige er totalt ovre det her bf"
   const at = (s) => R.directSeason(new Date(s));
-  assert.equal(at("2026-12-14T12:00:00"), "default");
-  assert.equal(at("2026-12-15T08:00:00"), "sale");
+  assert.equal(at("2026-12-09T12:00:00"), "default");
+  assert.equal(at("2026-12-10T08:00:00"), "sale");
   assert.equal(at("2027-01-03T20:00:00"), "sale");
   assert.equal(at("2027-01-04T08:00:00"), "default");
   assert.equal(at("2026-06-01T12:00:00"), "default");
@@ -445,6 +446,18 @@ test("direct: the New Year sale leads from 15 December to 3 January, news and de
     assert.match(c.proof, /20[ .,\u00a0\u202f]?000/, `${f} proof`);
     assert.doesNotMatch(JSON.stringify(c), /%|\b\d{1,2}\.?\s?(januar|january|janvier|gennaio|enero|januari|janeiro|ledna|január)/i, `${f}: no discount or date`);
     assert.deepEqual(Object.keys(c.types).sort(), R.BUSINESS_TYPES.slice().sort(), `${f} answers`);
+    // the sale's own version: the mail that will land, and the line after the signup
+    for (const k of ["mailFrom", "mailSubject", "mailPreview", "mailTime", "done"]) assert.ok(c.seasons.sale[k], `${f} sale.${k}`);
+    assert.equal(c.seasons.sale.mailFrom, "Westpack", `${f} the sender is Westpack`);
+  }
+});
+
+test("direct: the New Year sale is never called exclusive, early or first - it is on the store for everyone", () => {
+  // the user, 2026-11-27: "Vigtigt er at vi ikke siger eksklusivt nytår på email for det er det ikke"
+  const EXCLUSIVE = /e(x|ks|s)[ck]lu[sz][iíy]|\bvip\b|early access|before anyone|\bfirst\b|vorab|avant-premi|en premier|in anteprima|per primi|in anticipo|antes que nadie|als eerste|jako pierwsi|elsőként|ensimmäis|primeir|primii|prv[ií]|ennakk|z wyprzedzeniem|\bførst|\bförst/i;
+  for (const f of fs.readdirSync(COPY_DIR)) {
+    const c = loadCopy(f.replace(/\.js$/, "")).direct;
+    assert.doesNotMatch(JSON.stringify(c), EXCLUSIVE, `${f}: Direct says exclusive, early or first`);
   }
 });
 

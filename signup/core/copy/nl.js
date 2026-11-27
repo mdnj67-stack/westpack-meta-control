@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -182,8 +183,13 @@
         "dock": "Nieuws van Westpack"
       },
       "sale": {
-        "title": "De nieuwjaarsuitverkoop start in januari. We geven je een seintje als het zover is.",
-        "dock": "Seintje bij nieuwjaarsuitverkoop"
+        "title": "Krijg een seintje als de nieuwjaarsuitverkoop start – direct in je inbox.",
+        "dock": "Seintje bij nieuwjaarsuitverkoop",
+        "done": "We sturen je een bericht als de nieuwjaarsuitverkoop start.",
+        "mailFrom": "Westpack",
+        "mailSubject": "De nieuwjaarsuitverkoop is gestart",
+        "mailPreview": "Uitlopende producten zijn afgeprijsd – zolang de voorraad strekt.",
+        "mailTime": "januari"
       }
     },
     "proof": "Meer dan 20.000 mensen in Europa en de VS krijgen de nieuwsbrief al.",

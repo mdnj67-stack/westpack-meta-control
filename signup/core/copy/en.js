@@ -112,7 +112,15 @@
   direct: {
     seasons: {
       default: { title: "New boxes, deadlines and the New Year sale. We'll tell you in good time.", dock: "Get news from Westpack" },
-      sale: { title: "The New Year sale starts in January. We'll tell you when it does.", dock: "Hear when the New Year sale starts" },
+      sale: {
+        title: "Hear when the New Year sale starts – straight to your inbox.",
+        dock: "Hear when the New Year sale starts",
+        done: "We'll write when the New Year sale starts.",
+        mailFrom: "Westpack",
+        mailSubject: "The New Year sale has started",
+        mailPreview: "Discontinued products are reduced – while stocks last.",
+        mailTime: "January",
+      },
     },
     proof: "Over 20,000 people in Europe and the US already get the newsletter.",
     successTitle: "You're in.",

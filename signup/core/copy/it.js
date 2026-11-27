@@ -9,7 +9,8 @@
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
     "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
+    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -182,8 +183,13 @@
         "dock": "Novità da Westpack"
       },
       "sale": {
-        "title": "I saldi di Capodanno iniziano a gennaio. Ti avvisiamo quando partono.",
-        "dock": "Avvisami: saldi di Capodanno"
+        "title": "Ti avvisiamo quando iniziano i saldi di Capodanno – direttamente nella tua casella di posta.",
+        "dock": "Avvisami: iniziano i saldi",
+        "done": "Ti scriviamo quando iniziano i saldi di Capodanno.",
+        "mailFrom": "Westpack",
+        "mailSubject": "Sono iniziati i saldi di Capodanno",
+        "mailPreview": "I prodotti fuori produzione sono scontati – fino a esaurimento scorte.",
+        "mailTime": "gennaio"
       }
     },
     "proof": "Oltre 20.000 persone in Europa e negli Stati Uniti ricevono già la newsletter.",
