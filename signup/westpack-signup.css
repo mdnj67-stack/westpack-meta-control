@@ -132,7 +132,9 @@
 .wps-link { background: none; border: 0; padding: 6px 0; color: var(--wps-muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: 14px; }
 .wps-error { min-height: 0; margin: 0; font-size: 13.5px; color: var(--wps-error); font-weight: 550; }
 .wps-error:empty { display: none; }
-.wps-consent { margin: 2px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--wps-muted); text-wrap: pretty; }
+/* the consent sentence is what a signup rests on, so it is set to be read: 5.8:1 on the paper (the muted grey it had was
+   4.0:1, under the 4.5:1 small text needs - found by tools/signup/consent-check.js on 2026-11-27) */
+.wps-consent { margin: 2px 0 0; font-size: 11.5px; line-height: 1.5; color: #625D56; text-wrap: pretty; }
 .wps-consent a { color: inherit; text-underline-offset: 2px; }
 .wps-promise { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--wps-body); }
 .wps-promise li { display: flex; gap: 10px; align-items: baseline; }

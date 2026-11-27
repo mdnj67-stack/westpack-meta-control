@@ -85,6 +85,28 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 - Tracking indeholder aldrig e-mail eller navn: både browseren og serveren afviser enhver værdi med "@", og
   kun en fast liste af felter gemmes (testet).
 
+### Samtykke-tjek – kør dem før en oplevelse går live (2026-11-27)
+
+Brugeren: "Vi skal virkeligt være grundigt, det omhander jo permissions". To værktøjer, der tilsammen dækker det, en
+tilmelding hviler på:
+
+- **`node tools/signup/consent-check.js [oplevelse,...]`** – i den rigtige runtime, alle 18 markeder, telefon og computer:
+  butikkens samtykketekst ordret, inde i formularen, synlig uden at scrolle, højst 40 px fra knappen, mindst 11 px og
+  4,5:1 i kontrast; markedets privatlivslink (egne ord, ny fane); knappen siger nyhedsbrev; tomt, påkrævet e-mailfelt;
+  ingen afkrydsningsfelter; intet til Klaviyo før klik og aldrig en ugyldig adresse; et dobbeltklik = præcis én
+  tilmelding (TEST-listen i preview, SUBSCRIBED, kun e-mail, den viste tekst gemt på profilen, kilden og marked/sprog
+  rigtige); takkebeskeden først derefter; live = markedets egen konto og liste. Klaviyo opfanges, intet sendes.
+- **`node tools/signup/permission-live-check.js`** – mod de rigtige systemer, kun læsning: privatlivssiden svarer 200,
+  samtykketeksten står stadig ordret på butikkens egen /newsletter-signup-side (Magento skriver "æ" som `&aelig;`, så
+  der afkodes først), listen findes og er single opt-in, og medlemstallet (25.192 på de 18 lister 27/11 – grundlaget for
+  "over 20.000 får allerede nyhedsbrevet").
+- Og én rigtig tilmelding til TEST-listen: `E2E_ONLY=<oplevelse> node tools/signup/klaviyo-e2e.js` (sletter profilen).
+
+**Fundet 27/11 og rettet:** samtykketeksten stod i lys grå med kontrast 4,0:1 i alle oplevelser (også det live
+Logo-studie) – under de 4,5:1, så lille tekst kræver. Den er nu 5,8:1 i skallen (Nytårsudsalg 6,8:1).
+**Fundet 27/11, ikke rettet:** i **Pakket & sendt** står samtykketeksten under skærmkanten på en telefon i de fleste
+sprog (den gamle bundark-opsætning med et højt foto). Den er ikke live; ret det i dens designløft, før den bruges.
+
 ## Tracking og måling
 
 Pr. visning (en oplevelse, der blev vist) gemmes én post: marked, sprog, oplevelse, enhed, trigger, udfald og
