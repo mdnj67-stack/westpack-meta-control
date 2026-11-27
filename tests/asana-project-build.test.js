@@ -13,7 +13,8 @@ const OUTSIDER = "99";
 // An in-memory Asana: the owner (42) is in team "Marketing" (500), Martin (77) is in the workspace, 99 is not.
 // New projects come with an empty "Untitled section", and a new card lands at the top of its column, so the
 // build has to put the cards in order itself.
-function fakeAsana({ projects = [] } = {}) {
+function fakeAsana({ projects = [], failFirstTask = false } = {}) {
+  let failTask = failFirstTask;
   const state = {
     projects: projects.map((project) => ({ ...project })),
     sections: [],
@@ -84,6 +85,10 @@ function fakeAsana({ projects = [] } = {}) {
       if (!body.workspace && !body.projects && !body.parent) {
         return new Response(JSON.stringify({ errors: [{ message: "You should specify one of workspace, parent, projects" }] }), { status: 400 });
       }
+      if (failTask) {
+        failTask = false;
+        return new Response(JSON.stringify({ errors: [{ message: "Something went wrong" }] }), { status: 500 });
+      }
       const [membership] = body.memberships;
       state.tasks.unshift({ gid: gid(), name: body.name, notes: body.html_notes, project: membership.project, section: membership.section });
       return ok({ gid: state.tasks[0].gid });
@@ -143,6 +148,24 @@ test("a new project: in the owner's team, Martin as editor, columns and cards in
     assert.equal(state.tasks.find((task) => task.name === "Sådan bruger vi projektet").notes, '<body>Hej <a data-asana-gid="77"/>\nSmid idéer her.</body>');
     assert.equal(result.tasks.created, 4);
     assert.deepEqual(result.members.added, ["Martin"]);
+  } finally {
+    asana.restore();
+  }
+});
+
+test("a build that failed at the cards is finished by the same request, and the empty Untitled section still goes", async () => {
+  const asana = fakeAsana({ failFirstTask: true });
+  try {
+    await assert.rejects(buildAsanaProject(config, OUTLINE));
+    assert.ok(asana.state.sections.some((section) => section.name === "Untitled section"));
+    const retry = await buildAsanaProject(config, OUTLINE);
+    assert.equal(retry.done, true);
+    assert.equal(retry.project.created, false);
+    assert.deepEqual(retry.sections.removed, ["Untitled section"]);
+    assert.deepEqual(retry.sections.other, []);
+    assert.deepEqual(asana.state.sections.map((section) => section.name), ["Indbakke", "Grundbeslutninger", "Parkeret"]);
+    assert.equal(asana.state.tasks.length, 4);
+    assert.deepEqual(asana.state.memberships.map((item) => item.member), [MARTIN]);
   } finally {
     asana.restore();
   }

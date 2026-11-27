@@ -1091,9 +1091,10 @@ async function buildAsanaProject(config, input = {}, { now = Date.now, budgetMs 
     }
   }
 
-  // A new project may come with an empty "Untitled section"; it goes once the outline's columns exist.
+  // A new project may come with an empty "Untitled section"; it goes once the outline's columns exist - also on a
+  // repeat call, because the call that created the project may have stopped before it got here (27/11: it did).
   const removedSections = [];
-  if (createdProject) {
+  if (!remaining) {
     for (const section of existingSections) {
       const sectionName = String(section?.name || "").trim();
       if (sectionName.toLowerCase() !== "untitled section" || outline.sections.some((item) => item.name.toLowerCase() === "untitled section")) continue;
@@ -1116,7 +1117,14 @@ async function buildAsanaProject(config, input = {}, { now = Date.now, budgetMs 
     },
     team: { gid: String(team.gid), name: String(team.name || "") },
     members: { added: addedMembers, all: Object.values(people) },
-    sections: { created: createdSections, removed: removedSections, order: outline.sections.map((section) => section.name) },
+    sections: {
+      created: createdSections,
+      removed: removedSections,
+      order: outline.sections.map((section) => section.name),
+      other: existingSections
+        .map((section) => String(section?.name || "").trim())
+        .filter((sectionName) => !removedSections.includes(sectionName) && !outline.sections.some((item) => item.name.toLowerCase() === sectionName.toLowerCase()))
+    },
     tasks: { created: createdTasks, existing: outline.sections.reduce((sum, section) => sum + section.tasks.length, 0) - createdTasks - remaining, remaining, moved },
     done: remaining === 0
   };
