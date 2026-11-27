@@ -1,40 +1,79 @@
-/* New Year sale. An inbox in the brand's deep green with a few gold sparks, the mail the visitor asks for landing on
-   top, and beside it (under it on a phone) the promise, the field, the button and the consent - nothing before the
-   email. On a phone it is a normal popup card in the middle of the view, small enough to leave the store in sight. */
+/* New Year sale. The store's own palette - deep green, cream, gold foil (its hero is a green bag foil-printed in gold
+   beside a cream one) - with New Year only in the picture: a deep green night, the coming year in gold foil with a
+   light sweeping across it, thin gold bursts that bloom and fade, slow confetti. The form side stays calm and cream.
+   On a phone it is a normal popup card in the middle of the view, small enough to leave the store in sight. */
 .ny { display: grid; grid-template-columns: minmax(0, 1fr); }
 
-/* ---- the inbox ---- */
-.ny-inbox {
-  position: relative; display: grid; align-content: center; justify-items: center; padding: 12px 14px; overflow: hidden;
+/* ---- the night ---- */
+.ny-scene {
+  position: relative; isolation: isolate; overflow: hidden; display: grid; align-content: center; justify-items: center;
+  padding: 12px 14px;
   background:
-    radial-gradient(circle at 14% 18%, rgba(233, 211, 161, 0.7) 0 1.4px, transparent 2.2px),
-    radial-gradient(circle at 82% 12%, rgba(233, 211, 161, 0.55) 0 1.2px, transparent 2px),
-    radial-gradient(circle at 90% 78%, rgba(233, 211, 161, 0.6) 0 1.6px, transparent 2.4px),
-    radial-gradient(circle at 8% 86%, rgba(233, 211, 161, 0.45) 0 1.2px, transparent 2px),
-    radial-gradient(circle at 60% 94%, rgba(233, 211, 161, 0.4) 0 1px, transparent 1.8px),
-    radial-gradient(120% 90% at 30% 15%, #2f423b 0%, var(--wps-green-deep) 58%, #161f1b 100%);
+    radial-gradient(60% 46% at 50% 26%, rgba(233, 211, 161, 0.16) 0%, rgba(233, 211, 161, 0) 70%),
+    radial-gradient(130% 95% at 30% 10%, #2f433c 0%, var(--wps-green-deep) 55%, #131b18 100%);
 }
-.ny-inbox-list { width: 100%; max-width: 300px; display: grid; gap: 8px; }
+.ny-sky { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+/* a thin gold foil edge where the night meets the cream: under the band on a phone, down the side on a computer */
+.ny-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, rgba(233, 211, 161, 0), rgba(233, 211, 161, 0.75) 50%, rgba(233, 211, 161, 0)); }
+
+/* bursts: thin gold rays that bloom from a spark and fade */
+.ny-burst {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%; opacity: 0; transform: scale(0.35);
+  background: repeating-conic-gradient(from 6deg, rgba(243, 223, 168, 0.95) 0deg 1.3deg, transparent 1.3deg 15deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 15%, #000 23%, #000 38%, transparent 50%);
+  mask: radial-gradient(circle, transparent 0 15%, #000 23%, #000 38%, transparent 50%);
+  animation: ny-burst 4.4s var(--wps-ease-out) var(--delay) infinite;
+}
+@keyframes ny-burst { 0% { opacity: 0; transform: scale(0.35); } 12% { opacity: 0.9; } 58% { opacity: 0; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+
+/* confetti: each piece rides a column as tall as the scene, so a fall of 100% is exactly the scene's height */
+.ny-fall { position: absolute; top: 0; left: var(--x); width: 8px; height: 100%; animation: ny-fall var(--d) linear var(--delay) infinite; }
+.ny-fall i { position: absolute; top: -14px; left: 0; display: block; width: 5px; height: 11px; border-radius: 1.5px; background: var(--c); animation: ny-flip calc(var(--d) / 5) linear infinite; }
+.ny-fall.is-dot i { width: 6px; height: 6px; border-radius: 50%; }
+.ny-fall.is-gold { --c: linear-gradient(180deg, #f3dfa8, #b8955a); }
+.ny-fall.is-cream { --c: #f5f1ea; }
+.ny-fall.is-red { --c: #c8141c; }
+@keyframes ny-fall { 0% { transform: translate3d(0, -4%, 0); } 50% { transform: translate3d(var(--sway), 50%, 0); } 100% { transform: translate3d(0, 104%, 0); } }
+@keyframes ny-flip { to { transform: rotate3d(1, 0.4, 0.2, 360deg); } }
+
+/* the coming year in gold foil, a light sweeping slowly across it */
+.ny-year {
+  position: relative; display: block; font-family: var(--wps-display); font-weight: 600; font-size: 60px; line-height: 0.9;
+  letter-spacing: -0.03em; font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 144; font-variant-numeric: lining-nums;
+  background: linear-gradient(105deg, #7a5c25 0%, #c9a465 16%, #fff2c9 27%, #d9b873 38%, #8f6d31 54%, #ecd6a2 70%, #a98545 86%, #f3e1ae 100%);
+  background-size: 260% 100%; background-position: 40% 50%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255, 238, 196, 0.22)) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+  animation: ny-year-in 900ms var(--wps-ease-out) 100ms both;
+}
+@keyframes ny-year-in { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes ny-foil { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+
+/* ---- the inbox (computer): the mail they ask for lands below the year ---- */
+.ny-inbox-list { width: 100%; max-width: 288px; display: grid; gap: 8px; }
 .ny-mail { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; border-radius: 12px; min-width: 0; }
 .ny-mail-av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 600 17px/1 var(--wps-display); }
 .ny-mail-body { display: grid; gap: 1px; min-width: 0; }
-.ny-mail.is-new { position: relative; background: #fff; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(233, 211, 161, 0.5); animation: ny-arrive 760ms var(--wps-ease-out) 420ms both; }
+.ny-mail.is-new { position: relative; background: #fff; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(233, 211, 161, 0.55); animation: ny-arrive 760ms var(--wps-ease-out) 650ms both; }
 .ny-mail.is-new::before { content: ""; position: absolute; left: -4px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--wps-gold); box-shadow: 0 0 0 2px #fff; }
 .ny-mail.is-new .ny-mail-av { background: var(--wps-green); color: var(--wps-gold-hi); }
 .ny-mail-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; min-width: 0; }
 .ny-mail-from { font-size: 13px; font-weight: 700; color: var(--wps-ink); }
 .ny-mail-time { font-size: 11.5px; color: var(--wps-green); font-weight: 600; white-space: nowrap; }
-.ny-mail-subj { font-size: 13.5px; font-weight: 650; color: var(--wps-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ny-mail-prev { font-size: 12.5px; color: var(--wps-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ny-mail.is-older { background: rgba(255, 255, 255, 0.08); animation: ny-make-room 760ms var(--wps-ease-out) 420ms both; opacity: calc(1 - var(--i) * 0.22); }
-.ny-mail.is-older .ny-mail-av { background: rgba(255, 255, 255, 0.12); }
-.ny-mail.is-older i { display: block; height: 7px; margin: 4px 0; border-radius: 4px; background: rgba(255, 255, 255, 0.16); }
+.ny-mail-subj { font-size: 13.5px; font-weight: 650; color: var(--wps-ink); }
+.ny-mail-prev { font-size: 12.5px; color: var(--wps-muted); }
+.ny-mail-subj, .ny-mail-prev { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ny-mail.is-older { background: rgba(255, 255, 255, 0.07); animation: ny-make-room 760ms var(--wps-ease-out) 650ms both; opacity: calc(1 - var(--i) * 0.28); }
+.ny-mail.is-older .ny-mail-av { background: rgba(255, 255, 255, 0.11); }
+.ny-mail.is-older i { display: block; height: 7px; margin: 4px 0; border-radius: 4px; background: rgba(255, 255, 255, 0.15); }
 .ny-mail.is-older i:nth-child(1) { width: 38%; } .ny-mail.is-older i:nth-child(2) { width: 82%; } .ny-mail.is-older i:nth-child(3) { width: 64%; }
-@keyframes ny-arrive { from { opacity: 0; transform: translateY(-30px) scale(0.95); } to { opacity: 1; transform: none; } }
-@keyframes ny-make-room { from { transform: translateY(-66px); } to { transform: none; } }
+@keyframes ny-arrive { from { opacity: 0; transform: translateY(-26px) scale(0.95); } to { opacity: 1; transform: none; } }
+@keyframes ny-make-room { from { transform: translateY(-60px); } to { transform: none; } }
 
-/* ---- the ask ---- */
+/* ---- the ask: calm, cream, one gold star by the kicker ---- */
 .ny-side { padding: 18px 20px 20px; min-width: 0; }
+.ny-kicker::before { content: "\2726"; color: var(--wps-gold); margin-right: 7px; font-size: 1.15em; letter-spacing: 0; }
 .ny-title { font-size: clamp(24px, 6.6vw, 30px); margin-bottom: 10px; }
 .ny-proof { margin: 0 0 14px; font-size: 13.5px; font-weight: 550; color: var(--wps-body); }
 .ny-form .wps-consent { font-size: 11px; }
@@ -71,15 +110,9 @@
 /* the kicker goes on a phone (the headline and a button that says newsletter are enough); the label stays for screen readers */
 :where(.wps:not([data-device="desktop"])) .ny-kicker { display: none; }
 :where(.wps:not([data-device="desktop"])) .ny-form .wps-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-:where(.wps:not([data-device="desktop"])) .ny.is-done .ny-inbox { display: none; }
-:where(.wps:not([data-device="desktop"])) .ny.is-done .ny-side { padding-top: 26px; }
-/* the inbox is a band: the arriving mail alone, clear of the close button */
-:where(.wps:not([data-device="desktop"])) .ny-inbox { height: 84px; padding: 8px 54px 8px 14px; justify-items: start; }
-:where(.wps:not([data-device="desktop"])) .ny-inbox-list { max-width: none; }
-:where(.wps:not([data-device="desktop"])) .ny-mail { padding: 8px 10px; }
-/* the subject is the message: it may take two lines rather than end in "…"; the preview gives way on a phone */
-:where(.wps:not([data-device="desktop"])) .ny-mail-subj { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.22; }
-:where(.wps:not([data-device="desktop"])) .ny-mail-prev { display: none; }
+/* the night is a band with the year in it, and it stays for the thank-you */
+:where(.wps:not([data-device="desktop"])) .ny-scene { height: 88px; padding: 0; place-content: center; }
+:where(.wps:not([data-device="desktop"])) .ny.is-done .ny-side { padding-top: 22px; }
 :where(.wps:not([data-device="desktop"])) .ny-title.is-long { font-size: clamp(21px, 5.8vw, 26px); }
 /* typing: the card stands at the top of what the keyboard leaves, and may scroll there */
 :where(.wps:not([data-device="desktop"])).is-kb[data-concept="new-year-sale"] .wps-dialog {
@@ -88,28 +121,32 @@
 .wps[data-reduced="true"]:not([data-device="desktop"]).is-kb[data-concept="new-year-sale"] .wps-dialog { transform: translateX(-50%) !important; }
 /* a short view (a 360x640 Android, an iPhone SE): a lower band and a smaller headline */
 @media (max-height: 700px) {
+  :where(.wps:not([data-device="desktop"])) .ny-scene { height: 66px; }
+  :where(.wps:not([data-device="desktop"])) .ny-year { font-size: 46px; }
   :where(.wps:not([data-device="desktop"])) .ny-side { padding-top: 14px; }
   :where(.wps:not([data-device="desktop"])) .ny-title { font-size: 22px; margin-bottom: 8px; }
   :where(.wps:not([data-device="desktop"])) .ny-proof { font-size: 12.5px; margin-bottom: 12px; }
-  :where(.wps:not([data-device="desktop"])) .ny-inbox { height: 62px; padding-block: 6px; }
-  :where(.wps:not([data-device="desktop"])) .ny-mail { padding: 6px 10px; grid-template-columns: 28px minmax(0, 1fr); align-items: center; }
-  :where(.wps:not([data-device="desktop"])) .ny-mail-av { width: 28px; height: 28px; font-size: 15px; }
-  /* in the low band the avatar says who it is from; the subject keeps its two lines */
-  :where(.wps:not([data-device="desktop"])) .ny-mail-top { display: none; }
   :where(.wps:not([data-device="desktop"])) .ny-title.is-long { font-size: 20px; }
 }
 @media (max-width: 359px) {
   :where(.wps:not([data-device="desktop"])) .ny-side { padding: 14px 16px 18px; }
 }
 
-/* ---- a computer: the inbox on the left, the ask beside it ---- */
+/* ---- a computer: the night on the left with the year and the inbox, the ask beside it; the light sweeps ---- */
 @media (min-width: 760px) {
   .wps[data-device="desktop"][data-concept="new-year-sale"] .wps-dialog { width: min(860px, calc(100vw - 48px)); }
   :where(.wps[data-device="desktop"]) .ny { grid-template-columns: 340px minmax(0, 1fr); min-height: 510px; }
-  :where(.wps[data-device="desktop"]) .ny-inbox { padding: 28px 26px; }
+  :where(.wps[data-device="desktop"]) .ny-scene { padding: 34px 26px 30px; gap: 22px; }
+  :where(.wps[data-device="desktop"]) .ny-scene::after { left: auto; top: 0; width: 2px; height: auto; background: linear-gradient(180deg, rgba(233, 211, 161, 0), rgba(233, 211, 161, 0.65) 50%, rgba(233, 211, 161, 0)); }
+  :where(.wps[data-device="desktop"]) .ny-year { font-size: 112px; animation: ny-year-in 900ms var(--wps-ease-out) 100ms both, ny-foil 7s ease-in-out 1s infinite alternate; }
   :where(.wps[data-device="desktop"]) .ny-inbox-list { gap: 10px; }
-  :where(.wps[data-device="desktop"]) .ny-mail-prev, :where(.wps[data-device="desktop"]) .ny-mail-subj { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   :where(.wps[data-device="desktop"]) .ny-side { align-self: center; padding: 44px 44px 40px 40px; }
   :where(.wps[data-device="desktop"]) .ny-title { font-size: 34px; }
 }
+
+/* reduced motion: everything in place, nothing moving - the confetti resting where it would be mid-fall */
+.wps[data-reduced="true"] .ny-fall { animation: none !important; transform: translateY(var(--rest)); }
+.wps[data-reduced="true"] .ny-fall i { animation: none !important; transform: rotate(28deg); }
+.wps[data-reduced="true"] .ny-burst { animation: none !important; opacity: 0.4; transform: scale(0.9); }
+.wps[data-reduced="true"] .ny-year { animation: none !important; }
 .wps[data-reduced="true"] .ny-check-path { stroke-dashoffset: 0; }

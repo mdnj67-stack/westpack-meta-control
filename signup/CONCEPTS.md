@@ -98,5 +98,12 @@ vi lige er totalt ovre det her bf" – som en selvstændig oplevelse ("en specif
 - **Den kan ikke stå forkert:** live kører den kun 1. november – 3. januar (`CONCEPT_SEASONS` i `core/rules.js`). Står
   Control stadig på den 4. januar, viser butikkerne Logo-studiet af sig selv, for "når det starter" er ikke sandt, når
   det er startet. Preview viser den alle dage.
+- **Udtrykket** (brugeren: "lidt mere lækker, lidt mere nytår ... uden at stikke totalt ud"): butikkens egen forside er en
+  mørkegrøn pose med guldfolie ved siden af en cremefarvet, så paletten er den samme – en mørkegrøn nat på billedsiden,
+  creme på formularsiden. Nytåret ligger kun i billedet: det kommende år i guldfolie (Westpack trykker i folie) med et lys,
+  der glider over, tynde guldstråler, der blusser op og falmer, og langsom konfetti i guld, creme og lidt af butikkens
+  rød. På en computer lander mailen under årstallet. Formularsiden er rolig med én guldstjerne ved overskriften. Kun
+  transforms; ingen lysbevægelse på telefon, intet der bevæger sig ved "reduceret bevægelse". Årstallet er det næste
+  nytår (november–december: næste år).
 - Højst 72 % af en 360×640-skærm i det længste sprog; emnelinjen i indbakken klippes aldrig.
 - Teksterne er gpt-5.6's, ingen modersmålslæsning endnu.
