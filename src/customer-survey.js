@@ -158,7 +158,7 @@ function renderDelivery() {
     return used.length ? `<br><span class="survey-muted">${used.map((k) => `${escapeHtml(k.label)} ${k.count}`).join(" · ")}</span>` : "";
   };
   return `<h3 class="survey-subhead">What came back from the mail</h3>
-    <p class="survey-summary"><strong>${KR.format(d.mailed)}</strong> customers mailed · <strong>${d.answered}</strong> answered (${pct(d.answered, d.mailed)}) · <strong>${d.notReached}</strong> reached no one (${pct(d.notReached, d.mailed)})${d.updatedAt ? ` <span class="survey-muted">· read from the Westpack inbox ${escapeHtml(when(d.updatedAt))}</span>` : ""}</p>
+    <p class="survey-summary"><strong>${KR.format(d.mailed)}</strong> customers mailed · <strong>${d.notReached}</strong> reached no one (${pct(d.notReached, d.mailed)}) · ${d.items.length - d.notReached} arrived with an automatic reply${d.updatedAt ? ` <span class="survey-muted">· read from the Westpack inbox ${escapeHtml(when(d.updatedAt))}</span>` : ""}</p>
     <div class="survey-delivery">
       <div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
         <thead><tr><th>What came back</th><th class="is-numeric">Customers</th><th class="is-numeric">Of mailed</th><th aria-hidden="true"></th></tr></thead>
@@ -238,7 +238,9 @@ function render() {
   node.innerHTML = `
     ${t.recipients ? "" : '<div class="wp-alert is-warning"><div><strong>No recipient list yet.</strong> Answers are still saved, but no personal links have been made.</div></div>'}
     ${state.data.unreadable ? `<div class="wp-alert is-warning"><div><strong>${state.data.unreadable} saved ${state.data.unreadable === 1 ? "answer" : "answers"} could not be read just now</strong> and ${state.data.unreadable === 1 ? "is" : "are"} not in the figures below. Nothing is lost - press Read again.</div></div>` : ""}
-    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"}${t.fromMail ? ` (${t.fromMail} by reply to the mail)` : ""} · <strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%) · ${t.anonymous} without a link${t.wantsContact ? ` · <strong>${t.wantsContact}</strong> want to be contacted` : ""}</p>
+    <p class="survey-summary"><strong>${t.answers}</strong> ${t.answers === 1 ? "answer" : "answers"}${t.fromMail ? ` (${t.fromMail} by reply to the mail)` : ""} · ${state.data.delivery
+      ? `<strong>${state.data.delivery.answered}</strong> of the ${KR.format(state.data.delivery.mailed)} customers mailed so far (${pct(state.data.delivery.answered, state.data.delivery.mailed)}) · ${KR.format(t.recipients)} on the list`
+      : `<strong>${t.fromRecipients}</strong> of ${t.recipients} customers with a personal link (${rate}%)`} · ${t.anonymous} without a link${t.wantsContact ? ` · <strong>${t.wantsContact}</strong> want to be contacted` : ""}</p>
     ${renderDelivery()}
     ${state.data.reasons.some((r) => r.count) ? `<div class="wp-table-wrap"><table class="wp-table survey-table survey-reasons">
       <thead><tr><th>Main reason</th><th class="is-numeric">Answers</th><th class="is-numeric">Share</th><th aria-hidden="true"></th></tr></thead>

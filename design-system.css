@@ -7107,7 +7107,7 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
 
 .survey-delivery {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr) max-content;
   gap: var(--wp-space-4);
   align-items: start;
   margin-bottom: var(--wp-space-4);
@@ -7115,6 +7115,14 @@ body[data-workspace="signup"] .subnav-button.active .wp-nav-icon {
 
 .survey-delivery .survey-reasons {
   margin-bottom: 0;
+}
+
+.survey-delivery .survey-reasons .survey-bar-cell {
+  width: 24%;
+}
+
+.survey-delivery .is-numeric {
+  white-space: nowrap;
 }
 
 .survey-bar.is-muted {
