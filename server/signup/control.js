@@ -32,9 +32,7 @@ const STORE_CHECK_FRESH_MS = 10 * 60 * 1000;
 // What the page says about each experience. The order is the order they take their turn.
 const CONCEPTS = [
   { id: "logo-studio", name: "Logo studio", line: "Your brand name in foil on six real Westpack lids, live.", image: "/signup/cards/logo-studio.jpg" },
-  { id: "swipe-match", name: "Swipe match", line: "Swipe six real boxes, get a packaging profile.", image: "/signup/assets/swipe/monaco-600.webp" },
-  { id: "pack-and-ship", name: "Pack & ship", line: "The email address is printed on a shipping label.", image: "/signup/assets/ship/mailer-720.webp" },
-  { id: "direct", name: "Direct", line: "Permission first: the reason, the field and the button in the first frame; closed, it docks as a small pill.", image: "/signup/assets/logo/proof-14-360.webp" }
+  { id: "pack-and-ship", name: "Pack & ship", line: "The email address is printed on a shipping label.", image: "/signup/assets/ship/mailer-720.webp" }
 ];
 
 // The one line that goes on every store (signup/IMPLEMENTERING.md), and where it goes.

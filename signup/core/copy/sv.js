@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 0 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, du är med.",
     "successBody": "Nästa gång vi har något värt att öppna ligger det i din inkorg."
   },
-  "swipe-match": {
-    "peek": "Svep fram din förpackningsstil",
-    "peekCta": "Starta",
-    "kicker": "Askmatchning",
-    "title": "Hjärta eller nej tack?",
-    "lede": "Sex askar. Svep dem. Vi berättar vad de säger om ditt varumärke.",
-    "like": "Ja tack",
-    "nope": "Nej tack",
-    "keysHint": "Piltangenterna funkar också: ← nej · → ja",
-    "progress": "{n} av {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco presentask",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Gångjärnslock och guldkant. Klassikern som aldrig blir tråkig.",
-      "seoul": "En ultraplatt utdragslåda i dammgrönt. Diskret – tills den öppnas.",
-      "madrid": "Soft touch utanpå, velour inuti och en hylsa runtom.",
-      "oslo": "Konstläder och velour. En bästsäljare bland askar med gångjärnslock.",
-      "monaco": "En presentask som ser ut som en liten handväska. Med satinband.",
-      "tokyo": "Avtagbart lock och gott om plats för din logotyp."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Midnatt",
-        "line": "Mörkt, skarpt och med guld. Dina kunder öppnar asken långsamt."
-      },
-      "cocoa": {
-        "name": "Kakao",
-        "line": "Varmt och mjukt. En sådan ask som folk sparar."
-      },
-      "forest": {
-        "name": "Skogsmark",
-        "line": "Grönt, lugnt och genomtänkt. Ända ner till bandet."
-      },
-      "sand": {
-        "name": "Sand",
-        "line": "Ljust, luftigt och nordiskt. Smycket får hela scenen."
-      }
-    },
-    "resultKicker": "Din förpackningsprofil",
-    "resultTitle": "Du är {pct} % {world}.",
-    "resultSecond": "… och {pct} % {world}.",
-    "noneTitle": "Inte ett enda hjärta? Respekt.",
-    "noneLine": "De kräsnaste inköparna bygger de bästa varumärkena. Vi har betydligt fler askar än vad som ryms här.",
-    "ctaTitle": "Vill du ha nytt i din stil?",
-    "restart": "Svep igen",
-    "seeBoxes": "Se smyckesaskarna",
-    "successTitle": "Noterat: {world}.",
-    "successBody": "Vi ses i inkorgen."
-  },
   "pack-and-ship": {
     "peek": "Vi har ett paket till dig. (Det är ett nyhetsbrev.)",
     "peekCta": "Öppna",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Skickat.",
     "successBody": "När vi har något värt att öppna hamnar det i din inkorg."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nya askar, deadlines och nyårsrean. Vi säger till i god tid.",
-        "dock": "Få nytt från Westpack"
-      },
-      "sale": {
-        "title": "Få besked när nyårsrean börjar – direkt i din inkorg.",
-        "dock": "Få besked när nyårsrean börjar",
-        "done": "Vi skriver när nyårsrean börjar.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Nyårsrean har börjat",
-        "mailPreview": "Produkter som utgår är nedsatta – så långt lagret räcker.",
-        "mailTime": "januari"
-      }
-    },
-    "proof": "Över 20 000 personer i Europa och USA får redan nyhetsbrevet.",
-    "successTitle": "Du är med.",
-    "askTitle": "En sak till: Vad säljer du?",
-    "askLede": "Då skickar vi det som passar dig. Helt frivilligt.",
-    "types": {
-      "jewellery": "Smycken",
-      "watches": "Klockor",
-      "fashion": "Mode och accessoarer",
-      "beauty": "Skönhet och kosmetik",
-      "gifts": "Presenter och inredning",
-      "other": "Något annat"
-    },
-    "skip": "Hoppa över",
-    "thanks": "Tack, noterat. Vi ses i inkorgen.",
-    "dockOpen": "Öppna anmälan till nyhetsbrevet",
-    "dockHide": "Dölj"
   }
 };

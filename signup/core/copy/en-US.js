@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack newsletter",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, you're in.",
     "successBody": "Next time we have something worth opening, it'll be in your inbox."
   },
-  "swipe-match": {
-    "peek": "Swipe your way to your packaging style",
-    "peekCta": "Start",
-    "kicker": "Box match",
-    "title": "Love it or leave it?",
-    "lede": "Six boxes. Swipe them. We'll tell you what they say about your brand.",
-    "like": "Love it",
-    "nope": "Leave it",
-    "keysHint": "Arrow keys work too: ← leave · → love",
-    "progress": "{n} of {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco gift box",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Hinged lid, gold trim. The classic that never gets old.",
-      "seoul": "An ultra-flat drawer in dusty green. Quiet—until it opens.",
-      "madrid": "Soft touch outside, velour inside, and a sleeve around it.",
-      "oslo": "Leatherette and velour. A bestseller among hinged boxes.",
-      "monaco": "A gift box that looks like a tiny handbag. Satin ribbon included.",
-      "tokyo": "A lift-off lid and plenty of room for your logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Midnight",
-        "line": "Dark, sharp, and gold. Your customers open the box slowly."
-      },
-      "cocoa": {
-        "name": "Cocoa",
-        "line": "Warm and soft. The kind of box people keep."
-      },
-      "forest": {
-        "name": "Forest floor",
-        "line": "Green, calm, and thought through. Right down to the ribbon."
-      },
-      "sand": {
-        "name": "Sand",
-        "line": "Light, airy, and Nordic. The jewelry gets the whole stage."
-      }
-    },
-    "resultKicker": "Your packaging profile",
-    "resultTitle": "You're {pct}% {world}.",
-    "resultSecond": "… and {pct}% {world}.",
-    "noneTitle": "Not one heart? Respect.",
-    "noneLine": "The pickiest buyers build the best brands. We have far more boxes than fit in here.",
-    "ctaTitle": "Want new things in your style?",
-    "restart": "Swipe again",
-    "seeBoxes": "See the jewelry boxes",
-    "successTitle": "Noted: {world}.",
-    "successBody": "See you in your inbox."
-  },
   "pack-and-ship": {
     "peek": "We've got a package for you. (It's a newsletter.)",
     "peekCta": "Open",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Shipped.",
     "successBody": "We'll write when we have something worth opening."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "New boxes, deadlines and the New Year sale. We'll tell you in good time.",
-        "dock": "Get news from Westpack"
-      },
-      "sale": {
-        "title": "Hear when the New Year sale starts – straight to your inbox.",
-        "dock": "Hear when the sale starts",
-        "done": "We'll write when the New Year sale starts.",
-        "mailFrom": "Westpack",
-        "mailSubject": "The New Year sale has started",
-        "mailPreview": "Discontinued products are reduced – while stocks last.",
-        "mailTime": "January"
-      }
-    },
-    "proof": "Over 20,000 people in Europe and the US already get the newsletter.",
-    "successTitle": "You're in.",
-    "askTitle": "One more thing: what do you sell?",
-    "askLede": "Then we'll send you what fits. Entirely optional.",
-    "types": {
-      "jewellery": "Jewelry",
-      "watches": "Watches",
-      "fashion": "Fashion and accessories",
-      "beauty": "Beauty and cosmetics",
-      "gifts": "Gifts and interiors",
-      "other": "Something else"
-    },
-    "skip": "Skip",
-    "thanks": "Thanks, noted. See you in your inbox.",
-    "dockOpen": "Sign up for the newsletter",
-    "dockHide": "Hide"
   }
 };

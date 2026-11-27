@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 3 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, vous êtes sur la liste.",
     "successBody": "La prochaine fois qu’on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
   },
-  "swipe-match": {
-    "peek": "Trouvez votre style d’emballage en swipant",
-    "peekCta": "Commencer",
-    "kicker": "Le match des écrins",
-    "title": "Coup de cœur ou pas pour vous ?",
-    "lede": "Six écrins. Swipez. On vous dira ce qu’ils racontent sur votre marque.",
-    "like": "Coup de cœur",
-    "nope": "Pas pour moi",
-    "keysHint": "Les flèches marchent aussi · ← non · → oui",
-    "progress": "{n} sur {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Boîte cadeau Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Couvercle à charnière et bordure dorée. Le classique qui ne vieillit jamais.",
-      "seoul": "Un tiroir ultraplat d’un vert grisé. Discret, jusqu’à l’ouverture.",
-      "madrid": "Toucher doux à l’extérieur, velours à l’intérieur, le tout entouré d’un fourreau.",
-      "oslo": "Similicuir et velours. Un best-seller parmi les écrins à charnière.",
-      "monaco": "Une boîte cadeau qui ressemble à un petit sac à main. Ruban en satin inclus.",
-      "tokyo": "Un couvercle amovible et beaucoup de place pour votre logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Nuit noire",
-        "line": "Sombre, net et doré. Vos clients prennent leur temps pour ouvrir l’écrin."
-      },
-      "cocoa": {
-        "name": "Cacao",
-        "line": "Chaud et doux. Le genre d’écrin que l’on garde."
-      },
-      "forest": {
-        "name": "Sous-bois",
-        "line": "Vert, calme et bien pensé. Jusqu’au ruban."
-      },
-      "sand": {
-        "name": "Sable",
-        "line": "Clair, léger et nordique. Le bijou est seul en scène."
-      }
-    },
-    "resultKicker": "Votre profil d’emballage",
-    "resultTitle": "Vous êtes {pct} % {world}.",
-    "resultSecond": "… et {pct} % {world}.",
-    "noneTitle": "Pas un seul cœur. Respect.",
-    "noneLine": "Les acheteurs les plus exigeants bâtissent les meilleures marques. Nous avons bien plus d’écrins que de place ici.",
-    "ctaTitle": "Des nouveautés dans votre style",
-    "restart": "Swiper à nouveau",
-    "seeBoxes": "Voir les écrins",
-    "successTitle": "C’est noté · {world}.",
-    "successBody": "À bientôt dans votre boîte mail."
-  },
   "pack-and-ship": {
     "peek": "On a un colis pour vous. C’est une newsletter.",
     "peekCta": "Ouvrir",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "C’est parti.",
     "successBody": "Quand on aura quelque chose qui vaut la peine d’être ouvert, ce sera dans votre boîte mail."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nouvelles boîtes, dates limites et soldes du Nouvel An. On vous prévient à temps.",
-        "dock": "Recevoir la newsletter"
-      },
-      "sale": {
-        "title": "On vous dit quand les soldes du Nouvel An commencent, directement dans votre boîte mail.",
-        "dock": "Alerte soldes du Nouvel An",
-        "done": "On vous écrit quand les soldes du Nouvel An commencent.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Les soldes du Nouvel An ont commencé",
-        "mailPreview": "Les produits en fin de série sont soldés, dans la limite des stocks disponibles.",
-        "mailTime": "janvier"
-      }
-    },
-    "proof": "Plus de 20 000 personnes en Europe et aux États-Unis reçoivent déjà la newsletter.",
-    "successTitle": "C’est fait.",
-    "askTitle": "Une dernière chose. Que vendez-vous",
-    "askLede": "Pour vous envoyer ce qui vous correspond. C’est facultatif.",
-    "types": {
-      "jewellery": "Bijoux",
-      "watches": "Montres",
-      "fashion": "Mode et accessoires",
-      "beauty": "Beauté et cosmétiques",
-      "gifts": "Cadeaux et déco",
-      "other": "Autre chose"
-    },
-    "skip": "Passer la question",
-    "thanks": "Merci, c’est noté. On se retrouve dans votre boîte mail.",
-    "dockOpen": "Ouvrir l’inscription à la newsletter",
-    "dockHide": "Masquer"
   }
 };

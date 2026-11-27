@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter da Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, está na lista.",
     "successBody": "Quando tivermos algo que valha a pena abrir, escrevemos-lhe."
   },
-  "swipe-match": {
-    "peek": "Deslize até ao seu estilo de embalagem",
-    "peekCta": "Começar",
-    "kicker": "A caixa certa",
-    "title": "Coração ou nem pensar?",
-    "lede": "Seis caixas. Deslize. Nós dizemos-lhe o que revelam sobre a sua marca.",
-    "like": "Sim",
-    "nope": "Não",
-    "keysHint": "As setas também funcionam: ← não · → sim",
-    "progress": "{n} de {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Caixa de presente Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Tampa com dobradiça e rebordo dourado. O clássico que nunca cansa.",
-      "seoul": "Uma gaveta ultrafina em verde esbatido. Discreta — até abrir.",
-      "madrid": "Toque suave no exterior, veludo no interior e uma cinta à volta.",
-      "oslo": "Pele sintética e veludo. Um best-seller entre as caixas com dobradiça.",
-      "monaco": "Uma caixa de presente que parece uma pequena mala. Inclui fita de cetim.",
-      "tokyo": "Tampa amovível e muito espaço para o seu logótipo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Meia-noite",
-        "line": "Escuro, marcante e dourado. Os seus clientes abrem a caixa devagar."
-      },
-      "cocoa": {
-        "name": "Cacau",
-        "line": "Quente e suave. O tipo de caixa que ninguém deita fora."
-      },
-      "forest": {
-        "name": "Chão da floresta",
-        "line": "Verde, sereno e pensado ao pormenor. Até à fita."
-      },
-      "sand": {
-        "name": "Areia",
-        "line": "Claro, leve e nórdico. As joias ficam com o palco todo."
-      }
-    },
-    "resultKicker": "O seu perfil de embalagem",
-    "resultTitle": "É {pct}% {world}.",
-    "resultSecond": "… e {pct}% {world}.",
-    "noneTitle": "Nem um coração? Respeito.",
-    "noneLine": "Quem escolhe a dedo cria as melhores marcas. Temos muito mais caixas do que cabem aqui.",
-    "ctaTitle": "Quer novidades ao seu estilo?",
-    "restart": "Deslizar de novo",
-    "seeBoxes": "Ver caixas de joias",
-    "successTitle": "Registado: {world}.",
-    "successBody": "Até à próxima na sua caixa de entrada."
-  },
   "pack-and-ship": {
     "peek": "Temos um pacote para si. (É uma newsletter.)",
     "peekCta": "Abrir",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Enviado.",
     "successBody": "Escrevemos-lhe quando houver algo que valha a pena abrir."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Novas caixas, prazos e saldos de Ano Novo. Avisamos com antecedência.",
-        "dock": "Novidades da Westpack"
-      },
-      "sale": {
-        "title": "Saiba quando começam os saldos de Ano Novo — diretamente na sua caixa de entrada.",
-        "dock": "Avise-me quando começarem",
-        "done": "Escrevemos-lhe quando os saldos de Ano Novo começarem.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Os saldos de Ano Novo começaram",
-        "mailPreview": "Produtos descontinuados a preço reduzido — enquanto houver stock.",
-        "mailTime": "janeiro"
-      }
-    },
-    "proof": "Mais de 20 000 pessoas na Europa e nos EUA já recebem a newsletter.",
-    "successTitle": "Já está.",
-    "askTitle": "Só mais uma coisa: o que vende?",
-    "askLede": "Assim, enviamos-lhe o que encaixa melhor. É totalmente opcional.",
-    "types": {
-      "jewellery": "Joias",
-      "watches": "Relógios",
-      "fashion": "Moda e acessórios",
-      "beauty": "Beleza e cosmética",
-      "gifts": "Presentes e decoração",
-      "other": "Outra coisa"
-    },
-    "skip": "Saltar",
-    "thanks": "Obrigado — fica registado. Até à sua caixa de entrada.",
-    "dockOpen": "Abrir a subscrição da newsletter",
-    "dockHide": "Ocultar"
   }
 };

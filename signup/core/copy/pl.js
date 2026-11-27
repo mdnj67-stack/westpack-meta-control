@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, jesteś na liście.",
     "successBody": "Gdy znów będziemy mieć coś wartego otwarcia, znajdziesz to w swojej skrzynce."
   },
-  "swipe-match": {
-    "peek": "Przesuwaj i znajdź swój styl opakowań",
-    "peekCta": "Zaczynamy",
-    "kicker": "Dobierz pudełko",
-    "title": "Serce czy pas?",
-    "lede": "Sześć pudełek. Przesuwaj je, a powiemy Ci, co mówią o Twojej marce.",
-    "like": "Podoba mi się",
-    "nope": "Nie dla mnie",
-    "keysHint": "Strzałki też działają: ← nie · → tak",
-    "progress": "{n} z {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Pudełko prezentowe Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Wieczko na zawiasie i złote obramowanie. Klasyk, który się nie nudzi.",
-      "seoul": "Ultrapłaska szufladka w przygaszonej zieleni. Dyskretna – dopóki jej nie otworzysz.",
-      "madrid": "Soft touch na zewnątrz, welur wewnątrz i obwoluta dookoła.",
-      "oslo": "Sztuczna skóra i welur. Bestseller wśród pudełek na zawiasie.",
-      "monaco": "Pudełko prezentowe przypominające małą torebkę. Z satynową wstążką.",
-      "tokyo": "Zdejmowane wieczko i dużo miejsca na Twoje logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Nocna czerń",
-        "line": "Ciemno, wyraziście i ze złotem. Twoi klienci będą otwierać pudełko powoli."
-      },
-      "cocoa": {
-        "name": "Kakao",
-        "line": "Ciepło i miękko. Takie pudełko chce się zachować."
-      },
-      "forest": {
-        "name": "Leśne runo",
-        "line": "Zieleń, spokój i wszystko przemyślane. Aż po wstążkę."
-      },
-      "sand": {
-        "name": "Piasek",
-        "line": "Jasno, lekko i po nordycku. Biżuteria ma całą scenę dla siebie."
-      }
-    },
-    "resultKicker": "Twój profil opakowań",
-    "resultTitle": "Twój wynik: {world} – {pct} %.",
-    "resultSecond": "… i {world} – {pct} %.",
-    "noneTitle": "Ani jednego serca? Szanujemy.",
-    "noneLine": "Najbardziej wybredni kupujący tworzą najlepsze marki. Mamy znacznie więcej pudełek, niż da się tu zmieścić.",
-    "ctaTitle": "Chcesz nowości w swoim stylu?",
-    "restart": "Przesuń jeszcze raz",
-    "seeBoxes": "Zobacz pudełka na biżuterię",
-    "successTitle": "Zapisane: {world}.",
-    "successBody": "Do zobaczenia w skrzynce."
-  },
   "pack-and-ship": {
     "peek": "Mamy dla Ciebie paczkę. (To newsletter.)",
     "peekCta": "Otwórz",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Wysłane.",
     "successBody": "Gdy mamy coś wartego otwarcia, znajdziesz to w swojej skrzynce."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nowe pudełka, terminy i wyprzedaż noworoczna. Damy Ci znać odpowiednio wcześnie.",
-        "dock": "Wieści od Westpack"
-      },
-      "sale": {
-        "title": "Damy Ci znać, gdy ruszy wyprzedaż noworoczna – prosto na Twoją skrzynkę.",
-        "dock": "Info o starcie wyprzedaży",
-        "done": "Napiszemy, gdy ruszy wyprzedaż noworoczna.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Wyprzedaż noworoczna ruszyła",
-        "mailPreview": "Wycofywane produkty są przecenione – do wyczerpania zapasów.",
-        "mailTime": "styczeń"
-      }
-    },
-    "proof": "Ponad 20 000 osób w Europie i USA już otrzymuje newsletter.",
-    "successTitle": "Jesteś na liście.",
-    "askTitle": "Jeszcze jedno: co sprzedajesz?",
-    "askLede": "Dzięki temu wyślemy Ci to, co pasuje. Ale nie musisz odpowiadać.",
-    "types": {
-      "jewellery": "Biżuteria",
-      "watches": "Zegarki",
-      "fashion": "Moda i akcesoria",
-      "beauty": "Uroda i kosmetyki",
-      "gifts": "Prezenty i wnętrza",
-      "other": "Coś innego"
-    },
-    "skip": "Pomiń",
-    "thanks": "Dzięki, zapisane. Do zobaczenia w skrzynce.",
-    "dockOpen": "Otwórz zapis do newslettera",
-    "dockHide": "Ukryj"
   }
 };

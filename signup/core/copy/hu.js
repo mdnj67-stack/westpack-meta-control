@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack hírlevél",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, rajta vagy a listán.",
     "successBody": "Ha lesz valami, amit érdemes megnyitni, írunk."
   },
-  "swipe-match": {
-    "peek": "Találd meg a csomagolási stílusod",
-    "peekCta": "Kezdjük",
-    "kicker": "Dobozmatch",
-    "title": "Szív vagy passz?",
-    "lede": "Hat doboz. Húzd el őket. Mi elmondjuk, mit árulnak el a márkádról.",
-    "like": "Jöhet",
-    "nope": "Passz",
-    "keysHint": "A nyilak is működnek: ← passz · → jöhet",
-    "progress": "{n} / {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco ajándékdoboz",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Zsanéros fedél és aranyszegély. A klasszikus, ami sosem unalmas.",
-      "seoul": "Ultralapos fiók poroszöldben. Visszafogott – amíg ki nem nyitod.",
-      "madrid": "Soft touch kívül, velúr belül, körülötte egy tok.",
-      "oslo": "Műbőr és velúr. A zsanéros dobozok egyik bestsellere.",
-      "monaco": "Ajándékdoboz, amely olyan, mint egy apró kézitáska. Szaténszalaggal.",
-      "tokyo": "Leemelhető fedél, és bőven van hely a logódnak."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Éjfél",
-        "line": "Sötét, határozott és arany. A vevőid lassan nyitják ki a dobozt."
-      },
-      "cocoa": {
-        "name": "Kakaó",
-        "line": "Meleg és puha. Az a fajta doboz, amit az ember megtart."
-      },
-      "forest": {
-        "name": "Erdőmély",
-        "line": "Zöld, nyugodt és átgondolt. Egészen az ajándékszalagig."
-      },
-      "sand": {
-        "name": "Homok",
-        "line": "Világos, légies és északi. Minden reflektorfény az ékszeré."
-      }
-    },
-    "resultKicker": "A csomagolási profilod",
-    "resultTitle": "A stílusod: {pct}% {world}.",
-    "resultSecond": "… és {pct}% {world}.",
-    "noneTitle": "Egy szív sem? Tisztelet.",
-    "noneLine": "Aki válogat, jó márkát épít. És van még jó pár dobozunk, ami ide nem fért be.",
-    "ctaTitle": "Jöhetnek újdonságok a stílusodban?",
-    "restart": "Újra swipe-olok",
-    "seeBoxes": "Ékszerdobozok",
-    "successTitle": "Feljegyeztük: {world}.",
-    "successBody": "E-mailben folytatjuk."
-  },
   "pack-and-ship": {
     "peek": "Van egy csomagunk neked. (Hírlevél.)",
     "peekCta": "Kinyitom",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Feladva.",
     "successBody": "Ha lesz valami, amit érdemes megnyitni, e-mailben küldjük."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Új dobozok, határidők és az újévi kiárusítás. Időben szólunk.",
-        "dock": "Hírek a Westpacktől"
-      },
-      "sale": {
-        "title": "Szólunk, amikor elindul az újévi kiárusítás – egyenesen a postaládádba.",
-        "dock": "Szólj, ha indul a kiárusítás",
-        "done": "Írunk, amikor elindul az újévi kiárusítás.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Elindult az újévi kiárusítás",
-        "mailPreview": "A kifutó termékek leárazva – a készlet erejéig.",
-        "mailTime": "január"
-      }
-    },
-    "proof": "Több mint 20 000 ember Európában és az USA-ban már kapja a hírlevelet.",
-    "successTitle": "Feliratkoztál.",
-    "askTitle": "Még valami: mit árulsz?",
-    "askLede": "Így azt küldjük, ami neked való. A válasz nem kötelező.",
-    "types": {
-      "jewellery": "Ékszerek",
-      "watches": "Órák",
-      "fashion": "Divat és kiegészítők",
-      "beauty": "Szépségápolás és kozmetikumok",
-      "gifts": "Ajándékok és lakberendezés",
-      "other": "Valami más"
-    },
-    "skip": "Kihagyom",
-    "thanks": "Köszi, felírtuk. Találkozunk a postaládádban.",
-    "dockOpen": "Hírlevél-feliratkozás megnyitása",
-    "dockHide": "Elrejtés"
   }
 };

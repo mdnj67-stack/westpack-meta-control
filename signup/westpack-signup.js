@@ -27,7 +27,7 @@
   const script = document.currentScript || document.querySelector('script[src*="westpack-signup.js"]');
   const BASE = new URL(".", (script && script.src) || location.href).href;
   const data = (script && script.dataset) || {};
-  // ?wps=preview on any store page (or ?wps=logo-studio, swipe-match, pack-and-ship) opens the experience at once in
+  // ?wps=preview on any store page (or ?wps=logo-studio, pack-and-ship) opens the experience at once in
   // test mode: signups go to the test list, tracking is marked test, and it works whether or not the experience is
   // live. It is how the store's tag is checked on the real store before launch.
   // ?wps=reset forgets this browser's answers (closed, subscribed, shown this session), so a tester sees it as a new visitor
@@ -96,9 +96,6 @@
   // ---------- state ----------
   let R, M, market, COPY, concept, device, plan, reducedMotion;
   let state, root, shadow, ui = {}, mounted = null, isOpen = false, peekShown = false, exposure = null, lastFocus = null;
-  // the address of a signup made on this page, held only in memory, so an experience's follow-up question can be
-  // attached to the same profile; never stored, never tracked
-  let lastEmail = "";
   const concepts = {};
   const listeners = {};
   const emit = (name, detail) => { (listeners[name] || []).forEach((fn) => { try { fn(detail); } catch (e) { /* listener error */ } }); };
@@ -158,7 +155,6 @@
     track("submit");
     if (OPTS.dryRun) {
       await new Promise((r) => setTimeout(r, 700));
-      lastEmail = email;
       track("subscribed");
       emit("subscribed", { concept, market: market.market, test: true, dryRun: true, request: req });
       return { ok: true, doubleOptIn: OPTS.dryRun && data.doi === "1" };
@@ -173,7 +169,6 @@
     }
     if (res && (res.status === 202 || res.ok)) {
       state.subscribedAt = now(); saveState();
-      lastEmail = email;
       track("subscribed");
       // a timeline event for flows and reports; a failure here does not undo the signup
       post(R.buildCompletionEvent(opts), 8000).catch(() => {});
@@ -187,21 +182,6 @@
     exposure && exposure.errors.push(code || "unknown");
     track("submit_error");
     return { ok: false, code: code || "unknown" };
-  }
-
-  /**
-   * A subscriber's answer to an experience's follow-up question (Direct: what they sell), sent as a second event on the
-   * profile just signed up. Only after a signup on this page, and only a known answer (rules.buildAnswerEvent). It never
-   * touches the consent, and a failure costs the answer, not the signup.
-   */
-  async function answer(businessType) {
-    if (!lastEmail) return false;
-    const target = OPTS.test ? Object.assign({ optIn: "single" }, M.TEST_TARGET) : market;
-    const req = R.buildAnswerEvent({ market, target, email: lastEmail, concept, businessType });
-    if (!req) return false;
-    track(`answer_${businessType}`);
-    if (OPTS.dryRun) { emit("answer", { concept, businessType, request: req }); return true; }
-    try { const res = await post(req, 8000); return Boolean(res && (res.status === 202 || res.ok)); } catch (e) { return false; }
   }
 
   // ---------- the shared signup form ----------
@@ -326,76 +306,7 @@
       asset: (p) => `${BASE}assets/${p}?v=${ASSET_VERSION}`,
       track, signupForm, close, root: shadow, stage: ui.stage, dialog: ui.dialog,
       storeUrl: market.storeUrl,
-      // what opened this exposure (delay, exit, dock, preview ...) and Direct's reason of the moment
-      trigger: exposure ? exposure.trigger : "", season: R.directSeason(new Date()), answer,
     };
-  }
-
-  // ---------- dock: a "not now" that stays one tap away (experiences with CONCEPT_FEATURES dock) ----------
-  // A pill at the foot of the page, never over the store's own fixed things: the cookie button, a chat launcher, a
-  // product page's sticky basket bar. Each corner is probed with the pill taken out of hit-testing, so whatever fixed
-  // or sticky element sits under it - above or below us in the stack - lifts it clear.
-  function dockLine() {
-    const c = COPY[concept] || {};
-    const s = (c.seasons && c.seasons[R.directSeason(new Date())]) || {};
-    return s.dock || c.dock || COPY.shell.dialogLabel;
-  }
-  async function showDock() {
-    if (ui.dock || isOpen || !COPY) return;
-    if (!shadow) buildShell();
-    await ensureAssets();
-    if (ui.dock || isOpen) return;
-    const c = COPY[concept] || {};
-    const visual = concepts[concept] && concepts[concept].dockVisual ? concepts[concept].dockVisual(context()) : null;
-    ui.dock = el("div", { class: "wps-dock", role: "region", "aria-label": COPY.shell.dialogLabel }, [
-      el("button", { class: "wps-dock-main", type: "button", "aria-label": `${dockLine()} - ${c.dockOpen || COPY.shell.signup}`, onclick: () => { hideDock(); open("dock"); } }, [
-        visual ? el("span", { class: "wps-dock-visual", "aria-hidden": "true" }, [visual]) : null,
-        el("span", { class: "wps-dock-line", text: dockLine() }),
-        el("span", { class: "wps-dock-arrow", "aria-hidden": "true", text: "→" }),
-      ]),
-      el("button", { class: "wps-dock-x", type: "button", "aria-label": c.dockHide || COPY.shell.close, onclick: () => { state.dockDismissedAt = now(); saveState(); hideDock(); emit("dock", { action: "dismissed" }); } }, [svg(ICON_CLOSE)]),
-    ]);
-    ui.wrap.appendChild(ui.dock);
-    emit("dock", { action: "shown" });
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (!ui.dock) return;
-      ui.dock.classList.add("is-in");
-      setTimeout(liftDock, reducedMotion ? 0 : 560);
-    }));
-    window.addEventListener("resize", liftDock);
-    window.addEventListener("scroll", liftDockSoon, { passive: true });
-  }
-  function hideDock() {
-    window.removeEventListener("resize", liftDock);
-    window.removeEventListener("scroll", liftDockSoon);
-    if (!ui.dock) return;
-    const d = ui.dock; ui.dock = null; d.classList.remove("is-in");
-    setTimeout(() => d.remove(), reducedMotion ? 0 : 320);
-  }
-  let liftTimer = 0;
-  function liftDockSoon() { clearTimeout(liftTimer); liftTimer = setTimeout(liftDock, 180); }
-  function liftDock() {
-    const d = ui.dock;
-    if (!d || !d.classList.contains("is-in")) return;
-    d.style.bottom = "";
-    const r = d.getBoundingClientRect();
-    const was = root.style.pointerEvents;
-    root.style.pointerEvents = "none"; d.style.pointerEvents = "none";
-    let lift = 0;
-    try {
-      for (const [x, y] of [[r.left + 6, r.top + 6], [r.right - 6, r.top + 6], [r.left + 6, r.bottom - 6], [r.right - 6, r.bottom - 6], [(r.left + r.right) / 2, r.bottom - 6]]) {
-        let n = document.elementFromPoint(x, y);
-        while (n && n !== document.body && n !== document.documentElement && !/^(fixed|sticky)$/.test(getComputedStyle(n).position)) n = n.parentElement;
-        if (!n || n === document.body || n === document.documentElement || n === root) continue;
-        const b = n.getBoundingClientRect();
-        // only what stands at the foot of the view; a sticky header further up is not in the way
-        if (b.top > innerHeight * 0.5) lift = Math.max(lift, innerHeight - b.top + 8);
-      }
-    } finally { root.style.pointerEvents = was; d.style.pointerEvents = ""; }
-    if (lift) d.style.bottom = `${Math.round(lift)}px`;
-  }
-  function maybeDock(verdict) {
-    if (R.dockAllowed(state, verdict, now(), concept)) showDock();
   }
 
   // ---------- peek: the small card phones and tablets get instead of an interruption ----------
@@ -493,7 +404,6 @@
   async function open(trigger) {
     if (isOpen) return;
     isOpen = true;
-    if (ui.dock) hideDock();
     if (!shadow) buildShell();
     if (!exposure || exposure.flushed) startExposure(trigger || "manual");
     const s = session(); s.shown = true; saveSession(s);
@@ -537,8 +447,6 @@
     }, reducedMotion ? 0 : 420);
     try { if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); } catch (e) { /* element gone */ }
     emit("close", { reason, subscribed });
-    // an experience that docks leaves the pill behind once its popup is gone (rules.dockAllowed decides)
-    if (!subscribed && reason !== "link") setTimeout(() => { if (!isOpen) maybeDock({ reason: "shown_this_session" }); }, reducedMotion ? 0 : 460);
   }
 
   // ---------- consent banner and Klaviyo identification ----------
@@ -643,7 +551,6 @@
     while (!verdict.ok && verdict.retry) { await new Promise((r) => setTimeout(r, 1000)); verdict = check(); }
     emit("eligibility", verdict);
     if (verdict.ok) arm();
-    else maybeDock(verdict);
   }
 
   window.addEventListener("pagehide", () => { if (exposure && !exposure.flushed) flush(isOpen ? "abandoned" : peekShown ? "abandoned" : "not_opened"); });
@@ -653,8 +560,6 @@
     registerConcept(id, def) { concepts[id] = def; },
     open(id, trigger) { if (id && R.CONCEPT_IDS.includes(id)) concept = id; return open(trigger || "manual"); },
     peek(id) { if (id && R.CONCEPT_IDS.includes(id)) concept = id; return showPeek(); },
-    // the preview shows an experience's dock without having to close its popup first
-    dock(id) { if (id && R.CONCEPT_IDS.includes(id)) concept = id; return showDock(); },
     close, on(name, fn) { (listeners[name] = listeners[name] || []).push(fn); },
     reset() { local.remove("wps:v1"); sess.remove("wps:session:v1"); },
     get state() { return state; }, get market() { return market; }, get concept() { return concept; },

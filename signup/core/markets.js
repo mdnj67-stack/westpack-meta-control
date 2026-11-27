@@ -20,8 +20,8 @@
   const LIVE = false;
 
   // One experience at a time, not an A/B test (the user, 2026-10-30): Logo studio runs until it is judged worn out,
-  // then Swipe match, then Pack & ship - each gets its design pass when its turn comes. Changing the experience is
-  // this one line. The others stay in the code and still open with ?wps=<id>.
+  // then Pack & ship - which gets its design pass when its turn comes (Swipe match was removed on 2026-11-27 at the
+  // user's request). Changing the experience is this one line. The others stay in the code and still open with ?wps=<id>.
   const CURRENT = "logo-studio";
 
   const privacy = (code) => `https://www.westpack.com/${code}/westpack-gdpr`;

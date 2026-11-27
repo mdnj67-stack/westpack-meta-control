@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 0 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpacks nyhetsbrev",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, du er med.",
     "successBody": "Neste gang vi har noe som er verdt å åpne, ligger det i innboksen din."
   },
-  "swipe-match": {
-    "peek": "Swipe deg frem til emballasjestilen din",
-    "peekCta": "Start",
-    "kicker": "Smykkeeske-match",
-    "title": "Hjerte eller nei takk?",
-    "lede": "Seks smykkeesker. Swipe dem. Vi forteller hva de sier om merkevaren din.",
-    "like": "Ja takk",
-    "nope": "Nei takk",
-    "keysHint": "Piltastene virker også: ← nei · → ja",
-    "progress": "{n} av {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco gaveeske",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Hengslet lokk og gullkant. Klassikeren som aldri blir kjedelig.",
-      "seoul": "En ultraflat skuff i støvet grønn. Diskré – helt til den åpnes.",
-      "madrid": "Soft touch utenpå, velur inni og et omslag rundt.",
-      "oslo": "Kunstlær og velur. En bestselger blant smykkeeskene med hengslet lokk.",
-      "monaco": "En gaveeske som ser ut som en liten håndveske. Satengbånd følger med.",
-      "tokyo": "Lokk som løftes av, og god plass til logoen din."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Midnatt",
-        "line": "Mørkt, skarpt og med gull. Kundene dine åpner smykkeesken sakte."
-      },
-      "cocoa": {
-        "name": "Kakao",
-        "line": "Varmt og mykt. Den typen smykkeeske folk tar vare på."
-      },
-      "forest": {
-        "name": "Skogbunn",
-        "line": "Grønt, rolig og gjennomtenkt. Helt ned til gavebåndet."
-      },
-      "sand": {
-        "name": "Sand",
-        "line": "Lyst, luftig og nordisk. Smykket får hele scenen."
-      }
-    },
-    "resultKicker": "Emballasjeprofilen din",
-    "resultTitle": "Du er {pct} % {world}.",
-    "resultSecond": "… og {pct} % {world}.",
-    "noneTitle": "Ingen hjerter? Respekt.",
-    "noneLine": "De mest kresne innkjøperne bygger de beste merkevarene. Vi har langt flere smykkeesker enn det er plass til her.",
-    "ctaTitle": "Skal vi sende deg nytt i din stil?",
-    "restart": "Swipe igjen",
-    "seeBoxes": "Se smykkeeskene",
-    "successTitle": "Notert: {world}.",
-    "successBody": "Vi ses i innboksen."
-  },
   "pack-and-ship": {
     "peek": "Vi har en pakke til deg. (Det er et nyhetsbrev.)",
     "peekCta": "Åpne",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Sendt.",
     "successBody": "Den dukker opp i innboksen når vi har noe som er verdt å åpne."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nye esker, frister og nyttårssalget. Vi sier fra i god tid.",
-        "dock": "Nytt fra Westpack"
-      },
-      "sale": {
-        "title": "Få beskjed når nyttårssalget starter – rett i innboksen.",
-        "dock": "Få beskjed når salget starter",
-        "done": "Vi skriver når nyttårssalget starter.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Nyttårssalget har startet",
-        "mailPreview": "Utgående varer er satt ned – så lenge lageret rekker.",
-        "mailTime": "januar"
-      }
-    },
-    "proof": "Over 20 000 mennesker i Europa og USA får allerede nyhetsbrevet.",
-    "successTitle": "Du er med.",
-    "askTitle": "Én ting til: Hva selger du?",
-    "askLede": "Da sender vi deg det som passer. Helt frivillig.",
-    "types": {
-      "jewellery": "Smykker",
-      "watches": "Klokker",
-      "fashion": "Mote og tilbehør",
-      "beauty": "Skjønnhet og kosmetikk",
-      "gifts": "Gaver og interiør",
-      "other": "Noe annet"
-    },
-    "skip": "Hopp over",
-    "thanks": "Takk, notert. Vi sees i innboksen.",
-    "dockOpen": "Meld deg på nyhetsbrevet",
-    "dockHide": "Skjul"
   }
 };

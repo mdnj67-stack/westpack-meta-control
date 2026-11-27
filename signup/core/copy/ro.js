@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 5 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletterul Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, ești pe listă.",
     "successBody": "Când mai avem ceva care merită deschis, îl găsești în inbox."
   },
-  "swipe-match": {
-    "peek": "Găsește-ți stilul de ambalaj cu un swipe",
-    "peekCta": "Start",
-    "kicker": "Potrivire de cutii",
-    "title": "Inimă sau pas?",
-    "lede": "Șase cutii. Glisează-le. Îți spunem ce zic despre brandul tău.",
-    "like": "Inimă",
-    "nope": "Pas",
-    "keysHint": "Merg și săgețile: ← pas · → inimă",
-    "progress": "{n} din {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Cutie cadou Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Capac cu balama și margine aurie. Clasicul care nu se demodează.",
-      "seoul": "Un sertar ultraplat, verde prăfuit. Discret – până îl deschizi.",
-      "madrid": "Soft touch la exterior, velur la interior și un manșon în jur.",
-      "oslo": "Imitație de piele și velur. Un bestseller printre cutiile cu balama.",
-      "monaco": "O cutie cadou care arată ca o poșetă minusculă. Panglica din satin este inclusă.",
-      "tokyo": "Capac detașabil și mult loc pentru logoul tău."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Miez de noapte",
-        "line": "Întunecat, bine conturat și cu auriu. Clienții tăi deschid cutia încet."
-      },
-      "cocoa": {
-        "name": "Cacao",
-        "line": "Cald și fin. Genul de cutie pe care oamenii o păstrează."
-      },
-      "forest": {
-        "name": "Sol de pădure",
-        "line": "Verde, calm și bine gândit. Până la ultima panglică."
-      },
-      "sand": {
-        "name": "Nisip",
-        "line": "Luminos, aerisit și nordic. Bijuteria e în centrul atenției."
-      }
-    },
-    "resultKicker": "Profilul ambalajului tău",
-    "resultTitle": "Ești {pct} % {world}.",
-    "resultSecond": "… și {pct} % {world}.",
-    "noneTitle": "Nicio inimă? Respect.",
-    "noneLine": "Cei mai exigenți cumpărători construiesc cele mai bune branduri. Avem mult mai multe cutii decât încap aici.",
-    "ctaTitle": "Îți trimitem noutăți pe stilul tău?",
-    "restart": "Glisează din nou",
-    "seeBoxes": "Vezi cutiile de bijuterii",
-    "successTitle": "Am notat: {world}.",
-    "successBody": "Ne vedem în inbox."
-  },
   "pack-and-ship": {
     "peek": "Avem un colet pentru tine. (E un newsletter.)",
     "peekCta": "Deschide",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Expediat.",
     "successBody": "Ajunge în inbox când avem ceva care merită deschis."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Cutii noi, termene-limită și reducerile de Anul Nou. Te anunțăm din timp.",
-        "dock": "Noutăți de la Westpack"
-      },
-      "sale": {
-        "title": "Te anunțăm când încep reducerile de Anul Nou – direct în inbox.",
-        "dock": "Află când încep reducerile",
-        "done": "Îți scriem când încep reducerile de Anul Nou.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Au început reducerile de Anul Nou",
-        "mailPreview": "Produsele scoase din gamă sunt reduse – în limita stocului.",
-        "mailTime": "ianuarie"
-      }
-    },
-    "proof": "Peste 20.000 de oameni din Europa și SUA primesc deja newsletterul.",
-    "successTitle": "Gata, ești pe listă.",
-    "askTitle": "Încă ceva: ce vinzi?",
-    "askLede": "Așa îți trimitem ce ți se potrivește. E complet opțional.",
-    "types": {
-      "jewellery": "Bijuterii",
-      "watches": "Ceasuri",
-      "fashion": "Modă și accesorii",
-      "beauty": "Frumusețe și cosmetice",
-      "gifts": "Cadouri și interioare",
-      "other": "Altceva"
-    },
-    "skip": "Sari peste",
-    "thanks": "Mersi, am notat. Ne vedem în inbox.",
-    "dockOpen": "Deschide abonarea la newsletter",
-    "dockHide": "Ascunde"
   }
 };

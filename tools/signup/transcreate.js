@@ -78,7 +78,7 @@ function readEnv() {
 
 async function transcreate(lang, target, da, en, env) {
   const model = env.CONTENT_AGENT_MODEL || env.OPENAI_MODEL || "gpt-4.1";
-  const master = { shell: en.shell, "logo-studio": en["logo-studio"], "swipe-match": en["swipe-match"], "pack-and-ship": en["pack-and-ship"] };
+  const master = { shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"] };
   const prompt = `${RULES}
 
 Target: ${target.name}. Form of address: ${target.address}. The store's own word for a jewellery box: ${target.box}.
@@ -87,12 +87,12 @@ ${target.promises}
 ${target.notes ? `Also: ${target.notes}` : ""}
 
 The Danish master (for tone):
-${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "swipe-match": da["swipe-match"], "pack-and-ship": da["pack-and-ship"] })}
+${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"] })}
 
 The English master (structure to return, every key filled in ${target.name}):
 ${JSON.stringify(master)}
 
-Return only the JSON object with the same four top-level keys.`;
+Return only the JSON object with the same three top-level keys.`;
   for (let attempt = 1; attempt <= 3; attempt++) {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -113,9 +113,7 @@ Return only the JSON object with the same four top-level keys.`;
   throw new Error(`${lang}: no valid transcreation after 3 attempts`);
 }
 
-// the targets and rules are shared with the one-off block transcreations (copy-direct-2026-11-27.js)
-module.exports = { TARGETS, RULES, loadLang, readEnv, shapeOf, placeholders };
-if (require.main === module) (async () => {
+(async () => {
   const env = readEnv();
   if (!env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not set");
   const want = (process.argv[2] || Object.keys(TARGETS).join(",")).split(",");

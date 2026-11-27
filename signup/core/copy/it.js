@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 1 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, ci sei.",
     "successBody": "La prossima cosa che vale la pena aprire finirà nella tua casella di posta."
   },
-  "swipe-match": {
-    "peek": "Scorri fino al tuo stile di packaging",
-    "peekCta": "Inizia",
-    "kicker": "Match degli astucci",
-    "title": "Cuore o passo?",
-    "lede": "Sei astucci. Scorri. Ti diciamo cosa raccontano del tuo brand.",
-    "like": "Cuore",
-    "nope": "Passo",
-    "keysHint": "Funzionano anche le frecce: ← passo · → cuore",
-    "progress": "{n} di {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Scatola regalo Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Coperchio incernierato e bordo oro. Il classico che non stanca mai.",
-      "seoul": "Cassetto ultrapiatto in verde polvere. Discreto, finché non si apre.",
-      "madrid": "Soft touch fuori, velluto dentro e una fascetta tutt’intorno.",
-      "oslo": "Similpelle e velluto. Un bestseller tra gli astucci con coperchio incernierato.",
-      "monaco": "Una scatola regalo che sembra una piccola borsa. Nastro di raso incluso.",
-      "tokyo": "Coperchio rimovibile e tanto spazio per il tuo logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Mezzanotte",
-        "line": "Scuro, deciso e dorato. I tuoi clienti aprono l’astuccio lentamente."
-      },
-      "cocoa": {
-        "name": "Cacao",
-        "line": "Caldo e morbido. Il tipo di astuccio che non si butta via."
-      },
-      "forest": {
-        "name": "Sottobosco",
-        "line": "Verde, tranquillo e ben studiato. Fino al nastro."
-      },
-      "sand": {
-        "name": "Sabbia",
-        "line": "Chiaro, leggero e nordico. Il gioiello si prende tutta la scena."
-      }
-    },
-    "resultKicker": "Il tuo profilo packaging",
-    "resultTitle": "Sei {world} al {pct}%.",
-    "resultSecond": "… e {world} al {pct}%.",
-    "noneTitle": "Nemmeno un cuore? Rispetto.",
-    "noneLine": "Chi sceglie con cura costruisce i brand migliori. Abbiamo molti più astucci di quanti ne entrino qui.",
-    "ctaTitle": "Vuoi novità nel tuo stile?",
-    "restart": "Scorri di nuovo",
-    "seeBoxes": "Vedi gli astucci",
-    "successTitle": "Segnato: {world}.",
-    "successBody": "Ci vediamo nella posta in arrivo."
-  },
   "pack-and-ship": {
     "peek": "Abbiamo un pacco per te. (È una newsletter.)",
     "peekCta": "Apri",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Spedito.",
     "successBody": "Finisce nella tua casella di posta quando abbiamo qualcosa che vale la pena aprire."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nuove scatole, scadenze e saldi di Capodanno. Ti avvisiamo per tempo.",
-        "dock": "Novità da Westpack"
-      },
-      "sale": {
-        "title": "Ti avvisiamo quando iniziano i saldi di Capodanno – direttamente nella tua casella di posta.",
-        "dock": "Avvisami: iniziano i saldi",
-        "done": "Ti scriviamo quando iniziano i saldi di Capodanno.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Sono iniziati i saldi di Capodanno",
-        "mailPreview": "I prodotti fuori produzione sono scontati – fino a esaurimento scorte.",
-        "mailTime": "gennaio"
-      }
-    },
-    "proof": "Oltre 20.000 persone in Europa e negli Stati Uniti ricevono già la newsletter.",
-    "successTitle": "Ci sei.",
-    "askTitle": "Un’ultima cosa: cosa vendi?",
-    "askLede": "Così ti mandiamo ciò che fa al caso tuo. È del tutto facoltativo.",
-    "types": {
-      "jewellery": "Gioielli",
-      "watches": "Orologi",
-      "fashion": "Moda e accessori",
-      "beauty": "Bellezza e cosmetici",
-      "gifts": "Regali e arredamento",
-      "other": "Altro"
-    },
-    "skip": "Salta",
-    "thanks": "Grazie, segnato. Ci vediamo nella posta in arrivo.",
-    "dockOpen": "Apri l’iscrizione alla newsletter",
-    "dockHide": "Nascondi"
   }
 };

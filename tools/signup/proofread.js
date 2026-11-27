@@ -56,23 +56,19 @@ function readEnv() {
 const getAt = (o, p) => p.split(".").reduce((x, k) => (x == null ? undefined : x[/^\d+$/.test(k) ? Number(k) : k]), o);
 function setAt(o, p, v) { const ks = p.split("."); const last = ks.pop(); const parent = getAt(o, ks.join(".")); if (parent && typeof parent[/^\d+$/.test(last) ? Number(last) : last] === "string") { parent[/^\d+$/.test(last) ? Number(last) : last] = v; return true; } return false; }
 
-// every block the stores show; Direct joined on 2026-11-27
-const BLOCKS = ["shell", "logo-studio", "swipe-match", "pack-and-ship", "direct"];
-const blocks = (o) => Object.fromEntries(BLOCKS.map((k) => [k, o[k]]));
-
 async function read(lang, env, en, da) {
   const model = env.CONTENT_AGENT_MODEL || "gpt-5.6";
   const copy = loadLang(lang);
-  const body = blocks(copy);
+  const body = { shell: copy.shell, "logo-studio": copy["logo-studio"], "pack-and-ship": copy["pack-and-ship"] };
   const prompt = `${BRIEF}
 
 Language: ${LANGS[lang]}.
 
 English master, for meaning:
-${JSON.stringify(blocks(en))}
+${JSON.stringify({ shell: en.shell, "logo-studio": en["logo-studio"], "pack-and-ship": en["pack-and-ship"] })}
 
 Danish master, for tone:
-${JSON.stringify(blocks(da))}
+${JSON.stringify({ shell: da.shell, "logo-studio": da["logo-studio"], "pack-and-ship": da["pack-and-ship"] })}
 
 The ${LANGS[lang]} text to check:
 ${JSON.stringify(body)}`;

@@ -1,6 +1,6 @@
 # Westpack Signup Lab
 
-Tre tilmeldingsoplevelser til Westpacks nyhedsbrev, bygget som ét system, der kører på alle 18 webshops via én
+To tilmeldingsoplevelser til Westpacks nyhedsbrev, bygget som ét system, der kører på alle 18 webshops via én
 script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10-28/29.
 
 - **Preview (desktop og mobil):** https://project-4fcxa.vercel.app/signup/preview/
@@ -11,9 +11,7 @@ script-linje og tilmelder direkte i Klaviyo med korrekt samtykke. Bygget 2026-10
 | Oplevelse | Fil | Idé |
 |---|---|---|
 | Logo-studiet | `concepts/logo-studio.js/.css` | Dit brandnavn – eller dit eget logo – i folie på seks rigtige Westpack-låg og en bærepose, i logomodulets 26 foliefarver, live, med lys der følger musen/fingeren. Primært koncept. |
-| Æske-match | `concepts/swipe-match.js/.css` | Swipe seks rigtige æsker, få en emballageprofil. |
 | Pakket & sendt | `concepts/pack-and-ship.js/.css` | Formularen er oplevelsen: adressen printes på et forsendelsesmærkat. |
-| Direkte | `concepts/direct.js/.css` | Permission først (2026-11-27): grund, felt og knap i første billede; lukket bliver den til en pille nederst; "Hvad sælger I?" efter tilmeldingen. 10/12–3/1 sin egen nytårsudsalgs-version ("Få besked, når nytårsudsalget starter – direkte i din indbakke"), aldrig "eksklusivt". Se `CONCEPTS.md`, koncept 4. Ikke live. |
 
 ## Sådan virker det
 
@@ -67,16 +65,13 @@ Findes klaviyo.js på siden, bruges det kun til at lade genkendte besøgende væ
 - **Aldrig for:** dem, der er tilmeldt via oplevelsen; dem, der kommer fra en af vores mails (`_kx`,
   `utm_medium=email`; 180 dage); besøgende, Klaviyo genkender.
 - **Én gang pr. besøg.** Lukket én gang: pause i 14 dage, to gange: 45 dage, tre gange: 120 dage.
-- **Direkte efterlader en pille** (`CONCEPT_FEATURES` i `core/rules.js`): når dens popup er set og lukket, står en lille
-  pille nederst på siden – resten af besøget og under pausen – ét tryk fra e-mailfeltet. Aldrig for dem ovenfor, aldrig
-  på de udelukkede sider; dens eget kryds skjuler den i 14 dage. De andre oplevelser har ingen pille.
 - Hukommelsen ligger i `localStorage`/`sessionStorage` uden identifikatorer (kun datoer og den tildelte
   oplevelse). Ingen cookies.
 
 ## Samtykke og GDPR
 
 - Samtykketeksten er **butikkens egen sætning fra dens /newsletter-signup-side**, ordret, med link til butikkens
-  privatlivsside. Knappen siger altid "nyhedsbrev". Intet er forudkrydset; klik i quiz, swipe eller logo-studie
+  privatlivsside. Knappen siger altid "nyhedsbrev". Intet er forudkrydset; klik i logo-studiet
   er aldrig samtykke – kun e-mail + knappen ved siden af samtykketeksten.
 - Klaviyo registrerer samtykket som `SUBSCRIBED` med `custom_method_detail: "Westpack Signup Lab · <oplevelse>"`,
   tidspunkt og metode. Profilen får desuden `wp_consent_text` (præcis den tekst, der blev vist) og
@@ -112,10 +107,10 @@ trinnene med tid (fx `peek_shown > open > name_typed > option_foil > result > em
 
 ## Én oplevelse ad gangen
 
-Besluttet 2026-10-30: vi kører ikke de tre mod hinanden, men én ad gangen. **Logo-studiet** kører, til vi vurderer, at
-den er slidt op; så kommer **Æske-match**, og til sidst **Pakket & sendt**. Hver af de to sidste får sit designløft,
-når det bliver dens tur, ikke før. Skiftet er én linje: `CURRENT` i `core/markets.js`. Besøgende, der havde fået
-en anden oplevelse, får den nye på næste side. De andre åbner stadig med `?wps=swipe-match` / `?wps=pack-and-ship`.
+Besluttet 2026-10-30: vi kører ikke oplevelserne mod hinanden, men én ad gangen. **Logo-studiet** kører, til vi
+vurderer, at den er slidt op; så kommer **Pakket & sendt**, som får sit designløft, når det bliver dens tur, ikke før.
+**Æske-match** blev fjernet 2026-11-27 efter ønske. Skiftet er én linje: `CURRENT` i `core/markets.js`. Besøgende, der havde fået
+en anden oplevelse, får den nye på næste side. Den anden åbner stadig med `?wps=pack-and-ship`.
 
 - **Hvornår er den slidt op:** bekræftede tilmeldinger pr. visning, uge for uge, sammenlignet med dens egne første
   fire uger. Ligger den mindst 30 % under i to uger i træk, er det tid. Sæsonen (jul, januar) flytter alle tal, så

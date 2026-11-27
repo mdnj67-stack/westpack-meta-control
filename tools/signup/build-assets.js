@@ -56,13 +56,6 @@ const ASSETS = [
   ...LOGO_BOXES.map((b) => ({ id: `logo/box-${b.id}`, task: b.task, file: b.file, op: b.method === "harmonic" ? "harmonic" : "clean", print: b.print, texture: b.texture, detailRadius: b.detailRadius, radius: 22, size: 1600, cropPct: b.crop, polygonsPct: b.polygons, widths: [1200, 720, 160] })),
   // logo studio: real customers' logos, square
   ...["02", "04", "05", "14", "20", "03"].map((n) => ({ id: `logo/proof-${n}`, task: "kundelogo40", file: `Kundelogo-${n}.jpg`, op: "resize", aspect: 1, widths: [360] })),
-  // swipe match: one card per box, 4:5
-  { id: "swipe/torino", task: "kategori", file: "Kategori_Reshoot-9.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
-  { id: "swipe/seoul", task: "kategori", file: "Kategori_Reshoot-32.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
-  { id: "swipe/madrid", task: "kategori", file: "Kategori_Reshoot-23.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
-  { id: "swipe/oslo", task: "kategori", file: "Kategori_Reshoot-27.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
-  { id: "swipe/monaco", task: "monaco", file: "Monaco_eco_1x1-05.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
-  { id: "swipe/tokyo", task: "tokyo", file: "Tokyo_Ny_Farve_1x1-13.jpg", op: "resize", aspect: 0.8, widths: [900, 600] },
   // pack & ship: the open mailer with jewellery boxes
   { id: "ship/mailer", task: "shipping", file: "Shipping_Smykkeæsker_Reshoot-13.jpg", op: "resize", aspect: 1, widths: [1200, 720] },
 ];

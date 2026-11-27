@@ -74,10 +74,10 @@ test("every change is checked, says what it did, and is kept in a bounded histor
   assert.throws(() => control.applyChange(c, { type: "market", market: "XX", on: false }), /Unknown market/);
   assert.throws(() => control.applyChange(c, { type: "reach" }), /Live is off/);
   assert.throws(() => control.applyChange(c, { type: "drop_tables" }), /Unknown change/);
-  const r = control.applyChange(c, { type: "current", env: "staging", concept: "swipe-match" });
-  assert.equal(r.control.staging.current, "swipe-match");
+  const r = control.applyChange(c, { type: "current", env: "staging", concept: "pack-and-ship" });
+  assert.equal(r.control.staging.current, "pack-and-ship");
   assert.equal(r.control.live.current, CURRENT, "staging can run another experience than live");
-  assert.match(r.text, /Staging now runs Swipe match \(was Logo studio\)/);
+  assert.match(r.text, /Staging now runs Pack & ship \(was Logo studio\)/);
   assert.equal(r.control.history[0].text, r.text);
   assert.ok(r.control.updatedAt);
   for (let i = 0; i < control.HISTORY_KEPT + 20; i++) c = control.applyChange(c, { type: "staging", on: i % 2 === 1 }).control;
@@ -125,8 +125,8 @@ test("a store that gains the tag while live is on stays silent until it is broug
   const staging = control.applyChange(c, { type: "staging", on: false }).control;
   assert.deepEqual(staging.live.reach, ["DK"]);
   assert.equal(control.touchesLive({ type: "staging", on: false }), false);
-  assert.equal(control.touchesLive({ type: "current", env: "staging", concept: "swipe-match" }), false);
-  assert.equal(control.touchesLive({ type: "current", env: "live", concept: "swipe-match" }), true);
+  assert.equal(control.touchesLive({ type: "current", env: "staging", concept: "pack-and-ship" }), false);
+  assert.equal(control.touchesLive({ type: "current", env: "live", concept: "pack-and-ship" }), true);
   // bringing live in line moves reach, and with it which popups come down and go back up
   const r = control.applyChange(c, { type: "reach" });
   assert.deepEqual(r.control.live.reach, ["DE", "FR"]);
@@ -234,7 +234,7 @@ test("the funnel counts per experience, per market and per Danish day, and lists
   const out = funnel.aggregate([
     rec("logo-studio", ["peek_shown", "open", "name_typed", "email_focus", "submit", "subscribed"], { at: at("2026-10-29T22:30:00Z"), page: "home" }),
     rec("logo-studio", ["peek_shown", "open", "close_button"], { at: at("2026-10-29T10:00:00Z") }),
-    rec("swipe-match", ["peek_shown", "peek_dismissed"], { at: at("2026-10-30T09:00:00Z"), market: "DE" }),
+    rec("pack-and-ship", ["peek_shown", "peek_dismissed"], { at: at("2026-10-30T09:00:00Z"), market: "DE" }),
   ], { days: ["2026-10-29", "2026-10-30"] });
   assert.equal(out.total.exposures, 3);
   assert.equal(out.concepts["logo-studio"].opened, 2);
@@ -339,7 +339,7 @@ test("Klaviyo: live counts each market's own list, test counts the TEST list, a 
       },
       lists: {
         [TEST_TARGET.listId]: [member("logo-studio", "DK", "2026-10-30T10:00:00+00:00")],
-        [dk.listId]: [member("logo-studio", "DK", "2026-10-29T23:30:00+00:00"), member("swipe-match", "DK", "2026-10-30T09:00:00+00:00", "UNSUBSCRIBED"), { attributes: { joined_group_at: "2026-10-30T09:00:00+00:00", properties: {}, subscriptions: { email: { marketing: { consent: "SUBSCRIBED", custom_method_detail: "The Insert" } } } } }],
+        [dk.listId]: [member("logo-studio", "DK", "2026-10-29T23:30:00+00:00"), member("pack-and-ship", "DK", "2026-10-30T09:00:00+00:00", "UNSUBSCRIBED"), { attributes: { joined_group_at: "2026-10-30T09:00:00+00:00", properties: {}, subscriptions: { email: { marketing: { consent: "SUBSCRIBED", custom_method_detail: "The Insert" } } } } }],
       },
     },
     deKey: { events: {}, lists: { [de.listId]: [] } },

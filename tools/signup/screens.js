@@ -31,7 +31,7 @@ function serve() {
   const server = await serve();
   const base = `http://127.0.0.1:${server.address().port}/signup/preview/frame.html`;
   const browser = await chromium.launch();
-  const concepts = conceptArg ? [conceptArg] : ["logo-studio", "swipe-match", "pack-and-ship"];
+  const concepts = conceptArg ? [conceptArg] : ["logo-studio", "pack-and-ship"];
   const viewports = [
     { name: "mobile", ...devices["iPhone 13"] },
     { name: "desktop", viewport: { width: 1440, height: 900 } },
@@ -72,10 +72,6 @@ function serve() {
         await host.locator(".ls-next").click();
         await page.waitForTimeout(1200); await shot("4-result");
       }
-      if (c === "swipe-match") {
-        for (let i = 0; i < 6; i++) { await host.locator(i % 3 === 0 ? ".sm-nope" : ".sm-like").click(); await page.waitForTimeout(650); if (i === 1) await shot("2-swiping"); }
-        await page.waitForTimeout(1200); await shot("3-result");
-      }
       if (c === "pack-and-ship") {
         await host.locator(".wps-input").fill("not-an-email");
         await host.locator(".wps-btn-primary").click();
@@ -85,11 +81,6 @@ function serve() {
         await host.locator(".wps-btn-primary").click();
         await page.waitForTimeout(1400); await shot("4-shipping");
         await page.waitForTimeout(1800); await shot("5-success");
-      }
-      if (c === "swipe-match") {
-        await host.locator(".wps-input").fill("name@company.com");
-        await host.locator(".wps-btn-primary").click();
-        await page.waitForTimeout(1500); await shot("4-success");
       }
     }
     await ctx.close();

@@ -1,7 +1,8 @@
 # Signup Lab – koncepter, vurdering og valg
 
 Skrevet 2026-10-29. Ti grundlæggende forskellige interaktionsformer, vurderet efter briefens syv kriterier.
-De tre valgte er bygget færdigt (se `README.md`).
+De tre valgte blev bygget færdigt (se `README.md`); Æske-match blev fjernet igen 2026-11-27 efter ønske, så
+Logo-studiet og Pakket & sendt er tilbage.
 
 ## Det vi vidste på forhånd (Westpacks egne tal)
 
@@ -59,7 +60,7 @@ bedre end interaktion først? Her er intet trin før e-mailfeltet; selve tilmeld
 tape, poststempel med dagens dato). Den tester hypotesen "friktion koster mere end wow tjener" direkte. Mindst
 relevant som indhold, men den mest ærlige test af formen.
 
-**2 Æske-match – det tredje, reelt forskellige.** Swipe er den mest mobil-native interaktion, der findes,
+**2 Æske-match – det tredje, reelt forskellige (fjernet 2026-11-27).** Swipe er den mest mobil-native interaktion, der findes,
 viser seks rigtige æsker (aktiv brug af biblioteket) og giver en profil, der gemmes på profilen
 (`wp_style_profile`, `wp_liked_boxes`) til senere, relevante mails. Den ligger tættest på quizzen, som gav de
 bedste abonnenter, men med ét tryk pr. kort i stedet for spørgsmål.
@@ -79,65 +80,3 @@ størst wow og mindst relevans: et spil, der lærer folk at fange smykker, sælg
   mod nul friktion), og svaret fortæller, hvilken vej næste koncept skal gå.
 - Forvent ærligt, at Pakket & sendt giver flest tilmeldinger pr. visning og Logo-studiet de mest relevante. Det
   er derfor, målingen også følger kvaliteten (se README, "A/B-test").
-
-## Koncept 4: Direkte (2026-11-27)
-
-Bestilt som "en ny sign-up idé/koncept, som virkeligt er hardcore med permission indsamling". Kode:
-`concepts/direct.js/.css`, preview: `?wps=direct` på en butik eller "Direkte" i preview-værktøjet. **Ikke live nogen
-steder**: `CURRENT` er stadig Logo-studiet, og Control er ikke rørt.
-
-### Hvad tallene sagde
-
-Logo-studiet live i CZ og IT, 19.–27. november: 888 visninger, 663 åbnede, **407 trykkede luk i første billede**, 43
-skrev et navn, 27 nåede nogensinde e-mailfeltet, 8 tilmeldte sig (0,9 % pr. visning). The Insert ligger på samme niveau
-(~0,8 % pr. viser). Alt, der står foran e-mailfeltet, koster folk – også når det er smukt.
-
-### Princippet
-
-Hardcore på **hvor tidligt, hvor tit og hvor let** spørgsmålet stilles – aldrig på om svaret er frivilligt.
-
-1. **E-mailen står i første billede.** Grund, felt, knap og butikkens egen samtykkesætning – intet før. På en computer
-   står markøren allerede i feltet.
-2. **Grunden er konkret og følger kalenderen** (`rules.directSeason`): resten af året "Nye æsker, frister og
-   nytårsudsalget. Vi siger til i god tid." Ingen rabat, ingen procent, ingen dato.
-3. **Nytårsudsalget har sin egen version, 10. december – 3. januar** (brugeren 27/11: "sådan 10. dec agtigt. når vi lige
-   er totalt ovre det her bf"): "Få besked, når nytårsudsalget starter – direkte i din indbakke." Billedvæggen bliver til
-   en indbakke, hvor mailen "Nytårsudsalget er startet" lander øverst, med det ærlige preview "Varer, der udgår, er sat
-   ned – så længe lager haves." Efter tilmeldingen: "Vi skriver, når nytårsudsalget starter." Pillen siger "Få besked,
-   når udsalget starter". Den stopper 3. januar, fordi "når det starter" ikke er sandt, når det er startet (første mail
-   4/1). Knappen siger stadig "Tilmeld nyhedsbrevet" – det er nyhedsbrevet, de siger ja til.
-   **Aldrig "eksklusivt", "først", "før alle andre", "VIP" eller "early access"** (brugeren: "vi ikke siger eksklusivt
-   nytår på email for det er det ikke"): udsalget ligger i butikken for alle, mailen siger bare, hvornår det starter. En
-   test fejler, hvis et af de 17 sprog siger det, og oversættelsesværktøjet afviser det.
-4. **Rigtigt bevis:** seks kunders egne logo-æsker som billedvæg, og "Over 20.000 i Europa og USA får allerede
-   nyhedsbrevet" (25.239 på de 18 lister 24/11; "over 20.000" holder med god margin).
-5. **Et "nej tak" er ikke slutningen.** Lukkes popuppen, bliver en lille pille stående nederst på siden – på denne og de
-   næste sider – ét tryk fra feltet (`rules.dockAllowed`). Popuppen selv holder samme pause som alle andre (14/45/120
-   dage); pillen har sit eget kryds (14 dage). Den løfter sig over butikkens egne faste elementer (cookie-knap, chat,
-   en klæbende kurv-bjælke).
-6. **Det, vi vil vide, kommer efter tilladelsen, aldrig før:** "Hvad sælger I?" med seks svar på ét tryk, frivilligt,
-   sendt som sin egen hændelse ("Signup Lab Answered", `wp_business_type`). Et oversprunget spørgsmål koster intet.
-
-Det, den ikke gør: intet forudkrydset, intet samtykke i et klik på noget andet, ingen cookie-mur eller mur foran
-indholdet, altid et synligt kryds, ingen skyld i et nej, og ingen e-mail opsamlet, før knappen er trykket.
-
-På en telefon er den et normalt popup-kort midt på skærmen: højst 73 % af en 360×640-skærm på det længste sprog, 67 % på
-en iPhone 13, i begge versioner – intet skal scrolles, og mailens emnelinje klippes aldrig.
-
-### Sådan bliver den målt
-
-- Primært: bekræftede tilmeldinger pr. **selvåbnet** visning (trigger `delay`/`exit`) – tilmeldinger via pillen tæller
-  med i tælleren, ikke i nævneren, ellers straffes pillen for at virke. `wp_signup_trigger` på profilen siger, hvor
-  mange der kom ind via pillen; `wp_signup_season` hvilken grund de så.
-- Kvalitet bagefter som altid: afmeldinger inden for 90 dage og køb inden for et år, segmenteret på `wp_signup_concept`.
-
-### Det næste – ikke bygget, kræver et ja
-
-**Kvitteringssiden er den største permission-mulighed Westpack har, og den står tom.** Checkout-tilmeldingen gav 7,7 % af
-ordrerne frem til 30/6 (gæster ~43 %), faldt til 0,5 %, da gæstecheckout forsvandt 1/7, og er ~0 uden for DK siden 26/10
-(se `klaviyo-checkout-optin-break`). Checkout-tilmeldte er de bedste abonnenter: 23 % af de nye køber inden for et år mod
-7,2 % fra popups. Der kommer ~190 ordrer om dagen; siger 5–10 % ja på kvitteringssiden, er det 10–19 tilmeldinger om dagen
-– på niveau med alle popups i alle 18 markeder tilsammen (The Insert: ~24/dag). Scriptet sidder allerede på siden; det
-kræver en regel for `/checkout/onepage/success`, et kort uden pause og at det ikke spørger dem, der krydsede af i checkout
-(dataLayer `newsletter_consent_updated`). Det er et skridt ind på købsflowet og ligger ved siden af MCB's rettelse af
-checkout-boksen, så det er en beslutning, ikke en kodeændring.

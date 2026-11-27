@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 4 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpackin uutiskirje",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, olet listalla.",
     "successBody": "Kun meillä seuraavan kerran on jotain avaamisen arvoista, löydät sen sähköpostilaatikostasi."
   },
-  "swipe-match": {
-    "peek": "Pyyhkäise oma pakkaustyylisi esiin",
-    "peekCta": "Aloita",
-    "kicker": "Korurasiamatch",
-    "title": "Jatkoon vai sivuun?",
-    "lede": "Kuusi korurasiaa. Pyyhkäise. Me kerromme, mitä valintasi sanovat brändistäsi.",
-    "like": "Jatkoon",
-    "nope": "Ei kiitos",
-    "keysHint": "Myös nuolinäppäimet toimivat: ← ei · → kyllä",
-    "progress": "{n}/{total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco-lahjarasia",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Saranoitu kansi ja kultareunus. Klassikko, joka ei käy tylsäksi.",
-      "seoul": "Ultralitteä vetolaatikko pölyvihreänä. Huomaamaton – kunnes se avataan.",
-      "madrid": "Soft touch ulkopuolella, veluuri sisällä ja holkki ympärillä.",
-      "oslo": "Keinonahkaa ja veluuria. Saranoitujen rasioiden bestseller.",
-      "monaco": "Lahjarasia, joka näyttää pieneltä käsilaukulta. Satiininauha mukana.",
-      "tokyo": "Irti nostettava kansi ja reilusti tilaa logollesi."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Keskiyö",
-        "line": "Tumma, terävä ja kultainen. Asiakkaasi avaavat rasian hitaasti."
-      },
-      "cocoa": {
-        "name": "Kaakao",
-        "line": "Lämmin ja pehmeä. Sellainen rasia, jonka ihmiset säästävät."
-      },
-      "forest": {
-        "name": "Metsänpohja",
-        "line": "Vihreä, rauhallinen ja loppuun asti mietitty. Lahjanauhaa myöten."
-      },
-      "sand": {
-        "name": "Hiekka",
-        "line": "Vaalea, ilmava ja pohjoismainen. Koru saa koko näyttämön."
-      }
-    },
-    "resultKicker": "Pakkausprofiilisi",
-    "resultTitle": "Tyylisi on {pct} % {world}.",
-    "resultSecond": "… ja {pct} % {world}.",
-    "noneTitle": "Ei yhtään sydäntä? Arvostamme.",
-    "noneLine": "Vaativimmat ostajat rakentavat parhaat brändit. Meillä on enemmän rasioita kuin tähän mahtuu.",
-    "ctaTitle": "Lähetetäänkö sinulle uutuuksia tyylisi mukaan?",
-    "restart": "Pyyhkäise uudelleen",
-    "seeBoxes": "Katso korukotelot",
-    "successTitle": "Kirjattu: {world}.",
-    "successBody": "Nähdään sähköpostissa."
-  },
   "pack-and-ship": {
     "peek": "Sinulle on paketti. (Se on uutiskirje.)",
     "peekCta": "Avaa",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Lähetetty.",
     "successBody": "Se löytyy sähköpostilaatikostasi, kun meillä on jotain avaamisen arvoista."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Uudet rasiat, määräajat ja uudenvuoden ale. Kerromme hyvissä ajoin.",
-        "dock": "Uutisia Westpackilta"
-      },
-      "sale": {
-        "title": "Saat tiedon, kun uudenvuoden ale alkaa – suoraan sähköpostiisi.",
-        "dock": "Tieto uudenvuoden alen alusta",
-        "done": "Kirjoitamme, kun uudenvuoden ale alkaa.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Uudenvuoden ale on alkanut",
-        "mailPreview": "Valikoimasta poistuvat tuotteet on alennettu – niin kauan kuin varastoa riittää.",
-        "mailTime": "tammikuu"
-      }
-    },
-    "proof": "Yli 20 000 ihmistä Euroopassa ja Yhdysvalloissa saa jo uutiskirjeen.",
-    "successTitle": "Olet mukana.",
-    "askTitle": "Vielä yksi juttu: mitä myyt?",
-    "askLede": "Näin lähetämme sinulle sopivia juttuja. Täysin vapaaehtoista.",
-    "types": {
-      "jewellery": "Korut",
-      "watches": "Kellot",
-      "fashion": "Muoti ja asusteet",
-      "beauty": "Kauneus ja kosmetiikka",
-      "gifts": "Lahjat ja sisustus",
-      "other": "Jotain muuta"
-    },
-    "skip": "Ohita",
-    "thanks": "Kiitos – laitettu muistiin. Nähdään sähköpostissa.",
-    "dockOpen": "Avaa uutiskirjeen tilaus",
-    "dockHide": "Piilota"
   }
 };

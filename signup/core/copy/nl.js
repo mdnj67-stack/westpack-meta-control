@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Nieuwsbrief van Westpack",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, je doet mee.",
     "successBody": "Hebben we iets dat het openen waard is, dan vind je het in je inbox."
   },
-  "swipe-match": {
-    "peek": "Swipe naar jouw verpakkingsstijl",
-    "peekCta": "Start",
-    "kicker": "Doosjesmatch",
-    "title": "Hartje of weg ermee?",
-    "lede": "Zes doosjes. Swipe maar. Wij vertellen wat ze over je merk zeggen.",
-    "like": "Ja, graag",
-    "nope": "Nee, bedankt",
-    "keysHint": "De pijltjestoetsen werken ook: ← nee · → ja",
-    "progress": "{n} van {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco-geschenkdoos",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Scharnierdeksel en gouden rand. De klassieker die nooit verveelt.",
-      "seoul": "Een ultraplatte lade in stoffig groen. Bescheiden – tot hij opengaat.",
-      "madrid": "Soft touch aan de buitenkant, velours aan de binnenkant en een sleeve eromheen.",
-      "oslo": "Kunstleer en velours. Een bestseller onder de doosjes met scharnierdeksel.",
-      "monaco": "Een geschenkdoos die op een klein handtasje lijkt. Met satijnen lint.",
-      "tokyo": "Een los deksel en volop ruimte voor je logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Middernacht",
-        "line": "Donker, strak en met goud. Je klanten openen het doosje langzaam."
-      },
-      "cocoa": {
-        "name": "Cacao",
-        "line": "Warm en zacht. Zo’n doosje dat mensen bewaren."
-      },
-      "forest": {
-        "name": "Bosgrond",
-        "line": "Groen, rustig en doordacht. Tot aan het lint."
-      },
-      "sand": {
-        "name": "Zand",
-        "line": "Licht, luchtig en noords. Het sieraad krijgt alle aandacht."
-      }
-    },
-    "resultKicker": "Jouw verpakkingsprofiel",
-    "resultTitle": "Je bent {pct}% {world}.",
-    "resultSecond": "… en {pct}% {world}.",
-    "noneTitle": "Geen enkel hartje? Respect.",
-    "noneLine": "Kieskeurige inkopers bouwen de beste merken. We hebben veel meer doosjes dan hier passen.",
-    "ctaTitle": "Nieuws in jouw stijl ontvangen?",
-    "restart": "Opnieuw swipen",
-    "seeBoxes": "Bekijk de sieradendoosjes",
-    "successTitle": "Genoteerd: {world}.",
-    "successBody": "Tot in je inbox."
-  },
   "pack-and-ship": {
     "peek": "We hebben een pakketje voor je. (Het is een nieuwsbrief.)",
     "peekCta": "Openen",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Verzonden.",
     "successBody": "Hebben we iets dat het openen waard is, dan komt het in je inbox."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nieuwe doosjes, deadlines en de nieuwjaarsuitverkoop. We geven je op tijd een seintje.",
-        "dock": "Nieuws van Westpack"
-      },
-      "sale": {
-        "title": "Krijg een seintje als de nieuwjaarsuitverkoop start – direct in je inbox.",
-        "dock": "Seintje bij nieuwjaarsuitverkoop",
-        "done": "We sturen je een bericht als de nieuwjaarsuitverkoop start.",
-        "mailFrom": "Westpack",
-        "mailSubject": "De nieuwjaarsuitverkoop is gestart",
-        "mailPreview": "Uitlopende producten zijn afgeprijsd – zolang de voorraad strekt.",
-        "mailTime": "januari"
-      }
-    },
-    "proof": "Meer dan 20.000 mensen in Europa en de VS krijgen de nieuwsbrief al.",
-    "successTitle": "Je bent erbij.",
-    "askTitle": "Nog één ding: wat verkoop je?",
-    "askLede": "Dan sturen we je wat past. Helemaal vrijblijvend.",
-    "types": {
-      "jewellery": "Sieraden",
-      "watches": "Horloges",
-      "fashion": "Mode en accessoires",
-      "beauty": "Beauty en cosmetica",
-      "gifts": "Cadeaus en interieur",
-      "other": "Iets anders"
-    },
-    "skip": "Overslaan",
-    "thanks": "Bedankt, genoteerd. Tot in je inbox.",
-    "dockOpen": "Nieuwsbriefaanmelding openen",
-    "dockHide": "Verbergen"
   }
 };

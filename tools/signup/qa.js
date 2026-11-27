@@ -42,7 +42,7 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     return { ctx, p, host: p.locator("#westpack-signup"), flushes };
   }
   const overflow = (p) => p.evaluate(() => { const d = document.querySelector("#westpack-signup").shadowRoot.querySelector(".wps-dialog"); return { sw: d.scrollWidth, cw: d.clientWidth }; });
-  const concepts = ["logo-studio", "swipe-match", "pack-and-ship"];
+  const concepts = ["logo-studio", "pack-and-ship"];
   const { MARKETS } = require(path.join(ROOT, "signup", "core", "markets.js"));
   const byLang = {};
   for (const [code, m] of Object.entries(MARKETS)) if (!byLang[m.lang] && m.lang !== "da") byLang[m.lang] = code;
@@ -62,10 +62,6 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     const o = await overflow(p);
     check(`360×640 ${c}: no sideways overflow`, o.sw <= o.cw + 1, `${o.sw}/${o.cw}px`);
     await p.screenshot({ path: path.join(outDir, `small-${c}.jpg`), type: "jpeg", quality: 75 });
-    if (c === "swipe-match") {
-      const box = await p.locator("#westpack-signup .sm-like").boundingBox();
-      check("360×640 swipe-match: like button above the fold", box && box.y + box.height <= 640, box ? `bottom ${Math.round(box.y + box.height)}px` : "missing");
-    }
     await ctx.close();
   }
 
@@ -99,13 +95,15 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
     await ctx.close();
   }
 
-  // 4. reduced motion: the wrapper says so, and swiping still works with buttons
+  // 4. reduced motion: the wrapper says so, and a signup still reaches its thank-you (Pack & ship ships at once)
   {
-    const { ctx, p, host } = await page({ ...devices["iPhone 13"], reducedMotion: "reduce" }, "concept=swipe-match&market=dkk_dk_den");
+    const { ctx, p, host } = await page({ ...devices["iPhone 13"], reducedMotion: "reduce" }, "concept=pack-and-ship&market=dkk_dk_den");
     const flag = await p.evaluate(() => document.querySelector("#westpack-signup").shadowRoot.querySelector(".wps").dataset.reduced);
     check("reduced motion is detected", flag === "true", flag);
-    for (let i = 0; i < 6; i++) { await host.locator(".sm-like").click(); await p.waitForTimeout(250); }
-    check("reduced motion: swipe reaches the result", await host.locator(".sm-result:not([hidden])").count() === 1);
+    await host.locator(".wps-input").fill("name@company.com");
+    await host.locator(".wps-btn-primary").click();
+    await p.waitForTimeout(1200);
+    check("reduced motion: a signup reaches the thank-you", await host.locator(".ps-success:not([hidden])").count() === 1);
     await ctx.close();
   }
 

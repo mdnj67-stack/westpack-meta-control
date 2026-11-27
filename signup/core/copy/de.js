@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 7 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Westpack-Newsletter",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, Sie sind dabei.",
     "successBody": "Wenn wir wieder etwas haben, das sich zu öffnen lohnt, finden Sie es in Ihrem Postfach."
   },
-  "swipe-match": {
-    "peek": "Swipen Sie sich zu Ihrem Verpackungsstil",
-    "peekCta": "Starten",
-    "kicker": "Schachtel-Match",
-    "title": "Herz oder weiter?",
-    "lede": "Sechs Schmuckschachteln. Wischen Sie. Wir sagen Ihnen, was sie über Ihre Marke verraten.",
-    "like": "Herz",
-    "nope": "Weiter",
-    "keysHint": "Die Pfeiltasten gehen auch: ← weiter · → Herz",
-    "progress": "{n} von {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Monaco-Geschenkbox",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Klappdeckel und Goldrand. Der Klassiker, der nie langweilt.",
-      "seoul": "Ultraflache Schublade in Staubgrün. Zurückhaltend – bis sie geöffnet wird.",
-      "madrid": "Soft-Touch außen, Velours innen und eine Banderole drumherum.",
-      "oslo": "Kunstleder und Velours. Ein Bestseller unter den Schmuckschachteln mit Klappdeckel.",
-      "monaco": "Eine Geschenkbox, die wie eine kleine Handtasche aussieht. Mit Satinband.",
-      "tokyo": "Ein abnehmbarer Deckel und viel Platz für Ihr Logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Mitternacht",
-        "line": "Dunkel, markant und mit Gold. Ihre Kunden öffnen die Schachtel langsam."
-      },
-      "cocoa": {
-        "name": "Kakao",
-        "line": "Warm und weich. So eine Schachtel behält man."
-      },
-      "forest": {
-        "name": "Waldboden",
-        "line": "Grün, ruhig und durchdacht. Bis hin zum Geschenkband."
-      },
-      "sand": {
-        "name": "Sand",
-        "line": "Hell, leicht und nordisch. Das Schmuckstück bekommt die ganze Bühne."
-      }
-    },
-    "resultKicker": "Ihr Verpackungsprofil",
-    "resultTitle": "Sie sind {pct} % {world}.",
-    "resultSecond": "… und {pct} % {world}.",
-    "noneTitle": "Kein einziges Herz? Respekt.",
-    "noneLine": "Wer wählerisch ist, baut die besten Marken. Wir haben mehr Schmuckschachteln, als hier hineinpassen.",
-    "ctaTitle": "Neues passend zu Ihrem Stil?",
-    "restart": "Noch einmal wischen",
-    "seeBoxes": "Schmuckschachteln ansehen",
-    "successTitle": "Notiert: {world}.",
-    "successBody": "Wir lesen uns im Postfach."
-  },
   "pack-and-ship": {
     "peek": "Wir haben ein Paket für Sie. (Es ist ein Newsletter.)",
     "peekCta": "Öffnen",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Abgeschickt.",
     "successBody": "Wenn wir etwas haben, das sich zu öffnen lohnt, kommt es in Ihr Postfach."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Neue Schachteln, Fristen und der Neujahrs-Sale. Wir sagen Ihnen rechtzeitig Bescheid.",
-        "dock": "Neues von Westpack"
-      },
-      "sale": {
-        "title": "Erfahren Sie, wann der Neujahrs-Sale startet – direkt in Ihrem Postfach.",
-        "dock": "Start des Neujahrs-Sales",
-        "done": "Wir schreiben Ihnen, wenn der Neujahrs-Sale startet.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Der Neujahrs-Sale ist gestartet",
-        "mailPreview": "Auslaufartikel sind reduziert – solange der Vorrat reicht.",
-        "mailTime": "Januar"
-      }
-    },
-    "proof": "Über 20.000 Menschen in Europa und den USA bekommen bereits den Newsletter.",
-    "successTitle": "Sie sind dabei.",
-    "askTitle": "Noch eine Frage: Was verkaufen Sie?",
-    "askLede": "Dann schicken wir Ihnen, was zu Ihnen passt. Ganz freiwillig.",
-    "types": {
-      "jewellery": "Schmuck",
-      "watches": "Uhren",
-      "fashion": "Mode und Accessoires",
-      "beauty": "Beauty und Kosmetik",
-      "gifts": "Geschenke und Interieur",
-      "other": "Etwas anderes"
-    },
-    "skip": "Überspringen",
-    "thanks": "Danke, notiert. Wir sehen uns im Postfach.",
-    "dockOpen": "Newsletter-Anmeldung öffnen",
-    "dockHide": "Ausblenden"
   }
 };

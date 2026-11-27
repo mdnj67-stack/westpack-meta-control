@@ -50,7 +50,7 @@ async function findProfile(email) {
   const browser = await chromium.launch();
   const stamp = Date.now();
   const results = [];
-  for (const concept of (process.env.E2E_ONLY ? process.env.E2E_ONLY.split(",") : ["logo-studio", "swipe-match", "pack-and-ship", "direct"])) {
+  for (const concept of (process.env.E2E_ONLY ? process.env.E2E_ONLY.split(",") : ["logo-studio", "pack-and-ship"])) {
     const email = `signup-lab+${concept}-${stamp}@westpack.com`;
     const ctx = await browser.newContext({ ...devices["iPhone 13"] });
     const page = await ctx.newPage();
@@ -62,7 +62,6 @@ async function findProfile(email) {
     await page.waitForTimeout(1500);
     const host = page.locator("#westpack-signup");
     if (concept === "logo-studio") { await host.locator(".ls-name-input").fill("Signup Lab Test"); await host.locator(".ls-next").click(); }
-    if (concept === "swipe-match") for (let i = 0; i < 6; i++) { await host.locator(i % 2 ? ".sm-nope" : ".sm-like").click(); await page.waitForTimeout(450); }
     await page.waitForTimeout(600);
     // an invalid address must not reach Klaviyo
     await host.locator(".wps-input").fill("not an email");
@@ -75,17 +74,9 @@ async function findProfile(email) {
     await host.locator(".wps-form .wps-btn-primary").dblclick();
     await page.waitForTimeout(2500);
     const subs = posts.filter((u) => u.endsWith("/client/subscriptions")).length;
-    // Direct asks one optional question after the signup; its answer is a second event on the same profile
-    if (concept === "direct") { await host.locator('.dr-type[data-type="jewellery"]').click(); await page.waitForTimeout(2500); }
     const profile = await findProfile(email);
-    let events = null, metricNames = [];
-    for (let i = 0; profile && i < (concept === "direct" ? 10 : 1); i++) {
-      events = (await kv(`/api/events?filter=${encodeURIComponent(`equals(profile_id,"${profile.id}")`)}&fields[event]=event_properties,datetime&include=metric&fields[metric]=name`)).j;
-      metricNames = (events.included || []).map((m) => m.attributes.name);
-      if (concept !== "direct" || metricNames.includes("Signup Lab Answered")) break;
-      await sleep(3000);
-    }
-    const answered = concept === "direct" && events ? (events.data || []).map((e) => e.attributes.event_properties || {}).find((p) => p.wp_business_type) : undefined;
+    const events = profile ? (await kv(`/api/events?filter=${encodeURIComponent(`equals(profile_id,"${profile.id}")`)}&fields[event]=event_properties,datetime&include=metric&fields[metric]=name`)).j : null;
+    const metricNames = events ? (events.included || []).map((m) => m.attributes.name) : [];
     const p = profile && profile.attributes;
     results.push({
       concept, email,
@@ -98,7 +89,6 @@ async function findProfile(email) {
       locale: p && p.locale,
       properties: p && Object.fromEntries(Object.entries(p.properties || {}).filter(([k]) => k.startsWith("wp_")).map(([k, v]) => [k, k === "wp_consent_text" ? `${String(v).slice(0, 48)}…` : v])),
       timelineEvent: metricNames.includes("Signup Lab Subscribed"),
-      ...(concept === "direct" ? { answerEvent: metricNames.includes("Signup Lab Answered"), answer: answered && answered.wp_business_type } : {}),
       profileId: profile && profile.id,
     });
     await ctx.close();

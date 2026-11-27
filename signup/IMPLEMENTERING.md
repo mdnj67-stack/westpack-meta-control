@@ -35,7 +35,7 @@ tragten registreres som `env=test` (ikke live), og at links bliver på staging. 
 
 - **Se den igen:** tilføj `?wps=reset` bag adressen. Så glemmer browseren, at du har lukket den eller tilmeldt dig,
   og du er en ny besøgende igen.
-- **En bestemt oplevelse:** `?wps=logo-studio`, `?wps=swipe-match` eller `?wps=pack-and-ship` åbner den med det samme.
+- **En bestemt oplevelse:** `?wps=logo-studio` eller `?wps=pack-and-ship` åbner den med det samme.
 - **Tragten fra staging:** i biblen, Signup Lab → Signups → "Staging & tests" (eller
   `GET /api/signup/track?action=report&env=test&from=<dato>`).
 - **Hvad staging kører:** Signup Lab → Control. Staging har sin egen tænd/sluk og sin egen oplevelse, uafhængigt af
@@ -76,7 +76,7 @@ HTML-tag med samme linje, trigger All Pages. Brug kun én af de to veje (scripte
 indlæsning).
 
 **Tjek at tagget virker:** åbn en hvilken som helst butik med `?wps=preview` bag adressen, fx
-`https://www.westpack.com/dkk_dk_den/?wps=preview` (eller `?wps=logo-studio`, `?wps=swipe-match`,
+`https://www.westpack.com/dkk_dk_den/?wps=preview` (eller `?wps=logo-studio`,
 `?wps=pack-and-ship`). Oplevelsen åbner med det samme, på butikkens sprog. I den tilstand går en tilmelding kun til
 testlisten "TEST - Signup Lab (preview only)" i DK-kontoen. Uden parameteren sker der intet, før vi tænder.
 

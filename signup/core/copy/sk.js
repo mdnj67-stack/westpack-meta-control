@@ -8,9 +8,7 @@
     "proofread": "2026-11-20 gpt-5.6-sol, 2 fix(es)",
     "logoStudioUpdate": "2026-10-30: the foil headline, the carrier bag, the 25 foil names and the box-free hints were written by hand (Claude), not by transcreate.js; proofread 2026-11-20",
     "resultTitleUpdate": "2026-11-19: resultTitle names packaging instead of a box - the result's hero can be the carrier bag (Claude; proofread 2026-11-20)",
-    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)",
-    "directUpdate": "2026-11-27: the Direct block was transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read",
-    "directSaleUpdate": "2026-11-27: direct.seasons.sale transcreated alone by tools/signup/copy-direct-2026-11-27.js (gpt-5.6-sol); no native read"
+    "wineRedUpdate": "2026-11-20: colour.winered added, the logo module's matt Wine Red, in the module's own word for it (Claude; proofread 2026-11-20)"
   },
   "shell": {
     "dialogLabel": "Newsletter Westpacku",
@@ -105,61 +103,6 @@
     "successTitle": "{name}, ste tam.",
     "successBody": "Keď budeme mať niečo, čo stojí za otvorenie, ozveme sa e-mailom."
   },
-  "swipe-match": {
-    "peek": "Nájdite svoj štýl balenia potiahnutím",
-    "peekCta": "Začať",
-    "kicker": "Výber krabičky",
-    "title": "Srdcovka alebo nie?",
-    "lede": "Šesť krabičiek. Posúvajte ich. Povieme vám, čo hovoria o vašej značke.",
-    "like": "Áno, prosím",
-    "nope": "Nie, ďakujem",
-    "keysHint": "Fungujú aj šípky: ← nie · → áno",
-    "progress": "{n} z {total}",
-    "cardNames": {
-      "torino": "Torino",
-      "seoul": "Seoul",
-      "madrid": "Madrid",
-      "oslo": "Oslo",
-      "monaco": "Darčeková krabička Monaco",
-      "tokyo": "Tokyo"
-    },
-    "cards": {
-      "torino": "Odklápacie veko a zlatý lem. Klasika, ktorá nestarne.",
-      "seoul": "Ultraplochá zásuvka v tlmenej zelenej. Nenápadná – kým sa neotvorí.",
-      "madrid": "Soft touch zvonka, velúr zvnútra a návlek okolo krabičky.",
-      "oslo": "Koženka a velúr. Bestseller medzi krabičkami s odklápacím vekom.",
-      "monaco": "Darčeková krabička, ktorá vyzerá ako malá kabelka. So saténovou stuhou.",
-      "tokyo": "Odnímateľné veko a veľa miesta na vaše logo."
-    },
-    "worlds": {
-      "noir": {
-        "name": "Polnoc",
-        "line": "Tmavá, ostrá a so zlatom. Vaši zákazníci otvárajú krabičku pomaly."
-      },
-      "cocoa": {
-        "name": "Kakao",
-        "line": "Teplá a hebká. Taká krabička sa nevyhadzuje."
-      },
-      "forest": {
-        "name": "Lesná pôda",
-        "line": "Zelená, pokojná a premyslená. Až po darčekovú stuhu."
-      },
-      "sand": {
-        "name": "Piesok",
-        "line": "Svetlá, vzdušná a severská. Šperk dostane celé javisko."
-      }
-    },
-    "resultKicker": "Váš profil balenia",
-    "resultTitle": "Váš štýl je na {pct} % {world}.",
-    "resultSecond": "… a na {pct} % {world}.",
-    "noneTitle": "Ani jedno srdiečko? Rešpekt.",
-    "noneLine": "Vyberaví nákupcovia budujú tie najlepšie značky. Máme oveľa viac krabičiek, než sa sem zmestí.",
-    "ctaTitle": "Máme posielať novinky vo vašom štýle?",
-    "restart": "Potiahnuť znova",
-    "seeBoxes": "Pozrieť krabičky na šperky",
-    "successTitle": "Zapísané: {world}.",
-    "successBody": "Ozveme sa e-mailom."
-  },
   "pack-and-ship": {
     "peek": "Máme pre vás balík. (Je to newsletter.)",
     "peekCta": "Otvoriť",
@@ -175,38 +118,5 @@
     "tape": "Westpack",
     "successTitle": "Odoslané.",
     "successBody": "Keď budeme mať niečo, čo stojí za otvorenie, ozveme sa e-mailom."
-  },
-  "direct": {
-    "seasons": {
-      "default": {
-        "title": "Nové krabičky, termíny a novoročný výpredaj. Dáme vám vedieť včas.",
-        "dock": "Novinky z Westpacku"
-      },
-      "sale": {
-        "title": "Dozviete sa, keď sa novoročný výpredaj začne – priamo vo vašej schránke.",
-        "dock": "Keď sa začne výpredaj",
-        "done": "Napíšeme vám, keď sa novoročný výpredaj začne.",
-        "mailFrom": "Westpack",
-        "mailSubject": "Novoročný výpredaj sa začal",
-        "mailPreview": "Produkty vyradené z ponuky sú zlacnené – do vypredania zásob.",
-        "mailTime": "január"
-      }
-    },
-    "proof": "Viac ako 20 000 ľudí v Európe a USA už dostáva newsletter.",
-    "successTitle": "Ste v tom.",
-    "askTitle": "Ešte jedna vec: čo predávate?",
-    "askLede": "Tak vám pošleme to, čo sa vám hodí. Úplne dobrovoľné.",
-    "types": {
-      "jewellery": "Šperky",
-      "watches": "Hodinky",
-      "fashion": "Móda a doplnky",
-      "beauty": "Krása a kozmetika",
-      "gifts": "Darčeky a interiér",
-      "other": "Niečo iné"
-    },
-    "skip": "Preskočiť",
-    "thanks": "Vďaka, poznačené. Uvidíme sa v schránke.",
-    "dockOpen": "Prihlásiť sa na newsletter",
-    "dockHide": "Skryť"
   }
 };
